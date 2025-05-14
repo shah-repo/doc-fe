@@ -97,7 +97,7 @@ export type FBInputType =
   | 'shippingCustomer'
   | 'workOrderType'
   | 'supplierContacts'
-  | 'supplierOfferingList'
+  | 'supplierOfferings'
   | 'supplierSupportingDocs'
   | 'supplierReferences'
   | 'shippingInformation'
@@ -283,7 +283,7 @@ export const FBAutosave: FBInputType[] = [
   'cycleCount',
   'workOrderType',
   'supplierContacts',
-  'supplierOfferingList',
+  'supplierOfferings',
   'supplierSupportingDocs',
   'supplierReferences',
 ];

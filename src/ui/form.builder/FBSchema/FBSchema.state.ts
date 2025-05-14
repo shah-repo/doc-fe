@@ -163,7 +163,7 @@ class FBSchemaState {
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
     supplierContacts: FBSupplierContacts,
-    supplierOfferingList: FBProductOrService,
+    supplierOfferings: FBProductOrService,
     supplierSupportingDocs: FBCertifications,
     supplierReferences: FBReferences,
     shippingItems: FBShippingItems,

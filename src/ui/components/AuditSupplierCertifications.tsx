@@ -21,35 +21,43 @@ interface Props {
   previousValue?: any
 }
 
+const fieldNameLabelMapping: {[key: string]: string} = {
+  certificateId: 'Name',
+  type: 'Type',
+  expiryDate: 'Expiry Date',
+  uploadedBy: 'Uploaded By',
+  attachments: 'Attachments',
+};
+
 const AuditSupplierCertifications: React.FC<Props> = ({
   audit,
   dataCy,
   auditValue,
   previousValue,
 }) => {
-  const addedOrUpdatedField = (fieldName: string, newValue: string | undefined, prevValue: string | undefined): ReactNode => {
+  const addedOrUpdatedField = (label: string, newValue: string | undefined, prevValue: string | undefined): ReactNode => {
     if (newValue === prevValue) {
       return <></>;
     }
 
     if (newValue && !prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}` as unknown as Translation;
+      const fieldTranslation: Translation = 'documentRevision.audit.supplier.changes.added' as unknown as Translation;
       return (
-        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue }} /></p>
+        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue, label }} /></p>
       );
     }
 
     if (newValue && prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}.updated` as unknown as Translation;
+      const fieldTranslation: Translation = 'documentRevision.audit.supplier.changes.updated' as unknown as Translation;
       return (
-        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue, prevValue }} /></p>
+        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue, prevValue, label }} /></p>
       );
     }
 
     if (!newValue && prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}.removed` as unknown as Translation;
+      const fieldTranslation: Translation = 'documentRevision.audit.supplier.changes.removed' as unknown as Translation;
       return (
-        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ prevValue }} /></p>
+        <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ prevValue, label }} /></p>
       );
     }
 
@@ -57,17 +65,20 @@ const AuditSupplierCertifications: React.FC<Props> = ({
   };
 
   const auditFieldFactory = (): ReactNode => {
+    const auditValueToUse = auditValue ?? '{}';
     const { certificateId, type, expiryDate, uploadedByName, attachments }
-        = JSON.parse(auditValue ?? '{}') as ISupplierCertification;
+      = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as ISupplierCertification : auditValueToUse;
+
+    const previousValueToUse = previousValue ?? '{}';
     const {
       id: prevId, certificateId: prevCertificateId, type: prevType, expiryDate: prevExpiryDate,
       uploadedByName: prevUploadedByName, attachments: prevAttachments,
-    } = JSON.parse(previousValue ?? '{}') as ISupplierCertification;
+    } = (typeof previousValueToUse === 'string' ? JSON.parse(previousValueToUse) : previousValueToUse) as ISupplierCertification;
 
     if (audit.type.includes('OBJECT_DELETED')) {
       const identifyingData = prevCertificateId ?? prevId;
       return <p>
-        <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.entry.removed" values={{ value: identifyingData }}
+        <Text dataCy={dataCy} translation="documentRevision.audit.supplier.entry.removed" values={{ value: identifyingData }}
         /></p>;
     }
 
@@ -80,20 +91,24 @@ const AuditSupplierCertifications: React.FC<Props> = ({
       return (
         <>
           <p>{certificateId
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.certificate" values={{ value: certificateId }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: certificateId, label: fieldNameLabelMapping.certificateId }} />
           }</p>
           <p>{type
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.type" values={{ value: type }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: type, label: fieldNameLabelMapping.type }} />
           }</p>
           <p>{expiryDate
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.expiryDate"
-              values={{ value: getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit), label: fieldNameLabelMapping.expiryDate }} />
           }</p>
           <p>{uploadedByName
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.uploadedBy" values={{ value: uploadedByName }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: uploadedByName, label: fieldNameLabelMapping.uploadedBy }} />
           }</p>
           <p>{attachmentNameArr.length > 0
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.attachments" values={{ value: attachmentNameArr.join(', ') }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: attachmentNameArr.join(', '), label: fieldNameLabelMapping.attachments }} />
           }</p>
         </>
       );
@@ -109,17 +124,30 @@ const AuditSupplierCertifications: React.FC<Props> = ({
       if (prevExpiryDateToUse) {
         prevExpiryDateToUse = getFormattedDateString(prevExpiryDateToUse, MomentFormats.MonthDateYearTwoDigit);
       }
+
+      const fieldsToCompare = [
+        { key: 'certificateId', current: certificateId, previous: prevCertificateId },
+        { key: 'type', current: type, previous: prevType },
+        { key: 'expiryDate', current: expiryDateToUse, previous: prevExpiryDateToUse },
+        { key: 'uploadedBy', current: uploadedByName, previous: prevUploadedByName },
+        {
+          key: 'attachments',
+          current: attachmentNameArr.length ? attachmentNameArr.join(', ') : undefined,
+          previous: previousAttachmentNameArr.length ? previousAttachmentNameArr.join(', ') : undefined,
+        },
+      ];
+
       return (
         <>
           <p>{certificateId
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.certificate" values={{ value: certificateId }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.changes.added"
+              values={{ value: certificateId, label: fieldNameLabelMapping.certificateId }} />
           }</p>
-          <p>{addedOrUpdatedField('certificateId', certificateId, prevCertificateId)}</p>
-          <p>{addedOrUpdatedField('type', type, prevType)}</p>
-          <p>{addedOrUpdatedField('expiryDate', expiryDateToUse, prevExpiryDateToUse)}</p>
-          <p>{addedOrUpdatedField('uploadedBy', uploadedByName, prevUploadedByName)}</p>
-          <p>{addedOrUpdatedField('attachments', attachmentNameArr.length ? attachmentNameArr.join(', ') : undefined,
-            previousAttachmentNameArr.length ? previousAttachmentNameArr.join(', ') : undefined)}</p>
+          {fieldsToCompare.map(({ key, current, previous }) => (
+            <p key={key}>
+              {addedOrUpdatedField(fieldNameLabelMapping[key], current, previous)}
+            </p>
+          ))}
         </>
       );
     }

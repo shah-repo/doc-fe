@@ -45,7 +45,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'cycleCount',
     'traineeList',
     'supplierSupportingDocs',
-    'supplierOfferingList',
+    'supplierOfferings',
     'supplierReferences',
     'supplierContacts',
     'siteInformation',
