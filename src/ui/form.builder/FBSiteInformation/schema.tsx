@@ -63,6 +63,14 @@ export const buildSchema = ({
       width: 200,
     },
     {
+      id: 'state',
+      field: 'state',
+      title: 'form.builder.site.information.grid.heading.state',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
+    },
+    {
       id: 'zipCode',
       field: 'zipCode',
       title: 'form.builder.site.information.grid.heading.zip.code',
