@@ -6,12 +6,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
+import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { companyActions } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
-import { AsyncState } from '../../../state/types';
+import { AsyncState, AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { FB, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
@@ -69,6 +70,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { formState } = FB.useStores();
   const { isEditing } = useFormContext();
   const dispatch = useDispatch();
+  const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
   useEffect(() => {
     formState?.setSchema(schema);
@@ -145,6 +147,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     setMDTab?.(true);
   }
 
+  const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -156,7 +160,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     >
       <PromptIfDirty
         isDialog
-        dirty={isDirty}
+        dirty={shouldConfirmLeave}
         doNotPrompt={doNotPrompt}
         onConfirm={handlePromptConfirm}
         onCancel={handlePromptCancel}
