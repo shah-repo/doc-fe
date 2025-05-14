@@ -1,14 +1,15 @@
 import faker from 'faker';
 import { DEFAULT_NAVIGATION_ITEMS } from '../constants';
-import { Company, Employee, WhiteLabeling } from '../types';
+import { Company, Employee } from '../types';
 
 export const getCompany = (company: Partial<Company> = {}): Company => ({
   id: faker.random.uuid(),
   name: faker.company.companyName(),
   numOfRevStages: 1,
+  startRevisionNumber: 1,
   users: [],
   documentTypes: [],
-  whiteLabeling: {} as WhiteLabeling,
+  whiteLabeling: {},
   slackIntegrationEnabled: false,
   helloSignAppId: '',
   teamId: faker.random.uuid(),
