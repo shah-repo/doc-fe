@@ -8,8 +8,7 @@ export const withFBShippingMethod = <T extends FBShippingMethodProps>(Component:
   const Comp = (props: T) => {
     const { workspaceState, formState } = FB.useStores();
 
-    const customerId = useObserver(
-      () =>
+    const customerId = useObserver(() =>
         formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD)
         || workspaceState?.formInputSync.get(SHIPPING_CUSTOMER_FIELD)
         || workspaceState?.formInput?.customer,
