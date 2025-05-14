@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FB } from '..';
 import { isDocumentRevisionInDraft } from '../../documentRevision/helpers/documentRevisionStatus';
 import { SHIPPING_CUSTOMER_FIELD } from '../FBShippingInfo/constants';
+import { SHIPPING_METHOD_FIELD } from './constants';
 import { FBShippingMethodProps } from './types';
 
 export const withFBShippingMethod = <T extends FBShippingMethodProps>(Component: React.FC<T>): React.FC<T> => {
@@ -25,6 +26,9 @@ export const withFBShippingMethod = <T extends FBShippingMethodProps>(Component:
       if (selectedCustomer !== selectKey) {
         setSelectKey(selectedCustomer);
       }
+      const selectedMethod = formState?.getFieldValue(SHIPPING_METHOD_FIELD);
+
+      console.log('selectedMethod', selectedMethod);
       console.log('selectedCustomer in Shipping method', selectKey);
     });
 

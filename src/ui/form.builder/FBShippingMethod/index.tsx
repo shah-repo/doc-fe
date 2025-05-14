@@ -13,6 +13,8 @@ const FBShippingMethod: React.FC<FBShippingMethodProps> = ({ selectKey, ...props
         <FBSelect
           {...props}
           key={`select-${selectKey ?? 'none' + Math.random()}}`}
+          defaultValue={selectKey}
+          withState
           data-cy="shipping-method-field"
         />
       </Grid>

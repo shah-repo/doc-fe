@@ -74,17 +74,22 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       );
     }, []);
 
-    const onCustomerChange = () => {
-      const selectedCustomerId = formState?.getFieldValue(name);
-      console.log('selectedCustomerId', selectedCustomerId);
+    // Debounce the API call (e.g., 500ms delay)
+    const onCustomerChange = debounce(
+      () => {
+        const selectedCustomerId = formState?.getFieldValue(name);
+        console.log('selectedCustomerId inside shipping customer', selectedCustomerId);
 
-      if (isEmpty(selectedCustomerId)) {
-        formState?.setFieldValue(SHIPPING_METHOD_FIELD, undefined);
-        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
-      } else {
-        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
-      }
-    };
+        if (isEmpty(selectedCustomerId)) {
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, undefined, true);
+          formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+        } else {
+          customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+        }
+      },
+      1000,
+      { leading: false, trailing: true },
+    );
 
     useEffect(() => {
       if (!FB.isUUID(customerId)) {
