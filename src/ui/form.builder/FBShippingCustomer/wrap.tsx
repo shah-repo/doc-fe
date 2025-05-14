@@ -81,7 +81,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         console.log('selectedCustomerId inside shipping customer', selectedCustomerId);
 
         if (isEmpty(selectedCustomerId)) {
-          formState?.setFieldValue(SHIPPING_METHOD_FIELD, undefined, true);
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
           formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
         } else {
           customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
