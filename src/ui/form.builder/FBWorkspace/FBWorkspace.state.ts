@@ -1,4 +1,4 @@
-import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
@@ -257,7 +257,7 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
-    const isApprovalRequest = isUndefined(this.document);
+    const isApprovalRequest = !this.document;
     const saveFunction = isApprovalRequest ? saveApprovalRequest : saveDocumentRevision;
     return saveFunction(id, body as DocumentRevisionEditRequestBody & ChangeRequestEditRequestBody)
       .then((data) => {
