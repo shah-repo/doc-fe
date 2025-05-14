@@ -18,7 +18,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     const { workspaceState, formState } = FB.useStores();
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
     const previousCustomerIdRef = useRef<string>('');
-    const debouncedSaveDocRevRef = useRef<ReturnType<typeof debounce> | null>(null);
     const [latestRevisionSummary, setLatestRevisionSummary] = useState<CustomerRevisionInfo>();
     const customerId = useObserver(
       () =>
@@ -47,20 +46,18 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
 
     useEffect(() => {
       const updateCustomerShippingMethod = (customerId: string, shippingMethod: string) => {
-        const updateCustomerShippingMethod = () => {
+        const setCustomerShippingMethod = () => {
           if (!workspaceState?.loading) {
             workspaceState?.saveDocRev(formState?.getValues());
             previousCustomerIdRef.current = customerId;
             formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
             formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
           } else {
-            debounceTimerRef.current = setTimeout(updateCustomerShippingMethod, 100);
+            debounceTimerRef.current = setTimeout(setCustomerShippingMethod, 0);
           }
         };
-        updateCustomerShippingMethod();
+        setCustomerShippingMethod();
       };
-
-      debouncedSaveDocRevRef.current = debounce(updateCustomerShippingMethod, 100, { leading: false, trailing: true });
 
       const disposer = reaction(
         () => customersAsync.autocompleteValueApi.data,
@@ -73,12 +70,11 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           const shippingMethod = data?.formInput?.shippingMethod;
           formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
 
-          debouncedSaveDocRevRef.current?.(currentCustomerId, shippingMethod);
+          updateCustomerShippingMethod(currentCustomerId, shippingMethod);
         },
       );
 
       return () => {
-        debouncedSaveDocRevRef.current?.cancel();
         if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
         disposer();
       };
@@ -89,7 +85,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
         const selectedCustomerId = formState?.getFieldValue(name);
 
         if (isEmpty(selectedCustomerId)) {
-          formState?.setFieldValue(SHIPPING_METHOD_FIELD, '', true);
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
           formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
         } else {
           customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
