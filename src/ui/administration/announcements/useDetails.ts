@@ -11,17 +11,14 @@ import { IAnnouncementDetail, IConflictingItem } from './interface';
 export const useAnnouncementDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
   const [announcementDetailRows, setAnnouncementDetailRows] = useState<IAnnouncementDetail[]>([]);
   const [formRevsList, setFormRevsList] = useState<DocumentRevision[]>([]);
-
   const [selectedFormRevToUpgrade, setSelectedFormRevToUpgrade] = useState<string>('');
   const [conflictingElements, setConflictingElements] = useState<{ [key: string]: IConflictingItem }>({});
-
   const [isFormUpgradeDone, setIsFormUpgradeDone] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function catchAxiosException (exception: AxiosError) {
+  function catchAxiosException (exception: AxiosError): void {
     setIsLoading(false);
     if (exception?.response?.status === ErrorCodes.GATEWAY_TIMEOUT) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
@@ -36,7 +33,7 @@ export const useAnnouncementDetails = () => {
     }
   }
 
-  function getAnnouncementDetails (announcementId: string) {
+  function getAnnouncementDetails (announcementId: string): void {
     setIsLoading(true);
     setErrorMessage('');
 
@@ -64,7 +61,7 @@ export const useAnnouncementDetails = () => {
       });
   }
 
-  function handleFormRevSelectionToUpgrade (revIdSelected: string, announcementId: string) {
+  function handleFormRevSelectionToUpgrade (revIdSelected: string, announcementId: string): void {
     setIsLoading(true);
     setErrorMessage('');
 
@@ -94,7 +91,7 @@ export const useAnnouncementDetails = () => {
       });
   }
 
-  function processFormUpgrade (announcementId: string) {
+  function processFormUpgrade (announcementId: string): void {
     const isAnyUnresolved = Object.values(conflictingElements)
       .some(conflictingElement => !conflictingElement.isResolved && conflictingElement.mustBeResolved);
     if (isAnyUnresolved) {
@@ -102,11 +99,7 @@ export const useAnnouncementDetails = () => {
       return;
     }
 
-    if (isSubmitting) {
-      return;
-    }
-
-    if (!selectedFormRevToUpgrade) {
+    if (isSubmitting || !selectedFormRevToUpgrade) {
       return;
     }
 

@@ -140,6 +140,29 @@ const BulkMigrationContainer: React.FC = () => {
   const toRev = getRevById(toFormRevsList, toFormRevId);
   const { status: scanStatus, id: scanId = '' } = scanDetails ?? {};
 
+  const STATUSES_SHOWING_MIGRATION: MIGRATION_STATUS_ENUM[] = [
+    MIGRATION_STATUS_ENUM.INITIALIZED,
+    MIGRATION_STATUS_ENUM.CANCELLED,
+    MIGRATION_STATUS_ENUM.FAILED,
+    MIGRATION_STATUS_ENUM.COMPLETED,
+  ];
+
+  const STATUSES_SHOWING_ERROR: MIGRATION_STATUS_ENUM[] = [
+    MIGRATION_STATUS_ENUM.FAILED,
+    MIGRATION_STATUS_ENUM.COMPLETED,
+  ];
+
+  const STATUSES_ALLOWING_CANCEL: MIGRATION_STATUS_ENUM[] = [
+    MIGRATION_STATUS_ENUM.IN_PROGRESS,
+    MIGRATION_STATUS_ENUM.STARTED,
+    MIGRATION_STATUS_ENUM.MAPPING,
+  ];
+
+  const status = scanStatus as MIGRATION_STATUS_ENUM;
+  const isBulkMigrationButtonVisible = STATUSES_SHOWING_MIGRATION.includes(status);
+  const isBulkMigrationErrorVisible = STATUSES_SHOWING_ERROR.includes(status);
+  const isCancelMigrationButtonVisible = STATUSES_ALLOWING_CANCEL.includes(status);
+
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
@@ -163,7 +186,13 @@ const BulkMigrationContainer: React.FC = () => {
           </Grid>
           <Grid item xs={2}>
             {selectedRows.length > 0 && (
-              <Button size="small" data-cy="migrate-revisions-btn" onClick={confirmSubmission} variant="contained" color="primary">
+              <Button
+                size="small"
+                data-cy="migrate-revisions-btn"
+                onClick={confirmSubmission}
+                variant="contained"
+                color="primary"
+              >
                 {translate('bulk.migration.migrate.revisions')}
               </Button>
             )}
@@ -233,11 +262,7 @@ const BulkMigrationContainer: React.FC = () => {
           <Box className={cx(classes.actionBox, classes.flexBoxColumn)}>
             {scanDetails?.id && (
               <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
-                {[
-                  MIGRATION_STATUS_ENUM.IN_PROGRESS,
-                  MIGRATION_STATUS_ENUM.STARTED,
-                  MIGRATION_STATUS_ENUM.MAPPING,
-                ].includes(scanStatus as MIGRATION_STATUS_ENUM) && (
+                {isCancelMigrationButtonVisible && (
                   <>
                     <Button
                       data-cy="supplier-migration-scan-cancel"
@@ -263,12 +288,7 @@ const BulkMigrationContainer: React.FC = () => {
                   </>
                 )}
 
-                {[
-                  MIGRATION_STATUS_ENUM.INITIALIZED,
-                  MIGRATION_STATUS_ENUM.CANCELLED,
-                  MIGRATION_STATUS_ENUM.FAILED,
-                  MIGRATION_STATUS_ENUM.COMPLETED,
-                ].includes(scanStatus as MIGRATION_STATUS_ENUM) && (
+                {isBulkMigrationButtonVisible && (
                   <>
                     <Button
                       data-cy="bulk-migration-scan"
@@ -279,13 +299,9 @@ const BulkMigrationContainer: React.FC = () => {
                     >
                       {translate('bulk.migration.run.scan')}
                     </Button>
-                    {[MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(
-                      scanStatus as MIGRATION_STATUS_ENUM,
-                    ) && (
+                    {isBulkMigrationErrorVisible && (
                       <span className={classes.dateTimeLabel}>
-                        {scanStatus === MIGRATION_STATUS_ENUM.FAILED
-                          ? translate('bulk.migration.scan.fail.message')
-                          : null}
+                        {scanStatus === MIGRATION_STATUS_ENUM.FAILED ? translate('bulk.migration.scan.fail.message') : null}
                         <DateTime value={scanDetails.completedAt} format={MomentFormats.BriefDateTime} />
                       </span>
                     )}
@@ -294,7 +310,13 @@ const BulkMigrationContainer: React.FC = () => {
               </Box>
             )}
             {toFormRevId && fromFormRevId && (
-              <Button size="small" color="secondary" data-cy="show-mappings" variant="contained" onClick={showMappingRules}>
+              <Button
+                size="small"
+                color="secondary"
+                data-cy="show-mappings"
+                variant="contained"
+                onClick={showMappingRules}
+              >
                 {translate('bulk.migration.mapping.logic')}
               </Button>
             )}
