@@ -11,7 +11,7 @@ Partial<AutocompleteProps>,
   disabled: boolean
   updateLatestAvailableRevision: () => void
   resetOBSCustomerSelection: () => void
-  onCustomerChange: () => void
+  onShippingCustomerChange: () => void
   latestRevisionSummary: CustomerRevisionInfo
   autocompleteKey?: string
 };

@@ -173,7 +173,6 @@ class FBSchemaState {
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
     const schemaControl = FBSchemaState.control[type || ''];
-
     if (!schemaControl) {
       return;
     }

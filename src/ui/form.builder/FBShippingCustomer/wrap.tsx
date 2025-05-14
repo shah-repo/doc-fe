@@ -12,9 +12,7 @@ import { SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
-export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
-  Component: React.FC<T>,
-): React.FC<T> => {
+export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Component: React.FC<T>): React.FC<T> => {
   const Comp = (props: T) => {
     const { name } = props;
     const { workspaceState, formState } = FB.useStores();
@@ -28,9 +26,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
 
     const [autocompleteKey, setAutocompleteKey] = useState<string | undefined>(customerId);
 
-    const fetchLatestRevisionSummary = useActionCreator(
-      allocationActions.fetchLatestRevisionDetailsByRevId,
-    );
+    const fetchLatestRevisionSummary = useActionCreator(allocationActions.fetchLatestRevisionDetailsByRevId);
     const latestRevisionSummaryAsync = useAsync<CustomerRevisionInfo>({
       onSuccess: (data) => {
         setLatestRevisionSummary(data);
@@ -49,13 +45,12 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     useEffect(() => {
       let previousCustomerId = '';
 
-      // Debounce the API call with 10s delay
       const debouncedSaveDocRev = debounce((formValues, customerId, shippingMethod) => {
         workspaceState?.saveDocRev(formValues);
         previousCustomerId = customerId;
         formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
         formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
-      }, 10000);
+      }, 5000);
 
       return reaction(
         () => customersAsync.autocompleteValueApi.data,
@@ -65,8 +60,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
             if (currentCustomerId !== previousCustomerId) {
               const shippingMethod = data?.formInput?.shippingMethod;
               formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
-              console.log('shipping customer before saving the method values', formState?.getValues());
-              // Debounced call (will wait 10s before executing)
               debouncedSaveDocRev(formState?.getValues(), currentCustomerId, shippingMethod);
             }
           }
@@ -74,11 +67,9 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       );
     }, []);
 
-    // Debounce the API call (e.g., 500ms delay)
-    const onCustomerChange = debounce(
+    const onShippingCustomerChange = debounce(
       () => {
         const selectedCustomerId = formState?.getFieldValue(name);
-        console.log('selectedCustomerId inside shipping customer', selectedCustomerId);
 
         if (isEmpty(selectedCustomerId)) {
           formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
@@ -96,11 +87,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         return;
       }
 
-      latestRevisionSummaryAsync.start(
-        fetchLatestRevisionSummary,
-        customerId,
-        latestRevisionSummaryAsync,
-      );
+      latestRevisionSummaryAsync.start(fetchLatestRevisionSummary, customerId, latestRevisionSummaryAsync);
     }, []);
 
     useEffect(() => {
@@ -137,7 +124,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       latestRevisionSummary: latestRevisionSummary,
       resetOBSCustomerSelection,
       autocompleteKey: autocompleteKey,
-      onCustomerChange,
+      onShippingCustomerChange,
     });
   };
 

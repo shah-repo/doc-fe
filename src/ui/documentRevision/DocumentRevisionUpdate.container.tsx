@@ -146,7 +146,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         ...formInput,
         shippingMethod: null,
       });
-      console.log('making payload empty update container');
     }
 
     if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
