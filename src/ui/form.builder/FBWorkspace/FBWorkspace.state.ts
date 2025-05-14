@@ -244,7 +244,7 @@ class FBWorkspaceState extends FBSchemaState {
           const payload = getPayloadBasedOnWorkOrderType(cloneDeep(values));
 
           if (!isEmpty(payload) && SHIPPING_CUSTOMER_FIELD in payload && isEmpty(payload[SHIPPING_CUSTOMER_FIELD])) {
-            payload[SHIPPING_METHOD_FIELD] = null;
+            payload[SHIPPING_METHOD_FIELD] = '';
           }
           body = {
             formInput: omit(payload,

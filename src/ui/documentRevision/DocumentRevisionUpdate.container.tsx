@@ -144,7 +144,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     if (!isEmpty(formInput) && SHIPPING_CUSTOMER_FIELD in formInput && isEmpty(formInput[SHIPPING_CUSTOMER_FIELD])) {
       set(dataToSubmit, 'formInput', {
         ...formInput,
-        shippingMethod: null,
+        shippingMethod: '',
       });
     }
 

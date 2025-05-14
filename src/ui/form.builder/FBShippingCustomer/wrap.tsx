@@ -54,13 +54,13 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
             formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
             formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
           } else {
-            debounceTimerRef.current = setTimeout(updateCustomerShippingMethod, 1000);
+            debounceTimerRef.current = setTimeout(updateCustomerShippingMethod, 100);
           }
         };
         updateCustomerShippingMethod();
       };
 
-      debouncedSaveDocRevRef.current = debounce(updateCustomerShippingMethod, 500, { leading: false, trailing: true });
+      debouncedSaveDocRevRef.current = debounce(updateCustomerShippingMethod, 100, { leading: false, trailing: true });
 
       const disposer = reaction(
         () => customersAsync.autocompleteValueApi.data,
@@ -89,13 +89,13 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
         const selectedCustomerId = formState?.getFieldValue(name);
 
         if (isEmpty(selectedCustomerId)) {
-          formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, '', true);
           formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
         } else {
           customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
         }
       },
-      1000,
+      100,
       { leading: false, trailing: true },
     );
 
