@@ -38,6 +38,7 @@ interface Props {
   docDocumentId: string
   docRevId: string
   status: string
+  trainingId?: string
   timestamp: string
   dueOn: Nullable<string>
   trainingSourceReferences?: TrainingReference[]
@@ -66,6 +67,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
   dismissLineItem,
+  trainingId,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -147,6 +149,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               )}
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={`${classes.typography} ${classes.margin5}`}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {trainingId}
+                </Typography>
+              </Grid>
               <Grid item={true}>
                 <DocId url={documentVersionPath(docRevId, docDocumentId)} docId={docId} />
               </Grid>
