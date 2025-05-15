@@ -501,12 +501,12 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                           </Box>
                           {(schemaItem.mappedFrom ?? []).length > 0
                             && schemaItem.mappedFrom?.map((mappedFromEntry: SourceMapping) => {
-                              const { isShowDirectly, label } = mappedFromEntry;
+                              const { isShowDirectly, label, name } = mappedFromEntry;
                               return (
                                 isShowDirectly && (
                                   <Chip
                                     icon={showMappingIndicator(mappedFromEntry)}
-                                    key={label}
+                                    key={name + label}
                                     label={label}
                                     onDelete={() => handleMappedFromDelete(schemaItem, mappedFromEntry)}
                                     color="secondary"

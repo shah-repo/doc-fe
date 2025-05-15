@@ -1,7 +1,8 @@
+import { ReactNode } from 'react';
 import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
-import { FBSchemaProps } from '../../form.builder';
+import { FBInputType, FBLabelLocaleProps, FBSchemaProps } from '../../form.builder';
 
 export interface BulkMigrationDocType {
   id: string
@@ -28,6 +29,23 @@ export interface BulkMigrationScanDetails {
   status: MIGRATION_STATUS_ENUM
 }
 
+interface MigrationFailureReason {
+  code: string
+  status: string
+  message: string
+}
+
+interface FormInputMap {
+  [key: string]: string
+}
+
+interface RunDetail {
+  runAt: string
+  status: MIGRATION_STATUS_ENUM
+  completedAt: string
+  failureReason?: MigrationFailureReason
+}
+
 export interface SupplierScanResultRevision {
   id: string
   documentId: string
@@ -37,19 +55,19 @@ export interface SupplierScanResultRevision {
   displayRevision: string
   displayStatus: string
   owner: Employee
-  originalFormInput: {[key: string]: string}
-  newFormInput: {[key: string]: string}
-  proposedAction: REV_ACTION_OPTIONS
-  fieldNamesUnmatched: {[key: string]: string}
-  runDetails: Array<{runAt: string, status: MIGRATION_STATUS_ENUM, completedAt: string, failureReason?: any}>
+  originalFormInput: FormInputMap
+  newFormInput: FormInputMap
+  fieldNamesUnmatched: FormInputMap
+  runDetails: RunDetail[]
   status: MIGRATION_STATUS_ENUM
-  isSelected?: boolean // UI only
   approvalStatus: SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM
+  proposedAction: REV_ACTION_OPTIONS
   name: string
   email: string
   ownerId: string
   isMapped: boolean
   isAlreadyUpgraded: boolean
+  isSelected?: boolean
 }
 
 enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {
@@ -101,14 +119,16 @@ export type ISchemaItem = FBSchemaProps & {
 };
 
 export interface SourceMapping {
-  label: any
+  label?: string | ReactNode | FBLabelLocaleProps
   name: string
-  type: any
+  type?: FBInputType
   isShowDirectly: boolean
   localMapping?: {[key: string]: MappingOptions}
+  rules?: string
 }
+
 export interface TableRowData {
-  [key: string]: any
+  [key: string]: SourceMapping[]
 }
 
 export interface MismatchResponse {

@@ -76,10 +76,11 @@ const ToSchemaItemMappingTable: React.FC<{
       modifiedRow[key] = [];
     }
     modifiedRow[key].push({
-      name: selectedSchemaItem.name,
+      name: selectedSchemaItem.name ?? '',
       label: selectedSchemaItem.label,
       type: selectedSchemaItem.type,
       rules: selectedSchemaItem.rules,
+      isShowDirectly: false,
     });
 
     // Check for Table Mappings
@@ -165,7 +166,7 @@ const ToSchemaItemMappingTable: React.FC<{
                         onDelete={e => handleRowCellClearMapping(row, fieldName, entry)}
                         color="secondary"
                         className={classes.chip}
-                        key={entry.label}
+                        key={entry.label + entry.name}
                       />
                     );
                   }) : row[fieldName]}
