@@ -27,7 +27,7 @@ import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import UtilColors from '../../../layout/theme/utils/colors';
-import { MIGRATION_STATUS_ENUM, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from '../interface';
+import { MigrationStatus, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
 import {
   DATA_ITEM_KEY,
@@ -195,15 +195,15 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
   };
 
   const getRowColor = (row: SupplierScanResultRevision) => {
-    if (row.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
+    if (row.status === MigrationStatus.IN_PROGRESS) {
       return UtilColors.inProgress;
     }
 
-    if (row.status === MIGRATION_STATUS_ENUM.FAILED) {
+    if (row.status === MigrationStatus.FAILED) {
       return UtilColors.failed;
     }
 
-    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED) {
+    if (row.status === MigrationStatus.COMPLETED) {
       return UtilColors.done;
     }
 

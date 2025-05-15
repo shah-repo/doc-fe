@@ -4,16 +4,16 @@ import { translate } from '../../../common/intl';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import CurrentMappings from './CurrentMappings';
 import DialogHeader from './DrawerHeader';
-import { ISchemaItem, ListType, MappingOptions } from './interface';
+import { FormFieldSchema, ListType, LocalMappingOption, MappingOptions } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 
 interface OptionMapperDrawerProps {
   isOptionMapperVisible: boolean
   handleCloseOptionMapper: () => void
-  handleMappingConfirmation: (localMapping: {[key: string]: MappingOptions}) => void
-  selectedSchemaItem?: ISchemaItem
-  toRevSchemaItem?: ISchemaItem
+  handleMappingConfirmation: (localMapping: LocalMappingOption) => void
+  selectedSchemaItem?: FormFieldSchema
+  toRevSchemaItem?: FormFieldSchema
 }
 
 const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
@@ -28,7 +28,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
   const [checkboxFromOptions, setCheckboxFromOptions] = useState<MappingOptions[]>([]);
   const [checkboxToOptions, setCheckboxToOptions] = useState<MappingOptions[]>([]);
   const [fromSelectedOption, setFromSelectedOption] = useState<MappingOptions | undefined>();
-  const [localMapping, setLocalMapping] = useState<{[key: string]: MappingOptions}>({});
+  const [localMapping, setLocalMapping] = useState<LocalMappingOption>({});
 
   useEffect(() => {
     if (toRevSchemaItem?.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC) {

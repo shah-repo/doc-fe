@@ -10,7 +10,7 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { ListType, MIGRATION_STATUS_ENUM, SelectedItemDetails } from './interface';
+import { ListType, MigrationStatus, SelectedItemDetails } from './interface';
 import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
@@ -140,25 +140,25 @@ const BulkMigrationContainer: React.FC = () => {
   const toRev = getRevById(toFormRevsList, toFormRevId);
   const { status: scanStatus, id: scanId = '' } = scanDetails ?? {};
 
-  const STATUSES_SHOWING_MIGRATION: MIGRATION_STATUS_ENUM[] = [
-    MIGRATION_STATUS_ENUM.INITIALIZED,
-    MIGRATION_STATUS_ENUM.CANCELLED,
-    MIGRATION_STATUS_ENUM.FAILED,
-    MIGRATION_STATUS_ENUM.COMPLETED,
+  const STATUSES_SHOWING_MIGRATION: MigrationStatus[] = [
+    MigrationStatus.INITIALIZED,
+    MigrationStatus.CANCELLED,
+    MigrationStatus.FAILED,
+    MigrationStatus.COMPLETED,
   ];
 
-  const STATUSES_SHOWING_ERROR: MIGRATION_STATUS_ENUM[] = [
-    MIGRATION_STATUS_ENUM.FAILED,
-    MIGRATION_STATUS_ENUM.COMPLETED,
+  const STATUSES_SHOWING_ERROR: MigrationStatus[] = [
+    MigrationStatus.FAILED,
+    MigrationStatus.COMPLETED,
   ];
 
-  const STATUSES_ALLOWING_CANCEL: MIGRATION_STATUS_ENUM[] = [
-    MIGRATION_STATUS_ENUM.IN_PROGRESS,
-    MIGRATION_STATUS_ENUM.STARTED,
-    MIGRATION_STATUS_ENUM.MAPPING,
+  const STATUSES_ALLOWING_CANCEL: MigrationStatus[] = [
+    MigrationStatus.IN_PROGRESS,
+    MigrationStatus.STARTED,
+    MigrationStatus.MAPPING,
   ];
 
-  const status = scanStatus as MIGRATION_STATUS_ENUM;
+  const status = scanStatus as MigrationStatus;
   const isBulkMigrationButtonVisible = STATUSES_SHOWING_MIGRATION.includes(status);
   const isBulkMigrationErrorVisible = STATUSES_SHOWING_ERROR.includes(status);
   const isCancelMigrationButtonVisible = STATUSES_ALLOWING_CANCEL.includes(status);
@@ -176,7 +176,7 @@ const BulkMigrationContainer: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            {promptUserToRescanDetails.isPromptUserToScan && scanStatus !== MIGRATION_STATUS_ENUM.IN_PROGRESS && (
+            {promptUserToRescanDetails.isPromptUserToScan && scanStatus !== MigrationStatus.IN_PROGRESS && (
               <div className={classes.promptUserMsgStyle}>
                 {translate('bulk.migration.re.scan.message', {
                   msgParts: promptUserToRescanDetails.msgParts.join(' '),
@@ -301,7 +301,7 @@ const BulkMigrationContainer: React.FC = () => {
                     </Button>
                     {isBulkMigrationErrorVisible && (
                       <span className={classes.dateTimeLabel}>
-                        {scanStatus === MIGRATION_STATUS_ENUM.FAILED ? translate('bulk.migration.scan.fail.message') : null}
+                        {scanStatus === MigrationStatus.FAILED ? translate('bulk.migration.scan.fail.message') : null}
                         <DateTime value={scanDetails.completedAt} format={MomentFormats.BriefDateTime} />
                       </span>
                     )}

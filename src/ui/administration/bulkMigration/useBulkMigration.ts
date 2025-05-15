@@ -9,7 +9,7 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, ISchemaItem, ListType, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
+import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
@@ -241,7 +241,7 @@ export const useBulkMigration = () => {
       });
   }
 
-  function updateScanMapping (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) {
+  function updateScanMapping (fromRevSchema: FormFieldSchema[], toRevSchema: FormFieldSchema[]) {
     if (scanDetails) {
       commonSetUp();
       const requestConfig: AxiosRequestConfig = {

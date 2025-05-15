@@ -10,16 +10,16 @@ import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toastError } from '../../components/notifications';
-import { ISchemaItem, SourceMapping, TableRowData } from './interface';
+import { FormFieldSchema, SourceMapping, TableRowData } from './interface';
 import useStyles from './styles';
 import { validateTableMappings } from './utils';
 
 const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
 const ToSchemaItemMappingTable: React.FC<{
-  schemaItem: ISchemaItem
+  schemaItem: FormFieldSchema
   handleMappingChange: (rows: TableRowData[], entryRemoved?: SourceMapping) => void
-  selectedSchemaItem: ISchemaItem | undefined
+  selectedSchemaItem: FormFieldSchema | undefined
   isSingleRow?: boolean
 }> = ({ schemaItem, handleMappingChange, selectedSchemaItem, isSingleRow }) => {
   const classes = useStyles();
@@ -57,7 +57,7 @@ const ToSchemaItemMappingTable: React.FC<{
 
   function handleRowCellClicked (
     event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
-    selectedRow: TableRowData, key: string, mappedToSchemaItem: ISchemaItem,
+    selectedRow: TableRowData, key: string, mappedToSchemaItem: FormFieldSchema,
   ) {
     event.preventDefault();
     event.stopPropagation();

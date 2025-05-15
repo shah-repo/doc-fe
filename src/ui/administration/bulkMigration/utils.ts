@@ -5,7 +5,7 @@ import { translate } from '../../../common/intl';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
-import { ISchemaItem, MismatchResponse, SourceMapping, TableRowData } from './interface';
+import { FormFieldSchema, MismatchResponse, SourceMapping, TableRowData } from './interface';
 
 const schemaValidationMap = {
   supplierContacts: {
@@ -30,7 +30,7 @@ const TO_OPTIONS_TYPES: string[] = [...FROM_OPTIONS_TYPES,
 ];
 
 export function canMapItems (
-  selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem,
+  selectedSchemaItem: FormFieldSchema, toSchemaItem: FormFieldSchema,
 ): {canMap: boolean, errMessage?: string, showOptionsMapper?: boolean} {
   const errMessage = '';
   let canMap = true;
@@ -67,7 +67,7 @@ export function canMapItems (
 }
 
 export function validateTableMappings (
-  key: string, selectedSchemaItem: ISchemaItem, selectedRow: TableRowData, mappedToSchemaItem: ISchemaItem,
+  key: string, selectedSchemaItem: FormFieldSchema, selectedRow: TableRowData, mappedToSchemaItem: FormFieldSchema,
 ): {canMap: boolean, errMessage: string} {
   const canMap = true;
   const errMessage = '';
@@ -148,7 +148,7 @@ export function validateTableMappings (
   return { canMap, errMessage };
 }
 
-export function getFromSchemaItemBgColor (schemaItem: ISchemaItem): string {
+export function getFromSchemaItemBgColor (schemaItem: FormFieldSchema): string {
   if (isDisabledSchemaItem(schemaItem)) {
     return Colors.hint_gray;
   } else if (schemaItem.mappedToCount) {
@@ -158,14 +158,14 @@ export function getFromSchemaItemBgColor (schemaItem: ISchemaItem): string {
   }
 }
 
-export function isDisabledSchemaItem (schemaItem: ISchemaItem): boolean {
+export function isDisabledSchemaItem (schemaItem: FormFieldSchema): boolean {
   return ['section', 'subsection'].includes(schemaItem.type ?? '');
 }
 
 export function autoMapArrays (
-  fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]): {fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]} {
+  fromRevSchema: FormFieldSchema[], toRevSchema: FormFieldSchema[]): {fromRevSchema: FormFieldSchema[], toRevSchema: FormFieldSchema[]} {
   // Index toRevSchema by name and label for fast lookup
-  const toRevSchemaIndex: {[key: string]: ISchemaItem[]} = {};
+  const toRevSchemaIndex: {[key: string]: FormFieldSchema[]} = {};
   toRevSchema.forEach(item => {
     if (!isDisabledSchemaItem(item)) {
       if (item.name) toRevSchemaIndex[item.name] = [item];
@@ -186,12 +186,12 @@ export function autoMapArrays (
       continue;
     }
 
-    let matchingItemsFromName: ISchemaItem[] = [];
+    let matchingItemsFromName: FormFieldSchema[] = [];
     if (fromRevSchemaItem.name && typeof fromRevSchemaItem.name === 'string') {
       matchingItemsFromName = toRevSchemaIndex[fromRevSchemaItem.name];
     }
 
-    let matchingItemsFromLabel: ISchemaItem[] = [];
+    let matchingItemsFromLabel: FormFieldSchema[] = [];
     if (fromRevSchemaItem.label && typeof fromRevSchemaItem.label === 'string') {
       const formRevSchemaItemLabel
         = fromRevSchemaItem.label.toLocaleLowerCase().replace(/:$/, '');
@@ -199,7 +199,7 @@ export function autoMapArrays (
     }
 
     // The fields from the new schema that match.
-    const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
+    const matchingItems: FormFieldSchema[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
 
     for (const matchingItem of matchingItems) {
       const isMatching = checkSpecialFields(fromRevSchemaItem, matchingItem);

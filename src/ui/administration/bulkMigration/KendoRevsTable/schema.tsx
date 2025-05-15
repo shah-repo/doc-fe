@@ -4,7 +4,7 @@ import { translate } from '../../../../common/intl';
 import { DropdownFilterTemplate } from '../../../components/common/kendo.column.templates/DropdownFilterTemplate';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { createOption } from '../../../form.builder/FBApprovalMatrix/components/Grid';
-import { MIGRATION_STATUS_ENUM, SupplierScanResultRevision } from '../interface';
+import { MigrationStatus, SupplierScanResultRevision } from '../interface';
 import CheckboxCell from './components/CheckboxCell';
 import { DocIdCellTemplate } from './components/DocIdCellTemplate';
 import { ExpandCollapseCell } from './components/ExpandCollapseCell';
@@ -26,13 +26,13 @@ export const buildSchema = ({
   onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<SupplierScanResultRevision>> => {
   const statuses = [
-    MIGRATION_STATUS_ENUM.INITIALIZED,
-    MIGRATION_STATUS_ENUM.STARTED,
-    MIGRATION_STATUS_ENUM.IN_PROGRESS,
-    MIGRATION_STATUS_ENUM.FAILED,
-    MIGRATION_STATUS_ENUM.CANCELLED,
-    MIGRATION_STATUS_ENUM.COMPLETED,
-    MIGRATION_STATUS_ENUM.MAPPING,
+    MigrationStatus.INITIALIZED,
+    MigrationStatus.STARTED,
+    MigrationStatus.IN_PROGRESS,
+    MigrationStatus.FAILED,
+    MigrationStatus.CANCELLED,
+    MigrationStatus.COMPLETED,
+    MigrationStatus.MAPPING,
   ];
 
   const statusOptions = statuses.map(status => createOption(status, status));

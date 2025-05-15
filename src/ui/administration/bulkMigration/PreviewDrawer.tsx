@@ -9,7 +9,7 @@ import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState } from '../../form.builder';
 import DialogHeader from './DrawerHeader';
-import { BulkMigrationScanDetails, ISchemaItem } from './interface';
+import { BulkMigrationScanDetails, FormFieldSchema } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 import { isDisabledSchemaItem } from './utils';
@@ -17,7 +17,7 @@ import { isDisabledSchemaItem } from './utils';
 interface PreviewDrawerProps {
   isPreviewPanelVisible: boolean
   handleClosePreview: () => void
-  toRevSchema: ISchemaItem[]
+  toRevSchema: FormFieldSchema[]
   scanDetails: BulkMigrationScanDetails | null
 }
 

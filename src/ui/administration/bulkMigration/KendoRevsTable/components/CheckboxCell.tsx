@@ -6,7 +6,7 @@ import { translate } from '../../../../../common/intl';
 import { MomentFormats } from '../../../../../common/utils/date';
 import DateTime from '../../../../components/DateTime';
 import { Checkbox } from '../../../../components/forms/fields-next';
-import { MIGRATION_STATUS_ENUM } from '../../interface';
+import { MigrationStatus } from '../../interface';
 import { SELECTED_FIELD } from '../constants';
 import { CustomTemplateProps } from '../types';
 import useStyles from './styles';
@@ -69,20 +69,20 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <div className={classes.checkboxRowContent} onMouseEnter={handleIconHover} onMouseLeave={handlePopoverClose}>
-      {status !== MIGRATION_STATUS_ENUM.COMPLETED && (
+      {status !== MigrationStatus.COMPLETED && (
         <Checkbox
           checked={dataItem[SELECTED_FIELD]}
           onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}
           inputProps={{ 'aria-labelledby': labelId }}
         />
       )}
-      {status === MIGRATION_STATUS_ENUM.COMPLETED && (
+      {status === MigrationStatus.COMPLETED && (
         <FontAwesomeIcon size="xl" icon={solid('check-double')} className={classes.checkboxRowContentDone} />
       )}
-      {status === MIGRATION_STATUS_ENUM.FAILED && (
+      {status === MigrationStatus.FAILED && (
         <FontAwesomeIcon size="lg" icon={solid('circle-exclamation')} className={classes.checkboxRowContentFailed} />
       )}
-      {status === MIGRATION_STATUS_ENUM.IN_PROGRESS && (
+      {status === MigrationStatus.IN_PROGRESS && (
         <FontAwesomeIcon size="xl" icon={regular('hourglass')} className={classes.checkboxRowContentInProgress} />
       )}
     </div>

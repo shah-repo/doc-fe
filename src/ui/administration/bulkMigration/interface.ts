@@ -23,10 +23,10 @@ export interface BulkMigrationScanDetails {
   toDocumentTypeId: string
   fromFormRevId: string
   toFormRevId: string
-  fromFormSchema: ISchemaItem[]
-  toFormSchema: ISchemaItem[]
+  fromFormSchema: FormFieldSchema[]
+  toFormSchema: FormFieldSchema[]
   completedAt: string
-  status: MIGRATION_STATUS_ENUM
+  status: MigrationStatus
 }
 
 interface MigrationFailureReason {
@@ -41,7 +41,7 @@ interface FormInputMap {
 
 interface RunDetail {
   runAt: string
-  status: MIGRATION_STATUS_ENUM
+  status: MigrationStatus
   completedAt: string
   failureReason?: MigrationFailureReason
 }
@@ -59,9 +59,9 @@ export interface SupplierScanResultRevision {
   newFormInput: FormInputMap
   fieldNamesUnmatched: FormInputMap
   runDetails: RunDetail[]
-  status: MIGRATION_STATUS_ENUM
-  approvalStatus: SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM
-  proposedAction: REV_ACTION_OPTIONS
+  status: MigrationStatus
+  approvalStatus: SupplierMigrationApprovalStatus
+  proposedAction: MigrationAction
   name: string
   email: string
   ownerId: string
@@ -70,13 +70,13 @@ export interface SupplierScanResultRevision {
   isSelected?: boolean
 }
 
-enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {
+enum SupplierMigrationApprovalStatus {
   DEFAULT = 'DEFAULT',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
 
-enum REV_ACTION_OPTIONS {
+enum MigrationAction {
   REVISE_AND_MIGRATE = 'REVISE_AND_MIGRATE',
   MIGRATE_ONLY = 'MIGRATE_ONLY',
   CHECK_FORM_INPUT_ONLY = 'Check Form Input Only',
@@ -84,7 +84,7 @@ enum REV_ACTION_OPTIONS {
   RECOVER_ERROR_AND_RELEASE = 'RECOVER_ERROR_AND_RELEASE',
 }
 
-export enum MIGRATION_STATUS_ENUM {
+export enum MigrationStatus {
   INITIALIZED = 'INITIALIZED',
   STARTED = 'STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
@@ -96,7 +96,7 @@ export enum MIGRATION_STATUS_ENUM {
 
 export interface SelectedItemDetails {
   docRevId: string
-  action: REV_ACTION_OPTIONS
+  action: MigrationAction
 }
 
 export interface ApprovalRequirements {
@@ -112,18 +112,22 @@ export interface ApprovalRequirementGroup {
   permissions: Permission[]
 }
 
-export type ISchemaItem = FBSchemaProps & {
+export type FormFieldSchema = FBSchemaProps & {
   mappedToCount?: number
   mappedFrom?: SourceMapping[]
   tableMappings?: TableRowData[]
 };
+
+export interface LocalMappingOption {
+  [key: string]: MappingOptions
+}
 
 export interface SourceMapping {
   label?: string | ReactNode | FBLabelLocaleProps
   name: string
   type?: FBInputType
   isShowDirectly: boolean
-  localMapping?: {[key: string]: MappingOptions}
+  localMapping?: LocalMappingOption
   rules?: string
 }
 
