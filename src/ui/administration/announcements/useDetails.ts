@@ -6,15 +6,15 @@ import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
 import { DocumentRevision, ErrorCodes } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastSuccess } from '../../components/notifications';
-import { IAnnouncementDetail, IConflictingItem } from './interface';
+import { AnnouncementRowDetail, ConflictItem } from './interface';
 
 export const useAnnouncementDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [announcementDetailRows, setAnnouncementDetailRows] = useState<IAnnouncementDetail[]>([]);
+  const [announcementDetailRows, setAnnouncementDetailRows] = useState<AnnouncementRowDetail[]>([]);
   const [formRevsList, setFormRevsList] = useState<DocumentRevision[]>([]);
   const [selectedFormRevToUpgrade, setSelectedFormRevToUpgrade] = useState<string>('');
-  const [conflictingElements, setConflictingElements] = useState<{ [key: string]: IConflictingItem }>({});
+  const [conflictingElements, setConflictingElements] = useState<{ [key: string]: ConflictItem }>({});
   const [isFormUpgradeDone, setIsFormUpgradeDone] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,10 +46,9 @@ export const useAnnouncementDetails = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         const { announcementActionEntries, formRevs } = data as {
-          announcementActionEntries: IAnnouncementDetail[]
+          announcementActionEntries: AnnouncementRowDetail[]
           formRevs: DocumentRevision[]
         };
         setIsLoading(false);
@@ -76,10 +75,9 @@ export const useAnnouncementDetails = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         const { conflictingElements, isFormUpgradeDone } = data as {
-          conflictingElements: { [key: string]: IConflictingItem }
+          conflictingElements: { [key: string]: ConflictItem }
           isFormUpgradeDone: boolean
         };
         setIsLoading(false);
@@ -117,7 +115,6 @@ export const useAnnouncementDetails = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsSubmitting(false);
         toastSuccess(

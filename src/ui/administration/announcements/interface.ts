@@ -19,7 +19,7 @@ enum FormBuilderComponentTypeEnum {
   OBJECT = 'OBJECT',
 }
 
-export interface IAnnouncement {
+export interface Announcement {
   companyId: string
   completedAt: string
   documentTypeCategory: DocumentCategory
@@ -33,16 +33,21 @@ export interface IAnnouncement {
   isMappingRequired: boolean
 }
 
-export interface IAnnouncementDetail {
+export interface AnnouncementRowDetail {
   announcementId: string
   helpText: string
   componentKeyName: string
   displayOrder: number
-  formBuilder: IFormBuilder
+  formBuilder: FormComponent
   id: string
 }
 
-export interface IFormBuilder {
+interface Option {
+  text: string
+  value: string
+}
+
+export interface FormComponent {
   dataType: FormBuilderComponentTypeEnum
   defaultLabel: string
   defaultTabId: string
@@ -50,11 +55,11 @@ export interface IFormBuilder {
   fieldNames: string[]
   keyName: string
   optionId: string
-  options: Array<{text: string, value: string}>
+  options: Option[]
   type: string
 }
 
-export type IConflictingItem = FBSchemaProps & {
+export type ConflictItem = FBSchemaProps & {
   isResolved?: boolean
   isSelected?: boolean
   mustBeResolved?: boolean
@@ -65,7 +70,7 @@ export enum IndicatorTypeEnum {
   WARNING = 'warning',
 }
 
-export enum SELECTED_RESOLUTION_ENUM {
+export enum SelectedResolution {
   EXISTING = 'existing',
   NEW = 'new',
 }

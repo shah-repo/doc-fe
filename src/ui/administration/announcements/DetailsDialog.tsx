@@ -16,7 +16,7 @@ import { translate } from '../../../common/intl';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import AnnouncementDetail from './Detail';
 import InfoIndicator from './InfoIndicator';
-import { IAnnouncement, IAnnouncementDetail, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
+import { Announcement, AnnouncementRowDetail, IndicatorTypeEnum, SelectedResolution } from './interface';
 import useStyles from './styles';
 import { useAnnouncementDetails } from './useDetails';
 import { updateNestedObject } from './utils';
@@ -24,7 +24,7 @@ import { updateNestedObject } from './utils';
 interface AnnouncementDetailsDialogProps {
   isOpened: boolean
   handleClose: () => void
-  announcement: IAnnouncement
+  announcement: Announcement
 }
 
 const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ isOpened, handleClose, announcement }) => {
@@ -61,10 +61,10 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
     setIsAnyConflictingElementsUnResolved(hasUnresolved);
   }, [conflictingElements]);
 
-  const handleConflictResolution = (detailRow: IAnnouncementDetail, value: SELECTED_RESOLUTION_ENUM) => {
+  const handleConflictResolution = (detailRow: AnnouncementRowDetail, value: SelectedResolution) => {
     const updated = updateNestedObject(conflictingElements, detailRow.id, {
       isResolved: true,
-      isSelected: value === SELECTED_RESOLUTION_ENUM.EXISTING,
+      isSelected: value === SelectedResolution.EXISTING,
     });
     setConflictingElements(updated);
   };

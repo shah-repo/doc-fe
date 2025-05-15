@@ -8,7 +8,7 @@ import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, ErrorCodes, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
@@ -30,22 +30,22 @@ interface Props {
   isAssignBtnShown?: boolean
 }
 
-export interface IItem {
+export interface ApprovalItem {
   docId: string
   displayRevision: string
   phase: string
 }
 
-export interface IApprovalErrorResponse {
+export interface ApprovalFailureResponse {
   msgs: string[]
   isWarning: boolean
   isError: boolean
   itemsAsOfferingNotApproved: Array<{docId: string, displayRevision: string}>
-  errorItems: IItem[]
-  warningItems: IItem[]
+  errorItems: ApprovalItem[]
+  warningItems: ApprovalItem[]
 }
 
-export const SubmitForApproval: React.FunctionComponent<Props> = ({
+export const SubmitForApproval: React.FC<Props> = ({
   documentRevision,
   docRevId,
   status,
@@ -66,7 +66,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
-  const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+  const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
   if (isAssignBtnShown) {
     label = 'record.assign';
@@ -76,8 +76,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     onError: (error) => {
       try {
         const parsedError = JSON.parse(error as string);
-        if (parsedError.status === 412 && parsedError.response) {
-          setErrorResponse(parsedError.response as IApprovalErrorResponse);
+        if (parsedError.status === ErrorCodes.PRECONDITION_FAILED && parsedError.response) {
+          setErrorResponse(parsedError.response as ApprovalFailureResponse);
           supplierStatusDialog.open();
         } else {
           toastError(error as string);

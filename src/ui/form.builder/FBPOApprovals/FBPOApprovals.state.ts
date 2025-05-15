@@ -5,7 +5,7 @@ import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTrans
 import { GroupType } from '../../../state/ducks/auth/types';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { ErrorCodes } from '../../../state/ducks/documentRevisions/types';
-import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix/FBPOApprovalMatrix.types';
@@ -126,7 +126,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: (response: IApprovalErrorResponse) => void,
+    callback?: (response: ApprovalFailureResponse) => void,
     ignoreWarning?: boolean,
   ) => {
     if (!id) { return; }

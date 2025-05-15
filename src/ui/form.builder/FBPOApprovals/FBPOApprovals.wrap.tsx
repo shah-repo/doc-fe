@@ -7,7 +7,7 @@ import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDi
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
-import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
 import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
@@ -42,7 +42,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+    const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
     const [password, setPassword] = useState<string>();
     const supplierStatusDialog = useDialog();
 
@@ -84,7 +84,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const handleError = (response: IApprovalErrorResponse) => {
+    const handleError = (response: ApprovalFailureResponse) => {
       setErrorResponse(response);
       supplierStatusDialog.open();
     };

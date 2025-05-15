@@ -6,7 +6,7 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import { Dialog } from '../../components/dialogs';
 import Text from '../../components/Text';
-import { IApprovalErrorResponse, IItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
 import { styles as useStyles } from './AlertDialog.styles';
@@ -14,7 +14,7 @@ import { styles as useStyles } from './AlertDialog.styles';
 interface Props {
   confirmAction: (values?) => void
   cancelAction?: (e: React.MouseEvent<HTMLElement>) => void
-  data: IApprovalErrorResponse
+  data: ApprovalFailureResponse
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
@@ -38,7 +38,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
 
   const title: Translation = data.isError ? 'common.alert' : 'common.warning';
 
-  const getConflictingPhases = (items: IItem[]) => {
+  const getConflictingPhases = (items: ApprovalItem[]) => {
     const itemPhasesSet = new Set(items.map((item) => item.phase));
     const phases: string[] = Array.from(itemPhasesSet).map((phase) =>
       translate('supplier.conflict.phase.text', { phase }),

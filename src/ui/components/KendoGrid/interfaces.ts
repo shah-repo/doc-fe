@@ -1,6 +1,6 @@
 import { DataResult, State } from '@progress/kendo-data-query';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { IAnnouncement } from '../../administration/announcements/interface';
+import { Announcement } from '../../administration/announcements/interface';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { TablePanelStateProps } from '../../components/table/types';
 
@@ -58,7 +58,7 @@ export interface KendoGridProps<T> {
 export interface DataLoaderProps {
   dataState: State
   onDataReceived: (products: DataResult, dataState: State) => void
-  onAnnouncementReceived: (announcement: IAnnouncement[]) => void
+  onAnnouncementReceived: (announcement: Announcement[]) => void
   schema: object
   tableName: string
   queryUrl: string

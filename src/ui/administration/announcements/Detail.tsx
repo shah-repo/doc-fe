@@ -7,16 +7,13 @@ import { FBSchemaState } from '../../form.builder';
 import { FBOption } from '../../form.builder/index';
 import { FBInputProps } from '../../form.builder/types/common';
 import { Translation } from '../../translations/types';
-import { IAnnouncementDetail, IConflictingItem, IFormBuilder, SELECTED_RESOLUTION_ENUM } from './interface';
+import { AnnouncementRowDetail, ConflictItem, FormComponent, SelectedResolution } from './interface';
 import useStyles from './styles';
 
 interface AnnouncementDetailProps {
-  announcementDetailRow: IAnnouncementDetail
-  conflictingElements: Record<string, IConflictingItem>
-  handleConflictResolution: (
-    row: IAnnouncementDetail,
-    value: SELECTED_RESOLUTION_ENUM
-  ) => void
+  announcementDetailRow: AnnouncementRowDetail
+  conflictingElements: Record<string, ConflictItem>
+  handleConflictResolution: (row: AnnouncementRowDetail, value: SelectedResolution) => void
 }
 
 const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
@@ -39,7 +36,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
     });
   };
 
-  const getFormComponentDetails = (formBuilder: IFormBuilder): Partial<FBInputProps> => ({
+  const getFormComponentDetails = (formBuilder: FormComponent): Partial<FBInputProps> => ({
     name: formBuilder.keyName,
     label: formBuilder.defaultLabel,
     type: formBuilder.type,
@@ -48,18 +45,14 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
   });
 
   const handleOptionSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value as SELECTED_RESOLUTION_ENUM;
+    const value = event.target.value as SelectedResolution;
     setSelectedOption(value);
     handleConflictResolution(announcementDetailRow, value);
   };
 
   const getTabText = (defaultTabId: string): Translation => `tabId.${defaultTabId}` as Translation;
   const conflictData = conflictingElements[announcementDetailRow.id];
-  const hasConflict = !!(
-    formBuilder
-    && conflictData?.options?.length
-    && conflictData?.mustBeResolved
-  );
+  const hasConflict = !!(formBuilder && conflictData?.options?.length && conflictData?.mustBeResolved);
 
   return (
     <Grid item lg={12} xl={6}>
@@ -101,7 +94,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
             <Grid container className={classes.conflictingElementsContainer}>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
                 <FormControlLabel
-                  value={SELECTED_RESOLUTION_ENUM.EXISTING}
+                  value={SelectedResolution.EXISTING}
                   control={<Radio />}
                   label={translate('supplier.announcement.detail.existing.options')}
                   className={classes.announcementDetailOptionsHeading}
@@ -112,7 +105,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
               </Grid>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
                 <FormControlLabel
-                  value={SELECTED_RESOLUTION_ENUM.NEW}
+                  value={SelectedResolution.NEW}
                   control={<Radio />}
                   label={translate('supplier.announcement.detail.new.options')}
                   className={classes.announcementDetailOptionsHeading}
@@ -121,9 +114,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
                   {formBuilder.options?.map((option) => option.text).join(', ')}
                 </Typography>
               </Grid>
-              <Typography variant="body2">
-                {translate('supplier.announcement.detail.tab.helper.message')}
-              </Typography>
+              <Typography variant="body2">{translate('supplier.announcement.detail.tab.helper.message')}</Typography>
             </Grid>
           </RadioGroup>
         )}

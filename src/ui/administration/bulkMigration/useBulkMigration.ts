@@ -1,10 +1,10 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
 import { intl } from '../../../common/intl';
 import { encodeString } from '../../../common/utils/helpers';
 import apiClient from '../../../state/apiClient';
 import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, ErrorCodes } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
@@ -65,12 +65,12 @@ export const useBulkMigration = () => {
     setErrorMessage('');
   }
 
-  function catchAxiosException (exception: any) {
+  function catchAxiosException (exception: AxiosError): void {
     setIsLoading(false);
     if (axios.isCancel(exception)) {
       return;
     }
-    if (exception?.response?.status === 504) {
+    if (exception?.response?.status === ErrorCodes.GATEWAY_TIMEOUT) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
       const message: string = (exception?.response?.data?.message as string) ?? 'Error processing request';
@@ -91,7 +91,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         setDocumentTypesList(data);
@@ -116,7 +115,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
 
@@ -144,7 +142,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         setEligibleRevsCount(data);
@@ -173,7 +170,6 @@ export const useBulkMigration = () => {
 
       apiClient
         .request(requestConfig)
-        .then((resp) => resp)
         .then(({ data }) => {
           const {
             scanDetails, alreadyUpgradedScanEntryIds, irrelevantScanIds,
@@ -204,7 +200,6 @@ export const useBulkMigration = () => {
 
       apiClient
         .request(requestConfig)
-        .then((resp) => resp)
         .then(({ data }) => {
           setScanDetails(data);
         })
@@ -234,7 +229,6 @@ export const useBulkMigration = () => {
 
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         setIsScanRunning(false);
@@ -264,7 +258,6 @@ export const useBulkMigration = () => {
 
       apiClient
         .request(requestConfig)
-        .then((resp) => resp)
         .then(({ data }) => {
           setIsLoading(false);
           toastSuccess(
@@ -291,7 +284,6 @@ export const useBulkMigration = () => {
 
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         setScanDetails(data);
@@ -320,7 +312,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         handleMigrationConfirmationDialogClose();
@@ -343,7 +334,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setPreviewDocRevsList(data);
         setFilteredDocRevsList(data);
@@ -367,7 +357,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         const { newFormInput, fieldNamesUnmatched } = data;
         setNewFormInput(newFormInput);
@@ -402,7 +391,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
         const { items, totalCount }: {items: SupplierScanResultRevision[], totalCount: number} = data;
@@ -429,7 +417,6 @@ export const useBulkMigration = () => {
     };
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => {
         const { newFormInput, fieldNamesUnmatched } = data;
         row.newFormInput = newFormInput;
@@ -457,7 +444,6 @@ export const useBulkMigration = () => {
     };
     return await apiClient
       .request(requestConfig)
-      .then((resp) => resp)
       .then(({ data }) => data);
   }
 

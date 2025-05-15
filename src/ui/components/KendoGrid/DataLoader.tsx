@@ -1,5 +1,5 @@
 import { toODataString } from '@progress/kendo-data-query';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
@@ -161,7 +161,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
       .request(requestConfig)
       .then(({ data }) => {
         onAnnouncementReceived(data);
-      }).catch((exception) => {
+      }).catch((exception: AxiosError) => {
         if (axios.isCancel(exception)) {
           return;
         }

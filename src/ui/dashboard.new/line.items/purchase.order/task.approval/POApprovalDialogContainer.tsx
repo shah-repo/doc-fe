@@ -13,7 +13,7 @@ import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
-import { IApprovalErrorResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
+import { ApprovalFailureResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -50,7 +50,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useDispatch();
   const supplierStatusDialog = useDialog();
-  const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+  const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
   const [password, setPassword] = useState<string>();
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
@@ -92,7 +92,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         const { status, response } = parsedError || {};
 
         if (status === ErrorCodes.PRECONDITION_FAILED && response) {
-          setErrorResponse(response as IApprovalErrorResponse);
+          setErrorResponse(response as ApprovalFailureResponse);
           supplierStatusDialog.open();
         } else {
           toastError(error);

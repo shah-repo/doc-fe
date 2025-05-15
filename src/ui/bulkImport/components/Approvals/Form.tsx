@@ -212,7 +212,6 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
                     }
                   }} />
               </FormControl>}
-              <span>from here</span>
               {users && <List className={classes.listContainer}>
                 {users.map((user, index) => (
                   <ListItem key={index} className={classes.listItem}>

@@ -5,11 +5,11 @@ import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
 import { translate } from '../../../common/intl';
 import AnnouncementDetailsDialog from './DetailsDialog';
-import { AnnouncementTypeEnum, IAnnouncement } from './interface';
+import { Announcement, AnnouncementTypeEnum } from './interface';
 import useStyles from './styles';
 
 interface AnnouncementIndicatorProps {
-  announcement: IAnnouncement
+  announcement: Announcement
 }
 
 const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcement }) => {

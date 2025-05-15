@@ -18,7 +18,7 @@ import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import AnnouncementIndicator from '../../administration/announcements/Indicator';
-import { IAnnouncement } from '../../administration/announcements/interface';
+import { Announcement } from '../../administration/announcements/interface';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
@@ -184,8 +184,8 @@ export function KendoGrid<T extends any> ({
     }
   };
 
-  const [announcements, setAnnouncements] = useState<IAnnouncement[]>([]);
-  const announcementReceived = (data: IAnnouncement[]) => {
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const announcementReceived = (data: Announcement[]) => {
     setAnnouncements(data);
   };
 
