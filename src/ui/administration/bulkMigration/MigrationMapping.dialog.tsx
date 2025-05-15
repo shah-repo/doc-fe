@@ -12,7 +12,13 @@ import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/
 import Colors from '../../layout/theme/utils/colors';
 import InfoIndicator from '../announcements/InfoIndicator';
 import { IndicatorTypeEnum } from '../announcements/interface';
-import { BulkMigrationScanDetails, FormFieldSchema, LocalMappingOption, SourceMapping, TableRowData } from './interface';
+import {
+  BulkMigrationScanDetails,
+  FormFieldSchema,
+  LocalMappingOption,
+  SourceMapping,
+  TableRowData,
+} from './interface';
 import MappingRulesDrawer from './MappingRulesDrawer';
 import OptionMapperDrawer from './OptionMapperDrawer';
 import PreviewDrawer from './PreviewDrawer';
@@ -30,12 +36,9 @@ interface MigrationMappingDialogProps {
   scanDetails: BulkMigrationScanDetails | null
 }
 
-const OptionsRenderer: React.FC<{
-  name?: string
-}> = ({ name }) => {
+const OptionsRenderer: React.FC<{ name?: string }> = ({ name }) => {
   const classes = useStyles();
   const { getConfiguredSupplierOptions } = useBulkMigration();
-
   const [optionsToRender, setOptionsToRender] = useState<string[]>([]);
 
   useEffect(() => {

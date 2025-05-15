@@ -31,27 +31,29 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
   const [localMapping, setLocalMapping] = useState<LocalMappingOption>({});
 
   useEffect(() => {
-    if (toRevSchemaItem?.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC) {
-      fetchOptions(toRevSchemaItem.name);
+    if (toRevSchemaItem?.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC && toRevSchemaItem?.name) {
+      fetchOptions(toRevSchemaItem?.name);
     }
   }, [toRevSchemaItem]);
 
-  const fetchOptions = async (name) => {
+  const fetchOptions = async (name: string) => {
     const fetchedOptions = await getConfiguredSupplierOptions(name);
-    setCheckboxToOptions((fetchedOptions ?? []).map(option => ({ text: option.text, value: option.text })));
+    setCheckboxToOptions(
+      (fetchedOptions ?? []).map((option: MappingOptions) => ({ text: option.text, value: option.text })),
+    );
   };
 
   useEffect(() => {
     if (selectedSchemaItem) {
-      setCheckboxFromOptions((selectedSchemaItem.options as unknown as MappingOptions[]) ?? []);
+      setCheckboxFromOptions((selectedSchemaItem.options as MappingOptions[]) ?? []);
     }
 
     if (toRevSchemaItem) {
-      setCheckboxToOptions((toRevSchemaItem.options as unknown as MappingOptions[]) ?? []);
+      setCheckboxToOptions((toRevSchemaItem.options as MappingOptions[]) ?? []);
     }
   }, [selectedSchemaItem, toRevSchemaItem]);
 
-  const handleFromOptionClick = (option) => {
+  const handleFromOptionClick = (option: MappingOptions) => {
     setFromSelectedOption(option);
   };
 
@@ -70,7 +72,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
   };
 
   const isToOptionMapped = (option: MappingOptions) => {
-    return Object.values(localMapping).map(option => option.text).includes(option.text);
+    return Object.values(localMapping)
+      .map((option) => option.text)
+      .includes(option.text);
   };
 
   const getItemStyle = (option: MappingOptions, listType: string) => {
@@ -105,7 +109,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
             {/* First List of Options */}
             <Paper className={classes.optionMapperDrawerOptionsList}>
               <List>
-                <Typography variant="subtitle1" align="center"
+                <Typography
+                  variant="subtitle1"
+                  align="center"
                   dangerouslySetInnerHTML={{
                     __html: translate('bulk.migration.mapping.from.title', {
                       label: selectedSchemaItem?.label as string,
@@ -113,7 +119,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
                   }}
                 />
                 {checkboxFromOptions.map((option, index) => (
-                  <ListItem button key={option.text}
+                  <ListItem
+                    button
+                    key={option.text}
                     onClick={() => handleFromOptionClick(option)}
                     className={getItemStyle(option, ListType.FROM)}
                   >
@@ -125,7 +133,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
 
             <Paper className={classes.optionMapperDrawerOptionsList}>
               <List>
-                <Typography variant="subtitle1" align="center"
+                <Typography
+                  variant="subtitle1"
+                  align="center"
                   dangerouslySetInnerHTML={{
                     __html: translate('bulk.migration.mapping.to.title', {
                       label: toRevSchemaItem?.label as string,
@@ -133,7 +143,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
                   }}
                 />
                 {checkboxToOptions.map((option, index) => (
-                  <ListItem button key={option.text}
+                  <ListItem
+                    button
+                    key={option.text}
                     onClick={() => handleToOptionClick(option)}
                     className={getItemStyle(option, ListType.TO)}
                   >
@@ -152,7 +164,12 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
             {translate('common.cancel')}
           </Button>
           {Object.entries(localMapping).length > 0 && (
-            <Button onClick={() => handleMappingConfirmation(localMapping)} color="primary" variant="contained" autoFocus>
+            <Button
+              onClick={() => handleMappingConfirmation(localMapping)}
+              color="primary"
+              variant="contained"
+              autoFocus
+            >
               {translate('common.confirm')}
             </Button>
           )}

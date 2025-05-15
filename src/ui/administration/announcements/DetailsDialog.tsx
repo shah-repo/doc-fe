@@ -27,7 +27,11 @@ interface AnnouncementDetailsDialogProps {
   announcement: Announcement
 }
 
-const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ isOpened, handleClose, announcement }) => {
+const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({
+  isOpened,
+  handleClose,
+  announcement,
+}) => {
   const classes = useStyles();
 
   const {
@@ -45,7 +49,7 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
     processFormUpgrade,
   } = useAnnouncementDetails();
 
-  const [isAnyConflictingElementsUnResolved, setIsAnyConflictingElementsUnResolved] = useState<boolean>(false);
+  const [hasUnresolvedConflicts, setHasUnresolvedConflicts] = useState<boolean>(false);
 
   useEffect(() => {
     if (announcement.id) {
@@ -55,10 +59,8 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
 
   useEffect(() => {
     const values = Object.values(conflictingElements);
-    const hasUnresolved = values?.some(
-      ({ isResolved, mustBeResolved }) => !isResolved && mustBeResolved,
-    );
-    setIsAnyConflictingElementsUnResolved(hasUnresolved);
+    const hasUnresolved = values?.some(({ isResolved, mustBeResolved }) => !isResolved && mustBeResolved);
+    setHasUnresolvedConflicts(hasUnresolved);
   }, [conflictingElements]);
 
   const handleConflictResolution = (detailRow: AnnouncementRowDetail, value: SelectedResolution) => {
@@ -72,7 +74,7 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
   const showUpgradeSection = announcement.canUpgradeForm;
   const showUpgradeSuccess = showUpgradeSection && isFormUpgradeDone;
   const showUpgradeInfo = !showUpgradeSection;
-  const showUnresolvedWarning = showUpgradeSection && isAnyConflictingElementsUnResolved;
+  const showUnresolvedWarning = showUpgradeSection && hasUnresolvedConflicts;
 
   return (
     <Dialog fullScreen open={isOpened} onClose={handleClose} aria-labelledby="announcement-detail-title">
@@ -106,7 +108,9 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
                     }
                     data-cy="from-rev-selection"
                     value={formRevsList.find((rev) => rev.id === selectedFormRevToUpgrade) || null}
-                    onChange={(_, selectedOption) => handleFormRevSelectionToUpgrade(selectedOption?.id, announcement.id)}
+                    onChange={(_, selectedOption) =>
+                      handleFormRevSelectionToUpgrade(selectedOption?.id, announcement.id)
+                    }
                   />
                   <FormHelperText>
                     {translate('supplier.announcement.details.upgrade.form.rev.helper.text')}
@@ -120,7 +124,7 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
                     data-cy="upgrade-form"
                     className={classes.upgradeFormButton}
                     onClick={() => processFormUpgrade(announcement.id)}
-                    disabled={isAnyConflictingElementsUnResolved || !selectedFormRevToUpgrade}
+                    disabled={hasUnresolvedConflicts || !selectedFormRevToUpgrade}
                   >
                     {translate(
                       isSubmitting

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
-import { intl } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import { encodeString } from '../../../common/utils/helpers';
 import apiClient from '../../../state/apiClient';
 import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
@@ -9,7 +9,7 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
+import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, MappingOptions, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
@@ -42,8 +42,8 @@ export const useBulkMigration = () => {
   const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
   const [filteredDocRevsList, setFilteredDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
 
-  const [newFormInput, setNewFormInput] = useState<{[key: string]: any}>();
-  const [fieldsUnmatched, setFieldsUnmatched] = useState<{[key: string]: any}>();
+  const [newFormInput, setNewFormInput] = useState<{[key: string]: string}>();
+  const [fieldsUnmatched, setFieldsUnmatched] = useState<{[key: string]: string}>();
 
   const [rowMapping, setRowMapping] = useState(false);
 
@@ -260,9 +260,7 @@ export const useBulkMigration = () => {
         .request(requestConfig)
         .then(({ data }) => {
           setIsLoading(false);
-          toastSuccess(
-            'Scan mapping logic has been updated. Click Preview to see this logic in action.',
-          );
+          toastSuccess(translate('bulk.migration.scan.mapping.logic.info.message'));
           setScanDetails(data);
           setUpdateRevsTable(updateRevsTable => updateRevsTable + 1);
         })
@@ -287,7 +285,7 @@ export const useBulkMigration = () => {
       .then(({ data }) => {
         setIsLoading(false);
         setScanDetails(data);
-        toastSuccess('Scan request has been canceled. Please refresh.');
+        toastSuccess(translate('bulk.migration.scan.request.cancelled.message'));
       })
       .catch((exception) => {
         catchAxiosException(exception);
@@ -295,7 +293,6 @@ export const useBulkMigration = () => {
   }
 
   const handleMigrationConfirmation = (selectedRows: SelectedItemDetails[], employeePassword: string) => {
-    // Take all the ones selected & send to BE
     setIsLoading(true);
     setErrorMessage('');
 
@@ -315,7 +312,7 @@ export const useBulkMigration = () => {
       .then(({ data }) => {
         setIsLoading(false);
         handleMigrationConfirmationDialogClose();
-        toastSuccess('Supplier Migration job request has been placed. Please check back in some time.');
+        toastSuccess(translate('bulk.migration.migration.job.placed.success.message'));
       })
       .catch((exception) => {
         catchAxiosException(exception);
@@ -433,7 +430,7 @@ export const useBulkMigration = () => {
       });
   }
 
-  async function getConfiguredSupplierOptions (name: string): Promise<any> {
+  async function getConfiguredSupplierOptions (name: string): Promise<MappingOptions[]> {
     const type = name.split('-').length > 0 ? name.split('-')[1] : '';
     const requestConfig: AxiosRequestConfig = {
       method: 'get',

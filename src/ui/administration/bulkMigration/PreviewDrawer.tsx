@@ -1,6 +1,16 @@
 import { light, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Drawer, InputAdornment, LinearProgress, List, ListItem, ListItemText, TextField, Typography } from '@material-ui/core';
+import {
+  Box,
+  Drawer,
+  InputAdornment,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import cx from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -60,22 +70,25 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
     }
   };
 
-  const searchTextChanged = useCallback((text: string) => {
-    setSearchText(text);
-    const trimmedText = text.trim().toLowerCase();
+  const searchTextChanged = useCallback(
+    (text: string) => {
+      setSearchText(text);
+      const trimmedText = text.trim().toLowerCase();
 
-    if (!trimmedText) {
-      setFilteredDocRevsList(previewDocRevsList);
-      return;
-    }
+      if (!trimmedText) {
+        setFilteredDocRevsList(previewDocRevsList);
+        return;
+      }
 
-    const filtered = previewDocRevsList.filter(({ document, name }) => {
-      const docId = document?.docId?.toLowerCase() || '';
-      return docId.includes(trimmedText) || name.toLowerCase().includes(trimmedText);
-    });
+      const filtered = previewDocRevsList.filter(({ document, name }) => {
+        const docId = document?.docId?.toLowerCase() || '';
+        return docId.includes(trimmedText) || name.toLowerCase().includes(trimmedText);
+      });
 
-    setFilteredDocRevsList(filtered);
-  }, [previewDocRevsList]);
+      setFilteredDocRevsList(filtered);
+    },
+    [previewDocRevsList],
+  );
 
   const componentToRender = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
@@ -128,7 +141,9 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
                             data-cy="keyword-search-clear"
                           />
                         </InputAdornment>
-                      )}</>),
+                      )}
+                    </>
+                  ),
                 }}
                 onChange={(event) => searchTextChanged(event.target.value)}
               />
@@ -146,11 +161,7 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
                       >
                         <ListItemText
                           className={classes.listItemText}
-                          primary={
-                            <Typography className={classes.listItemText}>
-                              {revInfo}
-                            </Typography>
-                          }
+                          primary={<Typography className={classes.listItemText}>{revInfo}</Typography>}
                           secondary={
                             <Typography variant="body2" noWrap>
                               {translate('bulk.migration.mapping.preview.keys.mapped', {

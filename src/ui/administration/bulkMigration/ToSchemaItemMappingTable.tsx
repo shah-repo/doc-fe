@@ -9,6 +9,7 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { translate } from '../../../common/intl';
 import { toastError } from '../../components/notifications';
 import { FormFieldSchema, SourceMapping, TableRowData } from './interface';
 import useStyles from './styles';
@@ -16,12 +17,19 @@ import { validateTableMappings } from './utils';
 
 const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
-const ToSchemaItemMappingTable: React.FC<{
+interface ToSchemaItemMappingTableProps {
   schemaItem: FormFieldSchema
   handleMappingChange: (rows: TableRowData[], entryRemoved?: SourceMapping) => void
-  selectedSchemaItem: FormFieldSchema | undefined
+  selectedSchemaItem?: FormFieldSchema
   isSingleRow?: boolean
-}> = ({ schemaItem, handleMappingChange, selectedSchemaItem, isSingleRow }) => {
+}
+
+const ToSchemaItemMappingTable: React.FC<ToSchemaItemMappingTableProps> = ({
+  schemaItem,
+  handleMappingChange,
+  selectedSchemaItem,
+  isSingleRow,
+}) => {
   const classes = useStyles();
   const [rows, setRows] = useState<TableRowData[]>(schemaItem.tableMappings ?? []);
 
@@ -31,34 +39,36 @@ const ToSchemaItemMappingTable: React.FC<{
     }
   }, [schemaItem.name]);
 
-  function addNewRow () {
-    const rowDetails: {[key: string]: any} = {
+  const addNewRow = () => {
+    const rowDetails = {
       id: uuidv4(),
     };
-    schemaItem.fieldNames?.forEach(fieldName => {
+    schemaItem.fieldNames?.forEach((fieldName) => {
       rowDetails[fieldName] = null;
     });
-    setRows([...rows, rowDetails]);
-  }
+    setRows([...rows, rowDetails] as TableRowData[]);
+  };
 
-  function deleteRow (rowToDelete: TableRowData) {
-    const modifiedRows = rows.filter(row => row.id !== rowToDelete.id);
-    Object.keys(rowToDelete).forEach(key => {
+  const deleteRow = (rowToDelete: TableRowData) => {
+    const modifiedRows = rows.filter((row) => row.id !== rowToDelete.id);
+    Object.keys(rowToDelete).forEach((key) => {
       const removedEntries = rowToDelete[key];
       if (Array.isArray(removedEntries)) {
-        removedEntries.forEach(removedEntry => {
+        removedEntries.forEach((removedEntry) => {
           handleMappingChange(modifiedRows, removedEntry);
         });
       }
     });
 
     setRows(modifiedRows);
-  }
+  };
 
-  function handleRowCellClicked (
+  const handleRowCellClicked = (
     event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
-    selectedRow: TableRowData, key: string, mappedToSchemaItem: FormFieldSchema,
-  ) {
+    selectedRow: TableRowData,
+    key: string,
+    mappedToSchemaItem: FormFieldSchema,
+  ) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -67,7 +77,7 @@ const ToSchemaItemMappingTable: React.FC<{
     }
 
     if (selectedSchemaItem.referenceDataType) {
-      toastError('Reference data type cannot be mapped to a column in the table. Please use direct mapping.');
+      toastError(translate('bulk.migration.reference.data.type.error.message'));
       return;
     }
 
@@ -75,7 +85,7 @@ const ToSchemaItemMappingTable: React.FC<{
     if (!modifiedRow[key]) {
       modifiedRow[key] = [];
     }
-    modifiedRow[key].push({
+    modifiedRow?.[key]?.push({
       name: selectedSchemaItem.name ?? '',
       label: selectedSchemaItem.label,
       type: selectedSchemaItem.type,
@@ -83,15 +93,14 @@ const ToSchemaItemMappingTable: React.FC<{
       isShowDirectly: false,
     });
 
-    // Check for Table Mappings
-    const { canMap, errMessage }
-      = validateTableMappings(key, selectedSchemaItem, modifiedRow, mappedToSchemaItem);
+    const { canMap, errMessage } = validateTableMappings(key, selectedSchemaItem, modifiedRow, mappedToSchemaItem);
+
     if (!canMap) {
       toastError(errMessage);
       return;
     }
 
-    const modifiedRows = rows.map(row => {
+    const modifiedRows = rows.map((row) => {
       if (row.id === selectedRow.id) {
         return modifiedRow;
       } else {
@@ -101,82 +110,82 @@ const ToSchemaItemMappingTable: React.FC<{
 
     setRows(modifiedRows);
     handleMappingChange(modifiedRows);
-  }
+  };
 
-  function handleRowCellClearMapping (selectedRow: TableRowData, key: string, removedEntry) {
-    const modifiedRows = rows.map(row => {
+  const handleRowCellClearMapping = (selectedRow: TableRowData, key: string, removedEntry: SourceMapping) => {
+    const modifiedRows = rows.map((row) => {
       if (row.id === selectedRow.id) {
-        row[key] = row[key].filter(entry => entry.name !== removedEntry.name);
+        row[key] = row[key]?.filter((entry) => entry.name !== removedEntry.name);
       }
 
       return row;
     });
     setRows(modifiedRows);
     handleMappingChange(modifiedRows, removedEntry);
-  }
+  };
 
-  function handleCellInput (event, selectedRow: TableRowData, key: string) {
+  const handleCellInput = (event, selectedRow: TableRowData, key: string) => {
     const newValue = event.target.textContent;
-    const modifiedRows = rows.map(row => {
+    const modifiedRows = rows.map((row) => {
       if (row.id === selectedRow.id) {
         row[key] = newValue;
       }
 
       return row;
     });
-    // setRows(modifiedRows);
     handleMappingChange(modifiedRows);
-  }
+  };
 
   return (
-    <Table className={classes.width100}
-      size="small"
-      aria-label="Mapping Table"
-    >
+    <Table className={classes.width100} size="small" aria-label={translate('bulk.migration.mapping.table')}>
       <TableHead>
         <TableRow>
-          <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} >No. </TableCell>
-          {schemaItem.fieldNames?.map(fieldName => {
-            return (
-              <TableCell key={`header-${fieldName}`}>{fieldName}</TableCell>
-            );
+          <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }}>No. </TableCell>
+          {schemaItem.fieldNames?.map((fieldName) => {
+            return <TableCell key={`header-${fieldName}`}>{fieldName}</TableCell>;
           })}
-          { !isSingleRow && <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} /> }
+          {!isSingleRow && <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} />}
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row, index) => (
+        {rows.map((row: TableRowData, index: number) => (
           <TableRow key={index} className={classes.mappingTableRowHeight}>
-            <TableCell className={classes.mappingTableCell}>
-              {index + 1}.
-            </TableCell>
-            {schemaItem.fieldNames?.map(fieldName => {
+            <TableCell className={classes.mappingTableCell}>{index + 1}.</TableCell>
+            {schemaItem.fieldNames?.map((fieldName) => {
+              const fieldValue = row[fieldName];
+              const isFieldValueArray = Array.isArray(fieldValue);
+
               return (
-                <TableCell className={classes.mappingTableCell}
-                  onClick={e => handleRowCellClicked(e, row, fieldName, schemaItem)}
-                  contentEditable = {!Array.isArray(row[fieldName])}
+                <TableCell
+                  className={classes.mappingTableCell}
+                  onClick={(e) => handleRowCellClicked(e, row, fieldName, schemaItem)}
+                  contentEditable={!isFieldValueArray}
                   suppressContentEditableWarning
                   onInput={(event) => handleCellInput(event, row, fieldName)}
                   key={`valueField-${fieldName}-${index}`}
                 >
-                  {(Array.isArray(row[fieldName]) && row[fieldName]?.length) ? row[fieldName].map(entry => {
-                    return (
-                      <Chip
-                        label={entry.label}
-                        onDelete={e => handleRowCellClearMapping(row, fieldName, entry)}
-                        color="secondary"
-                        className={classes.chip}
-                        key={entry.label + entry.name}
-                      />
-                    );
-                  }) : row[fieldName]}
+                  {isFieldValueArray && fieldValue?.length
+                    ? fieldValue.map((entry) => {
+                      return (
+                        <Chip
+                          label={entry.label}
+                          onDelete={() => handleRowCellClearMapping(row, fieldName, entry)}
+                          color="secondary"
+                          className={classes.chip}
+                          key={entry.label + entry.name}
+                        />
+                      );
+                    })
+                    : fieldValue}
                 </TableCell>
               );
             })}
-            { !isSingleRow && <TableCell className={classes.mappingTableCell}>
-              { index > 0 && <DeleteIcon onClick={e => deleteRow(row)} className={classes.deleteIcon} /> }
-              <PlaylistAddIcon onClick={addNewRow} className={classes.cursorPointer} />
-            </TableCell> }
+            {!isSingleRow && (
+              <TableCell className={classes.mappingTableCell}>
+                {index > 0 && <DeleteIcon onClick={() => deleteRow(row)} className={classes.deleteIcon} />}
+                <PlaylistAddIcon onClick={addNewRow} className={classes.cursorPointer} />
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

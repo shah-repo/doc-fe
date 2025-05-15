@@ -63,7 +63,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
   const addUserToGroupsAsync = useAsync<ApprovalRequirements>({
     onSuccess: (approvalRequirements) => {
       setApprovalRequirements(approvalRequirements);
-      toastSuccess('Automation user has been added to the required groups successfully');
+      toastSuccess(translate('bulk.migration.automation.add.user.success.message'));
     },
     onError: toastError,
   });

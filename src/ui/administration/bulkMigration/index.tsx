@@ -21,7 +21,7 @@ import { getRevById } from './utils';
 const BulkMigrationContainer: React.FC = () => {
   const classes = useStyles();
   const [selectedRows, setSelectedRows] = useState<SelectedItemDetails[]>([]);
-  const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible] = useState<boolean>(false);
+  const [isMappingDialogVisible, setIsMappingDialogVisible] = useState<boolean>(false);
 
   const {
     isLoading,
@@ -129,11 +129,11 @@ const BulkMigrationContainer: React.FC = () => {
   }, [fromDocumentTypeId, toDocumentTypeId, fromFormRevId, toFormRevId]);
 
   const showMappingRules = () => {
-    setIsMigrationMappingDialogVisible(true);
+    setIsMappingDialogVisible(true);
   };
 
   const handleMigrationMappingDialogClose = () => {
-    setIsMigrationMappingDialogVisible(false);
+    setIsMappingDialogVisible(false);
   };
 
   const fromRev = getRevById(fromFormRevsList, fromFormRevId);
@@ -147,10 +147,7 @@ const BulkMigrationContainer: React.FC = () => {
     MigrationStatus.COMPLETED,
   ];
 
-  const STATUSES_SHOWING_ERROR: MigrationStatus[] = [
-    MigrationStatus.FAILED,
-    MigrationStatus.COMPLETED,
-  ];
+  const STATUSES_SHOWING_ERROR: MigrationStatus[] = [MigrationStatus.FAILED, MigrationStatus.COMPLETED];
 
   const STATUSES_ALLOWING_CANCEL: MigrationStatus[] = [
     MigrationStatus.IN_PROGRESS,
@@ -376,9 +373,9 @@ const BulkMigrationContainer: React.FC = () => {
           </Box>
         )}
       </div>
-      {isMigrationMappingDialogVisible && fromFormRevId && toFormRevId && (
+      {isMappingDialogVisible && fromFormRevId && toFormRevId && (
         <MigrationMappingDialog
-          isOpen={isMigrationMappingDialogVisible}
+          isOpen={isMappingDialogVisible}
           handleClose={handleMigrationMappingDialogClose}
           fromRev={fromRev}
           toRev={toRev}

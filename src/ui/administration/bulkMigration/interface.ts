@@ -132,7 +132,7 @@ export interface SourceMapping {
 }
 
 export interface TableRowData {
-  [key: string]: SourceMapping[]
+  [key: string]: SourceMapping[] | null | undefined
 }
 
 export interface MismatchResponse {
