@@ -41,7 +41,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions),
     );
     // ENC-6598 - app.approver for new structure, app for old structure
-    defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app);
+    const fieldValue = formState?.getFieldValue(name);
+    const formInputApprovers = fieldValue?.map((app) => app.approver ?? app);
+    const existingApprovers = approvals
+      ?.filter(approval => approval.status !== ApprovalStatus.Abandoned)
+      .map(approval => approval.approver);
+    defaultValue = (fieldValue ? formInputApprovers : existingApprovers) ?? [];
     const formValue = map(defaultValue, 'id');
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
 
