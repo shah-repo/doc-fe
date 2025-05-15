@@ -109,6 +109,15 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
       }
     }, [customerId]);
 
+    const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {
+      if (!selectedCustomerId) {
+        formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
+        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      } else {
+        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+      }
+    };
+
     const clearAddressFields = () => {
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS, {});
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ATTENTION, {});
@@ -119,6 +128,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     const updateLatestAvailableRevision = () => {
       const newCustomerId = latestRevisionSummary?.revisionDetails.id;
       formState?.setFieldValue(name, newCustomerId);
+      updateLatestRevShippingMethod(newCustomerId);
       setAutocompleteKey(newCustomerId);
       clearAddressFields();
     };
@@ -127,6 +137,8 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
       FBAutocompleteAsyncStore.reset(FBAutocompleteAsyncOption.shippingInformation);
       setLatestRevisionSummary(undefined);
       formState?.setFieldValue(name, '');
+      formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
+      formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
       setAutocompleteKey('');
       clearAddressFields();
     };
