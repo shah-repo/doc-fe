@@ -11,6 +11,7 @@ import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
@@ -87,11 +88,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
+  const currentUser = useSelector(authSelectors.currentUser);
 
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
   );
-
   // MARK: @state
   const [documentTypeGroups, setDocTypeGroups] = useState<Group[]>([]);
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
@@ -168,7 +169,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       } else {
         initialGroups = filter(
           uniqBy(response, 'id'),
-          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id),
+          (group) => includes(group.joinedEmployees.map((e) => e.id), currentUser?.employeeId),
         );
       }
       setCheckedGroups(initialGroups);
