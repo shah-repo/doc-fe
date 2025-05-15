@@ -15,8 +15,6 @@ import { FormFieldSchema, SourceMapping, TableRowData } from './interface';
 import useStyles from './styles';
 import { validateTableMappings } from './utils';
 
-const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
-
 interface ToSchemaItemMappingTableProps {
   schemaItem: FormFieldSchema
   handleMappingChange: (rows: TableRowData[], entryRemoved?: SourceMapping) => void
@@ -140,11 +138,11 @@ const ToSchemaItemMappingTable: React.FC<ToSchemaItemMappingTableProps> = ({
     <Table className={classes.width100} size="small" aria-label={translate('bulk.migration.mapping.table')}>
       <TableHead>
         <TableRow>
-          <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }}>No. </TableCell>
+          <TableCell className={classes.fixedWidthColumn}>{translate('bulk.migration.table.cell.no')} </TableCell>
           {schemaItem.fieldNames?.map((fieldName) => {
             return <TableCell key={`header-${fieldName}`}>{fieldName}</TableCell>;
           })}
-          {!isSingleRow && <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} />}
+          {!isSingleRow && <TableCell className={classes.fixedWidthColumn} />}
         </TableRow>
       </TableHead>
       <TableBody>

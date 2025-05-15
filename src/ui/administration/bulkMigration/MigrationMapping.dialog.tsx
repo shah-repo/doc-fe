@@ -36,7 +36,11 @@ interface MigrationMappingDialogProps {
   scanDetails: BulkMigrationScanDetails | null
 }
 
-const OptionsRenderer: React.FC<{ name?: string }> = ({ name }) => {
+interface OptionsRendererProps {
+  name?: string
+}
+
+const OptionsRenderer: React.FC<OptionsRendererProps> = ({ name }) => {
   const classes = useStyles();
   const { getConfiguredSupplierOptions } = useBulkMigration();
   const [optionsToRender, setOptionsToRender] = useState<string[]>([]);
@@ -149,7 +153,6 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   };
 
   const handleFromSchemaItemClick = (schemaItem: FormFieldSchema) => {
-    // if (!isDisabledSchemaItem(schemaItem) && !schemaItem.isMapped) {
     if (!isDisabledSchemaItem(schemaItem)) {
       setSelectedSchemaItem(schemaItem);
     }

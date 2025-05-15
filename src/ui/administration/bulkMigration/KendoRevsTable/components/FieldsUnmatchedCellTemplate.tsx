@@ -18,27 +18,30 @@ export const FieldsUnmatchedCellTemplate: React.FC<Props> = ({ field, scanId, da
   const classes = useStyles();
   const { isMapped } = dataItem;
   const { rowMapping, getPreviewForDocRevRevsTable } = useBulkMigration();
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
   const updateRow = (updatedRow: SupplierScanResultRevision) => {
     dataItem = updatedRow;
   };
 
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
+  const handlePreviewClick = () => {
+    getPreviewForDocRevRevsTable(scanId, dataItem, updateRow);
+  };
+
+  if (isMapped) {
+    return <>{JSON.stringify(displayValue)}</>;
+  }
+
+  const mappingText = translate(
+    rowMapping
+      ? 'administration.bulk.migration.rev.grid.cell.mapping'
+      : 'administration.bulk.migration.comparison.grid.cell.notMapped',
+  );
 
   return (
-    <>
-      {isMapped ? (
-        JSON.stringify(displayValue)
-      ) : (
-        <Box className={classes.fieldsMappingContainer} >
-          {translate(
-            rowMapping
-              ? 'administration.bulk.migration.rev.grid.cell.mapping'
-              : 'administration.bulk.migration.comparison.grid.cell.notMapped',
-          )}
-          <FontAwesomeIcon onClick={() => getPreviewForDocRevRevsTable(scanId, dataItem, updateRow)} className={classes.fieldsMappingIcon} icon={solid('bullseye')} />
-        </Box>
-      )}
-    </>
+    <Box className={classes.fieldsMappingContainer}>
+      {mappingText}
+      <FontAwesomeIcon icon={solid('bullseye')} onClick={handlePreviewClick} className={classes.fieldsMappingIcon} />
+    </Box>
   );
 };

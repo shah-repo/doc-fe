@@ -35,12 +35,12 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text, style }) => {
   const textClass = isInfo ? classes.infoIndicatorPopoverText : classes.infoIndicatorWarningText;
 
   return (
-    <Box display="inline">
+    <Box className={classes.popoverContainer}>
       <span className={classes.infoIcon} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose} ref={iconRef}>
         <FontAwesomeIcon icon={icon} className={iconClass} data-cy={`info-indicator-${type.toLowerCase()}`} />
       </span>
       <Popover
-        style={{ pointerEvents: 'none' }}
+        className={classes.infoIndicatorPopover}
         classes={{ paper: classes.infoIndicatorPopoverPaper }}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -49,7 +49,7 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text, style }) => {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Box p={1}>
+        <Box className={classes.popoverContent}>
           <Typography component="div" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
         </Box>
       </Popover>

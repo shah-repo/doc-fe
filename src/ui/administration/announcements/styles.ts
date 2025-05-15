@@ -107,4 +107,13 @@ export default makeStyles(theme => ({
   upgradeFormButton: {
     margin: theme.spacing(0, 0.625),
   },
+  infoIndicatorPopover: {
+    pointerEvents: 'none',
+  },
+  popoverContent: {
+    padding: theme.spacing(1),
+  },
+  popoverContainer: {
+    display: 'inline',
+  },
 }));

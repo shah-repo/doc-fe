@@ -1,6 +1,5 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cx from 'classnames';
 import React, { MouseEvent, ReactElement } from 'react';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats } from '../../../../../common/utils/date';
@@ -24,46 +23,57 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
-    const contentEl: ReactElement = (
+    const hasStarted = Boolean(run?.runAt);
+    const hasCompleted = Boolean(run?.completedAt);
+    const hasFailed = Boolean(run?.failureReason);
+
+    const renderCompletedContent = () => (
       <>
-        {run?.runAt && run?.completedAt && (
+        {translate('administration.bulk.migration.rev.grid.cell.completedAt')}{' '}
+        <DateTime
+          value={run?.completedAt}
+          format={MomentFormats.BriefDateTime}
+          className={classes.revsTableDateTimeLabel}
+        />{' '}
+        {translate('administration.bulk.migration.rev.grid.cell.startedAt.prefix')}{' '}
+        <DateTime
+          value={run?.runAt}
+          format={MomentFormats.BriefDateTime}
+          className={classes.revsTableDateTimeLabel}
+        />
+        {hasFailed && (
           <>
-            <>
-              {translate('administration.bulk.migration.rev.grid.cell.completedAt')}{' '}
-              <DateTime
-                value={run?.completedAt}
-                format={MomentFormats.BriefDateTime}
-                className={cx(classes.revsTableDateTimeLabel)}
-              />{' '}
-              {translate('administration.bulk.migration.rev.grid.cell.startedAt.prefix')}{' '}
-              <DateTime
-                value={run?.runAt}
-                format={MomentFormats.BriefDateTime}
-                className={cx(classes.revsTableDateTimeLabel)}
-              />
-            </>
-            {run?.failureReason && (
-              <>
-                <br />
-                {run?.failureReason?.message ?? translate('administration.bulk.migration.rev.grid.cell.error')}
-              </>
-            )}
+            <br />
+            {run?.failureReason?.message ?? translate('administration.bulk.migration.rev.grid.cell.error')}
           </>
         )}
-        {run?.runAt && !run?.completedAt && (
-          <>
-            {translate('administration.bulk.migration.rev.grid.cell.startedAt.suffix')}{' '}
-            <DateTime
-              value={run?.runAt}
-              format={MomentFormats.BriefDateTime}
-              className={cx(classes.revsTableDateTimeLabel)}
-            />{' '}
-            {translate('administration.bulk.migration.rev.grid.cell.inprogress')}
-          </>
-        )}
-        {!run?.runAt && <>{translate('administration.bulk.migration.rev.grid.cell.notAttempted')}</>}
       </>
     );
+
+    const renderInProgressContent = () => (
+      <>
+        {translate('administration.bulk.migration.rev.grid.cell.startedAt.suffix')}{' '}
+        <DateTime
+          value={run?.runAt}
+          format={MomentFormats.BriefDateTime}
+          className={classes.revsTableDateTimeLabel}
+        />{' '}
+        {translate('administration.bulk.migration.rev.grid.cell.inprogress')}
+      </>
+    );
+
+    const renderNotAttemptedContent = () => (
+      <>{translate('administration.bulk.migration.rev.grid.cell.notAttempted')}</>
+    );
+
+    const contentEl: ReactElement = (
+      <>
+        {hasStarted && hasCompleted && renderCompletedContent()}
+        {hasStarted && !hasCompleted && renderInProgressContent()}
+        {!hasStarted && renderNotAttemptedContent()}
+      </>
+    );
+
     handlePopoverOpen?.(event, contentEl);
   };
 

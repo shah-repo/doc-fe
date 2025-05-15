@@ -32,6 +32,7 @@ interface MigrationConfirmationDialogProps {
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
 }
+
 const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = ({
   isOpen,
   handleClose,

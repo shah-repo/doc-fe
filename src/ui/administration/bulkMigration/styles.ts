@@ -2,6 +2,8 @@ import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
 import Colors from '../../layout/theme/utils/colors';
 
+export const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
+
 export default makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -340,7 +342,7 @@ export default makeStyles((theme) => ({
   },
   employeePasswordText: {
     width: '100%',
-    border: '0px',
+    border: 0,
     borderBottom: `1px solid ${Colors.gray_goose}`,
   },
   spaceBetweenFlex: {
@@ -727,5 +729,8 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     margin: theme.spacing(0, 3.5),
+  },
+  fixedWidthColumn: {
+    width: ADD_ROW_COLUMN_WIDTH_PERCENT,
   },
 }));
