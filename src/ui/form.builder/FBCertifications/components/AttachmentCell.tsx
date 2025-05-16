@@ -61,27 +61,20 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
 
   return (
-    <>
-      <FBProvider {...{ fileUploadState }}>
-        {isEditMode && (
-          <Editor
-            {...props}
-            {...{ previousAttachments: defaultAttachments }}
-          />
-        )}
-        {isEmpty(defaultAttachments) ? (
-          EMPTY_VALUE_PLACEHOLDER
-        ) : (
-          <FBAttachmentNamePresenter
-            {...{
-              files: defaultAttachments,
-              fileUploadState,
-              isDisabled: !isEditMode,
-            }}
-            boxProps={{ className: classes.attachmentsContainer }}
-          />
-        )}
-      </FBProvider>
-    </>
+    <FBProvider {...{ fileUploadState }}>
+      {isEditMode && <Editor {...props} {...{ previousAttachments: defaultAttachments }} />}
+      {isEmpty(defaultAttachments) ? (
+        EMPTY_VALUE_PLACEHOLDER
+      ) : (
+        <FBAttachmentNamePresenter
+          {...{
+            files: defaultAttachments,
+            fileUploadState,
+            isDisabled: !isEditMode,
+          }}
+          boxProps={{ className: classes.attachmentsContainer }}
+        />
+      )}
+    </FBProvider>
   );
 };

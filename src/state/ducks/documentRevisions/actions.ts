@@ -795,7 +795,11 @@ const fetchReferences = (
   offset = 0,
   handlers: Handlers,
 ): ApiAction<EntitySearchResults> => {
-  const params = qs.stringify({ searchQuery, offset, limit: LIMIT });
+  const params = new URLSearchParams({
+    searchQuery,
+    offset: offset.toString(),
+    limit: LIMIT.toString(),
+  }).toString();
 
   return apiActionWithCallbacks({
     url: `${SUPPLIER_ROOT_URL}/references/search?${params}`,

@@ -29,6 +29,7 @@ export interface Reference {
   owner: string
   createdDate: string
   documentId?: string
+  comment?: string
 }
 
 export interface EditableReference extends Reference {
