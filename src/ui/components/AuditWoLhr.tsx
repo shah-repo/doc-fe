@@ -27,7 +27,7 @@ const AuditWoLhr: React.FC<Props> = ({
     }
   } catch (error) {
     // handle same value
-    console.log('Failed to parse localAuditValue:', error);
+    console.error(error);
   }
   const fetchLhrsDetailsAction = useActionCreator(documentRevisionsActions.fetchSelectedLHR);
   const fetchSelectedLhrAsync = useAsync<ILHRTableItem>({
