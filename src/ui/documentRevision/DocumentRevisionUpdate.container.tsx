@@ -1,24 +1,23 @@
-import { FormikHelpers } from 'formik';
 import { debounce, get, has, isEmpty, map, pick, set } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DocumentRevisionSummary, SM } from '../../App';
-import { saveDocumentRevision } from '../../App/Shifamed/Utils/API';
 import { getPayloadBasedOnWorkOrderType } from '../../common/utils/helpers';
 import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
-import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
-import { toastError } from '../components/notifications';
 import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import useGetHasTag from '../hooks/useGetHasTag';
 import { isOperator } from './DocumentRevisionDisplay.container';
@@ -61,6 +60,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
+  const saveAction = useActionCreator(documentRevisionsActions.save);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isPOEditState = useGetHasTag(GroupTag.PO_ADMIN) && isPO && SM.isNewVersion
         && isDocumentRevisionHasOutput(documentRevision);
@@ -68,7 +68,16 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  const updatingAsyncState = useSelector(documentRevisionsSelectors.getUpdateAsyncState);
+  const async = useAsync<DocumentRevision>({
+    onSuccess: () => {
+      if (redlineActive) {
+        dispatch(companyActions.redlineConfig(false));
+      }
+      if (!isPOEditState) {
+        setDoNotPrompt(true);
+      }
+    },
+  });
 
   useEffect(() => {
     FBDataStore.setRefreshData(documentRevision);
@@ -83,41 +92,36 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     );
   }
 
-  const handleSave = (
-    data: DocumentRevisionEditRequestBody,
-    helpers: FormikHelpers<DocumentRevisionFormValues>,
-  ) => {
-    saveDocumentRevision(documentRevision.id, data, helpers)
-      .then((docRev) => {
-        if (redlineActive) {
-          dispatch(companyActions.redlineConfig(false));
-        }
-        if (!isPOEditState) {
-          setDoNotPrompt(true);
-        }
-        if (FBStore?.isHistoryTabSelected) {
-          dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
-          FBStore.audit.set({
-            url: FBEndpoint.DocumentRevisionAudit,
-            urlValues: { documentId: documentRevision.id },
-            method: 'get',
-          });
-        }
+  const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
+    async.reset();
 
-        FBDataStore?.setRefreshData({
-          ...FBDataStore?.refreshData,
-          ...data,
-          formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
+    const promise = async.start(
+      saveAction,
+      documentRevision.id,
+      data,
+      async,
+      helpers,
+    );
+    // workaround when editing document through CR view. The form is marked dirty when editing FB fields
+    promise?.then(() => {
+      if (FBStore?.isHistoryTabSelected) {
+        dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
+        FBStore.audit.set({
+          url: FBEndpoint.DocumentRevisionAudit,
+          urlValues: { documentId: documentRevision.id },
+          method: 'get',
         });
-      })
-      .catch(toastError);
+      }
+
+      FBDataStore?.setRefreshData({
+        ...FBDataStore?.refreshData,
+        ...data,
+        formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
+      });
+    });
   };
 
-  const onSubmit = (
-    values: DocumentRevisionFormValues,
-    helpers: FormikHelpers<DocumentRevisionFormValues>,
-    cleanInitialValues?: DocumentRevisionFormValues,
-  ) => {
+  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
@@ -221,7 +225,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
         setDoNotPrompt={setDoNotPrompt}
-        asyncState={updatingAsyncState}
+        asyncState={async.asyncState}
         onSubmit={debouncedSubmit}
         initialValues={initialValues}
         onDirtyFlagChange={onDirtyFlagChange}
