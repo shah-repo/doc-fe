@@ -241,7 +241,6 @@ class FBWorkspaceState extends FBSchemaState {
       case 'formDesign':
         if (values) {
           const payload = getPayloadBasedOnWorkOrderType(cloneDeep(values));
-
           body = {
             formInput: omit(payload,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),

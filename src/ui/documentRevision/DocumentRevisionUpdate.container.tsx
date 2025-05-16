@@ -135,7 +135,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
       });
     }
-
     if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
       const approvalRoles = get(formInput, FBDAMFields.DAR);
       const rawApprovalMatrix = get(formInput, FBDAMFields.DAM);
