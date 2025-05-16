@@ -4,11 +4,13 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
+import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Button, FormControlLabel, Switch } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
+import { FB, FBWorkspaceState } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
 import InfoIndicator from '../announcements/InfoIndicator';
 import { IndicatorTypeEnum } from '../announcements/interface';
@@ -82,6 +84,12 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   const [isPreviewPanelVisible, setIsPreviewPanelVisible] = useState<boolean>(false);
   const [isMappingRulesPanelVisible, setIsMappingRulesPanelVisible] = useState<boolean>(false);
   const [isOptionMapperVisible, setIsOptionMapperVisible] = useState<boolean>(false);
+  const { _formState } = SM.useStores();
+  const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    schema: [],
+    mode: _formState?.mode,
+    autosave: _formState?.autosave || false,
+  });
 
   useEffect(() => {
     if (fromRev?.id) {
@@ -124,10 +132,12 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
 
   const handleMappingPreview = () => {
     setIsPreviewPanelVisible(true);
+    workspaceState.setIsPreviewPanelVisible(true);
   };
 
   const handleClosePreview = () => {
     setIsPreviewPanelVisible(false);
+    workspaceState.setIsPreviewPanelVisible(false);
   };
 
   const handleCloseOptionMapper = () => {
@@ -550,6 +560,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
           handleClosePreview={handleClosePreview}
           scanDetails={scanDetails}
           toRevSchema={toRevSchema}
+          workspaceState={workspaceState}
         />
       )}
       {isOptionMapperVisible && (

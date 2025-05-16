@@ -27,6 +27,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public isPreview?: boolean;
+  public isPreviewPanelVisible?: boolean;
   public document?: DocumentRevision;
   @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
@@ -168,6 +169,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setIsPreview = (isPreview: boolean) => {
     set(this, 'isPreview', isPreview);
+  };
+
+  @action public setIsPreviewPanelVisible = (isPreviewPanelVisible: boolean) => {
+    set(this, 'isPreviewPanelVisible', isPreviewPanelVisible);
   };
 
   @action public setAutosave = (autosave: boolean) => {

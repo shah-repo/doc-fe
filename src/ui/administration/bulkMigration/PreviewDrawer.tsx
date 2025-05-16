@@ -17,7 +17,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState } from '../../form.builder';
+import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState, FBWorkspaceState } from '../../form.builder';
 import DialogHeader from './DrawerHeader';
 import { BulkMigrationScanDetails, FormFieldSchema } from './interface';
 import useStyles from './styles';
@@ -29,6 +29,7 @@ interface PreviewDrawerProps {
   handleClosePreview: () => void
   toRevSchema: FormFieldSchema[]
   scanDetails: BulkMigrationScanDetails | null
+  workspaceState?: FBWorkspaceState
 }
 
 interface PreviewDocRev extends DocumentRevision {
@@ -38,6 +39,7 @@ interface PreviewDocRev extends DocumentRevision {
 const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
   isPreviewPanelVisible,
   handleClosePreview,
+  workspaceState,
   toRevSchema,
   scanDetails,
 }) => {
@@ -106,6 +108,7 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
     <FBProvider
       {...{
         formState,
+        workspaceState,
       }}
     >
       <Drawer
