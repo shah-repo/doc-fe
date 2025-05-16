@@ -17,13 +17,13 @@ const AuditWoLhr: React.FC<Props> = ({
   dataCy,
   auditValue: initialAuditValue,
 }) => {
-  const [auditValue, setAuditValue] = useState<string | undefined>(initialAuditValue);
+  const [localAuditValue, setLocalAuditValue] = useState<string | undefined>(initialAuditValue);
   const field = audit.field.split('.').at(-1) as string;
 
   try {
-    const auditNextValue = JSON.parse(auditValue as string);
+    const auditNextValue = JSON.parse(localAuditValue as string);
     if (Array.isArray(auditNextValue)) {
-      setAuditValue(auditNextValue[0]);
+      setLocalAuditValue(auditNextValue[0]);
     }
   } catch (error) {
     // handle same value
@@ -33,7 +33,7 @@ const AuditWoLhr: React.FC<Props> = ({
     onSuccess: (data) => {
       if (!Array.isArray(data) || !data.length) return;
       const { lotId, displayRevision, lhrDetails: { label } } = data[0];
-      setAuditValue(`${label} Rev ${displayRevision} - ${lotId}`); // Update state here
+      setLocalAuditValue(`${label} Rev ${displayRevision} - ${lotId}`); // Update state here
     },
   });
 
@@ -41,16 +41,16 @@ const AuditWoLhr: React.FC<Props> = ({
     // Only call this once (or when dependencies change)
     fetchSelectedLhrAsync.start(
       fetchLhrsDetailsAction,
-      [auditValue],
+      [localAuditValue],
       fetchSelectedLhrAsync,
     );
   }, []); // You can add more dependencies if needed
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
     workOrderLhrTable: () => {
-      return auditValue;
+      return localAuditValue;
     },
-    default: () => getAuditDefaultValue(auditValue),
+    default: () => getAuditDefaultValue(localAuditValue),
   };
 
   const value = (auditFieldFactory[field] ?? auditFieldFactory.default)();
