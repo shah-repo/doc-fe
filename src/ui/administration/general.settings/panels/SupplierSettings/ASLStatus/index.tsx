@@ -27,8 +27,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
   );
   const [ASLStatusList, setASLStatusList] = React.useState<ASLStatus[]>();
-  const [editedASLStatus, setEditedASLStatus]
-    = React.useState<EditableASLStatus>();
+  const [editedASLStatus, setEditedASLStatus] = React.useState<EditableASLStatus>();
   const discardASLStatus = () => setEditedASLStatus(undefined);
   const { values: formValues } = useFormikContext<GeneralSettings>();
   const [types, setTypes] = React.useState<ASLStatus[]>();
@@ -89,7 +88,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       }
 
       if ((values?.displayLabel?.length ?? 0) > ASL_MAX_DISPLAY_LABEL_LENGTH) {
-        error.displayLabel = 'validator.asl.status.displayLabel.char.limit';
+        error.displayLabel = translate('validator.asl.status.displayLabel.char.limit', { length: ASL_MAX_DISPLAY_LABEL_LENGTH });
       }
 
       return error;
@@ -161,8 +160,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   const mappedASLStatusList = ASLStatusList?.map((aslStatus: ASLStatus) => {
     return {
       ...aslStatus,
-      [MODE_FIELD]:
-          aslStatus.id === editedASLStatus?.id ? Mode.edit : Mode.show,
+      [MODE_FIELD]: aslStatus.id === editedASLStatus?.id ? Mode.edit : Mode.show,
     };
   }) ?? [];
 
@@ -171,9 +169,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     : mappedASLStatusList;
 
   const dataCyGenerator = (aslStatus: EditableASLStatus) => ({
-    'data-cy': `row-${kebabCase(aslStatus.internalType)}-${
-      aslStatus.displayOrder
-    }`,
+    'data-cy': `row-${kebabCase(aslStatus.internalType)}-${aslStatus.displayOrder}`,
   });
 
   const schema = buildSchema({

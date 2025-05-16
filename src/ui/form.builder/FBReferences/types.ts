@@ -14,10 +14,7 @@ export interface SchemaOptions {
   ) => void
 }
 
-export type FBReferenceProps = Pick<
-FBInputProps,
-'name' | 'label' | 'disabled'
-> & {
+export type FBReferenceProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'> & {
   references: Reference[]
   setReferences: React.Dispatch<React.SetStateAction<Reference[]>>
 };

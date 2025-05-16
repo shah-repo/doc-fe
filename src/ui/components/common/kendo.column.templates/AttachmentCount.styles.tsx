@@ -3,11 +3,11 @@ import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   icon: {
-    height: 17,
-    width: 17,
+    height: 16,
+    width: 16,
   },
   iconContainer: {
-    padding: theme.spacing(0.43),
+    padding: theme.spacing(0.5),
     cursor: 'pointer',
   },
   dot: {

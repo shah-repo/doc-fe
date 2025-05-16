@@ -16,14 +16,9 @@ export interface SchemaOptions {
   ) => void
 }
 
-export type FBProductORServiceProps = Pick<
-FBInputProps,
-'name' | 'label' | 'disabled'
-> & {
+export type FBProductORServiceProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'> & {
   productOrServices: ProductORService[]
-  setProductOrServices: React.Dispatch<
-  React.SetStateAction<ProductORService[]>
-  >
+  setProductOrServices: React.Dispatch<React.SetStateAction<ProductORService[]>>
 };
 
 export interface ProductORService {

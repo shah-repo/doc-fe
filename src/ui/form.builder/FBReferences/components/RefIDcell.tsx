@@ -1,13 +1,9 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Box,
-  CircularProgress,
   Grid,
-  TextField,
   Tooltip,
 } from '@material-ui/core';
-import { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -174,35 +170,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         filterOptions={(x) => x}
         disabled={isUpdateAction}
         size="small"
-        renderInput={(params: RenderInputParams) => (
-          <Box display="flex">
-            <Box width="100%" data-cy="reference-items">
-              <TextField
-                {...params}
-                fullWidth
-                variant="outlined"
-                placeholder={translate('common.select')}
-                InputProps={{
-                  ...params.InputProps,
-                  style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                  startAdornment: <div>{params.InputProps.startAdornment}</div>,
-                  endAdornment: (
-                    <>
-                      {fetchOptionsDataAsync.isLoading && (
-                        <CircularProgress color="inherit" size={16} />
-                      )}
-                      {params.InputProps.endAdornment}
-                    </>
-                  ),
-                }}
-                inputProps={{
-                  ...params.inputProps,
-                  style: { padding: '4.5px 0' },
-                }}
-              />
-            </Box>
-          </Box>
-        )}
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}
         disableClearable
@@ -231,31 +198,20 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => onOpenQuickView?.(evt, dataItem);
 
+  const { referenceDisplayName, documentId, referenceRevId } = dataItem ?? {};
+
   return (
-    <Grid
-      justify="flex-start"
-      alignItems="center"
-      container
-      onClick={handleClick}
-      data-cy="reference-cell"
-    >
+    <Grid justify="flex-start" alignItems="center" container onClick={handleClick} data-cy="reference-cell">
       <Grid item xs={10} className={classes.grid}>
-        <StyledLink
-          to={
-            dataItem?.documentId
-              ? documentVersionPath(
-                  dataItem?.referenceRevId,
-                  dataItem?.documentId,
-              )
-              : '#'
-          }
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          data-cy="selected-reference-item-link"
-        >
-          {dataItem.referenceDisplayName}
-        </StyledLink>
+        {documentId ? (
+          <StyledLink
+            to={documentVersionPath(referenceRevId, documentId)}
+            onClick={(e) => e.stopPropagation()}
+            data-cy="selected-reference-item-link"
+          >
+            {referenceDisplayName}
+          </StyledLink>
+        ) : referenceDisplayName }
       </Grid>
       <Grid item xs={2}>
         <span ref={viewIconRef} onClick={openQuickView}>

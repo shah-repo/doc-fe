@@ -1,7 +1,6 @@
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import { isEmpty } from 'lodash';
 import React, { MouseEvent, useContext, useMemo } from 'react';
-import { useIntl } from 'react-intl';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
@@ -21,7 +20,6 @@ interface CustomOptionType extends OptionType {
 
 export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props) => {
   const hasValue = (value: string) => value && value !== defaultItem;
-  const intl = useIntl();
   const classes = useStyles();
   const onDropdownChange = (syntheticEvent, target?: CustomOptionType) => {
     const isValueExists = hasValue(target?.aslStatusId ?? '');
@@ -78,7 +76,7 @@ export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props)
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
+        title={translate(TranslatedText[DisplayText.CLEAR])}
         disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >

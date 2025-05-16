@@ -11,7 +11,6 @@ import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
-import FBCheckboxGroupAsync from '../FBCheckboxGroupAsync/FBCheckboxGroupAsync';
 import FBCustomerHeaderQuaterAddress from '../FBCustomerHeaderQuaterAddress/FBCustomerHeaderQuaterAddress';
 import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
@@ -60,6 +59,7 @@ import FBShippingItems from '../FBShippingItems';
 import FBSiteInformation from '../FBSiteInformation';
 import FBSubsection from '../FBSubsection/FBSubsection';
 import FBSupplier from '../FBSupplier/FBSupplier';
+import FBSupplierCheckboxGroupAsync from '../FBSupplierCheckboxGroupAsync';
 import FBSupplierContacts from '../FBSupplierContacts';
 import FBTask from '../FBTask/FBTask';
 import FBTextEditor from '../FBTextEditor/FBTextEditor';
@@ -96,7 +96,7 @@ class FBSchemaState {
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
-    checkboxgroupasync: FBCheckboxGroupAsync,
+    checkboxgroupasync: FBSupplierCheckboxGroupAsync,
     autocomplete: FBAutocompleteAsync,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,

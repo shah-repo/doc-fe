@@ -1,7 +1,7 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles(theme => ({
   button: {
     borderRadius: theme.shape.borderRadius / 2,
     padding: theme.spacing(0, 1.5),

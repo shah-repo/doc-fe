@@ -311,7 +311,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         });
       }
       formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
-      loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
+      loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading || async.isLoading;
       FBStore?.setPurchaseOrderValue(value);
     });
 

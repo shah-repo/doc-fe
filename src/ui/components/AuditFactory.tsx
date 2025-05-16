@@ -8,7 +8,7 @@ import { translate } from '../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit, LifecyclePhaseOptionType, POLineItem } from '../../state/ducks/audit/types';
+import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
@@ -48,7 +48,7 @@ interface OwnProps {
   audit: Audit
   dataCy?: string
   revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
-  lifecyclePhaseOptions?: LifecyclePhaseOptionType[]
+  lifecyclePhaseOptions?: LifeCyclePhaseOptions[]
   aslStatusOptions?: ASLStatus[]
 }
 

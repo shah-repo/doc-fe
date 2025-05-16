@@ -10,11 +10,7 @@ import { getStatusLabel } from '../../../dashboard.new/line.items/common/DocIcon
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableReference } from '../types';
 
-export const StatusCell: React.FC<CustomTemplateProps> = ({
-  dataItem,
-  field,
-  ...props
-}) => {
+export const StatusCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   const classes = useStyles();
   let defaultValue = dataItem[field];
   const formik = useFormikContext<EditableReference>();
@@ -29,18 +25,17 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
   }
 
-  return <Tooltip
-    data={displayStatus}
-    childrenElement={
-      <Chip
-        size="small"
-        data-cy="status-value"
-        className={cx(
-          classes.chip,
-          classes[statusClassMapping[displayStatus]],
-        )}
-        label={displayStatus}
-      />
-    }
-  />;
+  return (
+    <Tooltip
+      data={displayStatus}
+      childrenElement={
+        <Chip
+          size="small"
+          data-cy="status-value"
+          className={cx(classes.chip, classes[statusClassMapping[displayStatus]])}
+          label={displayStatus}
+        />
+      }
+    />
+  );
 };

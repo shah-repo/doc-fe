@@ -19,8 +19,9 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { hasObsoleteRevision, hasReleasedRevision }
+  const { hasObsoleteRevision, hasReleasedRevision, revisionDetails }
     = latestRevisionSummary ?? {};
+  const customerId = revisionDetails?.docId;
   return (
     <Grid container className={classes.grid}>
       {(hasObsoleteRevision || hasReleasedRevision) && !props.disabled && (
@@ -31,6 +32,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
                 arrow
                 title={translate(
                   'form.builder.shipping.released.rev.available.message',
+                  { customerId },
                 )}
                 placement="top-start"
               >
@@ -48,6 +50,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
                 arrow
                 title={translate(
                   'form.builder.shipping.obs.rev.available.message',
+                  { customerId },
                 )}
                 placement="top-start"
               >

@@ -75,6 +75,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   getOptionLabel,
   ChipProps = { size: 'small' },
   PopperComponent,
+  shouldAlwaysShowPlaceholder,
   ...props
 }, ref: MutableRefObject<HTMLDivElement>) => {
   const baseClasses = useStyles();
@@ -88,6 +89,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
 
   const isSmall = size === 'small';
   const hasClearIcon = !props.disableClearable;
+  const inputPlaceholder = shouldAlwaysShowPlaceholder || !props.value ? placeholder : undefined;
 
   // TODO this is workaround for incorrect filtering, remove after upgrading MUI
   const internalFilterOptions = useMemo(() => getOptionLabel ? createFilterOptions({
@@ -142,7 +144,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}
-          placeholder={props.value ? '' : placeholder}
+          placeholder={inputPlaceholder}
         />
       )}
       ChipProps={ChipProps}
