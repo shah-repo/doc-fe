@@ -17,7 +17,6 @@ import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
-import { SHIPPING_CUSTOMER_FIELD } from '../form.builder/FBShippingInfo/constants';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -134,13 +133,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         ...updatedFormInput,
         [AllocationCheckBoxOptions.AUTO_TRANSACT]: FBDataStore?.refreshData?.formInput?.autoTransact,
         [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
-      });
-    }
-
-    if (!isEmpty(formInput) && SHIPPING_CUSTOMER_FIELD in formInput && isEmpty(formInput[SHIPPING_CUSTOMER_FIELD])) {
-      set(dataToSubmit, 'formInput', {
-        ...formInput,
-        shippingMethod: null,
       });
     }
 

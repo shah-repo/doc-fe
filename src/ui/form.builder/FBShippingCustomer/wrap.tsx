@@ -1,4 +1,4 @@
-import { debounce, isEmpty } from 'lodash';
+import { debounce } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { useEffect, useRef, useState } from 'react';
@@ -68,8 +68,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           if (currentCustomerId === previousCustomerIdRef.current) return;
 
           const shippingMethod = data?.formInput?.shippingMethod;
-          formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
-
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod, !shippingMethod);
           updateCustomerShippingMethod(currentCustomerId, shippingMethod);
         },
       );
@@ -80,19 +79,16 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
       };
     }, []);
 
-    const onShippingCustomerChange = debounce(
-      () => {
-        const selectedCustomerId = formState?.getFieldValue(name);
+    const onShippingCustomerChange = debounce(() => {
+      const selectedCustomerId = formState?.getFieldValue(name);
 
-        if (isEmpty(selectedCustomerId)) {
-          formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
-          formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
-        } else {
-          customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
-        }
-      },
-      100,
-      { leading: false, trailing: true },
+      if (selectedCustomerId) {
+        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+      } else {
+        updatedDefaultShippingMethodField();
+        workspaceState?.saveDocRev(formState?.getValues());
+      }
+    }, 100, { leading: false, trailing: true },
     );
 
     useEffect(() => {
@@ -113,10 +109,14 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
       }
     }, [customerId]);
 
+    const updatedDefaultShippingMethodField = () => {
+      formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
+      formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+    };
+
     const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {
       if (!selectedCustomerId) {
-        formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
-        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+        updatedDefaultShippingMethodField();
       } else {
         customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
       }
@@ -141,8 +141,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
       FBAutocompleteAsyncStore.reset(FBAutocompleteAsyncOption.shippingInformation);
       setLatestRevisionSummary(undefined);
       formState?.setFieldValue(name, '');
-      formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
-      formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      updatedDefaultShippingMethodField();
       setAutocompleteKey('');
       clearAddressFields();
     };

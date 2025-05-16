@@ -13,8 +13,6 @@ import { EditableTLItem } from '../../change.request/FBMaterialDisposition/compo
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
-import { SHIPPING_CUSTOMER_FIELD } from '../FBShippingInfo/constants';
-import { SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 
@@ -244,9 +242,6 @@ class FBWorkspaceState extends FBSchemaState {
         if (values) {
           const payload = getPayloadBasedOnWorkOrderType(cloneDeep(values));
 
-          if (!isEmpty(payload) && SHIPPING_CUSTOMER_FIELD in payload && isEmpty(payload[SHIPPING_CUSTOMER_FIELD])) {
-            payload[SHIPPING_METHOD_FIELD] = null;
-          }
           body = {
             formInput: omit(payload,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
