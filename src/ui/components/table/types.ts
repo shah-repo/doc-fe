@@ -43,6 +43,7 @@ export interface TablePanelStateProps {
   scrollToIndex: number
   sortDirection?: SortDirectionType
   forceUpdate: boolean
+  hasClearedDefaultFilters?: boolean
   kendoConfig?: string
   columnConfig?: string
 }

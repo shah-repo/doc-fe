@@ -95,6 +95,7 @@ const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeR
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
+const getUpdateAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.updateAsyncInfo;
 
 const getDependentOnDocRevsState = (state: ApplicationState): ChangeRequestDependentOnDocRevsState =>
   state.changeRequests.dependentOnDocRevs;
@@ -109,6 +110,7 @@ export default {
   getApproversListForAssessmentForm,
   getApproversListWithoutCurrentUser,
   getLoadAuditAsyncState,
+  getUpdateAsyncState,
   getAudit,
   getAssignessList,
   makeGetAudit,

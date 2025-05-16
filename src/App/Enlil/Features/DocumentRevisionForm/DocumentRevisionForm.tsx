@@ -9,11 +9,14 @@ import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../../
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { PremiumFeature } from '../../../../state/ducks/company/types';
+import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import { AsyncStatus } from '../../../../state/types';
+import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
@@ -25,7 +28,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -83,6 +86,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isPaperLHR = checkIsDocumentPaperLHR(groupOptions);
+  const isDAM = checkIsDocumentDAM(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
@@ -104,9 +108,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
+  const updatingAsyncState = useSelector(documentRevisionsSelectors.getUpdateAsyncState);
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
+
+  const [reloadKey, setReloadKey] = React.useState(0);
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -193,6 +200,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     [_tabsState],
   );
 
+  const reloadComponent = () => {
+    setReloadKey(prevKey => prevKey + 1);
+  };
+
   const getLeftSidePanel = () => {
     if (isPaperLHR && hasActiveOCRSubscription) {
       return AttachmentsPanel;
@@ -201,9 +212,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     return DocumentRevisionLeftPanel;
   };
 
+  const shouldConfirmLeave = dirty || updatingAsyncState.status === AsyncStatus.Active;
+
   return (
     <>
       <SMForm
+        key={reloadKey}
         templateBoxProps={{ stretchY: '100%', width: '100%' }}
         contentBoxProps={{ bgcolor: Colors.alabaster }}
         values={formValues.values}
@@ -218,7 +232,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         }
       >
         <PromptIfDirty
-          dirty={dirty}
+          dirty={shouldConfirmLeave}
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
           onConfirm={async () => {
@@ -428,6 +442,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           </Observer>
         </SMTemplate>
       </SMForm>
+      {isDAM && <SyncMessageDialogContainer { ...{ documentRevision, reloadComponent } } />}
     </>
   );
 };
