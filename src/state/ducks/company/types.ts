@@ -35,7 +35,7 @@ export interface WhiteLabelingEnv {
   colors?: WhiteLabelingColors
 }
 
-export interface WhiteLabeling {
+interface WhiteLabeling {
   [ThemeEnv.DEV_THEME]?: WhiteLabelingEnv
   [ThemeEnv.DEMO_THEME]?: WhiteLabelingEnv
   [ThemeEnv.SANDBOX_THEME]?: WhiteLabelingEnv
@@ -62,6 +62,7 @@ export interface Company {
   id: string
   name: string
   numOfRevStages: number
+  startRevisionNumber: number
   users: User[]
   documentTypes: DocumentType[]
   whiteLabeling: WhiteLabeling
@@ -102,6 +103,7 @@ export interface CompanyMineRequest {
   helloSignIntegrationEnabled?: boolean
   navigation?: NavigationItem[]
   numOfRevStages?: number
+  startRevisionNumber?: number
 }
 
 export type SelectCompanyState = Company;

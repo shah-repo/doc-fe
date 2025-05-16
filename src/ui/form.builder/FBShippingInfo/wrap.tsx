@@ -36,11 +36,27 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
     }, [customersAsync]);
 
     const renderOptions = (shippingAddresses: ShippingAddress[]): CustomOptionType[] => {
-      return shippingAddresses.map((address) => ({
-        label: `${address.siteName} (${address.siteAddress}, ${address.city} ${address.zipCode}, ${address.country})`,
-        value: address.id,
-        siteContact: address.siteContact,
-      }));
+      return shippingAddresses.map((address) => {
+        const {
+          siteName,
+          siteAddress,
+          city,
+          state,
+          zipCode,
+          country,
+          siteContact,
+          id,
+        } = address;
+
+        const formattedState = state ? ` ${state}` : '';
+        const label = `${siteName} (${siteAddress}, ${city} ${formattedState} ${zipCode}, ${country})`;
+
+        return {
+          label,
+          value: id,
+          siteContact,
+        };
+      });
     };
 
     useEffect(() => {
