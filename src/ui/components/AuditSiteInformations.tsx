@@ -7,7 +7,7 @@ import { Site } from '../form.builder/FBSiteInformation/types';
 interface Props {
   audit: Audit
   dataCy?: string
-  auditValue?: string
+  auditValue?: any
 }
 
 const AuditSiteInformations: React.FC<Props> = ({
