@@ -1,10 +1,11 @@
-import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
-import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
@@ -262,18 +263,10 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
-    const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
-    return this.documentRevApi.set({
-      url,
-      urlValues: { id },
-      body,
-      method: 'patch',
-    }, (data, error) => {
-      this.omitAutosave = false;
-      if (error) {
-        this.documentRevApi.onError(error);
-        this.loading = false;
-      } else {
+    const isApprovalRequest = !this.document;
+    const saveFunction = isApprovalRequest ? saveApprovalRequest : saveDocumentRevision;
+    return saveFunction(id, body as DocumentRevisionEditRequestBody & ChangeRequestEditRequestBody)
+      .then((data) => {
         this.setDirty(false);
         this.setFormInputData(data);
         if (!isEmpty(this.getItemsByType('inlineapproval'))) {
@@ -288,10 +281,12 @@ class FBWorkspaceState extends FBSchemaState {
         }
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
-        this.loading = false;
         this.approvals = data?.approvals as FBInlineApprovalBody[];
-      }
-    });
+      }).catch((error) => {
+        this.documentRevApi.onError(error);
+      }).finally(() => {
+        this.loading = false;
+      });
   };
 
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {

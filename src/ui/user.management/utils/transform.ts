@@ -36,14 +36,48 @@ export const toNavigationBodyValues = (values) => ({
   navigation: parseJSON(values.navigation),
 });
 
-// Revision Stage config helpers
-export const toNumRevisionStageInitialValues = (numOfRevStages) => ({
-  numOfRevStages: numOfRevStages.toString(),
-});
+export const objectValuesToString = <T extends Record<string, unknown>>(object: T): { [K in keyof T]: string } => {
+  const result: Partial<{ [K in keyof T]: string }> = {};
 
-export const toNumRevisionStageBodyValues = (values) => ({
-  numOfRevStages: Number(values.numOfRevStages),
-});
+  for (const key in object) {
+    if (Object.prototype.hasOwnProperty.call(object, key)) {
+      result[key] = String(object[key]);
+    }
+  }
+
+  return result as { [K in keyof T]: string };
+};
+
+export const objectValuesToNumber = <T extends Record<string, unknown>>(
+  object: T,
+): { [K in keyof T]: number } => {
+  const result: Partial<{ [K in keyof T]: number }> = {};
+
+  for (const key in object) {
+    if (Object.prototype.hasOwnProperty.call(object, key)) {
+      result[key] = Number(object[key]);
+    }
+  }
+
+  return result as { [K in keyof T]: number };
+};
+
+export const getObjectChangedValues = <T extends object>(
+  original: T,
+  updated: T,
+): Partial<T> => {
+  const result: Partial<T> = {};
+
+  for (const key in original) {
+    if (Object.prototype.hasOwnProperty.call(original, key)) {
+      if (original[key] !== updated[key]) {
+        result[key] = updated[key];
+      }
+    }
+  }
+
+  return result;
+};
 
 // White labeling config helpers
 export const toWhiteLabelingInitialValues = (whiteLabeling) => ({
