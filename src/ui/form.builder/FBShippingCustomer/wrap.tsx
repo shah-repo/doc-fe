@@ -45,7 +45,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         customerId,
         latestRevisionSummaryAsync,
       );
-    }, []);
+    }, [customerId]);
 
     useEffect(() => {
       if (FB.isUUID(customerId)) {

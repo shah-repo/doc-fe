@@ -418,6 +418,7 @@ export function KendoGrid<T extends any> ({
           queryDict: {
             dataState,
           },
+          hasClearedDefaultFilters: true,
         },
         tableName,
       ),

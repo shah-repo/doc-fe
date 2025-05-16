@@ -1,5 +1,6 @@
 import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
+import { FormikHelpers } from 'formik';
 import qs from 'query-string';
 import { intl, translate } from '../../../common/intl';
 import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
@@ -8,6 +9,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { DocumentRevisionFormValues } from '../../../ui/documentRevision/forms/types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { BOMResponse, IWhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
@@ -21,7 +23,7 @@ import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
-import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, ASL_SUPPLIER_LIST_URL, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PARTS_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, SUPPLIER_STATUS_URL, UPDATE_BOM_BRANCH } from './constants';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, ASL_SUPPLIER_LIST_URL, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPDATE_ASYNC, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PARTS_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, SUPPLIER_STATUS_URL, UPDATE_BOM_BRANCH } from './constants';
 import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, EntitySearchResults, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, MeqResponse, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
@@ -87,14 +89,20 @@ const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
-const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>, helpers?: any):
+const save = (
+  id: string,
+  body: DocumentRevisionEditRequestBody,
+  handlers: Handlers<DocumentRevision>,
+  helpers?: FormikHelpers<DocumentRevisionFormValues>,
+):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: 'patch',
   data: body,
+  asyncType: DOCUMENT_REVISION_UPDATE_ASYNC,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
-    helpers && helpers.resetForm();
+    helpers?.resetForm();
     // dispatch(documentRevisionSet(undefined, body, id));
   },
   handlers,

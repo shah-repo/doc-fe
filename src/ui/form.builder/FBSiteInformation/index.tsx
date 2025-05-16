@@ -133,6 +133,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       zipCode: isSameAsHQ ? hqAddress?.headquarterAddressZipCode ?? '' : '',
       siteAddress: isSameAsHQ ? hqAddress?.headquarterAddress ?? '' : '',
       city: isSameAsHQ ? hqAddress?.headquarterAddressCity ?? '' : '',
+      state: isSameAsHQ ? hqAddress?.headquarterAddressState ?? '' : '',
       country: isSameAsHQ ? hqAddress?.headquarterAddressCountry ?? '' : '',
       isSameAsHQ: isSameAsHQ,
     });
