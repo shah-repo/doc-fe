@@ -35,7 +35,7 @@ interface LotAutocompleteProps {
   dataItem: EditableAllocationItem
   parentPartRevId?: string
   lotRevId?: string
-  loading?: boolean
+  isLoading?: boolean
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -43,7 +43,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   lots,
   value,
   setValue,
-  loading,
+  isLoading,
   dataItem,
   lotRevId,
   parentPartRevId,
@@ -98,7 +98,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
             )}
           </ListItem>
         )}
-        loading={loading}
+        loading={isLoading}
         onChange={handleChange}
       />
     </FormikField>
@@ -216,7 +216,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
             })}>
               <span className={classes.lotInfoId}>
                 {isEditMode ? (
-                  <LotAutocomplete {...{ field, lots, value, setValue, dataItem, parentPartRevId, lotRevId, loading: fetchAvailablePartsAsync.isLoading }} />
+                  <LotAutocomplete {...{ field, lots, value, setValue, dataItem, parentPartRevId, lotRevId, isLoading: fetchAvailablePartsAsync.isLoading }} />
                 ) : lotRevId && lotDocumentId ? (
                   <Link to={documentVersionPath(lotRevId, lotDocumentId)} className={classes.link} target="_blank">
                     {lotDocId}
