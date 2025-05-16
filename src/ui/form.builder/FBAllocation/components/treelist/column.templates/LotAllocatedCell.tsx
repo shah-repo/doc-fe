@@ -112,11 +112,8 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   style,
   dataItem,
   field,
-  level,
   parentRevId,
-  onExpandChange,
   addLot,
-  expanded,
   ariaColumnIndex,
   colIndex,
   className,
@@ -190,7 +187,6 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
       data-grid-col-index={colIndex}
       role="gridcell"
       {...navigationAttributes}
-      aria-expanded={expanded}
       aria-selected="false"
       {...{ colSpan, id, style }}
       data-cy="cell-lot-allocated"
