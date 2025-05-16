@@ -750,9 +750,13 @@ const fetchSupplierConfigurationOptions = (
   fetchFormOptions: boolean,
   handlers: Handlers,
 ): ApiAction<OptionType[]> => {
-  const params = qs.stringify({ supplierTypeIds: ids, fetchFormOptions });
+  const params = new URLSearchParams();
+  ids.forEach(id => params.append('supplierTypeIds', id));
+  params.append('fetchFormOptions', fetchFormOptions.toString());
+  const queryString = params.toString();
+
   return apiActionWithCallbacks({
-    url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${params}`,
+    url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${queryString}`,
     method: 'get',
     handlers,
   });
