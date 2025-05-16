@@ -9,13 +9,11 @@ import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../../
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { PremiumFeature } from '../../../../state/ducks/company/types';
-import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
-import { AsyncStatus } from '../../../../state/types';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -108,7 +106,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
-  const updatingAsyncState = useSelector(documentRevisionsSelectors.getUpdateAsyncState);
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
@@ -212,8 +209,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     return DocumentRevisionLeftPanel;
   };
 
-  const shouldConfirmLeave = dirty || updatingAsyncState.status === AsyncStatus.Active;
-
   return (
     <>
       <SMForm
@@ -232,7 +227,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         }
       >
         <PromptIfDirty
-          dirty={shouldConfirmLeave}
+          dirty={dirty}
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
           onConfirm={async () => {
