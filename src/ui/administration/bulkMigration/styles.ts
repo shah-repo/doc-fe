@@ -173,14 +173,14 @@ export default makeStyles((theme) => ({
     maxWidth: 340,
   },
   promptUserMsgStyle: {
-    color: Colors.blue,
-    backgroundColor: Colors.light_gray_blue,
+    color: NextColors.primaryLight,
+    backgroundColor: NextColors.primaryHighlight,
     padding: theme.spacing(1),
     textAlign: 'center',
   },
   errMsgStyle: {
-    color: Colors.red,
-    backgroundColor: Colors.light_red,
+    color: NextColors.error,
+    backgroundColor: NextColors.errorHighlight,
     padding: theme.spacing(0.5),
   },
   mappingRuleSchemaItemBox: {
@@ -232,7 +232,7 @@ export default makeStyles((theme) => ({
 
   blackSpan: {
     paddingLeft: theme.spacing(0.5),
-    color: Colors.black,
+    color: NextColors.black,
   },
 
   refreshIconStyle: {
@@ -385,11 +385,11 @@ export default makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
   },
   greenCheckCircle: {
-    color: Colors.green,
+    color: NextColors.approve,
     fontSize: 15,
   },
   redWarning: {
-    color: Colors.red,
+    color: NextColors.error,
     fontSize: 15,
   },
   relative: {
@@ -436,13 +436,13 @@ export default makeStyles((theme) => ({
     overflow: 'auto',
   },
   selectedFromSchemaItem: {
-    color: Colors.green,
+    color: NextColors.approve,
     position: 'absolute',
     right: 6,
     top: 2,
   },
   doneAllIcon: {
-    color: Colors.green,
+    color: NextColors.approve,
     position: 'relative',
     top: 6,
   },
@@ -646,7 +646,7 @@ export default makeStyles((theme) => ({
   },
   deleteIcon: {
     cursor: 'pointer',
-    color: Colors.red,
+    color: NextColors.error,
     marginRight: theme.spacing(0.5),
   },
   tableCellHiddenOverflow: {
