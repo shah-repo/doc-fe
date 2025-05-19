@@ -79,6 +79,7 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
             }
           });
         }
+        setSelectedCheckBoxOptions?.(optionsList);
         workspaceState?.setCheckboxGroupsOptionsMap(name, optionsList);
       },
       onError: toastError,
