@@ -1,11 +1,13 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
+import Colors from '../../layout/theme-next/colors';
 
 export default makeStyles(theme => ({
   announcementPopoverPaper: {
     padding: theme.spacing(1),
     maxWidth: 400,
-    backgroundColor: Colors.medium_gray,
+    color: Colors.textBlack,
+    backgroundColor: Colors.primaryBg,
+    border: `1px solid ${Colors.tableStroke}`,
   },
   textContainer: {
     padding: theme.spacing(2),
@@ -15,7 +17,9 @@ export default makeStyles(theme => ({
   },
   announcementDetailRoot: {
     width: '100%',
-    backgroundColor: Colors.medium_gray,
+    color: Colors.textBlack,
+    backgroundColor: Colors.primaryBg,
+    border: `1px solid ${Colors.tableStroke}`,
   },
   announcementDetailCardHeader: {
     display: 'flex',
@@ -23,11 +27,11 @@ export default makeStyles(theme => ({
     gap: theme.spacing(0.5),
   },
   announcementDetailTabIndicatorText: {
-    color: Colors.font_gray,
+    color: Colors.textBlack,
     fontSize: 12,
   },
   announcementDetailTextDescription: {
-    color: Colors.dark_gray,
+    color: Colors.textBlack,
     fontSize: 12,
     paddingTop: theme.spacing(1),
   },
@@ -35,7 +39,7 @@ export default makeStyles(theme => ({
     padding: theme.spacing(2),
   },
   conflictingElementsContainer: {
-    backgroundColor: Colors.light_red,
+    backgroundColor: Colors.errorHighlight,
     padding: theme.spacing(2),
   },
   announcementDetailOptionsArea: {
@@ -53,13 +57,13 @@ export default makeStyles(theme => ({
     padding: theme.spacing(1, 2),
   },
   errorDiv: {
-    color: Colors.red,
-    backgroundColor: Colors.light_red,
+    color: Colors.error,
+    backgroundColor: Colors.errorHighlight,
     padding: theme.spacing(0.5),
   },
   infoDiv: {
-    color: Colors.blue,
-    backgroundColor: Colors.light_gray_blue,
+    color: Colors.primaryLight,
+    backgroundColor: Colors.primaryHighlight,
     padding: theme.spacing(0.5, 1),
   },
   conflictingElementBox: {
@@ -75,13 +79,14 @@ export default makeStyles(theme => ({
   infoIndicatorPopoverPaper: {
     padding: theme.spacing(1),
     maxWidth: 400,
-    backgroundColor: Colors.platinum_gray,
+    color: Colors.textBlack,
+    backgroundColor: Colors.primaryHighlight,
   },
   infoIndicatorWarningIcon: {
-    color: Colors.error_red,
+    color: Colors.error,
   },
   infoIndicatorIcon: {
-    color: Colors.blue,
+    color: Colors.primary,
   },
   infoIndicatorWhite: {
     color: Colors.white,
@@ -91,7 +96,7 @@ export default makeStyles(theme => ({
     fontSize: 12,
   },
   infoIndicatorWarningText: {
-    color: Colors.latest_red_varient,
+    color: Colors.error,
     marginTop: theme.spacing(0.5),
     fontSize: 12,
   },
