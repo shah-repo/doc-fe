@@ -50,7 +50,7 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text, style }) => {
         disableRestoreFocus
       >
         <Box className={classes.popoverContent}>
-          <Typography component="div" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
+          <Typography component="span" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
         </Box>
       </Popover>
     </Box>
