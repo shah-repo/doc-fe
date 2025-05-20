@@ -64,7 +64,7 @@ export enum AlternatePartsHeaderStatusClassMapping {
 
 export const truncateByMaxChars = (text: string, maxChars: number): string => {
   if (text.length > maxChars) {
-    return `${text.substring(0, maxChars)}...`;
+    return `${text.substring(0, maxChars - 1)}...`;
   }
   return text;
 };

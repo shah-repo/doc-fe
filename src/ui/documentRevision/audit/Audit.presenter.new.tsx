@@ -15,6 +15,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { SUPPLIER_ASSESSMENT_FIELDS } from '../../components/AuditCheckboxGroupAsync';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
@@ -258,6 +259,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
+      if (fbType === 'checkboxgroupasync') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (field === 'id') {
+          return;
+        }
+      }
+
       if (fbType === 'siteInformation') {
         const result = handleSiteInformationChange(change, fbLabel);
         if (result) {
@@ -440,23 +449,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
-      if (fbType === 'partVendors') {
-        const fieldParts = change.field.split('.');
-        const field = fieldParts.at(-1) as string;
-        const parentField = fieldParts.at(-2) as string;
-        if (['id', 'currency', 'primary'].includes(field)) {
-          return;
-        }
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
-          fbLabel = translate('form.builder.part.vendors.audit.item', {
-            label: fbLabel as string,
-            field: fieldName,
-          });
-        }
-      }
-
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
@@ -547,7 +539,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // For inputs where the selected value is - Other, it shows an additional input field with a label of Note.
         // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
         if (change.field.includes('input-context') && change.fbSchemaItem) {
-          fbLabel = 'Note';
+          if (SUPPLIER_ASSESSMENT_FIELDS.some((field) => change.field.includes(field))) {
+            fbLabel = translate('form.builder.supplier.context.other', { field: fbLabel as string });
+          } else {
+            fbLabel = 'Note';
+          }
         }
 
         if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
