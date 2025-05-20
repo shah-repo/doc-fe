@@ -105,6 +105,12 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
         workspaceState?.setCheckboxGroupsOptionsMap(name, []);
         return;
       }
+      const existingOptions = workspaceState?.checkboxGroupsOptionsMap?.get(name);
+
+      if (existingOptions) {
+        return;
+      }
+
       async.start(
         fetchSupplierConfigOptions,
         props.optionId,

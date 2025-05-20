@@ -745,7 +745,7 @@ const fetchSupplierConfigurationOptions = (
 ): ApiAction<OptionType[]> => {
   const params = new URLSearchParams();
   ids.forEach(id => params.append('supplierTypeIds', id));
-  params.append('fetchFormOptions', fetchFormOptions.toString());
+  params.append('fetchFormOptions', fetchFormOptions?.toString());
   const queryString = params.toString();
 
   return apiActionWithCallbacks({
