@@ -1,6 +1,5 @@
 import { lighten, makeStyles } from '@material-ui/core';
-import { Colors as NextColors } from '../../layout/theme-next';
-import Colors from '../../layout/theme/utils/colors';
+import { Colors } from '../../layout/theme-next';
 
 export const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
@@ -31,7 +30,7 @@ export default makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   grey: {
-    backgroundColor: Colors.hint_gray,
+    backgroundColor: Colors.lightGray3,
   },
   flexBox: {
     display: 'flex',
@@ -45,7 +44,7 @@ export default makeStyles((theme) => ({
     gridGap: theme.spacing(2.5, 3),
   },
   header: {
-    borderBottom: `1px solid ${NextColors.stroke}`,
+    borderBottom: `1px solid ${Colors.stroke}`,
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -75,16 +74,16 @@ export default makeStyles((theme) => ({
   title: {
     fontSize: 21,
     marginBottom: theme.spacing(0.5),
-    color: NextColors.textBlack,
+    color: Colors.textBlack,
     fontWeight: 600,
   },
   subtitle: {
-    color: NextColors.textGray,
+    color: Colors.textGray,
     fontWeight: 400,
     fontSize: 14,
   },
   migrateInfo: {
-    color: NextColors.textBlack,
+    color: Colors.textBlack,
     fontWeight: 600,
     fontSize: 14,
   },
@@ -121,22 +120,22 @@ export default makeStyles((theme) => ({
     borderRadius: 4,
     padding: theme.spacing(1, 1.25),
     marginBottom: theme.spacing(0.5),
-    color: NextColors.textGray,
+    color: Colors.textGray,
     fontSize: 12,
     minHeight: 0,
     cursor: 'pointer',
 
     '&.Mui-selected': {
-      backgroundColor: NextColors.lightGray,
-      color: NextColors.primaryDark,
+      backgroundColor: Colors.lightGray,
+      color: Colors.primaryDark,
       fontWeight: 600,
 
       '&:hover': {
-        backgroundColor: NextColors.lightGray,
+        backgroundColor: Colors.lightGray,
       },
     },
     '&:hover': {
-      backgroundColor: NextColors.lightGray,
+      backgroundColor: Colors.lightGray,
     },
   },
   panels: {
@@ -151,7 +150,7 @@ export default makeStyles((theme) => ({
       wordBreak: 'break-all',
       wordWrap: 'break-word',
       paddingBottom: theme.spacing(0.5),
-      borderBottom: `1px solid ${NextColors.stroke}`,
+      borderBottom: `1px solid ${Colors.stroke}`,
     },
   },
   marginBottom: {
@@ -173,20 +172,20 @@ export default makeStyles((theme) => ({
     maxWidth: 340,
   },
   promptUserMsgStyle: {
-    color: NextColors.primaryLight,
-    backgroundColor: NextColors.primaryHighlight,
+    color: Colors.primary,
+    backgroundColor: Colors.primaryBg,
     padding: theme.spacing(1),
     textAlign: 'center',
   },
   errMsgStyle: {
-    color: NextColors.error,
-    backgroundColor: NextColors.errorHighlight,
+    color: Colors.error,
+    backgroundColor: Colors.errorHighlight,
     padding: theme.spacing(0.5),
   },
   mappingRuleSchemaItemBox: {
     position: 'relative',
     marginTop: theme.spacing(1),
-    border: `1px solid ${NextColors.textGray}`,
+    border: `1px solid ${Colors.textGray}`,
     borderRadius: theme.spacing(0.25),
     padding: theme.spacing(1),
     width: '100%',
@@ -218,9 +217,9 @@ export default makeStyles((theme) => ({
     },
   },
   switchBase: {
-    color: NextColors.statusDraftBorder,
+    color: Colors.statusDraftBorder,
     '&$checked': {
-      color: NextColors.statusDraftBorder,
+      color: Colors.statusDraftBorder,
     },
   },
   /* Container to define the boundary */
@@ -232,7 +231,7 @@ export default makeStyles((theme) => ({
 
   blackSpan: {
     paddingLeft: theme.spacing(0.5),
-    color: NextColors.black,
+    color: Colors.black,
   },
 
   refreshIconStyle: {
@@ -315,22 +314,22 @@ export default makeStyles((theme) => ({
     height: 32,
   },
   mappingTableCell: {
-    border: `1px solid ${Colors.dark_gray2}`,
+    border: `1px solid ${Colors.lightGray}`,
   },
   approvalRequirementsBox: {
     padding: theme.spacing(1.5),
     fontSize: 14,
-    backgroundColor: Colors.background_blue,
+    backgroundColor: Colors.primaryBg,
     borderRadius: '4px',
   },
   approvalRequirementsBoxText: {
     marginBottom: theme.spacing(0.5),
     fontSize: 14,
-    color: Colors.light_gray_II,
+    color: Colors.textGray,
   },
   approvalRequirementsBoxEmail: {
     fontWeight: 'bold',
-    color: Colors.bright_blue,
+    color: Colors.primaryLight,
     fontSize: 14,
     display: 'block',
   },
@@ -343,7 +342,7 @@ export default makeStyles((theme) => ({
   employeePasswordText: {
     width: '100%',
     border: 0,
-    borderBottom: `1px solid ${Colors.gray_goose}`,
+    borderBottom: `1px solid ${Colors.lightGray3}`,
   },
   spaceBetweenFlex: {
     display: 'flex',
@@ -353,7 +352,7 @@ export default makeStyles((theme) => ({
   },
   dialogActions: {
     padding: theme.spacing(1, 3),
-    background: NextColors.darkGray,
+    background: Colors.darkGray,
   },
   buttonSpacing: {
     marginLeft: theme.spacing(1),
@@ -385,11 +384,11 @@ export default makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
   },
   greenCheckCircle: {
-    color: NextColors.approve,
+    color: Colors.approve,
     fontSize: 15,
   },
   redWarning: {
-    color: NextColors.error,
+    color: Colors.error,
     fontSize: 15,
   },
   relative: {
@@ -414,7 +413,7 @@ export default makeStyles((theme) => ({
   mappingDialogSelectionOption: {
     fontSize: '84%',
     padding: theme.spacing(0.25),
-    backgroundColor: Colors.gray_goose,
+    backgroundColor: Colors.lightGray3,
   },
   mappingDialogInstructions: {
     marginTop: 0,
@@ -425,7 +424,7 @@ export default makeStyles((theme) => ({
   mappingAreaTitle: {
     display: 'inline-block',
     marginBottom: theme.spacing(1),
-    color: NextColors.textBlack,
+    color: Colors.textBlack,
     fontWeight: 600,
     fontSize: 14,
   },
@@ -436,13 +435,13 @@ export default makeStyles((theme) => ({
     overflow: 'auto',
   },
   selectedFromSchemaItem: {
-    color: NextColors.approve,
+    color: Colors.approve,
     position: 'absolute',
     right: 6,
     top: 2,
   },
   doneAllIcon: {
-    color: NextColors.approve,
+    color: Colors.approve,
     position: 'relative',
     top: 6,
   },
@@ -506,22 +505,22 @@ export default makeStyles((theme) => ({
     borderRadius: 4,
     padding: theme.spacing(1, 1.25),
     marginBottom: theme.spacing(0.5),
-    color: NextColors.textGray,
+    color: Colors.textGray,
     fontSize: 12,
     minHeight: 0,
     cursor: 'pointer',
 
     '&.Mui-selected': {
-      backgroundColor: NextColors.lightGray,
-      color: NextColors.primaryDark,
+      backgroundColor: Colors.lightGray,
+      color: Colors.primaryDark,
       fontWeight: 600,
 
       '&:hover': {
-        backgroundColor: NextColors.lightGray,
+        backgroundColor: Colors.lightGray,
       },
     },
     '&:hover': {
-      backgroundColor: NextColors.lightGray,
+      backgroundColor: Colors.lightGray,
     },
   },
   previewDrawerMappingRuleSchemaItemBox: {
@@ -547,20 +546,20 @@ export default makeStyles((theme) => ({
   },
   optionMapperDrawerOptionsList: {
     width: '45%',
-    border: `1px solid ${Colors.gray}`,
+    border: `1px solid ${Colors.lightGray3}`,
     overflowY: 'auto',
   },
   optionMapperDrawerListItem: {
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: Colors.default,
+      backgroundColor: Colors.darkGray,
     },
   },
   optionMapperDrawerSelectedListItem: {
-    backgroundColor: Colors.chinese_silver,
+    backgroundColor: Colors.lightGray2,
   },
   optionMapperDrawerMappedListItem: {
-    backgroundColor: Colors.pale_green,
+    backgroundColor: Colors.successHighlight,
   },
   revsTableRoot: {
     width: '100%',
@@ -586,7 +585,7 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: 14,
     lineHeight: '21px',
-    color: Colors.dark_jungle_green,
+    color: Colors.textBlack,
   },
   revsTableFlexBox: {
     display: 'flex',
@@ -636,17 +635,17 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
   },
   checkboxRowContentDone: {
-    color: NextColors.success,
+    color: Colors.success,
   },
   checkboxRowContentFailed: {
-    color: NextColors.error,
+    color: Colors.error,
   },
   checkboxRowContentInProgress: {
-    color: NextColors.warning,
+    color: Colors.warning,
   },
   deleteIcon: {
     cursor: 'pointer',
-    color: NextColors.error,
+    color: Colors.error,
     marginRight: theme.spacing(0.5),
   },
   tableCellHiddenOverflow: {
@@ -708,20 +707,20 @@ export default makeStyles((theme) => ({
   dialogContentText: {
     fontWeight: 400,
     fontSize: 14,
-    color: NextColors.textBlack,
+    color: Colors.textBlack,
     'white-space': 'break-spaces',
   },
   selectedRevInfo: {
     fontWeight: 600,
     fontSize: 14,
-    color: NextColors.textBlack,
+    color: Colors.textBlack,
     'white-space': 'break-spaces',
   },
   jobInfo: {
     fontSize: 14,
   },
   isRequired: {
-    color: NextColors.error,
+    color: Colors.error,
     fontSize: 16,
   },
   currentMappingsContainer: {

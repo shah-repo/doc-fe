@@ -338,7 +338,7 @@ export const useBulkMigration = () => {
       })
       .catch((exception) => {
         setIsLoading(false);
-        toastError(exception?.response.data?.message);
+        toastError(exception?.response?.data?.message);
       });
   }
 
@@ -364,7 +364,7 @@ export const useBulkMigration = () => {
       })
       .catch((exception) => {
         setIsLoading(false);
-        toastError(exception?.response.data?.message);
+        toastError(exception?.response?.data?.message);
       });
   }
 
@@ -426,7 +426,7 @@ export const useBulkMigration = () => {
       })
       .catch((exception) => {
         setRowMapping(false);
-        toastError(exception?.response.data?.message);
+        toastError(exception?.response?.data?.message);
       });
   }
 

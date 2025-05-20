@@ -1,6 +1,5 @@
 import { lighten, makeStyles } from '@material-ui/core';
-import { Colors as NextColors } from '../../../layout/theme-next';
-import Colors from '../../../layout/theme/utils/colors';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   root: {
@@ -17,7 +16,7 @@ export default makeStyles((theme) => ({
     },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',
-      color: Colors.almost_black,
+      color: Colors.textBlack,
     },
   },
   noPointerEvents: {
@@ -27,11 +26,11 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   selectedRow: {
-    backgroundColor: Colors.selected,
+    backgroundColor: Colors.secondaryBg,
   },
   errMsgStyle: {
-    color: Colors.red,
-    backgroundColor: Colors.light_red,
+    color: Colors.error,
+    backgroundColor: Colors.errorHighlight,
     padding: theme.spacing(0.5),
   },
   revsTableSelectedHighlight:
@@ -77,9 +76,9 @@ export default makeStyles((theme) => ({
     },
   },
   switchBase: {
-    color: NextColors.statusDraftBorder,
+    color: Colors.statusDraftBorder,
     '&$checked': {
-      color: NextColors.statusDraftBorder,
+      color: Colors.statusDraftBorder,
     },
   },
 }));

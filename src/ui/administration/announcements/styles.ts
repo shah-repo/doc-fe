@@ -31,7 +31,7 @@ export default makeStyles(theme => ({
     fontSize: 12,
   },
   announcementDetailTextDescription: {
-    color: Colors.textBlack,
+    color: Colors.textGray,
     fontSize: 12,
     paddingTop: theme.spacing(1),
   },
@@ -62,8 +62,8 @@ export default makeStyles(theme => ({
     padding: theme.spacing(0.5),
   },
   infoDiv: {
-    color: Colors.primaryLight,
-    backgroundColor: Colors.primaryHighlight,
+    color: Colors.primary,
+    backgroundColor: Colors.primaryBg,
     padding: theme.spacing(0.5, 1),
   },
   conflictingElementBox: {
