@@ -67,7 +67,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
         {(file: FBAttachment) => {
           const { name, type, id } = file;
           return (
-            <div className={classes.attachmentName}>
+            <div key={id} className={classes.attachmentName}>
               <AttachFile />
               <Box
                 className={classes.fileName}

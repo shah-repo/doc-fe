@@ -23,7 +23,7 @@ import { AsyncStatus } from '../../../../state/types';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
-import HeaderSupplierStatus from '../../../components/common/header/HeaderSupplierStatus';
+import HeaderSupplierStatus, { shouldShowHeaderStatus } from '../../../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
 import OwnerChangerContainer from '../../../components/common/owner.changer/container';
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
@@ -180,6 +180,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
+  const showSupplierHeaderStatus = shouldShowHeaderStatus(documentRevision);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
@@ -523,7 +524,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isSupplier && <HeaderSupplierStatus documentRevision={documentRevision} />}
+      {isSupplier && showSupplierHeaderStatus && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>

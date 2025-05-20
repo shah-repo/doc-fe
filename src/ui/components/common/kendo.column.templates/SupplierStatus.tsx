@@ -25,7 +25,7 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   const defaultValue = get(dataItem, field, '');
   const statusData = docTypeTableContext?.aslStatuses?.find((data) => data.id === defaultValue);
   const statusClassLabel = statusData?.internalType;
-  const label = statusData?.displayLabel;
+  const label = statusData?.displayLabel ?? defaultValue;
 
   return (
     <td

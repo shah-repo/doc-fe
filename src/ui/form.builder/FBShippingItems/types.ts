@@ -13,6 +13,7 @@ export interface SchemaOptions {
   onDiscard?: () => void
   onDelete?: (dataItem: EditableShippingItem) => void
   onRowClick?: (e: ShippingItemEditEvent) => void
+  clearLots: () => void
   fetchLotsByPartId: (id?: string) => void
 }
 
@@ -24,6 +25,7 @@ export type FBShippingItemsProps =
   isLotsloading: boolean
   isPartsloading: boolean
   shippingItems: ShippingItem[]
+  clearLots: () => void
   fetchLotsByPartId: (id?: string) => void
   updateShippingItem: (item: ShippingItem) => void
   deleteShippingItem: (item: ShippingItem) => void
@@ -58,5 +60,6 @@ export type UseOptionsHook = () => {
   parts: PartOption[]
   isLotsloading: boolean
   isPartsloading: boolean
+  clearLots: () => void
   fetchLotsByPartId: (id: string) => void
 };

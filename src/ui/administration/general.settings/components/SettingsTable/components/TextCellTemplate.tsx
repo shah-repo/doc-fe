@@ -12,7 +12,7 @@ function TextCellTemplate<T extends EditableItem> ({
   field,
 }: CellTemplateProps<T>): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, errors } = useFormikContext<Record<string, string>>();
+  const { getFieldProps } = useFormikContext();
   const classes = useStyles();
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -20,7 +20,7 @@ function TextCellTemplate<T extends EditableItem> ({
 
   if (isEditMode) {
     return (
-      <FormikField name={field} error={!!errors?.displayLabel}>
+      <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
           classes={{

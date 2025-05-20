@@ -29,6 +29,7 @@ import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../fo
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
+import AuditCheckboxGroupAsync from './AuditCheckboxGroupAsync';
 import AuditCycleCount from './AuditCycleCount';
 import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
@@ -186,6 +187,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       partVendors () {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
+      },
+      checkboxgroupasync () {
+        return <AuditCheckboxGroupAsync {...{ audit, dataCy, auditValue }} />;
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;

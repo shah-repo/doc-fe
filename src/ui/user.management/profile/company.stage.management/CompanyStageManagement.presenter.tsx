@@ -11,7 +11,7 @@ import Colors from '../../../layout/theme/utils/colors';
 
 interface Props {
   asyncState: AsyncState
-  disabled: boolean
+  canChangeRevisionStage: boolean
 }
 
 const useStyles = makeStyles(theme => createStyles({
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => createStyles({
 
 const CompanyStageManagementPresenter: React.FC<Props> = ({
   asyncState,
-  disabled,
+  canChangeRevisionStage,
 }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const formik = useFormikContext();
@@ -46,12 +46,12 @@ const CompanyStageManagementPresenter: React.FC<Props> = ({
               <RadioButton
                 label="2"
                 value="2"
-                disabled={disabled}
+                disabled={!canChangeRevisionStage}
               />
               <RadioButton
                 label="3"
                 value="3"
-                disabled={disabled}
+                disabled={!canChangeRevisionStage}
               />
             </RadioGroup>
           </>
@@ -85,7 +85,6 @@ const CompanyStageManagementPresenter: React.FC<Props> = ({
         <Button
           type="submit"
           data-cy="num-of-rev-stages-save"
-          disabled={disabled}
           variant="outlined"
         >
           <Text translation="common.save" />
