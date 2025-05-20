@@ -1,7 +1,7 @@
 import { lighten, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
-export const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
+const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
 export default makeStyles((theme) => ({
   root: {
