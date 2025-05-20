@@ -30,7 +30,7 @@ interface Props extends CellTemplateProps<Attachment> {
 }
 
 const ActionNeededCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem: attachment, documentRevision, onDownloadAttachment, onDownloadAsPDF, onView, onDelete } = props;
+  const { dataItem: attachment, documentRevision, onDownloadAttachment, onDownloadAsPDF, onView, onDelete, dataIndex } = props;
   const classes = useStyles();
   const type = get(attachment, 'type') as AttachmentType;
   const isFileViewable = useMemo(() => checkIfFileIsViewable(type), [type]);
@@ -58,33 +58,33 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
       dataCy={`${kebabCase(attachment?.name)}-menu`}
       icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
     >
-      <MenuItem onClick={() => onDownloadAttachment?.(attachment)}>
+      <MenuItem onClick={() => onDownloadAttachment?.(attachment)} data-cy={`attachment-download-${dataIndex}`}>
         <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.menuIcons} />
         <Text message={translate('attachment.menu.download.file')} />
       </MenuItem>
       {canWatermark && (
-        <MenuItem onClick={() => onDownloadAsPDF?.(attachment, AttachmentType.Attached, id)}>
+        <MenuItem onClick={() => onDownloadAsPDF?.(attachment, AttachmentType.Attached, id)} data-cy={`attachment-download-as-pdf-${dataIndex}`}>
           <FontAwesomeIcon icon={regular('file-lines')} className={classes.menuIcons} />
           <Text message={translate('attachment.menu.download.as.pdf')} />
         </MenuItem>
       )}
       {isFileViewable && (
-        <MenuItem onClick={onView?.(attachment)}>
+        <MenuItem onClick={onView?.(attachment)} data-cy={`attachment-view-${dataIndex}`}>
           <FontAwesomeIcon icon={regular('eye')} className={classes.menuIcons} />
           <Text message={translate('attachment.menu.view')} />
         </MenuItem>
       )}
       {isUserDocumentOwner && requiredStatus && (
-        <MenuItem onClick={onDelete?.(attachment)}>
+        <MenuItem onClick={onDelete?.(attachment)} data-cy={`attachment-delete-${dataIndex}`}>
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
           <Text message={translate('common.delete')} />
         </MenuItem>
       )}
       {showSetAsPrimary && !isNewDocument && (
-        <>
+        <span data-cy={`attachment-set-as-primary-${dataIndex}`} >
           <Divider />
           <MenuItemSetPrimary {...{ attachment, documentRevision }} />
-        </>
+        </span>
       )}
     </HeaderMenu>
   );
