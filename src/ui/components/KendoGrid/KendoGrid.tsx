@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
 import { CompositeFilterDescriptor, DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
 import React, { ComponentType, useCallback, useContext, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -25,6 +25,7 @@ import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
+import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
@@ -310,6 +311,14 @@ export function KendoGrid<T extends any> ({
   const InputFilter = (props: GridFilterCellProps) => (
     <InputFilterTemplate {...props} />
   );
+  const ExpirationDate = (props: GridFilterCellProps) => (
+    <ExpirationDateFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
 
   const AttachmentsCountHeaderCell = (props: GridHeaderCellProps) => {
     return (
@@ -336,6 +345,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
     [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
     [KendoGridFilterCell.SUPPLIER_STATUS]: ASLSupplierStatusFilter,
+    [KendoGridFilterCell.SUPPLIER_CERTIFICATIONS]: ExpirationDate,
   };
 
   const headerCellMapping = {

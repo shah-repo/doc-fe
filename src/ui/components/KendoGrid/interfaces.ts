@@ -80,6 +80,7 @@ export enum KendoGridFilterCell {
   TASKTYPE = 'taskType',
   STATUS = 'status',
   SUPPLIER_STATUS = 'supplierStatusId',
+  SUPPLIER_CERTIFICATIONS = 'supplierCertifications',
   EQ_STATUS = 'eqStatus',
   ASYNC_CREATED_AT = 'createdAtt',
 }
