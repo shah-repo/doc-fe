@@ -177,6 +177,7 @@ class FBEditorState {
     workOrderType: FBEditorLabel,
     workOrderLhrTable: FBEditorLabel,
     shippingCustomer: FBEditorAutocomplete,
+    shippingMethod: FBEditorOptionGroup,
   };
 
   public static editorTypeIconMapping = {
