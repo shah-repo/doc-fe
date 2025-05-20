@@ -468,82 +468,84 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         </Button>
       </FBSection>
       <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
-        <KendoDataGrid<EditableMDItem>
-          data={MDItemList}
-          schema={getColumns()}
-          fullWidth
-          className={classes.rootMDTable}
-          containerRef={containerRef}
-          hasBoxScrollbars
-          onRowClick={editMDItem}
-          selectedField={SELECTED_FIELD}
-          dataItemKey={DATA_ITEM_KEY}
-          selectable={{
-            enabled: true,
-            drag: true,
-            cell: true,
-            mode: 'multiple',
-          }}
-          filterable={true}
-          navigatable={true}
-          rowRender={rowRender}
-          onSelectionChange={onSelectionChange}
-          onKeyDown={onKeyDown}
-          loading={materialDispositionAsync.isLoading || partAsync.isLoading || deleteMDItemAsync.isLoading}
-          resizable={true}
-        >
-          <GridToolbar>
-            <Grid container justify="flex-end"
-              className={classes.toolbarContainer}
-            >
-              <Grid item>
-                <Grid container justify="flex-end">
-                  <Grid className={classes.refreshContainer}
-                  >
-                    <Grid container>
-                      { changeRequest?.state === ChangeRequestStatus.Draft && <StyleTooltip
-                        title={translate('approvalRequest.material.disposition.refresh')}
+        <div ref={containerRef} className={classes.root} data-cy="material-disposition-table">
+          <KendoDataGrid<EditableMDItem>
+            data={MDItemList}
+            schema={getColumns()}
+            fullWidth
+            className={classes.rootMDTable}
+            containerRef={containerRef}
+            hasBoxScrollbars
+            onRowClick={editMDItem}
+            selectedField={SELECTED_FIELD}
+            dataItemKey={DATA_ITEM_KEY}
+            selectable={{
+              enabled: true,
+              drag: true,
+              cell: true,
+              mode: 'multiple',
+            }}
+            filterable={true}
+            navigatable={true}
+            rowRender={rowRender}
+            onSelectionChange={onSelectionChange}
+            onKeyDown={onKeyDown}
+            loading={materialDispositionAsync.isLoading || partAsync.isLoading || deleteMDItemAsync.isLoading}
+            resizable={true}
+          >
+            <GridToolbar>
+              <Grid container justify="flex-end"
+                className={classes.toolbarContainer}
+              >
+                <Grid item>
+                  <Grid container justify="flex-end">
+                    <Grid className={classes.refreshContainer}
+                    >
+                      <Grid container>
+                        { changeRequest?.state === ChangeRequestStatus.Draft && <StyleTooltip
+                          title={translate('approvalRequest.material.disposition.refresh')}
+                          placement="top"
+                          arrow
+                        >
+                          <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
+                        </StyleTooltip> }
+                        { lastRefreshedAt && <Typography
+                          variant="h6"
+                          component="h6"
+                          className={classes.refreshText}
+                        >
+                          <Text translation="approvalRequest.material.disposition.refresh.date"
+                            values={{ date: getFormattedDateString(lastRefreshedAt, MomentFormats.BriefDate) }}
+                          />
+                        </Typography> }
+                      </Grid>
+                    </Grid>
+                    <Grid item >
+                      <StyleTooltip
+                        title={translate('common.download')}
                         placement="top"
                         arrow
                       >
-                        <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
-                      </StyleTooltip> }
-                      { lastRefreshedAt && <Typography
-                        variant="h6"
-                        component="h6"
-                        className={classes.refreshText}
-                      >
-                        <Text translation="approvalRequest.material.disposition.refresh.date"
-                          values={{ date: getFormattedDateString(lastRefreshedAt, MomentFormats.BriefDate) }}
-                        />
-                      </Typography> }
+                        <FontAwesomeIcon data-cy="excel-download"
+                          className={classes.icon}
+                          onClick={exportToExcel}
+                          icon={solid('arrow-down-to-line')} />
+                      </StyleTooltip>
                     </Grid>
-                  </Grid>
-                  <Grid item >
-                    <StyleTooltip
-                      title={translate('common.download')}
-                      placement="top"
-                      arrow
+                    <Grid item
+                      data-cy="show-hide-columns"
                     >
-                      <FontAwesomeIcon data-cy="excel-download"
-                        className={classes.icon}
-                        onClick={exportToExcel}
-                        icon={solid('arrow-down-to-line')} />
-                    </StyleTooltip>
-                  </Grid>
-                  <Grid item
-                    data-cy="show-hide-columns"
-                  >
-                    <ColumnShowHideMDMenu
-                      columnDefinition={columns}
-                      onChange={onColumnShowHide}
-                    />
+                      <ColumnShowHideMDMenu
+                        columnDefinition={columns}
+                        onChange={onColumnShowHide}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </GridToolbar>
-        </KendoDataGrid>
+            </GridToolbar>
+          </KendoDataGrid>
+        </div>
       </ExcelExport>
     </PopupClipboardMenuContext.Provider>
     {!isShowOnly && !formContext?.isEditing && <Button

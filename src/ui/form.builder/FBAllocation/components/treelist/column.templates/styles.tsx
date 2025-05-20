@@ -239,4 +239,13 @@ export const styles = makeStyles((theme) => ({
       width: 66,
     },
   },
+  flexJustifyBetween: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconGroup: {
+    display: 'flex',
+    gap: theme.spacing(1),
+  },
 }));

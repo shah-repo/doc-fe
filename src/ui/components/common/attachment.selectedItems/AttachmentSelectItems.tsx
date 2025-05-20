@@ -43,11 +43,13 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
         <Text message={translate('attachment.header.selected')} />
       </span>
       <hr className={classes.hr} />
+      {aiWidgetContext?.isWidgetActive && (
       <Tooltip title={translate('common.summarize.with.ai')}>
         <IconButton onClick={handleSummarizeAi} className={classes.aiButton}>
           <FontAwesomeIcon icon={regular('stars')} className={classes.aiIcon} />
         </IconButton>
       </Tooltip>
+      )}
     </Box>
   );
 };

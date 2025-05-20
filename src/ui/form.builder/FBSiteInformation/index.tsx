@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { omit } from 'lodash';
+import { omit, uniq } from 'lodash';
 import React, { lazy, memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
@@ -34,6 +34,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   const isActive = !disabled;
   const [editedSite, setEditedSite] = useState<Partial<EditableSite>>();
   const [expandedSiteIDs, setExpandedSiteIDs] = useState<string[]>();
+  const isExapandAll = useRef<boolean>(false);
 
   const isEditingRef = useRef<BooleanRef>(null);
   const isSiteAdded = editedSite?.[MODE_FIELD] === Mode.add;
@@ -132,10 +133,30 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       zipCode: isSameAsHQ ? hqAddress?.headquarterAddressZipCode ?? '' : '',
       siteAddress: isSameAsHQ ? hqAddress?.headquarterAddress ?? '' : '',
       city: isSameAsHQ ? hqAddress?.headquarterAddressCity ?? '' : '',
+      state: isSameAsHQ ? hqAddress?.headquarterAddressState ?? '' : '',
       country: isSameAsHQ ? hqAddress?.headquarterAddressCountry ?? '' : '',
       isSameAsHQ: isSameAsHQ,
     });
   }, [workspaceState?.formInput, editedSite]);
+
+  const getAllItemIds = (items: Site[]) => {
+    if (!items) return [];
+    const ids: string[] = [];
+    items.forEach((item) => {
+      ids.push(item.id);
+    });
+    return uniq(ids);
+  };
+
+  const toggleExpandCollapseAll = (toggle: boolean) => {
+    isExapandAll.current = toggle;
+    if (toggle) {
+      const expanded = getAllItemIds(sites);
+      setExpandedSiteIDs(expanded);
+      return;
+    }
+    setExpandedSiteIDs([]);
+  };
 
   const handleDataItemExpanded = useCallback((dataItem: EditableSite) => {
     if (isEditingRef.current) { return; }
@@ -151,6 +172,8 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     isActive,
     isInEditMode,
     actionsClass: classes.actionsCell,
+    isExapandAll: isExapandAll.current,
+    toggleExpandCollapseAll,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: onDiscardSite,
