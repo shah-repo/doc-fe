@@ -37,7 +37,7 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
     const isMaintainOptionsStatus = workspaceState?.document?.status
     && [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview].includes(workspaceState?.document?.status);
     const formValue = formState?.getFieldValue(name) || defaultValue;
-    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview;
+    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview || workspaceState?.isPreviewPanelVisible;
 
     options = useObserver(() => {
       const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [];
@@ -79,6 +79,7 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
             }
           });
         }
+        setSelectedCheckBoxOptions?.(optionsList);
         workspaceState?.setCheckboxGroupsOptionsMap(name, optionsList);
       },
       onError: toastError,
@@ -104,6 +105,12 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
         workspaceState?.setCheckboxGroupsOptionsMap(name, []);
         return;
       }
+      const existingOptions = workspaceState?.checkboxGroupsOptionsMap?.get(name);
+
+      if (existingOptions) {
+        return;
+      }
+
       async.start(
         fetchSupplierConfigOptions,
         props.optionId,

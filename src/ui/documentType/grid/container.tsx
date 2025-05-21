@@ -175,6 +175,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     } else if (columnDetails.searchOptions?.supplierStatusTemplate || upDateField === 'precalc.supplierStatus') {
       filterCellTemplate = KendoGridFilterCell.SUPPLIER_STATUS;
       dynamicCellTemplate = KendoCellTemplates.SUPPLIER_STATUS;
+    } else if (upDateField === 'precalc.supplierCertifications') {
+      filterCellTemplate = KendoGridFilterCell.SUPPLIER_CERTIFICATIONS;
+      dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     } else if (columnDetails.searchOptions?.eqStatusTemplate) {
       dynamicCellTemplate = KendoCellTemplates.EQ_STATUS;
       filterCellTemplate = KendoGridFilterCell.EQ_STATUS;

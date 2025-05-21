@@ -98,7 +98,7 @@ const CompanyStageManagementContainer: React.FC = () => {
       <FormikProvider value={formik}>
         <CompanyStageManagementPresenter
           asyncState={async.asyncState}
-          disabled={numOfRevStages >= MAX_NUM_OF_REV_STAGES}
+          canChangeRevisionStage={numOfRevStages < MAX_NUM_OF_REV_STAGES}
         />
       </FormikProvider>
     </Box>

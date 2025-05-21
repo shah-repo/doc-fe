@@ -14,7 +14,7 @@ export const withFBShippingItems = <T extends FBShippingItemsProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const [shippingItems, setShippingItems] = useState<ShippingItem[]>(workspaceState?.formInputSync.get(name) ?? []);
-    const { parts, lots, fetchLotsByPartId, isLotsloading, isPartsloading } = useOptions();
+    const { parts, lots, fetchLotsByPartId, clearLots, isLotsloading, isPartsloading } = useOptions();
 
     const updateState = (state: ShippingItem[]) => {
       setShippingItems(state);
@@ -46,6 +46,7 @@ export const withFBShippingItems = <T extends FBShippingItemsProps>(
       isPartsloading,
       disabled: disabled ?? workspaceState?.isPreview,
       shippingItems,
+      clearLots,
       fetchLotsByPartId,
       updateShippingItem,
       deleteShippingItem,

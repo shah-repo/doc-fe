@@ -3,12 +3,12 @@ export const DOCUMENT_REVISION_LIST = 'documentRevisions/LIST';
 export const DOCUMENT_REVISION_AUDIT_SET = 'documentRevisions/AUDIT_SET';
 
 export const DOCUMENT_REVISION_GET_ASYNC = 'documentRevisions/GET_ASYNC';
-export const DOCUMENT_REVISION_UPDATE_ASYNC = 'documentRevisions/UPDATE_ASYNC';
 export const DOCUMENT_REVISION_GET_ASYNC_DRAWER = 'documentRevisions/GET_ASYNC_DRAWER';
 export const DOCUMENT_REVISION_SECURITY_GET_ASYNC = 'documentRevisions/GET_ASYNC_SECURITY';
 export const DOCUMENT_REVISION_LIST_ASYNC = 'documentRevisions/LIST_ASYNC';
 export const DOCUMENT_REVISION_GET_AUDIT_ASYNC = 'documentRevisions/GET_AUDIT_ASYNC';
 export const REMOTE_VALIDATOR_GET_ASYNC = 'remoteValidator/GET_ASYNC';
+export const TASK_APPROVAL_GET_ASYNC = 'taskApproval/GET_ASYNC';
 
 export const DOCUMENT_GET_ASYNC = 'documentRevisions/GET_DOCUMENT_ASYNC';
 export const DOCUMENT_SET = 'documentRevisions/SET_DOCUMENT';

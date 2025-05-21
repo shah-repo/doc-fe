@@ -243,7 +243,7 @@ const fetchASLOptions = (
   handlers: Handlers,
 ): ApiAction<OptionType> =>
   apiActionWithCallbacks({
-    url: `${ASL_OPTIONS_OPTIONS_URL}`,
+    url: ASL_OPTIONS_OPTIONS_URL,
     method: 'get',
     handlers,
   });

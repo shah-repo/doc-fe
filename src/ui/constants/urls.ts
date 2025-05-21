@@ -72,6 +72,8 @@ export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions
 export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
+export const BULK_MIGRATION_URL = '/bulk_migration';
+
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
 export const BULK_IMPORT_EDIT_BASE_URL = `${BULK_IMPORT_PROGRESS_URL}/edit/`;
 export const BULK_IMPORT_EDIT_URL = `${BULK_IMPORT_EDIT_BASE_URL}:bulkImportId`;

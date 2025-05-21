@@ -1,5 +1,5 @@
 import { Box, BoxProps, ClickAwayListener } from '@material-ui/core';
-import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createFilter } from 'react-select';

@@ -12,15 +12,17 @@ import { PrimarySupplierCellTemplate } from './components/PrimarySupplierCellTem
 import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
 import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
+import { SupplierStateCellTemplate } from './components/SupplierStateCellTemplate';
 import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
 import { UnitsCellTemplate } from './components/UnitsCellTemplate';
-import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
+import { SUPPLIER_FIELD, SUPPLIER_STATE_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
 import { EditableVendor, SchemaOptions } from './types';
 
 export const buildSchema = ({
   units,
   statuses,
+  states,
   suppliers,
   isActive,
   isInEditMode,
@@ -45,6 +47,15 @@ export const buildSchema = ({
     <DropdownFilter
       {...props}
       data={statusOptions}
+      defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
+
+  const stateOptions = (states ?? []).map(state => createOption(state.displayLabel, state.displayLabel));
+  const StateFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      data={stateOptions}
       defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
@@ -78,10 +89,18 @@ export const buildSchema = ({
     {
       id: 'status',
       field: SUPPLIER_STATUS_FIELD,
-      title: 'form.builder.part.vendors.vendor.status',
+      title: 'form.builder.part.vendors.vendor.state',
       filterCell: StatusFilter,
       template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
       width: 120,
+    },
+    {
+      id: 'state',
+      field: SUPPLIER_STATE_FIELD,
+      title: 'form.builder.part.vendors.vendor.status',
+      filterCell: StateFilter,
+      template: (props) => <SupplierStateCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
     },
     {
       id: 'part-number',

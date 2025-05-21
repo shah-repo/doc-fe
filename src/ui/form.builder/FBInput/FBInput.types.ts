@@ -95,6 +95,7 @@ export type FBInputType =
   | 'workOrderLhrTable'
   | 'woApprovals'
   | 'shippingCustomer'
+  | 'shippingMethod'
   | 'workOrderType'
   | 'supplierContacts'
   | 'supplierOfferings'
@@ -148,7 +149,8 @@ export type FBInputProps =
     removeBorder?: boolean
     isFbEditorField?: boolean
     moveable?: boolean
-
+    referenceDataType?: string
+    fieldNames?: string[]
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
