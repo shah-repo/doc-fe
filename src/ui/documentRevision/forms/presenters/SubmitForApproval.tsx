@@ -41,6 +41,7 @@ export interface ApprovalFailureResponse {
   isWarning: boolean
   isError: boolean
   itemsAsOfferingNotApproved: Array<{docId: string, displayRevision: string}>
+  isSupplierUndefined?: boolean
   errorItems: ApprovalItem[]
   warningItems: ApprovalItem[]
 }

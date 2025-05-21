@@ -48,7 +48,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
-  const { isError, isWarning, errorItems, warningItems } = data ?? {};
+  const { isError, isWarning, isSupplierUndefined, errorItems, warningItems } = data ?? {};
 
   return (
     <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'supplierStatusDialog' }}>
@@ -69,6 +69,13 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               <Typography data-cy="dialog-header" className={classes.alertTitle}>
                 <Text translation={title} />
               </Typography>
+              { isSupplierUndefined
+                  && <Typography data-cy="dialog-message" className={classes.contentText}>
+                    <Text message={
+                      translate('purchaseOrder.supplierStatus.dialog.status')
+                    } />
+                  </Typography>
+              }
               {errorItems.length > 0 && (
                 <Typography data-cy="dialog-message" className={classes.contentText}>
                   <Text
@@ -87,6 +94,11 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                   />
                 </Typography>
               )}
+              { isWarning && !isError
+                  && <Box className={cx(classes.topSpacing, classes.contentText)}>
+                    <Text translation="supplier.status.warning.continue.message" />
+                  </Box>
+              }
             </Grid>
           </Grid>
         </DialogContentText>

@@ -1,5 +1,6 @@
 import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
+import { FormikHelpers } from 'formik';
 import qs from 'query-string';
 import { intl, translate } from '../../../common/intl';
 import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
@@ -8,6 +9,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { DocumentRevisionFormValues } from '../../../ui/documentRevision/forms/types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { BOMResponse, IWhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
@@ -87,14 +89,19 @@ const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
-const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>, helpers?: any):
+const save = (
+  id: string,
+  body: DocumentRevisionEditRequestBody,
+  handlers: Handlers<DocumentRevision>,
+  helpers?: FormikHelpers<DocumentRevisionFormValues>,
+):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: 'patch',
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
-    helpers && helpers.resetForm();
+    helpers?.resetForm();
     // dispatch(documentRevisionSet(undefined, body, id));
   },
   handlers,
@@ -747,7 +754,6 @@ const fetchSupplierConfigurationOptions = (
   ids.forEach(id => params.append('supplierTypeIds', id));
   params.append('fetchFormOptions', fetchFormOptions?.toString());
   const queryString = params.toString();
-
   return apiActionWithCallbacks({
     url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${queryString}`,
     method: 'get',
@@ -797,7 +803,6 @@ const fetchReferences = (
     offset: offset.toString(),
     limit: LIMIT.toString(),
   }).toString();
-
   return apiActionWithCallbacks({
     url: `${SUPPLIER_ROOT_URL}/references/search?${params}`,
     method: 'get',
