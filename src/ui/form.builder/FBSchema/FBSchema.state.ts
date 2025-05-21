@@ -9,6 +9,7 @@ import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
+import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
 import FBCustomerHeaderQuaterAddress from '../FBCustomerHeaderQuaterAddress/FBCustomerHeaderQuaterAddress';
 import FBCycleCount from '../FBCycleCount';
@@ -39,12 +40,14 @@ import FBPOApprovals from '../FBPOApprovals/FBPOApprovals';
 import FBPOReceive from '../FBPOReceive/FBPOReceive';
 import FBProcedure from '../FBProcedure/FBProcedure';
 import FBProcedureDiff from '../FBProcedureDiff/FBProcedureDiff';
+import FBProductOrService from '../FBProductOrService';
 import FBPurchaseOrder from '../FBPurchaseOrder/FBPurchaseOrder';
 import FBPurchaseOrderSummary from '../FBPurchaseOrder/FBPurchaseOrderSummary';
 import FBQuantityField from '../FBQuantityField/FBQuantityField';
 import FBQuantityUnitField from '../FBQuantityUnitField/FBQuantityUnitField';
 import FBRadio from '../FBRadio/FBRadio';
 import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
+import FBReferences from '../FBReferences';
 import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
 import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
@@ -57,6 +60,8 @@ import FBShippingMethod from '../FBShippingMethod';
 import FBSiteInformation from '../FBSiteInformation';
 import FBSubsection from '../FBSubsection/FBSubsection';
 import FBSupplier from '../FBSupplier/FBSupplier';
+import FBSupplierCheckboxGroupAsync from '../FBSupplierCheckboxGroupAsync';
+import FBSupplierContacts from '../FBSupplierContacts';
 import FBTask from '../FBTask/FBTask';
 import FBTextEditor from '../FBTextEditor/FBTextEditor';
 import FBTextField from '../FBTextField/FBTextField';
@@ -84,7 +89,7 @@ class FBSchemaState {
     'lhrstep',
   ];
 
-  private static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+  static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
     stepsection: FBSection,
@@ -92,6 +97,7 @@ class FBSchemaState {
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
+    checkboxgroupasync: FBSupplierCheckboxGroupAsync,
     autocomplete: FBAutocompleteAsync,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
@@ -157,6 +163,10 @@ class FBSchemaState {
     tasksListTable: FBTasksListTable,
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
+    supplierContacts: FBSupplierContacts,
+    supplierOfferings: FBProductOrService,
+    supplierSupportingDocs: FBCertifications,
+    supplierReferences: FBReferences,
     shippingItems: FBShippingItems,
     shippingAddress: FBShippingAddress,
     shippingCustomer: FBShippingCustomer,

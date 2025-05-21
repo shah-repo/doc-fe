@@ -117,6 +117,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     isTodayDueOnCcActive: false,
     isOverdueCcActive: false,
   },
+  aslStatusConfig: [],
+  supplierConfig: [],
 };
 
 const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {

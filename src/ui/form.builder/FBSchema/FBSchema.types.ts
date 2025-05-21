@@ -50,6 +50,8 @@ export type FBSchemaProps = Pick<FBInputProps,
 | 'autoScrollTo'
 | 'autoFocus'
 | 'tabId'
+| 'referenceDataType'
+| 'fieldNames'
 > & {
   validators?: Dictionary<any>
   tabId?: string

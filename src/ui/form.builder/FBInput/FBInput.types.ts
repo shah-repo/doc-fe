@@ -14,11 +14,16 @@ export type FBInputType =
   | 'textfield'
   | 'checkbox'
   | 'checkboxgroup'
+  | 'checkboxgroupasync'
   | 'section'
   | 'subsection'
   | 'datepicker'
   | 'texteditor'
   | 'select'
+  | 'contacts'
+  | 'certifications'
+  | 'references'
+  | 'productorservice'
   | 'radio'
   | 'radiogroup'
   | 'autocomplete'
@@ -92,6 +97,10 @@ export type FBInputType =
   | 'shippingCustomer'
   | 'shippingMethod'
   | 'workOrderType'
+  | 'supplierContacts'
+  | 'supplierOfferings'
+  | 'supplierSupportingDocs'
+  | 'supplierReferences'
   | 'shippingInformation'
   | 'headquarterAddress'
   | 'shippingItems'
@@ -140,7 +149,8 @@ export type FBInputProps =
     removeBorder?: boolean
     isFbEditorField?: boolean
     moveable?: boolean
-
+    referenceDataType?: string
+    fieldNames?: string[]
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
@@ -274,6 +284,10 @@ export const FBAutosave: FBInputType[] = [
   'numeric',
   'cycleCount',
   'workOrderType',
+  'supplierContacts',
+  'supplierOfferings',
+  'supplierSupportingDocs',
+  'supplierReferences',
 ];
 
 export const SectionTypeField: FBInputType[] = [
