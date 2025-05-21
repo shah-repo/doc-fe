@@ -43,7 +43,3 @@ export enum FBDataStoreApprovalKeys {
   PO_APPROVALS='poApprovals',
   INLINE_APPROVALS='inlineApprovals',
 }
-
-export enum FBErrorCodes {
-  PRECONDITION_FAILED = 412,
-}

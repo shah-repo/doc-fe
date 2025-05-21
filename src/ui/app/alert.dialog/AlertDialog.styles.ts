@@ -48,7 +48,7 @@ export const styles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2.5),
       color: Colors.error,
       '& svg': {
-        fontSize: 48,
+        fontSize: '3em',
       },
     },
     warningIcon: {
@@ -56,7 +56,7 @@ export const styles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2.5),
       color: Colors.warning,
       '& svg': {
-        fontSize: 48,
+        fontSize: '3em',
       },
     },
     alertDiv: {

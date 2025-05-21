@@ -89,10 +89,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       supplierStatusDialog.open();
     };
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, isWarningIgnored = false) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning = false) => {
       if (!approvalId) { return; }
       setPassword(password);
-      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, isWarningIgnored);
+      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, ignoreWarning);
     };
 
     onConfirmClick = (approvalId: string) => {
