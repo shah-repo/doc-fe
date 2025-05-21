@@ -17,7 +17,6 @@ export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGri
         id: item.docRevId,
       },
       revisionFormTo: item.revisionFormTo,
-      attachments: item.attachments,
       autoUpdate: item.autoUpdate,
     }
   ))

@@ -4,8 +4,8 @@ import { action, computed, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from '..';
 import { GroupType } from '../../../state/ducks/auth/types';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
-import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
-import { FBErrorCodes } from '../../documentRevision/forms/types';
+import { ErrorCodes } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix/FBPOApprovalMatrix.types';
@@ -126,12 +126,12 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: (response: IApprovalErrorResponse) => void,
-    isWarningIgnored?: boolean,
+    callback?: (response: ApprovalFailureResponse) => void,
+    ignoreWarning?: boolean,
   ) => {
     if (!id) { return; }
     return this.transitionApi.set({
-      url: `${FBEndpoint.ApprovalsTransition}?ignoreWarning=${isWarningIgnored}`,
+      url: `${FBEndpoint.ApprovalsTransition}?ignoreWarning=${ignoreWarning}`,
       urlValues: { id, transition },
       body,
       method: 'post',
@@ -139,7 +139,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
       if (error) {
         try {
           const parsedError = JSON.parse(JSON.stringify(error));
-          if (parsedError.status === FBErrorCodes.PRECONDITION_FAILED && parsedError.response) {
+          if (parsedError.status === ErrorCodes.PRECONDITION_FAILED && parsedError.response) {
             callback?.(parsedError.response);
           } else {
             return this.transitionApi.onError(error);

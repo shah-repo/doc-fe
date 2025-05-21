@@ -4,6 +4,7 @@ import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
 import { Audit, AuditGroupType } from '../audit/types';
+import { User } from '../common/types';
 import { ChangeRequestDependentOnDocRevsState } from './types';
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
@@ -62,6 +63,17 @@ const getUsersList = createSelector(
     ids.map((id) => ({ value: approvers[id].user.id, label: approvers[id].user.name })),
 );
 
+const getUserInfoById = createSelector(
+  (state: ApplicationState) => ({
+    ids: approversAllIds(state),
+    approvers: approversById(state),
+  }),
+  (state, owner) => owner,
+  ({ ids, approvers }, userId): User => {
+    return approvers[userId]?.user;
+  },
+);
+
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
@@ -95,7 +107,6 @@ const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeR
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
-const getUpdateAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.updateAsyncInfo;
 
 const getDependentOnDocRevsState = (state: ApplicationState): ChangeRequestDependentOnDocRevsState =>
   state.changeRequests.dependentOnDocRevs;
@@ -110,11 +121,11 @@ export default {
   getApproversListForAssessmentForm,
   getApproversListWithoutCurrentUser,
   getLoadAuditAsyncState,
-  getUpdateAsyncState,
   getAudit,
   getAssignessList,
   makeGetAudit,
   getDependentOnDocRevsState,
   usersById,
   getUsersList,
+  getUserInfoById,
 };

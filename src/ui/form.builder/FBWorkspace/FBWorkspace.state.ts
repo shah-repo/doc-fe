@@ -1,11 +1,10 @@
-import { cloneDeep, includes, isArray, isEmpty, map, omit, size, union } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
-import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
-import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
@@ -15,6 +14,7 @@ import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
+import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
@@ -26,6 +26,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public isPreview?: boolean;
+  public isPreviewPanelVisible?: boolean;
   public document?: DocumentRevision;
   @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
@@ -46,6 +47,8 @@ class FBWorkspaceState extends FBSchemaState {
   public tlTableData: EditableTLItem[] = [];
   public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
+
+  @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -167,6 +170,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, 'isPreview', isPreview);
   };
 
+  @action public setIsPreviewPanelVisible = (isPreviewPanelVisible: boolean) => {
+    set(this, 'isPreviewPanelVisible', isPreviewPanelVisible);
+  };
+
   @action public setAutosave = (autosave: boolean) => {
     set(this, 'autosave', autosave);
   };
@@ -222,6 +229,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
+  @action public setCheckboxGroupsOptionsMap = (name: string, value: CheckBoxOptionType[]) => {
+    set(this.checkboxGroupsOptionsMap, name, value);
+  };
+
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave, isPreview } = this;
@@ -257,10 +268,18 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
-    const isApprovalRequest = !this.document;
-    const saveFunction = isApprovalRequest ? saveApprovalRequest : saveDocumentRevision;
-    return saveFunction(id, body as DocumentRevisionEditRequestBody & ChangeRequestEditRequestBody)
-      .then((data) => {
+    const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
+    return this.documentRevApi.set({
+      url,
+      urlValues: { id },
+      body,
+      method: 'patch',
+    }, (data, error) => {
+      this.omitAutosave = false;
+      if (error) {
+        this.documentRevApi.onError(error);
+        this.loading = false;
+      } else {
         this.setDirty(false);
         this.setFormInputData(data);
         if (!isEmpty(this.getItemsByType('inlineapproval'))) {
@@ -275,12 +294,10 @@ class FBWorkspaceState extends FBSchemaState {
         }
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
-        this.approvals = data?.approvals as FBInlineApprovalBody[];
-      }).catch((error) => {
-        this.documentRevApi.onError(error);
-      }).finally(() => {
         this.loading = false;
-      });
+        this.approvals = data?.approvals as FBInlineApprovalBody[];
+      }
+    });
   };
 
   public undoPO = (prevDocumentRevision?: DocumentRevision) => {

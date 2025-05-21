@@ -2,17 +2,18 @@ import { ButtonProps } from '@material-ui/core/Button';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
+import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
+import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
-import { IApprovalErrorResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
-import { FBErrorCodes } from '../../../../documentRevision/forms/types';
+import { ApprovalFailureResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -49,7 +50,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useDispatch();
   const supplierStatusDialog = useDialog();
-  const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+  const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
   const [password, setPassword] = useState<string>();
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
@@ -81,16 +82,23 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
     },
     onError: (error?: string) => {
       async.reset();
+      if (!error) {
+        toastError(translate('supplier.announcement.unknown.error.message'));
+        return;
+      }
+
       try {
-        const parsedError = JSON.parse(error as string);
-        if (parsedError.status === FBErrorCodes.PRECONDITION_FAILED && parsedError.response) {
-          setErrorResponse(parsedError.response as IApprovalErrorResponse);
+        const parsedError = JSON.parse(error);
+        const { status, response } = parsedError || {};
+
+        if (status === ErrorCodes.PRECONDITION_FAILED && response) {
+          setErrorResponse(response as ApprovalFailureResponse);
           supplierStatusDialog.open();
         } else {
-          toastError(error as string);
+          toastError(error);
         }
-      } catch (err) {
-        toastError(error as string);
+      } catch {
+        toastError(error);
       }
     },
   });

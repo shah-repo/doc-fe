@@ -23,7 +23,7 @@ export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSch
   return keyBy(transformed, 'targetId');
 };
 
-const checkSpecialFields = (item, targetField) => {
+export const checkSpecialFields = (item, targetField) => {
   switch (item.type) {
     case MigrationSpecialFields.AUTOCOMPLETE:
       // Autocomple options must match

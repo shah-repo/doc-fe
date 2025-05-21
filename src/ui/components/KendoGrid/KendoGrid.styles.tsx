@@ -15,5 +15,14 @@ const KendoGridStyles = makeStyles((theme) => ({
   kendoGridContainer: {
     position: 'inherit !important' as 'inherit',
   },
+  filters: {
+    textAlign: 'left',
+  },
+  columnMenu: {
+    textAlign: 'right',
+  },
+  announcements: {
+    textAlign: 'center',
+  },
 }));
 export default KendoGridStyles;
