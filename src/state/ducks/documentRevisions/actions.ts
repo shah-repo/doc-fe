@@ -750,9 +750,12 @@ const fetchSupplierConfigurationOptions = (
   fetchFormOptions: boolean,
   handlers: Handlers,
 ): ApiAction<OptionType[]> => {
-  const params = qs.stringify({ supplierTypeIds: ids, fetchFormOptions });
+  const params = new URLSearchParams();
+  ids.forEach(id => params.append('supplierTypeIds', id));
+  params.append('fetchFormOptions', fetchFormOptions?.toString());
+  const queryString = params.toString();
   return apiActionWithCallbacks({
-    url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${params}`,
+    url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${queryString}`,
     method: 'get',
     handlers,
   });
@@ -795,8 +798,11 @@ const fetchReferences = (
   offset = 0,
   handlers: Handlers,
 ): ApiAction<EntitySearchResults> => {
-  const params = qs.stringify({ searchQuery, offset, limit: LIMIT });
-
+  const params = new URLSearchParams({
+    searchQuery,
+    offset: offset.toString(),
+    limit: LIMIT.toString(),
+  }).toString();
   return apiActionWithCallbacks({
     url: `${SUPPLIER_ROOT_URL}/references/search?${params}`,
     method: 'get',
