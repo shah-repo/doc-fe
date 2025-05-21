@@ -79,7 +79,6 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
             }
           });
         }
-        setSelectedCheckBoxOptions?.(optionsList);
         workspaceState?.setCheckboxGroupsOptionsMap(name, optionsList);
       },
       onError: toastError,
@@ -105,11 +104,6 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
         workspaceState?.setCheckboxGroupsOptionsMap(name, []);
         return;
       }
-      const existingOptions = workspaceState?.checkboxGroupsOptionsMap?.get(name);
-
-      if (existingOptions) {
-        return;
-      }
 
       async.start(
         fetchSupplierConfigOptions,
@@ -119,6 +113,10 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
         async,
       );
     }, [selectedTypes]);
+
+    useEffect(() => {
+      setSelectedCheckBoxOptions?.(formValue);
+    }, [formValue]);
 
     controls = map(options, (option, index) => {
       const [value, message] = at(option, [optionValueKey, optionLabelKey]) as string[];
