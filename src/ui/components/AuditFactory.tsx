@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
@@ -22,8 +22,8 @@ import { ASLStatus } from '../administration/general.settings/panels/SupplierSet
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
-import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
+import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
@@ -38,6 +38,8 @@ import AuditProcedure from './AuditProcedure';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
+import AuditSupplierOfferings from './AuditSupplierOfferings';
+import AuditSupplierReferences from './AuditSupplierReferences';
 import AuditTraineeList from './AuditTraineeList';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
@@ -196,6 +198,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       supplierSupportingDocs () {
         return <AuditSupplierCertifications {...{ audit, dataCy, auditValue, previousValue }} />;
+      },
+      supplierReferences () {
+        return <AuditSupplierReferences {...{ audit, dataCy, auditValue, previousValue }} />;
+      },
+      supplierOfferings () {
+        return <AuditSupplierOfferings {...{ audit, dataCy, auditValue, previousValue }} />;
       },
       siteInformation () {
         return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
