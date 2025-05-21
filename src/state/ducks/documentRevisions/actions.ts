@@ -188,10 +188,11 @@ const loadDocument = (id: string): ApiAction<Document> => apiAction({
 
 const applyTransition = (
   id: string,
+  ignoreWarning: boolean,
   transition: DocumentRevisionTransition,
   handlers: Handlers<DocumentRevisionTransitionResponse>,
 ): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}?ignoreWarning=${ignoreWarning}`,
   method: 'post',
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
@@ -744,7 +745,7 @@ const fetchSupplierConfigurationOptions = (
 ): ApiAction<OptionType[]> => {
   const params = new URLSearchParams();
   ids.forEach(id => params.append('supplierTypeIds', id));
-  params.append('fetchFormOptions', fetchFormOptions.toString());
+  params.append('fetchFormOptions', fetchFormOptions?.toString());
   const queryString = params.toString();
 
   return apiActionWithCallbacks({

@@ -25,6 +25,12 @@ export enum DocumentRevisionStatus {
   Voided = 'VOIDED',
 }
 
+export enum ErrorCodes {
+  PRECONDITION_FAILED = 412,
+  INTERNAL_SERVER_ERROR = 500,
+  GATEWAY_TIMEOUT = 504,
+}
+
 export enum DocumentRevisionStatusDisplay {
   Draft = 'Draft',
   PendingChange = 'PendingChange',

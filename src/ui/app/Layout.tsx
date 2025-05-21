@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
-import UserGroupManagment from '../administration/UserGroupManagement';
+import BulkMigrationPage from '../administration/bulkMigration';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
+import UserGroupManagment from '../administration/UserGroupManagement';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -21,6 +22,7 @@ import {
   BULK_IMPORT_EDIT_URL,
   BULK_IMPORT_PROGRESS_URL,
   BULK_IMPORT_URL,
+  BULK_MIGRATION_URL,
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
   CHANGE_REQUEST_ROOT_URL,
@@ -54,8 +56,8 @@ import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
-import TrainingDetailContainer from '../training/TrainingDetail.container';
 import TrainingListContainer from '../training/grid/container';
+import TrainingDetailContainer from '../training/TrainingDetail.container';
 import { AiWidgetProvider } from './AiWidget';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
@@ -185,6 +187,11 @@ const Layout: React.FC = () => {
             <Route
               path={BULK_IMPORT_URL}
               component={BulkImportPage}
+              exact
+            />
+            <Route
+              path={BULK_MIGRATION_URL}
+              component={BulkMigrationPage}
               exact
             />
             <Route

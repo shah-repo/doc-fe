@@ -113,10 +113,10 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         item[ASL_STATUS_KEYS.displayOrder] = index + 1;
       });
 
-      const displayOrderMap = sortedItems?.reduce((acc, item) => {
-        acc[item.id] = item[ASL_STATUS_KEYS.displayOrder];
-        return acc;
-      }, {});
+      const displayOrderMap: Record<string, number> = {};
+      sortedItems?.forEach((item) => {
+        displayOrderMap[item.id] = item[ASL_STATUS_KEYS.displayOrder];
+      });
 
       const displayOrderUpdatedData = updatedData?.map((status: ASLStatus) => ({
         ...status,

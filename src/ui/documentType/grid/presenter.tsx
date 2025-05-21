@@ -15,6 +15,7 @@ import { DocTypeTableContext, KendoPresenterProps } from './interfaces';
 
 export function DocumentTypePresenter ({
   statuses,
+  aslStatuses,
   tableName,
   tableCriteria,
   schema,

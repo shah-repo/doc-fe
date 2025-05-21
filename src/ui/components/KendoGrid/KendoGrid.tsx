@@ -10,11 +10,15 @@ import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag } from '../../../state/ducks/auth/types';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import AnnouncementIndicator from '../../administration/announcements/Indicator';
+import { Announcement } from '../../administration/announcements/interface';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
@@ -60,6 +64,7 @@ export function KendoGrid<T extends any> ({
   tableCriteria,
   schema,
   statuses = [],
+  aslStatuses = [],
   onRowClick,
   queryUrl,
   defaultPayloadData,
@@ -88,6 +93,9 @@ export function KendoGrid<T extends any> ({
     onSuccess: () => toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' })),
     onError: toastError,
   });
+
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
+  const canSeeAnnouncements = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
 
   useEffect(() => {
     if (didMount) {
@@ -175,6 +183,11 @@ export function KendoGrid<T extends any> ({
     if (data.total === 0) {
       setNoDataMessage(<NoDataFound />);
     }
+  };
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const announcementReceived = (data: Announcement[]) => {
+    setAnnouncements(data);
   };
 
   // Column Menu Filters
@@ -611,10 +624,16 @@ export function KendoGrid<T extends any> ({
       >
         <GridToolbar>
           <Grid container>
-            <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
+            <Grid item={true} xs={4} className={classes.filters}>
               <ClearFilters {...{ clearFilter }} />
             </Grid>
-            <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
+            <Grid item={true} xs={4} className={classes.announcements}>
+              {
+                announcements.length > 0 && canSeeAnnouncements
+                && <AnnouncementIndicator announcement={announcements[0]} />
+              }
+            </Grid>
+            <Grid item={true} xs={4} className={classes.columnMenu}>
               <ColumnShowHideMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -648,6 +667,7 @@ export function KendoGrid<T extends any> ({
         <DataLoader
           dataState={dataState}
           onDataReceived={dataReceived}
+          onAnnouncementReceived={announcementReceived}
           schema={schema}
           tableName={tableName}
           queryUrl={queryUrl}
