@@ -25,6 +25,7 @@ export const buildSchema = ({
   states,
   suppliers,
   isActive,
+  isLoading,
   isInEditMode,
   actionsClass,
   onRowClick,
@@ -99,7 +100,7 @@ export const buildSchema = ({
       field: SUPPLIER_STATE_FIELD,
       title: 'form.builder.part.vendors.vendor.status',
       filterCell: StateFilter,
-      template: (props) => <SupplierStateCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <SupplierStateCellTemplate {...props} approvedSupplierStatuses={states} isLoading={isLoading} onClick={onRowClick} />,
       width: 200,
     },
     {
