@@ -14,6 +14,7 @@ import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip
 import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
 import useDialog from '../../hooks/useDialog';
 import useTableCriteria from '../FBApprovalMatrixRoles/utils';
+import ExportDAMDialog from './components/ExportUtils/ExportDAMDialog';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import { APPROVAL_MATRIX_TABLE_NAME } from './constants';
@@ -53,6 +54,7 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { asyncState } = React.useContext(FormHeaderContext) ?? {};
   const { workspaceState } = FB.useStores();
+  const damDialogBox = useDialog();
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
@@ -92,11 +94,30 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     ) as FBApprovalRolesStages,
   });
 
+  const onExportDAM = () => {
+    damDialogBox.open();
+  };
+
   return (
     <Box
       className={classes.container}
       {...size && { height: size.height - 80 }}
     >
+      <Box className={classes.iconContainer}>
+      <StyleTooltip
+        title={translate('form.builder.export.dam')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          className={classes.buttonFullscreen}
+          kind="ghost"
+          data-cy="button-export-dam"
+          onClick={onExportDAM}
+        >
+          <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
+        </IconButton>
+      </StyleTooltip>
       <StyleTooltip
         title={translate('form.builder.fullscreen.mode')}
         placement="top"
@@ -111,6 +132,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           <FontAwesomeIcon icon={solid('expand')} />
         </IconButton>
       </StyleTooltip>
+      </Box>
       <FBGridTableContainer
         isDialog={dialog.isOpen}
         dialogContentStyle={classes.dialogContentStyle}
@@ -129,6 +151,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           onDataStateChange={dataStateChange}
         />
       </FBGridTableContainer>
+      <ExportDAMDialog dialog={damDialogBox} />
     </Box>
   );
 };
