@@ -39,7 +39,7 @@ export default makeStyles(theme => ({
     padding: theme.spacing(2),
   },
   conflictingElementsContainer: {
-    backgroundColor: Colors.errorHighlight,
+    backgroundColor: Colors.errorLight,
     padding: theme.spacing(2),
   },
   announcementDetailOptionsArea: {
@@ -49,7 +49,7 @@ export default makeStyles(theme => ({
     marginLeft: theme.spacing(-1),
   },
   announcementDetailOptionsText: {
-    color: Colors.gray,
+    color: Colors.textGray,
     fontSize: 12,
   },
   announceDetailsAppBar: {
