@@ -6,11 +6,7 @@ export default makeStyles(theme => ({
   root: {
     margin: theme.spacing(3, 0),
   },
-  detailsGridAddButton: {
-    maxWidth: '70vw',
-  },
   detailsGrid: {
-    maxWidth: '70vw',
     '& .k-column-title': {
       fontSize: 12,
     },

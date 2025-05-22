@@ -200,7 +200,6 @@ const SiteContact = forwardRef<BooleanRef, SiteContactProps>(({
           kind="add"
           fullWidth
           attached
-          className={classes.detailsGridAddButton}
           disabled={isInEditMode || isEditingRef?.current}
           onClick={createSiteContact}
           data-cy="add-contact-button"
