@@ -17,6 +17,7 @@ import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 import useStyle from './styles';
+import { isNotProdEnv } from './utils';
 
 const erroMessage = (customDays: number) => {
   const value = String(customDays);
@@ -45,7 +46,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
-      {process.env.NODE_ENV !== 'production' && <SettingsPanelSection>
+      {isNotProdEnv() && <SettingsPanelSection>
         <SwitchControl
           {...getFieldProps('trainingReminders.isEmailSendingEnabled')}
           checked={values.trainingReminders.isEmailSendingEnabled}
