@@ -1,4 +1,4 @@
-export const ENVIRONMENTS = {
+const ENVIRONMENTS = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',
   TEST: 'test',
