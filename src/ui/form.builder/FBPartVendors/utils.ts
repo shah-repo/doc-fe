@@ -87,5 +87,6 @@ export const useOptions: UseOptionsHook = (vendors) => {
     units,
     statuses,
     states,
+    isLoading: suppliersStateAsync.isLoading,
   };
 };

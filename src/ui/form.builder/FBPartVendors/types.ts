@@ -12,6 +12,7 @@ export interface SchemaOptions {
   isActive: boolean
   isInEditMode: boolean
   actionsClass: string
+  isLoading?: boolean
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
@@ -34,6 +35,7 @@ export type FBPartVendorsProps =
   updateVendor: (item: Vendor) => void
   deleteVendor: (item: Vendor, id?: string) => void
   setPrimaryVendor: (id: string) => void
+  isLoading: boolean
 };
 
 interface Cost {
@@ -44,6 +46,7 @@ interface Supplier {
   id: string
   name: string
   displayStatus?: string
+  supplierStatusId?: string
 }
 
 export interface UnitOption {
@@ -56,6 +59,7 @@ export type UseOptionsHook = (suppliersList: Supplier[]) => {
   statuses: string[]
   suppliers: SupplierOption[]
   states: ASLStatus[]
+  isLoading: boolean
 };
 
 export interface Vendor {
@@ -91,4 +95,6 @@ export type SupplierOption =
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableVendor> {
   onClick?: (e: VendorEditEvent) => void
+  approvedSupplierStatuses?: ASLStatus[]
+  isLoading?: boolean
 }

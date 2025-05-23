@@ -71,6 +71,12 @@ export function DocumentTypePresenter ({
   const getSupplierStatusLabel = (id: string) =>
     docTypeTableContext?.aslStatuses?.find((data) => data.id === id)?.displayLabel;
 
+  useEffect(() => {
+    if (docTypeTableContext?.aslStatuses && dataToBeExported.length > 0) {
+      handleExportData(dataToBeExported);
+    }
+  }, [docTypeTableContext?.aslStatuses]);
+
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>,
   ) => {
@@ -81,7 +87,7 @@ export function DocumentTypePresenter ({
           record.precalc.lhr_end_accepted_quantity = 'N/A';
         }
       }
-      if (has(record, 'precalc.supplierStatus')) {
+      if (record?.precalc?.supplierStatus && (docTypeTableContext?.aslStatuses ?? [])?.length > 0) {
         record.precalc.supplierStatus = getSupplierStatusLabel(record.precalc.supplierStatus);
       }
       return record;
