@@ -50,8 +50,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableSupplierContact>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const supplierContacts: EditableSupplierContact[]
-        = workspaceState?.formInputSync.get(name) ?? [];
+      const supplierContacts = contacts as EditableSupplierContact[];
       const updatedContact = omit(values, FIELDS_TO_OMIT);
 
       const updatedContactsAfterAddition = supplierContacts.length > 0
