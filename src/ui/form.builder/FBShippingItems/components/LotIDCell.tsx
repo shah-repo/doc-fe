@@ -17,6 +17,7 @@ import useStyles from './styles';
 interface Props extends CustomTemplateProps {
   isLoading: boolean
   options: DocumentRevision[]
+  clearLots: () => void
   fetchLotsByPartId: (id?: string) => void
 }
 
@@ -25,8 +26,9 @@ interface CustomOptionType extends OptionType {
   documentId: string
 }
 
-const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, isLoading }) => {
+const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, clearLots, options, isLoading }) => {
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
+  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
   const classes = useStyles();
 
@@ -35,6 +37,8 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
       return;
     }
     fetchLotsByPartId(part?.id);
+
+    return clearLots;
   }, [part]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
@@ -64,6 +68,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
         options={renderOptions()}
         data-cy="lot-id-field"
         value={value}
+        disabled={isUpdateAction}
         getOptionLabel={(option) => option?.label ?? ''}
         onChange={handleChange}
         loading={isLoading}

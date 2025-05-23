@@ -1,5 +1,6 @@
 import { Chip, Grid, Link, Typography } from '@material-ui/core';
 import classNames from 'classnames';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -277,7 +278,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   )}
                 </Grid>
                 &nbsp;
-                {displayRevision && <> <Grid item={true} className={classes.whiteDot} />&nbsp;
+                {!isEmpty(displayRevision) && <> <Grid item={true} className={classes.whiteDot} />&nbsp;
                   <Grid item={true}>
                     <Text
                       translation="form.builder.header.rev"

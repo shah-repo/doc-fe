@@ -7,6 +7,8 @@ import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
+import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
+import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
 import TrainingReminders from './panels/TrainingReminders';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
@@ -65,6 +67,16 @@ export const panels = [
     key: GeneralSettingsTabs.LCP,
     title: 'administration.general.settings.lcp',
     component: LCPSettings,
+  },
+  {
+    key: GeneralSettingsTabs.SupplierConfiguration,
+    title: 'administration.general.settings.suppliers.configuration',
+    component: SupplierConfiguration,
+  },
+  {
+    key: GeneralSettingsTabs.ASLStatus,
+    title: 'administration.general.settings.suppliers.asl.status',
+    component: ASLStatusSettings,
   },
   {
     key: GeneralSettingsTabs.Integrations,

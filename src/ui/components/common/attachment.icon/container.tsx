@@ -202,6 +202,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     if (cleanCopyRequiresPassword(attachment) || redLineRequiresPassword(attachment, attachmentType)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
+      setSelectedAttachment(attachment);
       openWarningDialog();
       closeContextMenu();
     } else {

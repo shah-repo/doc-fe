@@ -72,12 +72,17 @@ export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions
 export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
+export const BULK_MIGRATION_URL = '/bulk_migration';
+
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
 export const BULK_IMPORT_EDIT_BASE_URL = `${BULK_IMPORT_PROGRESS_URL}/edit/`;
 export const BULK_IMPORT_EDIT_URL = `${BULK_IMPORT_EDIT_BASE_URL}:bulkImportId`;
 
 export const LIFE_CYCLE_URL = '/lifecycle';
+export const SUPPLIERS_URL = '/supplier';
 export const LIFE_CYCLE_PHASES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/baseOptions`;
+export const SUPPLIERS_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${SUPPLIERS_URL}/baseOptions`;
+export const ASL_OPTIONS_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${SUPPLIERS_URL}/aslStatusBaseOptions`;
 export const LIFE_CYCLE_DOC_REV_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/docRevOptions`;
 export const LIFE_CYCLE_DOC_TYPES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/documentTypeOptions`;
 
