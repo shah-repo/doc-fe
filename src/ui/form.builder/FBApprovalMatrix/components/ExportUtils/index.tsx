@@ -6,6 +6,10 @@ import createSchema from '../../schema';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ApprovalRole } from '../../../FBApprovalMatrixRoles/types';
 import { SEARCHABLE_GROUPS_FIELD } from '../../../FBApprovalMatrixRoles/constants';
+import { isEmpty, isUndefined } from 'lodash';
+
+const matrixTab = 'Matrix Details';
+const approvalTab = 'Approval Roles';
 
 interface Column {
   field?: string
@@ -18,6 +22,7 @@ interface HeaderCell {
   colSpan?: number
   rowSpan?: number
   bold?: boolean
+  hAlign?: string
 }
 
 interface HeaderRow {
@@ -51,10 +56,11 @@ const buildHeaderRows = (columns, depth = getMaxDepth(columns)) => {
       const rowSpan = isGroup ? 1 : depth - level;
 
       rows[level].cells.push({
-        value: col.title || col.field,
+        value: (col.title || col.field)?.toUpperCase(),
         colSpan,
         rowSpan,
         bold: true,
+        hAlign: 'center',
       });
 
       if (isGroup) {
@@ -91,31 +97,30 @@ const exportSheets = async (sheetData, fileName, damName) => {
       cells: flatColumns.map((col, colIndex) => {
         let value = getNestedValue(row, col.field);
         if (colIndex === 0) {
-          if (value === true) {
-            value = 'Active';
-          } else if (value === false) {
-            value = 'Inactive';
-          }
+          value = value === true ? 'Active' : value === false ? 'Inactive' : value;
+        } else {
+          value = value === true ? 'Y' : value === false ? '' : value;
         }
-        else if (value === true) {
-          value = 'Y';
-        } else if (value === false) {
-          value = '';
+        if (value === 'Y') {
+          return { value, hAlign: 'center' };
         }
-        return { value, alignment: { horizontal: 'center' } };
+        return { value };
       }),
     }));
 
     const customIntroRow = {
       cells: [
-        { value: name === 'Matrix Details' ? damName : '' }, // only for first sheet
-        ...Array(flatColumns.length - 1).fill({ value: '' }), // fill remaining columns with blanks
+        {
+          value: name === matrixTab ? damName : '',
+          bold: true,
+          background: '#f2f2f2',
+        },
       ],
     };
 
     return {
       name,
-      rows: name === 'Matrix Details'
+      rows: name === matrixTab
         ? [customIntroRow, ...headerRows, ...dataRows]
         : [...headerRows, ...dataRows],
     };
@@ -129,8 +134,8 @@ const exportSheets = async (sheetData, fileName, damName) => {
 const getNestedValue = (obj, path) =>
   path?.split('.').reduce((acc, part) => acc?.[part], obj);
 
-export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOfRevStages, fileName, damName) => {
-  const matrixDetailsData = approvalMatrixFieldState?.getCurrentData('matrix') ?? [];
+export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOfRevStages, fileName, damName, datafilter) => {
+  let matrixDetailsData = approvalMatrixFieldState?.getCurrentData('matrix') ?? [];
   const approvalRoles = existingRoles.map((role) => {
     const foundGroups = role.groups.map(({ id }) => {
       const foundGroup = groups.find((group) => group.id === id);
@@ -148,46 +153,45 @@ export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOf
   });
   let schemaMatrix = createSchema({ data: { approvalMatrix: matrixDetailsData, approvalRoles: approvalRolesData } });
 
-  if(numOfRevStages === 2) {
+  if (numOfRevStages === 2) {
     schemaMatrix = schemaMatrix.filter(item => item.id !== 'form-builder-approvals-numeric-alpha');
   }
 
   const matrixDetailsColumns = getExcelColumns(schemaMatrix as TreeListColumnProps[]);
   const approvalRolesColumns = getExcelColumns(schemaApprovalRoles as TreeListColumnProps[]);
-  const introRow = matrixDetailsColumns.reduce((acc, col, index) => {
-    if (col.field) {
-      acc[col.field] = index === 0 ? damName : '';
-    }
-    return acc;
-  }, {} as Record<string, any>);
-  const matrixSheetDataWithHeader = [
-    introRow,
-    ...matrixDetailsData,
+
+  if (!isEmpty(datafilter)) {
+    const filterItem = datafilter?.find(item => item.field === 'docType.active');
+    matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active === filterItem?.value);
+  }
+  else if (isUndefined(datafilter)) {
+    matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active);
+  }
+
+  const sheetData = [
+    {
+      name: matrixTab,
+      data: matrixDetailsData,
+      columns: matrixDetailsColumns,
+    },
+    {
+      name: approvalTab,
+      data: approvalRolesData,
+      columns: approvalRolesColumns,
+    },
   ];
-    const sheetData = [
-      {
-        name: 'Matrix Details',
-        data: matrixSheetDataWithHeader,
-        columns: matrixDetailsColumns,
-      },
-      {
-        name: 'Approval Roles',
-        data: approvalRolesData,
-        columns: approvalRolesColumns,
-      },
-    ];
-    exportSheets(sheetData, fileName, damName);
+  exportSheets(sheetData, fileName, damName);
 };
 
-  const schemaApprovalRoles: Array<ColumnDefinition<any>> = [
-    {
-      id: 'name',
-      field: 'name',
-      title: 'form.builder.approval.role',
-    },
-    {
-      id: 'groups',
-      field: 'groupsList',
-      title: 'form.builder.approving.groups',
-    },
-  ];
+const schemaApprovalRoles: Array<ColumnDefinition<any>> = [
+  {
+    id: 'name',
+    field: 'name',
+    title: 'form.builder.approval.role',
+  },
+  {
+    id: 'groups',
+    field: 'groupsList',
+    title: 'form.builder.approving.groups',
+  },
+];

@@ -11,17 +11,23 @@ import { userManagementSelectors } from '../../../../../state/ducks/userManageme
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { DialogHandler } from '../../../../hooks/useDialog';
+import useTableCriteria from '../../../FBApprovalMatrixRoles/utils';
+import { APPROVAL_MATRIX_TABLE_NAME } from '../../constants';
 import { styles } from './ExportDAMDialog.styles';
+import { State } from '@progress/kendo-data-query';
 
 interface Props {
   dialog: DialogHandler
+  matrixTabDataState?: State
 }
 
 const ExportDAMDialog: React.FunctionComponent<Props> = ({
   dialog,
+  matrixTabDataState,
 }) => {
   const classes = styles();
   const { approvalMatrixFieldState, workspaceState } = FB.useStores();
+  const { dataState } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
   const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
   const groupOptions = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
@@ -44,8 +50,9 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
     if(isEmpty(fileName)) {
       return toastError(translate('document.revision.enter.valid.file.name'));
     }
+    const datafilter = matrixTabDataState?.filter?.filters ?? dataState?.filter?.filters;
     const damName = `${workspaceState?.document?.document.docId} - ${workspaceState?.document?.name} - Rev ${workspaceState?.document?.displayRevision}`;
-    exportDAM(approvalMatrixFieldState, groupOptions, existingRoles, numOfRevStages, fileName, damName);
+    exportDAM(approvalMatrixFieldState, groupOptions, existingRoles, numOfRevStages, fileName, damName, datafilter);
     dialog.close();
   };
 

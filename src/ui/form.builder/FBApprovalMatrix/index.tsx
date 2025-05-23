@@ -105,7 +105,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     >
       <Box className={classes.iconContainer}>
       <StyleTooltip
-        title={translate('form.builder.export.dam')}
+        title={translate('form.builder.export.dam.ar')}
         placement="top"
         arrow
       >
@@ -151,7 +151,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           onDataStateChange={dataStateChange}
         />
       </FBGridTableContainer>
-      <ExportDAMDialog dialog={damDialogBox} />
+      <ExportDAMDialog dialog={damDialogBox} matrixTabDataState={dataState} />
     </Box>
   );
 };
