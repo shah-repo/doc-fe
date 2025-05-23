@@ -133,7 +133,7 @@ export function shouldShowHeaderStatus (documentRevision?: DocumentRevision): bo
   }
 
   return ![DocumentRevisionStatus.Canceled, DocumentRevisionStatus.Deprecated,
-    DocumentRevisionStatus.Voided, DocumentRevisionStatus.Voided].includes(documentRevision.status);
+    DocumentRevisionStatus.Voided].includes(documentRevision.status) && !!documentRevision.isLatestRevision;
 }
 
 export default withThemeNext(HeaderSupplierStatus);

@@ -326,6 +326,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   expiryDate?: string
   supplierStatusId?: string
   mappedConfigDetails?: {[key: string]: ASLStatus}
+  isLatestRevision?: boolean
 }
 
 interface EQ {
