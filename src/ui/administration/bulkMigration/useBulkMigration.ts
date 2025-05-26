@@ -369,7 +369,7 @@ export const useBulkMigration = () => {
   }
 
   function fetchScanSupplierRevisions (
-    scanId: string, page: number, rowsPerPage: number, orderBy: string, order: SortDirection, isShowActionableRows: boolean,
+    scanId: string, page: number, rowsPerPage: number, orderBy: string, order: SortDirection, showActionableRows: boolean,
     searchQueries: {[key: string]: string},
   ) {
     setIsLoading(true);
@@ -378,7 +378,7 @@ export const useBulkMigration = () => {
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}&showActionableOnly=${showActionableRows}`,
       data: {
         searchQueries,
       },
