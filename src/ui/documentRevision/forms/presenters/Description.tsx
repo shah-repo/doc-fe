@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useIntl } from 'react-intl';
 import { SMTextEditor } from '../../../../App';
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import useDescription from '../../../hooks/docCustomization/useDescription';
@@ -8,16 +7,16 @@ interface Props {
   isQms: boolean
   documentTypeId?: string
   isDisabled?: boolean
+  placeholder?: string
 }
 
 const Description: React.FunctionComponent<Props> = ({
   documentTypeId = '',
   isQms,
   isDisabled = false,
+  placeholder,
 }) => {
-  const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useDescription(documentTypeId, isQms);
-  const placeholder: string = intl.formatMessage({ id: 'form.builder.enter.description' });
 
   if (!isVisible) {
     return null;

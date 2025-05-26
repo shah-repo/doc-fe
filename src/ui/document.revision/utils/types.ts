@@ -20,6 +20,13 @@ export enum ReleasedDateOptions {
   LAST_MONTH = 'Last 30 days',
 }
 
+export enum ExpiryDateOptions {
+  TWO_WEEKS = 'Expiring in 14 days',
+  ONE_MONTH = 'Expiring in 30 days',
+  TWO_MONTHS = 'Expiring in 60 days',
+  THREE_MONTHS = 'Expiring in 90 days',
+}
+
 export enum CompletedOnDateOptions {
   NEXT_WEEK = 'Due in 7 days',
   PENDING = 'Pending',

@@ -8,6 +8,7 @@ import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from '../../
 import apiClient from '../../apiClient';
 import apiXClient from '../../apiXClient';
 import { authActions } from '../../ducks/auth';
+import { ErrorCodes } from '../../ducks/documentRevisions/types';
 import { ApplicationState } from '../../reducers';
 import { ApiAction, AsyncAction, AsyncStatus } from '../../types';
 import { AsyncActionErrorResponse } from './types';
@@ -124,6 +125,11 @@ const apiMiddleware: Middleware = ({
         responseMessage = intl.formatMessage({
           id: 'errors.somethingWentWrong',
         });
+        break;
+      }
+      case ErrorCodes.PRECONDITION_FAILED: {
+        const { data } = (exception as AxiosError)?.response as AsyncActionErrorResponse;
+        responseMessage = JSON.stringify(data);
         break;
       }
       default: {

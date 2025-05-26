@@ -1,3 +1,4 @@
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
 import { TableColumnActionType } from '../../../ui/components/table/column/types';
 import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
@@ -22,6 +23,12 @@ export enum DocumentRevisionStatus {
   Obsolete = 'OBSOLETE',
   Canceled = 'CANCELED',
   Voided = 'VOIDED',
+}
+
+export enum ErrorCodes {
+  PRECONDITION_FAILED = 412,
+  INTERNAL_SERVER_ERROR = 500,
+  GATEWAY_TIMEOUT = 504,
 }
 
 export enum DocumentRevisionStatusDisplay {
@@ -226,6 +233,27 @@ export interface UsedDocumentsInLHRS {
   [key: string]: DocumentsInLHRS
 }
 
+export interface EntitySearchResults {
+  items: DocumentRevision[]
+  totalCount: number
+}
+
+interface LifecyclePhase {
+  displayLabel: string
+  displayOrder: number
+  documentTypeId: string
+  groupType: string
+  id: string
+  internalType: string
+  isActive: boolean
+  isAllowedOnLhrProd: string
+  isAllowedToBuy: string
+  isApprovedSupplierEnforcedOnPO: string
+  isUserAdded: boolean
+  isUserModified: boolean
+  order: number
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
   displayStatus: DocumentRevisionStatus
   children?: DocumentRevision[]
@@ -293,9 +321,12 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSyncedSuccessNotify?: boolean
   eqStatus?: EquipmentStatus
   lifecyclePhaseId?: string
-  lifecyclePhase?: string
+  lifecyclePhase?: LifecyclePhase
   isExpired?: boolean
   expiryDate?: string
+  supplierStatusId?: string
+  mappedConfigDetails?: {[key: string]: ASLStatus}
+  isLatestRevision?: boolean
 }
 
 interface EQ {

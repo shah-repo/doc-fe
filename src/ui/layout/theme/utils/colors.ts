@@ -74,6 +74,7 @@ enum Colors {
   latest_red_varient = '#EC2B00',
   trinary_red = '#F14822',
   mandy = '#EB4770',
+  error_bg = '#ef9f87',
   dawn='#A2A2A2',
   seashell='#FCF0ED',
   errorHighlight='#FEF4F2',
@@ -92,6 +93,7 @@ enum Colors {
   green_blue='#0DB78D',
   light_forest_green_border='#509849',
   dark_jungle_green='#162229',
+  light_green_selected='#dbf5cb',
   // yellow
   light_yellow = '#FFF3CD',
   dark_yellow = '#856404',
