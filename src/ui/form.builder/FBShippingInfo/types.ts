@@ -15,6 +15,7 @@ export interface FBShippingAddressProps {
 export interface ShippingAddress {
   id: string
   city: string
+  state: string
   country: string
   primary: boolean
   zipCode: number
