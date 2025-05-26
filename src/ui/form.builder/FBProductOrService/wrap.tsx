@@ -62,10 +62,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     });
 
     useEffect(() => {
-      if (
-        !workspaceState?.documentId
-        && !workspaceState?.formInputSync.get(name)
-      ) {
+      if (!workspaceState?.formInputSync.get(name)) {
         return;
       }
 

@@ -358,8 +358,6 @@ export const useBulkMigration = () => {
         const { newFormInput, fieldNamesUnmatched } = data;
         setNewFormInput(newFormInput);
         setFieldsUnmatched(fieldNamesUnmatched);
-
-        formState?.setValues(newFormInput);
         setIsLoading(false);
       })
       .catch((exception) => {

@@ -59,10 +59,7 @@ export const withFBReferences = <T extends FBReferenceProps>(
     });
 
     useEffect(() => {
-      if (
-        !workspaceState?.documentId
-        && !workspaceState?.formInputSync.get(name)
-      ) {
+      if (!workspaceState?.formInputSync.get(name)) {
         return;
       }
       fetchOptionsDataAsync.start(
