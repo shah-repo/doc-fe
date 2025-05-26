@@ -7,6 +7,7 @@ import { statusClassMapping } from '../../../components/common/kendo/helpers';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { getStatusLabel } from '../../../dashboard.new/line.items/common/DocIcon';
+import { configureStatus } from '../../../hooks/docCustomization/useCustomization';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableProductORService } from '../types';
 
@@ -22,7 +23,7 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
     defaultValue = formik?.values.status || dataItem[field];
   }
 
-  const displayStatus = getStatusLabel('', defaultValue, '');
+  const displayStatus = getStatusLabel('', configureStatus(defaultValue), '');
 
   if (!defaultValue) {
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
@@ -36,7 +37,7 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
           size="small"
           className={cx(
             classes.chip,
-            classes[statusClassMapping[displayStatus]],
+            classes[statusClassMapping[defaultValue]],
           )}
           label={displayStatus}
         />
