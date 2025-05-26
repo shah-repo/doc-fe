@@ -79,7 +79,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
       formState?.setFieldValue(name, updatedContacts);
       workspaceState?.saveDocRev({
-        ...workspaceState?.formInput,
+        ...formState?.getValues(),
         [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
           workspaceState.formInputSync.get(
             SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,
@@ -112,7 +112,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     setContacts(updatedContacts);
     formState?.setFieldValue(name, updatedContacts);
     workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
+      ...formState?.getValues(),
       [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
         workspaceState.formInputSync.get(
           SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,

@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
@@ -16,7 +17,8 @@ export const withFBReferences = <T extends FBReferenceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = workspaceState?.formInputSync.get(name) ?? [];
+
+    const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
 
     const mergeArrays = (
       references: Reference[],
