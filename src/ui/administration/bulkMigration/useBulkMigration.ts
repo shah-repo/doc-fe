@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import qs from 'query-string';
 import { useState } from 'react';
 import { intl, translate } from '../../../common/intl';
 import { encodeString } from '../../../common/utils/helpers';
@@ -9,7 +10,7 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, MappingOptions, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
+import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, MappingOptions, ScanFetchOptions, SelectedItemDetails, SupplierScanResultRevision } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
@@ -367,16 +368,17 @@ export const useBulkMigration = () => {
   }
 
   function fetchScanSupplierRevisions (
-    scanId: string, page: number, rowsPerPage: number, orderBy: string, order: SortDirection, showActionableRows: boolean,
+    scanId: string, options: ScanFetchOptions,
     searchQueries: {[key: string]: string},
   ) {
     setIsLoading(true);
     setErrorMessage('');
     setSelected([]);
 
+    const params = qs.stringify(options);
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}&showActionableOnly=${showActionableRows}`,
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?${params}`,
       data: {
         searchQueries,
       },

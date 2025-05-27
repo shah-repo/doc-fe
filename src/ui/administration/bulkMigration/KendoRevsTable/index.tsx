@@ -23,11 +23,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { SortDirectionType } from 'react-virtualized';
 import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Colors } from '../../../layout/theme-next';
-import { MigrationStatus, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from '../interface';
+import { MigrationStatus, SelectedItemDetails, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
 import {
   DATA_ITEM_KEY,
@@ -56,7 +57,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{ [key: string]: string }>({});
-  const [order, setOrder] = React.useState<SortDirection>('desc');
+  const [sortOrder, setSortOrder] = React.useState<SortDirectionType>('DESC');
   const [orderBy, setOrderBy] = React.useState('createdAt');
   const [page, setPage] = React.useState<Page>({ skip: 0, pageNumber: 0, take: INITIAL_ROWS_COUNT });
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
@@ -117,18 +118,21 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
 
   useEffect(() => {
     if (scanId) {
+      const options = {
+        offset: page.pageNumber,
+        limit: page.take,
+        orderBy,
+        sortOrder,
+        showActionableOnly: isShowActionableRows,
+      };
       fetchScanSupplierRevisions(
         scanId,
-        page.pageNumber,
-        page.take,
-        orderBy,
-        order,
-        isShowActionableRows,
+        options,
         searchQueries,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateRevsTable, scanId, searchQueries, page, orderBy, order, isShowActionableRows]);
+  }, [updateRevsTable, scanId, searchQueries, page, orderBy, sortOrder, isShowActionableRows]);
 
   const handleChangePage = (event: GridPageChangeEvent) => {
     const {
@@ -139,8 +143,8 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
   };
 
   const handleRequestSort = (event: ChangeEventHandler, property: string) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && sortOrder === 'ASC';
+    setSortOrder(isAsc ? 'DESC' : 'ASC');
     setOrderBy(property);
   };
 
@@ -283,12 +287,13 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
                   onClick={() =>
                     fetchScanSupplierRevisions(
                       scanId,
-                      page.pageNumber,
-                      page.take,
-                      orderBy,
-                      order,
-                      isShowActionableRows,
-                      searchQueries,
+                      {
+                        offset: page.pageNumber,
+                        limit: page.take,
+                        orderBy,
+                        sortOrder,
+                        showActionableOnly: isShowActionableRows,
+                      }, searchQueries,
                     )
                   }
                 />
