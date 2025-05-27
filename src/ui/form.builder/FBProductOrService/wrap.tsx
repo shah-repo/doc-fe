@@ -39,10 +39,10 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
               docId: item.document?.docId,
               displayRevision: item.displayRevision,
               name: item?.name,
-              status: item.status,
+              status: item.displayStatus,
             },
           ),
-          status: item.status,
+          status: item.displayStatus,
           lifecyclePhase: item?.lifecyclePhase?.displayLabel,
           documentId: item.documentId,
           aslDisplayLabel:
