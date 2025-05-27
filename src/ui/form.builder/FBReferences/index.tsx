@@ -73,7 +73,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
 
       formState?.setFieldValue(name, updatedReferences);
       workspaceState?.saveDocRev({
-        ...workspaceState?.formInput,
+        ...formState?.getValues(),
         [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]:
           workspaceState.formInputSync.get(
             SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY,
@@ -112,7 +112,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     setReferences(referenceWithCompleteData);
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
+      ...formState?.getValues(),
       [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]:
         workspaceState.formInputSync.get(
           SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY,
