@@ -70,7 +70,7 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
           );
       formState?.setFieldValue(name, updatedCertifications);
       workspaceState?.saveDocRev({
-        ...workspaceState?.formInput,
+        ...formState?.getValues(),
         [SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY]:
           workspaceState.formInputSync.get(
             SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY,
@@ -106,7 +106,7 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     setCertifications(updatedCertifications);
     formState?.setFieldValue(name, updatedCertifications);
     workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
+      ...formState?.getValues(),
       [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(
         SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY,
       ),
