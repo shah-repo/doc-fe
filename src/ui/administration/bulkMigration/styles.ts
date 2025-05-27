@@ -478,7 +478,6 @@ export default makeStyles((theme) => ({
     height: '96vh',
     overflow: 'auto',
     display: 'flex',
-    justifyContent: 'space-between',
     flexDirection: 'column',
   },
   previewDrawerRightSection: {
