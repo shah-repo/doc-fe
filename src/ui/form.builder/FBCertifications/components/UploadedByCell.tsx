@@ -13,7 +13,7 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   const isAddition = dataItem[MODE_FIELD] === Mode.add;
   const uploadedByUserId = dataItem[field] as string;
   const { id: currentUserId } = store.getState().auth.user ?? {};
-  const id = (isAddition ? currentUserId : uploadedByUserId) as string;
+  const id = isAddition ? currentUserId : uploadedByUserId;
   const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, id));
 
   if (!selectedUserInfo) {
