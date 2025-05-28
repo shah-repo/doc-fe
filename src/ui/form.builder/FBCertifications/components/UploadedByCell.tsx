@@ -10,8 +10,9 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, EditableCertification } from '../types';
 
 export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
-  const { id } = store.getState().auth.user ?? {};
-  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, id));
+  const isAddition = dataItem[MODE_FIELD] === Mode.add;
+  const { id: currentUserId } = store.getState().auth.user ?? {};
+  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, isAddition ? currentUserId : dataItem[field]));
 
   if (!selectedUserInfo) {
     return null;
@@ -19,7 +20,6 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const { name, avatar, initialColor } = selectedUserInfo;
   const formik = useFormikContext<EditableCertification>();
-  const isAddition = dataItem[MODE_FIELD] === Mode.add;
   if (isAddition && formik && formik.values?.[field] !== selectedUserInfo?.id) {
     formik.setFieldValue(field, selectedUserInfo?.id);
     formik.setFieldValue('uploadedByName', name);
