@@ -71,6 +71,13 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({
     setConflictingElements(updated);
   };
 
+  const handleFormRevSelectionChanged = (selectedOption) => {
+    const idSelected = selectedOption?.id;
+    if (idSelected) {
+      handleFormRevSelectionToUpgrade(idSelected, announcement.id);
+    }
+  };
+
   const showUpgradeSection = announcement.canUpgradeForm;
   const showUpgradeSuccess = showUpgradeSection && isFormUpgradeDone;
   const showUpgradeInfo = !showUpgradeSection;
@@ -109,12 +116,7 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({
                     }
                     data-cy="from-rev-selection"
                     value={formRevsList.find((rev) => rev.id === selectedFormRevToUpgrade) || null}
-                    onChange={(_, selectedOption) => {
-                      const idSelected = selectedOption?.id;
-                      if (idSelected) {
-                        handleFormRevSelectionToUpgrade(idSelected, announcement.id);
-                      }
-                    }}
+                    onChange={(_, selectedOption) => handleFormRevSelectionChanged(selectedOption)}
                   />
                   <FormHelperText>
                     {translate('supplier.announcement.details.upgrade.form.rev.helper.text')}
