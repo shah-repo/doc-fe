@@ -170,11 +170,11 @@ export function autoMapArrays (
     if (!isDisabledSchemaItem(item)) {
       if (item.name) toRevSchemaIndex[item.name] = [item];
       if (item.label && typeof item.label === 'string') {
-        const lowercaseLabel = item.label.toLocaleLowerCase();
-        if (toRevSchemaIndex[lowercaseLabel]?.length) {
-          toRevSchemaIndex[lowercaseLabel].push(item);
+        const formattedLabel = formatLabel(item.label);
+        if (toRevSchemaIndex[formattedLabel]?.length) {
+          toRevSchemaIndex[formattedLabel].push(item);
         } else {
-          toRevSchemaIndex[lowercaseLabel] = [item];
+          toRevSchemaIndex[formattedLabel] = [item];
         }
       }
     }
@@ -193,8 +193,7 @@ export function autoMapArrays (
 
     let matchingItemsFromLabel: FormFieldSchema[] = [];
     if (fromRevSchemaItem.label && typeof fromRevSchemaItem.label === 'string') {
-      const formRevSchemaItemLabel
-        = fromRevSchemaItem.label.toLocaleLowerCase().replace(/:$/, '');
+      const formRevSchemaItemLabel = formatLabel(fromRevSchemaItem.label);
       matchingItemsFromLabel = toRevSchemaIndex[formRevSchemaItemLabel];
     }
 
@@ -241,11 +240,6 @@ export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
   const msgParts: string[] = [];
   let isPromptUserToScan = false;
 
-  if (rerunScanDetails.irrelevantScanIds?.length > 0) {
-    isPromptUserToScan = true;
-    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.irrelevantScanIds?.length, action: 'removed' }));
-  }
-
   if (rerunScanDetails.mismatchingStatusScanIds?.length > 0) {
     isPromptUserToScan = true;
     msgParts.push(translate('bulk.migration.scan.status.message', { count: rerunScanDetails.mismatchingStatusScanIds?.length }));
@@ -262,4 +256,8 @@ export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
   }
 
   return { msgParts, isPromptUserToScan };
+}
+
+function formatLabel (label: string): string {
+  return label.toLocaleLowerCase().replace(/:$/, '');
 }
