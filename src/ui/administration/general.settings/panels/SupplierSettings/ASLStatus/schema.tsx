@@ -1,9 +1,9 @@
 import React from 'react';
 import ActionsCellTemplate from '../../../components/SettingsTable/components/ActionsCellTemplate';
+import TextCellTemplate from '../../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../../components/SettingsTable/types';
 import { OptionType } from '../SupplierConfiguration/types';
 import ActiveCell from './components/ActiveCell';
-import ASLDisplayLabel from './components/ASLDisplayLabel';
 import { ASLTypeCell } from './components/ASLTypeCell';
 import { EditableASLStatus } from './types';
 
@@ -38,7 +38,7 @@ export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
       id: 'displayLabel',
       field: 'displayLabel',
       title: 'administration.general.settings.suppliers.customer.label',
-      template: ASLDisplayLabel,
+      template: TextCellTemplate,
     },
     {
       id: 'actions',
