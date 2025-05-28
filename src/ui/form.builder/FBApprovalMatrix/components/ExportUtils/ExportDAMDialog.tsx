@@ -43,7 +43,7 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
     dialog.close();
   };
 
-  const onClose = () => {
+  const closeDialog = () => {
     setFileName('');
     dialog.close();
   };
@@ -51,16 +51,18 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
   return (
     <Dialog
       open={dialog.isOpen}
-      maxWidth="sm"
-      onClose={onClose}
-      onCancel={onClose}
+      fullWidth
+      maxWidth="xs"
+      onClose={closeDialog}
+      onCancel={closeDialog}
       onConfirm={dowloadFile}
       cancelLabel="common.cancel"
       confirmLabel="common.download"
       confirmProps={{ disabled: isEmpty(fileName) }}
     >
-      <FormField label="document.revision.enter.file.name" />
-      <TextField onChange={handleFileName} />
+      <FormField label="document.revision.enter.file.name">
+        <TextField onChange={handleFileName} />
+      </FormField>
     </Dialog>
   );
 };
