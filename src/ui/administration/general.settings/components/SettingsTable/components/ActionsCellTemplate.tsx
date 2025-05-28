@@ -47,7 +47,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         onConfirm={onConfirm}
         onDiscard={onDiscard}
         onEdit={() => onEdit?.(dataItem)}
-        onDelete={() => onDelete?.(dataItem)}
+        onDelete={onDelete && (() => onDelete(dataItem))}
       />
     </>
   );
