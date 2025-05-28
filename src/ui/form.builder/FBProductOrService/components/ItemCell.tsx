@@ -179,7 +179,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         options={items}
         getOptionLabel={(option) => option.label ?? ''}
         filterOptions={(x) => x}
-        disabled={isUpdateAction}
         size="small"
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}
