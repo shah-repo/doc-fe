@@ -258,6 +258,6 @@ export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
   return { msgParts, isPromptUserToScan };
 }
 
-function formatLabel (label: string) {
+function formatLabel (label: string): string {
   return label.toLocaleLowerCase().replace(/:$/, '');
 }
