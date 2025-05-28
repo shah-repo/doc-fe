@@ -23,7 +23,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { SortDirectionType } from 'react-virtualized';
+import { SortDirection, SortDirectionType } from 'react-virtualized';
 import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -57,7 +57,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{ [key: string]: string }>({});
-  const [sortOrder, setSortOrder] = React.useState<SortDirectionType>('DESC');
+  const [sortOrder, setSortOrder] = React.useState<SortDirectionType>(SortDirection.DESC);
   const [orderBy, setOrderBy] = React.useState('createdAt');
   const [page, setPage] = React.useState<Page>({ skip: 0, pageNumber: 0, take: INITIAL_ROWS_COUNT });
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
@@ -143,8 +143,8 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
   };
 
   const handleRequestSort = (event: ChangeEventHandler, property: string) => {
-    const isAsc = orderBy === property && sortOrder === 'ASC';
-    setSortOrder(isAsc ? 'DESC' : 'ASC');
+    const isAsc = orderBy === property && sortOrder === SortDirection.ASC;
+    setSortOrder(isAsc ? SortDirection.DESC : SortDirection.ASC);
     setOrderBy(property);
   };
 
