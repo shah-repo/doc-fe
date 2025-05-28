@@ -466,7 +466,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
             </Box>
             <Box className={classes.toRevContainer}>
               <Typography variant="h5" className={classes.mappingAreaTitle}>
-                {translate('bulk.migration.form.revision', { revision: toRev?.displayRevision })}
+                {translate('bulk.migration.to.revision', { revision: toRev?.displayRevision })}
               </Typography>
               <Box className={cx({ [classes.mappingView]: !isShowRelationVisible })}>
                 {toRevSchema
