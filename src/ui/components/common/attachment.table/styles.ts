@@ -56,9 +56,15 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(0.2),
   },
   columnMenuItem: {
+    display: 'flex !important',
     margin: 0,
-    padding: 0,
     width: 250,
+    '&:last-child': {
+      padding: 0,
+    },
+  },
+  columnMenuItemPrimary: {
+    flex: 1,
   },
   menuIcons: {
     marginRight: theme.spacing(2),
