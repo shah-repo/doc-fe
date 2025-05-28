@@ -347,6 +347,17 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
+  public setFormInputDirectly = (data?: Record<string, any>) => {
+    this.formInput = data;
+    map(data, (value, key) => {
+      set(this.formInputSync, key, value);
+    });
+  };
+
+  public setId = (docRevId: string) => {
+    set(this, 'id', docRevId);
+  };
+
   public loadDocRev = (values?: Record<string, any>) => {
     const { id } = this;
     if (!id) { return; }
