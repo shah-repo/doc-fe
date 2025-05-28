@@ -4,45 +4,44 @@ import React from 'react';
 import { truncateByMaxChars } from '../../../../../../components/common/header/Helpers';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
-import { CellTemplateProps, EditableItem } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { MAX_ASL_STATUS_CHAR_LIMIT } from '../../../../../../form.builder/FBProductOrService/constants';
+import { CustomCellProps } from '../types';
 import useStyles from './styles';
 
-function ASLDisplayLabel<T extends EditableItem> ({
-  dataItem,
-  field,
-}: CellTemplateProps<T>): React.ReactElement {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+interface ASLTextEditorProps {
+  field: string
+}
+
+const ASLTextEditor: React.FC<ASLTextEditorProps> = ({ field }) => {
   const { getFieldProps } = useFormikContext();
   const classes = useStyles();
+
+  return (
+    <FormikField name={field}>
+      <TextField
+        {...getFieldProps(field)}
+        classes={{ root: classes.inputRoot }}
+        size="small"
+      />
+    </FormikField>
+  );
+};
+
+const ASLDisplayLabel: React.FC<CustomCellProps> = ({ dataItem, field }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const defaultValue = get(dataItem, field, '') as string;
-  const forceTooltip = defaultValue.length > MAX_ASL_STATUS_CHAR_LIMIT;
+  const defaultValue = get(dataItem, field, '');
+  const forceTooltip = defaultValue?.length > MAX_ASL_STATUS_CHAR_LIMIT;
 
   if (isEditMode) {
-    return (
-      <FormikField name={field}>
-        <TextField
-          {...getFieldProps(field)}
-          classes={{
-            root: classes.inputRoot,
-          }}
-          size="small"
-        />
-      </FormikField>
-    );
+    return <ASLTextEditor field={field} />;
   }
+
   return (
-    <OverflowTooltip
-      title={defaultValue}
-      placement="top"
-      arrow
-      forceTooltip={forceTooltip}
-    >
+    <OverflowTooltip title={defaultValue} placement="top" arrow forceTooltip={forceTooltip}>
       {truncateByMaxChars(defaultValue, MAX_ASL_STATUS_CHAR_LIMIT)}
     </OverflowTooltip>
   );
-}
+};
 
 export default ASLDisplayLabel;
