@@ -71,6 +71,10 @@ enum Colors {
 
   // Header
   headerBg='#1533CD',
+
+  // blue
+  light_blue = '#edf4ff',
+  medium_blue = '#5C9DFC',
 }
 
 export default Colors;

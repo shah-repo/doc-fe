@@ -94,44 +94,40 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     ) as FBApprovalRolesStages,
   });
 
-  const onExportDAM = () => {
-    damDialogBox.open();
-  };
-
   return (
     <Box
       className={classes.container}
       {...size && { height: size.height - 80 }}
     >
       <Box className={classes.iconContainer}>
-      <StyleTooltip
-        title={translate('form.builder.export.dam.ar')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          className={classes.buttonFullscreen}
-          kind="ghost"
-          data-cy="button-export-dam"
-          onClick={onExportDAM}
+        <StyleTooltip
+          title={translate('form.builder.export.dam.ar')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
-        </IconButton>
-      </StyleTooltip>
-      <StyleTooltip
-        title={translate('form.builder.fullscreen.mode')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          className={classes.buttonFullscreen}
-          kind="ghost"
-          data-cy="button-fullscreen"
-          onClick={dialog.open}
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-export-dam"
+            onClick={() => damDialogBox.open()}
+          >
+            <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
+          </IconButton>
+        </StyleTooltip>
+        <StyleTooltip
+          title={translate('form.builder.fullscreen.mode')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('expand')} />
-        </IconButton>
-      </StyleTooltip>
+          <IconButton
+            className={classes.buttonFullscreen}
+            kind="ghost"
+            data-cy="button-fullscreen"
+            onClick={dialog.open}
+          >
+            <FontAwesomeIcon icon={solid('expand')} />
+          </IconButton>
+        </StyleTooltip>
       </Box>
       <FBGridTableContainer
         isDialog={dialog.isOpen}

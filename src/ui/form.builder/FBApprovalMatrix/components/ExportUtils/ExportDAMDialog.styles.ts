@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
+import { Colors } from '../../../../layout/theme-next';
 
-export const styles = makeStyles((theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
       background: Colors.medium_blue,
@@ -26,26 +26,6 @@ export const styles = makeStyles((theme: Theme) =>
     dialogAction: {
       display: 'flex',
       marginBottom: 10,
-    },
-    dialogContent: {
-      color: Colors.dark_gray,
-      opacity: 0.6,
-    },
-    iconContainer: {
-      '&:before': {
-        content: "''",
-        height: 40,
-        width: 45,
-        position: 'absolute',
-        backgroundColor: Colors.gray,
-        opacity: 0.1,
-        transform: 'translate(-10px, -6px)',
-        borderRadius: 11,
-      },
-    },
-    title: {
-      marginTop: 20,
-      marginBottom: 5,
     },
     subtitle: {
       marginTop: 20,

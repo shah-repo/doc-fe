@@ -111,26 +111,22 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
     );
   };
 
-  const onExportDAM = () => {
-    damDialogBox.open();
-  };
-
   return (
     <Box className={classes.root}>
       <Box className={classes.iconContainer}>
-      <StyleTooltip
-        title={translate('form.builder.export.dam.ar')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          kind="ghost"
-          data-cy="button-export-dam"
-          onClick={onExportDAM}
+        <StyleTooltip
+          title={translate('form.builder.export.dam.ar')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
-        </IconButton>
-      </StyleTooltip>
+          <IconButton
+            kind="ghost"
+            data-cy="button-export-dam"
+            onClick={() => damDialogBox.open()}
+          >
+            <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
+          </IconButton>
+        </StyleTooltip>
       </Box>
       <KendoDataGrid<EditableRole>
         schema={schema}
