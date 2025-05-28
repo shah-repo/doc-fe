@@ -183,7 +183,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         size="small"
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}
-        disableClearable
+        disableClearable={!inputValue}
         open={isOpen}
         onOpen={handleOpen}
         onClose={handleClose}
