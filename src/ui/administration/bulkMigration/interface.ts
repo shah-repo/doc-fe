@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { SortDirectionType } from 'react-virtualized';
 import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -146,9 +147,15 @@ export interface DetailedScanResult extends MismatchResponse {
   scanDetails: BulkMigrationScanDetails
 }
 
-export type SortDirection = 'asc' | 'desc' | undefined;
-
 export interface MappingOptions {
   text: string
   value: string
+}
+
+export interface ScanFetchOptions {
+  offset: number
+  limit: number
+  orderBy: string
+  sortOrder: SortDirectionType
+  showActionableOnly: boolean
 }
