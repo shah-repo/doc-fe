@@ -1,11 +1,17 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { IconButton } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../components/notifications';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import useDialog from '../../hooks/useDialog';
+import ExportDAMDialog from '../FBApprovalMatrix/components/ExportUtils/ExportDAMDialog';
 import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
@@ -26,6 +32,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   const editRole = ({ dataItem }: RoleEditEvent) => setEditedRole(dataItem);
 
   const discardRole = () => setEditedRole(undefined);
+  const exportDialog = useDialog();
 
   const setFieldError = (field: ErrorField) => setEditedRole(prev => {
     if (!prev) {
@@ -106,6 +113,21 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   return (
     <Box className={classes.root}>
+      <Box className={classes.iconContainer}>
+        <StyleTooltip
+          title={translate('form.builder.export.dam.ar')}
+          placement="top"
+          arrow
+        >
+          <IconButton
+            kind="ghost"
+            data-cy="button-export-dam"
+            onClick={exportDialog.open}
+          >
+            <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
+          </IconButton>
+        </StyleTooltip>
+      </Box>
       <KendoDataGrid<EditableRole>
         schema={schema}
         data={roles}
@@ -117,6 +139,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
         onRowClick={isActive ? editRole : undefined}
         filterable
       />
+      <ExportDAMDialog dialog={exportDialog} />
     </Box>
   );
 };
