@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import { cloneDeep, has, map } from 'lodash';
+import { cloneDeep, has, isEqual, map } from 'lodash';
 import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -9,6 +9,7 @@ import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { QueryType, SearchContext } from '../../components/KeywordSearch/types';
 import { TableDataProps } from '../../components/table/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
+import { FB } from '../../form.builder';
 import { isTranslation } from '../../translations/types';
 import CreateDocumentByType from '../list/CreateDocumentByType';
 import { DocTypeTableContext, KendoPresenterProps } from './interfaces';
@@ -71,11 +72,21 @@ export function DocumentTypePresenter ({
   const getSupplierStatusLabel = (id: string) =>
     docTypeTableContext?.aslStatuses?.find((data) => data.id === id)?.displayLabel;
 
-  useEffect(() => {
-    if (docTypeTableContext?.aslStatuses && dataToBeExported.length > 0) {
+  const useDeepCompareEffect = (callback, dependencies) => {
+    const previousDepsRef = useRef();
+
+    if (!isEqual(previousDepsRef.current, dependencies)) {
+      previousDepsRef.current = dependencies;
+    }
+
+    useEffect(callback, [previousDepsRef.current]);
+  };
+
+  useDeepCompareEffect(() => {
+    if (!docTypeTableContext?.isLoading && dataToBeExported.length > 0) {
       handleExportData(dataToBeExported);
     }
-  }, [docTypeTableContext?.aslStatuses]);
+  }, [docTypeTableContext?.aslStatuses, dataToBeExported, docTypeTableContext?.isLoading]);
 
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>,
@@ -87,8 +98,10 @@ export function DocumentTypePresenter ({
           record.precalc.lhr_end_accepted_quantity = 'N/A';
         }
       }
-      if (record?.precalc?.supplierStatus && (docTypeTableContext?.aslStatuses ?? [])?.length > 0) {
-        record.precalc.supplierStatus = getSupplierStatusLabel(record.precalc.supplierStatus);
+      const supplierStatus = record.precalc.supplierStatus;
+      const hasAslStatuses = (docTypeTableContext?.aslStatuses ?? [])?.length > 0;
+      if (supplierStatus && hasAslStatuses && FB.isUUID(supplierStatus)) {
+        record.precalc.supplierStatus = getSupplierStatusLabel(supplierStatus);
       }
       return record;
     });
