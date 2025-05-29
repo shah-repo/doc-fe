@@ -170,10 +170,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, 'isPreview', isPreview);
   };
 
-  @action public setIsPreviewPanelVisible = (isPreviewPanelVisible: boolean) => {
-    set(this, 'isPreviewPanelVisible', isPreviewPanelVisible);
-  };
-
   @action public setAutosave = (autosave: boolean) => {
     set(this, 'autosave', autosave);
   };
