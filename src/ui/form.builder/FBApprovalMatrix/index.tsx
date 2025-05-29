@@ -54,7 +54,7 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { asyncState } = React.useContext(FormHeaderContext) ?? {};
   const { workspaceState } = FB.useStores();
-  const damDialogBox = useDialog();
+  const exportDialog = useDialog();
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
@@ -109,7 +109,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
             className={classes.buttonFullscreen}
             kind="ghost"
             data-cy="button-export-dam"
-            onClick={() => damDialogBox.open()}
+            onClick={exportDialog.open}
           >
             <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
           </IconButton>
@@ -147,7 +147,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           onDataStateChange={dataStateChange}
         />
       </FBGridTableContainer>
-      <ExportDAMDialog dialog={damDialogBox} matrixTabDataState={dataState} />
+      <ExportDAMDialog dialog={exportDialog} matrixTabDataState={dataState} />
     </Box>
   );
 };

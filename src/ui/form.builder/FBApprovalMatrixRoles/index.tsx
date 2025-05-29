@@ -32,7 +32,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   const editRole = ({ dataItem }: RoleEditEvent) => setEditedRole(dataItem);
 
   const discardRole = () => setEditedRole(undefined);
-  const damDialogBox = useDialog();
+  const exportDialog = useDialog();
 
   const setFieldError = (field: ErrorField) => setEditedRole(prev => {
     if (!prev) {
@@ -122,7 +122,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
           <IconButton
             kind="ghost"
             data-cy="button-export-dam"
-            onClick={() => damDialogBox.open()}
+            onClick={exportDialog.open}
           >
             <FontAwesomeIcon icon={solid('arrow-down-to-line')} />
           </IconButton>
@@ -139,7 +139,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
         onRowClick={isActive ? editRole : undefined}
         filterable
       />
-      <ExportDAMDialog dialog={damDialogBox} />
+      <ExportDAMDialog dialog={exportDialog} />
     </Box>
   );
 };

@@ -61,7 +61,7 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
       confirmProps={{ disabled: isEmpty(fileName) }}
     >
       <FormField label="document.revision.enter.file.name">
-        <TextField onChange={handleFileName} />
+        <TextField value={fileName} onChange={handleFileName} />
       </FormField>
     </Dialog>
   );

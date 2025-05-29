@@ -7,9 +7,10 @@ import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoData
 import { ApprovalRole } from '../../../FBApprovalMatrixRoles/types';
 import { SEARCHABLE_GROUPS_FIELD } from '../../../FBApprovalMatrixRoles/constants';
 import { isEmpty, isUndefined } from 'lodash';
+import { translate } from '../../../../../common/intl';
 
-const matrixTab = 'Matrix Details';
-const approvalTab = 'Approval Roles';
+const matrixTab = translate('tabId.matrixdetails');
+const approvalTab = translate('tabId.approvalroles');
 
 interface Column {
   field?: string
@@ -97,7 +98,7 @@ const exportSheets = async (sheetData, fileName, damName) => {
       cells: flatColumns.map((col, colIndex) => {
         let value = getNestedValue(row, col.field);
         if (colIndex === 0) {
-          value = value === true ? 'Active' : value === false ? 'Inactive' : value;
+          value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : value;
         } else {
           value = value === true ? 'Y' : value === false ? '' : value;
         }
@@ -113,7 +114,6 @@ const exportSheets = async (sheetData, fileName, damName) => {
         {
           value: name === matrixTab ? damName : '',
           bold: true,
-          background: '#f2f2f2',
         },
       ],
     };
