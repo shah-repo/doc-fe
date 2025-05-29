@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import { cloneDeep, has, isEqual, map } from 'lodash';
+import { cloneDeep, has, map } from 'lodash';
 import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -10,6 +10,7 @@ import { QueryType, SearchContext } from '../../components/KeywordSearch/types';
 import { TableDataProps } from '../../components/table/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
 import { FB } from '../../form.builder';
+import useDeepCompareEffect from '../../hooks/useDeepCompareEffect';
 import { isTranslation } from '../../translations/types';
 import CreateDocumentByType from '../list/CreateDocumentByType';
 import { DocTypeTableContext, KendoPresenterProps } from './interfaces';
@@ -71,16 +72,6 @@ export function DocumentTypePresenter ({
   const docTypeTableContext = useContext(DocTypeTableContext);
   const getSupplierStatusLabel = (id: string) =>
     docTypeTableContext?.aslStatuses?.find((data) => data.id === id)?.displayLabel;
-
-  const useDeepCompareEffect = (callback, dependencies) => {
-    const previousDepsRef = useRef();
-
-    if (!isEqual(previousDepsRef.current, dependencies)) {
-      previousDepsRef.current = dependencies;
-    }
-
-    useEffect(callback, [previousDepsRef.current]);
-  };
 
   useDeepCompareEffect(() => {
     if (!docTypeTableContext?.isLoading && dataToBeExported.length > 0) {
