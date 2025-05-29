@@ -33,7 +33,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'form.builder.supplier.certifications.grid.heading.attachments',
       filterable: false,
-      template: (props) => <AttachmentCell {...props} onClick={onRowClick} />,
+      template: (props) => <AttachmentCell key={props.dataItem.id} {...props} onClick={onRowClick} />,
       width: 250,
     },
     {

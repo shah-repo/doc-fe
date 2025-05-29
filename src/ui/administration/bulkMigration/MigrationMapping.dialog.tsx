@@ -132,12 +132,10 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
 
   const handleMappingPreview = () => {
     setIsPreviewPanelVisible(true);
-    workspaceState.setIsPreviewPanelVisible(true);
   };
 
   const handleClosePreview = () => {
     setIsPreviewPanelVisible(false);
-    workspaceState.setIsPreviewPanelVisible(false);
   };
 
   const handleCloseOptionMapper = () => {
