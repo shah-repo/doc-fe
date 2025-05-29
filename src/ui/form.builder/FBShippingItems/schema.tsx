@@ -17,6 +17,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  clearLots,
   fetchLotsByPartId,
 }: SchemaOptions): Array<ColumnDefinition<EditableShippingItem>> => {
   return [
@@ -33,7 +34,7 @@ export const buildSchema = ({
       field: 'lot',
       title: 'form.builder.record.shipping.items.grid.heading.lot',
       filterable: false,
-      template: (props) => <LotIDCell {...props} options={lots} isLoading={isLotsloading} fetchLotsByPartId={fetchLotsByPartId} onClick={onRowClick} />,
+      template: (props) => <LotIDCell {...props} options={lots} isLoading={isLotsloading} fetchLotsByPartId={fetchLotsByPartId} onClick={onRowClick} clearLots={clearLots} />,
       width: 310,
     },
     {

@@ -27,6 +27,7 @@ const FBShippingItems: React.FC<FBShippingItemsProps> = ({
   isLotsloading,
   isPartsloading,
   shippingItems = [],
+  clearLots,
   fetchLotsByPartId,
   updateShippingItem,
   deleteShippingItem,
@@ -100,6 +101,7 @@ const FBShippingItems: React.FC<FBShippingItemsProps> = ({
     onDiscard: discardShippingItem,
     onDelete: removeShippingItem,
     fetchLotsByPartId,
+    clearLots,
   });
 
   const shippingItemList = shippingItems.reduce((list, item) => {

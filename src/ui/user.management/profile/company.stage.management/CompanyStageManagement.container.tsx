@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core';
-import { Formik, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import { FormikProvider, useFormik } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { GroupTag } from '../../../../state/ducks/auth/types';
@@ -12,62 +13,94 @@ import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import { Translation } from '../../../translations/types';
-import { toNumRevisionStageBodyValues, toNumRevisionStageInitialValues } from '../../utils/transform';
+import { getObjectChangedValues, objectValuesToNumber, objectValuesToString } from '../../utils/transform';
 import CompanyStageManagementPresenter from './CompanyStageManagement.presenter';
 
 const MAX_NUM_OF_REV_STAGES = 3;
 
-const CompanyStageManagementContainer: React.FC<{}> = () => {
-  const async = useAsync({
-    onError: (error) => toastError(error as string),
-  });
+interface FormikValues {
+  numOfRevStages: string
+  startRevisionNumber: string
+}
 
-  const dialog = useDialog();
-
+const CompanyStageManagementContainer: React.FC = () => {
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
   const canManageCompanyStage = useGetHasTag(GroupTag.COMPANY_CONFIG_DOCUMENT_REV_STAGES);
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
-  const initialValues = toNumRevisionStageInitialValues(numOfRevStages);
-  const [updatingStage, setUpdatingStage] = useState(0);
+  const startRevisionNumber = useSelector(companySelectors.getCompanyStartRevisionNumber);
+  const initialValues = objectValuesToString({ numOfRevStages, startRevisionNumber });
+  const valuesToSave = useRef<Partial<FormikValues>>();
+
+  const confirmationDialog = useDialog();
+
+  const updateCompany = (values: Partial<FormikValues>) => {
+    confirmationDialog.close();
+    async.start(
+      changeCompanyAction,
+      objectValuesToNumber(values),
+      async,
+    );
+  };
+
+  const saveValues = () => {
+    if (valuesToSave.current) {
+      updateCompany(valuesToSave.current);
+    }
+    confirmationDialog.close();
+  };
+
+  const resetState = () => {
+    valuesToSave.current = undefined;
+    confirmationDialog.close();
+  };
+
+  const async = useAsync({
+    onError: toastError,
+    onSuccess: resetState,
+  });
+
+  const formik = useFormik<FormikValues>({
+    initialValues,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      const changedValues = getObjectChangedValues(initialValues, values);
+
+      if (isEmpty(changedValues)) {
+        return;
+      }
+
+      if (changedValues.numOfRevStages) {
+        valuesToSave.current = changedValues;
+        confirmationDialog.open();
+        return;
+      }
+
+      updateCompany(changedValues);
+    },
+  });
+
   if (!canManageCompanyStage) {
     return null;
   }
-  const onSubmit = (values: any) => {
-    dialog.open();
-    setUpdatingStage(values.numOfRevStages);
-  };
 
-  const render = (props: FormikProps<any>) => (
-    <CompanyStageManagementPresenter
-      asyncState={async.asyncState}
-      {...props}
-      disabled={numOfRevStages === MAX_NUM_OF_REV_STAGES}
-    />
-  );
-
-  const handleYes = () => {
-    dialog.close();
-    async.start(changeCompanyAction, toNumRevisionStageBodyValues({ numOfRevStages: updatingStage }), async);
-  };
-  const msg = translate('user.management.profile.companyStage.alert', { revStage: updatingStage }) as Translation;
+  const msg = translate('user.management.profile.companyStage.alert', { revStage: valuesToSave.current?.numOfRevStages }) as Translation;
 
   return (
     <Box>
-      {dialog.isOpen && (
+      {confirmationDialog.isOpen && (
         <AlertDialog
-          dialog={dialog}
-          confirmAction={handleYes}
-          cancelAction={dialog.close}
+          dialog={confirmationDialog}
+          confirmAction={saveValues}
+          cancelAction={resetState}
           message={msg}
         />
       )}
-      <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      >
-        {render}
-      </Formik>
+      <FormikProvider value={formik}>
+        <CompanyStageManagementPresenter
+          asyncState={async.asyncState}
+          canChangeRevisionStage={numOfRevStages < MAX_NUM_OF_REV_STAGES}
+        />
+      </FormikProvider>
     </Box>
   );
 };

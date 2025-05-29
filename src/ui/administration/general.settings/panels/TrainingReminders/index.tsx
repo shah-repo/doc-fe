@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
+import { isProd } from '../../../../../common/utils/env.utils';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
@@ -13,19 +14,19 @@ import { Checkbox, FormField, TextField } from '../../../../components/forms/fie
 import CheckboxField from '../../../../components/forms/fields/Checkbox';
 import Text from '../../../../components/Text';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsPanelSection from '../../components/SettingsPanelSection';
+import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 import useStyle from './styles';
 
 const erroMessage = (customDays: number) => {
   const value = String(customDays);
 
-  if(!value || isEmpty(value)) {
+  if (!value || isEmpty(value)) {
     return translate('validator.must.be.number');
-  }
-  else if(value.includes('-')) {
+  } else if (value.includes('-')) {
     return translate('validators.positive.number');
-  }
-  else if(customDays === 0) {
+  } else if (customDays === 0) {
     return translate('validators.greater.than.zero');
   }
 };
@@ -45,6 +46,22 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
+      {!isProd() && <SettingsPanelSection>
+        <SwitchControl
+          {...getFieldProps('trainingReminders.isEmailSendingEnabled')}
+          checked={values.trainingReminders.isEmailSendingEnabled}
+          label={
+            <>
+              <div className={classes.title}>
+                {translate('administration.general.settings.training.reminders.email.sending.title')}
+              </div>
+              <div className={classes.description}>
+                {translate('administration.general.settings.training.reminders.info')}
+              </div>
+            </>
+          }
+        />
+      </SettingsPanelSection>}
       <Text message="administration.general.settings.training.reminders.sub.title" />
       <Grid
         container

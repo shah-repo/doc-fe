@@ -53,6 +53,7 @@ export interface Audit {
   relatedEntity?: DocumentRevision | Approval
   hasPoReceivedQtyFlag?: boolean
   crId?: string
+  updatedField?: string
 }
 
 export interface AuditActionPayload {
@@ -89,7 +90,7 @@ export interface POLineItem {
   capitalEquipment?: boolean
 }
 
-export interface LifecyclePahseOptionPayload {
+export interface LifeCyclePhaseOptions {
   id: string
   text: string
 }

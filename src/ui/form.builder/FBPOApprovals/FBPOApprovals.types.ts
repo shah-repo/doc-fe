@@ -1,13 +1,16 @@
 import { FBApprovalsStatusEndpoint, FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from '..';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { Dialog } from '../../hooks/useDialog';
 
 export type FBPOApprovalsProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
 & FBAutocompleteAsyncProps
 & {
-  approvalTransition: (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => void
+  approvalTransition: (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning?: boolean) => void
   isIncluded?: (group: FBRequiredApprover) => void
   onApproveClick?: (approvalId: string) => void
+  onConfirmClick?: (approvalId: string) => void
   approvals?: FBInlineApprovalBody[]
   poApprovalsState?: FBPOApprovalsState
   docId?: string
@@ -18,6 +21,8 @@ export type FBPOApprovalsProps =
   documentStatus?: DocumentRevisionStatus
   dialogState?: FBDialogState
   disableChipDelete?: boolean
+  errorResponse?: ApprovalFailureResponse
+  supplierStatusDialog?: Dialog
 };
 
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {

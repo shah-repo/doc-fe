@@ -17,7 +17,7 @@ export const withFBRequestApproval = <T extends FBRequestApprovalProps>(
     const { isOutput } = workspaceState || {};
 
     handleAddEdit = () =>
-    openEditor && openEditor({
+      openEditor && openEditor({
         ...defaultValue,
         type,
         name,

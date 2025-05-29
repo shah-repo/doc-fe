@@ -9,4 +9,6 @@ export type DocumentRevisionFormHeaderProps =
   inDialog?: boolean
   type?: DocumentCloneType
   documentTypeId?: string
+  descriptionPlaceholder?: string
+  titlePlaceholder?: string
 };
