@@ -31,6 +31,7 @@ import Text from '../../../../components/Text';
 import { FormContext } from '../../../../components/forms/FormContext';
 import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import { disableOtherFieldsChangeControl } from '../../../../document.revision/utils/helpers';
 import { BOMResponse } from '../../../../form.builder/FBBOM/components/treelist/interface';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import { FB } from '../../../../form.builder/index';
@@ -118,6 +119,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
+  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
 
   const expressApprovalDialog = useDialog();
   const templateSelectionDialog = useDialog();
@@ -148,6 +150,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const create = useActionCreator(changeRequestsActions.create);
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
+  const editingEmployeeId = inRestrictedEditMode
+    ? currentUser?.employeeId
+    : owner?.id;
+
   // MARK: @async
   const async = useAsync({ onSuccess: expressApprovalDialog.close });
   const asyncGroups = useAsync({
@@ -169,7 +175,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       } else {
         initialGroups = filter(
           uniqBy(response, 'id'),
-          (group) => includes(group.joinedEmployees.map((e) => e.id), currentUser?.employeeId),
+          (group) => includes(group.joinedEmployees.map((e) => e.id), editingEmployeeId),
         );
       }
       setCheckedGroups(initialGroups);

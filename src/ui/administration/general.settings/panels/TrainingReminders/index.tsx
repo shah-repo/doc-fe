@@ -19,13 +19,11 @@ import useStyle from './styles';
 const erroMessage = (customDays: number) => {
   const value = String(customDays);
 
-  if(!value || isEmpty(value)) {
+  if (!value || isEmpty(value)) {
     return translate('validator.must.be.number');
-  }
-  else if(value.includes('-')) {
+  } else if (value.includes('-')) {
     return translate('validators.positive.number');
-  }
-  else if(customDays === 0) {
+  } else if (customDays === 0) {
     return translate('validators.greater.than.zero');
   }
 };
