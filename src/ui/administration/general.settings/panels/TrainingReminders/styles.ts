@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   gridContainer: {
@@ -28,5 +29,15 @@ export default makeStyles(theme => ({
   },
   marginBottom: {
     marginBottom: theme.spacing(4),
+  },
+  title: {
+    color: Colors.textBlack,
+    marginBottom: theme.spacing(0.25),
+    fontWeight: 600,
+    fontSize: 14,
+  },
+  description: {
+    color: Colors.textGray,
+    fontSize: 12,
   },
 }));

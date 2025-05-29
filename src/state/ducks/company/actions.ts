@@ -2,16 +2,15 @@ import { omit } from 'lodash';
 import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import {
-  COMPANY_MINE_URL,
-  COMPANY_SETTINGS_URL,
+  ASL_OPTIONS_OPTIONS_URL, COMPANY_MINE_URL, COMPANY_SETTINGS_URL,
   CREATE_APPROVAL_ROLES_URL,
-  LIFE_CYCLE_DOC_REV_OPTIONS_URL,
-  LIFE_CYCLE_DOC_TYPES_URL,
-  LIFE_CYCLE_PHASES_URL,
+  LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  SUPPLIERS_OPTIONS_URL,
   UPDATE_APPROVAL_ROLES_URL,
   UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
@@ -117,6 +116,19 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
+const getGeneralSettingsWithHandler = (
+  handlers: Handlers,
+): ApiAction => {
+  return apiActionWithCallbacks({
+    url: COMPANY_SETTINGS_URL,
+    handlers,
+    method: 'get',
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
 const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
   type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   payload: subscriptions,
@@ -171,7 +183,7 @@ const updateGeneralSettings = (
 };
 
 const createApprovalRoles = (
-  body: { name: string, isActive: boolean },
+  body: { name: string, isActive: boolean, index: number },
   handlers: Handlers,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
@@ -217,6 +229,25 @@ const fetchLCPPhasesByGroup = (
     handlers,
   });
 
+const fetchSupplierConfigs = (
+  type: string,
+  handlers: Handlers,
+): ApiAction<OptionType> =>
+  apiActionWithCallbacks({
+    url: `${SUPPLIERS_OPTIONS_URL}/${type}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchASLOptions = (
+  handlers: Handlers,
+): ApiAction<OptionType> =>
+  apiActionWithCallbacks({
+    url: ASL_OPTIONS_OPTIONS_URL,
+    method: 'get',
+    handlers,
+  });
+
 const fetchLCPDocTypes = (
   handlers: Handlers,
 ): ApiAction<GroupDocTypes[]> =>
@@ -252,6 +283,9 @@ export default {
   setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,
+  fetchSupplierConfigs,
+  fetchASLOptions,
+  getGeneralSettingsWithHandler,
   updateGeneralSettings,
   getPremiumFeatureSubscriptions,
   updatePremiumFeatureSubscription,

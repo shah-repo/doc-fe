@@ -16,6 +16,7 @@ export type FBEQMaintenanceProps =
   getOptionLabel?: FBAutocompleteProps['getOptionLabel']
   maintenanceHistory?: DocumentRevision[]
   docRevId: string
+  isOverDue?: boolean
 };
 
 export interface AvailableMaintenanceForm {

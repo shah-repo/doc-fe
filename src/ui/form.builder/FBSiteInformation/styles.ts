@@ -22,6 +22,9 @@ export default makeStyles(theme => ({
         },
       },
     },
+    '& .k-grid-content td.k-hierarchy-cell': {
+      display: 'none',
+    },
     '& tr': {
       '&:last-child td': {
         borderBottom: `1px solid ${Colors.tableStroke}`,

@@ -48,6 +48,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters)
       && isEmpty(tableCriteria?.queryDict?.dataState?.sort)
       && isEmpty(tableCriteria?.queryDict?.dataState?.group)
+      && !tableCriteria?.hasClearedDefaultFilters
     ) {
       const dataState: DataStateProps = {
         filter: {
