@@ -99,6 +99,7 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
     ) {
       workspaceState.setId(selectedPreviewDocRev?.id);
       workspaceState?.setFormInputDirectly(newFormInput);
+      formState?.setValues(newFormInput);
     }
   }, [newFormInput]);
 

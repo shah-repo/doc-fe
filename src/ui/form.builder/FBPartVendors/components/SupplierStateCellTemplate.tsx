@@ -38,7 +38,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field, approvedSuppli
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values } = useFormikContext<EditableVendor>();
 
-  const value = values?.vendor?.displayStatus ?? (dataItem?.[field] as string);
+  const value = values?.vendor?.supplierStatusId ?? (dataItem?.[field] as string);
 
   if (!value) {
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
@@ -62,7 +62,7 @@ export const SupplierStateCellTemplate: React.FC<CustomTemplateProps> = (props) 
   }
 
   if (!value) {
-    return <></>;
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
   }
 
   const handleClick = () => onClick?.({ dataItem });
