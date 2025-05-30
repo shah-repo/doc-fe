@@ -23,7 +23,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
-    const hasStarted = Boolean(run?.runAt);
+    const hasStarted = Boolean(status === MigrationStatus.IN_PROGRESS);
     const hasCompleted = Boolean(run?.completedAt);
     const hasFailed = Boolean(run?.failureReason);
 
