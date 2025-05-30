@@ -4,6 +4,6 @@ enum Environment {
   TEST = 'test',
 }
 
-const env = (process.env.NODE_ENV || '').trim().toLowerCase();
+const env = (process.env.REACT_APP_ENV_NAME || '').trim().toLowerCase();
 
 export const isProd = (): boolean => env === Environment.PRODUCTION;

@@ -25,6 +25,7 @@ export interface KendoPresenterProps {
 
 interface DocTypeTableContextType {
   aslStatuses?: ASLStatus[]
+  isLoading?: boolean
 }
 
 export const DocTypeTableContext = createContext<DocTypeTableContextType | undefined>(undefined);

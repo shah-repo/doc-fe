@@ -68,7 +68,7 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
       ) : (
         <FBAttachmentNamePresenter
           {...{
-            files: defaultAttachments,
+            attachments: defaultAttachments,
             fileUploadState,
             isDisabled: !isEditMode,
           }}

@@ -1429,6 +1429,7 @@
   "form.builder.send": "Send",
   "form.builder.edit.matrix": "Edit matrix",
   "form.builder.fullscreen.mode": "Fullscreen Mode",
+  "form.builder.export.dam.ar": "Export DAM & Approval Roles",
   "form.builder.subTotal": "Sub Total: ",
   "form.builder.totalAmount": "Total amount: ",
   "form.builder.type": "Type",

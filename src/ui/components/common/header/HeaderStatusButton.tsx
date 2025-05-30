@@ -56,7 +56,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         onClick={!disabled ? optionsMenu.open : undefined}
         data-cy={`${dataCy}-button`}
       >
-        <OverflowTooltip arrow placement="top" title={label} wrapperClassName={classes.buttonLabel}>
+        <OverflowTooltip arrow placement="top" title={label} wrapperClassName={classes.buttonLabel} forceTooltip={label?.length > MAX_ASL_STATUS_CHAR_LIMIT}>
           {truncateByMaxChars(label, MAX_ASL_STATUS_CHAR_LIMIT)}
         </OverflowTooltip>
       </Button>
@@ -76,7 +76,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
               className={classes.menuItem}
             >
               <ListItemText className={classes.menuItemText}>
-                <OverflowTooltip arrow placement="top" title={label}>
+                <OverflowTooltip arrow placement="top" title={option.label} forceTooltip={option.label?.length > MAX_ASL_STATUS_CHAR_LIMIT}>
                   {truncateByMaxChars(option.label, MAX_ASL_STATUS_CHAR_LIMIT)}
                 </OverflowTooltip>
               </ListItemText>
