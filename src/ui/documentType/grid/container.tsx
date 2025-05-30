@@ -229,7 +229,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     history.push(urlPath);
   };
   return (
-    <DocTypeTableContext.Provider value={{ aslStatuses }}>
+    <DocTypeTableContext.Provider value={{ aslStatuses, isLoading: supplierTypesAsync?.isLoading }}>
       <DocumentTypePresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}
