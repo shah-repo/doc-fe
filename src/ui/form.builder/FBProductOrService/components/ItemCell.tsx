@@ -79,7 +79,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
             value: item.id,
             revision: item.displayRevision,
             title: item?.name,
-            status: item.status,
+            status: item.displayStatus,
             createdDate: item.createdAt,
             owner: item.owner.user.id,
             lifecyclePhase: item?.lifecyclePhase?.displayLabel,
