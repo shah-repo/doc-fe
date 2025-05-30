@@ -1,4 +1,5 @@
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBInputProps } from '../FBInput/FBInput.types';
@@ -6,10 +7,12 @@ import { FBInputProps } from '../FBInput/FBInput.types';
 export interface SchemaOptions {
   units: string[]
   statuses: string[]
+  states?: ASLStatus[]
   suppliers: SupplierOption[]
   isActive: boolean
   isInEditMode: boolean
   actionsClass: string
+  isLoading?: boolean
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
@@ -26,11 +29,13 @@ export type FBPartVendorsProps =
 & {
   vendors: Vendor[]
   units: string[]
-  statuses: string[]
+  statuses?: string[]
+  states: ASLStatus[]
   suppliers: SupplierOption[]
   updateVendor: (item: Vendor) => void
   deleteVendor: (item: Vendor, id?: string) => void
   setPrimaryVendor: (id: string) => void
+  isLoading: boolean
 };
 
 interface Cost {
@@ -41,6 +46,7 @@ interface Supplier {
   id: string
   name: string
   displayStatus?: string
+  supplierStatusId?: string
 }
 
 export interface UnitOption {
@@ -52,6 +58,8 @@ export type UseOptionsHook = (suppliersList: Supplier[]) => {
   units: string[]
   statuses: string[]
   suppliers: SupplierOption[]
+  states: ASLStatus[]
+  isLoading: boolean
 };
 
 export interface Vendor {
@@ -59,6 +67,7 @@ export interface Vendor {
   primary: boolean
   vendor: Supplier
   status?: string
+  supplierStatusId?: string
   partNumber?: string
   cost?: Cost
   unitsBuy?: string
@@ -78,7 +87,7 @@ export interface VendorEditEvent {
 type VendorOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId' >;
 
 export type SupplierOption =
-& Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision'>
+& Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision' | 'supplierStatusId'>
 & {
   document: VendorOptionDocument
   isUnselectable?: boolean
@@ -86,4 +95,6 @@ export type SupplierOption =
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableVendor> {
   onClick?: (e: VendorEditEvent) => void
+  approvedSupplierStatuses?: ASLStatus[]
+  isLoading?: boolean
 }

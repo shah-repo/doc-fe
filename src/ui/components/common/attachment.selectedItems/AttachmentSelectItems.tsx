@@ -44,11 +44,11 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
       </span>
       <hr className={classes.hr} />
       {aiWidgetContext?.isWidgetActive && (
-      <Tooltip title={translate('common.summarize.with.ai')}>
-        <IconButton onClick={handleSummarizeAi} className={classes.aiButton}>
-          <FontAwesomeIcon icon={regular('stars')} className={classes.aiIcon} />
-        </IconButton>
-      </Tooltip>
+        <Tooltip title={translate('common.summarize.with.ai')}>
+          <IconButton onClick={handleSummarizeAi} className={classes.aiButton}>
+            <FontAwesomeIcon icon={regular('stars')} className={classes.aiIcon} />
+          </IconButton>
+        </Tooltip>
       )}
     </Box>
   );

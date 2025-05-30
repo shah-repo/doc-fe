@@ -16,11 +16,13 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   updateLatestAvailableRevision,
   autocompleteKey,
   defaultValue,
+  onShippingCustomerChange,
   ...props
 }) => {
   const classes = useStyles();
-  const { hasObsoleteRevision, hasReleasedRevision }
+  const { hasObsoleteRevision, hasReleasedRevision, revisionDetails }
     = latestRevisionSummary ?? {};
+  const customerId = revisionDetails?.docId;
   return (
     <Grid container className={classes.grid}>
       {(hasObsoleteRevision || hasReleasedRevision) && !props.disabled && (
@@ -31,6 +33,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
                 arrow
                 title={translate(
                   'form.builder.shipping.released.rev.available.message',
+                  { customerId },
                 )}
                 placement="top-start"
               >
@@ -48,6 +51,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
                 arrow
                 title={translate(
                   'form.builder.shipping.obs.rev.available.message',
+                  { customerId },
                 )}
                 placement="top-start"
               >
@@ -69,6 +73,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
           optionId={FBAutocompleteAsyncOption.shippingInformation}
           autosave
           defaultValue={defaultValue}
+          onChange={onShippingCustomerChange}
           withState
           data-cy="shipping-address-field"
         />

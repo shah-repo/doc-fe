@@ -25,11 +25,11 @@ const GeneralSettingsContainer: React.FC = () => {
   const formik = useFormik<GeneralSettings>({
     initialValues,
     validationSchema: Yup.object().shape({
-    trainingReminders: Yup.object({
-      customDaysDueOn: Yup.object({
-        days: Yup.number().required('common.required').min(1),
+      trainingReminders: Yup.object({
+        customDaysDueOn: Yup.object({
+          days: Yup.number().required('common.required').min(1),
+        }),
       }),
-    }),
     }),
     onSubmit: (values: GeneralSettings) => {
       dispatch(companyActions.updateGeneralSettings(values));

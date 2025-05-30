@@ -3,6 +3,7 @@ import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -14,7 +15,9 @@ import { SupplierOption, UnitOption, UseOptionsHook } from './types';
 
 export const useOptions: UseOptionsHook = (vendors) => {
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
+  const getStateAction = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
+  const [states, saveStates] = useState<ASLStatus[]>([]);
   const async = useAsync<DocumentRevisionStatus[]>({ onSuccess: response => saveStatuses(response ?? []) });
 
   const suppliersAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -25,6 +28,8 @@ export const useOptions: UseOptionsHook = (vendors) => {
     optionId: FBAutocompleteAsyncOption.unitMeasures,
   });
 
+  const suppliersStateAsync = useAsync<ASLStatus[]>({ onSuccess: response => saveStates(response ?? []) });
+
   useEffect(() => {
     suppliersAsync.load();
     unitsAsync.load();
@@ -32,6 +37,11 @@ export const useOptions: UseOptionsHook = (vendors) => {
 
   useEffect(() => {
     async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], 'Supplier');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    suppliersStateAsync.start(getStateAction, false, suppliersStateAsync, documentRevisionQueryStatus(), [], 'Supplier');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,5 +86,7 @@ export const useOptions: UseOptionsHook = (vendors) => {
     suppliers,
     units,
     statuses,
+    states,
+    isLoading: suppliersStateAsync.isLoading,
   };
 };

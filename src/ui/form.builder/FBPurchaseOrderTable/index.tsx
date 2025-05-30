@@ -1,11 +1,12 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { GridProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import React from 'react';
 import { FBPurchaseOrderItem } from '..';
-import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import { translate } from '../../../common/intl';
+import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridRowClickEvent } from '../../components/KendoDataGrid/KendoDataGrid.types';
@@ -46,6 +47,13 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
 }) => {
   const classes = useStyles({ disabled });
   const isActionsAllowed = !disabled || isReceivable;
+  let alertMessageKey = 'documentRevision.po.notification.alert.update';
+
+  if (isPOAddAction) {
+    alertMessageKey = 'documentRevision.po.notification.alert.add';
+  } else if (isPORemoveAction) {
+    alertMessageKey = 'documentRevision.po.notification.alert.remove';
+  }
 
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {
     handleItem?.(dataItem);
@@ -154,18 +162,17 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
 
       {dialog && onAlertNotificationConfirm && (
         <AlertDialog
-          dialog={dialog}
-          confirmAction={onAlertNotificationConfirm}
-          cancelAction={onAlertNotificationCancel}
+          handler={dialog}
+          onConfirm={onAlertNotificationConfirm}
+          onCancel={onAlertNotificationCancel}
           confirmLabel="common.yes.proceed"
-          message={
-            isPOAddAction
-              ? 'documentRevision.po.notification.alert.add'
-              : isPORemoveAction
-                ? 'documentRevision.po.notification.alert.remove'
-                : 'documentRevision.po.notification.alert.update'
-          }
-        />
+          loading={loading}
+        >
+          <Typography data-cy="dialog-message">
+            {translate(alertMessageKey)}
+          </Typography>
+        </AlertDialog>
+
       )}
     </>
   );

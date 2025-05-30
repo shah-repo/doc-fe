@@ -1,22 +1,26 @@
 import { toODataString } from '@progress/kendo-data-query';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { redirectTo } from '../../../common/redirectHandler';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
+import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
+import { DocumentCategory } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
 import { USER_LOCKED } from '../../constants/urls';
 import Loader from '../common/kendo/Loader';
+import { toastInfo } from '../notifications';
 import { getDynamicPayloadItems, updateDataState } from './DataLoader.util';
 import { DataLoaderProps } from './interfaces';
 
 export const DataLoader: React.FC<DataLoaderProps> = ({
   dataState,
   onDataReceived,
+  onAnnouncementReceived,
   schema,
   tableName,
   queryUrl,
@@ -52,6 +56,12 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
   const lastSuccess = React.useRef<string>('');
   const pending = React.useRef<string>('');
   const odString = `${toODataString(updatedDataState)}&$table="${tableName}"`;
+
+  React.useEffect(() => {
+    if (documentTypeCategory === DocumentCategory.Supplier) {
+      getAnnouncements(documentTypeCategory);
+    }
+  }, []);
 
   React.useEffect(() => {
     if (tableCriteria.forceUpdate) {
@@ -137,6 +147,29 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
         );
       });
   };
+
+  const getAnnouncements = (documentTypeCategory: string) => {
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${ANNOUNCEMENTS_BASE}/${documentTypeCategory}/active`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+
+    apiClient
+      .request(requestConfig)
+      .then(({ data }) => {
+        onAnnouncementReceived(data);
+      }).catch((exception: AxiosError) => {
+        if (axios.isCancel(exception)) {
+          return;
+        }
+
+        toastInfo(exception?.response?.data?.message);
+      });
+  };
+
   requestDataIfNeeded();
   return pending.current ? <Loader /> : null;
 };
