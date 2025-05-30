@@ -17,7 +17,6 @@ import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { withFBFilesPresenter } from '../../FBFilesPresenter/FBFilesPresenter.wrap';
 import useStyles from './styles';
 
 interface Props extends FBFilesPresenterProps {
@@ -98,4 +97,4 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 };
-export default withFBFilesPresenter(FBAttachmentNamePresenter);
+export default FBAttachmentNamePresenter;

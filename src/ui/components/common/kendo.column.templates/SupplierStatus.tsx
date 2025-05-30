@@ -1,4 +1,4 @@
-import { Chip, Grid } from '@material-ui/core';
+import { Chip, CircularProgress, Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { get } from 'lodash';
 import React, { useContext } from 'react';
@@ -26,6 +26,10 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   const statusData = docTypeTableContext?.aslStatuses?.find((data) => data.id === defaultValue);
   const statusClassLabel = statusData?.internalType;
   const label = statusData?.displayLabel ?? defaultValue;
+
+  if (docTypeTableContext?.isLoading) {
+    return <td><CircularProgress size={16} /></td>;
+  }
 
   return (
     <td
