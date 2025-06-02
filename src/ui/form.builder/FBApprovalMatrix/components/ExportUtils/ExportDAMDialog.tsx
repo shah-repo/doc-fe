@@ -36,10 +36,11 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
     setFileName(ev.target.value);
   };
 
-  const dowloadFile = () => {
+  const downloadFile = () => {
     const datafilter = matrixTabDataState?.filter?.filters ?? dataState?.filter?.filters;
     const damName = `${workspaceState?.document?.document.docId} - ${workspaceState?.document?.name} - Rev ${workspaceState?.document?.displayRevision}`;
-    exportDAM(approvalMatrixFieldState, groupOptions, existingRoles, numOfRevStages, fileName, damName, datafilter);
+    exportDAM(approvalMatrixFieldState, groupOptions, existingRoles, numOfRevStages, fileName, damName, datafilter, workspaceState?.document?.status);
+    setFileName('');
     dialog.close();
   };
 
@@ -55,7 +56,7 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
       maxWidth="xs"
       onClose={closeDialog}
       onCancel={closeDialog}
-      onConfirm={dowloadFile}
+      onConfirm={downloadFile}
       cancelLabel="common.cancel"
       confirmLabel="common.download"
       confirmProps={{ disabled: isEmpty(fileName) }}
