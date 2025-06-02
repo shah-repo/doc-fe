@@ -51,15 +51,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
     );
 
     const renderInProgressContent = () => (
-      <>
-        {translate('administration.bulk.migration.rev.grid.cell.startedAt.suffix')}{' '}
-        <DateTime
-          value={run?.runAt}
-          format={MomentFormats.BriefDateTime}
-          className={classes.revsTableDateTimeLabel}
-        />{' '}
-        {translate('administration.bulk.migration.rev.grid.cell.inprogress')}
-      </>
+      <>{translate('administration.bulk.migration.rev.grid.cell.inprogress')}</>
     );
 
     const renderNotAttemptedContent = () => (
