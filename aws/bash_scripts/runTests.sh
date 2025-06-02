@@ -4,6 +4,7 @@ set -e
 BASE_DIR="${BITBUCKET_CLONE_DIR}"
 AWS_DIR="${BASE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
+BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 TEST_RESULTS_DIR="${BASE_DIR}/test-results"
 JEST_CONFIG_LOG_DIR="${BASE_DIR}/jest-config"

@@ -2,6 +2,7 @@
 set -e
 
 ENV=$1
+NODE_VER=$2
 
 BASE_DIR="${BITBUCKET_CLONE_DIR}"
 AWS_DIR="${BASE_DIR}/aws"
@@ -9,7 +10,7 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 
-. "${BASH_SCRIPTS_DIR}/configure.sh"
+. "${BASH_SCRIPTS_DIR}/configure.sh" "${NODE_VER}"
 
 set -o allexport
 [[ -f "${ENVIRONMENT_DIR}/pipelines/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/pipelines/${ENV}.env"
