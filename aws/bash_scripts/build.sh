@@ -9,6 +9,8 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 
+. "${BASH_SCRIPTS_DIR}/configure.sh"
+
 set -o allexport
 [[ -f "${ENVIRONMENT_DIR}/pipelines/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/pipelines/${ENV}.env"
 [[ -f "${ENVIRONMENT_DIR}/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/${ENV}.env"
