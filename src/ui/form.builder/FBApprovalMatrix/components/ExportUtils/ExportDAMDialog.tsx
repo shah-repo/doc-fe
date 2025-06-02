@@ -40,8 +40,7 @@ const ExportDAMDialog: React.FunctionComponent<Props> = ({
     const datafilter = matrixTabDataState?.filter?.filters ?? dataState?.filter?.filters;
     const damName = `${workspaceState?.document?.document.docId} - ${workspaceState?.document?.name} - Rev ${workspaceState?.document?.displayRevision}`;
     exportDAM(approvalMatrixFieldState, groupOptions, existingRoles, numOfRevStages, fileName, damName, datafilter, workspaceState?.document?.status);
-    setFileName('');
-    dialog.close();
+    closeDialog();
   };
 
   const closeDialog = () => {
