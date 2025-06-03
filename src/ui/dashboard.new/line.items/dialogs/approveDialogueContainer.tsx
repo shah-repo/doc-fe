@@ -30,6 +30,7 @@ interface Props {
   title?: string
   label: string
   transitionDialog: any
+  docRevOwnerName?: string
   onSuccess?: () => void
 }
 
@@ -41,6 +42,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   buttonProps,
   label,
   transitionDialog,
+  docRevOwnerName,
   onSuccess,
 }) => {
   const effectiveDateDialog = useDialog();
@@ -90,6 +92,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   return (
     <TransitionDialog
       onSubmit={onSubmit}
+      docRevOwnerName={docRevOwnerName}
       asyncState={async.asyncState}
       buttonProps={buttonProps}
       transition={transition}
