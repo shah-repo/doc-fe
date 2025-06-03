@@ -59,9 +59,9 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
   const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosed && status !== EmployeeStatus.Done;
 
   return (<>
-    {assigneList?.map(({ employeeId, attachments, status, name }) => {
+    {assigneList?.map(({ employeeId, attachments, status, name }, index) => {
       const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
-      return <div className={classes.employeeResponseFields}>
+      return <div className={classes.employeeResponseFields} key={index}>
         <FBProvider {...{ fileUploadState }}>
           {(showEditor(employeeId, status)) && (
             <Editor {...props} {...{ employeeId, name, previousAttachments: attachments } } />
