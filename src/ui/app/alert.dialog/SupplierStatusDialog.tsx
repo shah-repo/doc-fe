@@ -74,11 +74,9 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.warning.dialog.status')}</Typography>
 
                 <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text
-                    message={translate('purchaseOrder.supplierStatus.dialog.general', {
+                  {translate('purchaseOrder.supplierStatus.dialog.general', {
                       phases: getConflictingPhases(errorItems),
                     })}
-                  />
                 </Typography>
                 </>
               )}
@@ -86,11 +84,9 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 <>
                   <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.dialog.status')}</Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
-                    <Text
-                      message={translate('purchaseOrder.supplierStatus.dialog.general', {
+                    {translate('purchaseOrder.supplierStatus.dialog.general', {
                         phases: getConflictingPhases(warningItems),
                       })}
-                    />
                   </Typography>
                 </>
               )}
