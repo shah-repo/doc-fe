@@ -25,7 +25,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   docRevOwnerName,
 }) => {
   const approverName = docRevOwnerName ?? '';
-  const approverValue = { label: approverName, value: approverName };
+  const defaultValue = { label: approverName, value: approverName };
   return (
     <Form className={classes.container}>
       <FormMessage asyncState={asyncState} />
@@ -37,11 +37,10 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
           isClearable: false,
           styles,
           backspaceRemovesValue: false,
-          value: approverValue,
+          value: defaultValue,
         }}
         isDisabled
-        onChange={(users) => console.log({ users })}
-        options={[approverValue] as OptionType[]}
+        options={[defaultValue] as OptionType[]}
       />
       <InputField
         name="password"
