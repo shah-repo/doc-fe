@@ -71,11 +71,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               </Typography>
               {errorItems.length > 0 && isSupplierUndefined && (
                 <>
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                    <Text message={
-                      translate('purchaseOrder.supplierStatus.warning.dialog.status')
-                    } />
-                </Typography>
+                <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.warning.dialog.status')}</Typography>
 
                 <Typography data-cy="dialog-message" className={classes.contentText}>
                   <Text
@@ -88,11 +84,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               )}
               {warningItems.length > 0 && errorItems.length === 0 && isSupplierUndefined && (
                 <>
-                  <Typography data-cy="dialog-message" className={classes.contentText}>
-                      <Text message={
-                        translate('purchaseOrder.supplierStatus.dialog.status')
-                      } />
-                  </Typography>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.dialog.status')}</Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text
                       message={translate('purchaseOrder.supplierStatus.dialog.general', {
