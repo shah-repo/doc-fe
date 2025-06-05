@@ -1,11 +1,5 @@
 /* eslint-disable max-len */
-import {
-  CHANGE_REQUEST_LIST_URL,
-  DOCUMENT_REVISION_LIST_URL,
-  DOCUMENT_TYPE_MANAGEMENT_URL,
-  HOME_URL,
-  PAGE_DETAILS_MANAGEMENT_URL,
-} from '../../../ui/constants/urls';
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL } from '../../../ui/constants/urls';
 import { GroupTag } from '../auth/types';
 import { NavigationItem } from './types';
 
@@ -18,6 +12,21 @@ export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 export const SET_PREMIUM_FEATURE_SUBSCRIPTIONS = 'company/SET_PREMIUM_FEATURE_SUBSCRIPTIONS';
 export const UPDATE_PREMIUM_FEATURE_SUBSCRIPTION = 'company/UPDATE_PREMIUM_FEATURE_SUBSCRIPTION';
+
+export const BULK_MIGRATION_GET_DOCUMENT_TYPES = 'bulk_migration/document_types';
+export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/document_type_form_details';
+export const BULK_MIGRATION_GET_ELIGIBLE_REVS = 'bulk_migration/eligible_revs';
+export const BULK_MIGRATION_GET_SCAN_DETAILS = 'bulk_migration/scan_details';
+export const BULK_MIGRATION_REGISTER_SCAN = 'bulk_migration/register_scan';
+export const BULK_MIGRATION_UPDATE_SCAN = 'bulk_migration/update_scan';
+export const BULK_MIGRATION_REGISTER_SCAN_FOR_RUN = 'bulk_migration/start_scan';
+export const BULK_MIGRATION_CANCEL_SCAN = 'bulk_migration/cancel_scan';
+export const BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW = 'bulk_migration/scan_revisions_for_preview';
+export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/mapping_preview';
+export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/search';
+export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration/migrate_doc_revs';
+
+export const ANNOUNCEMENTS_BASE = 'announcement';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
@@ -153,4 +162,4 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
   },
 ];
 
-export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles', 'dirty'];

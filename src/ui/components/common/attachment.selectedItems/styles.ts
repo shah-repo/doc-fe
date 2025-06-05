@@ -18,7 +18,6 @@ export const useStyles = makeStyles((theme) => ({
     width: 12,
   },
   aiButton: {
-    display: 'none',
     marginLeft: theme.spacing(1.5),
     padding: theme.spacing(0.5),
     background: `linear-gradient(226.32deg, ${Colors.secondary} 17.49%, ${Colors.primaryGradient} 44.44%, ${Colors.primary} 93.06%)`,

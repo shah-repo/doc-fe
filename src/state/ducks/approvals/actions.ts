@@ -8,11 +8,14 @@ const applyTransition = (
   transition: FBApprovalsStatusEndpoint,
   handlers: Handlers<any>,
   password?: string,
+  asyncType?: string,
+  ignoreWarning = false,
 ): ApiAction<any, any> => apiActionWithCallbacks({
-  url: `${APPROVALS_ROOT_URL}/${id}/${transition}`,
+  url: `${APPROVALS_ROOT_URL}/${id}/${transition}?ignoreWarning=${ignoreWarning}`,
   method: 'post',
   password,
   handlers,
+  asyncType,
 });
 
 export default {

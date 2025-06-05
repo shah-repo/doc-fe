@@ -1,8 +1,10 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { SupplierConfig } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
-import { GroupTag, Permission } from '../auth/types';
+import { Group, GroupTag, Permission } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
@@ -33,7 +35,7 @@ export interface WhiteLabelingEnv {
   colors?: WhiteLabelingColors
 }
 
-export interface WhiteLabeling {
+interface WhiteLabeling {
   [ThemeEnv.DEV_THEME]?: WhiteLabelingEnv
   [ThemeEnv.DEMO_THEME]?: WhiteLabelingEnv
   [ThemeEnv.SANDBOX_THEME]?: WhiteLabelingEnv
@@ -60,6 +62,7 @@ export interface Company {
   id: string
   name: string
   numOfRevStages: number
+  startRevisionNumber: number
   users: User[]
   documentTypes: DocumentType[]
   whiteLabeling: WhiteLabeling
@@ -100,6 +103,7 @@ export interface CompanyMineRequest {
   helloSignIntegrationEnabled?: boolean
   navigation?: NavigationItem[]
   numOfRevStages?: number
+  startRevisionNumber?: number
 }
 
 export type SelectCompanyState = Company;
@@ -203,6 +207,9 @@ export interface EquipmentFamilyEquipmentStatus {
 interface ApprovalRoleItem {
   id: string
   name: string
+  index: number
+  employees: Employee[]
+  groups: Group[]
 }
 
 export interface ApprovalRole extends ApprovalRoleItem {
@@ -257,6 +264,7 @@ interface TrainingReminders {
   isThreeDaysDueOnCcActive: boolean
   isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
+  isEmailSendingEnabled?: boolean
 }
 
 export interface GeneralSettings {
@@ -265,6 +273,8 @@ export interface GeneralSettings {
   equipmentFamily: EquipmentFamilySettings
   isMaterialFlowAclEnabled: boolean
   lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  aslStatusConfig: ASLStatus[]
+  supplierConfig: SupplierConfig[]
   materialFlowACLs: MaterialFlowAclRule[]
   shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP

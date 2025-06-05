@@ -46,6 +46,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.MonthDateYearTwoDigit);
     availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
+    const isOverDue = dueDate ? new Date() > new Date(dueDate) : false;
 
     useEffect(() => {
       eqMaintenanceState?.getAvailableMaintenanceForms();
@@ -210,6 +211,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       preventativeFormOptions,
       getOptionLabel,
       maintenanceHistory,
+      isOverDue,
     });
   };
 

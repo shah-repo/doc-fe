@@ -14,6 +14,7 @@ import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
+import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
@@ -25,6 +26,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public isPreview?: boolean;
+  public isPreviewPanelVisible?: boolean;
   public document?: DocumentRevision;
   @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
@@ -45,6 +47,8 @@ class FBWorkspaceState extends FBSchemaState {
   public tlTableData: EditableTLItem[] = [];
   public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
+
+  @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -221,6 +225,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
+  @action public setCheckboxGroupsOptionsMap = (name: string, value: CheckBoxOptionType[]) => {
+    set(this.checkboxGroupsOptionsMap, name, value);
+  };
+
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave, isPreview } = this;
@@ -333,6 +341,17 @@ class FBWorkspaceState extends FBSchemaState {
     map(formInput, (value, key) => {
       set(this.formInputSync, key, value);
     });
+  };
+
+  public setFormInputDirectly = (data?: Record<string, any>) => {
+    this.formInput = data;
+    map(data, (value, key) => {
+      set(this.formInputSync, key, value);
+    });
+  };
+
+  public setId = (docRevId: string) => {
+    set(this, 'id', docRevId);
   };
 
   public loadDocRev = (values?: Record<string, any>) => {

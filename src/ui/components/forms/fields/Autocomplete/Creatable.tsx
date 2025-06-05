@@ -1,5 +1,5 @@
 import { Box, BoxProps, ClickAwayListener } from '@material-ui/core';
-import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createFilter } from 'react-select';
@@ -89,7 +89,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   };
 
   const intl = useIntl();
-  const titlePlaceholder = intl.formatMessage({ id: 'form.builder.enter.title' });
+  const titlePlaceholder = placeholder ?? intl.formatMessage({ id: 'form.builder.enter.title' });
 
   return (
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>

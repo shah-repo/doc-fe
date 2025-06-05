@@ -27,7 +27,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 80,
+      width: 30,
     },
     {
       id: 'isShipping',
@@ -41,7 +41,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 80,
+      width: 30,
     },
     {
       id: 'isAttention',
@@ -55,7 +55,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 80,
+      width: 40,
     },
     {
       id: 'name',
@@ -63,7 +63,7 @@ export const buildSchema = ({
       title: 'form.builder.contact.grid.heading.name',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 200,
+      width: 100,
     },
     {
       id: 'email',
@@ -71,7 +71,7 @@ export const buildSchema = ({
       title: 'form.builder.contact.grid.heading.email',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 200,
+      width: 120,
     },
     {
       id: 'phoneNumber',
@@ -79,7 +79,7 @@ export const buildSchema = ({
       title: 'form.builder.contact.grid.heading.phone.number',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
+      width: 80,
     },
     {
       id: 'other',
@@ -87,7 +87,7 @@ export const buildSchema = ({
       title: 'form.builder.contact.grid.heading.other',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
+      width: 80,
     },
     {
       id: 'actions',

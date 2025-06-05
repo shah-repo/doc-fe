@@ -2,7 +2,7 @@ import { groupBy, keyBy, keys, merge, omit, uniq } from 'lodash';
 import { combineReducers } from 'redux';
 import asyncReducer from '../../reducers/asyncReducer';
 import { AuditByCRIdState } from '../audit/types';
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SECURITY_GET_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET, REMOTE_VALIDATOR_GET_ASYNC } from './constants';
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SECURITY_GET_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET, REMOTE_VALIDATOR_GET_ASYNC, TASK_APPROVAL_GET_ASYNC } from './constants';
 import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from './types';
 
 type DocumentRevisionActions =
@@ -117,6 +117,7 @@ export default combineReducers({
   loadAsyncRemoteValidatorInfo: asyncReducer(REMOTE_VALIDATOR_GET_ASYNC),
   loadAsyncDrawerInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC_DRAWER),
   loadAsyncSecurityInfo: asyncReducer(DOCUMENT_REVISION_SECURITY_GET_ASYNC),
+  loadAsyncTaskApprovalInfo: asyncReducer(TASK_APPROVAL_GET_ASYNC),
   loadDocumentAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
   loadAuditAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_AUDIT_ASYNC),
   byId,

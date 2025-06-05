@@ -1,21 +1,25 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
+import { kebabCase } from 'lodash';
 import React, { MouseEvent } from 'react';
 import { isTranslationExists, translate } from '../../../../../common/intl';
+import { dotCase } from '../../../../common/utils/helpers';
 import useHover from '../../../../hooks/useHover';
 import SwitchControl from '../../../general.settings/components/SwitchControl';
 import useStyles from './styles';
 import { SubscriptionItemProps } from './types';
 
 const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
+  isDisabled,
   subscription,
   onToggle,
 }) => {
   const classes = useStyles();
   const [hoverRef, isHover] = useHover();
 
-  const key = subscription.premiumFeature.toLowerCase().replaceAll('_', '.');
+  const featureName = kebabCase(subscription.premiumFeature);
+  const key = dotCase(subscription.premiumFeature);
 
   const infoText = isTranslationExists(`administration.premium.features.${key}.info`)
     ? translate(`administration.premium.features.${key}.info`)
@@ -33,13 +37,15 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
       }}
       checked={subscription.isEnabled}
       className={classes.toggler}
+      data-cy={`administration-pfo-feature-${featureName}-toggler`}
+      disabled={isDisabled}
       label={
         <>
           <div>
-            <div className={classes.subscriptionTitle}>
+            <div data-cy={`administration-pfo-feature-${featureName}-title`} className={classes.subscriptionTitle}>
               {translate(`administration.premium.features.${key}.title`)}
             </div>
-            <div className={classes.subscriptionDescription}>
+            <div data-cy={`administration-pfo-feature-${featureName}-desc`} className={classes.subscriptionDescription}>
               {translate(`administration.premium.features.${key}.description`)}
             </div>
           </div>
@@ -52,6 +58,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
             <span ref={hoverRef}>
               <FontAwesomeIcon
                 className={classes.infoIcon}
+                data-cy={`administration-pfo-feature-${featureName}-info-icon`}
                 icon={isHover ? solid('circle-info') : regular('circle-info')}
               />
             </span>

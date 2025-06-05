@@ -1,6 +1,6 @@
 import { GroupDescriptor } from '@progress/kendo-data-query';
 import { ColumnSortSettings } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSettings } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridHeaderCellProps, GridPagerSettings } from '@progress/kendo-react-grid';
 import { schema } from 'normalizr';
 import { ComponentType } from 'react';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -16,6 +16,7 @@ export enum KendoCellTemplates {
   USER_AVATAR='UserAvatar',
   STATUS='Status',
   EQ_STATUS='EQStatus',
+  ATTACHMENT_COUNT='AttachmentCount',
   DATE_COMPLETED='DateCompleted',
   DATE_INFO='DateInfo',
   COMMON_CELL='CommonCell',
@@ -25,8 +26,10 @@ export enum KendoCellTemplates {
   DURATION='DurationCell',
   OVERFLOW_CELL ='OverflowCell',
   DOC_ID_LIST_CELL ='DocIdListCell',
+  SUPPLIER_STATUS='SupplierStatus',
 }
 export interface KendoColumn {
+  headerCell?: ComponentType<GridHeaderCellProps> | string
   sortable?: ColumnSortSettings
   field: string
   title: string

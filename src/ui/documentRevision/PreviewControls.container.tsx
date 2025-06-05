@@ -7,9 +7,9 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
@@ -29,10 +29,12 @@ import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import { store } from '../../state/store';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
+import Text from '../components/Text';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
+import HeaderSupplierStatus, { shouldShowHeaderStatus } from '../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../components/common/header/Menu';
 import OwnerChangerContainer from '../components/common/owner.changer/container';
 import { RequestType } from '../components/common/owner.changer/helpers/types';
@@ -40,7 +42,6 @@ import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
 import PrintLabelDetailsDialog from '../components/table/printLabel/PrintLabelDetailsDialog';
-import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
@@ -54,15 +55,15 @@ import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
 import { Translation } from '../translations/types';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 import WOClose from './forms/presenters/Close';
-import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { useIsLatestRevision } from './helpers/useIsLatestRevision';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -132,6 +133,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
+  const isSupplier = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.SUPPLIER;
   const isEB = checkIsDocumentEB(groupOptions);
   const isWO = checkIsDocumentWO(groupOptions);
   const isShipping = checkIsDocumentShipping(groupOptions);
@@ -171,6 +173,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     asyncWithdraw.start(
       applyTransition,
       documentRevision.id,
+      true,
       'withdrawn',
       asyncWithdraw,
     );
@@ -204,7 +207,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   };
 
   const setDocRevToDraft = () => {
-    dispatch(documentRevisionsActions.update(documentRevision.id, {
+    dispatch(documentRevisionsActions.restrictedEdit(documentRevision.id, {
       status: DocumentRevisionStatus.Draft,
       displayStatus: 'Draft',
     }));
@@ -652,6 +655,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const showSupplierHeaderStatus = shouldShowHeaderStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isCloseDisabled = ((isWORecord || isShippingRecord) && hasPendingApprovals)
     || !isDocOwner;
@@ -668,6 +672,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isSupplier && showSupplierHeaderStatus && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {(isWORecord || isShippingRecord) && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isCloseDisabled} />}
       <>
