@@ -1,12 +1,20 @@
 #!/bin/bash
 set -e
 
+BASE_DIR="${BITBUCKET_CLONE_DIR}"
+AWS_DIR="${BASE_DIR}/aws"
+BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
+
+. "${BASH_SCRIPTS_DIR}/configure.sh"
+
 TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/eslint-results"
 
 # Executing Test
 echo "-------- Executing Lint Tests --------"
 
 mkdir -p ${TEST_RESULTS_DIR}
+
+NODE_ENV=development yarn install --frozen-lockfile
 
 pids=()
 CI=true yarn lint --format codeframe -o ${TEST_RESULTS_DIR}/eslint-results.txt & pids+=($!)

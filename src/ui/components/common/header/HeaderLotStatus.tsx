@@ -6,14 +6,14 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { Translation } from '../../../translations/types';
-import HeaderStatusButton from './HeaderStatusButton';
+import HeaderStatusButton, { StatusValue } from './HeaderStatusButton';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -45,9 +45,9 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
   const statusLabel = getLotStatusLabel(documentRevision?.lotStatus);
 
   const updateLotStatus = useRef<() => void>();
-  const nextStatus = useRef<LotStatus | EquipmentStatus>();
+  const nextStatus = useRef<StatusValue>();
 
-  const confirmUpdate = (lotStatus: LotStatus | EquipmentStatus) => {
+  const confirmUpdate = (lotStatus: StatusValue) => {
     nextStatus.current = lotStatus;
     updateLotStatus.current = () => {
       async.start(updateLotStatusAction, documentRevision.id, { lotStatus }, async);

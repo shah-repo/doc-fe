@@ -1,6 +1,7 @@
-import { Box, Button, createStyles, InputLabel, makeStyles, RadioGroup, Theme } from '@material-ui/core';
-import { Field, FormikProps } from 'formik';
+import { Box, Button, createStyles, InputLabel, makeStyles, RadioGroup } from '@material-ui/core';
+import { Field, useFormikContext } from 'formik';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import { AsyncState } from '../../../../state/types';
 import RadioButton from '../../../components/forms/fields/RadioButton';
 import FormProgress from '../../../components/forms/FormProgress';
@@ -8,33 +9,30 @@ import FormWrapper from '../../../components/forms/FormWrapper';
 import Text from '../../../components/Text';
 import Colors from '../../../layout/theme/utils/colors';
 
-interface Props extends FormikProps<any> {
+interface Props {
   asyncState: AsyncState
-  disabled: boolean
+  canChangeRevisionStage: boolean
 }
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    label: {
-      margin: theme.spacing(3, 0, 3, 0),
-      fontWeight: 'bold',
-      color: Colors.dark_gray,
-    },
+const useStyles = makeStyles(theme => createStyles({
+  label: {
+    margin: theme.spacing(3, 0, 3, 0),
+    fontWeight: 'bold',
+    color: Colors.dark_gray,
   },
-  ));
+}));
 
-const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
-  dirty,
-  resetForm,
-  initialValues,
+const CompanyStageManagementPresenter: React.FC<Props> = ({
   asyncState,
-  disabled,
+  canChangeRevisionStage,
 }) => {
-  const classes = styles();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const formik = useFormikContext();
+  const classes = useStyles();
 
   return (
     <FormWrapper
-      {...{ dirty, initialValues, resetForm }}
+      {...formik }
     >
       <Field name="numOfRevStages">
         {({
@@ -42,22 +40,39 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
         }) => (
           <>
             <InputLabel className={classes.label}>
-                Number of revision stages
+              {translate('administration.general.settings.revision.stages.number')}
             </InputLabel>
             <RadioGroup {...field}>
               <RadioButton
-                // has to be string
-                // if value is number, cheking radio buttons doesn't work correctly
                 label="2"
                 value="2"
-                disabled={disabled}
+                disabled={!canChangeRevisionStage}
               />
               <RadioButton
-                // has to be string
-                // if value is number, cheking radio buttons doesn't work correctly
                 label="3"
                 value="3"
-                disabled={disabled}
+                disabled={!canChangeRevisionStage}
+              />
+            </RadioGroup>
+          </>
+        )}
+      </Field>
+      <Field name="startRevisionNumber">
+        {({
+          field,
+        }) => (
+          <>
+            <InputLabel className={classes.label}>
+              {translate('administration.general.settings.revision.start.number')}
+            </InputLabel>
+            <RadioGroup {...field}>
+              <RadioButton
+                label="0"
+                value="0"
+              />
+              <RadioButton
+                label="1"
+                value="1"
               />
             </RadioGroup>
           </>
@@ -67,7 +82,11 @@ const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <Button type="submit" data-cy="num-of-rev-stages-save" disabled={disabled} variant="outlined">
+        <Button
+          type="submit"
+          data-cy="num-of-rev-stages-save"
+          variant="outlined"
+        >
           <Text translation="common.save" />
         </Button>
       </Box>

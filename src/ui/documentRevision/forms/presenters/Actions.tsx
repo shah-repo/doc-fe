@@ -3,7 +3,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from 'lodash';
+import { get, isArray, isEmpty, isEqual, isUndefined, keys, map, omit, set } from 'lodash';
 import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,9 +19,11 @@ import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/d
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import { AsyncStatus } from '../../../../state/types';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
+import HeaderSupplierStatus, { shouldShowHeaderStatus } from '../../../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
 import OwnerChangerContainer from '../../../components/common/owner.changer/container';
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
@@ -32,7 +34,7 @@ import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
-import { FB } from '../../../form.builder';
+import { FB, FBFormState } from '../../../form.builder';
 import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
@@ -94,6 +96,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
   const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const isLoading = asyncState.status === AsyncStatus.Active;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || '';
@@ -114,12 +117,29 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
+  const formState = FB.useRef<FBFormState>(FBFormState, {
+    schema: _documentRevisionFormState?.schema ?? documentRevision.schema,
+    initialValues: documentRevision?.formInput ?? {},
+    workspaceMode: workspaceState?.mode ?? 'form',
+    workspaceState,
+  });
 
   React.useEffect(() => {
-    _formState?.validate((_valid) => {
+    map(schema, (schemaItem) => {
+      if (schemaItem.rules) {
+        const { name, rules } = schemaItem;
+        formState?.setFieldRules(name ?? '', rules);
+      }
+    });
+
+    const formValues = Object.fromEntries(workspaceState?.formInputSync ?? new Map()) as Record<string, any>;
+    formState.setValues(formValues);
+    map(formValues, (v, k) => set(formState.validationValues, k, v));
+
+    formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
         if (schemaItem.validationMode === 'visibility' || schemaItem.validationMode === 'disabled') {
-          return !isUndefined(_formState.errors.get(schemaItem.name ?? ''));
+          return !isUndefined(formState.errors.get(schemaItem.name ?? ''));
         }
         return true;
       });
@@ -127,7 +147,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved(documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
+  }, [_formState, formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
@@ -146,6 +166,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
+  const isSupplier = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.SUPPLIER;
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
@@ -159,6 +180,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
+  const showSupplierHeaderStatus = shouldShowHeaderStatus(documentRevision);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
@@ -257,9 +279,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     setFBValue();
 
-    if(isUndefined(documentRevision)) {
+    if (isUndefined(documentRevision)) {
       const attachments = _formState?.getValue('attachments');
-      if(!isEmpty(attachments)) {
+      if (!isEmpty(attachments)) {
         formik.setFieldValue('attachments', attachments);
       }
     }
@@ -502,6 +524,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isSupplier && showSupplierHeaderStatus && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>
@@ -536,7 +559,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               data-cy="DocumentRevisionForm-submit"
               disabled={
                 isCreateDocumentDisabled
-                  || _documentRevisionFormState?.disabledAction
+                  || _documentRevisionFormState?.disabledAction || isLoading
               }
             />
           </>

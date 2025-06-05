@@ -22,12 +22,14 @@ const useStyles = makeStyles({
 interface Props extends Omit<TooltipProps, 'children'> {
   maxLines?: number
   wrapperClassName?: string
+  forceTooltip?: boolean
 }
 
 const OverflowTooltip: React.FC<Props> = ({
   title,
   children,
   maxLines = 1,
+  forceTooltip,
   wrapperClassName,
   ...props
 }) => {
@@ -37,7 +39,7 @@ const OverflowTooltip: React.FC<Props> = ({
   return (
     <Tooltip
       {...props}
-      title={isOverflowing ? title : ''}
+      title={isOverflowing || forceTooltip ? title : ''}
     >
       <div
         className={cx(

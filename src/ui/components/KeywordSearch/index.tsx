@@ -46,7 +46,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ tableName }) => {
   };
 
   const onHandleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearchText(event.target.value);
+    const value = event.target.value;
+    if (value === '' && searchText !== '') {
+      handleClearClick();
+    }
+    setSearchText(value);
   };
 
   return (

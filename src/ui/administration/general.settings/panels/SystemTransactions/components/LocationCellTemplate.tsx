@@ -6,6 +6,7 @@ import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../components/KendoDataGrid
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
+import { ListType } from '../../../../bulkMigration/interface';
 import useStyles from '../styles';
 import { EditableSystemTransactionsRule, LocationField } from '../types';
 
@@ -21,13 +22,13 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
   const classes = useStyles();
 
   const handleChange = (event: ChangeEvent<unknown>, value?: CompanyLocation) => {
-    onLocationChange?.(dataItem, field === 'to' ? 'to' : 'from', value);
+    onLocationChange?.(dataItem, field === ListType.TO ? ListType.TO : ListType.FROM, value);
   };
 
   const value = dataItem[field] as CompanyLocation;
 
   const isScrapAction = dataItem.action === LotTransferType.Scrap;
-  const isDisabled = field === 'to' && isScrapAction;
+  const isDisabled = field === ListType.TO && isScrapAction;
 
   if (isActive) {
     return (

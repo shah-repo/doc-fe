@@ -11,6 +11,7 @@ CustomFormatConfig & { value: number };
 const currencyMappings: Record<string, string> = {
   CHF: '₣',
   SGD: 'S$',
+  SAR: '﷼',
 };
 
 const FormattedNumber: React.FC<Props> = (props) => (

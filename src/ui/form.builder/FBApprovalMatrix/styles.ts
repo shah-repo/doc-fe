@@ -35,4 +35,8 @@ export default makeStyles(() => ({
     color: Colors.error,
     fontSize: 12,
   },
+  iconContainer: {
+    display: 'flex',
+    alignSelf: 'end',
+  },
 }));

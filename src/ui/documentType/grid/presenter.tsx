@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { cloneDeep, has, map } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { DocumentCategory, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
@@ -9,12 +9,15 @@ import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { QueryType, SearchContext } from '../../components/KeywordSearch/types';
 import { TableDataProps } from '../../components/table/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
+import { FB } from '../../form.builder';
+import useDeepCompareEffect from '../../hooks/useDeepCompareEffect';
 import { isTranslation } from '../../translations/types';
 import CreateDocumentByType from '../list/CreateDocumentByType';
-import { KendoPresenterProps } from './interfaces';
+import { DocTypeTableContext, KendoPresenterProps } from './interfaces';
 
 export function DocumentTypePresenter ({
   statuses,
+  aslStatuses,
   tableName,
   tableCriteria,
   schema,
@@ -65,6 +68,17 @@ export function DocumentTypePresenter ({
     : {
       documentTypeId: documentType.id,
     };
+
+  const docTypeTableContext = useContext(DocTypeTableContext);
+  const getSupplierStatusLabel = (id: string) =>
+    docTypeTableContext?.aslStatuses?.find((data) => data.id === id)?.displayLabel;
+
+  useDeepCompareEffect(() => {
+    if (!docTypeTableContext?.isLoading && dataToBeExported.length > 0) {
+      handleExportData(dataToBeExported);
+    }
+  }, [docTypeTableContext?.aslStatuses, dataToBeExported, docTypeTableContext?.isLoading]);
+
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>,
   ) => {
@@ -74,6 +88,11 @@ export function DocumentTypePresenter ({
         if (record.precalc.lhr_end_accepted_quantity === -1) {
           record.precalc.lhr_end_accepted_quantity = 'N/A';
         }
+      }
+      const supplierStatus = record.precalc.supplierStatus;
+      const hasAslStatuses = (docTypeTableContext?.aslStatuses ?? [])?.length > 0;
+      if (supplierStatus && hasAslStatuses && FB.isUUID(supplierStatus)) {
+        record.precalc.supplierStatus = getSupplierStatusLabel(supplierStatus);
       }
       return record;
     });
