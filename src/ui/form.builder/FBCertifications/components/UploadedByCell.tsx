@@ -12,7 +12,7 @@ import { CustomTemplateProps, EditableCertification } from '../types';
 export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const isAddition = dataItem[MODE_FIELD] === Mode.add;
   const { id: currentUserId } = store.getState().auth.user ?? {};
-  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, isAddition ? currentUserId : dataItem[field]));
+  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, dataItem[field] ?? currentUserId));
 
   if (!selectedUserInfo) {
     return null;
