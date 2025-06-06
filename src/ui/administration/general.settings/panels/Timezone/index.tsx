@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { translate } from '../../../../../common/intl';
+import TimezoneSelect from '../../../../components/TimezoneSelect';
+import { TimezoneOption } from '../../../../components/TimezoneSelect/types';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
-import TimezoneSelect from './components/TimezoneSelect';
 
 const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
+  const [timezone, setTimezone] = useState<TimezoneOption | null>(null);
+
+  const onChange = (value) => {
+    console.log('Selected zone', value);
+    setTimezone(value);
+    // TODO API
+  };
+
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.timezone.title')}>
-      <TimezoneSelect {...props} />
+      <TimezoneSelect value={timezone} onChange={onChange} />
     </SettingsPanel>
   );
 };
