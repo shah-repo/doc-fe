@@ -20,7 +20,7 @@ export const withFBApprovalPasswordForm = (
 
     const onDialogApprove = () => {
       const password = formState?.getFieldValue('password');
-      approvalTransition?.('approve', approvalId, password);
+      approvalTransition?.('approve', approvalId, password, true);
       onDialogClose();
     };
 
