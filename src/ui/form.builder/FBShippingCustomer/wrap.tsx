@@ -115,6 +115,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     const updatedDefaultShippingMethodField = () => {
       formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
       formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, undefined);
     };
 
     const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {
