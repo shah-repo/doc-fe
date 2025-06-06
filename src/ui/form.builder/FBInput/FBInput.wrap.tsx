@@ -217,8 +217,14 @@ export const withFBInput = <T extends FBInputProps>(
               if (isUndefined(intermediateFlag)) {
                 intermediateFlag = false;
               }
-              const flag = !isUndefined(fieldValueEntry)
-              && formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              const fieldNameValue = formState?.getFieldValue(fieldName);
+              let flag = !isUndefined(fieldValueEntry)
+              && fieldNameValue.includes(fieldValueEntry);
+
+              if (typeof fieldValueEntry === 'object') {
+                flag = fieldNameValue.some(convertedItem => isEqual(fieldValueEntry, convertedItem));
+              }
+
               if (flag) {
                 intermediateFlag = flag;
               }
