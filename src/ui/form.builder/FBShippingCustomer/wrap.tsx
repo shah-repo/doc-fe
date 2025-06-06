@@ -8,7 +8,7 @@ import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
-import { SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
+import { INPUT_CONTEXT_SHIPPING_METHOD_FIELD, SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
@@ -68,7 +68,10 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           if (currentCustomerId === previousCustomerIdRef.current) return;
 
           const shippingMethod = data?.formInput?.shippingMethod;
+          const inputContextshippingMethod = data?.formInput?.[INPUT_CONTEXT_SHIPPING_METHOD_FIELD];
+
           formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod, !shippingMethod);
+          formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, inputContextshippingMethod);
           updateCustomerShippingMethod(currentCustomerId, shippingMethod);
         },
       );
