@@ -36,10 +36,15 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
 
     passwordSoonToExpire && toastInfo(
       <div>
-        Your password will expire in {daysUntilPasswordExpires} days.&nbsp;
+        Your password will expire {
+          daysUntilPasswordExpires === 0
+            ? 'today'
+            : `in ${daysUntilPasswordExpires} days`
+        }.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
-      { autoClose: 10000 });
+      { autoClose: 10000 },
+    );
 
     employee.company.scheduledForDeletion
     && toastSuccess(

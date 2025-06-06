@@ -90,7 +90,7 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
 
     props.passwordSoonToExpire && toastInfo(
       <div>
-        Your password will expire in {props.daysUntilPasswordExpires} days.&nbsp;
+        Your password will expire {props.daysUntilPasswordExpires === 0 ? 'today' : `in ${props.daysUntilPasswordExpires} days`}.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 },
