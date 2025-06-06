@@ -88,10 +88,20 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
       return <Redirect to={NO_ACCESS} />;
     }
 
-    props.passwordSoonToExpire && toastInfo(
+    props.passwordSoonToExpire
+    && toastInfo(
       <div>
-        Your password will expire {props.daysUntilPasswordExpires === 0 ? 'today' : `in ${props.daysUntilPasswordExpires} days`}.&nbsp;
-        <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
+        {
+          props.daysUntilPasswordExpires === 0
+            ? intl.formatMessage({ id: 'password.expiring.today' })
+            : intl.formatMessage(
+              { id: 'password.expiring' },
+              { daysUntilPasswordExpires: props.daysUntilPasswordExpires },
+            )
+        }{' '}
+        <Link to={RESET_PASSWORD_URL}>
+          {intl.formatMessage({ id: 'password.expiring.link' })}
+        </Link>
       </div>,
       { autoClose: 10000 },
     );

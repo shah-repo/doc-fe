@@ -34,14 +34,21 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
 
     history.push(HOME_URL);
 
-    passwordSoonToExpire && toastInfo(
+    passwordSoonToExpire
+    && toastInfo(
       <div>
-        Your password will expire {
+        {
           daysUntilPasswordExpires === 0
-            ? 'today'
-            : `in ${daysUntilPasswordExpires} days`
-        }.&nbsp;
-        <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
+            ? intl.formatMessage({ id: 'password.expiring.today' })
+            : intl.formatMessage(
+              { id: 'password.expiring' },
+              { daysUntilPasswordExpires },
+            )
+        }
+        &nbsp;
+        <Link to={RESET_PASSWORD_URL}>
+          {intl.formatMessage({ id: 'password.expiring.link' })}
+        </Link>
       </div>,
       { autoClose: 10000 },
     );
