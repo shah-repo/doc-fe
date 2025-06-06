@@ -1089,6 +1089,7 @@
   "form.builder.supplier": "Supplier",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
+  "form.builder.checkboxgroupasync": "Checkbox group",
   "form.builder.unitMeasures": "Unit Measures",
   "form.builder.partVendors": "Part Vendors",
   "form.builder.lotTransfers": "Lot Transfers",
