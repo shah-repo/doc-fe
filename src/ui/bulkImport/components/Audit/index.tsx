@@ -143,8 +143,10 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         skip = true;
         break;
       case BulkImportLogsEntries.JOB_ID:
-        secondaryText = translate('bk.audit.log.job.new.import.started', { processType: currentBulkImport.processType });
-        stepChange = translate('bk.audit.log.step.1.import.details');
+        if (currentBulkImport?.processType) {
+          secondaryText = translate('bk.audit.log.job.new.import.started', { processType: currentBulkImport.processType });
+          stepChange = translate('bk.audit.log.step.1.import.details');
+        }
         break;
       case BulkImportLogsEntries.XLSX:
         if (log.type === LogEntryType.ARRAY_NEW) {
@@ -228,6 +230,9 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         } else if (log.approvalId) {
           currentBulkImport = bulkImportsMaps.approvalIds[log.approvalId];
         }
+      }
+      if (!currentBulkImport) {
+        return null;
       }
       const ownerDetails = getUserDetails(log.ownerId) ?? {
         user: {
