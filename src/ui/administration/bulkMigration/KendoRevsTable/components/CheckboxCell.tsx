@@ -23,9 +23,9 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
-    const hasStarted = Boolean(run?.runAt);
-    const hasCompleted = Boolean(run?.completedAt);
-    const hasFailed = Boolean(run?.failureReason);
+    const hasStarted = status === MigrationStatus.IN_PROGRESS;
+    const hasCompleted = status === MigrationStatus.COMPLETED;
+    const hasFailed = status === MigrationStatus.FAILED;
 
     const renderCompletedContent = () => (
       <>
@@ -51,15 +51,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
     );
 
     const renderInProgressContent = () => (
-      <>
-        {translate('administration.bulk.migration.rev.grid.cell.startedAt.suffix')}{' '}
-        <DateTime
-          value={run?.runAt}
-          format={MomentFormats.BriefDateTime}
-          className={classes.revsTableDateTimeLabel}
-        />{' '}
-        {translate('administration.bulk.migration.rev.grid.cell.inprogress')}
-      </>
+      <>{translate('administration.bulk.migration.rev.grid.cell.inprogress')}</>
     );
 
     const renderNotAttemptedContent = () => (
