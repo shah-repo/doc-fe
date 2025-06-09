@@ -36,7 +36,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     history.push(HOME_URL);
 
     if (passwordSoonToExpire) {
-      showPasswordExpiryToast(intl, daysUntilPasswordExpires);
+      showPasswordExpiryToast(daysUntilPasswordExpires);
     }
 
     employee.company.scheduledForDeletion

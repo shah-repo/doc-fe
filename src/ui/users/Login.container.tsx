@@ -90,7 +90,7 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
     }
 
     if (props.passwordSoonToExpire) {
-      showPasswordExpiryToast(intl, props.daysUntilPasswordExpires);
+      showPasswordExpiryToast(props.daysUntilPasswordExpires);
     }
 
     props.isScheduledForDeletion && toastSuccess(
