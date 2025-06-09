@@ -27,6 +27,7 @@ export interface Certification {
   phoneNumber?: string
   attachments: Attachment[]
   uploadedBy: string
+  uploadedByName: string
   expiryDate: string | null
 }
 
