@@ -2,7 +2,7 @@ import { Box, CircularProgress } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import Config from '../../config';
 import { authActions, authSelectors } from '../../state/ducks/auth';
@@ -10,10 +10,11 @@ import { SSO_LOGIN_URL, SSO_REDIRECT_PARAM } from '../../state/ducks/auth/consta
 import { Employee } from '../../state/ducks/company/types';
 import { ApplicationState } from '../../state/reducers';
 import { Button } from '../components/forms/fields-next';
-import { toastError, toastInfo, toastSuccess } from '../components/notifications';
-import { COMPANY_EMAIL, HOME_URL, NO_ACCESS, RESET_PASSWORD_URL } from '../constants/urls';
+import { toastError, toastSuccess } from '../components/notifications';
+import { COMPANY_EMAIL, HOME_URL, NO_ACCESS } from '../constants/urls';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
+import { showPasswordExpiryToast } from './PasswordExpiryToast';
 import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
 
 interface StateProps {
@@ -88,23 +89,9 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
       return <Redirect to={NO_ACCESS} />;
     }
 
-    props.passwordSoonToExpire
-    && toastInfo(
-      <div>
-        {
-          props.daysUntilPasswordExpires === 0
-            ? intl.formatMessage({ id: 'password.expiring.today' })
-            : intl.formatMessage(
-              { id: 'password.expiring' },
-              { daysUntilPasswordExpires: props.daysUntilPasswordExpires },
-            )
-        }{' '}
-        <Link to={RESET_PASSWORD_URL}>
-          {intl.formatMessage({ id: 'password.expiring.link' })}
-        </Link>
-      </div>,
-      { autoClose: 10000 },
-    );
+    if (props.passwordSoonToExpire) {
+      showPasswordExpiryToast(intl, props.daysUntilPasswordExpires);
+    }
 
     props.isScheduledForDeletion && toastSuccess(
       <div>

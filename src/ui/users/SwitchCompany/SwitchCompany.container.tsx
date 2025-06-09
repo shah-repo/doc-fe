@@ -2,16 +2,17 @@ import { orderBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
 import Config from '../../../config';
 import { authActions, authSelectors } from '../../../state/ducks/auth';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { Employee, WhiteLabelingEnv } from '../../../state/ducks/company/types';
-import { toastInfo, toastSuccess } from '../../components/notifications';
-import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from '../../constants/urls';
+import { toastSuccess } from '../../components/notifications';
+import { COMPANY_EMAIL, HOME_URL } from '../../constants/urls';
 import { ThemeEnv } from '../../layout/theme/utils/types';
 import { LoginContainerProps } from '../Login.container';
+import { showPasswordExpiryToast } from '../PasswordExpiryToast';
 import SwitchCompanyPresenter from './SwitchCompany.presenter';
 import { styles } from './SwitchCompany.styles';
 
@@ -34,24 +35,9 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
 
     history.push(HOME_URL);
 
-    passwordSoonToExpire
-    && toastInfo(
-      <div>
-        {
-          daysUntilPasswordExpires === 0
-            ? intl.formatMessage({ id: 'password.expiring.today' })
-            : intl.formatMessage(
-              { id: 'password.expiring' },
-              { daysUntilPasswordExpires },
-            )
-        }
-        &nbsp;
-        <Link to={RESET_PASSWORD_URL}>
-          {intl.formatMessage({ id: 'password.expiring.link' })}
-        </Link>
-      </div>,
-      { autoClose: 10000 },
-    );
+    if (passwordSoonToExpire) {
+      showPasswordExpiryToast(intl, daysUntilPasswordExpires);
+    }
 
     employee.company.scheduledForDeletion
     && toastSuccess(
