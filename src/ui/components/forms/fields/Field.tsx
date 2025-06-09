@@ -33,7 +33,7 @@ export interface FieldStyleProps {
 
 type FieldProps = FieldOwnProps & FormikFieldProps & Partial<TypographyProps>;
 
-const Field: React.FunctionComponent< FieldProps> = ({
+const Field: React.FunctionComponent<FieldProps> = ({
   field,
   form,
   form: { touched, errors, isSubmitting },

@@ -1,9 +1,9 @@
 import { Button, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
+import { translate } from '../../../../../../common/intl';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
 import AutocompleteField from '../../../../../components/forms/fields/Autocomplete/Autocomplete';
-import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import InputField from '../../../../../components/forms/fields/Input';
 import { required, validator } from '../../../../../components/forms/fields/validators';
 import FormMessage from '../../../../../components/forms/FormMessage';
@@ -40,7 +40,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
           value: defaultValue,
         }}
         isDisabled
-        options={[defaultValue] as OptionType[]}
+        options={[defaultValue]}
       />
       <InputField
         name="password"
@@ -48,7 +48,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         dataCy="transition.action.password"
         labelProps={{ className: classes.label }}
         inputStyleProps={classes.inputFieldWrap}
-        inputProps={{ type: 'password', placeholder: 'Enter here', className: classes.inputField }}
+        inputProps={{ type: 'password', placeholder: translate('common.enter.here'), className: classes.inputField }}
         validate={validator(required)}
       />
       <FormProgress asyncState={asyncState} />
@@ -57,7 +57,6 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         dataCy="passwordConfirm"
         asyncState={asyncState}
         label="transition.action.confirm"
-        fullWidth={false}
         className={classes.submitButton}
       />
       <Button
