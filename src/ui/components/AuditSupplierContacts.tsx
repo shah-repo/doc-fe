@@ -31,6 +31,9 @@ const fieldNameLabelMapping: {[key: string]: string} = {
   comments: 'Comments',
 };
 
+const YES = 'Yes';
+const NO = 'No';
+
 const AuditSupplierContacts: React.FC<Props> = ({
   audit,
   dataCy,
@@ -38,7 +41,7 @@ const AuditSupplierContacts: React.FC<Props> = ({
   previousValue,
 }) => {
   const addedOrUpdatedField = (label: string, newValue: string | undefined, prevValue: string | undefined): ReactNode => {
-    if (newValue === prevValue) {
+    if (newValue === prevValue && newValue !== NO) {
       return <></>;
     }
 
@@ -50,7 +53,10 @@ const AuditSupplierContacts: React.FC<Props> = ({
     }
 
     if (newValue && prevValue) {
-      const fieldTranslation: Translation = 'documentRevision.audit.supplier.changes.updated' as unknown as Translation;
+      let fieldTranslation: Translation = 'documentRevision.audit.supplier.changes.updated' as unknown as Translation;
+      if (label === fieldNameLabelMapping.isPrimary) {
+        fieldTranslation = 'documentRevision.audit.supplier.changes.primary.contact.updated' as unknown as Translation;
+      }
       return (
         <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue, prevValue, label }} /></p>
       );
@@ -121,7 +127,7 @@ const AuditSupplierContacts: React.FC<Props> = ({
 
     if (audit.type.includes('OBJECT_EDITED')) {
       const fieldsToCompare = [
-        { key: 'isPrimary', current: Boolean(isPrimary).toString(), previous: Boolean(prevIsPrimary).toString() },
+        { key: 'isPrimary', current: isPrimary ? YES : NO, previous: prevIsPrimary ? YES : NO },
         { key: 'name', current: name, previous: prevName },
         { key: 'title', current: title, previous: prevTitle },
         { key: 'email', current: email, previous: prevEmail },
