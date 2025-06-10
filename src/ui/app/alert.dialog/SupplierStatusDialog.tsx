@@ -4,8 +4,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { Dialog } from '../../components/dialogs';
 import Text from '../../components/Text';
+import { Dialog } from '../../components/dialogs';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
@@ -69,30 +69,26 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               <Typography data-cy="dialog-header" className={classes.alertTitle}>
                 <Text translation={title} />
               </Typography>
-              { isSupplierUndefined
-                  && <Typography data-cy="dialog-message" className={classes.contentText}>
-                    <Text message={
-                      translate('purchaseOrder.supplierStatus.dialog.status')
-                    } />
-                  </Typography>
-              }
-              {errorItems.length > 0 && (
+              {errorItems.length > 0 && isSupplierUndefined && (
+                <>
+                <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.warning.dialog.status')}</Typography>
+
                 <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text
-                    message={translate('purchaseOrder.supplierStatus.dialog.general', {
+                  {translate('purchaseOrder.supplierStatus.dialog.general', {
                       phases: getConflictingPhases(errorItems),
                     })}
-                  />
                 </Typography>
+                </>
               )}
-              {warningItems.length > 0 && errorItems.length === 0 && (
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text
-                    message={translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(warningItems),
-                    })}
-                  />
-                </Typography>
+              {warningItems.length > 0 && errorItems.length === 0 && isSupplierUndefined && (
+                <>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.dialog.status')}</Typography>
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
+                    {translate('purchaseOrder.supplierStatus.dialog.general', {
+                        phases: getConflictingPhases(warningItems),
+                      })}
+                  </Typography>
+                </>
               )}
               { isWarning && !isError
                   && <Box className={cx(classes.topSpacing, classes.contentText)}>
