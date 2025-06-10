@@ -717,6 +717,7 @@
   "common.schema": "Schema",
   "common.fields.config": "Fields Config",
   "common.type.here": "Type here...",
+  "common.enter.here": "Enter here",
   "common.operators": "Operators",
   "common.select.migration.form": "Select Migration Form",
   "common.trId": "TRN ID",

@@ -18,6 +18,7 @@ interface TransitionDialogProps {
   buttonProps?: ButtonProps
   transition: Transition
   label: string
+  docRevOwnerName?: string
   transitionDialog: DialogHandler
 }
 
@@ -28,6 +29,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   onSubmit,
   asyncState,
   transition,
+  docRevOwnerName,
   transitionDialog,
 }) => {
   const renderPasswordForm = (props: FormikProps<any>) => (
@@ -35,6 +37,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
       {...props}
       asyncState={asyncState}
       cancel={transitionDialog.close}
+      docRevOwnerName={docRevOwnerName}
     />
   );
 
@@ -61,7 +64,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                   translation={
                     transition === TransitionTypes.TRANSITION_REJECT
                       ? 'transition.action.reject.title'
-                      : 'transition.action.approve.title'
+                      : 'transition.action.title'
                   }
                 />
               </Typography>

@@ -35,7 +35,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
       labelProps={labelProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
-        inputProps={{ 'data-lpignore': lpignore, 'data-cy': dataCy }}
+        inputProps={{ 'data-lpignore': lpignore, 'data-cy': dataCy, className: inputProps?.className }}
         {...fieldProps.field}
         {...inputProps}
         onBlur={(evt) => {

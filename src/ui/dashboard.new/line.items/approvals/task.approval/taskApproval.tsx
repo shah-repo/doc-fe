@@ -475,12 +475,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogReject}
         label="transition.action.reject"
+        docRevOwnerName={docRevOwnerName}
       />
       <ApproveDialogueContainer
         transition="approve"
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogApprove}
         label="transition.action.approve"
+        docRevOwnerName={docRevOwnerName}
       />
     </>
   );

@@ -32,6 +32,7 @@ interface Props {
   onSuccess?: () => void
   type?: string
   translationRejectMsg?: Translation
+  docRevOwnerName?: string
 }
 
 interface ResponseProps {
@@ -44,6 +45,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   buttonProps,
   label,
   type,
+  docRevOwnerName,
   transitionDialog,
   translationRejectMsg = 'dashboard.po.reject.alert',
   onSuccess,
@@ -132,6 +134,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         buttonProps={buttonProps}
         transition={transition}
         label={label}
+        docRevOwnerName={docRevOwnerName}
         {...{
           transitionDialog,
         }}
