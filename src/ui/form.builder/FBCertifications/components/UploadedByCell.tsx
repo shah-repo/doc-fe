@@ -7,12 +7,17 @@ import { ApplicationState } from '../../../../state/reducers';
 import { store } from '../../../../state/store';
 import { AvatarComponent } from '../../../components/common/kendo.column.templates/UserAvatar';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { FB } from '../../helpers';
 import { CustomTemplateProps, EditableCertification } from '../types';
 
 export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const isAddition = dataItem[MODE_FIELD] === Mode.add;
+  const { workspaceState } = FB.useStores();
   const { id: currentUserId } = store.getState().auth.user ?? {};
-  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, isAddition ? currentUserId : dataItem[field]));
+
+  const docRevOwnerId = workspaceState?.document?.owner.user?.id;
+  const selectedUserInfo = useSelector((state: ApplicationState) =>
+    changeRequestsSelectors.getUserInfoById(state, dataItem[field] ?? docRevOwnerId ?? currentUserId));
 
   if (!selectedUserInfo) {
     return null;

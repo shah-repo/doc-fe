@@ -99,10 +99,10 @@ const exportSheets = async (sheetData, fileName, damName, status) => {
       cells: flatColumns.map((col, colIndex) => {
         let value = getNestedValue(row, col.field);
         if (colIndex === 0) {
-          if(status === DocumentRevisionStatus.Deprecated) {
+          if(status === DocumentRevisionStatus.Deprecated && name === matrixTab && isUndefined(value)) {
             value = '-';
           } else {
-            value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : '-';
+            value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : value;
           }
         } else {
           value = value === true ? 'Y' : value === false ? '' : value;

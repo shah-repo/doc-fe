@@ -60,9 +60,9 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
     const contentEl: ReactElement = (
       <>
-        {hasStarted && hasCompleted && renderCompletedContent()}
-        {hasStarted && !hasCompleted && renderInProgressContent()}
-        {!hasStarted && renderNotAttemptedContent()}
+        {(hasCompleted || hasFailed) && renderCompletedContent()}
+        {hasStarted && renderInProgressContent()}
+        {!hasStarted && !hasCompleted && !hasFailed && renderNotAttemptedContent()}
       </>
     );
 
