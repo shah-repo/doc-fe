@@ -10,12 +10,15 @@ import { AvatarComponent } from '../../../components/common/kendo.column.templat
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { FB } from '../../helpers';
 import { UPLOADED_BY_NAME } from '../constants';
 import { CustomTemplateProps, EditableCertification } from '../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
+  const { workspaceState } = FB.useStores();
+  const docRevOwner = workspaceState?.document?.owner.user;
   const isAddition = dataItem[MODE_FIELD] === Mode.add;
-  const { id: currentUserId, name = '' } = store.getState().auth.user ?? {};
+  const { id: currentUserId, name = '' } = (docRevOwner ?? store.getState().auth.user) ?? {};
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableCertification>();
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const defaultValue = { label: values.uploadedByName ?? '', value: values[field] ?? '' };
