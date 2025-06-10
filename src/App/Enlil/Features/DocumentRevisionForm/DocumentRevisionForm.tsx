@@ -386,11 +386,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                     />
                                   </>
                                 )}
-                                {tabType === TabTypeOptions.TABS_MEQ && (
+                                {tabType === TabTypeOptions.TABS_MEQ && (<>
                                   <FBMaterialEqInfoContainer
                                     documentRevision={documentRevision}
                                     inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                                   />
+                                </>
                                 )}
                                 {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                                   <FBTrainingInfoContainer
@@ -421,8 +422,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   === TabTypeOptions.MATERIAL_DISPOSITION
                                   && _tabsState?.isTabActive(
                                     TabTypeOptions.MATERIAL_DISPOSITION,
-                                  ) && (
+                                  ) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
+                                  <FBWorkspace
+                                    isPortal={false}
+                                    document={{
+                                      ...formValues.values as unknown as DocumentRevision,
+                                      ...documentRevision as unknown as DocumentRevision,
+                                    }}
+                                    {... { autosaveEnabled, workspaceState }}
+                                    initialValues={formInput}
+                                    schema={schema}
+                                  />
+                                </>
                                 )}
                               </SMBox>
                             )}
