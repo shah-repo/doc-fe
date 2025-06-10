@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { translate } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { Translation } from '../translations/types';
 import Text from './Text';
@@ -31,8 +32,8 @@ const fieldNameLabelMapping: {[key: string]: string} = {
   comments: 'Comments',
 };
 
-const YES = 'Yes';
-const NO = 'No';
+const YES = translate('common.true');
+const NO = translate('common.false');
 
 const AuditSupplierContacts: React.FC<Props> = ({
   audit,
