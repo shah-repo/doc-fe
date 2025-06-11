@@ -342,6 +342,7 @@
   "documentRevision.audit.relatedEquipment.OBJECT_NEW": "Related Equipment added",
   "documentRevision.audit.relatedEquipment.OBJECT_DELETED": "Related Equipment deleted",
   "documentRevision.audit.relatedEquipment.OBJECT_EDITED": "Equipment Specification auto-synced",
+  "documentRevision.audit.relatedEquipment.BOOLEAN_NEW": "Equipment Specification manually-synced",
   "documentRevision.audit.supplier.changes.added": "{label}: {value}",
   "documentRevision.audit.supplier.changes.updated": "{label}: {prevValue} updated to {value}",
   "documentRevision.audit.supplier.changes.primary.contact.updated": "{label}: {value}",
