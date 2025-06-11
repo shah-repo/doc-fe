@@ -54,8 +54,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
 
 export const UploadedByCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, field, onClick } = props;
+
+  const { workspaceState } = FB.useStores();
+  const docRevOwner = workspaceState?.document?.owner.user;
+  const { id: currentUserId } = docRevOwner ?? store.getState().auth.user;
+
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, dataItem[field]));
+  const selectedUserInfo = useSelector((state: ApplicationState) =>
+    changeRequestsSelectors.getUserInfoById(state, dataItem[field] ?? currentUserId));
 
   if (isEditMode) {
     return <Editor {...props} />;
