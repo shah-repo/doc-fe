@@ -229,13 +229,13 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     history.push(urlPath);
   };
 
-  const contextValue = useMemo(() => ({
+  const docTypeContextValue = useMemo(() => ({
     aslStatuses,
     isLoading: supplierTypesAsync?.isLoading,
   }), [aslStatuses, supplierTypesAsync?.isLoading]);
 
   return (
-    <DocTypeTableContext.Provider value={contextValue}>
+    <DocTypeTableContext.Provider value={docTypeContextValue}>
       <DocumentTypePresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}
