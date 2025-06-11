@@ -27,7 +27,6 @@ interface TransitionDialogProps {
   label: string
   hideLabel?: boolean
   transitionDialog: DialogHandler
-  docRevOwnerName?: string
   effectiveDateDialog?: DialogHandler
 }
 
@@ -42,7 +41,6 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   transition,
   transitionDialog,
   hideLabel,
-  docRevOwnerName,
   effectiveDateDialog,
 }) => {
   const renderPasswordForm = (props: FormikProps<any>) => (
@@ -50,7 +48,6 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
       {...props}
       asyncState={asyncState}
       cancel={transitionDialog.close}
-      docRevOwnerName={docRevOwnerName}
     />
   );
 
