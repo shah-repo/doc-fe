@@ -2,6 +2,7 @@ import { Button, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
 import { translate } from '../../../../../../common/intl';
+import { store } from '../../../../../../state/store';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
 import AutocompleteField from '../../../../../components/forms/fields/Autocomplete/Autocomplete';
 import InputField from '../../../../../components/forms/fields/Input';
@@ -15,17 +16,15 @@ import styles from './PasswordForm.styles';
 interface PasswordFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState
   cancel: () => void
-  docRevOwnerName?: string
 }
 
 const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   cancel,
   classes,
   asyncState,
-  docRevOwnerName,
 }) => {
-  const approverName = docRevOwnerName ?? '';
-  const defaultValue = { label: approverName, value: approverName };
+  const { name } = store.getState().auth.user;
+  const defaultValue = { label: name, value: name };
   return (
     <Form className={classes.container}>
       <FormMessage asyncState={asyncState} />

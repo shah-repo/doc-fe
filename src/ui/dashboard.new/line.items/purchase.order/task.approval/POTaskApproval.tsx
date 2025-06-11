@@ -627,7 +627,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         approvalId={approvalId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
-        docRevOwnerName={docRevOwnerName}
       />
       {selectedAttachment && (
         <AttachmentSlideProvider {...{ setSelectedAttachment }}>
