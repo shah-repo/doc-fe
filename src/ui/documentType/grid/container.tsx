@@ -230,10 +230,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   };
 
   return (
-    <DocTypeTableContext.Provider value={{
-      aslStatuses,
-      isLoading: supplierTypesAsync?.isLoading,
-    }}>
+    <DocTypeTableContext.Provider value={{ aslStatuses, isLoading: supplierTypesAsync?.isLoading }}>
       <DocumentTypePresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}
