@@ -1,6 +1,6 @@
 import { GridRowClickEvent } from '@progress/kendo-react-grid';
 import { each, isEmpty } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, RouteComponentProps, useHistory } from 'react-router-dom';
@@ -229,13 +229,11 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     history.push(urlPath);
   };
 
-  const docTypeContextValue = useMemo(() => ({
-    aslStatuses,
-    isLoading: supplierTypesAsync?.isLoading,
-  }), [aslStatuses, supplierTypesAsync?.isLoading]);
-
   return (
-    <DocTypeTableContext.Provider value={docTypeContextValue}>
+    <DocTypeTableContext.Provider value={{
+      aslStatuses,
+      isLoading: supplierTypesAsync?.isLoading,
+    }}>
       <DocumentTypePresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}

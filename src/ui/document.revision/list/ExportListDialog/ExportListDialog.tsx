@@ -1,6 +1,5 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
 import { ExportToCsv } from 'export-to-csv';
-import { get } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
 import { DocumentCategory, DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
@@ -64,7 +63,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     const aslMap = new Map(docTypeTableContext?.aslStatuses?.map(({ id, displayLabel }) => [id, displayLabel]));
 
     data = data.map((record) => {
-      const status = get(record, 'precalc.supplierStatus');
+      const status = record['precalc.supplierStatus'];
 
       if (status && FB.isUUID(status)) {
         const label = aslMap.get(status);
