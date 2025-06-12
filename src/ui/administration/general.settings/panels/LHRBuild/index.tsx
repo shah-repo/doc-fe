@@ -22,7 +22,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-  const LHRBuilds = settings.LHRBuilds;
+  const LHRBuilds = settings.lhrBuilds;
 
   const [LHRBuildsData, setLHRBuildData] = React.useState<LHRBuild[]>(LHRBuilds ?? []);
   const [editedLHRBuild, setEditedLHRBuild] = React.useState<EditableLHRBuild>();
