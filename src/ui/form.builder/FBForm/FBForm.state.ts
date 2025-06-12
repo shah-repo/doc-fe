@@ -1,5 +1,5 @@
 import { flatten, unflatten } from 'flat';
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
+import { cloneDeep, Dictionary, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import FBSchemaState from '../FBSchema/FBSchema.state';
@@ -305,7 +305,12 @@ class FBFormState extends FBSchemaState {
         !isArray(inputValue) && (inputValue = [inputValue]);
         const diff = inputValue && inputValue.filter((inputVal) => {
           try {
-            return values(JSON.parse(reqs)).includes(inputVal);
+            const inputRequirements = values(JSON.parse(reqs));
+            if (inputVal && typeof inputVal === 'object') {
+              return inputRequirements.some((convertedItem) => isEqual(inputVal, convertedItem));
+            }
+
+            return inputRequirements.includes(inputVal);
           } catch {
             return reqs.includes(inputVal);
           }
