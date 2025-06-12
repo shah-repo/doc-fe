@@ -305,12 +305,12 @@ class FBFormState extends FBSchemaState {
         !isArray(inputValue) && (inputValue = [inputValue]);
         const diff = inputValue && inputValue.filter((inputVal) => {
           try {
-            const inputRequirements = values(JSON.parse(reqs));
+            const ruleParams = values(JSON.parse(reqs));
             if (inputVal && typeof inputVal === 'object') {
-              return inputRequirements.some((convertedItem) => isEqual(inputVal, convertedItem));
+              return ruleParams.some((convertedItem) => isEqual(inputVal, convertedItem));
             }
 
-            return inputRequirements.includes(inputVal);
+            return ruleParams.includes(inputVal);
           } catch {
             return reqs.includes(inputVal);
           }
