@@ -153,6 +153,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
+                      const isMDTabVisible = tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION);
 
                       return (
                         <SMBox key={index} pt={0.25}>
@@ -178,12 +179,10 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
-                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} isAdditionalColumnsShown={isAdditionalColumnsShown} />
+                          {isMDTabVisible && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} isAdditionalColumnsShown={isAdditionalColumnsShown} />
                           }
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent
-                            && _formState?.mode !== FBWorkspaceModeOptions.NONE
+                          {((tabType === TabTypeOptions.DYNAMIC && showTabContent
+                            && _formState?.mode !== FBWorkspaceModeOptions.NONE) || isMDTabVisible)
                               && <FBWorkspace
                                 isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}

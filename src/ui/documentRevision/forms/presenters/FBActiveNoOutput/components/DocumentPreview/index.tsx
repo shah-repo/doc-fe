@@ -340,9 +340,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           isDisabled={true} isShowOnly={true} isWO={isWO} />
                       )}
                       {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                        && _tabsState?.isTabActive(
-                          TabTypeOptions.MATERIAL_DISPOSITION,
-                        ) && <FBMaterialDisposition isShowOnly />}
+                        && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION) && (
+                        <>
+                          <FBMaterialDisposition isShowOnly />
+                          <FBSchema {...{ schema }} schemaState={previewWorkspaceState} workspaceMode={mode} />
+                        </>
+                      )}
                     </SMBox>
                   );
                 })}

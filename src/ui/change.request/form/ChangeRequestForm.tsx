@@ -226,7 +226,19 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                            && <>
+                              <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                              <FBWorkspace
+                                isPortal={false}
+                                initialValues={formInput}
+                                formState={formState}
+                                changeRequest={cloneDeep(changeRequest)}
+                                autosave={autosave}
+                                withoutBottomBar={withoutBottomBar}
+                                schema={schema}
+                                mode={mode}
+                              />
+                            </>
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE

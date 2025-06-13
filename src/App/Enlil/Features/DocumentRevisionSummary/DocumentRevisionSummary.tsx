@@ -279,8 +279,16 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                                   && _tabsState?.isTabActive(
                                     TabTypeOptions.MATERIAL_DISPOSITION,
-                                  ) && (
+                                  ) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
+                                  <FBWorkspace
+                                    document={documentRevision}
+                                    initialValues={documentRevision.formInput}
+                                    schema={schema}
+                                    mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions)
+                                      ? FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
+                                  />
+                                </>
                                 )}
                                 {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
                                   <FBLHRSummary isShowOnly={!hasOutput} isDisabled={true} />
