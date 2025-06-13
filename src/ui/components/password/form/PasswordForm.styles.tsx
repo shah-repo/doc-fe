@@ -1,4 +1,5 @@
 import { createStyles, Theme } from '@material-ui/core';
+import { Colors } from '../../../layout/theme-next';
 
 export default (theme: Theme) =>
   createStyles({
@@ -12,5 +13,24 @@ export default (theme: Theme) =>
     cancelButton: {
       float: 'right',
       marginRight: theme.spacing(1),
+    },
+    labelContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginBottom: theme.spacing(2.5),
+    },
+    label: {
+      fontWeight: 600,
+      fontSize: 12,
+      color: Colors.textBlack,
+      lineHeight: '15px',
+      marginBottom: theme.spacing(1.25),
+    },
+    inputFieldWrap: {
+      marginTop: `${theme.spacing(0)}px !important`,
+    },
+    inputField: {
+      fontSize: 'inherit',
+      padding: theme.spacing(1.5),
     },
   });

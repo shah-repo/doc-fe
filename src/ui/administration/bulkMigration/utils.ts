@@ -259,5 +259,5 @@ export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
 }
 
 function formatLabel (label: string): string {
-  return label.toLocaleLowerCase().replace(/:$/, '');
+  return label?.toLocaleLowerCase().replace(/:$/, '');
 }
