@@ -111,6 +111,7 @@ class FBEditorState {
     'select',
     'radiogroup',
     'checkboxgroup',
+    'checkboxgroupasync',
     'texteditor',
     'shippingMethod',
   ];

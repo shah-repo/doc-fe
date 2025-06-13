@@ -25,6 +25,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
         || workspaceState?.formInputSync.get(name)
         || workspaceState?.formInput?.shippingCustomer,
     );
+    const hasShippingMethodFieldExists = useObserver(() => workspaceState?.schema?.some((field) => !field.deleted && field.type === SHIPPING_METHOD_FIELD) ?? false);
 
     const [autocompleteKey, setAutocompleteKey] = useState<string | undefined>(customerId);
 
@@ -50,8 +51,10 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           if (!workspaceState?.loading) {
             workspaceState?.saveDocRev(formState?.getValues());
             previousCustomerIdRef.current = customerId;
+            if (hasShippingMethodFieldExists) {
             formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
             formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+            }
           } else {
             debounceTimerRef.current = setTimeout(setCustomerShippingMethod, 0);
           }
@@ -70,9 +73,11 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           const shippingMethod = data?.formInput?.shippingMethod;
           const inputContextshippingMethod = data?.formInput?.[INPUT_CONTEXT_SHIPPING_METHOD_FIELD];
 
+          if (hasShippingMethodFieldExists) {
           formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod, !shippingMethod);
           formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, inputContextshippingMethod);
           updateCustomerShippingMethod(currentCustomerId, shippingMethod);
+          }
         },
       );
 
@@ -113,9 +118,11 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     }, [customerId]);
 
     const updatedDefaultShippingMethodField = () => {
+      if (hasShippingMethodFieldExists) {
       formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
       formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
       formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, undefined);
+      }
     };
 
     const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {

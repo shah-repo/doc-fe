@@ -1,9 +1,11 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
 import { ExportToCsv } from 'export-to-csv';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
 import { DocumentCategory, DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../components/Text';
+import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
+import { FB } from '../../../form.builder';
 import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './ExportListDialog.styles';
 
@@ -26,6 +28,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
+  const docTypeTableContext = useContext(DocTypeTableContext);
 
   const options = {
     showLabels: true,
@@ -54,6 +57,26 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
       ...(item.poStatus === POStatusType.OPENED && { poStatus: POStatusLabelMapping.OPENED }),
       ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && { displayStatus: DocumentRevisionStatusDisplay.Approved }),
     }));
+  }
+
+  if (categoryName === DocumentCategory.Supplier && (docTypeTableContext?.aslStatuses?.length ?? 0) > 0) {
+    const aslMap = new Map(docTypeTableContext?.aslStatuses?.map(({ id, displayLabel }) => [id, displayLabel]));
+
+    data = data.map((record) => {
+      const status = record['precalc.supplierStatus'];
+
+      if (status && FB.isUUID(status)) {
+        const label = aslMap.get(status);
+        if (label) {
+          return {
+            ...record,
+            'precalc.supplierStatus': label,
+          };
+        }
+      }
+
+      return record;
+    });
   }
 
   return (

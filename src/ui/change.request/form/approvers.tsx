@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { concat, difference, filter, find, includes, isEmpty, last, sortBy, uniqBy } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { components } from 'react-select';
 import { ReactComponent as CheckedMark } from '../../../assets/images/check_mark.svg';
@@ -10,6 +10,7 @@ import { Group } from '../../../state/ducks/auth/types';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { Approval, Owner } from '../../../state/ducks/common/types';
 import { ApplicationState } from '../../../state/reducers';
+import { store } from '../../../state/store';
 import AutcompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import Text from '../../components/Text';
@@ -69,6 +70,17 @@ const Approvers: React.FunctionComponent<Props> = ({
 
   // MARK: @state
   const [selectedApprovers, setSelectedApprovers] = useState<OptionType[]>([]);
+  const authUser = store.getState().auth.user;
+
+  useEffect(() => {
+    if (!authUser) {
+      return;
+    }
+
+    const { name } = authUser;
+    const defaultValue = { label: name, value: name };
+    setSelectedApprovers((prev) => [...prev, defaultValue]);
+  }, [authUser]);
 
   // MARK: @effects
 
@@ -166,6 +178,7 @@ const Approvers: React.FunctionComponent<Props> = ({
           backspaceRemovesValue: false,
           formatOptionLabel,
           components: { MultiValueLabel },
+          value: selectedApprovers,
         }}
         options={uniqBy(arrayOfOptions, 'value').filter((e: any) => e.value !== owner?.id) as OptionType[]}
         onChange={(users) => markGroupChecked(users as OptionType[])}
