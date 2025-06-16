@@ -62,10 +62,13 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const history = useHistory();
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
-  const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+  let enableTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
   const [isActionsDisabled, setIsActionsDisabled] = React.useState<boolean>(false);
+  if (workspaceState?.changeRequest?.state) {
+    enableTasksAdditionalColumns = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(workspaceState?.changeRequest?.state);
+  }
 
-  if (enbleTasksAdditionalColumns) {
+  if (enableTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
   }
 
