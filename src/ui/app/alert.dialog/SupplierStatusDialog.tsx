@@ -36,8 +36,6 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const title: Translation = data.isError ? 'common.alert' : 'common.warning';
-
   const getConflictingPhases = (items: ApprovalItem[]) => {
     const itemPhasesSet = new Set(items.map((item) => item.phase));
     const phases: string[] = Array.from(itemPhasesSet).map((phase) =>
@@ -50,17 +48,20 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
 
   const { isError, isWarning, isSupplierUndefined, errorItems, warningItems } = data ?? {};
 
+  const showError = isError || isSupplierUndefined || errorItems?.length > 0;
+  const title: Translation = showError ? 'common.alert' : 'common.warning';
+
   return (
     <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'supplierStatusDialog' }}>
       <DialogContent>
         <DialogContentText>
           <Grid container className={classes.contentContainer}>
-            {isError && (
+            {showError && (
               <Grid item className={classes.alertIcon}>
                 <WarningIcon />
               </Grid>
             )}
-            {isWarning && !isError && (
+            {isWarning && !showError && (
               <Grid item className={classes.warningIcon}>
                 <ErrorOutlineIcon />
               </Grid>
@@ -69,60 +70,80 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               <Typography data-cy="dialog-header" className={classes.alertTitle}>
                 <Text translation={title} />
               </Typography>
-              {errorItems.length > 0 && isSupplierUndefined && (
-                <>
-                <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.warning.dialog.status')}</Typography>
-
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  {translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(errorItems),
-                    })}
+              { isSupplierUndefined
+                ? <Typography data-cy="dialog-message" className={classes.contentText}>
+                  <Text message={
+                    translate('purchaseOrder.supplierStatus.dialog.status')
+                  } />
                 </Typography>
+                : <>
+                  {errorItems.length > 0 && (
+                    <>
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(errorItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                    </>
+                  )}
+                  {warningItems.length > 0 && errorItems.length === 0 && (
+                    <>
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(warningItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                    </>
+                  )}
+                  { isWarning && !isError
+                    && <Box className={cx(classes.topSpacing, classes.contentText)}>
+                      <Text translation="supplier.status.warning.continue.message" />
+                    </Box>
+                  }
                 </>
-              )}
-              {warningItems.length > 0 && errorItems.length === 0 && isSupplierUndefined && (
-                <>
-                  <Typography data-cy="dialog-message" className={classes.contentText}>{translate('purchaseOrder.supplierStatus.dialog.status')}</Typography>
-                  <Typography data-cy="dialog-message" className={classes.contentText}>
-                    {translate('purchaseOrder.supplierStatus.dialog.general', {
-                        phases: getConflictingPhases(warningItems),
-                      })}
-                  </Typography>
-                </>
-              )}
-              { isWarning && !isError
-                  && <Box className={cx(classes.topSpacing, classes.contentText)}>
-                    <Text translation="supplier.status.warning.continue.message" />
-                  </Box>
               }
             </Grid>
           </Grid>
         </DialogContentText>
       </DialogContent>
-      <Box className={classes.dialogAction}>
-        {isWarning && !isError && (
-          <Button
-            variant="text"
-            className={cx(classes.cancelButton, classes.buttonLabel)}
-            onClick={cancelAction}
-            id="dialog-cancel"
-            data-cy="dialog-cancel"
-          >
-            <Text translation={cancelLabel} />
-          </Button>
-        )}
-        {isWarning && !isError && (
-          <Button
-            variant="contained"
-            className={cx(classes.submitButton, classes.buttonLabel)}
-            id="dialog-continue"
-            data-cy="dialog-continue"
-            onClick={confirmAction}
-          >
-            <Text translation={confirmLabel} />
-          </Button>
-        )}
-        {isError && (
+      {!isSupplierUndefined
+        && <Box className={classes.dialogAction}>
+          {isWarning && !isError && (
+            <Button
+              variant="text"
+              className={cx(classes.cancelButton, classes.buttonLabel)}
+              onClick={cancelAction}
+              id="dialog-cancel"
+              data-cy="dialog-cancel"
+            >
+              <Text translation={cancelLabel} />
+            </Button>
+          )}
+          {isWarning && !isError && (
+            <Button
+              variant="contained"
+              className={cx(classes.submitButton, classes.buttonLabel)}
+              id="dialog-continue"
+              data-cy="dialog-continue"
+              onClick={confirmAction}
+            >
+              <Text translation={confirmLabel} />
+            </Button>
+          )}
+          {isError && (
+            <Button
+              variant="contained"
+              className={cx(classes.submitButton, classes.buttonLabel)}
+              id="dialog-continue"
+              data-cy="dialog-continue"
+              onClick={cancelAction}
+            >
+              <Text translation={infoLabel} />
+            </Button>
+          )}
+        </Box> }
+      {isSupplierUndefined
+        && <Box className={classes.dialogAction}>
           <Button
             variant="contained"
             className={cx(classes.submitButton, classes.buttonLabel)}
@@ -132,8 +153,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
           >
             <Text translation={infoLabel} />
           </Button>
-        )}
-      </Box>
+        </Box> }
     </Dialog>
   );
 };

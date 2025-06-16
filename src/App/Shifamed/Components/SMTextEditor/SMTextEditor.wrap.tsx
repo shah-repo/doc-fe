@@ -3,7 +3,7 @@ import draftToHtml from 'draftjs-to-html';
 import { useFormikContext } from 'formik';
 import htmlToDraft from 'html-to-draftjs';
 import { map } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from '../../..';
 import { useFormContext } from '../../../../ui/components/forms/FormContext';
@@ -54,6 +54,12 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       ],
       inline: { options: ['bold', 'italic', 'underline', 'monospace'] },
     });
+
+    useEffect(() => {
+      const value = _formState?.getValue(name);
+      const editorState = htmlToEditorState(value);
+      _textEditorState?.setEditorState(editorState);
+    }, [_formState?.getValue(name)]);
 
     showToggleButton = () => {
       setTimeout(() => {

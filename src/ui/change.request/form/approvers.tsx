@@ -77,8 +77,8 @@ const Approvers: React.FunctionComponent<Props> = ({
       return;
     }
 
-    const { name } = authUser;
-    const defaultValue = { label: name, value: name };
+    const { name, employeeId } = authUser;
+    const defaultValue = { label: name, value: employeeId };
     setSelectedApprovers((prev) => [...prev, defaultValue]);
   }, [authUser]);
 
