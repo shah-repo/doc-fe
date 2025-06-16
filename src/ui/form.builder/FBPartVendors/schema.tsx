@@ -52,7 +52,9 @@ export const buildSchema = ({
     />
   );
 
-  const stateOptions = (states ?? []).map(state => createOption(state.displayLabel, state.displayLabel));
+  const stateOptions = (states ?? [])
+    .filter(state => state.isActive)
+    .map(state => createOption(state.displayLabel, state.displayLabel));
   const StateFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}

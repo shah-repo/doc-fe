@@ -4,7 +4,7 @@ import { FB } from '..';
 import { FBSupplierContactsProps, SupplierContact } from './types';
 
 const prepareData = (list: SupplierContact[] = []) =>
-  orderBy(list, 'isPrimary', 'desc');
+  orderBy(list, [(item) => item.isPrimary ?? false], 'desc');
 
 export const withFBSupplierContacts = <T extends FBSupplierContactsProps>(
   Component: React.FC<T>,
@@ -23,7 +23,7 @@ export const withFBSupplierContacts = <T extends FBSupplierContactsProps>(
       = useState<SupplierContact[]>(supplierContacts);
 
     useEffect(() => {
-      setContacts(supplierContacts);
+      setContacts(prepareData(supplierContacts));
     }, [supplierContacts]);
 
     const updateState = (state: SupplierContact[]) => {

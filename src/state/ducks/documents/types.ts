@@ -13,6 +13,7 @@ export enum DocumentStatus {
 }
 
 export enum ApprovalStatus {
+  Draft = 'DRAFT',
   Pending = 'PENDING',
   Approved = 'APPROVED',
   Rejected = 'REJECTED',
