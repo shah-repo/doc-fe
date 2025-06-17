@@ -9,7 +9,7 @@ import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { companyActions } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { TAB_IDS, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { TabIds, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -217,7 +217,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             />
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                            && _tabsState?.isTabActive(TAB_IDS.MATERIAL_DISPOSITION)
+                            && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION)
                             && <>
                               <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
                               <FBWorkspace

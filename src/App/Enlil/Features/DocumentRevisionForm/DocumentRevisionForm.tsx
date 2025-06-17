@@ -10,7 +10,7 @@ import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { PremiumFeature } from '../../../../state/ducks/company/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TAB_IDS, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabIds, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -411,7 +411,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 )}
                                 {tabType
                                   === TabTypeOptions.MATERIAL_DISPOSITION
-                                  && _tabsState?.isTabActive(TAB_IDS.MATERIAL_DISPOSITION) && (<>
+                                  && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
                                   <FBWorkspace
                                     isPortal={false}

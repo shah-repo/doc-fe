@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TAB_IDS, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabIds, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
@@ -267,7 +267,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 )}
                                 {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
                                   <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />)}
-                                {tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TAB_IDS.MATERIAL_DISPOSITION) && (<>
+                                {tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
                                   <FBWorkspace
                                     document={documentRevision}

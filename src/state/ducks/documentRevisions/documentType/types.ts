@@ -155,7 +155,7 @@ export enum TabTypeOptions {
   ALLOCATION = 'ALLOCATION',
 }
 
-export enum TAB_IDS {
+export enum TabIds {
   MATERIAL_DISPOSITION = 'MaterialDisposition',
 }
 
