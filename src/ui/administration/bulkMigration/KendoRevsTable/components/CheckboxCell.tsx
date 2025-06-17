@@ -73,7 +73,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <div className={classes.checkboxRowContent} onMouseEnter={handleIconHover} onMouseLeave={handlePopoverClose}>
-      {!isShowSelector && (
+      {isShowSelector && (
         <Checkbox
           checked={dataItem[SELECTED_FIELD]}
           onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}
