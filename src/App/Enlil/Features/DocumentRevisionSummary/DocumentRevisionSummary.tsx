@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TAB_IDS, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
@@ -18,7 +18,7 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
-import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -53,7 +53,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
-  const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
+  // const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
   const smartReferencesFrom
     = documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
@@ -142,13 +142,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     [_tabsState],
   );
 
-  if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
-    tabConfig.splice(2, 0, {
-      labelId: 'tabId.materialDisposition',
-      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
-      type: TabTypeOptions.MATERIAL_DISPOSITION,
-    });
-  }
+  // if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
+  //   tabConfig.splice(2, 0, {
+  //     labelId: 'tabId.materialDisposition',
+  //     tabId: TAB_IDS.MATERIAL_DISPOSITION,
+  //     type: TabTypeOptions.MATERIAL_DISPOSITION,
+  //   });
+  // }
 
   return (
     <>
@@ -276,10 +276,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 )}
                                 {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
                                   <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />)}
-                                {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                                  && _tabsState?.isTabActive(
-                                    TabTypeOptions.MATERIAL_DISPOSITION,
-                                  ) && (<>
+                                {tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TAB_IDS.MATERIAL_DISPOSITION) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
                                   <FBWorkspace
                                     document={documentRevision}

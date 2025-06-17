@@ -8,7 +8,7 @@ import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate 
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { TAB_IDS, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
@@ -82,13 +82,13 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
-  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
-    tabConfig.splice(2, 0, {
-      labelId: 'tabId.materialDisposition',
-      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
-      type: TabTypeOptions.MATERIAL_DISPOSITION,
-    });
-  }
+  // if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+  //   tabConfig.splice(2, 0, {
+  //     labelId: 'tabId.materialDisposition',
+  //     tabId: TAB_IDS.MATERIAL_DISPOSITION,
+  //     type: TabTypeOptions.MATERIAL_DISPOSITION,
+  //   });
+  // }
 
   useEffect(() => {
     const navigateToTabId = new URLSearchParams(location.search).get('tabId');
@@ -153,7 +153,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
-                      const isMDTabVisible = tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION);
+                      const isMDTabVisible = tabType === TabTypeOptions.MATERIAL_DISPOSITION && _tabsState?.isTabActive(TAB_IDS.MATERIAL_DISPOSITION);
 
                       return (
                         <SMBox key={index} pt={0.25}>

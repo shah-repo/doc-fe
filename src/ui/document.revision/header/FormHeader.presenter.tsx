@@ -62,10 +62,10 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         documentTypeId={documentRevision?.document?.documentType.id}
         revisionChangeType={documentRevision?.revisionChangeType}
         subRevision={documentRevision?.subRevision}
-        displayStatus={documentRevision.displayStatus}
+        displayStatus={documentRevision?.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
-        displayRevision={getVersionNumber(documentRevision.id)}
-        relatedParentPartDetails={documentRevision.relatedParentPartDetails}
+        displayRevision={getVersionNumber(documentRevision?.id)}
+        relatedParentPartDetails={documentRevision?.relatedParentPartDetails}
       />
       }
       <Grid item={true} xs={type !== 'newOutput' && isDisabled ? 6 : 12} alignContent="center" container>
