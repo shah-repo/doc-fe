@@ -287,6 +287,7 @@ export interface GeneralSettings {
     removeFromDam: ApprovalRoleItem[]
     dam: Dam
   }
+  timezone: string
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

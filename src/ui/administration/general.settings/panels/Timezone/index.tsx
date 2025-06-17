@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import TimezoneSelect from '../../../../components/TimezoneSelect';
-import { TimezoneOption } from '../../../../components/TimezoneSelect/types';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 
 const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
-  const [timezone, setTimezone] = useState<TimezoneOption | null>(null);
+  const dispatch = useDispatch();
+  const updateCompanyTimezone = useActionCreator(companyActions.updateCompanyTimezone);
+  const companyTimezone = useSelector(companySelectors.getCompanyTimezone);
+
+  const asyncCompanyTimezone = useAsync({
+    onSuccess: (data: any) => {
+      if (data?.affected) {
+        dispatch(companyActions.getGeneralSettings());
+      }
+    },
+  });
 
   const onChange = (value) => {
-    console.log('Selected zone', value);
-    setTimezone(value);
-    // TODO API
+    asyncCompanyTimezone.start(updateCompanyTimezone, { timezone: value.value }, asyncCompanyTimezone);
   };
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.timezone.title')}>
-      <TimezoneSelect value={timezone?.value} onChange={onChange} />
+      <TimezoneSelect value={companyTimezone} onChange={onChange} />
     </SettingsPanel>
   );
 };
