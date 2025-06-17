@@ -1,3 +1,4 @@
+import { find } from 'lodash';
 import moment from 'moment-timezone';
 import React, { useMemo } from 'react';
 import { translate } from '../../../common/intl';
@@ -33,13 +34,14 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   disabled = false,
 }) => {
   const timezoneOptions = useMemo(() => generateTimezoneOptions(), []);
+  const timezone = find(timezoneOptions, { value });
 
   return (
     <Autocomplete
       options={timezoneOptions}
       getOptionLabel={(option) => option.label}
       placeholder={placeholder}
-      value={value}
+      value={timezone}
       onChange={(_, selectedOption) => onChange(selectedOption)}
       autoHighlight
       clearOnEscape

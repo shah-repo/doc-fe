@@ -6,8 +6,8 @@ import asyncReducer from '../../reducers/asyncReducer';
 import { COMPANY_DEFAULT_STATE } from '../company/reducers';
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from '../tableSearch/constants';
 import { EditGroupsAction, EditUserInfoAction } from '../tableSearch/types';
-import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
-import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, ToggleCustomLabelsAction, UserGroupsAction, UserGroupsState, UserState } from './types';
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_TIMEZONE_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
+import { AuthUserAction, EditUserMeAction, GroupTag, LoadUserTimezoneAction, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, ToggleCustomLabelsAction, UserGroupsAction, UserGroupsState, UserState } from './types';
 
 export const DEFAULT_EMPLOYEE = {
   id: '',
@@ -45,6 +45,7 @@ const USER_DEFAULT_STATE: UserState = {
   daysUntilPasswordExpires: 90,
   passwordSoonToExpire: false,
   initialColor: Colors.deep_purple,
+  timezone: '',
 };
 
 type AuthUserActions =
@@ -56,7 +57,8 @@ type AuthUserActions =
   | UserGroupsAction
   | EditGroupsAction
   | SetCredentialsAction
-  | ToggleCustomLabelsAction;
+  | ToggleCustomLabelsAction
+  | LoadUserTimezoneAction;
 
 const user = (
   state: UserState = USER_DEFAULT_STATE,
@@ -94,6 +96,11 @@ const user = (
         ...state,
         name: action.payload.name,
         avatar: action.payload.avatar,
+      };
+    case USERS_TIMEZONE_URL:
+      return {
+        ...state,
+        timezone: action.payload,
       };
     case EDIT_EMPLOYEE_USER_INFO:
       if (state.id === action.payload.id) {

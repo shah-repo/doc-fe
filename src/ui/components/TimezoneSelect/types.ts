@@ -7,7 +7,7 @@ export interface TimezoneOption {
 }
 
 export interface TimezoneSelectProps {
-  value: TimezoneOption | null
+  value: string | undefined
   onChange: (value: TimezoneOption | null) => void
   label?: string
   placeholder?: string
