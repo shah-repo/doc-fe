@@ -82,14 +82,6 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
-  // if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
-  //   tabConfig.splice(2, 0, {
-  //     labelId: 'tabId.materialDisposition',
-  //     tabId: TAB_IDS.MATERIAL_DISPOSITION,
-  //     type: TabTypeOptions.MATERIAL_DISPOSITION,
-  //   });
-  // }
-
   useEffect(() => {
     const navigateToTabId = new URLSearchParams(location.search).get('tabId');
     if (navigateToTabId) {

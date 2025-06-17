@@ -115,14 +115,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
-  // if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
-  //   tabConfig.splice(2, 0, {
-  //     labelId: 'tabId.materialDisposition',
-  //     tabId: TAB_IDS.MATERIAL_DISPOSITION,
-  //     type: TabTypeOptions.MATERIAL_DISPOSITION,
-  //   });
-  // }
-
   const values = useObserver(() => ({
     ...formValues.values,
     formInput: formState?.getValues(),

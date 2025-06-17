@@ -48,6 +48,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
       iconClassName={classes.uploadEvidenceFieldIcon}
       disabled={isDisabled}
       name={taskId}
+      forceFileUpload
     />);
 };
 

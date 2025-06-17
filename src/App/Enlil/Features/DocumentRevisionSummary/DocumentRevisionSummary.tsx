@@ -53,7 +53,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
-  // const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
   const smartReferencesFrom
     = documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
@@ -141,14 +140,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     ),
     [_tabsState],
   );
-
-  // if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
-  //   tabConfig.splice(2, 0, {
-  //     labelId: 'tabId.materialDisposition',
-  //     tabId: TAB_IDS.MATERIAL_DISPOSITION,
-  //     type: TabTypeOptions.MATERIAL_DISPOSITION,
-  //   });
-  // }
 
   return (
     <>
