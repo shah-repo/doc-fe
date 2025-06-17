@@ -71,7 +71,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <div className={classes.checkboxRowContent} onMouseEnter={handleIconHover} onMouseLeave={handlePopoverClose}>
-      {status !== MigrationStatus.COMPLETED && (
+      {![MigrationStatus.COMPLETED, MigrationStatus.IN_PROGRESS].includes(status) && (
         <Checkbox
           checked={dataItem[SELECTED_FIELD]}
           onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}
