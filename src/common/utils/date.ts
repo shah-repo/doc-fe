@@ -1,13 +1,40 @@
 import moment, { MomentInput } from 'moment';
 import 'moment-timezone';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../state/ducks/auth';
 import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
 
 export const TIME_ZONE = 'America/Los_Angeles';
 
-type DateTypes = MomentInput | Date | string | number | undefined;
+export const useDate = () => {
+  const timezone = useSelector(authSelectors.getUserTimezone);
 
-export const getStartOfDayDateString = (date: DateTypes, format = '') =>
-  moment(date).tz(TIME_ZONE).startOf('day').format(format);
+  const getFormattedDateString = (date: DateTypes, format = '') =>
+    moment(date).tz(timezone).format(format);
+
+  const getStartOfDayDateString = (date: DateTypes, format = '') =>
+    moment(date).tz(timezone).startOf('day').format(format);
+
+  const getFormattedStartOfDayDateString = (date: DateTypes) =>
+    getStartOfDayDateString(date, 'LL');
+
+  const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
+
+  const convertDateTimeToUserTz = (date: string, format: string): string => {
+    return moment.tz(date, format, timezone).startOf('day').toISOString();
+  };
+
+  return {
+    timezone,
+    getCurrentDate,
+    convertDateTimeToUserTz,
+    getFormattedDateString,
+    getStartOfDayDateString,
+    getFormattedStartOfDayDateString,
+  };
+};
+
+type DateTypes = MomentInput | Date | string | number | undefined;
 
 export const getSortedLineItems = (data: MyFeedsItems[]): MyFeedsItems[] =>
   data?.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp))).reverse();
@@ -17,15 +44,7 @@ export const toStartOfDay = (date: DateTypes) =>
     ...(moment.utc(date).toArray().slice(0, 3) as [number, number, number]),
   );
 
-export const getFormattedStartOfDayDateString = (date: DateTypes) =>
-  getStartOfDayDateString(date, 'LL');
-
-export const getFormattedDateString = (date: DateTypes, format = '') =>
-  moment(date).tz(TIME_ZONE).format(format);
-
 export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf('seconds').fromNow();
-
-export const getCurrentDate = (format: string) => moment().tz(TIME_ZONE).format(format);
 
 export enum MomentFormats {
   MonthDateYear = 'M/D/YYYY',
@@ -50,8 +69,4 @@ export enum MomentFormats {
 export const toValidateIfDate = (value: moment.MomentInput) => moment(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
 export const validateDateFormats = (date: string, formats: string[]): boolean => {
   return formats.some(fmt => moment(date, fmt, true).isValid());
-};
-
-export const convertDateTimeToPST = (date: string, format: string): string => {
-  return moment.tz(date, format, TIME_ZONE).startOf('day').toISOString();
 };

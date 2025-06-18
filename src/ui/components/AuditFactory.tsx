@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
@@ -64,6 +64,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+  const { getFormattedDateString } = useDate();
 
   const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 

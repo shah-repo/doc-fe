@@ -4,7 +4,7 @@ import { Form } from 'formik';
 import moment from 'moment';
 import * as React from 'react';
 import { ReactComponent as ScheduleIcon } from '../../../../../../assets/images/ScheduleIcon.svg';
-import { getFormattedDateString, getStartOfDayDateString, MomentFormats, TIME_ZONE } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { AsyncState } from '../../../../../../state/types';
 import DatePickerStaticField from '../../../../../components/forms/fields/DatePickerStaticField';
 import { required, validator } from '../../../../../components/forms/fields/validators/index';
@@ -30,14 +30,16 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFi
   ...fieldProps
 }) => {
   const { values } = fieldProps;
+  const { timezone, getFormattedDateString, getStartOfDayDateString } = useDate();
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       <Box className={classes.pendingBox}>
         <DatePickerStaticField
           name="effectiveDate"
-          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
-          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          minDate={getStartOfDayDateString(moment().tz(timezone).toISOString())}
+          value={getStartOfDayDateString(moment().tz(timezone).toISOString())}
           validate={validator(required)}
         />
       </Box>

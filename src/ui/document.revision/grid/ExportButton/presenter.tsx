@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import { isEmpty, map, startCase } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import ExportListIcon from '../../../components/common/kendo/ExportListIcon';
 import Text from '../../../components/Text';
@@ -19,6 +19,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
   const classes = styles();
   const dialog = useDialog();
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const headers = map(columns, (column) => ({
     label: startCase(getTranslatedText(column.title)),

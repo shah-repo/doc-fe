@@ -1,5 +1,5 @@
 import { isEmpty, pick } from 'lodash';
-import { getStartOfDayDateString } from '../../../common/utils/date';
+import { useDate } from '../../../common/utils/date';
 import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/ducks/changeRequest/types';
 import { ChangeRequestFormValues, TemplateOption } from './types';
 
@@ -54,6 +54,7 @@ export const templateOptionToChangeRequestCreateBody = (option: TemplateOption):
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+  const { getStartOfDayDateString } = useDate();
   const effectiveDate = getStartOfDayDateString(values.formInput?.effectiveDate);
   const formInput = {
     ...values.formInput,

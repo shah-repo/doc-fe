@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
+import { useDate } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
@@ -90,6 +90,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const currentUser = useSelector(authSelectors.currentUser);
+  const { timezone, getStartOfDayDateString } = useDate();
 
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
@@ -474,7 +475,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         finalizeAction,
         id,
         {
-          effectiveDate: getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString()),
+          effectiveDate: getStartOfDayDateString(moment().tz(timezone).toISOString()),
         },
         async,
       );

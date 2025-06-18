@@ -6,7 +6,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { FBApprovalsStatusEndpoint, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from '..';
 import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../../ui/components/Text';
@@ -44,6 +44,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   ...props
 }) => {
   const classes = useStyles();
+  const { getFormattedDateString } = useDate();
 
   const approvalsByStatus = approvals?.reduce((list, approval) => {
     if (!approval.status) {

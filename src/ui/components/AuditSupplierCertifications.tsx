@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit } from '../../state/ducks/audit/types';
 import { Translation } from '../translations/types';
@@ -35,6 +35,8 @@ const AuditSupplierCertifications: React.FC<Props> = ({
   auditValue,
   previousValue,
 }) => {
+  const { getFormattedDateString } = useDate();
+
   const addedOrUpdatedField = (label: string, newValue: string | undefined, prevValue: string | undefined): ReactNode => {
     if (newValue === prevValue) {
       return <></>;
