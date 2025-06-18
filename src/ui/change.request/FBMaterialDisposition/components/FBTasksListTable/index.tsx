@@ -81,7 +81,9 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const isOwner = isDocRevOwner === currentUserId;
 
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    if ((isAdditionalColumnsShown && !isOwner) && (isShowOnly || formik.dirty)) {
+    const hasEditContext = isShowOnly || formik.dirty;
+    const canEdit = isAdditionalColumnsShown ? !isOwner && hasEditContext : hasEditContext;
+    if (canEdit) {
       return;
     }
 
