@@ -4,10 +4,12 @@ import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
@@ -343,6 +345,12 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     ];
   }, isTasksListAdded ? [editedTLItem] : []);
 
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const isDocRevOwner = workspaceState?.changeRequest?.owner?.id ?? workspaceState?.document?.owner?.id;
+  const isOwner = isDocRevOwner === currentUserId;
+  const canAddTaskInSection = isAdditionalColumnsShown ? !isOwner : isShowOnly || formContext?.isEditing;
+  const canAddTask = (isAdditionalColumnsShown && isOwner) || (!isShowOnly && !formContext?.isEditing);
+
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
@@ -353,7 +361,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
           startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
           onClick={createDraftTLItem}
           data-cy="add-task-small-btn"
-          disabled={isShowOnly || formContext?.isEditing}
+          disabled={canAddTaskInSection}
         >
           {translate('approvalRequest.tasks.list.add')}
         </Button>
@@ -370,15 +378,11 @@ const FBTasksListTable: React.FunctionComponent<props> = (
         containerRef={containerRef}
         resizable={true}
       />
-      {!isShowOnly && !formContext?.isEditing && <Button
-        kind="add"
-        fullWidth
-        attached
-        onClick={createDraftTLItem}
-        data-cy="add-task"
-      >
-        {translate('approvalRequest.tasks.list.add')}
-      </Button>}
+      {canAddTask && (
+        <Button kind="add" fullWidth attached onClick={createDraftTLItem} data-cy="add-task">
+          {translate('approvalRequest.tasks.list.add')}
+        </Button>
+      )}
     </div>
   );
 };
