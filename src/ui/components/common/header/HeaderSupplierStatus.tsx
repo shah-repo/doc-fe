@@ -108,12 +108,13 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
 
   return (
     <>
-      <HeaderStatusButton
+      {(statusLabel || isSupplierStatusEditable) && <HeaderStatusButton
         onItemSelect={confirmUpdate}
         label={getStatusLabel()}
         options={options}
+        disabled = {!isSupplierStatusEditable}
         data-cy="supplier-status"
-      />
+      /> }
       <AlertDialog
         handler={confirmationDialog}
         onConfirm={updateLotStatus.current ?? noop}
