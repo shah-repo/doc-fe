@@ -76,8 +76,12 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     isAdditionalColumnsShown = true;
   }
 
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const isDocRevOwner = workspaceState?.changeRequest?.owner?.id ?? workspaceState?.document?.owner?.id;
+  const isOwner = isDocRevOwner === currentUserId;
+
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    if (isShowOnly || formik.dirty) {
+    if ((isAdditionalColumnsShown && !isOwner) && (isShowOnly || formik.dirty)) {
       return;
     }
 
@@ -345,9 +349,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     ];
   }, isTasksListAdded ? [editedTLItem] : []);
 
-  const currentUserId = useSelector(authSelectors.currentEmployeeId);
-  const isDocRevOwner = workspaceState?.changeRequest?.owner?.id ?? workspaceState?.document?.owner?.id;
-  const isOwner = isDocRevOwner === currentUserId;
   const canAddTaskInSection = isAdditionalColumnsShown ? !isOwner : isShowOnly || formContext?.isEditing;
   const canAddTask = (isAdditionalColumnsShown && isOwner) || (!isShowOnly && !formContext?.isEditing);
 
