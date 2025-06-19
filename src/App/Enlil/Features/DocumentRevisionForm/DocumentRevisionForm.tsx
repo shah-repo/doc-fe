@@ -9,11 +9,13 @@ import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../../
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { PremiumFeature } from '../../../../state/ducks/company/types';
+import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import { AsyncStatus } from '../../../../state/types';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -28,7 +30,7 @@ import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redl
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
 import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import { FB, FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
 import FBLHRSummary from '../../../../ui/form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
@@ -106,11 +108,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
+  const updatingAsyncState = useSelector(documentRevisionsSelectors.getUpdateAsyncState);
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
 
   const [reloadKey, setReloadKey] = React.useState(0);
+
+  const { formState } = FB.useStores();
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
@@ -209,6 +214,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     return DocumentRevisionLeftPanel;
   };
 
+  const shouldConfirmLeave = dirty || updatingAsyncState.status === AsyncStatus.Active;
+
   return (
     <>
       <SMForm
@@ -227,7 +234,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         }
       >
         <PromptIfDirty
-          dirty={dirty}
+          dirty={shouldConfirmLeave}
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
           onConfirm={async () => {
@@ -350,6 +357,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                         {... { autosaveEnabled, workspaceState }}
                                         initialValues={formInput}
                                         schema={schema}
+                                        formState={formState}
                                       />
                                     )}
                                   </>
@@ -383,6 +391,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                       {... { autosaveEnabled, workspaceState }}
                                       initialValues={formInput}
                                       schema={schema}
+                                      formState={formState}
                                     />
                                   </>
                                 )}

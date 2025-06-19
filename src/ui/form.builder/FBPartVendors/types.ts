@@ -1,3 +1,4 @@
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -97,4 +98,16 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableVendor> {
   onClick?: (e: VendorEditEvent) => void
   approvedSupplierStatuses?: ASLStatus[]
   isLoading?: boolean
+}
+
+export interface Item {
+  text: string
+  value?: string | boolean
+}
+
+export interface DropdownFilterCellProps extends GridFilterCellProps {
+  defaultItem: Item
+  defaultValue?: Item
+  data: Item[]
+  disabled?: boolean
 }

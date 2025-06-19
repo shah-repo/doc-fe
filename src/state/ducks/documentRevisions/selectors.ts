@@ -154,6 +154,8 @@ const getLoadAsyncValidatorState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncRemoteValidatorInfo;
 const getLoadAsyncTaskApprovalState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncTaskApprovalInfo;
+const getUpdateAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.updateAsyncInfo;
 
 export default {
   byId,
@@ -171,6 +173,7 @@ export default {
   makeGetDocumentRevisions,
   getAudit,
   getLoadAuditAsyncState,
+  getUpdateAsyncState,
   makeGetAvailableReferences,
   makeGetAudit,
   makeGetDisableCreateNewVersion,
