@@ -1162,18 +1162,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                     onDataStateChange={handleDataStateChange}
                     columns={sortedColumnDefinitions}
                     columnMenu={
-                      _documentRevisionFormState?.isMaximizedView
-                        ? undefined
-                        : (props) => (
-                          <CustomColumnMenu
-                            {...props}
-                            columns={getColumns()}
-                            {...{
-                              onLock,
-                              onColumnShowHide,
-                            }}
-                          />
-                        )
+                      (props) => (
+                        <CustomColumnMenu
+                          {...props}
+                          columns={getColumns()}
+                          {...{
+                            onLock,
+                            onColumnShowHide,
+                          }}
+                        />
+                      )
                     }
                     onRowClick={editBOM}
                     onColumnReorder={onColumnReorder}
