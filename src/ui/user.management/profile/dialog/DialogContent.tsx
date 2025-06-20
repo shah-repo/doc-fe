@@ -110,7 +110,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   });
 
   const onChange = (value) => {
-    asyncUserTimezone.start(updateUserTimezone, { timezone: value.value }, asyncUserTimezone);
+    asyncUserTimezone.start(updateUserTimezone, { timezone: value?.value }, asyncUserTimezone);
   };
 
   // this is a hack for back button to redirect to user management table

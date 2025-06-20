@@ -39,7 +39,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
   const classes = useStyles();
   const isActive = !disabled;
   const [editedCycleCount, setEditedCycleCount] = React.useState<Partial<EditableCycleCount>>();
-  const { getFormattedDateString } = useDate();
+  const { timezone, getFormattedDateString } = useDate();
   const isCycleCountAdded = editedCycleCount?.[MODE_FIELD] === Mode.add;
 
   const editCycleCount = ({ dataItem }: CycleCountEditEvent) => setEditedCycleCount(dataItem);
@@ -134,7 +134,7 @@ const FBCycleCount: React.FC<FBCycleCountProps> = ({
     ];
   }, isCycleCountAdded ? [editedCycleCount] : []);
 
-  const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').format(MomentFormats.MonthDateYearTwoDigit);
+  const nextDueDate = moment(cycleCountsList.at(0)?.date).add(cycleCountFrequency, 'days').tz(timezone).format(MomentFormats.MonthDateYearTwoDigit);
 
   return (
     <Box className={classes.root} data-cy="cycle-count">

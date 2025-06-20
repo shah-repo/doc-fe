@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
-import { concat, filter, find, flatten, includes, sortBy, uniqBy } from 'lodash';
+import { concat, filter, find, flatten, includes, isEmpty, sortBy, uniqBy } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -437,8 +437,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const onSubmit = (values: any) => {
+    const updatedValues = {
+      ...values,
+      formInput: {
+        ...values.formInput,
+        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(values.formInput?.effectiveDate) } : {}),
+      },
+    };
     if (selectedInvalid) {
-      asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
+      asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(updatedValues)), asyncAR);
       return;
     }
 
