@@ -1,6 +1,5 @@
 export const ATTACHMENT_ROOT_URL = '/attachments';
 export const PURCHASE_ORDER_ROOT_URL = '/purchase_order';
-export const ATTACHMENT_UPLOAD_URL = `${ATTACHMENT_ROOT_URL}/upload`;
 export const ATTACHMENT_PUBLIC_UPLOAD_URL = `${ATTACHMENT_ROOT_URL}/public_upload_url`;
 export const REQUEST_WATERMARK_ASYNC = 'attachments/REQUEST_WATERMARK_ASYNC';
 export const CHECK_WATERMARK_ASYNC = 'attachments/CHECK_WATERMARK_ASYNC';
@@ -29,10 +28,6 @@ export const SET_UPLOAD_STATUS = 'uploads/SET_UPLOAD_STATUS';
 export const UPDATE_UPLOAD_STATS = 'uploads/UPDATE_UPLOAD_STATS';
 export const UPDATE_STATS = 'uploads/UPDATE_STATS';
 export const SET_UPLOAD_PART_PROGRESS = 'uploads/SET_UPLOAD_PART_PROGRESS';
-
-export const UPLOAD_START = 'uploads/UPLOAD_START';
-export const UPLOAD_COMPLETE = 'uploads/UPLOAD_COMPLETE';
-export const UPLOAD_ABORT = 'uploads/UPLOAD_ABORT';
 
 export const MAX_CONCURRENT_UPLOADS = 3;
 export const MAX_CONCURRENT_PARTS = 3;

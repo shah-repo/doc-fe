@@ -530,46 +530,6 @@ const uploadImage = (
   contentType: 'image/jpeg',
 });
 
-// Utility functions for formatting speed and ETA
-export const formatSpeed = (speedInBytesPerMs: number): string => {
-  const speedInBytesPerSecond = speedInBytesPerMs * 1000;
-  if (speedInBytesPerSecond < 1024) {
-    return `${Math.round(speedInBytesPerSecond)} B/s`;
-  } else if (speedInBytesPerSecond < 1024 * 1024) {
-    return `${(speedInBytesPerSecond / 1024).toFixed(1)} KB/s`;
-  } else {
-    return `${(speedInBytesPerSecond / (1024 * 1024)).toFixed(1)} MB/s`;
-  }
-};
-
-export const formatEta = (etaInMs: number): string => {
-  if (etaInMs < 1000) {
-    return `${Math.round(etaInMs)}ms`;
-  } else if (etaInMs < 60 * 1000) {
-    return `${Math.round(etaInMs / 1000)}s`;
-  } else if (etaInMs < 60 * 60 * 1000) {
-    const minutes = Math.floor(etaInMs / (60 * 1000));
-    const seconds = Math.round((etaInMs % (60 * 1000)) / 1000);
-    return `${minutes}m ${seconds}s`;
-  } else {
-    const hours = Math.floor(etaInMs / (60 * 60 * 1000));
-    const minutes = Math.round((etaInMs % (60 * 60 * 1000)) / (60 * 1000));
-    return `${hours}h ${minutes}m`;
-  }
-};
-
-export const formatFileSize = (sizeInBytes: number): string => {
-  if (sizeInBytes < 1024) {
-    return `${sizeInBytes} B`;
-  } else if (sizeInBytes < 1024 * 1024) {
-    return `${(sizeInBytes / 1024).toFixed(1)} KB`;
-  } else if (sizeInBytes < 1024 * 1024 * 1024) {
-    return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`;
-  } else {
-    return `${(sizeInBytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-  }
-};
-
 export default {
   upload,
   uploadAsync,

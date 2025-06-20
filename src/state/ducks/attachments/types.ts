@@ -135,14 +135,14 @@ interface AttachmentUploadParent {
 
 export type AttachmentMetadata = Omit<UploadCompleteRequestBody, 'uploadId' | 'key' | 'parts'> & AttachmentUploadParent;
 
-export interface AttachmentUploadEntryStats {
+interface AttachmentUploadEntryStats {
   speed: number
   eta: number
   uploaded: number
   progress: number
   lastUpdate: number
 }
-export interface AttachmentUploadEntrySession {
+interface AttachmentUploadEntrySession {
   key: string
   uploadId: string
   parts: UploadPart[]
