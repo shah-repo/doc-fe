@@ -2,26 +2,27 @@ import axios, { CancelTokenSource } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import CallbackHandler from '../../../common/callbackHandler';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApplicationState } from '../../reducers';
 import { store } from '../../store';
 import { ApiAction, Handlers } from '../../types';
 import { authActions } from '../auth';
 import { EmployeeEditRequestBody } from '../auth/types';
-import { ADD_FILE, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_UPLOAD, MAX_CONCURRENT_CHUNKS, MAX_CONCURRENT_UPLOADS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, SET_CANCEL_TOKEN, SET_PROCESSING, SET_STATUS, SET_UPLOAD_SESSION, START_UPLOAD, UPDATE_PROGRESS, UPDATE_STATS, UPDATE_UPLOAD_ETA, UPDATE_UPLOAD_SPEED } from './constants';
+import { ADD_FILE, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, MAX_CONCURRENT_PARTS, MAX_CONCURRENT_UPLOADS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
 import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentMetadata, AttachmentType, AttachmentUploadEntry, AttachmentUploadError, AttachmentUploadStatus, AvatarS3linkResponse, ClearWatermarkAction, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
 
-const _addFile = (id: string, file: File, metadata: AttachmentMetadata) => ({ type: ADD_FILE, payload: { id, file, metadata } });
+const _addFile = (id: string, file: File, numberOfParts: number, metadata: AttachmentMetadata) => ({ type: ADD_FILE, payload: { id, file, numberOfParts, metadata } });
 const _startUpload = (id: string) => ({ type: START_UPLOAD, payload: id });
-const _updateProgress = (id: string, progress: number) => ({ type: UPDATE_PROGRESS, payload: { id, progress } });
 const _finishUpload = (id: string, attachment: Attachment) => ({ type: FINISH_UPLOAD, payload: { id, attachment } });
+const _retryUpload = (id: string) => ({ type: RETRY_UPLOAD, payload: id });
 const _failUpload = (id: string, errorMessage?: string) => ({ type: FAIL_UPLOAD, payload: { id, errorMessage } });
 const _deleteUpload = (id: string) => ({ type: DELETE_UPLOAD, payload: id });
-const _setCancelToken = (id: string, source: CancelTokenSource) => ({ type: SET_CANCEL_TOKEN, payload: { id, source } });
-const _setProcessing = (isProcessing: boolean) => ({ type: SET_PROCESSING, payload: isProcessing });
-const _setStatus = (id: string, status: AttachmentUploadStatus) => ({ type: SET_STATUS, payload: { id, status } });
-const _setUploadSession = (id: string, uploadId: string, key: string) => ({ type: SET_UPLOAD_SESSION, payload: { id, uploadId, key } });
-const _updateUploadSpeed = (id: string, speed: number) => ({ type: UPDATE_UPLOAD_SPEED, payload: { id, speed } });
-const _updateUploadEta = (id: string, eta: number) => ({ type: UPDATE_UPLOAD_ETA, payload: { id, eta } });
-const _updateStats = (speed: number, eta: number) => ({ type: UPDATE_STATS, payload: { speed, eta } });
+const _setUploadStatus = (id: string, status: AttachmentUploadStatus) => ({ type: SET_UPLOAD_STATUS, payload: { id, status } });
+const _updateUploadStats = (id: string, speed: number, uploaded: number, eta: number, lastUpdate: number) => ({ type: UPDATE_UPLOAD_STATS, payload: { id, speed, uploaded, eta, lastUpdate } });
+const _updateStats = (speed: number, eta: number, lastUpdate: number) => ({ type: UPDATE_STATS, payload: { speed, eta, lastUpdate } });
+const _initializeUploadSession = (id: string, uploadUrls: UploadUrl[], key: string, uploadId: string) => ({ type: INITIALIZE_UPLOAD_SESSION, payload: { id, uploadUrls, key, uploadId } });
+const _startPartsUploading = (id: string, source: CancelTokenSource) => ({ type: START_PARTS_UPLOADING, payload: { id, source } });
+const _finishPartsUploading = (id: string, parts: UploadPart[]) => ({ type: FINISH_PARTS_UPLOADING, payload: { id, parts } });
+const _setUploadPartProgress = (id: string, partNumber: number, uploaded: number) => ({ type: SET_UPLOAD_PART_PROGRESS, payload: { id, partNumber, uploaded } });
 
 const _start = (
   data: UploadStartRequestBody,
@@ -45,242 +46,263 @@ const _complete = (
 
 const _abort = (
   data: UploadAbortRequestBody,
-  handlers: Handlers<undefined>,
-) => apiActionWithCallbacks<undefined, UploadAbortRequestBody>({
+  handlers: Handlers<AttachmentUploadEntry>,
+) => apiActionWithCallbacks<AttachmentUploadEntry, UploadAbortRequestBody>({
   url: ATTACHMENT_UPLOAD_ABORT_URL,
   method: 'post',
   data,
   handlers,
 });
 
-const startUpload = (entry: AttachmentUploadEntry): UploadThunkAction => (dispatch) => {
-  dispatch(_setStatus(entry.id, AttachmentUploadStatus.Started));
-  const handlers: Handlers<UploadStartResponse> = {
-    successHandler: new CallbackHandler<UploadStartResponse>(({ key, uploadId, uploadUrls }) => {
-      dispatch(_startUpload(entry.id));
-      dispatch(_setUploadSession(entry.id, uploadId, key));
-      dispatch(uploadMultipartFile(entry.id, uploadUrls));
-    }),
-    errorHandler: new CallbackHandler<string>((error) => {
-      dispatch(failUpload(entry.id, error || 'Failed to start upload'));
-    }),
-  };
-
-  const numberOfParts = Math.ceil(entry.file.size / PART_SIZE);
-  dispatch(_start({ fileName: entry.file.name, numberOfParts }, handlers));
+const getEntry = (entryId: string, state: ApplicationState): AttachmentUploadEntry => {
+  const entry = state.attachments.uploads.queue.find(f => f.id === entryId);
+  if (!entry) {
+    throw getUploadError('Entry not found', 'get entry');
+  }
+  return entry;
 };
 
-const completeUpload = (
-  entryId: string,
-  parts: UploadPart[],
-): UploadThunkAction => (dispatch, getState) => {
-  const entry = getState().attachments.uploads.queue.find(f => f.id === entryId);
-  if (!entry) return;
-
-  const { key, uploadId } = entry;
-  if (!key || !uploadId) return;
-
-  const handlers: Handlers<Attachment> = {
-    successHandler: new CallbackHandler<Attachment>((attachment) => {
-      dispatch(_finishUpload(entry.id, attachment));
-    }),
-    errorHandler: new CallbackHandler<string>((error) => {
-      dispatch(_failUpload(entry.id, error || 'Failed to complete upload'));
-      dispatch(abortUpload(entry.id));
-    }),
-  };
-
-  dispatch(_complete({ uploadId, key, parts, ...entry.attachmentMetadata }, handlers));
-  dispatch(processUploadQueue());
+const getUploadError = (message: string, reason = 'Unknown reason') => {
+  return new Error(`${message}: ${reason}`);
 };
 
-const abortUpload = (entryId: string): UploadThunkAction => (dispatch, getState) => {
-  const entry = getState().attachments.uploads.queue.find(f => f.id === entryId);
-  if (!entry) return;
+const startUpload = (entryId: string): UploadThunkAction<Promise<UploadStartResponse>> => async (dispatch, getState) => {
+  return await new Promise((resolve, reject) => {
+    const { id, file, numberOfParts } = getEntry(entryId, getState());
 
-  const { key, uploadId } = entry;
+    const handlers: Handlers<UploadStartResponse> = {
+      successHandler: new CallbackHandler<UploadStartResponse>((response) => {
+        dispatch(_initializeUploadSession(id, response.uploadUrls, response.key, response.uploadId));
+        resolve(response);
+      }),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Start upload failed', error))),
+    };
 
-  if (!key || !uploadId) return;
-
-  const handlers: Handlers<undefined> = {
-    successHandler: new CallbackHandler<undefined>(() => {
-      dispatch(_deleteUpload(entry.id));
-    }),
-    errorHandler: new CallbackHandler<string>(() => {
-      // noop
-    }),
-  };
-  dispatch(_abort({ key, uploadId }, handlers));
+    dispatch(_startUpload(id));
+    dispatch(_start({ fileName: file.name, numberOfParts }, handlers));
+  });
 };
 
-const failUpload = (entryId: string, errorMessage?: string, uploadUrls?: UploadUrl[]): UploadThunkAction => async (dispatch, getState) => {
-  const entry = getState().attachments.uploads.queue.find(f => f.id === entryId);
-  if (!entry) return;
+const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>> => async (dispatch, getState) => {
+  return await new Promise((resolve, reject) => {
+    const { attachmentMetadata, session } = getEntry(entryId, getState());
+
+    if (!session) {
+      reject(getUploadError('Complete upload failed', 'session not found'));
+      return;
+    }
+
+    dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Finalizing));
+
+    const { key, uploadId, parts } = session;
+    const handlers: Handlers<Attachment> = {
+      successHandler: new CallbackHandler<Attachment>((attachment) => {
+        dispatch(_finishUpload(entryId, attachment));
+        resolve(attachment);
+      }),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Complete upload failed', error))),
+    };
+
+    dispatch(_complete({ uploadId, key, parts, ...attachmentMetadata }, handlers));
+  });
+};
+
+const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
+  const { id, status, cancelSource } = getEntry(entryId, getState());
+
+  if (status === AttachmentUploadStatus.Uploading) {
+    cancelSource?.cancel('Upload deleted by user');
+  }
+  await dispatch(abortUpload(id));
+  dispatch(_deleteUpload(id));
+};
+
+const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
+  return await new Promise((resolve, reject) => {
+    const entry = getEntry(entryId, getState());
+    const { session, status } = entry;
+
+    if (status < AttachmentUploadStatus.Initialized) {
+      resolve(entry);
+    }
+
+    if (!session) {
+      reject(getUploadError('Abort upload failed', 'session not found'));
+      return;
+    }
+
+    const { key, uploadId } = session;
+
+    dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Cancelling));
+
+    const handlers: Handlers<AttachmentUploadEntry> = {
+      successHandler: new CallbackHandler<AttachmentUploadEntry>(() => {
+        dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Cancelled));
+        resolve(entry);
+      }),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Abort upload failed', error))),
+    };
+    dispatch(_abort({ key, uploadId }, handlers));
+  });
+};
+
+const failUpload = (entryId: string, errorMessage?: string): UploadThunkAction => async (dispatch, getState) => {
+  const entry = getEntry(entryId, getState());
 
   if (entry.retries + 1 < MAX_RETRIES) {
     const delay = BASE_RETRY_DELAY * 2 ** entry.retries;
     await new Promise((resolve) => setTimeout(resolve, delay));
+    dispatch(_retryUpload(entryId));
     switch (entry.status) {
-      case AttachmentUploadStatus.Started:
-        dispatch(_setStatus(entryId, AttachmentUploadStatus.Uploading));
+      case AttachmentUploadStatus.Starting:
+        await dispatch(startUpload(entryId));
         break;
+      case AttachmentUploadStatus.Initialized:
       case AttachmentUploadStatus.Uploading:
-        if (!uploadUrls) return;
-        dispatch(uploadMultipartFile(entryId, uploadUrls));
+        await dispatch(uploadParts(entryId));
+        break;
+      case AttachmentUploadStatus.Uploaded:
+      case AttachmentUploadStatus.Finalizing:
+        await dispatch(completeUpload(entryId));
         break;
       default:
         dispatch(_failUpload(entryId, errorMessage));
     }
   } else {
     dispatch(_failUpload(entryId, errorMessage));
+    await dispatch(abortUpload(entryId));
   }
 };
 
-const processUploadQueue = (): UploadThunkAction => (dispatch, getState) => {
-  const state = getState().attachments.uploads;
-  if (state.isProcessing) return;
-  dispatch(_setProcessing(true));
+const processUploadQueue = (): UploadThunkAction => async (dispatch, getState) => {
+  const { queue } = getState().attachments.uploads;
+  const activeUploads = queue.filter(f => f.status === AttachmentUploadStatus.Uploading).length;
 
-  const tryNext = () => {
-    const state = getState().attachments.uploads;
+  const candidates = queue.filter(f => [AttachmentUploadStatus.Queued, AttachmentUploadStatus.Failed].includes(f.status) && f.retries < MAX_RETRIES);
 
-    if (state.activeUploads >= MAX_CONCURRENT_UPLOADS) return;
+  if (candidates.length === 0 || activeUploads >= MAX_CONCURRENT_UPLOADS) return;
 
-    const next = state.queue.find(f => (f.status === AttachmentUploadStatus.Queued || (f.status === AttachmentUploadStatus.Failed && f.retries < MAX_RETRIES)));
-    if (!next) return;
-
-    dispatch(startUpload(next));
-  };
-
-  for (let i = 0; i < MAX_CONCURRENT_UPLOADS; i++) {
-    tryNext();
-  }
-
-  dispatch(_setProcessing(false));
+  await Promise.race(candidates.slice(0, MAX_CONCURRENT_UPLOADS).map(f => dispatch(uploadFile(f.id))));
+  dispatch(processUploadQueue());
 };
 
-const uploadMultipartFile = (entryId: string, uploadUrls: UploadUrl[]): UploadThunkAction => async (dispatch, getState) => {
-  const cancelTokenSource = axios.CancelToken.source();
-  const entry = getState().attachments.uploads.queue.find(f => f.id === entryId);
-  if (!entry) return;
-  const { id, file, key, retries, uploadId } = entry;
-
-  dispatch(_setCancelToken(entry.id, cancelTokenSource));
-
+const uploadFile = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
   try {
-    const parts: UploadPart[] = [];
-    const chunkProgress = new Map<number, number>();
-    let lastProgressUpdate = Date.now();
+    const { id } = getEntry(entryId, getState());
+    await dispatch(startUpload(id));
+    await dispatch(uploadParts(id));
+    await dispatch(completeUpload(id));
+  } catch (error) {
+    if (axios.isCancel(error)) {
+      return;
+    }
+    dispatch(failUpload(entryId, error instanceof Error ? error.message : 'unknown error'));
+  }
+};
 
-    uploadUrls.forEach(url => {
-      chunkProgress.set(url.partNumber, 0);
+const uploadParts = (
+  entryId: string,
+): UploadThunkAction<Promise<UploadPart[]>> => async (dispatch, getState) => {
+  const cancelTokenSource = axios.CancelToken.source();
+  const { id, file, session } = getEntry(entryId, getState());
+
+  if (!session) {
+    throw getUploadError('Parts upload failed', 'session not found');
+  }
+
+  const parts: UploadPart[] = [];
+
+  dispatch(_startPartsUploading(id, cancelTokenSource));
+
+  for (let i = 0; i < session.parts.length; i += MAX_CONCURRENT_PARTS) {
+    const batch = session.parts.slice(i, i + MAX_CONCURRENT_PARTS);
+    const batchPromises = batch.map(async part => {
+      const chunk = file.slice((part.partNumber - 1) * PART_SIZE, part.partNumber * PART_SIZE);
+      const result = await dispatch(uploadPart(part, chunk, cancelTokenSource, id));
+      parts.push(result);
+      return result;
     });
+    await Promise.all(batchPromises);
+  }
 
-    const updateTotalProgress = () => {
-      const totalChunkProgress = Array.from(chunkProgress.values()).reduce((sum, progress) => sum + progress, 0);
-      const totalProgress = Math.round(totalChunkProgress / uploadUrls.length);
-      dispatch(_updateProgress(id, totalProgress));
+  dispatch(_finishPartsUploading(id, parts));
 
-      // Calculate speed and ETA for this upload
-      const now = Date.now();
-      const timeElapsed = now - lastProgressUpdate;
-      if (timeElapsed > 0 && totalProgress > 0) {
-        const bytesUploaded = (file.size * totalProgress) / 100;
-        const speed = bytesUploaded / (timeElapsed / 1000); // bytes per second
-        const remainingBytes = file.size - bytesUploaded;
-        const eta = speed > 0 ? (remainingBytes / speed) * 1000 : 0; // milliseconds
+  return parts;
+};
 
-        dispatch(_updateUploadSpeed(id, speed));
-        dispatch(_updateUploadEta(id, eta));
-        lastProgressUpdate = now;
-      }
-
-      // Calculate overall statistics
-      const activeUploads = getState().attachments.uploads.queue.filter(f => f.status === AttachmentUploadStatus.Uploading);
-      if (activeUploads.length > 0) {
-        const totalSpeed = activeUploads.reduce((sum, upload) => sum + upload.speed, 0);
-        const maxEta = Math.max(...activeUploads.map(upload => upload.eta));
-        dispatch(_updateStats(totalSpeed, maxEta));
-      }
-    };
-
-    const uploadChunk = async (part: UploadUrl): Promise<UploadPart> => {
-      const blob = file.slice((part.partNumber - 1) * PART_SIZE, part.partNumber * PART_SIZE);
-
+const uploadPart = (
+  part: UploadUrl,
+  chunk: Blob,
+  cancelTokenSource: CancelTokenSource,
+  uploadId: string,
+): UploadThunkAction<Promise<UploadPart>> => async (dispatch) => {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
       const response = await axios({
         method: 'PUT',
         url: part.url,
-        data: blob,
+        data: chunk,
         cancelToken: cancelTokenSource.token,
         onUploadProgress: (progressEvent: ProgressEvent) => {
-          const currentProgress = Math.round(progressEvent.loaded * 100 / blob.size);
-          chunkProgress.set(part.partNumber, currentProgress);
-          updateTotalProgress();
+          dispatch(_setUploadPartProgress(uploadId, part.partNumber, progressEvent.loaded));
+          dispatch(updateUploadStats(uploadId));
+          dispatch(updateStats());
         },
         headers: {
-          'Content-Type': blob.type || 'application/octet-stream',
+          'Content-Type': chunk.type ?? 'application/octet-stream',
         },
       });
 
       if (response.status !== 200) {
-        throw new Error(`Upload failed with status: ${response.status}`);
+        throw getUploadError('Part upload failed', response.status.toString());
       }
 
-      const headers = response.headers as { etag: string };
-      const eTag = headers.etag;
+      const { eTag } = response.headers as { eTag: string };
       if (!eTag) {
-        throw new Error('Missing ETag');
+        throw getUploadError('Part upload failed', 'missing ETag');
       }
 
-      // Mark chunk as completed
-      chunkProgress.set(part.partNumber, 100);
-      updateTotalProgress();
-
-      return { partNumber: part.partNumber, eTag };
-    };
-
-    for (let i = 0; i < uploadUrls.length; i += MAX_CONCURRENT_CHUNKS) {
-      const batch = uploadUrls.slice(i, i + MAX_CONCURRENT_CHUNKS);
-      const batchPromises = batch.map(uploadChunk);
-      const batchResults = await Promise.all(batchPromises);
-      parts.push(...batchResults);
-    }
-
-    parts.sort((a, b) => a.partNumber - b.partNumber);
-
-    dispatch(completeUpload(id, parts));
-  } catch (err) {
-    if (axios.isCancel(err)) {
-      dispatch(_deleteUpload(id));
-    } else {
-      const errorMessage = err instanceof Error ? err.message : 'Upload failed';
-      if (retries + 1 < MAX_RETRIES) {
-        const delay = BASE_RETRY_DELAY * 2 ** retries;
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        dispatch(failUpload(id, errorMessage, uploadUrls));
-      } else {
-        dispatch(_failUpload(id, errorMessage));
+      return { ...part, eTag, uploaded: chunk.size };
+    } catch (error) {
+      if (attempt >= MAX_RETRIES || axios.isCancel(error)) {
+        throw error;
       }
+
+      const delay = BASE_RETRY_DELAY * 2 ** attempt;
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
-    if (uploadId && key) {
-      dispatch(abortUpload(entry.id));
-    }
+  }
+
+  throw getUploadError('Part upload failed', 'unknown error');
+};
+
+const updateUploadStats = (entityId: string): UploadThunkAction => (dispatch, getState) => {
+  const entry = getEntry(entityId, getState());
+  const { file, stats } = entry;
+
+  const now = Date.now();
+  const timeElapsed = now - stats.lastUpdate;
+  const uploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
+
+  if (timeElapsed > 0 && uploaded > 0) {
+    const speed = uploaded / timeElapsed;
+    const remainingBytes = file.size - uploaded;
+    const eta = speed > 0 ? remainingBytes / speed : 0;
+
+    dispatch(_updateUploadStats(entityId, speed, uploaded, eta, now));
   }
 };
 
-export const cancelUpload = (entryId: string): UploadThunkAction => (dispatch, getState) => {
-  const entry = getState().attachments.uploads.queue.find(f => f.id === entryId);
-  if (!entry) return;
+const updateStats = (): UploadThunkAction => (dispatch, getState) => {
+  const { queue } = getState().attachments.uploads;
+  const activeUploads = queue.filter(f => f.status !== AttachmentUploadStatus.Failed);
 
-  if (entry.status === AttachmentUploadStatus.Uploading) {
-    entry.cancelSource?.cancel('Upload deleted by user');
-    if (entry.key && entry.uploadId) {
-      dispatch(abortUpload(entry.id));
-    }
-  }
+  const totalSize = activeUploads.reduce((sum, upload) => sum + upload.file.size, 0);
+  const totalUploaded = activeUploads.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
+  const speed = totalUploaded / (Date.now() - (getState().attachments.uploads.stats.lastUpdate ?? 0));
+  const eta = speed > 0 ? (totalSize - totalUploaded) / speed : 0;
 
-  dispatch(_deleteUpload(entry.id));
-  dispatch(processUploadQueue());
+  dispatch(_updateStats(speed, eta, Date.now()));
 };
 
 const uploadAsync = (
@@ -288,10 +310,12 @@ const uploadAsync = (
   lineType: string,
   index: number,
   isCleanCopyRequired = false,
+  partSize = PART_SIZE,
 ): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
   const id = uuidv4();
+  const numberOfParts = Math.ceil(file.size / partSize);
 
-  dispatch(_addFile(id, file, {
+  dispatch(_addFile(id, file, numberOfParts, {
     lineType,
     index,
     isCleanCopyRequired,
@@ -301,17 +325,18 @@ const uploadAsync = (
 
   return await new Promise((resolve, reject) => {
     const unsubscribe = store.subscribe(() => {
-      const entry = getState().attachments.uploads.queue.find(f => f.id === id);
+      const entry = getEntry(id, getState());
 
-      if (!entry) return;
-
-      if (entry.status === AttachmentUploadStatus.Done && entry.attachment) {
+      if (entry.status === AttachmentUploadStatus.Completed && entry.attachment) {
         unsubscribe();
         resolve(entry);
       } else if (entry.status === AttachmentUploadStatus.Failed) {
         unsubscribe();
         const reason = entry.errorMessage ?? 'Unknown reason';
-        reject(new AttachmentUploadError(`Upload failed ${reason}`, entry));
+        reject(new AttachmentUploadError(`Upload failed: ${reason}`, entry));
+      } else if (entry.status === AttachmentUploadStatus.Cancelled) {
+        unsubscribe();
+        reject(new AttachmentUploadError('Upload cancelled', entry));
       }
     });
   });
@@ -506,7 +531,8 @@ const uploadImage = (
 });
 
 // Utility functions for formatting speed and ETA
-export const formatSpeed = (speedInBytesPerSecond: number): string => {
+export const formatSpeed = (speedInBytesPerMs: number): string => {
+  const speedInBytesPerSecond = speedInBytesPerMs * 1000;
   if (speedInBytesPerSecond < 1024) {
     return `${Math.round(speedInBytesPerSecond)} B/s`;
   } else if (speedInBytesPerSecond < 1024 * 1024) {
@@ -529,6 +555,18 @@ export const formatEta = (etaInMs: number): string => {
     const hours = Math.floor(etaInMs / (60 * 60 * 1000));
     const minutes = Math.round((etaInMs % (60 * 60 * 1000)) / (60 * 1000));
     return `${hours}h ${minutes}m`;
+  }
+};
+
+export const formatFileSize = (sizeInBytes: number): string => {
+  if (sizeInBytes < 1024) {
+    return `${sizeInBytes} B`;
+  } else if (sizeInBytes < 1024 * 1024) {
+    return `${(sizeInBytes / 1024).toFixed(1)} KB`;
+  } else if (sizeInBytes < 1024 * 1024 * 1024) {
+    return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`;
+  } else {
+    return `${(sizeInBytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
   }
 };
 

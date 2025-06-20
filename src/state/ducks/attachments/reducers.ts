@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ADD_FILE, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_UPLOAD, REMOVE_WATERMARK, RETRY_UPLOAD, SET_CANCEL_TOKEN, SET_PROCESSING, SET_STATUS, SET_UPLOAD_SESSION, START_UPLOAD, UPDATE_PROGRESS, UPDATE_STATS, UPDATE_UPLOAD_ETA, UPDATE_UPLOAD_SPEED } from './constants';
+import { ADD_FILE, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, REMOVE_WATERMARK, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
 import { AttachmentUploadAction, AttachmentUploadState, AttachmentUploadStatus, WatermarkActions, WatermarkState } from './types';
 
 const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
@@ -22,11 +22,11 @@ const watermarks = (
 
 const UPLOAD_DEFAULT_STATE: AttachmentUploadState = {
   queue: [],
-  isProcessing: false,
-  activeUploads: 0,
-  progress: 0,
-  speed: 0,
-  eta: 0,
+  stats: {
+    speed: 0,
+    eta: 0,
+    lastUpdate: 0,
+  },
 };
 
 const uploads = (
@@ -34,7 +34,7 @@ const uploads = (
   action: AttachmentUploadAction,
 ): AttachmentUploadState => {
   switch (action.type) {
-    case ADD_FILE:
+    case ADD_FILE: {
       return {
         ...state,
         queue: [
@@ -42,70 +42,93 @@ const uploads = (
           {
             id: action.payload.id,
             file: action.payload.file,
+            numberOfParts: action.payload.numberOfParts,
             status: AttachmentUploadStatus.Queued,
-            progress: 0,
             retries: 0,
-            cancelSource: null,
             attachmentMetadata: action.payload.metadata,
-            speed: 0,
-            eta: 0,
+            stats: {
+              speed: 0,
+              eta: 0,
+              uploaded: 0,
+              progress: 0,
+              lastUpdate: Date.now(),
+            },
+            cancelSource: undefined,
           },
         ],
       };
+    }
     case START_UPLOAD:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload ? {
           ...f,
-          status: AttachmentUploadStatus.Uploading,
-          startTime: Date.now(),
-          lastProgressUpdate: Date.now(),
+          status: AttachmentUploadStatus.Starting,
+          stats: {
+            uploaded: 0,
+            speed: 0,
+            eta: 0,
+            progress: 0,
+            lastUpdate: Date.now(),
+          },
         } : f),
-        activeUploads: state.activeUploads + 1,
       };
-    case UPDATE_PROGRESS:
+    case INITIALIZE_UPLOAD_SESSION:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          progress: action.payload.progress,
-          lastProgressUpdate: Date.now(),
+          status: AttachmentUploadStatus.Initialized,
+          session: {
+            key: action.payload.key,
+            uploadId: action.payload.uploadId,
+            parts: action.payload.uploadUrls.map(url => ({
+              ...url,
+              uploaded: 0,
+              lastUpdate: Date.now(),
+            })),
+          },
         } : f),
       };
-    case UPDATE_UPLOAD_SPEED:
+    case UPDATE_UPLOAD_STATS:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          speed: action.payload.speed,
-        } : f),
-      };
-    case UPDATE_UPLOAD_ETA:
-      return {
-        ...state,
-        queue: state.queue.map(f => f.id === action.payload.id ? {
-          ...f,
-          eta: action.payload.eta,
+          stats: {
+            ...f.stats,
+            speed: action.payload.speed,
+            eta: action.payload.eta,
+            uploaded: action.payload.uploaded,
+            progress: Math.round((action.payload.uploaded / f.file.size) * 100),
+            lastUpdate: action.payload.lastUpdate,
+          },
         } : f),
       };
     case UPDATE_STATS:
       return {
         ...state,
-        speed: action.payload.speed,
-        eta: action.payload.eta,
+        stats: {
+          ...state.stats,
+          speed: action.payload.speed,
+          eta: action.payload.eta,
+          lastUpdate: action.payload.lastUpdate,
+        },
       };
     case FINISH_UPLOAD:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          status: AttachmentUploadStatus.Done,
+          session: undefined,
+          status: AttachmentUploadStatus.Completed,
           attachment: action.payload.attachment,
-          progress: 100,
-          speed: 0,
-          eta: 0,
+          stats: {
+            ...f.stats,
+            uploaded: f.file.size,
+            progress: 100,
+          },
         } : f),
-        activeUploads: state.activeUploads - 1,
       };
     case FAIL_UPLOAD:
       return {
@@ -113,41 +136,52 @@ const uploads = (
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
           status: AttachmentUploadStatus.Failed,
-          retries: f.retries + 1,
+          stats: {
+            ...f.stats,
+            retries: f.retries + 1,
+          },
           errorMessage: action.payload.errorMessage,
-          speed: 0,
-          eta: 0,
         } : f),
-        activeUploads: state.activeUploads - 1,
       };
     case RETRY_UPLOAD:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          retries: f.retries + 1,
+          stats: {
+            ...f.stats,
+            retries: f.retries + 1,
+          },
           errorMessage: undefined,
-          speed: 0,
-          eta: 0,
         } : f),
       };
-    case DELETE_UPLOAD:
+    case DELETE_UPLOAD: {
       return {
         ...state,
         queue: state.queue.filter(f => f.id !== action.payload),
-        activeUploads: state.activeUploads - (state.queue.find(f => f.id === action.payload)?.status === AttachmentUploadStatus.Uploading ? 1 : 0),
       };
-    case SET_CANCEL_TOKEN:
+    }
+    case START_PARTS_UPLOADING:
       return {
         ...state,
-        queue: state.queue.map(f => f.id === action.payload.id ? { ...f, cancelSource: action.payload.source } : f),
+        stats: {
+          ...state.stats,
+          lastUpdate: Date.now(),
+        },
+        queue: state.queue.map(f => f.id === action.payload.id ? {
+          ...f,
+          status: AttachmentUploadStatus.Uploading,
+          cancelSource: action.payload.source,
+          stats: {
+            ...f.stats,
+            uploaded: 0,
+            speed: 0,
+            eta: 0,
+            lastUpdate: Date.now(),
+          },
+        } : f),
       };
-    case SET_PROCESSING:
-      return {
-        ...state,
-        isProcessing: action.payload,
-      };
-    case SET_STATUS:
+    case SET_UPLOAD_STATUS:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
@@ -155,14 +189,36 @@ const uploads = (
           status: action.payload.status,
         } : f),
       };
-    case SET_UPLOAD_SESSION:
+    case FINISH_PARTS_UPLOADING:
       return {
         ...state,
-        queue: state.queue.map(f =>
-          f.id === action.payload.id
-            ? { ...f, uploadId: action.payload.uploadId, key: action.payload.key }
-            : f,
-        ),
+        queue: state.queue.map(f => f.id === action.payload.id ? {
+          ...f,
+          status: AttachmentUploadStatus.Uploaded,
+          session: f.session ? {
+            ...f.session,
+            parts: action.payload.parts,
+          } : undefined,
+        } : f),
+      };
+    case SET_UPLOAD_PART_PROGRESS:
+      return {
+        ...state,
+        queue: state.queue.map(f => f.id === action.payload.id ? {
+          ...f,
+          session: f.session ? {
+            ...f.session,
+            parts: f.session.parts.map(part =>
+              part.partNumber === action.payload.partNumber
+                ? {
+                  ...part,
+                  uploaded: action.payload.uploaded,
+                  lastUpdate: Date.now(),
+                }
+                : part,
+            ),
+          } : f.session,
+        } : f),
       };
     default:
       return state;

@@ -5,7 +5,7 @@ import { ApplicationState } from '../../reducers';
 import { Id, Nullable, User } from '../common/types';
 import { Employee } from '../company/types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ADD_FILE, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_UPLOAD, REMOVE_WATERMARK, RETRY_UPLOAD, SET_CANCEL_TOKEN, SET_PROCESSING, SET_STATUS, SET_UPLOAD_SESSION, START_UPLOAD, UPDATE_PROGRESS, UPDATE_STATS, UPDATE_UPLOAD_ETA, UPDATE_UPLOAD_SPEED } from './constants';
+import { ADD_FILE, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, REMOVE_WATERMARK, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
 
 export interface Attachment {
   id: string
@@ -92,37 +92,40 @@ export class AttachmentUploadError extends Error {
 export type UploadThunkAction<T = unknown> = ThunkAction<T, ApplicationState, unknown, AnyAction>;
 
 export type AttachmentUploadAction =
-  | { type: typeof ADD_FILE, payload: { id: string, file: File, metadata: AttachmentMetadata } }
+  | { type: typeof ADD_FILE, payload: { id: string, file: File, numberOfParts: number, metadata: AttachmentMetadata } }
   | { type: typeof START_UPLOAD, payload: string }
-  | { type: typeof UPDATE_PROGRESS, payload: { id: string, progress: number } }
+  | { type: typeof INITIALIZE_UPLOAD_SESSION, payload: { id: string, uploadUrls: UploadUrl[], key: string, uploadId: string } }
   | { type: typeof FINISH_UPLOAD, payload: { id: string, attachment: Attachment } }
   | { type: typeof FAIL_UPLOAD, payload: { id: string, errorMessage?: string } }
   | { type: typeof RETRY_UPLOAD, payload: { id: string } }
   | { type: typeof DELETE_UPLOAD, payload: string }
-  | { type: typeof SET_CANCEL_TOKEN, payload: { id: string, source: CancelTokenSource } }
-  | { type: typeof SET_PROCESSING, payload: boolean }
-  | { type: typeof SET_STATUS, payload: { id: string, status: AttachmentUploadStatus } }
-  | { type: typeof SET_UPLOAD_SESSION, payload: { id: string, uploadId: string, key: string } }
-  | { type: typeof UPDATE_UPLOAD_SPEED, payload: { id: string, speed: number } }
-  | { type: typeof UPDATE_UPLOAD_ETA, payload: { id: string, eta: number } }
-  | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number } };
+  | { type: typeof SET_UPLOAD_STATUS, payload: { id: string, status: AttachmentUploadStatus } }
+  | { type: typeof START_PARTS_UPLOADING, payload: { id: string, source: CancelTokenSource } }
+  | { type: typeof FINISH_PARTS_UPLOADING, payload: { id: string, parts: UploadPart[] } }
+  | { type: typeof SET_UPLOAD_PART_PROGRESS, payload: { id: string, partNumber: number, uploaded: number } }
+  | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number, lastUpdate: number } }
+  | { type: typeof UPDATE_UPLOAD_STATS, payload: { id: string, speed: number, uploaded: number, eta: number, lastUpdate: number } };
 
 export interface AttachmentUploadState {
   queue: AttachmentUploadEntry[]
-  isProcessing: boolean
-  activeUploads: number
-  progress: number
-  speed: number
-  eta: number
+  stats: {
+    speed: number
+    eta: number
+    lastUpdate: number
+  }
 }
 
 export enum AttachmentUploadStatus {
-  Queued = 'QUEUED',
-  Started = 'STARTED',
-  Uploading = 'UPLOADING',
-  Uploaded = 'UPLOADED',
-  Done = 'DONE',
-  Failed = 'FAILED',
+  Queued = 100,
+  Starting = 102,
+  Initialized = 201,
+  Uploading = 202,
+  Uploaded = 206,
+  Finalizing = 299,
+  Completed = 302,
+  Cancelling = 410,
+  Cancelled = 423,
+  Failed = 500,
 }
 
 interface AttachmentUploadParent {
@@ -132,22 +135,30 @@ interface AttachmentUploadParent {
 
 export type AttachmentMetadata = Omit<UploadCompleteRequestBody, 'uploadId' | 'key' | 'parts'> & AttachmentUploadParent;
 
+export interface AttachmentUploadEntryStats {
+  speed: number
+  eta: number
+  uploaded: number
+  progress: number
+  lastUpdate: number
+}
+export interface AttachmentUploadEntrySession {
+  key: string
+  uploadId: string
+  parts: UploadPart[]
+}
 export interface AttachmentUploadEntry {
   id: string
   file: File
-  key?: string
-  uploadId?: string
-  attachment?: Attachment
   status: AttachmentUploadStatus
-  progress: number
   retries: number
-  cancelSource: CancelTokenSource | null
+  numberOfParts: number
   attachmentMetadata: AttachmentMetadata
+  stats: AttachmentUploadEntryStats
+  session?: AttachmentUploadEntrySession
+  attachment?: Attachment
+  cancelSource?: CancelTokenSource
   errorMessage?: string
-  speed: number
-  eta: number
-  startTime?: number
-  lastProgressUpdate?: number
 }
 
 export interface UploadStartRequestBody {
@@ -160,15 +171,15 @@ export interface UploadUrl {
   url: string
 }
 
+export interface UploadPart extends UploadUrl {
+  eTag?: string
+  uploaded: number
+}
+
 export interface UploadStartResponse {
   key: string
   uploadId: string
   uploadUrls: UploadUrl[]
-}
-
-export interface UploadPart {
-  eTag: string
-  partNumber: number
 }
 
 export interface UploadCompleteRequestBody {
@@ -187,7 +198,8 @@ export interface UploadAbortRequestBody {
   uploadId: string
 }
 
-export interface UploadStats {
+export interface UploadsStats {
+  totalSize: number
   totalUploads: number
   totalProgress: number
   activeUploads: number

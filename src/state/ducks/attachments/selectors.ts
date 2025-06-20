@@ -1,5 +1,5 @@
 import { ApplicationState } from '../../reducers';
-import { AttachmentUploadEntry, AttachmentUploadState, UploadStats, WatermarkState } from './types';
+import { AttachmentUploadEntry, AttachmentUploadState, UploadsStats, WatermarkState } from './types';
 
 const getWatermarks = (state: ApplicationState): WatermarkState =>
   state.attachments.watermarks;
@@ -23,17 +23,18 @@ const getUploadsByChangeRequestId = (state: ApplicationState, approvalRequestId:
     upload.attachmentMetadata.approvalRequestId === approvalRequestId,
   );
 
-const getStats = (state: ApplicationState): UploadStats => {
-  const uploads = state.attachments.uploads.queue;
-  const totalUploads = uploads.length;
-  const totalProgress = totalUploads === 0 ? 0 : Math.round(
-    uploads.reduce((sum, upload) => sum + upload.progress, 0) / totalUploads,
-  );
-  const activeUploads = uploads.filter(upload => upload.progress < 100).length;
-  const finishedUploads = uploads.filter(upload => upload.progress === 100).length;
-  const { speed, eta } = state.attachments.uploads;
+const getStats = (state: ApplicationState): UploadsStats => {
+  const uploads = state.attachments.uploads;
+  const totalUploads = uploads.queue.length;
+  const totalSize = uploads.queue.reduce((sum, upload) => sum + upload.file.size, 0);
+  const totalUploaded = uploads.queue.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
+  const totalProgress = totalUploads === 0 ? 0 : Math.round((totalUploaded / totalSize) * 100);
+  const activeUploads = uploads.queue.filter(upload => upload.stats.uploaded < upload.file.size).length;
+  const finishedUploads = uploads.queue.filter(upload => upload.stats.uploaded === upload.file.size).length;
+  const { speed, eta } = uploads.stats;
 
   return {
+    totalSize,
     totalUploads,
     totalProgress,
     activeUploads,
