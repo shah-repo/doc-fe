@@ -442,7 +442,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
 
     /** Add owner to approvals (needed for validation) */
-    const approvalsBody = concat(values.approvals || [], [{ value: owner?.id }]);
+    const approvalsBody = uniqBy(concat(values.approvals || [], [{ value: owner?.id }]), 'value');
 
     const approversWithSignatures = !values.approvals || values.approvals.length === 0
       ? [getApproverPayload(owner?.id)]
