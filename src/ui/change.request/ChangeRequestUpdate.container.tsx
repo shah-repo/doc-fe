@@ -2,6 +2,7 @@ import { cloneDeep, debounce, isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
+import { useDate } from '../../common/utils/date';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
@@ -64,6 +65,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
+  const { getStartOfDayDateString } = useDate();
 
   useEffect(() => {
     const isItemsRevDataSame = isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
@@ -123,11 +125,22 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const frozenInitialValues = cloneDeep(initialValues);
 
   const onSubmit = (values: ChangeRequestFormValues) => {
+    const updatedValues = formState.getValues();
+
     const dataToSubmit = compareValuesToSubmit(
-      frozenInitialValues,
+      {
+        ...frozenInitialValues,
+        formInput: {
+          ...frozenInitialValues.formInput,
+          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(frozenInitialValues.formInput?.effectiveDate) } : {}),
+        },
+      },
       {
         ...values,
-        formInput: formState.getValues(),
+        formInput: {
+          ...updatedValues.formInput,
+          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedValues.formInput?.effectiveDate) } : {}),
+        },
       },
       toChangeRequestEditRequestBody,
     );

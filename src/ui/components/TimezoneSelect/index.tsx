@@ -46,6 +46,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       autoHighlight
       clearOnEscape
       disabled={disabled}
+      disableClearable
     />
   );
 };

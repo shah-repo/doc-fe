@@ -22,7 +22,7 @@ const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
   });
 
   const onChange = (value) => {
-    asyncCompanyTimezone.start(updateCompanyTimezone, { timezone: value.value }, asyncCompanyTimezone);
+    asyncCompanyTimezone.start(updateCompanyTimezone, { timezone: value?.value }, asyncCompanyTimezone);
   };
 
   return (
