@@ -4,8 +4,8 @@ import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { AssignedTOCellTemplate } from './components/cells/AssignedTOCellTemplate';
 import { AssigneeActionCellTemplate } from './components/cells/AssigneeActionCellTemplate';
 import { CommentCellTemplate } from './components/cells/CommentCellTemplate';
+import { EvidenceCommonCell } from './components/cells/EvidenceCommonCell1';
 import { InstructionsCellTemplate } from './components/cells/InstructionsCellTemplate';
-import { UploadEvidenceCellTemplate } from './components/cells/UploadEvidenceCellTemplate';
 import { EditableTLItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -49,7 +49,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'approvalRequest.grid.heading.attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled }} />,
+      template: (props) => <EvidenceCommonCell {...props} {...{ employeeEvidenceUpdates, isDisabled }} />,
       width: 324,
     },
     {
