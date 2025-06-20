@@ -33,7 +33,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       {...props}
       className={classes.root}
       open={handler.isOpen}
-      hideCloseButton={hideCloseButton}
+      hideCloseButton={false}
       loading={loading}
       cancelLabel={isCancelButtonHidden ? undefined : cancelLabel}
       confirmLabel={confirmLabel}
