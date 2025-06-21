@@ -65,7 +65,7 @@ const AuditSupplierCertifications: React.FC<Props> = ({
   };
 
   const auditFieldFactory = (): ReactNode => {
-    const auditValueToUse = auditValue ?? '{}';
+    const auditValueToUse = (audit.nextValue as unknown as string) ?? '{}';
     const { certificateId, type, expiryDate, uploadedByName, attachments }
       = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as ISupplierCertification : auditValueToUse;
 
