@@ -165,7 +165,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // On revisionChangeType change
     useEffect(() => reaction(
-      () => FBDataStore.revisionChangeType,
+      () => workspaceState?.revisionChangeType,
       (revisionChangeType) => {
         if (revisionChangeType) {
           Promise.resolve(fetchRequiredGroups()).then(() => {
