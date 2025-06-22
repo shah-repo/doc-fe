@@ -210,23 +210,36 @@ const uploadParts = (
     throw getUploadError('Parts upload failed', 'session not found');
   }
 
-  const parts: UploadPart[] = [];
-
   dispatch(_startPartsUploading(id, cancelTokenSource));
 
-  for (let i = 0; i < session.parts.length; i += MAX_CONCURRENT_PARTS) {
-    const batch = session.parts.slice(i, i + MAX_CONCURRENT_PARTS);
-    const batchPromises = batch.map(async part => {
-      const chunk = file.slice((part.partNumber - 1) * PART_SIZE, part.partNumber * PART_SIZE);
-      const result = await dispatch(uploadPart(part, chunk, cancelTokenSource, id));
-      parts.push(result);
-      return result;
-    });
-    await Promise.all(batchPromises);
+  const parts: UploadPart[] = [];
+  const queue = [...session.parts];
+  const inFlight = new Set<Promise<void>>();
+
+  const uploadNext = async (part: UploadPart) => {
+    const chunk = file.slice(
+      (part.partNumber - 1) * PART_SIZE,
+      part.partNumber * PART_SIZE,
+    );
+    const result = await dispatch(uploadPart(part, chunk, cancelTokenSource, id));
+    parts.push(result);
+  };
+
+  while (queue.length > 0 || inFlight.size > 0) {
+    while (inFlight.size < MAX_CONCURRENT_PARTS && queue.length > 0) {
+      const part = queue.shift();
+      if (part) {
+        const promise = uploadNext(part).finally(() => inFlight.delete(promise));
+        inFlight.add(promise);
+      }
+    }
+
+    if (inFlight.size > 0) {
+      await Promise.race(inFlight);
+    }
   }
 
   dispatch(_finishPartsUploading(id, parts));
-
   return parts;
 };
 
