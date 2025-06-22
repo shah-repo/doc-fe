@@ -11,7 +11,6 @@ import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters
 import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
 import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
-import FBDataStore from '../FBStore/FBDataStore';
 import { usePoApprovals } from './hooks';
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
