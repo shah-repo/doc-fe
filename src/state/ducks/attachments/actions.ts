@@ -1,6 +1,7 @@
 import axios, { CancelTokenSource } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import CallbackHandler from '../../../common/callbackHandler';
+import { translate } from '../../../common/intl';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApplicationState } from '../../reducers';
 import { store } from '../../store';
@@ -57,12 +58,12 @@ const _abort = (
 const getEntry = (entryId: string, state: ApplicationState): AttachmentUploadEntry => {
   const entry = state.attachments.uploads.queue.find(f => f.id === entryId);
   if (!entry) {
-    throw getUploadError('Entry not found', 'get entry');
+    throw getUploadError(translate('attachment.upload.error.entry.not.found'), translate('attachment.upload.error.get.entry'));
   }
   return entry;
 };
 
-const getUploadError = (message: string, reason = 'Unknown reason') => {
+const getUploadError = (message: string, reason = translate('attachment.upload.error.unknown.reason')) => {
   return new Error(`${message}: ${reason}`);
 };
 
@@ -75,7 +76,7 @@ const startUpload = (entryId: string): UploadThunkAction<Promise<UploadStartResp
         dispatch(_initializeUploadSession(id, response.uploadUrls, response.key, response.uploadId));
         resolve(response);
       }),
-      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Start upload failed', error))),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.start.failed'), error))),
     };
 
     dispatch(_startUpload(id));
@@ -88,7 +89,7 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
     const { attachmentMetadata, session } = getEntry(entryId, getState());
 
     if (!session) {
-      reject(getUploadError('Complete upload failed', 'session not found'));
+      reject(getUploadError(translate('attachment.upload.error.complete.failed'), translate('attachment.upload.error.session.not.found')));
       return;
     }
 
@@ -100,7 +101,7 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
         dispatch(_finishUpload(entryId, attachment));
         resolve(attachment);
       }),
-      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Complete upload failed', error))),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.complete.failed'), error))),
     };
 
     dispatch(_complete({ uploadId, key, parts, ...attachmentMetadata }, handlers));
@@ -111,7 +112,7 @@ const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, ge
   const { id, status, cancelSource } = getEntry(entryId, getState());
 
   if (status === AttachmentUploadStatus.Uploading) {
-    cancelSource?.cancel('Upload deleted by user');
+    cancelSource?.cancel(translate('attachment.upload.deleted.by.user'));
   }
   await dispatch(abortUpload(id));
   dispatch(_deleteUpload(id));
@@ -127,7 +128,7 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
     }
 
     if (!session) {
-      reject(getUploadError('Abort upload failed', 'session not found'));
+      reject(getUploadError(translate('attachment.upload.error.abort.failed'), translate('attachment.upload.error.session.not.found')));
       return;
     }
 
@@ -140,7 +141,7 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
         dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Cancelled));
         resolve(entry);
       }),
-      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError('Abort upload failed', error))),
+      errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.abort.failed'), error))),
     };
     dispatch(_abort({ key, uploadId }, handlers));
   });
@@ -196,7 +197,7 @@ const uploadFile = (entryId: string): UploadThunkAction => async (dispatch, getS
     if (axios.isCancel(error)) {
       return;
     }
-    dispatch(failUpload(entryId, error instanceof Error ? error.message : 'unknown error'));
+    dispatch(failUpload(entryId, error instanceof Error ? error.message : translate('attachment.upload.error.unknown.error')));
   }
 };
 
@@ -207,7 +208,7 @@ const uploadParts = (
   const { id, file, session } = getEntry(entryId, getState());
 
   if (!session) {
-    throw getUploadError('Parts upload failed', 'session not found');
+    throw getUploadError(translate('attachment.upload.error.parts.failed'), translate('attachment.upload.error.session.not.found'));
   }
 
   dispatch(_startPartsUploading(id, cancelTokenSource));
@@ -267,12 +268,12 @@ const uploadPart = (
       });
 
       if (response.status !== 200) {
-        throw getUploadError('Part upload failed', response.status.toString());
+        throw getUploadError(translate('attachment.upload.error.part.failed'), response.status.toString());
       }
 
       const { eTag } = response.headers as { eTag: string };
       if (!eTag) {
-        throw getUploadError('Part upload failed', 'missing ETag');
+        throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.missing.etag'));
       }
 
       return { ...part, eTag, uploaded: chunk.size };
@@ -286,7 +287,7 @@ const uploadPart = (
     }
   }
 
-  throw getUploadError('Part upload failed', 'unknown error');
+  throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.unknown.error'));
 };
 
 const updateUploadStats = (entityId: string): UploadThunkAction => (dispatch, getState) => {
@@ -345,11 +346,11 @@ const uploadAsync = (
         resolve(entry);
       } else if (entry.status === AttachmentUploadStatus.Failed) {
         unsubscribe();
-        const reason = entry.errorMessage ?? 'Unknown reason';
-        reject(new AttachmentUploadError(`Upload failed: ${reason}`, entry));
+        const reason = entry.errorMessage ?? translate('attachment.upload.error.unknown.reason');
+        reject(new AttachmentUploadError(`${translate('attachment.upload.error.failed')}: ${reason}`, entry));
       } else if (entry.status === AttachmentUploadStatus.Cancelled) {
         unsubscribe();
-        reject(new AttachmentUploadError('Upload cancelled', entry));
+        reject(new AttachmentUploadError(translate('attachment.upload.error.cancelled'), entry));
       }
     });
   });
