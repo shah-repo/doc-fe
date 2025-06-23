@@ -5,28 +5,30 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { Audit, AuditGroupType, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { Audit, AuditGroupType, LifeCyclePhaseOptions } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
-import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { SUPPLIER_ASSESSMENT_FIELDS } from '../../components/AuditCheckboxGroupAsync';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
-import Text from '../../components/Text';
 import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
-import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
+import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
 import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
@@ -61,7 +63,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const docTypeId = documentRevisions[0].document?.documentType?.id;
 
   // fetch lifecycle phase options
-  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifecyclePahseOptionPayload[]>([]);
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifeCyclePhaseOptions[]>([]);
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
   const fetchLCPDocTypesAsync = useAsync({
@@ -71,11 +73,26 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     onError: toastError,
   });
 
+  const [aslStatusOptions, setOptions] = useState<ASLStatus[]>([]);
+  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
+
+  const supplierTypesAsync = useAsync<ASLStatus[]>({
+    onSuccess: (aslStatusList) => {
+      setOptions(aslStatusList ?? []);
+    },
+    onError: toastError,
+  });
+
   useEffect(() => {
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
       fetchLCPDocTypesAsync,
+    );
+    supplierTypesAsync.start(
+      fetchASLTypes,
+      false,
+      supplierTypesAsync,
     );
   }, []);
 
@@ -239,6 +256,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             label: fbLabel as string,
             field: fieldName,
           });
+        }
+      }
+
+      if (fbType === 'checkboxgroupasync') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (field === 'id') {
+          return;
         }
       }
 
@@ -406,6 +431,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
+      if (fbType === 'supplierContacts') {
+        const field = change.field.split('.').pop() as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+
+        if (['STRING_EDITED', 'STRING_DELETED', 'STRING_NEW'].includes(change.type)) {
+          fbLabel = translate(`formInput.supplier-contacts[].${field}`);
+        }
+
+        if (['isPrimary'].includes(field)) {
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
+        }
+      }
+
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
@@ -496,7 +539,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // For inputs where the selected value is - Other, it shows an additional input field with a label of Note.
         // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
         if (change.field.includes('input-context') && change.fbSchemaItem) {
-          fbLabel = 'Note';
+          if (SUPPLIER_ASSESSMENT_FIELDS.some((field) => change.field.includes(field))) {
+            fbLabel = translate('form.builder.supplier.context.other', { field: fbLabel as string });
+          } else {
+            fbLabel = 'Note';
+          }
         }
 
         if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
@@ -509,7 +556,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
-        const isCustomBooleanField = change.field === CUSTOM_BOOLEAN_FIELD;
+        const isCustomBooleanField = [change.field, change.updatedField].includes(CUSTOM_BOOLEAN_FIELD);
+
+        if (isCustomBooleanField && fbType === 'supplierContacts') {
+          const field = change.field.split('.').pop() as string;
+          fbLabel = translate(`formInput.supplier-contacts[].${field}.${change.type}`);
+        }
 
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
@@ -575,6 +627,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   dataCy={`change-value-${groupKey}-${key}`}
                   revIdRelatedTypeObj={revIdRelatedTypeObj}
                   lifecyclePhaseOptions={lifecyclePhaseOptions}
+                  aslStatusOptions={aslStatusOptions}
                 />
               </div>
             )}
@@ -642,6 +695,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               dataCy={`change-value-${change.groupKey}-${change.index}`}
               revIdRelatedTypeObj={revIdRelatedTypeObj}
               lifecyclePhaseOptions={lifecyclePhaseOptions}
+              aslStatusOptions={aslStatusOptions}
             />
           </div>
         ))}

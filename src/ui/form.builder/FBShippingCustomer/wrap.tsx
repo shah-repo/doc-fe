@@ -1,20 +1,23 @@
+import { debounce } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import { useEffect, useState } from 'react';
-import { FB, FBAutocompleteAsyncOption } from '..';
+import { useEffect, useRef, useState } from 'react';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { INPUT_CONTEXT_SHIPPING_METHOD_FIELD, SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
-export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
-  Component: React.FC<T>,
-): React.FC<T> => {
+export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Component: React.FC<T>): React.FC<T> => {
   const Comp = (props: T) => {
     const { name } = props;
     const { workspaceState, formState } = FB.useStores();
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const previousCustomerIdRef = useRef<string>('');
     const [latestRevisionSummary, setLatestRevisionSummary] = useState<CustomerRevisionInfo>();
     const customerId = useObserver(
       () =>
@@ -22,18 +25,79 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         || workspaceState?.formInputSync.get(name)
         || workspaceState?.formInput?.shippingCustomer,
     );
+    const hasShippingMethodFieldExists = useObserver(() => workspaceState?.schema?.some((field) => !field.deleted && field.type === SHIPPING_METHOD_FIELD) ?? false);
 
     const [autocompleteKey, setAutocompleteKey] = useState<string | undefined>(customerId);
 
-    const fetchLatestRevisionSummary = useActionCreator(
-      allocationActions.fetchLatestRevisionDetailsByRevId,
-    );
+    const fetchLatestRevisionSummary = useActionCreator(allocationActions.fetchLatestRevisionDetailsByRevId);
     const latestRevisionSummaryAsync = useAsync<CustomerRevisionInfo>({
       onSuccess: (data) => {
         setLatestRevisionSummary(data);
       },
       onError: toastError,
     });
+
+    const customersAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.shippingInformation,
+    });
+
+    useEffect(() => {
+      customersAsync.load();
+    }, [customersAsync]);
+
+    useEffect(() => {
+      const updateCustomerShippingMethod = (customerId: string, shippingMethod: string) => {
+        const setCustomerShippingMethod = () => {
+          if (!workspaceState?.loading) {
+            workspaceState?.saveDocRev(formState?.getValues());
+            previousCustomerIdRef.current = customerId;
+            if (hasShippingMethodFieldExists) {
+            formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
+            formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+            }
+          } else {
+            debounceTimerRef.current = setTimeout(setCustomerShippingMethod, 0);
+          }
+        };
+        setCustomerShippingMethod();
+      };
+
+      const disposer = reaction(
+        () => customersAsync.autocompleteValueApi.data,
+        (data) => {
+          if (!data) return;
+
+          const currentCustomerId = data.id;
+          if (currentCustomerId === previousCustomerIdRef.current) return;
+
+          const shippingMethod = data?.formInput?.shippingMethod;
+          const inputContextshippingMethod = data?.formInput?.[INPUT_CONTEXT_SHIPPING_METHOD_FIELD];
+
+          if (hasShippingMethodFieldExists) {
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod, !shippingMethod);
+          formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, inputContextshippingMethod);
+          updateCustomerShippingMethod(currentCustomerId, shippingMethod);
+          }
+        },
+      );
+
+      return () => {
+        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+        disposer();
+      };
+    }, []);
+
+    const onShippingCustomerChange = debounce(() => {
+      const selectedCustomerId = formState?.getFieldValue(name);
+
+      if (selectedCustomerId) {
+        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+      } else {
+        updatedDefaultShippingMethodField();
+        workspaceState?.saveDocRev(formState?.getValues());
+      }
+    }, 100, { leading: false, trailing: true },
+    );
 
     useEffect(() => {
       if (!FB.isUUID(customerId)) {
@@ -45,13 +109,29 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         customerId,
         latestRevisionSummaryAsync,
       );
-    }, []);
+    }, [customerId]);
 
     useEffect(() => {
       if (FB.isUUID(customerId)) {
         setAutocompleteKey(customerId);
       }
     }, [customerId]);
+
+    const updatedDefaultShippingMethodField = () => {
+      if (hasShippingMethodFieldExists) {
+      formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
+      formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, undefined);
+      }
+    };
+
+    const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {
+      if (!selectedCustomerId) {
+        updatedDefaultShippingMethodField();
+      } else {
+        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+      }
+    };
 
     const clearAddressFields = () => {
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS, {});
@@ -63,6 +143,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     const updateLatestAvailableRevision = () => {
       const newCustomerId = latestRevisionSummary?.revisionDetails.id;
       formState?.setFieldValue(name, newCustomerId);
+      updateLatestRevShippingMethod(newCustomerId);
       setAutocompleteKey(newCustomerId);
       clearAddressFields();
     };
@@ -71,6 +152,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       FBAutocompleteAsyncStore.reset(FBAutocompleteAsyncOption.shippingInformation);
       setLatestRevisionSummary(undefined);
       formState?.setFieldValue(name, '');
+      updatedDefaultShippingMethodField();
       setAutocompleteKey('');
       clearAddressFields();
     };
@@ -81,6 +163,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       latestRevisionSummary: latestRevisionSummary,
       resetOBSCustomerSelection,
       autocompleteKey: autocompleteKey,
+      onShippingCustomerChange,
     });
   };
 

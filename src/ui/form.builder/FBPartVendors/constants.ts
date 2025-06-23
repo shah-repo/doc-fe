@@ -3,7 +3,10 @@ import { Currency } from './types';
 
 export const DEFAULT_CURRENCY = Currency.USD;
 
+export const TEXT_FIELD = 'text';
+export const DATA_ITEM_KEY = 'value';
 export const SUPPLIER_FIELD = 'supplierName';
 export const SUPPLIER_STATUS_FIELD = 'supplierStatus';
+export const SUPPLIER_STATE_FIELD = 'supplierState';
 
-export const FIELDS_TO_OMIT = [MODE_FIELD, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD];
+export const FIELDS_TO_OMIT = [MODE_FIELD, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD, SUPPLIER_STATE_FIELD];

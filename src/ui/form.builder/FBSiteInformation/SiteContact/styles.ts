@@ -7,10 +7,10 @@ export default makeStyles(theme => ({
     margin: theme.spacing(3, 0),
   },
   detailsGridAddButton: {
-    maxWidth: '55vw',
+    maxWidth: '70vw',
   },
   detailsGrid: {
-    maxWidth: '55vw',
+    maxWidth: '70vw',
     '& .k-column-title': {
       fontSize: 12,
     },

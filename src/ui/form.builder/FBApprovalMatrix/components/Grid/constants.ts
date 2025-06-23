@@ -1,4 +1,6 @@
 import { State } from '@progress/kendo-data-query';
+import { translate } from '../../../../../common/intl';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 
 export const MODE_FIELD = '_mode';
 
@@ -31,4 +33,10 @@ export const DEFAULT_DATA_STATE: State = {
       },
     ],
   },
+};
+
+export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTreeListColumnProps[] => {
+  return [...columns].filter(col => !col.isHidden).map(col => {
+        return { ...col, title: translate(col.title) };
+  });
 };

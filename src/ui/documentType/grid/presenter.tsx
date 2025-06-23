@@ -65,6 +65,7 @@ export function DocumentTypePresenter ({
     : {
       documentTypeId: documentType.id,
     };
+
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>,
   ) => {

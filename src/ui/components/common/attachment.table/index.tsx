@@ -50,7 +50,7 @@ const AttachmentTable: React.FC<Props> = ({
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
   const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
   const { _formState } = SM.useStores();
-  const isDisabled = documentRevision?.status === DocumentRevisionStatus.Released;
+  const isDisabled = [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Approved, DocumentRevisionStatus.Deprecated].includes(documentRevision?.status);
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (values?: DocumentRevision) => {

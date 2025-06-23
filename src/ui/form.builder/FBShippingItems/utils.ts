@@ -27,6 +27,10 @@ export const useOptions: UseOptionsHook = () => {
     });
   };
 
+  const clearLots = () => {
+    setLots([]);
+  };
+
   useEffect(() => {
     partsAsync.load();
   }, [partsAsync]);
@@ -52,6 +56,7 @@ export const useOptions: UseOptionsHook = () => {
     parts,
     isLotsloading,
     isPartsloading,
+    clearLots,
     fetchLotsByPartId,
   };
 };
