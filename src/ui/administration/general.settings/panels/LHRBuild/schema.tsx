@@ -3,14 +3,12 @@ import ActionsCellTemplate from '../../components/SettingsTable/components/Actio
 import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
-// import { IncludedInTotalQtyCellTemplate } from './components/IncludedInTotalQtyCellTemplate';
 import { EditableLHRBuild } from './types';
 
 export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   isActive,
   onEdit,
   onActiveStateChange,
-  onDelete,
   onDiscard,
   onConfirm,
 }) => {
@@ -34,8 +32,8 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       template: TextCellTemplate,
     },
     {
-      id: 'label',
-      field: 'label',
+      id: 'displayLabel',
+      field: 'displayLabel',
       title: 'administration.general.settings.suppliers.customer.label',
       template: TextCellTemplate,
       width: 160,
@@ -50,7 +48,6 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
           {...props}
           isActive={isActive}
           onEdit={onEdit}
-          onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
         />

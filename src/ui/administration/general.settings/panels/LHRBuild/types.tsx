@@ -3,7 +3,7 @@ import { EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid
 export interface LHRBuild {
   id: string
   internalType: string
-  label: string
+  displayLabel: string
   isActive: boolean
 }
 

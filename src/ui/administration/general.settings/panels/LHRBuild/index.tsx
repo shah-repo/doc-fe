@@ -22,7 +22,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-  const LHRBuilds = settings.lhrBuilds;
+  const LHRBuilds = settings.lhrBuildTypeConfig;
 
   const [LHRBuildsData, setLHRBuildData] = React.useState<LHRBuild[]>(LHRBuilds ?? []);
   const [editedLHRBuild, setEditedLHRBuild] = React.useState<EditableLHRBuild>();
@@ -39,19 +39,22 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const updateLHRBuilds = (updatedLHRBuilds: LHRBuild[]) => {
     setLHRBuildData(updatedLHRBuilds);
-    async.start(updateLHRBuildsSettings, { ...values, lhrBuilds: updatedLHRBuilds }, '', 'POST', async);
+    async.start(updateLHRBuildsSettings, { ...values, lhrBuildTypeConfig: updatedLHRBuilds }, '', 'POST', async);
   };
 
   const formik = useFormik<EditableLHRBuild | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = LHRBuilds?.some(({ internalType, id }) => internalType.toLowerCase() === values?.internalType?.toLowerCase() && id !== values.id);
+      const isDuplicate = LHRBuilds?.some(({ internalType, id }) => internalType.toLowerCase() === values?.internalType?.toLowerCase().trim() && id !== values.id);
       if (isEmpty(values.internalType)) {
-        error.name = 'validators.required';
+        error.internalType = 'validators.required';
+      }
+      if (isEmpty(values.displayLabel)) {
+        error.displayLabel = 'validators.required';
       }
       if (values.internalType && isDuplicate) {
-        error.name = 'validator.lhr.build.same.internal.exist';
+        error.internalType = 'validator.lhr.build.same.internal.exist';
       }
       return error;
     },
@@ -82,7 +85,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setEditedLHRBuild({
       id: uuidv4(),
       internalType: '',
-      label: '',
+      displayLabel: '',
       isActive: true,
       [MODE_FIELD]: Mode.add,
     });

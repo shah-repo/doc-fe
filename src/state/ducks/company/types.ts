@@ -288,7 +288,7 @@ export interface GeneralSettings {
     removeFromDam: ApprovalRoleItem[]
     dam: Dam
   }
-  lhrBuilds?: LHRBuild[]
+  lhrBuildTypeConfig?: LHRBuild[]
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

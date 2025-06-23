@@ -87,7 +87,7 @@
   "validator.location.same.name.exist": "This location already exists, please enter a different location name",
   "validator.location.name.required": "The Equipment Location name is required",
   "validator.approval.role.same.name.exist": "Choose a different approval role as same name already exists (ignoring lower/upper case)",
-  "validator.lhr.build.same.internal.exist": "This LHR Build already exists, please enter a different name",
+  "validator.lhr.build.same.internal.exist": "This internal type already exists, please enter a different name",
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
   "errors.fetch.tryAgain": "Try again",
