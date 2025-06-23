@@ -97,11 +97,11 @@ export type AttachmentUploadAction =
   | { type: typeof INITIALIZE_UPLOAD_SESSION, payload: { id: string, uploadUrls: UploadUrl[], key: string, uploadId: string } }
   | { type: typeof FINISH_UPLOAD, payload: { id: string, attachment: Attachment } }
   | { type: typeof FAIL_UPLOAD, payload: { id: string, errorMessage?: string } }
-  | { type: typeof RETRY_UPLOAD, payload: { id: string } }
+  | { type: typeof RETRY_UPLOAD, payload: string }
   | { type: typeof DELETE_UPLOAD, payload: string }
   | { type: typeof SET_UPLOAD_STATUS, payload: { id: string, status: AttachmentUploadStatus } }
   | { type: typeof START_PARTS_UPLOADING, payload: { id: string, source: CancelTokenSource } }
-  | { type: typeof FINISH_PARTS_UPLOADING, payload: { id: string, parts: UploadPart[] } }
+  | { type: typeof FINISH_PARTS_UPLOADING, payload: { id: string, parts: EntryUploadPart[] } }
   | { type: typeof SET_UPLOAD_PART_PROGRESS, payload: { id: string, partNumber: number, uploaded: number } }
   | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number, lastUpdate: number } }
   | { type: typeof UPDATE_UPLOAD_STATS, payload: { id: string, speed: number, uploaded: number, eta: number, lastUpdate: number } };
@@ -145,7 +145,7 @@ interface AttachmentUploadEntryStats {
 interface AttachmentUploadEntrySession {
   key: string
   uploadId: string
-  parts: UploadPart[]
+  parts: EntryUploadPart[]
 }
 export interface AttachmentUploadEntry {
   id: string
@@ -171,8 +171,12 @@ export interface UploadUrl {
   url: string
 }
 
-export interface UploadPart extends UploadUrl {
+export interface UploadPart {
   eTag?: string
+  partNumber: number
+}
+
+export interface EntryUploadPart extends UploadPart, UploadUrl {
   uploaded: number
 }
 

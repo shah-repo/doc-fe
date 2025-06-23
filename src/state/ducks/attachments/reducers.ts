@@ -146,12 +146,9 @@ const uploads = (
     case RETRY_UPLOAD:
       return {
         ...state,
-        queue: state.queue.map(f => f.id === action.payload.id ? {
+        queue: state.queue.map(f => f.id === action.payload ? {
           ...f,
-          stats: {
-            ...f.stats,
-            retries: f.retries + 1,
-          },
+          retries: f.retries + 1,
           errorMessage: undefined,
         } : f),
       };

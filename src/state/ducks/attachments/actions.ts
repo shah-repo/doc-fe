@@ -9,7 +9,7 @@ import { ApiAction, Handlers } from '../../types';
 import { authActions } from '../auth';
 import { EmployeeEditRequestBody } from '../auth/types';
 import { ADD_FILE, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, MAX_CONCURRENT_PARTS, MAX_CONCURRENT_UPLOADS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
-import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentMetadata, AttachmentType, AttachmentUploadEntry, AttachmentUploadError, AttachmentUploadStatus, AvatarS3linkResponse, ClearWatermarkAction, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
+import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentMetadata, AttachmentType, AttachmentUploadEntry, AttachmentUploadError, AttachmentUploadStatus, AvatarS3linkResponse, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
 
 const _addFile = (id: string, file: File, numberOfParts: number, metadata: AttachmentMetadata) => ({ type: ADD_FILE, payload: { id, file, numberOfParts, metadata } });
 const _startUpload = (id: string) => ({ type: START_UPLOAD, payload: id });
@@ -95,7 +95,13 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
 
     dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Finalizing));
 
-    const { key, uploadId, parts } = session;
+    const { key, uploadId } = session;
+
+    const parts = session.parts.map(({ eTag, partNumber }) => ({
+      eTag,
+      partNumber,
+    }));
+
     const handlers: Handlers<Attachment> = {
       successHandler: new CallbackHandler<Attachment>((attachment) => {
         dispatch(_finishUpload(entryId, attachment));
@@ -147,28 +153,16 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
   });
 };
 
-const failUpload = (entryId: string, errorMessage?: string): UploadThunkAction => async (dispatch, getState) => {
-  const entry = getEntry(entryId, getState());
+const failUpload = (entryId: string, errorMessage: string): UploadThunkAction => async (dispatch, getState) => {
+  const { status, retries } = getEntry(entryId, getState());
 
-  if (entry.retries + 1 < MAX_RETRIES) {
-    const delay = BASE_RETRY_DELAY * 2 ** entry.retries;
+  const isStatusValid = status < AttachmentUploadStatus.Completed && status !== AttachmentUploadStatus.Uploading;
+
+  if (retries + 1 <= MAX_RETRIES && isStatusValid) {
+    const delay = BASE_RETRY_DELAY * 2 ** retries;
     await new Promise((resolve) => setTimeout(resolve, delay));
     dispatch(_retryUpload(entryId));
-    switch (entry.status) {
-      case AttachmentUploadStatus.Starting:
-        await dispatch(startUpload(entryId));
-        break;
-      case AttachmentUploadStatus.Initialized:
-      case AttachmentUploadStatus.Uploading:
-        await dispatch(uploadParts(entryId));
-        break;
-      case AttachmentUploadStatus.Uploaded:
-      case AttachmentUploadStatus.Finalizing:
-        await dispatch(completeUpload(entryId));
-        break;
-      default:
-        dispatch(_failUpload(entryId, errorMessage));
-    }
+    await dispatch(uploadFile(entryId));
   } else {
     dispatch(_failUpload(entryId, errorMessage));
     await dispatch(abortUpload(entryId));
@@ -189,10 +183,22 @@ const processUploadQueue = (): UploadThunkAction => async (dispatch, getState) =
 
 const uploadFile = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
   try {
-    const { id } = getEntry(entryId, getState());
-    await dispatch(startUpload(id));
-    await dispatch(uploadParts(id));
-    await dispatch(completeUpload(id));
+    const { status } = getEntry(entryId, getState());
+
+    switch (status) {
+      case AttachmentUploadStatus.Queued:
+      case AttachmentUploadStatus.Starting:
+        await dispatch(startUpload(entryId));
+        // fall through
+      case AttachmentUploadStatus.Initialized:
+      case AttachmentUploadStatus.Uploading:
+        await dispatch(uploadParts(entryId));
+        // fall through
+      case AttachmentUploadStatus.Uploaded:
+      case AttachmentUploadStatus.Finalizing:
+        await dispatch(completeUpload(entryId));
+        break;
+    }
   } catch (error) {
     if (axios.isCancel(error)) {
       return;
@@ -212,12 +218,13 @@ const uploadParts = (
   }
 
   dispatch(_startPartsUploading(id, cancelTokenSource));
+  dispatch(updateUploadStats(id));
 
-  const parts: UploadPart[] = [];
+  const parts: EntryUploadPart[] = [];
   const queue = [...session.parts];
   const inFlight = new Set<Promise<void>>();
 
-  const uploadNext = async (part: UploadPart) => {
+  const uploadNext = async (part: EntryUploadPart) => {
     const chunk = file.slice(
       (part.partNumber - 1) * PART_SIZE,
       part.partNumber * PART_SIZE,
@@ -240,17 +247,17 @@ const uploadParts = (
     }
   }
 
-  dispatch(_finishPartsUploading(id, parts));
+  dispatch(_finishPartsUploading(id, parts.sort((a, b) => a.partNumber - b.partNumber)));
   return parts;
 };
 
 const uploadPart = (
-  part: UploadUrl,
+  part: EntryUploadPart,
   chunk: Blob,
   cancelTokenSource: CancelTokenSource,
   uploadId: string,
-): UploadThunkAction<Promise<UploadPart>> => async (dispatch) => {
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+): UploadThunkAction<Promise<EntryUploadPart>> => async (dispatch) => {
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await axios({
         method: 'PUT',
@@ -260,7 +267,6 @@ const uploadPart = (
         onUploadProgress: (progressEvent: ProgressEvent) => {
           dispatch(_setUploadPartProgress(uploadId, part.partNumber, progressEvent.loaded));
           dispatch(updateUploadStats(uploadId));
-          dispatch(updateStats());
         },
         headers: {
           'Content-Type': chunk.type ?? 'application/octet-stream',
@@ -271,7 +277,7 @@ const uploadPart = (
         throw getUploadError(translate('attachment.upload.error.part.failed'), response.status.toString());
       }
 
-      const { eTag } = response.headers as { eTag: string };
+      const { etag: eTag } = response.headers as { etag: string };
       if (!eTag) {
         throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.missing.etag'));
       }
@@ -304,6 +310,7 @@ const updateUploadStats = (entityId: string): UploadThunkAction => (dispatch, ge
     const eta = speed > 0 ? remainingBytes / speed : 0;
 
     dispatch(_updateUploadStats(entityId, speed, uploaded, eta, now));
+    dispatch(updateStats());
   }
 };
 
