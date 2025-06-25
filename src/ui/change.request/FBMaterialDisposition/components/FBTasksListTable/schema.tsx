@@ -4,7 +4,7 @@ import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { AssignedTOCellTemplate } from './components/cells/AssignedTOCellTemplate';
 import { AssigneeActionCellTemplate } from './components/cells/AssigneeActionCellTemplate';
 import { CommentCellTemplate } from './components/cells/CommentCellTemplate';
-import { EvidenceCommonCell } from './components/cells/EvidenceCommonCell1';
+import { EvidenceCommonCell } from './components/cells/EvidenceCommonCell';
 import { InstructionsCellTemplate } from './components/cells/InstructionsCellTemplate';
 import { EditableTLItem, SchemaOptions } from './types';
 
