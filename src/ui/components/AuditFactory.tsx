@@ -64,7 +64,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, getFormattedStartOfDayDateString } = useDate();
 
   const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
@@ -811,6 +811,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } catch (err) {
           // do nothing
         }
+        break;
+      case 'formInput.po-items-built-in.dateOfExchangeRate':
+        returnValue = (<div data-cy={dataCy}>{getFormattedStartOfDayDateString(auditValue)}</div>);
         break;
       case 'formInput.po-items-built-in.items.order':
       case 'formInput.po-items-built-in.items.totalAmount':
