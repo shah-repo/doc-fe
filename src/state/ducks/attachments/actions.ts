@@ -8,24 +8,24 @@ import { store } from '../../store';
 import { ApiAction, Handlers } from '../../types';
 import { authActions } from '../auth';
 import { EmployeeEditRequestBody } from '../auth/types';
-import { ADD_FILE, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, MAX_CONCURRENT_PARTS, MAX_CONCURRENT_UPLOADS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
-import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentMetadata, AttachmentType, AttachmentUploadEntry, AttachmentUploadError, AttachmentUploadStatus, AvatarS3linkResponse, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
+import { ADD_ENTRY, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, MAX_CONCURRENT_ENTRIES, MAX_CONCURRENT_PARTS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, STATS_UPDATE_THROTTLE, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
+import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentType, AttachmentUploadEntry, AttachmentUploadEntryMetadata, AttachmentUploadEntryStatus, AttachmentUploadError, AvatarS3linkResponse, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
 
-const _addFile = (id: string, file: File, numberOfParts: number, metadata: AttachmentMetadata) => ({ type: ADD_FILE, payload: { id, file, numberOfParts, metadata } });
-const _startUpload = (id: string) => ({ type: START_UPLOAD, payload: id });
-const _finishUpload = (id: string, attachment: Attachment) => ({ type: FINISH_UPLOAD, payload: { id, attachment } });
-const _retryUpload = (id: string) => ({ type: RETRY_UPLOAD, payload: id });
-const _failUpload = (id: string, errorMessage?: string) => ({ type: FAIL_UPLOAD, payload: { id, errorMessage } });
-const _deleteUpload = (id: string) => ({ type: DELETE_UPLOAD, payload: id });
-const _setUploadStatus = (id: string, status: AttachmentUploadStatus) => ({ type: SET_UPLOAD_STATUS, payload: { id, status } });
-const _updateUploadStats = (id: string, speed: number, uploaded: number, eta: number, lastUpdate: number) => ({ type: UPDATE_UPLOAD_STATS, payload: { id, speed, uploaded, eta, lastUpdate } });
-const _updateStats = (speed: number, eta: number, lastUpdate: number) => ({ type: UPDATE_STATS, payload: { speed, eta, lastUpdate } });
-const _initializeUploadSession = (id: string, uploadUrls: UploadUrl[], key: string, uploadId: string) => ({ type: INITIALIZE_UPLOAD_SESSION, payload: { id, uploadUrls, key, uploadId } });
-const _startPartsUploading = (id: string, source: CancelTokenSource) => ({ type: START_PARTS_UPLOADING, payload: { id, source } });
-const _finishPartsUploading = (id: string, parts: UploadPart[]) => ({ type: FINISH_PARTS_UPLOADING, payload: { id, parts } });
-const _setUploadPartProgress = (id: string, partNumber: number, uploaded: number) => ({ type: SET_UPLOAD_PART_PROGRESS, payload: { id, partNumber, uploaded } });
+const _addEntry = (id: string, file: File, numberOfParts: number, metadata: AttachmentUploadEntryMetadata) => ({ type: ADD_ENTRY, payload: { id, file, numberOfParts, metadata } });
+const _initializeEntry = (id: string) => ({ type: INITIALIZE_ENTRY, payload: id });
+const _initializeEntrySession = (id: string, uploadUrls: UploadUrl[], key: string, uploadId: string) => ({ type: INITIALIZE_ENTRY_SESSION, payload: { id, uploadUrls, key, uploadId } });
+const _finalizeEntry = (id: string, attachment: Attachment) => ({ type: FINALIZE_ENTRY, payload: { id, attachment } });
+const _retryEntry = (id: string) => ({ type: RETRY_ENTRY, payload: id });
+const _failEntry = (id: string, errorMessage?: string) => ({ type: FAIL_ENTRY, payload: { id, errorMessage } });
+const _deleteEntry = (id: string) => ({ type: DELETE_ENTRY, payload: id });
+const _setEntryStatus = (id: string, status: AttachmentUploadEntryStatus) => ({ type: SET_ENTRY_STATUS, payload: { id, status } });
+const _updateEntryStats = (id: string, speed: number, uploaded: number, eta: number) => ({ type: UPDATE_ENTRY_STATS, payload: { id, speed, uploaded, eta } });
+const _updateStats = (speed: number, eta: number) => ({ type: UPDATE_STATS, payload: { speed, eta } });
+const _startEntryPartsUploading = (id: string, source: CancelTokenSource) => ({ type: START_ENTRY_PARTS_UPLOADING, payload: { id, source } });
+const _finishEntryPartsUploading = (id: string, parts: UploadPart[]) => ({ type: FINISH_ENTRY_PARTS_UPLOADING, payload: { id, parts } });
+const _setEntryPartProgress = (id: string, partNumber: number, uploaded: number) => ({ type: SET_ENTRY_PART_PROGRESS, payload: { id, partNumber, uploaded } });
 
-const _start = (
+const _startUploadApiAction = (
   data: UploadStartRequestBody,
   handlers: Handlers<UploadStartResponse>,
 ) => apiActionWithCallbacks<UploadStartResponse, UploadStartRequestBody>({
@@ -35,7 +35,7 @@ const _start = (
   handlers,
 });
 
-const _complete = (
+const _completeUploadApiAction = (
   data: UploadCompleteRequestBody,
   handlers: Handlers<Attachment>,
 ) => apiActionWithCallbacks<Attachment, UploadCompleteRequestBody>({
@@ -45,7 +45,7 @@ const _complete = (
   handlers,
 });
 
-const _abort = (
+const _abortUploadApiAction = (
   data: UploadAbortRequestBody,
   handlers: Handlers<AttachmentUploadEntry>,
 ) => apiActionWithCallbacks<AttachmentUploadEntry, UploadAbortRequestBody>({
@@ -73,14 +73,14 @@ const startUpload = (entryId: string): UploadThunkAction<Promise<UploadStartResp
 
     const handlers: Handlers<UploadStartResponse> = {
       successHandler: new CallbackHandler<UploadStartResponse>((response) => {
-        dispatch(_initializeUploadSession(id, response.uploadUrls, response.key, response.uploadId));
+        dispatch(_initializeEntrySession(id, response.uploadUrls, response.key, response.uploadId));
         resolve(response);
       }),
       errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.start.failed'), error))),
     };
 
-    dispatch(_startUpload(id));
-    dispatch(_start({ fileName: file.name, numberOfParts }, handlers));
+    dispatch(_initializeEntry(id));
+    dispatch(_startUploadApiAction({ fileName: file.name, numberOfParts }, handlers));
   });
 };
 
@@ -93,7 +93,7 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
       return;
     }
 
-    dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Finalizing));
+    dispatch(_setEntryStatus(entryId, AttachmentUploadEntryStatus.Finalizing));
 
     const { key, uploadId } = session;
 
@@ -104,24 +104,25 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
 
     const handlers: Handlers<Attachment> = {
       successHandler: new CallbackHandler<Attachment>((attachment) => {
-        dispatch(_finishUpload(entryId, attachment));
+        dispatch(_finalizeEntry(entryId, attachment));
         resolve(attachment);
       }),
       errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.complete.failed'), error))),
     };
 
-    dispatch(_complete({ uploadId, key, parts, ...attachmentMetadata }, handlers));
+    dispatch(_completeUploadApiAction({ uploadId, key, parts, ...attachmentMetadata }, handlers));
   });
 };
 
 const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
   const { id, status, cancelSource } = getEntry(entryId, getState());
 
-  if (status === AttachmentUploadStatus.Uploading) {
+  if (status === AttachmentUploadEntryStatus.Uploading) {
     cancelSource?.cancel(translate('attachment.upload.deleted.by.user'));
   }
   await dispatch(abortUpload(id));
-  dispatch(_deleteUpload(id));
+  dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
+  dispatch(_deleteEntry(id));
 };
 
 const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -129,8 +130,9 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
     const entry = getEntry(entryId, getState());
     const { session, status } = entry;
 
-    if (status < AttachmentUploadStatus.Initialized) {
+    if (status < AttachmentUploadEntryStatus.Initialized) {
       resolve(entry);
+      return;
     }
 
     if (!session) {
@@ -140,44 +142,44 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
 
     const { key, uploadId } = session;
 
-    dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Cancelling));
+    dispatch(_setEntryStatus(entryId, AttachmentUploadEntryStatus.Aborting));
 
     const handlers: Handlers<AttachmentUploadEntry> = {
       successHandler: new CallbackHandler<AttachmentUploadEntry>(() => {
-        dispatch(_setUploadStatus(entryId, AttachmentUploadStatus.Cancelled));
+        dispatch(_setEntryStatus(entryId, AttachmentUploadEntryStatus.Aborted));
         resolve(entry);
       }),
       errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.abort.failed'), error))),
     };
-    dispatch(_abort({ key, uploadId }, handlers));
+    dispatch(_abortUploadApiAction({ key, uploadId }, handlers));
   });
 };
 
 const failUpload = (entryId: string, errorMessage: string): UploadThunkAction => async (dispatch, getState) => {
   const { status, retries } = getEntry(entryId, getState());
 
-  const isStatusValid = status < AttachmentUploadStatus.Completed && status !== AttachmentUploadStatus.Uploading;
+  const isStatusValid = status < AttachmentUploadEntryStatus.Completed && status !== AttachmentUploadEntryStatus.Uploading;
 
   if (retries + 1 <= MAX_RETRIES && isStatusValid) {
     const delay = BASE_RETRY_DELAY * 2 ** retries;
     await new Promise((resolve) => setTimeout(resolve, delay));
-    dispatch(_retryUpload(entryId));
+    dispatch(_retryEntry(entryId));
     await dispatch(uploadFile(entryId));
   } else {
-    dispatch(_failUpload(entryId, errorMessage));
     await dispatch(abortUpload(entryId));
+    dispatch(_failEntry(entryId, errorMessage));
   }
 };
 
 const processUploadQueue = (): UploadThunkAction => async (dispatch, getState) => {
   const { queue } = getState().attachments.uploads;
-  const activeUploads = queue.filter(f => f.status === AttachmentUploadStatus.Uploading).length;
+  const activeUploads = queue.filter(f => f.status === AttachmentUploadEntryStatus.Uploading).length;
 
-  const candidates = queue.filter(f => [AttachmentUploadStatus.Queued, AttachmentUploadStatus.Failed].includes(f.status) && f.retries < MAX_RETRIES);
+  const candidates = queue.filter(f => [AttachmentUploadEntryStatus.Queued, AttachmentUploadEntryStatus.Failed].includes(f.status) && f.retries < MAX_RETRIES);
 
-  if (candidates.length === 0 || activeUploads >= MAX_CONCURRENT_UPLOADS) return;
+  if (candidates.length === 0 || activeUploads >= MAX_CONCURRENT_ENTRIES) return;
 
-  await Promise.race(candidates.slice(0, MAX_CONCURRENT_UPLOADS).map(f => dispatch(uploadFile(f.id))));
+  await Promise.race(candidates.slice(0, MAX_CONCURRENT_ENTRIES).map(f => dispatch(uploadFile(f.id))));
   dispatch(processUploadQueue());
 };
 
@@ -186,16 +188,16 @@ const uploadFile = (entryId: string): UploadThunkAction => async (dispatch, getS
     const { status } = getEntry(entryId, getState());
 
     switch (status) {
-      case AttachmentUploadStatus.Queued:
-      case AttachmentUploadStatus.Starting:
+      case AttachmentUploadEntryStatus.Queued:
+      case AttachmentUploadEntryStatus.Starting:
         await dispatch(startUpload(entryId));
         // fall through
-      case AttachmentUploadStatus.Initialized:
-      case AttachmentUploadStatus.Uploading:
+      case AttachmentUploadEntryStatus.Initialized:
+      case AttachmentUploadEntryStatus.Uploading:
         await dispatch(uploadParts(entryId));
         // fall through
-      case AttachmentUploadStatus.Uploaded:
-      case AttachmentUploadStatus.Finalizing:
+      case AttachmentUploadEntryStatus.Uploaded:
+      case AttachmentUploadEntryStatus.Finalizing:
         await dispatch(completeUpload(entryId));
         break;
     }
@@ -217,8 +219,8 @@ const uploadParts = (
     throw getUploadError(translate('attachment.upload.error.parts.failed'), translate('attachment.upload.error.session.not.found'));
   }
 
-  dispatch(_startPartsUploading(id, cancelTokenSource));
-  dispatch(updateUploadStats(id));
+  dispatch(_startEntryPartsUploading(id, cancelTokenSource));
+  dispatch(updateEntryStats(id));
 
   const parts: EntryUploadPart[] = [];
   const queue = [...session.parts];
@@ -247,7 +249,7 @@ const uploadParts = (
     }
   }
 
-  dispatch(_finishPartsUploading(id, parts.sort((a, b) => a.partNumber - b.partNumber)));
+  dispatch(_finishEntryPartsUploading(id, parts.sort((a, b) => a.partNumber - b.partNumber)));
   return parts;
 };
 
@@ -255,7 +257,7 @@ const uploadPart = (
   part: EntryUploadPart,
   chunk: Blob,
   cancelTokenSource: CancelTokenSource,
-  uploadId: string,
+  entryId: string,
 ): UploadThunkAction<Promise<EntryUploadPart>> => async (dispatch) => {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -265,8 +267,7 @@ const uploadPart = (
         data: chunk,
         cancelToken: cancelTokenSource.token,
         onUploadProgress: (progressEvent: ProgressEvent) => {
-          dispatch(_setUploadPartProgress(uploadId, part.partNumber, progressEvent.loaded));
-          dispatch(updateUploadStats(uploadId));
+          dispatch(updateEntryPartProgress(entryId, part.partNumber, progressEvent.loaded));
         },
         headers: {
           'Content-Type': chunk.type ?? 'application/octet-stream',
@@ -296,34 +297,57 @@ const uploadPart = (
   throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.unknown.error'));
 };
 
-const updateUploadStats = (entityId: string): UploadThunkAction => (dispatch, getState) => {
+const updateEntryPartProgress = (entityId: string, partNumber: number, uploaded: number): UploadThunkAction => (dispatch, getState) => {
+  const { session } = getEntry(entityId, getState());
+
+  const now = Date.now();
+  const part = session?.parts.find(part => part.partNumber === partNumber);
+
+  if (!part || now - part.lastUpdate < STATS_UPDATE_THROTTLE) {
+    return;
+  }
+
+  dispatch(_setEntryPartProgress(entityId, partNumber, uploaded));
+};
+
+const updateEntryStats = (entityId: string): UploadThunkAction => (dispatch, getState) => {
   const entry = getEntry(entityId, getState());
   const { file, stats } = entry;
 
   const now = Date.now();
-  const timeElapsed = now - stats.lastUpdate;
-  const uploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
 
-  if (timeElapsed > 0 && uploaded > 0) {
-    const speed = uploaded / timeElapsed;
-    const remainingBytes = file.size - uploaded;
+  if (now - stats.lastUpdate < STATS_UPDATE_THROTTLE) {
+    return;
+  }
+
+  const timeElapsed = now - stats.lastUpdate;
+  const entryUploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
+
+  if (timeElapsed > 0 && entryUploaded > 0) {
+    const speed = entryUploaded / timeElapsed;
+    const remainingBytes = file.size - entryUploaded;
     const eta = speed > 0 ? remainingBytes / speed : 0;
 
-    dispatch(_updateUploadStats(entityId, speed, uploaded, eta, now));
+    dispatch(_updateEntryStats(entityId, speed, entryUploaded, eta));
     dispatch(updateStats());
   }
 };
 
 const updateStats = (): UploadThunkAction => (dispatch, getState) => {
-  const { queue } = getState().attachments.uploads;
-  const activeUploads = queue.filter(f => f.status !== AttachmentUploadStatus.Failed);
+  const { queue, stats } = getState().attachments.uploads;
+  const activeUploads = queue.filter(f => f.status <= AttachmentUploadEntryStatus.Completed);
+
+  const now = Date.now();
+  if (now - stats.lastUpdate < STATS_UPDATE_THROTTLE) {
+    return;
+  }
 
   const totalSize = activeUploads.reduce((sum, upload) => sum + upload.file.size, 0);
   const totalUploaded = activeUploads.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
-  const speed = totalUploaded / (Date.now() - (getState().attachments.uploads.stats.lastUpdate ?? 0));
+  const speed = totalUploaded / (Date.now() - stats.lastUpdate);
   const eta = speed > 0 ? (totalSize - totalUploaded) / speed : 0;
 
-  dispatch(_updateStats(speed, eta, Date.now()));
+  dispatch(_updateStats(speed, eta));
 };
 
 const uploadAsync = (
@@ -336,7 +360,7 @@ const uploadAsync = (
   const id = uuidv4();
   const numberOfParts = Math.ceil(file.size / partSize);
 
-  dispatch(_addFile(id, file, numberOfParts, {
+  dispatch(_addEntry(id, file, numberOfParts, {
     lineType,
     index,
     isCleanCopyRequired,
@@ -348,14 +372,14 @@ const uploadAsync = (
     const unsubscribe = store.subscribe(() => {
       const entry = getEntry(id, getState());
 
-      if (entry.status === AttachmentUploadStatus.Completed && entry.attachment) {
+      if (entry.status === AttachmentUploadEntryStatus.Completed && entry.attachment) {
         unsubscribe();
         resolve(entry);
-      } else if (entry.status === AttachmentUploadStatus.Failed) {
+      } else if (entry.status === AttachmentUploadEntryStatus.Failed) {
         unsubscribe();
         const reason = entry.errorMessage ?? translate('attachment.upload.error.unknown.reason');
         reject(new AttachmentUploadError(`${translate('attachment.upload.error.failed')}: ${reason}`, entry));
-      } else if (entry.status === AttachmentUploadStatus.Cancelled) {
+      } else if (entry.status === AttachmentUploadEntryStatus.Cancelled) {
         unsubscribe();
         reject(new AttachmentUploadError(translate('attachment.upload.error.cancelled'), entry));
       }
@@ -373,11 +397,11 @@ const upload = (
   return await dispatch(uploadAsync(file, lineType, index, isCleanCopyRequired))
     .then(({ id, attachment }) => {
       attachment && handlers.successHandler.execute(attachment);
-      dispatch(_deleteUpload(id));
+      dispatch(_deleteEntry(id));
     })
     .catch(({ message, entry }: AttachmentUploadError) => {
       handlers.errorHandler.execute(message);
-      dispatch(_deleteUpload(entry.id));
+      dispatch(_deleteEntry(entry.id));
     });
 };
 

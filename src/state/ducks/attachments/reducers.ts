@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { ADD_FILE, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_UPLOAD, FAIL_UPLOAD, FINISH_PARTS_UPLOADING, FINISH_UPLOAD, INITIALIZE_UPLOAD_SESSION, REMOVE_WATERMARK, RETRY_UPLOAD, SET_UPLOAD_PART_PROGRESS, SET_UPLOAD_STATUS, START_PARTS_UPLOADING, START_UPLOAD, UPDATE_STATS, UPDATE_UPLOAD_STATS } from './constants';
-import { AttachmentUploadAction, AttachmentUploadState, AttachmentUploadStatus, WatermarkActions, WatermarkState } from './types';
+import { ADD_ENTRY, ADD_WATERMARK, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, REMOVE_WATERMARK, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
+import { AttachmentUploadAction, AttachmentUploadEntryStatus, AttachmentUploadState, WatermarkActions, WatermarkState } from './types';
 
 const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
 
@@ -34,7 +34,7 @@ const uploads = (
   action: AttachmentUploadAction,
 ): AttachmentUploadState => {
   switch (action.type) {
-    case ADD_FILE: {
+    case ADD_ENTRY: {
       return {
         ...state,
         queue: [
@@ -43,7 +43,7 @@ const uploads = (
             id: action.payload.id,
             file: action.payload.file,
             numberOfParts: action.payload.numberOfParts,
-            status: AttachmentUploadStatus.Queued,
+            status: AttachmentUploadEntryStatus.Queued,
             retries: 0,
             attachmentMetadata: action.payload.metadata,
             stats: {
@@ -58,12 +58,12 @@ const uploads = (
         ],
       };
     }
-    case START_UPLOAD:
+    case INITIALIZE_ENTRY:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload ? {
           ...f,
-          status: AttachmentUploadStatus.Starting,
+          status: AttachmentUploadEntryStatus.Starting,
           stats: {
             uploaded: 0,
             speed: 0,
@@ -73,12 +73,12 @@ const uploads = (
           },
         } : f),
       };
-    case INITIALIZE_UPLOAD_SESSION:
+    case INITIALIZE_ENTRY_SESSION:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          status: AttachmentUploadStatus.Initialized,
+          status: AttachmentUploadEntryStatus.Initialized,
           session: {
             key: action.payload.key,
             uploadId: action.payload.uploadId,
@@ -90,7 +90,7 @@ const uploads = (
           },
         } : f),
       };
-    case UPDATE_UPLOAD_STATS:
+    case UPDATE_ENTRY_STATS:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
@@ -101,7 +101,7 @@ const uploads = (
             eta: action.payload.eta,
             uploaded: action.payload.uploaded,
             progress: Math.round((action.payload.uploaded / f.file.size) * 100),
-            lastUpdate: action.payload.lastUpdate,
+            lastUpdate: Date.now(),
           },
         } : f),
       };
@@ -112,16 +112,16 @@ const uploads = (
           ...state.stats,
           speed: action.payload.speed,
           eta: action.payload.eta,
-          lastUpdate: action.payload.lastUpdate,
+          lastUpdate: Date.now(),
         },
       };
-    case FINISH_UPLOAD:
+    case FINALIZE_ENTRY:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
           session: undefined,
-          status: AttachmentUploadStatus.Completed,
+          status: AttachmentUploadEntryStatus.Completed,
           attachment: action.payload.attachment,
           stats: {
             ...f.stats,
@@ -130,12 +130,12 @@ const uploads = (
           },
         } : f),
       };
-    case FAIL_UPLOAD:
+    case FAIL_ENTRY:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          status: AttachmentUploadStatus.Failed,
+          status: AttachmentUploadEntryStatus.Failed,
           stats: {
             ...f.stats,
             retries: f.retries + 1,
@@ -143,7 +143,7 @@ const uploads = (
           errorMessage: action.payload.errorMessage,
         } : f),
       };
-    case RETRY_UPLOAD:
+    case RETRY_ENTRY:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload ? {
@@ -152,13 +152,13 @@ const uploads = (
           errorMessage: undefined,
         } : f),
       };
-    case DELETE_UPLOAD: {
+    case DELETE_ENTRY: {
       return {
         ...state,
         queue: state.queue.filter(f => f.id !== action.payload),
       };
     }
-    case START_PARTS_UPLOADING:
+    case START_ENTRY_PARTS_UPLOADING:
       return {
         ...state,
         stats: {
@@ -167,8 +167,16 @@ const uploads = (
         },
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          status: AttachmentUploadStatus.Uploading,
+          status: AttachmentUploadEntryStatus.Uploading,
           cancelSource: action.payload.source,
+          session: f.session ? {
+            ...f.session,
+            parts: f.session.parts.map(part => ({
+              ...part,
+              uploaded: 0,
+              lastUpdate: Date.now(),
+            })),
+          } : undefined,
           stats: {
             ...f.stats,
             uploaded: 0,
@@ -178,7 +186,7 @@ const uploads = (
           },
         } : f),
       };
-    case SET_UPLOAD_STATUS:
+    case SET_ENTRY_STATUS:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
@@ -186,19 +194,19 @@ const uploads = (
           status: action.payload.status,
         } : f),
       };
-    case FINISH_PARTS_UPLOADING:
+    case FINISH_ENTRY_PARTS_UPLOADING:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
           ...f,
-          status: AttachmentUploadStatus.Uploaded,
+          status: AttachmentUploadEntryStatus.Uploaded,
           session: f.session ? {
             ...f.session,
             parts: action.payload.parts,
           } : undefined,
         } : f),
       };
-    case SET_UPLOAD_PART_PROGRESS:
+    case SET_ENTRY_PART_PROGRESS:
       return {
         ...state,
         queue: state.queue.map(f => f.id === action.payload.id ? {
