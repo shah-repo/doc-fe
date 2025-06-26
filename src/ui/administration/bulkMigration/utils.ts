@@ -18,6 +18,16 @@ const schemaValidationMap = {
       shouldMapTo: 'fileupload',
     },
   },
+  supplierReferences: {
+    referenceRevId: {
+      shouldMapTo: 'autocomplete',
+    },
+  },
+  supplierOfferings: {
+    revId: {
+      shouldMapTo: 'autocomplete',
+    },
+  },
 };
 
 const FROM_OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
