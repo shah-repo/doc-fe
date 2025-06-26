@@ -20,7 +20,7 @@ const _failEntry = (id: string, errorMessage?: string) => ({ type: FAIL_ENTRY, p
 const _deleteEntry = (id: string) => ({ type: DELETE_ENTRY, payload: id });
 const _setEntryStatus = (id: string, status: AttachmentUploadEntryStatus) => ({ type: SET_ENTRY_STATUS, payload: { id, status } });
 const _updateEntryStats = (id: string, speed: number, uploaded: number, eta: number) => ({ type: UPDATE_ENTRY_STATS, payload: { id, speed, uploaded, eta } });
-const _updateStats = (speed: number, eta: number) => ({ type: UPDATE_STATS, payload: { speed, eta } });
+const _updateStats = (speed: number, eta: number, uploaded: number) => ({ type: UPDATE_STATS, payload: { speed, eta, uploaded } });
 const _startEntryPartsUploading = (id: string, source: CancelTokenSource) => ({ type: START_ENTRY_PARTS_UPLOADING, payload: { id, source } });
 const _finishEntryPartsUploading = (id: string, parts: UploadPart[]) => ({ type: FINISH_ENTRY_PARTS_UPLOADING, payload: { id, parts } });
 const _setEntryPartProgress = (id: string, partNumber: number, uploaded: number) => ({ type: SET_ENTRY_PART_PROGRESS, payload: { id, partNumber, uploaded } });
@@ -308,6 +308,7 @@ const updateEntryPartProgress = (entityId: string, partNumber: number, uploaded:
   }
 
   dispatch(_setEntryPartProgress(entityId, partNumber, uploaded));
+  dispatch(updateEntryStats(entityId));
 };
 
 const updateEntryStats = (entityId: string): UploadThunkAction => (dispatch, getState) => {
@@ -321,14 +322,14 @@ const updateEntryStats = (entityId: string): UploadThunkAction => (dispatch, get
   }
 
   const timeElapsed = now - stats.lastUpdate;
-  const entryUploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
+  const currentUploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
 
-  if (timeElapsed > 0 && entryUploaded > 0) {
-    const speed = entryUploaded / timeElapsed;
-    const remainingBytes = file.size - entryUploaded;
+  if (timeElapsed > 0 && currentUploaded > 0) {
+    const speed = (currentUploaded - stats.uploaded) / timeElapsed;
+    const remainingBytes = file.size - currentUploaded;
     const eta = speed > 0 ? remainingBytes / speed : 0;
 
-    dispatch(_updateEntryStats(entityId, speed, entryUploaded, eta));
+    dispatch(_updateEntryStats(entityId, speed, currentUploaded, eta));
     dispatch(updateStats());
   }
 };
@@ -344,10 +345,10 @@ const updateStats = (): UploadThunkAction => (dispatch, getState) => {
 
   const totalSize = activeUploads.reduce((sum, upload) => sum + upload.file.size, 0);
   const totalUploaded = activeUploads.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
-  const speed = totalUploaded / (Date.now() - stats.lastUpdate);
+  const speed = (totalUploaded - stats.uploaded) / (now - stats.lastUpdate);
   const eta = speed > 0 ? (totalSize - totalUploaded) / speed : 0;
 
-  dispatch(_updateStats(speed, eta));
+  dispatch(_updateStats(speed, eta, totalUploaded));
 };
 
 const uploadAsync = (

@@ -25,6 +25,7 @@ const UPLOAD_DEFAULT_STATE: AttachmentUploadState = {
   stats: {
     speed: 0,
     eta: 0,
+    uploaded: 0,
     lastUpdate: 0,
   },
 };
@@ -112,6 +113,7 @@ const uploads = (
           ...state.stats,
           speed: action.payload.speed,
           eta: action.payload.eta,
+          uploaded: action.payload.uploaded,
           lastUpdate: Date.now(),
         },
       };

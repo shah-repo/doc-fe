@@ -104,13 +104,14 @@ export type AttachmentUploadAction =
   | { type: typeof RETRY_ENTRY, payload: string }
   | { type: typeof DELETE_ENTRY, payload: string }
   | { type: typeof UPDATE_ENTRY_STATS, payload: { id: string, speed: number, uploaded: number, eta: number } }
-  | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number } };
+  | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number, uploaded: number } };
 
 export interface AttachmentUploadState {
   queue: AttachmentUploadEntry[]
   stats: {
     speed: number
     eta: number
+    uploaded: number
     lastUpdate: number
   }
 }
