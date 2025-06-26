@@ -1,6 +1,6 @@
-import { SET_UPLOAD_PART_PROGRESS } from './constants';
+import { SET_ENTRY_PART_PROGRESS } from './constants';
 import reducer from './reducers';
-import { AttachmentUploadAction, AttachmentUploadState, AttachmentUploadStatus, UploadPart, UploadUrl } from './types';
+import { AttachmentUploadAction, AttachmentUploadEntryStatus, AttachmentUploadState, EntryUploadPart, UploadUrl } from './types';
 
 describe('attachments reducers tests', () => {
   describe('SET_UPLOAD_PART_PROGRESS action', () => {
@@ -13,10 +13,11 @@ describe('attachments reducers tests', () => {
       url: 'https://example.com/upload',
     };
 
-    const uploadPart: UploadPart = {
+    const uploadPart: EntryUploadPart = {
       ...uploadUrl,
       eTag: 'test-etag',
       uploaded: 512, // initial uploaded bytes
+      lastUpdate: Date.now(),
     };
 
     const uploadState: AttachmentUploadState = {
@@ -24,7 +25,7 @@ describe('attachments reducers tests', () => {
         {
           id: uploadId,
           file: new File(['test'], 'test.txt'),
-          status: AttachmentUploadStatus.Uploading,
+          status: AttachmentUploadEntryStatus.Uploading,
           retries: 0,
           numberOfParts: 2,
           attachmentMetadata: {
@@ -41,7 +42,7 @@ describe('attachments reducers tests', () => {
           session: {
             key: 'test-key',
             uploadId: 'test-upload-id',
-            parts: [uploadPart, { ...uploadUrl, partNumber: 2, uploaded: 0 }],
+            parts: [uploadPart, { ...uploadUrl, partNumber: 2, uploaded: 0, lastUpdate: Date.now() }],
           },
         },
       ],
@@ -49,6 +50,7 @@ describe('attachments reducers tests', () => {
         speed: 0,
         eta: 0,
         lastUpdate: Date.now(),
+        uploaded: 0,
       },
     };
 
@@ -58,7 +60,7 @@ describe('attachments reducers tests', () => {
     };
 
     const action: AttachmentUploadAction = {
-      type: SET_UPLOAD_PART_PROGRESS,
+      type: SET_ENTRY_PART_PROGRESS,
       payload: {
         id: uploadId,
         partNumber,
@@ -97,7 +99,7 @@ describe('attachments reducers tests', () => {
             {
               id: otherUploadId,
               file: new File(['other'], 'other.txt'),
-              status: AttachmentUploadStatus.Uploading,
+              status: AttachmentUploadEntryStatus.Uploading,
               retries: 0,
               numberOfParts: 1,
               attachmentMetadata: {
@@ -114,7 +116,7 @@ describe('attachments reducers tests', () => {
               session: {
                 key: 'other-key',
                 uploadId: 'other-upload-id',
-                parts: [{ ...uploadUrl, partNumber: 1, uploaded: 0 }],
+                parts: [{ ...uploadUrl, partNumber: 1, uploaded: 0, lastUpdate: Date.now() }],
               },
             },
           ],
@@ -149,7 +151,7 @@ describe('attachments reducers tests', () => {
 
     it('handles case when part number does not exist', () => {
       const actionWithNonExistentPart: AttachmentUploadAction = {
-        type: SET_UPLOAD_PART_PROGRESS,
+        type: SET_ENTRY_PART_PROGRESS,
         payload: {
           id: uploadId,
           partNumber: 999, // non-existent part number
