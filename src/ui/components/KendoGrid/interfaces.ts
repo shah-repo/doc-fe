@@ -1,5 +1,6 @@
 import { DataResult, State } from '@progress/kendo-data-query';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { Announcement } from '../../administration/announcements/interface';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { TablePanelStateProps } from '../../components/table/types';
 
@@ -45,6 +46,7 @@ export interface KendoGridProps<T> {
   tableCriteria: TablePanelStateProps
   schema: object
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[]
+  aslStatuses?: string[]
   exportDataChanges: (data: T[]) => void
   onRowClick: ((dataItem: any) => void)
   queryUrl: string
@@ -56,6 +58,7 @@ export interface KendoGridProps<T> {
 export interface DataLoaderProps {
   dataState: State
   onDataReceived: (products: DataResult, dataState: State) => void
+  onAnnouncementReceived: (announcement: Announcement[]) => void
   schema: object
   tableName: string
   queryUrl: string
@@ -78,8 +81,14 @@ export enum KendoGridFilterCell {
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
+  SUPPLIER_STATUS = 'supplierStatusId',
+  SUPPLIER_CERTIFICATIONS = 'supplierCertifications',
   EQ_STATUS = 'eqStatus',
   ASYNC_CREATED_AT = 'createdAtt',
+}
+
+export enum KendoGridHeaderCell {
+  ATTACHMENT_COUNT='AttachmentCount',
 }
 
 export enum KendoGridFilterCellOperators {

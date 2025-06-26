@@ -111,7 +111,9 @@ class FBEditorState {
     'select',
     'radiogroup',
     'checkboxgroup',
+    'checkboxgroupasync',
     'texteditor',
+    'shippingMethod',
   ];
 
   public static pickStepIndex: FBInputType[] = ['stepsection', 'teststep', 'procedure', 'mpiprocedure', 'lhrstep'];
@@ -126,6 +128,7 @@ class FBEditorState {
     textfield: FBEditorTextField,
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
+    checkboxgroupasync: FBEditorLabel,
     autocomplete: FBEditorAutocomplete,
     texteditor: FBEditorTextEditor,
     datepicker: FBEditorLabel,
@@ -176,7 +179,12 @@ class FBEditorState {
     tasksListTable: FBEditorLabel,
     workOrderType: FBEditorLabel,
     workOrderLhrTable: FBEditorLabel,
+    supplierContacts: FBEditorLabel,
+    supplierOfferings: FBEditorLabel,
+    supplierSupportingDocs: FBEditorLabel,
+    supplierReferences: FBEditorLabel,
     shippingCustomer: FBEditorAutocomplete,
+    shippingMethod: FBEditorOptionGroup,
   };
 
   public static editorTypeIconMapping = {
@@ -184,6 +192,7 @@ class FBEditorState {
     subsection: SubsectionIcon,
     stepsection: StepsectionIcon,
     textfield: TextfieldIcon,
+    checkboxgroupasync: TextfieldIcon,
     checkboxgroup: CheckboxIcon,
     autocomplete: AutoCompleteIcon,
     texteditor: TextEditorIcon,

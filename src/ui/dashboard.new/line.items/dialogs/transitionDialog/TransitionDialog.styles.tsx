@@ -6,7 +6,6 @@ export default (theme: NextTheme) =>
   createStyles({
     modalTitle: {
       position: 'static',
-      width: '194.98px',
       height: '18px',
       left: 'calc(50% - 194.98px/2 - 107.51px)',
       top: 'calc(50% - 18px/2)',

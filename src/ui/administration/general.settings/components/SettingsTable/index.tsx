@@ -13,6 +13,7 @@ function SettingsTable<T extends EditableItem> ({
   addButtonLabel,
   isEditing,
   isActive,
+  isFilterable,
   onAdd,
   getRowProperties,
   rowRender,
@@ -41,6 +42,7 @@ function SettingsTable<T extends EditableItem> ({
     <>
       <KendoDataGrid
         {...props}
+        filterable={isFilterable}
         rowRender={rowRender ?? defaultRowRender}
         className={cx(classes.grid, className, { [classes.gridWithButton]: shouldShowAddButton })}
       />

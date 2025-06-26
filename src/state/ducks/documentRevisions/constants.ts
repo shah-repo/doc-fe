@@ -3,11 +3,13 @@ export const DOCUMENT_REVISION_LIST = 'documentRevisions/LIST';
 export const DOCUMENT_REVISION_AUDIT_SET = 'documentRevisions/AUDIT_SET';
 
 export const DOCUMENT_REVISION_GET_ASYNC = 'documentRevisions/GET_ASYNC';
+export const DOCUMENT_REVISION_UPDATE_ASYNC = 'documentRevisions/UPDATE_ASYNC';
 export const DOCUMENT_REVISION_GET_ASYNC_DRAWER = 'documentRevisions/GET_ASYNC_DRAWER';
 export const DOCUMENT_REVISION_SECURITY_GET_ASYNC = 'documentRevisions/GET_ASYNC_SECURITY';
 export const DOCUMENT_REVISION_LIST_ASYNC = 'documentRevisions/LIST_ASYNC';
 export const DOCUMENT_REVISION_GET_AUDIT_ASYNC = 'documentRevisions/GET_AUDIT_ASYNC';
 export const REMOTE_VALIDATOR_GET_ASYNC = 'remoteValidator/GET_ASYNC';
+export const TASK_APPROVAL_GET_ASYNC = 'taskApproval/GET_ASYNC';
 
 export const DOCUMENT_GET_ASYNC = 'documentRevisions/GET_DOCUMENT_ASYNC';
 export const DOCUMENT_SET = 'documentRevisions/SET_DOCUMENT';
@@ -43,6 +45,10 @@ export const PO_APPROVAL_KEY = 'fb-po-approvals-';
 export const THRESHOLD_KEY = 'threshold';
 export const PO_ROOT_URL = '/purchase_order';
 export const LOT_ROOT_URL = '/lot';
+export const SUPPLIER_STATUS_URL = '/document_revisions/supplier_status';
+export const SUPPLIER_ROOT_URL = '/supplier';
+export const ASL_SUPPLIER_LIST_URL = '/supplier/asl_configured';
 export const EQUIPMENT_ROOT_URL = '/equipment_status';
 export const LOT_OF_PARTS = '/document_revisions/lots_of_part';
+export const SUPPLIER_CONFIGURATION_OPTIONS_URL = '/supplier/selection_options';
 export const PARTS_URL = '/parts';

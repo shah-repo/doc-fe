@@ -1,0 +1,78 @@
+import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
+import UtilColors from '../../../../layout/theme/utils/colors';
+
+export default makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  expand: {
+    fontSize: 18,
+    marginRight: theme.spacing(2),
+    color: Colors.textBlack,
+    cursor: 'pointer',
+  },
+  headerCheckbox: {
+    display: 'flex',
+  },
+  revsTableDateTimeLabel: {
+    fontSize: 12,
+    padding: theme.spacing(0, 1),
+  },
+  checkboxRowContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxRowContentDone: {
+    color: Colors.success,
+    marginLeft: theme.spacing(0.5),
+  },
+  checkboxRowContentFailed: {
+    color: Colors.error,
+    marginLeft: theme.spacing(0.5),
+  },
+  checkboxRowContentInProgress: {
+    color: Colors.warning,
+    marginLeft: theme.spacing(0.5),
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  revsTableFlexBoxColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gridGap: theme.spacing(0.25, 1),
+  },
+  revsTablePrimaryText: {
+    fontWeight: 600,
+    fontSize: 14,
+    lineHeight: '21px',
+    color: UtilColors.dark_jungle_green,
+  },
+  tableCellHiddenOverflow: {
+    overflow: 'hidden',
+    wordWrap: 'break-word',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
+  },
+  fieldsMappingIcon: {
+    cursor: 'pointer',
+    marginLeft: theme.spacing(1),
+    width: 17,
+    height: 17,
+  },
+  fieldsMappingContainer: {
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+  revsTableName: {
+    fontWeight: 'bold',
+  },
+}));
