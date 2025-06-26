@@ -5,9 +5,12 @@ import { AttachmentUploadAction, AttachmentUploadEntryStatus, AttachmentUploadSt
 const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
 
 const watermarks = (
-  state = WATERMARKS_DEFAULT_STATE,
+  state: WatermarkState | undefined,
   action: WatermarkActions,
 ): WatermarkState => {
+  if (!state) {
+    return WATERMARKS_DEFAULT_STATE;
+  }
   switch (action.type) {
     case ADD_WATERMARK:
       return [...state, action.payload];
@@ -31,9 +34,12 @@ const UPLOAD_DEFAULT_STATE: AttachmentUploadState = {
 };
 
 const uploads = (
-  state = UPLOAD_DEFAULT_STATE,
+  state: AttachmentUploadState | undefined,
   action: AttachmentUploadAction,
 ): AttachmentUploadState => {
+  if (!state) {
+    return UPLOAD_DEFAULT_STATE;
+  }
   switch (action.type) {
     case ADD_ENTRY: {
       return {
