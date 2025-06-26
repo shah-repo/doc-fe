@@ -1,24 +1,21 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../../layout/theme-next';
 
-const ROW_HEIGHT = 40;
 export default makeStyles(theme => ({
-  root: {
-    margin: theme.spacing(3, 0),
-  },
+  root: {},
   grid: {
-    '& .k-column-title': {
-      fontSize: 12,
-    },
-    '& td': {
-      height: ROW_HEIGHT,
-      boxSizing: 'border-box',
+    borderCollapse: 'collapse',
 
-      '& a': {
-        color: Colors.textBlack,
+    '& .k-grid-content': {
+      '& tr': {
+        height: 38,
 
-        '&:hover': {
-          textDecoration: 'underline',
+        '& td': {
+          padding: theme.spacing(0.5, 1.5),
+
+          '& .Mui-required.Mui-error': {
+            marginTop: theme.spacing(0.25),
+          },
         },
       },
     },
@@ -39,27 +36,20 @@ export default makeStyles(theme => ({
       whiteSpace: 'normal !important' as 'normal',
     },
   },
-  actionsCell: {
-    overflow: 'visible !important',
-    position: 'sticky',
-    right: 0,
-    width: '0 !important',
-    padding: '0 !important',
-    verticalAlign: 'bottom !important',
-
-    '& > div': {
-      borderLeft: `1px solid ${Colors.primaryLight} !important`,
-    },
-  },
-  addButton: {
-    float: 'right',
-  },
-  marginTop: {
-    marginTop: theme.spacing(3),
-  },
-  statusFilterOptionCell: {
+  actions: {
     display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0.5, 1),
+    justifyContent: 'center',
+    margin: theme.spacing(0, -1.5),
+  },
+  actionsEdit: {
+    gap: theme.spacing(0, 1.12),
+    margin: theme.spacing(0.5, 0, 0),
+  },
+  activeCheckbox: {
+    margin: theme.spacing(0.75, 0, 0),
+  },
+  inputRoot: {
+    margin: theme.spacing(0, -1.125),
+    width: `calc(100% + ${theme.spacing(2.25)}px)`,
   },
 }));

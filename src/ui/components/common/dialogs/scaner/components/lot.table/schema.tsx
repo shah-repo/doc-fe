@@ -1,172 +1,84 @@
-import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import { Input } from '@progress/kendo-react-inputs';
 import React from 'react';
-import { translate } from '../../../common/intl';
-import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
-import { createOption } from '../FBApprovalMatrix/components/Grid';
-import InputFilter from '../FBApprovalMatrix/components/InputFilter';
-import { ActionsCellTemplate } from './components/ActionsCellTemplate';
-import { NumericCellTemplate } from './components/NumericCellTemplate';
-import { PrimarySupplierCellTemplate } from './components/PrimarySupplierCellTemplate';
-import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
-import { SupplierCellTemplate } from './components/SupplierCellTemplate';
-import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
-import { SupplierStateCellTemplate } from './components/SupplierStateCellTemplate';
-import SupplierStateFilterCellTemplate from './components/SupplierStateFilterCellTemplate';
-import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
-import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
-import { UnitsCellTemplate } from './components/UnitsCellTemplate';
-import { SUPPLIER_FIELD, SUPPLIER_STATE_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
-import { EditableVendor, SchemaOptions } from './types';
+import { ColumnDefinition } from '../../../../../KendoDataGrid/KendoDataGrid.types';
+import ActionsCellTemplate from './components/ActionsCellTemplate';
+import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  units,
-  statuses,
-  states,
-  suppliers,
-  isActive,
-  isLoading,
   isInEditMode,
-  actionsClass,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
-  onPrimaryChange,
-}: SchemaOptions): Array<ColumnDefinition<EditableVendor>> => {
-  const unitOptions = units.map(unit => createOption(unit, unit));
-  const UnitsFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
-      {...props}
-      data={unitOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
-
-  const statusOptions = statuses.map(status => createOption(status, status));
-  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
-      {...props}
-      data={statusOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
-
-  const stateOptions = (states ?? [])
-    .filter(state => state.isActive)
-    .map(state => createOption(state.displayLabel, state.displayLabel));
-  const StateFilter: React.FC<GridFilterCellProps> = (props) => (
-    <SupplierStateFilterCellTemplate
-      {...props}
-      data={stateOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
-
+}: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
     {
-      id: 'primary',
-      field: 'primary',
+      id: 'lotNumber',
+      field: 'lotNumber',
+      title: 'scan.lot.grid.lot.number',
       filterCell: () => <Input disabled />,
-      headerCell: PrimarySupplierTitle,
-      template: (props) => (
-        <PrimarySupplierCellTemplate
-          {...props}
-          onPrimaryChange={onPrimaryChange}
-          isActive={isActive}
-          isInEditMode={isInEditMode}
-        />
-      ),
       width: 50,
     },
     {
-      id: 'supplier',
-      field: SUPPLIER_FIELD,
-      title: 'form.builder.part.vendors.vendor',
-      filterCell: InputFilter,
-      template: (props) => (
-        <SupplierCellTemplate{...props} options={suppliers} onClick={onRowClick} />
-      ),
-      width: 200,
+      id: 'serialNumber',
+      field: 'serialNumber',
+      title: 'scan.lot.grid.serial.number',
+      filterCell: () => <Input disabled />,
+      width: 50,
     },
     {
-      id: 'status',
-      field: SUPPLIER_STATUS_FIELD,
-      title: 'form.builder.part.vendors.vendor.state',
-      filterCell: StatusFilter,
-      template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
-      width: 120,
+      id: 'quantityAssigned',
+      field: 'quantityAssigned',
+      title: 'scan.lot.grid.quantity.assigned',
+      filterCell: () => <Input disabled />,
+      width: 50,
     },
     {
-      id: 'state',
-      field: SUPPLIER_STATE_FIELD,
-      title: 'form.builder.part.vendors.vendor.status',
-      filterCell: StateFilter,
-      template: (props) => <SupplierStateCellTemplate {...props} approvedSupplierStatuses={states} isLoading={isLoading} onClick={onRowClick} />,
-      width: 200,
-    },
-    {
-      id: 'part-number',
-      field: 'partNumber',
-      title: 'form.builder.part.vendors.partNumber',
-      filterCell: InputFilter,
-      template: (props) => <SupplierPartNumberCellTemplate {...props} onClick={onRowClick} />,
-      width: 200,
-    },
-    {
-      id: 'cost',
-      field: 'cost.value',
-      title: 'form.builder.part.vendors.cost',
-      filterCell: InputFilter,
-      template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
-    },
-    {
-      id: 'units-buy',
-      field: 'unitsBuy',
-      title: 'form.builder.part.vendors.unitsBuy',
-      filterCell: UnitsFilter,
-      template: (props) => <UnitsCellTemplate {...props} options={units} onClick={onRowClick} />,
-      width: 150,
-    },
-    {
-      id: 'conversion',
-      field: 'conversion',
-      title: 'form.builder.part.vendors.conversion',
-      filterCell: InputFilter,
-      template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
-    },
-    {
-      id: 'units-use',
-      field: 'unitsUse',
-      title: 'form.builder.part.vendors.unitsUse',
-      filterCell: UnitsFilter,
-      template: (props) => <UnitsCellTemplate {...props} options={units} />,
-      width: 150,
-    },
-    {
-      id: 'lead-time',
-      field: 'leadTime',
-      title: 'form.builder.part.vendors.leadTime',
-      filterCell: InputFilter,
-      template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
+      id: 'unitOfMeasure',
+      field: 'unitOfMeasure',
+      title: 'scan.lot.grid.unit.of.measure',
+      filterCell: () => <Input disabled />,
+      width: 50,
     },
     {
       id: 'actions',
-      title: 'actions',
-      className: actionsClass,
+      field: 'actions',
+      title: 'common.actions',
+      width: 75,
       template: (props) => (
         <ActionsCellTemplate
           {...props}
-          onConfirm={onConfirm}
-          onDiscard={onDiscard}
+          isActive={true}
+          onEdit={onConfirm}
           onDelete={onDelete}
+          onDiscard={onDiscard}
+          onConfirm={onConfirm}
         />
       ),
-      width: 1,
     },
+    // {
+    //   id: 'cost',
+    //   field: 'cost.value',
+    //   title: 'form.builder.part.vendors.cost',
+    //   filterCell: InputFilter,
+    //   template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
+    //   width: 150,
+    // },
+    // {
+    //   id: 'units-buy',
+    //   field: 'unitsBuy',
+    //   title: 'form.builder.part.vendors.unitsBuy',
+    //   filterCell: UnitsFilter,
+    //   template: (props) => <UnitsCellTemplate {...props} options={units} onClick={onRowClick} />,
+    //   width: 150,
+    // },
+    // {
+    //   id: 'lead-time',
+    //   field: 'leadTime',
+    //   title: 'form.builder.part.vendors.leadTime',
+    //   filterCell: InputFilter,
+    //   template: (props) => <NumericCellTemplate {...props} onClick={onRowClick} />,
+    //   width: 150,
+    // },
   ];
 };

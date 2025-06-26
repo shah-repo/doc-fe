@@ -21,6 +21,6 @@ export default makeStyles(theme => ({
   },
   value: {
     fontSize: 14,
-    color: Colors.darkGray,
+    color: Colors.lightGray2,
   },
 }));

@@ -3,6 +3,7 @@ import React from 'react';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
+import ScanLotTable from './components/lot.table';
 import useStyles from './styles';
 
 interface Props {
@@ -30,7 +31,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
       hideCloseButton={false}
       // loading={loading}
       cancelLabel="common.cancel"
-      title="common.scan"
+      title="scan.lot.dialog.title.message"
       confirmLabel="common.add"
       confirmProps={{
         id: 'dialog-add',
@@ -59,7 +60,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
             </ListItem>
           ))}
         </List>
-
+        <ScanLotTable />
       </Box>
     </Dialog>
   );
