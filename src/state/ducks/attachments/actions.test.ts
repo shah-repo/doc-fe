@@ -3,10 +3,35 @@ import { attachmentsActions } from '.';
 import CallbackHandler from '../../../common/callbackHandler';
 import { getCallbackHandler } from '../../../common/tests/factories';
 import { Handlers } from '../../types';
+import { formatFileSize } from './actions';
 import { ATTACHMENT_ROOT_URL, LINE_TYPES } from './constants';
 import { Attachment, AttachmentDownloadResponse } from './types';
 
 describe('attachemnt actions tests', () => {
+  describe('formatFileSize tests', () => {
+    it('formats bytes correctly', () => {
+      expect(formatFileSize(512)).toBe('512 B');
+      expect(formatFileSize(1023)).toBe('1023 B');
+    });
+
+    it('formats kilobytes correctly', () => {
+      expect(formatFileSize(1024)).toBe('1.0 KB');
+      expect(formatFileSize(1536)).toBe('1.5 KB');
+      expect(formatFileSize(1024 * 1024 - 1)).toBe('1024.0 KB');
+    });
+
+    it('formats megabytes correctly', () => {
+      expect(formatFileSize(1024 * 1024)).toBe('1.0 MB');
+      expect(formatFileSize(1024 * 1024 * 1.5)).toBe('1.5 MB');
+      expect(formatFileSize(1024 * 1024 * 1024 - 1)).toBe('1024.0 MB');
+    });
+
+    it('formats gigabytes correctly', () => {
+      expect(formatFileSize(1024 * 1024 * 1024)).toBe('1.0 GB');
+      expect(formatFileSize(1024 * 1024 * 1024 * 2.5)).toBe('2.5 GB');
+    });
+  });
+
   describe('upload action tests', () => {
     const handlers: Handlers<Attachment> = {
       successHandler: getCallbackHandler<Attachment>(),

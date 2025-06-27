@@ -8,7 +8,7 @@ import { store } from '../../store';
 import { ApiAction, Handlers } from '../../types';
 import { authActions } from '../auth';
 import { EmployeeEditRequestBody } from '../auth/types';
-import { ADD_ENTRY, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, MAX_CONCURRENT_ENTRIES, MAX_CONCURRENT_PARTS, MAX_RETRIES, MAX_UPLOAD_PROGRESS_HISTORY, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, STATS_UPDATE_THROTTLE, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
+import { ADD_ENTRY, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, MAX_CONCURRENT_ENTRIES, MAX_CONCURRENT_PARTS, MAX_RETRIES, MAX_UPLOAD_PROGRESS_HISTORY, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, STATS_SMOTHING_FACTOR, STATS_UPDATE_THROTTLE, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
 import { AddWatermarkAction, ApiDownloadAction, Attachment, AttachmentDownloadResponse, AttachmentType, AttachmentUploadEntry, AttachmentUploadEntryMetadata, AttachmentUploadEntryStatus, AttachmentUploadError, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadProgress, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
 
 const _addEntry = (id: string, file: File, numberOfParts: number, metadata: AttachmentUploadEntryMetadata) => ({ type: ADD_ENTRY, payload: { id, file, numberOfParts, metadata } });
@@ -122,7 +122,7 @@ const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, ge
   }
   await dispatch(abortUpload(id));
   dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
-  dispatch(_deleteEntry(id));
+  dispatch(deleteEntry(id));
 };
 
 const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -147,12 +147,18 @@ const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploa
     const handlers: Handlers<AttachmentUploadEntry> = {
       successHandler: new CallbackHandler<AttachmentUploadEntry>(() => {
         dispatch(_setEntryStatus(entryId, AttachmentUploadEntryStatus.Aborted));
+        dispatch(updateStats(true));
         resolve(entry);
       }),
       errorHandler: new CallbackHandler<string>((error) => reject(getUploadError(translate('attachment.upload.error.abort.failed'), error))),
     };
     dispatch(_abortUploadApiAction({ key, uploadId }, handlers));
   });
+};
+
+const deleteEntry = (entryId: string): UploadThunkAction => (dispatch) => {
+  dispatch(_deleteEntry(entryId));
+  dispatch(updateStats(true));
 };
 
 const failUpload = (entryId: string, errorMessage: string): UploadThunkAction => async (dispatch, getState) => {
@@ -173,9 +179,13 @@ const failUpload = (entryId: string, errorMessage: string): UploadThunkAction =>
 
 const processUploadQueue = (): UploadThunkAction => async (dispatch, getState) => {
   const { queue } = getState().attachments.uploads;
-  const activeUploads = queue.filter(f => f.status === AttachmentUploadEntryStatus.Uploading).length;
+  const activeUploads = queue.filter(
+    f => f.status >= AttachmentUploadEntryStatus.Initialized && f.status < AttachmentUploadEntryStatus.Completed,
+  ).length;
 
-  const candidates = queue.filter(f => [AttachmentUploadEntryStatus.Queued, AttachmentUploadEntryStatus.Failed].includes(f.status) && f.retries < MAX_RETRIES);
+  const candidates = queue.filter(
+    f => [AttachmentUploadEntryStatus.Queued, AttachmentUploadEntryStatus.Failed].includes(f.status) && f.retries < MAX_RETRIES,
+  );
 
   if (candidates.length === 0 || activeUploads >= MAX_CONCURRENT_ENTRIES) return;
 
@@ -297,6 +307,37 @@ const uploadPart = (
   throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.unknown.error'));
 };
 
+const calculateStats = (history: UploadProgress[], loaded: number, total: number, startTime: number) => {
+  if (history.length < 2) {
+    return {
+      currentSpeed: 0,
+      averageSpeed: 0,
+      eta: 0,
+      progress: 0,
+    };
+  }
+
+  const current = history[history.length - 1];
+  const previous = history[history.length - 2];
+
+  const timeDiff = (current.timestamp - previous.timestamp);
+  const bytesDiff = current.loaded - previous.loaded;
+  const totalTime = (current.timestamp - startTime);
+  const rawCurrentSpeed = timeDiff > 0 ? bytesDiff / timeDiff : 0;
+  const currentSpeed = (rawCurrentSpeed * STATS_SMOTHING_FACTOR) + (rawCurrentSpeed * (1 - STATS_SMOTHING_FACTOR));
+  const averageSpeed = totalTime > 0 ? current.loaded / totalTime : 0;
+  const remainingBytes = total - loaded;
+  const eta = averageSpeed > 0 ? remainingBytes / averageSpeed : 0;
+  const progress = Math.round((loaded / total) * 100);
+
+  return {
+    currentSpeed,
+    averageSpeed,
+    eta,
+    progress,
+  };
+};
+
 const entryProgressHistory = new Map<string, UploadProgress[]>();
 
 const updateEntryProgressHistory = (entryId: string, progress: UploadProgress) => {
@@ -341,22 +382,7 @@ const updateEntryStats = (entityId: string): UploadThunkAction => (dispatch, get
   updateEntryProgressHistory(entityId, { loaded, timestamp: now });
 
   const history = getEntryProgressHistory(entityId);
-
-  if (history.length < 2) {
-    return;
-  }
-
-  const current = history[history.length - 1];
-  const previous = history[history.length - 2];
-
-  const timeDiff = (current.timestamp - previous.timestamp);
-  const bytesDiff = current.loaded - previous.loaded;
-  const totalTime = (current.timestamp - stats.startTime);
-  const currentSpeed = timeDiff > 0 ? bytesDiff / timeDiff : 0;
-  const averageSpeed = totalTime > 0 ? current.loaded / totalTime : 0;
-  const remainingBytes = file.size - loaded;
-  const eta = averageSpeed > 0 ? remainingBytes / averageSpeed : 0;
-  const progress = Math.round((loaded / file.size) * 100);
+  const { currentSpeed, averageSpeed, eta, progress } = calculateStats(history, loaded, file.size, stats.startTime);
 
   dispatch(_updateEntryStats(entityId, currentSpeed, averageSpeed, eta, loaded, progress));
   dispatch(updateStats());
@@ -372,14 +398,14 @@ const updateProgressHistory = (progress: UploadProgress) => {
   }
 };
 
-const updateStats = (): UploadThunkAction => (dispatch, getState) => {
+const updateStats = (force = false): UploadThunkAction => (dispatch, getState) => {
   const { queue, stats } = getState().attachments.uploads;
   const activeUploads = queue.filter(f => f.status <= AttachmentUploadEntryStatus.Completed);
 
   const now = Date.now();
   const timeElapsed = now - stats.lastUpdate;
 
-  if (timeElapsed < STATS_UPDATE_THROTTLE) {
+  if (timeElapsed < STATS_UPDATE_THROTTLE && !force) {
     return;
   }
 
@@ -391,22 +417,7 @@ const updateStats = (): UploadThunkAction => (dispatch, getState) => {
   }, { loaded: 0, totalSize: 0, startTime: Infinity });
 
   updateProgressHistory({ loaded, timestamp: now });
-
-  if (progressHistory.length < 2) {
-    return;
-  }
-
-  const current = progressHistory[progressHistory.length - 1];
-  const previous = progressHistory[progressHistory.length - 2];
-
-  const timeDiff = (current.timestamp - previous.timestamp);
-  const bytesDiff = current.loaded - previous.loaded;
-  const totalTime = (current.timestamp - startTime);
-  const currentSpeed = timeDiff > 0 ? bytesDiff / timeDiff : 0;
-  const averageSpeed = totalTime > 0 ? current.loaded / totalTime : 0;
-  const remainingBytes = totalSize - loaded;
-  const eta = averageSpeed > 0 ? remainingBytes / averageSpeed : 0;
-  const progress = Math.round((loaded / totalSize) * 100);
+  const { currentSpeed, averageSpeed, eta, progress } = calculateStats(progressHistory, loaded, totalSize, startTime);
 
   dispatch(_updateStats(currentSpeed, averageSpeed, eta, loaded, progress));
 };
@@ -458,11 +469,11 @@ const upload = (
   return await dispatch(uploadAsync(file, lineType, index, isCleanCopyRequired))
     .then(({ id, attachment }) => {
       attachment && handlers.successHandler.execute(attachment);
-      dispatch(_deleteEntry(id));
+      dispatch(deleteEntry(id));
     })
     .catch(({ message, entry }: AttachmentUploadError) => {
       handlers.errorHandler.execute(message);
-      dispatch(_deleteEntry(entry.id));
+      dispatch(deleteEntry(entry.id));
     });
 };
 

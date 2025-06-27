@@ -36,3 +36,4 @@ export const BASE_RETRY_DELAY = 1000;
 export const PART_SIZE = 5 * 1024 * 1024;
 export const STATS_UPDATE_THROTTLE = 500;
 export const MAX_UPLOAD_PROGRESS_HISTORY = 10;
+export const STATS_SMOTHING_FACTOR = 0.3;
