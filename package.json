@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "Document Management - Frontend Application",
-  "version": "25.5",
+  "version": "25.6",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",
@@ -106,7 +106,7 @@
     "yup": "0.28.0"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.16.0"
   },
   "scripts": {
     "start": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",
