@@ -22,6 +22,8 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
   const run = runDetails[0];
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
+  const isShowSelector = ![MigrationStatus.COMPLETED, MigrationStatus.IN_PROGRESS].includes(status);
+
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
     const hasStarted = status === MigrationStatus.IN_PROGRESS;
     const hasCompleted = status === MigrationStatus.COMPLETED;
@@ -71,7 +73,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <div className={classes.checkboxRowContent} onMouseEnter={handleIconHover} onMouseLeave={handlePopoverClose}>
-      {status !== MigrationStatus.COMPLETED && (
+      {isShowSelector && (
         <Checkbox
           checked={dataItem[SELECTED_FIELD]}
           onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}

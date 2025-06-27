@@ -57,4 +57,9 @@ export default makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(3),
   },
+  statusFilterOptionCell: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0.5, 1),
+  },
 }));
