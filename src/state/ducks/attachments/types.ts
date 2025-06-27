@@ -31,8 +31,6 @@ export interface AttachmentDownloadResponse {
 
 export type ApiDownloadAction = ApiAction<AttachmentDownloadResponse, string>;
 
-export type AvatarS3linkResponse = AttachmentDownloadResponse;
-
 export enum AttachmentType {
   Attached = 'ATTACHED',
   CleanCopy = 'CLEAN_COPY',
