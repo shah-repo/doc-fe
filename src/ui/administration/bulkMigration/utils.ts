@@ -18,6 +18,16 @@ const schemaValidationMap = {
       shouldMapTo: 'fileupload',
     },
   },
+  supplierReferences: {
+    referenceRevId: {
+      shouldMapTo: 'autocomplete',
+    },
+  },
+  supplierOfferings: {
+    revId: {
+      shouldMapTo: 'autocomplete',
+    },
+  },
 };
 
 const FROM_OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
@@ -259,5 +269,5 @@ export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
 }
 
 function formatLabel (label: string): string {
-  return label.toLocaleLowerCase().replace(/:$/, '');
+  return label?.toLocaleLowerCase().replace(/:$/, '');
 }

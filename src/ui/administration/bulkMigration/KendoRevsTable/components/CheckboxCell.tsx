@@ -22,10 +22,12 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
   const run = runDetails[0];
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
+  const isShowSelector = ![MigrationStatus.COMPLETED, MigrationStatus.IN_PROGRESS].includes(status);
+
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
-    const hasStarted = Boolean(run?.runAt);
-    const hasCompleted = Boolean(run?.completedAt);
-    const hasFailed = Boolean(run?.failureReason);
+    const hasStarted = status === MigrationStatus.IN_PROGRESS;
+    const hasCompleted = status === MigrationStatus.COMPLETED;
+    const hasFailed = status === MigrationStatus.FAILED;
 
     const renderCompletedContent = () => (
       <>
@@ -51,15 +53,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
     );
 
     const renderInProgressContent = () => (
-      <>
-        {translate('administration.bulk.migration.rev.grid.cell.startedAt.suffix')}{' '}
-        <DateTime
-          value={run?.runAt}
-          format={MomentFormats.BriefDateTime}
-          className={classes.revsTableDateTimeLabel}
-        />{' '}
-        {translate('administration.bulk.migration.rev.grid.cell.inprogress')}
-      </>
+      <>{translate('administration.bulk.migration.rev.grid.cell.inprogress')}</>
     );
 
     const renderNotAttemptedContent = () => (
@@ -68,9 +62,9 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
     const contentEl: ReactElement = (
       <>
-        {hasStarted && hasCompleted && renderCompletedContent()}
-        {hasStarted && !hasCompleted && renderInProgressContent()}
-        {!hasStarted && renderNotAttemptedContent()}
+        {(hasCompleted || hasFailed) && renderCompletedContent()}
+        {hasStarted && renderInProgressContent()}
+        {!hasStarted && !hasCompleted && !hasFailed && renderNotAttemptedContent()}
       </>
     );
 
@@ -79,7 +73,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <div className={classes.checkboxRowContent} onMouseEnter={handleIconHover} onMouseLeave={handlePopoverClose}>
-      {status !== MigrationStatus.COMPLETED && (
+      {isShowSelector && (
         <Checkbox
           checked={dataItem[SELECTED_FIELD]}
           onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}

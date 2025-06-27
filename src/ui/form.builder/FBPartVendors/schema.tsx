@@ -13,6 +13,7 @@ import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
 import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
 import { SupplierStateCellTemplate } from './components/SupplierStateCellTemplate';
+import SupplierStateFilterCellTemplate from './components/SupplierStateFilterCellTemplate';
 import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
 import { UnitsCellTemplate } from './components/UnitsCellTemplate';
@@ -52,9 +53,11 @@ export const buildSchema = ({
     />
   );
 
-  const stateOptions = (states ?? []).map(state => createOption(state.displayLabel, state.displayLabel));
+  const stateOptions = (states ?? [])
+    .filter(state => state.isActive)
+    .map(state => createOption(state.displayLabel, state.displayLabel));
   const StateFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
+    <SupplierStateFilterCellTemplate
       {...props}
       data={stateOptions}
       defaultItem={createOption(undefined, translate('common.all'))}

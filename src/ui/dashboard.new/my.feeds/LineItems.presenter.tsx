@@ -466,7 +466,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   docRevVersion={pendingAction?.docRevVersion}
                   status={pendingAction.trainingStatus}
                   timestamp={getFormattedDateString(
-                    pendingAction.timestamp,
+                    pendingAction.completedAt ?? pendingAction.timestamp,
                     MomentFormats.BriefDateTime,
                   )}
                   dueOn={getFormattedDateString(

@@ -10,6 +10,7 @@ import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/t
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
 import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
@@ -20,7 +21,6 @@ import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import { Translation } from '../../../../translations/types';
 import ApproveDialog from '../../dialogs/transitionDialog/ApproveOrRejectDialog';
-import PoRejectDialog from '../../dialogs/transitionDialog/PoRejectDialog';
 import { PasswordFormValues } from '../../dialogs/transitionDialog/types';
 interface Props {
   approvalId: string
@@ -120,12 +120,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { type && <PoRejectDialog
+      { type && <AlertDialog
         dialog={transitionDialog}
-        message={translationRejectMsg}
-        onSubmit={onReject}
+        message="dashboard.po.reject.alert"
+        confirmAction={onReject}
         cancelAction={transitionDialog.close}
-      />}
+      /> }
       { !type && <ApproveDialog
         onSubmit={onSubmit}
         asyncState={asyncState}

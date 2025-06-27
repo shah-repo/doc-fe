@@ -113,7 +113,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                       ? 'transition.action.close.title'
                       : transition === TransitionTypes.TRANSITION_REJECT
                         ? 'transition.action.reject.title'
-                        : 'transition.action.approve.title'
+                        : 'transition.action.title'
                   }
                 />}
               </Typography>

@@ -8,6 +8,7 @@ import { ApprovalRole } from '../../../FBApprovalMatrixRoles/types';
 import { SEARCHABLE_GROUPS_FIELD } from '../../../FBApprovalMatrixRoles/constants';
 import { isEmpty, isUndefined } from 'lodash';
 import { translate } from '../../../../../common/intl';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 
 const matrixTab = translate('tabId.matrixdetails');
 const approvalTab = translate('tabId.approvalroles');
@@ -88,7 +89,7 @@ const countLeafColumns = (col) => {
   return col.children.reduce((sum, child) => sum + countLeafColumns(child), 0);
 };
 
-const exportSheets = async (sheetData, fileName, damName) => {
+const exportSheets = async (sheetData, fileName, damName, status) => {
   const sheets = sheetData.map(({ name, data, columns }) => {
     const flatColumns = flattenColumns(columns);
 
@@ -98,7 +99,11 @@ const exportSheets = async (sheetData, fileName, damName) => {
       cells: flatColumns.map((col, colIndex) => {
         let value = getNestedValue(row, col.field);
         if (colIndex === 0) {
-          value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : value;
+          if(status === DocumentRevisionStatus.Deprecated && name === matrixTab && isUndefined(value)) {
+            value = '-';
+          } else {
+            value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : value;
+          }
         } else {
           value = value === true ? 'Y' : value === false ? '' : value;
         }
@@ -134,7 +139,7 @@ const exportSheets = async (sheetData, fileName, damName) => {
 const getNestedValue = (obj, path) =>
   path?.split('.').reduce((acc, part) => acc?.[part], obj);
 
-export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOfRevStages, fileName, damName, datafilter) => {
+export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOfRevStages, fileName, damName, datafilter, status) => {
   let matrixDetailsData = approvalMatrixFieldState?.getCurrentData('matrix') ?? [];
   const approvalRoles = existingRoles.map((role) => {
     const foundGroups = role.groups.map(({ id }) => {
@@ -164,7 +169,7 @@ export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOf
     const filterItem = datafilter?.find(item => item.field === 'docType.active');
     matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active === filterItem?.value);
   }
-  else if (isUndefined(datafilter)) {
+  else if (isUndefined(datafilter) && status !== DocumentRevisionStatus.Deprecated) {
     matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active);
   }
 
@@ -180,7 +185,7 @@ export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOf
       columns: approvalRolesColumns,
     },
   ];
-  exportSheets(sheetData, fileName, damName);
+  exportSheets(sheetData, fileName, damName, status);
 };
 
 const schemaApprovalRoles: Array<ColumnDefinition<any>> = [
