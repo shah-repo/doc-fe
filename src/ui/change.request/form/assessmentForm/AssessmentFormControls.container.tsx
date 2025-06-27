@@ -99,7 +99,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const closeARStates = [ChangeRequestStatus.Approved, ChangeRequestStatus.Implementation];
   const hasCloseARPermission = useSelector(getHasPermission(Permission.CLOSE_AR));
-  const canClose = (isCurrentUserOwner || hasCloseARPermission) && closeARStates.includes(changeRequest.state);
+  const canClose = hasCloseARPermission && closeARStates.includes(changeRequest.state);
 
   const currentUserApproval = changeRequest.approvals.filter(
     (approval) => approval.approver.user.email === currentUserEmail,
