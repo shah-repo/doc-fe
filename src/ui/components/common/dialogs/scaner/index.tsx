@@ -28,6 +28,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
     <Dialog
       className={classes.root}
       open={handler?.isOpen}
+      maxWidth="xl"
       hideCloseButton={false}
       // loading={loading}
       cancelLabel="common.cancel"

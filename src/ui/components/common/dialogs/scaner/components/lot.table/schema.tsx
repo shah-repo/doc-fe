@@ -1,4 +1,3 @@
-import { Input } from '@progress/kendo-react-inputs';
 import React from 'react';
 import { ColumnDefinition } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
@@ -16,35 +15,36 @@ export const buildSchema = ({
       id: 'lotNumber',
       field: 'lotNumber',
       title: 'scan.lot.grid.lot.number',
-      filterCell: () => <Input disabled />,
-      width: 50,
+      filterable: false,
+      width: 150,
     },
     {
       id: 'serialNumber',
       field: 'serialNumber',
       title: 'scan.lot.grid.serial.number',
-      filterCell: () => <Input disabled />,
-      width: 50,
+      filterable: false,
+      width: 150,
     },
     {
       id: 'quantityAssigned',
       field: 'quantityAssigned',
       title: 'scan.lot.grid.quantity.assigned',
-      filterCell: () => <Input disabled />,
-      width: 50,
+      filterable: false,
+      width: 150,
     },
     {
       id: 'unitOfMeasure',
       field: 'unitOfMeasure',
       title: 'scan.lot.grid.unit.of.measure',
-      filterCell: () => <Input disabled />,
-      width: 50,
+      filterable: false,
+      width: 150,
     },
     {
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
       width: 75,
+      filterable: false,
       template: (props) => (
         <ActionsCellTemplate
           {...props}

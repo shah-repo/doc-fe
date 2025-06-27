@@ -3,7 +3,7 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
-    width: '80%',
+    width: '60vw',
   },
   contentWrapper: {
     width: '100%',
@@ -21,6 +21,6 @@ export default makeStyles(theme => ({
   },
   value: {
     fontSize: 14,
-    color: Colors.lightGray2,
+    color: Colors.textGray,
   },
 }));
