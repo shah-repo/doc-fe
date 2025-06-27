@@ -34,10 +34,12 @@ describe('attachments reducers tests', () => {
           },
           stats: {
             uploaded: 0,
-            speed: 0,
+            currentSpeed: 0,
+            averageSpeed: 0,
             eta: 0,
-            lastUpdate: Date.now(),
             progress: 0,
+            startTime: Date.now(),
+            lastUpdate: Date.now(),
           },
           session: {
             key: 'test-key',
@@ -47,10 +49,12 @@ describe('attachments reducers tests', () => {
         },
       ],
       stats: {
-        speed: 0,
+        currentSpeed: 0,
+        averageSpeed: 0,
         eta: 0,
         lastUpdate: Date.now(),
         uploaded: 0,
+        progress: 0,
       },
     };
 
@@ -108,9 +112,11 @@ describe('attachments reducers tests', () => {
               },
               stats: {
                 uploaded: 0,
-                speed: 0,
+                currentSpeed: 0,
+                averageSpeed: 0,
                 eta: 0,
                 progress: 0,
+                startTime: Date.now(),
                 lastUpdate: Date.now(),
               },
               session: {

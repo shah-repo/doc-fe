@@ -2,6 +2,7 @@ import { CancelTokenSource } from 'axios';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { ApplicationState } from '../../reducers';
+import { ApiAction } from '../../types';
 import { Id, Nullable, User } from '../common/types';
 import { Employee } from '../company/types';
 import { DocumentRevision } from '../documentRevisions/types';
@@ -27,6 +28,8 @@ export interface Attachment {
 export interface AttachmentDownloadResponse {
   url: string
 }
+
+export type ApiDownloadAction = ApiAction<AttachmentDownloadResponse, string>;
 
 export type AvatarS3linkResponse = AttachmentDownloadResponse;
 
@@ -103,15 +106,17 @@ export type AttachmentUploadAction =
   | { type: typeof FAIL_ENTRY, payload: { id: string, errorMessage?: string } }
   | { type: typeof RETRY_ENTRY, payload: string }
   | { type: typeof DELETE_ENTRY, payload: string }
-  | { type: typeof UPDATE_ENTRY_STATS, payload: { id: string, speed: number, uploaded: number, eta: number } }
-  | { type: typeof UPDATE_STATS, payload: { speed: number, eta: number, uploaded: number } };
+  | { type: typeof UPDATE_ENTRY_STATS, payload: { id: string, currentSpeed: number, averageSpeed: number, eta: number, uploaded: number, progress: number } }
+  | { type: typeof UPDATE_STATS, payload: { currentSpeed: number, averageSpeed: number, eta: number, uploaded: number, progress: number } };
 
 export interface AttachmentUploadState {
   queue: AttachmentUploadEntry[]
   stats: {
-    speed: number
+    currentSpeed: number
+    averageSpeed: number
     eta: number
     uploaded: number
+    progress: number
     lastUpdate: number
   }
 }
@@ -138,10 +143,12 @@ interface AttachmentUploadEntryParent {
 export type AttachmentUploadEntryMetadata = Omit<UploadCompleteRequestBody, 'uploadId' | 'key' | 'parts'> & AttachmentUploadEntryParent;
 
 interface AttachmentUploadEntryStats {
-  speed: number
+  currentSpeed: number
+  averageSpeed: number
   eta: number
   uploaded: number
   progress: number
+  startTime: number
   lastUpdate: number
 }
 interface AttachmentUploadEntrySession {
@@ -208,9 +215,16 @@ export interface UploadAbortRequestBody {
 export interface UploadsStats {
   totalSize: number
   totalUploads: number
-  totalProgress: number
   activeUploads: number
   finishedUploads: number
-  speed: number
+  uploaded: number
+  progress: number
+  currentSpeed: number
+  averageSpeed: number
   eta: number
+}
+
+export interface UploadProgress {
+  loaded: number
+  timestamp: number
 }

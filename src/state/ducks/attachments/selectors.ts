@@ -27,19 +27,19 @@ const getStats = (state: ApplicationState): UploadsStats => {
   const uploads = state.attachments.uploads;
   const totalUploads = uploads.queue.length;
   const totalSize = uploads.queue.reduce((sum, upload) => sum + upload.file.size, 0);
-  const totalUploaded = uploads.queue.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
-  const totalProgress = totalUploads === 0 ? 0 : Math.round((totalUploaded / totalSize) * 100);
   const activeUploads = uploads.queue.filter(upload => upload.stats.uploaded < upload.file.size).length;
   const finishedUploads = uploads.queue.filter(upload => upload.stats.uploaded === upload.file.size).length;
-  const { speed, eta } = uploads.stats;
+  const { currentSpeed, averageSpeed, eta, uploaded, progress } = uploads.stats;
 
   return {
     totalSize,
     totalUploads,
-    totalProgress,
     activeUploads,
     finishedUploads,
-    speed,
+    currentSpeed,
+    averageSpeed,
+    uploaded,
+    progress,
     eta,
   };
 };

@@ -26,9 +26,11 @@ const watermarks = (
 const UPLOAD_DEFAULT_STATE: AttachmentUploadState = {
   queue: [],
   stats: {
-    speed: 0,
+    currentSpeed: 0,
+    averageSpeed: 0,
     eta: 0,
     uploaded: 0,
+    progress: 0,
     lastUpdate: 0,
   },
 };
@@ -54,11 +56,13 @@ const uploads = (
             retries: 0,
             attachmentMetadata: action.payload.metadata,
             stats: {
-              speed: 0,
+              currentSpeed: 0,
+              averageSpeed: 0,
               eta: 0,
               uploaded: 0,
               progress: 0,
               lastUpdate: Date.now(),
+              startTime: Date.now(),
             },
             cancelSource: undefined,
           },
@@ -73,10 +77,12 @@ const uploads = (
           status: AttachmentUploadEntryStatus.Starting,
           stats: {
             uploaded: 0,
-            speed: 0,
+            currentSpeed: 0,
+            averageSpeed: 0,
             eta: 0,
             progress: 0,
             lastUpdate: Date.now(),
+            startTime: Date.now(),
           },
         } : f),
       };
@@ -104,7 +110,8 @@ const uploads = (
           ...f,
           stats: {
             ...f.stats,
-            speed: action.payload.speed,
+            currentSpeed: action.payload.currentSpeed,
+            averageSpeed: action.payload.averageSpeed,
             eta: action.payload.eta,
             uploaded: action.payload.uploaded,
             progress: Math.round((action.payload.uploaded / f.file.size) * 100),
@@ -117,9 +124,11 @@ const uploads = (
         ...state,
         stats: {
           ...state.stats,
-          speed: action.payload.speed,
+          currentSpeed: action.payload.currentSpeed,
+          averageSpeed: action.payload.averageSpeed,
           eta: action.payload.eta,
           uploaded: action.payload.uploaded,
+          progress: action.payload.progress,
           lastUpdate: Date.now(),
         },
       };
@@ -188,7 +197,8 @@ const uploads = (
           stats: {
             ...f.stats,
             uploaded: 0,
-            speed: 0,
+            currentSpeed: 0,
+            averageSpeed: 0,
             eta: 0,
             lastUpdate: Date.now(),
           },

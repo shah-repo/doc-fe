@@ -2,14 +2,14 @@ import axios, { CancelTokenSource } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import CallbackHandler from '../../../common/callbackHandler';
 import { translate } from '../../../common/intl';
-import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { apiAction, apiActionWithCallbacks, ApiDefinitionWithCallbacks } from '../../factories';
 import { ApplicationState } from '../../reducers';
 import { store } from '../../store';
 import { ApiAction, Handlers } from '../../types';
 import { authActions } from '../auth';
 import { EmployeeEditRequestBody } from '../auth/types';
-import { ADD_ENTRY, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, MAX_CONCURRENT_ENTRIES, MAX_CONCURRENT_PARTS, MAX_RETRIES, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, STATS_UPDATE_THROTTLE, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
-import { AddWatermarkAction, Attachment, AttachmentDownloadResponse, AttachmentType, AttachmentUploadEntry, AttachmentUploadEntryMetadata, AttachmentUploadEntryStatus, AttachmentUploadError, AvatarS3linkResponse, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
+import { ADD_ENTRY, ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_ABORT_URL, ATTACHMENT_UPLOAD_COMPLETE_URL, ATTACHMENT_UPLOAD_START_URL, BASE_RETRY_DELAY, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, DELETE_ENTRY, FAIL_ENTRY, FINALIZE_ENTRY, FINISH_ENTRY_PARTS_UPLOADING, INITIALIZE_ENTRY, INITIALIZE_ENTRY_SESSION, MAX_CONCURRENT_ENTRIES, MAX_CONCURRENT_PARTS, MAX_RETRIES, MAX_UPLOAD_PROGRESS_HISTORY, PART_SIZE, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, RETRY_ENTRY, SET_ENTRY_PART_PROGRESS, SET_ENTRY_STATUS, START_ENTRY_PARTS_UPLOADING, STATS_UPDATE_THROTTLE, UPDATE_ENTRY_STATS, UPDATE_STATS } from './constants';
+import { AddWatermarkAction, ApiDownloadAction, Attachment, AttachmentDownloadResponse, AttachmentType, AttachmentUploadEntry, AttachmentUploadEntryMetadata, AttachmentUploadEntryStatus, AttachmentUploadError, ClearWatermarkAction, EntryUploadPart, RemoveWatermarkAction, UploadAbortRequestBody, UploadCompleteRequestBody, UploadPart, UploadProgress, UploadStartRequestBody, UploadStartResponse, UploadThunkAction, UploadUrl, WatermarkRequest, WatermarkRequestBody } from './types';
 
 const _addEntry = (id: string, file: File, numberOfParts: number, metadata: AttachmentUploadEntryMetadata) => ({ type: ADD_ENTRY, payload: { id, file, numberOfParts, metadata } });
 const _initializeEntry = (id: string) => ({ type: INITIALIZE_ENTRY, payload: id });
@@ -19,8 +19,8 @@ const _retryEntry = (id: string) => ({ type: RETRY_ENTRY, payload: id });
 const _failEntry = (id: string, errorMessage?: string) => ({ type: FAIL_ENTRY, payload: { id, errorMessage } });
 const _deleteEntry = (id: string) => ({ type: DELETE_ENTRY, payload: id });
 const _setEntryStatus = (id: string, status: AttachmentUploadEntryStatus) => ({ type: SET_ENTRY_STATUS, payload: { id, status } });
-const _updateEntryStats = (id: string, speed: number, uploaded: number, eta: number) => ({ type: UPDATE_ENTRY_STATS, payload: { id, speed, uploaded, eta } });
-const _updateStats = (speed: number, eta: number, uploaded: number) => ({ type: UPDATE_STATS, payload: { speed, eta, uploaded } });
+const _updateEntryStats = (id: string, currentSpeed: number, averageSpeed: number, eta: number, uploaded: number, progress: number) => ({ type: UPDATE_ENTRY_STATS, payload: { id, currentSpeed, averageSpeed, eta, uploaded, progress } });
+const _updateStats = (currentSpeed: number, averageSpeed: number, eta: number, uploaded: number, progress: number) => ({ type: UPDATE_STATS, payload: { currentSpeed, averageSpeed, eta, uploaded, progress } });
 const _startEntryPartsUploading = (id: string, source: CancelTokenSource) => ({ type: START_ENTRY_PARTS_UPLOADING, payload: { id, source } });
 const _finishEntryPartsUploading = (id: string, parts: UploadPart[]) => ({ type: FINISH_ENTRY_PARTS_UPLOADING, payload: { id, parts } });
 const _setEntryPartProgress = (id: string, partNumber: number, uploaded: number) => ({ type: SET_ENTRY_PART_PROGRESS, payload: { id, partNumber, uploaded } });
@@ -297,6 +297,21 @@ const uploadPart = (
   throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.unknown.error'));
 };
 
+const entryProgressHistory = new Map<string, UploadProgress[]>();
+
+const updateEntryProgressHistory = (entryId: string, progress: UploadProgress) => {
+  const history = entryProgressHistory.get(entryId) ?? [];
+  history.push(progress);
+  if (history.length > MAX_UPLOAD_PROGRESS_HISTORY) {
+    history.shift();
+  }
+  entryProgressHistory.set(entryId, history);
+};
+
+const getEntryProgressHistory = (entryId: string): UploadProgress[] => {
+  return entryProgressHistory.get(entryId) ?? [];
+};
+
 const updateEntryPartProgress = (entityId: string, partNumber: number, uploaded: number): UploadThunkAction => (dispatch, getState) => {
   const { session } = getEntry(entityId, getState());
 
@@ -316,21 +331,44 @@ const updateEntryStats = (entityId: string): UploadThunkAction => (dispatch, get
   const { file, stats } = entry;
 
   const now = Date.now();
+  const timeElapsed = now - stats.lastUpdate;
 
-  if (now - stats.lastUpdate < STATS_UPDATE_THROTTLE) {
+  if (timeElapsed < STATS_UPDATE_THROTTLE) {
     return;
   }
 
-  const timeElapsed = now - stats.lastUpdate;
-  const currentUploaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
+  const loaded = entry.session?.parts.reduce((sum, part) => sum + part.uploaded, 0) ?? 0;
+  updateEntryProgressHistory(entityId, { loaded, timestamp: now });
 
-  if (timeElapsed > 0 && currentUploaded > 0) {
-    const speed = (currentUploaded - stats.uploaded) / timeElapsed;
-    const remainingBytes = file.size - currentUploaded;
-    const eta = speed > 0 ? remainingBytes / speed : 0;
+  const history = getEntryProgressHistory(entityId);
 
-    dispatch(_updateEntryStats(entityId, speed, currentUploaded, eta));
-    dispatch(updateStats());
+  if (history.length < 2) {
+    return;
+  }
+
+  const current = history[history.length - 1];
+  const previous = history[history.length - 2];
+
+  const timeDiff = (current.timestamp - previous.timestamp);
+  const bytesDiff = current.loaded - previous.loaded;
+  const totalTime = (current.timestamp - stats.startTime);
+  const currentSpeed = timeDiff > 0 ? bytesDiff / timeDiff : 0;
+  const averageSpeed = totalTime > 0 ? current.loaded / totalTime : 0;
+  const remainingBytes = file.size - loaded;
+  const eta = averageSpeed > 0 ? remainingBytes / averageSpeed : 0;
+  const progress = Math.round((loaded / file.size) * 100);
+
+  dispatch(_updateEntryStats(entityId, currentSpeed, averageSpeed, eta, loaded, progress));
+  dispatch(updateStats());
+};
+
+const progressHistory: UploadProgress[] = [];
+
+const updateProgressHistory = (progress: UploadProgress) => {
+  progressHistory.push(progress);
+
+  if (progressHistory.length > MAX_UPLOAD_PROGRESS_HISTORY) {
+    progressHistory.shift();
   }
 };
 
@@ -339,16 +377,38 @@ const updateStats = (): UploadThunkAction => (dispatch, getState) => {
   const activeUploads = queue.filter(f => f.status <= AttachmentUploadEntryStatus.Completed);
 
   const now = Date.now();
-  if (now - stats.lastUpdate < STATS_UPDATE_THROTTLE) {
+  const timeElapsed = now - stats.lastUpdate;
+
+  if (timeElapsed < STATS_UPDATE_THROTTLE) {
     return;
   }
 
-  const totalSize = activeUploads.reduce((sum, upload) => sum + upload.file.size, 0);
-  const totalUploaded = activeUploads.reduce((sum, upload) => sum + upload.stats.uploaded, 0);
-  const speed = (totalUploaded - stats.uploaded) / (now - stats.lastUpdate);
-  const eta = speed > 0 ? (totalSize - totalUploaded) / speed : 0;
+  const { loaded, totalSize, startTime } = activeUploads.reduce((acc, upload) => {
+    acc.loaded += upload.stats.uploaded;
+    acc.totalSize += upload.file.size;
+    acc.startTime = Math.min(acc.startTime, upload.stats.startTime);
+    return acc;
+  }, { loaded: 0, totalSize: 0, startTime: Infinity });
 
-  dispatch(_updateStats(speed, eta, totalUploaded));
+  updateProgressHistory({ loaded, timestamp: now });
+
+  if (progressHistory.length < 2) {
+    return;
+  }
+
+  const current = progressHistory[progressHistory.length - 1];
+  const previous = progressHistory[progressHistory.length - 2];
+
+  const timeDiff = (current.timestamp - previous.timestamp);
+  const bytesDiff = current.loaded - previous.loaded;
+  const totalTime = (current.timestamp - startTime);
+  const currentSpeed = timeDiff > 0 ? bytesDiff / timeDiff : 0;
+  const averageSpeed = totalTime > 0 ? current.loaded / totalTime : 0;
+  const remainingBytes = totalSize - loaded;
+  const eta = averageSpeed > 0 ? remainingBytes / averageSpeed : 0;
+  const progress = Math.round((loaded / totalSize) * 100);
+
+  dispatch(_updateStats(currentSpeed, averageSpeed, eta, loaded, progress));
 };
 
 const uploadAsync = (
@@ -406,14 +466,18 @@ const upload = (
     });
 };
 
+const downloadApiAction = (
+  apiDefinition: ApiDefinitionWithCallbacks<AttachmentDownloadResponse, string>,
+): ApiDownloadAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>(apiDefinition);
+
 const download = (
   attachment: Attachment,
   handlers: Handlers<AttachmentDownloadResponse>,
   type?: AttachmentType,
-): ApiAction<AttachmentDownloadResponse, string> => {
+): ApiDownloadAction => {
   attachment.isLoading = true;
   const queryParams = type ? `?type=${type}` : '';
-  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  return downloadApiAction({
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
     method: 'get',
     onSuccess: () => (attachment.isLoading = false),
@@ -426,9 +490,9 @@ const downloadRedLine = (
   handlers: Handlers<AttachmentDownloadResponse>,
   type?: AttachmentType,
   password?: string,
-): ApiAction<AttachmentDownloadResponse, string> => {
+): ApiDownloadAction => {
   const queryParams = type ? `?type=${type}` : '';
-  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  return downloadApiAction({
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line${queryParams}`,
     method: 'get',
     password,
@@ -440,7 +504,7 @@ const downloadRedLine = (
 const downloadAllAttachments = (
   docRevId: string,
   handlers: Handlers<AttachmentDownloadResponse>,
-): ApiAction<AttachmentDownloadResponse, string> => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+): ApiDownloadAction => downloadApiAction({
   url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all`,
   method: 'get',
   handlers,
@@ -450,7 +514,7 @@ const downloadAllAttachmentsPassword = (
   docRevId: string,
   handlers: Handlers<AttachmentDownloadResponse>,
   password?: string,
-): ApiAction<AttachmentDownloadResponse, string> => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+): ApiDownloadAction => downloadApiAction({
   url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all_with_red_line`,
   method: 'get',
   password,
@@ -460,7 +524,7 @@ const downloadAllAttachmentsPassword = (
 const downloadSelectedAttachments = (
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
-): ApiAction<AttachmentDownloadResponse, string> => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+): ApiDownloadAction => downloadApiAction({
   url: `${ATTACHMENT_ROOT_URL}/file_url`,
   method: 'get',
   params: { attachmentIds },
@@ -507,12 +571,11 @@ const clearWatermarks = (): ClearWatermarkAction => ({
 const requestAvatarS3link = (
   fileName: string,
   handlers: Handlers,
-): ApiAction<AvatarS3linkResponse> =>
-  apiActionWithCallbacks< AvatarS3linkResponse, AttachmentDownloadResponse>({
-    url: `${ATTACHMENT_PUBLIC_UPLOAD_URL}?filename=${fileName}`,
-    method: 'get',
-    handlers,
-  });
+): ApiDownloadAction => downloadApiAction({
+  url: `${ATTACHMENT_PUBLIC_UPLOAD_URL}?filename=${fileName}`,
+  method: 'get',
+  handlers,
+});
 
 const uploadAvatar = (
   url: string,
@@ -547,7 +610,7 @@ const uploadAvatar = (
 const getAssetUrl = (
   s3link: string,
   handlers: Handlers,
-): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+): ApiDownloadAction => downloadApiAction({
   url: `${ATTACHMENT_ROOT_URL}/assetUrl`,
   method: 'get',
   params: { s3link },
@@ -558,7 +621,7 @@ const getPOUrl = (
   s3link: string,
   docRevId: string,
   handlers: Handlers,
-): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+): ApiDownloadAction => downloadApiAction({
   url: `${PURCHASE_ORDER_ROOT_URL}/${docRevId}/pdf`,
   method: 'get',
   params: { s3link },
