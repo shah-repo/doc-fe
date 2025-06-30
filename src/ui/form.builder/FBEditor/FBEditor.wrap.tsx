@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { FB, FBEditorProps, FBEditorState } from '..';
 import { SM } from '../../../App';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
@@ -41,6 +41,10 @@ export const withFBEditor = <T extends FBEditorProps>(
       const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
       const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
       tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+
+      if (group === DocTypeGroups.CHANGE_REQUEST) {
+        tabConfig = tabConfig.filter(tab => tab.type !== TabTypeOptions.ITEMS);
+      }
     }
 
     useEffect(() => {
