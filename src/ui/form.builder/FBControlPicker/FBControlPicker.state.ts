@@ -75,7 +75,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
         ...this.hasApproval ? ['inlineapproval'] as FBInputType[] : [],
         ...this.hasRequestApproval ? ['requestapproval'] as FBInputType[] : [],
       ],
-      customcontrols: ['customcontrol'],
+      // customcontrols: ['customcontrol'],
       instructions: ['instructionsdocument', 'selectdocument'],
       buttons: ['checkpoint', 'createlabel', 'task'],
       actions: ['action'],
