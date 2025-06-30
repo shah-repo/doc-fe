@@ -55,10 +55,15 @@ export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
       {assignees?.map(({ employeeId, status }: EmployeeResponse) => {
         const canEdit = showEditor(employeeId, status);
 
-        return <div className={classes.commentCell} >
-          {canEdit && <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} /> }
-          {!canEdit && (assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER)}
-        </div>;
+        return (
+          <div className={classes.commentCell}>
+            {canEdit ? (
+              <Editor {...props} {...{ field: `${taskId}.${COMMENTS_FIELD}.${employeeId}`, employeeId }} />
+            ) : (
+              assigneeComments[employeeId] ?? EMPTY_VALUE_PLACEHOLDER
+            )}
+          </div>
+        );
       })}
     </OverflowingContent>
   </>);

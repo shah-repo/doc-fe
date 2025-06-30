@@ -292,7 +292,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
   const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
-  const isDisabled = isWORecord ? isWOVoided : false;
+  const isDisabled = isWORecord && isWOVoided;
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
