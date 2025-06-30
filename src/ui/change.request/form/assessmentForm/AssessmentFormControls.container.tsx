@@ -3,8 +3,9 @@ import { FormikErrors } from 'formik';
 import { find, isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
-import { GroupTag } from '../../../../state/ducks/auth/types';
+import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from '../../../../state/ducks/changeRequest/types';
 import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import HeaderMenu from '../../../components/common/header/Menu';
@@ -96,10 +97,9 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     = !formContext.isEditing && isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
   const canSendToReview
     = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
-  const canClose
-    = isCurrentUserOwner
-    && (changeRequest.state === ChangeRequestStatus.Approved
-      || changeRequest.state === ChangeRequestStatus.Implementation);
+  const closeARStates = [ChangeRequestStatus.Approved, ChangeRequestStatus.Implementation];
+  const hasCloseARPermission = useSelector(getHasPermission(Permission.CLOSE_AR));
+  const canClose = hasCloseARPermission && closeARStates.includes(changeRequest.state);
 
   const currentUserApproval = changeRequest.approvals.filter(
     (approval) => approval.approver.user.email === currentUserEmail,

@@ -11,7 +11,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabIds, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
@@ -340,9 +340,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           isDisabled={true} isShowOnly={true} isWO={isWO} />
                       )}
                       {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                        && _tabsState?.isTabActive(
-                          TabTypeOptions.MATERIAL_DISPOSITION,
-                        ) && <FBMaterialDisposition isShowOnly />}
+                        && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION) && (
+                        <>
+                          <FBMaterialDisposition isShowOnly />
+                          <FBSchema {...{ schema }} schemaState={previewWorkspaceState} workspaceMode={mode} />
+                        </>
+                      )}
                     </SMBox>
                   );
                 })}
