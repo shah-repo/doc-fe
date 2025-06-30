@@ -26,7 +26,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 
     const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
 
-    const shouldUploadFiles = () => workspaceState?.mode !== 'preview' || isWORecord || forceFileUpload;
+    const shouldUploadFiles = workspaceState?.mode !== 'preview' || isWORecord || forceFileUpload;
 
     if (fileUploadEl) {
       fileUploadEl.onclick = registerCancel;
@@ -74,7 +74,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
         return;
       }
 
-      if (shouldUploadFiles()) {
+      if (shouldUploadFiles) {
         fileFieldState?.upload(filesToUpload);
       }
     };
@@ -88,7 +88,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       reaction(
         () => fileFieldState?.data,
         (data) => {
-          if (shouldUploadFiles()) {
+          if (shouldUploadFiles) {
             fileUploadState?.addFile(data);
           }
         },
