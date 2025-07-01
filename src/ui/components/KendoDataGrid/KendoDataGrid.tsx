@@ -63,11 +63,9 @@ const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...prop
     return null;
   }
 
-  const translatedTitle = translate(column.title);
-
   return (
     <Tooltip
-      title={isOverflowing ? translatedTitle : ''}
+      title={isOverflowing ? translate(column.title) : ''}
       placement="top-start"
       arrow
     >
