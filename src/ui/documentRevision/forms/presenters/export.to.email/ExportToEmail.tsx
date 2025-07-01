@@ -12,16 +12,21 @@ import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/f
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../../../state/types';
 import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../../../app/sockets/DownloadPDFSockets';
 import { downloadFile } from '../../../../common/utils/helpers';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import { ExportPDFCloseButton, ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../../../components/notifications/ExportPDFToastr.styles';
+import PasswordDialog from '../../../../components/password/dialog';
+import { Password } from '../../../../components/password/types';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import { documentRevisionStatusContextFromDocList } from '../../../DocumentRevisionsManager.container';
 import ExportToEmailDialogActions from './ExportToEmailDialogActions';
 import ExportToEmailModal, { ExportToEmailDialogRefType } from './ExportToEmailModal';
 interface Props {
@@ -49,6 +54,14 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const classes = exportPDFToastrStyles();
+  const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
+  const passwordDialogHandler = useDialog();
+  const passwordState = {
+    status: AsyncStatus.Idle,
+    message: '',
+  };
+
+  const openPasswordDialog = () => passwordDialogHandler.open();
 
   const handleDownloadComplete = (isComplete: boolean) => {
     setIsDownloadInprogress(!isComplete);
@@ -87,19 +100,57 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
   );
+  const exportToEmailWithPassword = useActionCreator(
+    documentRevisionsActions.exportToEmailWithPassword,
+  );
   const childFormRef = useRef<ExportToEmailDialogRefType>();
 
-  const runExportWithChildren = () => {
+  const runExportWithChildren = (password?: string) => {
     if (childFormRef.current) {
       const values = omit(childFormRef.current.getValues(), 'includeDate');
       setIsDownloadInprogress(true);
-      async.start(
-        exportToEmail,
-        revisionId,
-        { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
-        async,
-      );
+      if (password) {
+        async.start(
+          exportToEmailWithPassword,
+          revisionId,
+          { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
+          async,
+          password,
+        );
+      } else {
+        async.start(
+          exportToEmail,
+          revisionId,
+          { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
+          async,
+        );
+      }
     }
+  };
+
+  const isPasswordRequired = () => {
+    console.log('cleanCopyRequiresPassword: ', { documentRevisionStatusFromDocList });
+
+    const hasPasswordRequiredStatusFromDocList = (
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
+        || documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+
+    return hasPasswordRequiredStatusFromDocList;
+  };
+
+  const handleEmail = () => {
+    if (isPasswordRequired()) {
+      openPasswordDialog();
+    } else {
+      runExportWithChildren();
+    }
+  };
+
+  const passwordSubmit = (values: Password) => {
+    console.log({ values });
+
+    passwordDialogHandler.close();
+    runExportWithChildren(values.password);
   };
 
   const getUpdatedButton = () => {
@@ -154,11 +205,17 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
         open={emailDialog.isOpen}
         onClose={emailDialog.close}
         actionsProps={{ className: classes.dialogAction }}
-        actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
+        actions={ <ExportToEmailDialogActions {...{ handleEmail, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
       >
         <DownloadPDFSockets employeeId={employeeId} revId={revisionId} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
         <ExportToEmailModal ref={childFormRef} {...{ setNoOptionSelected, isNoOptionSelected, revisionId }} />
       </Dialog>
+      <PasswordDialog
+        isDialogOpen={passwordDialogHandler.isOpen}
+        onSubmit={passwordSubmit}
+        closeDialog={passwordDialogHandler.close}
+        asyncState={passwordState}
+      />
     </>
   );
 };
