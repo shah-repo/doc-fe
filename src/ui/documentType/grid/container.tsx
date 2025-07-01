@@ -10,13 +10,14 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { PageDetailsColumn } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps, KendoGridFilterCell, KendoGridHeaderCell } from '../../components/KendoGrid/interfaces';
 import { TableColumnProps } from '../../components/table/column/types';
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
@@ -27,6 +28,7 @@ import { isTranslation } from '../../translations/types';
 import { RouteParams } from '../utils/types';
 import { cellOverflowFields, ownerFieldsMapping } from './constants';
 import { columnSearchConfiguration, getStaticColumns } from './helpers';
+import { DocTypeTableContext } from './interfaces';
 import { DocumentTypePresenter } from './presenter';
 
 const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({
@@ -44,6 +46,19 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     },
   });
   const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
+
+  // ASL Status
+  const [aslStatuses, saveAslStatuses] = useState<ASLStatus[]>([]);
+  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
+
+  const supplierTypesAsync = useAsync<ASLStatus[]>({
+    onSuccess: (aslStatusList) => {
+      saveAslStatuses(aslStatusList ?? []);
+    },
+  });
+
+  const getASLStatuses = () => supplierTypesAsync.start(fetchASLTypes, false, supplierTypesAsync);
+
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
@@ -90,6 +105,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getStatuses();
+    if (categoryName === DocumentCategory.Supplier) {
+      getASLStatuses();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
@@ -135,6 +153,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
+    let dynamicHeaderCellTemplate;
     let dynamicCellGroupable = true;
     let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key : columnDetails.key;
     if (columnDetails.searchOptions?.dateFilter) {
@@ -153,6 +172,12 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (columnDetails.searchOptions?.supplierStatusTemplate || upDateField === 'precalc.supplierStatus') {
+      filterCellTemplate = KendoGridFilterCell.SUPPLIER_STATUS;
+      dynamicCellTemplate = KendoCellTemplates.SUPPLIER_STATUS;
+    } else if (upDateField === 'precalc.supplierCertifications') {
+      filterCellTemplate = KendoGridFilterCell.SUPPLIER_CERTIFICATIONS;
+      dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     } else if (columnDetails.searchOptions?.eqStatusTemplate) {
       dynamicCellTemplate = KendoCellTemplates.EQ_STATUS;
       filterCellTemplate = KendoGridFilterCell.EQ_STATUS;
@@ -161,6 +186,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT_WITH_CURRENCY;
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
+    } else if (upDateField === 'precalc.supplierAttachmentsCount') {
+      dynamicCellTemplate = KendoCellTemplates.ATTACHMENT_COUNT;
+      dynamicHeaderCellTemplate = KendoGridHeaderCell.ATTACHMENT_COUNT;
     } else if (cellOverflowFields.includes(upDateField)) {
       dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
@@ -177,6 +205,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       width: 15,
       groupable: dynamicCellGroupable,
       cell: dynamicCellTemplate,
+      headerCell: dynamicHeaderCellTemplate,
       locked: false,
       show: true,
       showColumnMenu: true,
@@ -199,22 +228,25 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     }
     history.push(urlPath);
   };
+
   return (
-    <DocumentTypePresenter
-      tableName={TABLE_NAME}
-      tableCriteria={tableCriteria}
-      schema={schema}
-      statuses={statuses}
-      isByCategory={isByCategory}
-      documentCategory={documentCategory}
-      documentType={documentType}
-      headerColumns={columnDef}
-      columns={kendoColumnDef as KendoColumn[]}
-      onRowClick={onRowClick}
-      title={title}
-      queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
-      documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
-    />
+    <DocTypeTableContext.Provider value={{ aslStatuses, isLoading: supplierTypesAsync?.isLoading }}>
+      <DocumentTypePresenter
+        tableName={TABLE_NAME}
+        tableCriteria={tableCriteria}
+        schema={schema}
+        statuses={statuses}
+        isByCategory={isByCategory}
+        documentCategory={documentCategory}
+        documentType={documentType}
+        headerColumns={columnDef}
+        columns={kendoColumnDef as KendoColumn[]}
+        onRowClick={onRowClick}
+        title={title}
+        queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
+        documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
+      />
+    </DocTypeTableContext.Provider>
   );
 };
 

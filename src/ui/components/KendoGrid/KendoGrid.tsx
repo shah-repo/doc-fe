@@ -3,27 +3,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
 import { CompositeFilterDescriptor, DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
 import React, { ComponentType, useCallback, useContext, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag } from '../../../state/ducks/auth/types';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import AnnouncementIndicator from '../../administration/announcements/Indicator';
+import { Announcement } from '../../administration/announcements/interface';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
 import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
+import { ASLStatusFilterTemplate } from '../../document.revision/grid/filter.template/ASLStatusFilterTemplate';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
+import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
@@ -31,6 +37,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
 import { getLotStatusLabel } from '../common/header/HeaderLotStatus';
+import Attachments from '../common/kendo.column.templates/Attachments';
 import { DropdownFilterTemplate } from '../common/kendo.column.templates/DropdownFilterTemplate';
 import { RenderCustomCell } from '../common/kendo.column.templates/RenderCellTemplate';
 import ColumnHeader from '../common/kendo/ColumnHeader';
@@ -46,7 +53,7 @@ import ClearFilters from '../table/ClearFilters';
 import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
 import { printColumnProps } from '../table/printLabel/PrintLabelDetailsDialog.wrap';
 import { DataLoader } from './DataLoader';
-import { KendoGridFilterCell, KendoGridProps } from './interfaces';
+import { KendoGridFilterCell, KendoGridHeaderCell, KendoGridProps } from './interfaces';
 import KendoGridStyles from './KendoGrid.styles';
 
 const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
@@ -57,6 +64,7 @@ export function KendoGrid<T extends any> ({
   tableCriteria,
   schema,
   statuses = [],
+  aslStatuses = [],
   onRowClick,
   queryUrl,
   defaultPayloadData,
@@ -85,6 +93,9 @@ export function KendoGrid<T extends any> ({
     onSuccess: () => toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' })),
     onError: toastError,
   });
+
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
+  const canSeeAnnouncements = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
 
   useEffect(() => {
     if (didMount) {
@@ -174,6 +185,11 @@ export function KendoGrid<T extends any> ({
     }
   };
 
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const announcementReceived = (data: Announcement[]) => {
+    setAnnouncements(data);
+  };
+
   // Column Menu Filters
   const ActiveFilter = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
@@ -191,6 +207,15 @@ export function KendoGrid<T extends any> ({
       {...props}
       documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
+  const ASLSupplierStatusFilter = (props: GridFilterCellProps) => (
+    <ASLStatusFilterTemplate
+      {...props}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
@@ -299,6 +324,22 @@ export function KendoGrid<T extends any> ({
   const InputFilter = (props: GridFilterCellProps) => (
     <InputFilterTemplate {...props} />
   );
+  const ExpirationDate = (props: GridFilterCellProps) => (
+    <ExpirationDateFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
+  const AttachmentsCountHeaderCell = (props: GridHeaderCellProps) => {
+    return (
+      <Attachments
+        {...props}
+      />
+    );
+  };
 
   const filterCellMapping = {
     [KendoGridFilterCell.ACTIVE]: ActiveFilter,
@@ -316,6 +357,12 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
     [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
+    [KendoGridFilterCell.SUPPLIER_STATUS]: ASLSupplierStatusFilter,
+    [KendoGridFilterCell.SUPPLIER_CERTIFICATIONS]: ExpirationDate,
+  };
+
+  const headerCellMapping = {
+    [KendoGridHeaderCell.ATTACHMENT_COUNT]: AttachmentsCountHeaderCell,
   };
 
   const sortedColumnDefinitions = orderByLockedState(columns, []);
@@ -330,8 +377,11 @@ export function KendoGrid<T extends any> ({
             width={setColumnWidth(column.width as number, gridWidth)}
             minResizableWidth={200}
             headerCell={
-              column.title ? (props) => <ColumnHeader {...props} /> : undefined
+              headerCellMapping[column.headerCell as string]
+                ? headerCellMapping[column.headerCell as string]
+                : column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
+
             cell={(props) => {
               props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
                 && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
@@ -574,10 +624,16 @@ export function KendoGrid<T extends any> ({
       >
         <GridToolbar>
           <Grid container>
-            <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
+            <Grid item={true} xs={4} className={classes.filters}>
               <ClearFilters {...{ clearFilter }} />
             </Grid>
-            <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
+            <Grid item={true} xs={4} className={classes.announcements}>
+              {
+                announcements.length > 0 && canSeeAnnouncements
+                && <AnnouncementIndicator announcement={announcements[0]} />
+              }
+            </Grid>
+            <Grid item={true} xs={4} className={classes.columnMenu}>
               <ColumnShowHideMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -589,6 +645,7 @@ export function KendoGrid<T extends any> ({
           <GridColumn
             {...printColumnProps }
             filterable={false}
+            headerCell={printColumnProps.headerCell as ComponentType<GridHeaderCellProps> | undefined}
             filterCell={printColumnProps.filterCell as ComponentType<GridFilterCellProps>}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
@@ -610,6 +667,7 @@ export function KendoGrid<T extends any> ({
         <DataLoader
           dataState={dataState}
           onDataReceived={dataReceived}
+          onAnnouncementReceived={announcementReceived}
           schema={schema}
           tableName={tableName}
           queryUrl={queryUrl}

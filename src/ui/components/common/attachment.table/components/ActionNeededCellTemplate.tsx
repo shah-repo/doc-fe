@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Divider, MenuItem } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 import cx from 'classnames';
 import { get, kebabCase } from 'lodash';
 import React, { useMemo } from 'react';
@@ -30,7 +30,7 @@ interface Props extends CellTemplateProps<Attachment> {
 }
 
 const ActionNeededCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem: attachment, documentRevision, onDownloadAttachment, onDownloadAsPDF, onView, onDelete } = props;
+  const { dataItem: attachment, documentRevision, onDownloadAttachment, onDownloadAsPDF, onView, onDelete, dataIndex } = props;
   const classes = useStyles();
   const type = get(attachment, 'type') as AttachmentType;
   const isFileViewable = useMemo(() => checkIfFileIsViewable(type), [type]);
@@ -55,36 +55,36 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
     <HeaderMenu
       columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
       menuIconButtonClass={classes.iconButton}
-      dataCy={`${kebabCase(attachment?.name)}-menu`}
+      dataCy={`${kebabCase(attachment?.name)}-menu-${dataIndex}`}
       icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
     >
-      <MenuItem onClick={() => onDownloadAttachment?.(attachment)}>
+      <div onClick={() => onDownloadAttachment?.(attachment)} data-cy="option-download">
         <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.menuIcons} />
         <Text message={translate('attachment.menu.download.file')} />
-      </MenuItem>
+      </div>
       {canWatermark && (
-        <MenuItem onClick={() => onDownloadAsPDF?.(attachment, AttachmentType.Attached, id)}>
+        <div onClick={() => onDownloadAsPDF?.(attachment, AttachmentType.Attached, id)} data-cy="option-download-as-pdf">
           <FontAwesomeIcon icon={regular('file-lines')} className={classes.menuIcons} />
           <Text message={translate('attachment.menu.download.as.pdf')} />
-        </MenuItem>
+        </div>
       )}
       {isFileViewable && (
-        <MenuItem onClick={onView?.(attachment)}>
+        <div onClick={onView?.(attachment)} data-cy="option-view">
           <FontAwesomeIcon icon={regular('eye')} className={classes.menuIcons} />
           <Text message={translate('attachment.menu.view')} />
-        </MenuItem>
+        </div>
       )}
       {isUserDocumentOwner && requiredStatus && (
-        <MenuItem onClick={onDelete?.(attachment)}>
+        <div onClick={onDelete?.(attachment)} data-cy="option-delete">
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
           <Text message={translate('common.delete')} />
-        </MenuItem>
+        </div>
       )}
       {showSetAsPrimary && !isNewDocument && (
-        <>
+        <div data-cy="option-set-as-primary" className={classes.columnMenuItemPrimary} >
           <Divider />
           <MenuItemSetPrimary {...{ attachment, documentRevision }} />
-        </>
+        </div>
       )}
     </HeaderMenu>
   );

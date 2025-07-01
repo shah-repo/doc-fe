@@ -8,6 +8,7 @@ import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../../compon
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
+import { ListType } from '../../../../bulkMigration/interface';
 import useStyles from '../styles';
 import { EditableMaterialFlowAclRule } from '../types';
 
@@ -28,7 +29,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
   const value = (isEditMode ? values[field] : dataItem[field]) as CompanyLocation;
 
   const isScrapAction = values.action === LotTransferType.Scrap;
-  const isDisabled = field === 'to' && isScrapAction;
+  const isDisabled = field === ListType.TO && isScrapAction;
 
   if (isEditMode && !isEmpty(values)) {
     return (

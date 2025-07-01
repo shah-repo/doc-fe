@@ -1,4 +1,6 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { SupplierConfig } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
@@ -262,6 +264,7 @@ interface TrainingReminders {
   isThreeDaysDueOnCcActive: boolean
   isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
+  isEmailSendingEnabled?: boolean
 }
 
 export interface GeneralSettings {
@@ -270,6 +273,8 @@ export interface GeneralSettings {
   equipmentFamily: EquipmentFamilySettings
   isMaterialFlowAclEnabled: boolean
   lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  aslStatusConfig: ASLStatus[]
+  supplierConfig: SupplierConfig[]
   materialFlowACLs: MaterialFlowAclRule[]
   shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP

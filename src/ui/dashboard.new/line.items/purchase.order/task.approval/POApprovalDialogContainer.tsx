@@ -1,19 +1,26 @@
 import { ButtonProps } from '@material-ui/core/Button';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
+import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import { toastSuccess } from '../../../../components/notifications';
+import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
+import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
+import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
+import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { ApprovalFailureResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import { Translation } from '../../../../translations/types';
 import ApproveDialog from '../../dialogs/transitionDialog/ApproveOrRejectDialog';
-import PoRejectDialog from '../../dialogs/transitionDialog/PoRejectDialog';
 import { PasswordFormValues } from '../../dialogs/transitionDialog/types';
 interface Props {
   approvalId: string
@@ -42,6 +49,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   onSuccess,
 }) => {
   const dispatch = useDispatch();
+  const supplierStatusDialog = useDialog();
+  const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
+  const [password, setPassword] = useState<string>();
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
@@ -70,28 +80,55 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         dispatch(dashboardMyFeedsActions.loadMyFeedsList());
       }
     },
-    onError: () => {
+    onError: (error?: string) => {
       async.reset();
+      if (!error) {
+        toastError(translate('supplier.announcement.unknown.error.message'));
+        return;
+      }
+
+      try {
+        const parsedError = JSON.parse(error);
+        const { status, response } = parsedError || {};
+
+        if (status === ErrorCodes.PRECONDITION_FAILED && response) {
+          setErrorResponse(response as ApprovalFailureResponse);
+          supplierStatusDialog.open();
+        } else {
+          toastError(error);
+        }
+      } catch {
+        toastError(error);
+      }
     },
   });
+  const asyncState = useSelector(documentRevisionsSelectors.getLoadAsyncTaskApprovalState);
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onSubmit = (props: PasswordFormValues) => {
-    async.start(applyTransition, approvalId, transition, async, props.password);
+    setPassword(props.password);
+    async.start(applyTransition, approvalId, transition, async, props.password, TASK_APPROVAL_GET_ASYNC);
   };
   const onReject = () => {
     async.start(applyTransition, approvalId, transition, async, null);
   };
+
+  const onConfirmClick = () => {
+    async.start(applyTransition, approvalId, transition, async, password, TASK_APPROVAL_GET_ASYNC, true);
+    setPassword('');
+    supplierStatusDialog.close();
+  };
+
   return (
     <>
-      { type && <PoRejectDialog
+      { type && <AlertDialog
         dialog={transitionDialog}
-        message={translationRejectMsg}
-        onSubmit={onReject}
+        message="dashboard.po.reject.alert"
+        confirmAction={onReject}
         cancelAction={transitionDialog.close}
-      />}
+      /> }
       { !type && <ApproveDialog
         onSubmit={onSubmit}
-        asyncState={async.asyncState}
+        asyncState={asyncState}
         buttonProps={buttonProps}
         transition={transition}
         label={label}
@@ -99,6 +136,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
           transitionDialog,
         }}
       />}
+      {errorResponse && (
+        <SupplierStatusDialog
+          dialog={supplierStatusDialog}
+          data={errorResponse}
+          confirmAction={onConfirmClick} />
+      )}
     </>
   );
 };
