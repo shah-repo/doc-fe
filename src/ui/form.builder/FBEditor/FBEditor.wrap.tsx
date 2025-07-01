@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBEditorProps, FBEditorState } from '..';
 import { SM } from '../../../App';
@@ -40,11 +40,14 @@ export const withFBEditor = <T extends FBEditorProps>(
       const docTypeGroup = get(documentRevision?.document.documentType, 'group', DOC_TYPE_GROUP.OTHER);
       const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
       const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-      tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+      const rawTabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
 
-      if (group === DocTypeGroups.CHANGE_REQUEST) {
-        tabConfig = tabConfig.filter(tab => tab.type !== TabTypeOptions.ITEMS);
-      }
+      tabConfig = useMemo(() => {
+        if (group === DocTypeGroups.CHANGE_REQUEST) {
+          return rawTabConfig.filter(tab => tab.type !== TabTypeOptions.ITEMS);
+        }
+        return rawTabConfig;
+      }, [rawTabConfig]);
     }
 
     useEffect(() => {
