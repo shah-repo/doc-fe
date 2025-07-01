@@ -83,9 +83,14 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   }
 
   useEffect(() => {
-    const navigateToTabId = new URLSearchParams(location.search).get('tabId');
-    if (navigateToTabId) {
-      _tabsState?.setActiveTabId(navigateToTabId);
+    const schemaType = new URLSearchParams(location.search).get('component');
+    if (!schemaType) return;
+
+    const schemaItems = changeRequest?.formDocument?.formTemplate?.schema ?? [];
+    const matchedSchemaItemTabId = schemaItems.find((item) => item.type === schemaType)?.tabId;
+
+    if (matchedSchemaItemTabId) {
+      _tabsState?.setActiveTabId(matchedSchemaItemTabId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
