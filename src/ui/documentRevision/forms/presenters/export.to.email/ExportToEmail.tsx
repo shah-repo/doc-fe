@@ -129,8 +129,6 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   };
 
   const isPasswordRequired = () => {
-    console.log('cleanCopyRequiresPassword: ', { documentRevisionStatusFromDocList });
-
     const hasPasswordRequiredStatusFromDocList = (
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
         || documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
@@ -147,8 +145,6 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   };
 
   const passwordSubmit = (values: Password) => {
-    console.log({ values });
-
     passwordDialogHandler.close();
     runExportWithChildren(values.password);
   };
