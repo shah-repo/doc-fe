@@ -2,7 +2,7 @@ import { groupBy, keyBy, uniq } from 'lodash';
 import { combineReducers } from 'redux';
 import asyncReducer from '../../reducers/asyncReducer';
 import { AuditByCRIdState } from '../audit/types';
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS, CHANGE_REQUEST_UPDATE_ASYNC } from './constants';
 import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestDependentOnDocRevsSetAction, ChangeRequestDependentOnDocRevsState, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from './types';
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
@@ -142,6 +142,7 @@ export default combineReducers({
   loadAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
   loadApproversAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_APPROVERS_ASYNC),
   loadAuditAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_AUDIT_ASYNC),
+  updateAsyncInfo: asyncReducer(CHANGE_REQUEST_UPDATE_ASYNC),
   byId,
   allIds,
   approversById,
