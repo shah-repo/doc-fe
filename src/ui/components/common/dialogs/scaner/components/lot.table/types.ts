@@ -9,6 +9,13 @@ export interface ScanLot {
   id: string
 }
 
+export interface ScanLotTableProps {
+  scanLots: ScanLot[]
+  disabled?: boolean
+  updateScanLot?: (item: ScanLot) => void
+  deleteScanLot?: (item: ScanLot) => void
+}
+
 export interface EditableScanLot extends ScanLot {
   [MODE_FIELD]: Mode
 }

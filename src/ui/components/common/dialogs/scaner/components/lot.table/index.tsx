@@ -12,13 +12,13 @@ import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types'
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableScanLot } from './types';
+import { EditableScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC = () => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
-  // const isVendorAdded = editedScanLot?.[MODE_FIELD] === Mode.add;
+  const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
   const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
   const isInEditMode = editedScanLot !== undefined;
   const handleRowClick = !isInEditMode ? editScanLot : undefined;
@@ -37,10 +37,11 @@ const ScanLotTable: React.FC = () => {
     resetForm({ values: editedScanLot ?? {} });
   }, [editedScanLot, setValues, resetForm]);
 
-  const createDraftScanLot = () => setEditedScanLot({
-    id: uuidv4(),
-    [MODE_FIELD]: Mode.add,
-  });
+  const createDraftScanLot = () =>
+    setEditedScanLot({
+      id: uuidv4(),
+      [MODE_FIELD]: Mode.add,
+    });
 
   const discardScanLot = () => setEditedScanLot(undefined);
 
@@ -57,18 +58,11 @@ const ScanLotTable: React.FC = () => {
       return row;
     }
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const schema = buildSchema({
@@ -77,27 +71,22 @@ const ScanLotTable: React.FC = () => {
     onConfirm: submitForm,
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
-    // onPrimaryChange: setPrimaryVendor,
   });
 
-  // const vendorsList = vendors.reduce((list, item) => {
-  //   const isVendorEdited = editedScanLot && editedScanLot.id === item.id;
-  //   const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
-  //   const supplierName = supplier?.name ?? item.vendor?.name;
-  //   const supplierStatus = supplier?.displayStatus ?? '';
-  //   const supplierState = supplier?.supplierStatusId ?? '';
+  const scanLotList = scanLots.reduce(
+    (list, item) => {
+      const isScanLotEdited = editedScanLot && editedScanLot.id === item.id;
 
-  //   return [
-  //     ...list,
-  //     {
-  //       ...(isVendorEdited ? editedScanLot : item),
-  //       [SUPPLIER_FIELD]: supplierName,
-  //       [SUPPLIER_STATUS_FIELD]: supplierStatus,
-  //       [SUPPLIER_STATE_FIELD]: supplierState,
-  //       [MODE_FIELD]: isVendorEdited ? Mode.edit : Mode.show,
-  //     },
-  //   ];
-  // }, isVendorAdded ? [editedScanLot] : []);
+      return [
+        ...list,
+        {
+          ...(isScanLotEdited ? editedScanLot : item),
+          [MODE_FIELD]: editedScanLot ? Mode.edit : Mode.show,
+        },
+      ];
+    },
+    isScanLotEdited ? [editedScanLot] : [],
+  );
 
   return (
     <Box className={classes.root} data-cy="part-vendors">
@@ -107,18 +96,11 @@ const ScanLotTable: React.FC = () => {
         filterable
         hasBoxScrollbars
         schema={schema}
-        data={[]}
+        data={scanLotList as EditableScanLot[]}
         // onRowClick={handleRowClick}
         rowRender={rowRender}
       />
-      <Button
-        kind="add"
-        fullWidth
-        attached
-        disabled={isInEditMode}
-        onClick={createDraftScanLot}
-        data-cy="add-button"
-      >
+      <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={createDraftScanLot} data-cy="add-button">
         {translate('form.builder.part.vendors.add')}
       </Button>
     </Box>

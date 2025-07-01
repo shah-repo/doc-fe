@@ -61,7 +61,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
             </ListItem>
           ))}
         </List>
-        <ScanLotTable />
+        <ScanLotTable scanLots={[]} />
       </Box>
     </Dialog>
   );

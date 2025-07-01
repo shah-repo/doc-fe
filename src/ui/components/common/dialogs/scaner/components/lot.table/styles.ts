@@ -5,7 +5,6 @@ export default makeStyles(theme => ({
   root: {},
   grid: {
     borderCollapse: 'collapse',
-
     '& .k-grid-content': {
       '& tr': {
         height: 38,
@@ -18,6 +17,9 @@ export default makeStyles(theme => ({
           },
         },
       },
+    },
+    '& tr.k-filter-row': {
+      height: '0px !important',
     },
   },
   gridWithButton: {
