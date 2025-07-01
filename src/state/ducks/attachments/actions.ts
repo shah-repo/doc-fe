@@ -97,9 +97,10 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
 
     const { key, uploadId } = session;
 
-    const parts = session.parts.map(({ eTag, partNumber }) => ({
-      eTag,
+    const parts = session.parts.map(({ eTag, partNumber, checksum }) => ({
       partNumber,
+      eTag,
+      checksum,
     }));
 
     const handlers: Handlers<Attachment> = {
@@ -263,12 +264,20 @@ const uploadParts = (
   return parts;
 };
 
+const calculateChecksum = async (content: File | Blob): Promise<string> => {
+  const checksum = await crypto.subtle.digest('SHA-256', await content.arrayBuffer());
+  const checksumArray = Array.from(new Uint8Array(checksum));
+  return btoa(String.fromCharCode(...checksumArray));
+};
+
 const uploadPart = (
   part: EntryUploadPart,
   chunk: Blob,
   cancelTokenSource: CancelTokenSource,
   entryId: string,
 ): UploadThunkAction<Promise<EntryUploadPart>> => async (dispatch) => {
+  const checksum = await calculateChecksum(chunk);
+
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await axios({
@@ -281,6 +290,7 @@ const uploadPart = (
         },
         headers: {
           'Content-Type': chunk.type ?? 'application/octet-stream',
+          'x-amz-checksum-sha256': checksum,
         },
       });
 
@@ -293,7 +303,7 @@ const uploadPart = (
         throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.missing.etag'));
       }
 
-      return { ...part, eTag, uploaded: chunk.size };
+      return { ...part, eTag, checksum, uploaded: chunk.size };
     } catch (error) {
       if (attempt >= MAX_RETRIES || axios.isCancel(error)) {
         throw error;
