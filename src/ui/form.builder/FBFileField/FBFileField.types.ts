@@ -17,4 +17,5 @@ export type FBFileFieldProps =
   className?: string
   labelClassName?: string
   iconClassName?: string
+  forceFileUpload?: boolean
 };

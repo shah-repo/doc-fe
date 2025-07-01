@@ -11,7 +11,7 @@ import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { PremiumFeature } from '../../../../state/ducks/company/types';
 import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabIds, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -28,7 +28,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FB, FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -90,7 +90,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
-  const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -171,14 +170,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       tabId: TabTypeOptions.SUMMARY.toLowerCase(),
       type: TabTypeOptions.SUMMARY,
     }];
-  }
-
-  if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
-    tabConfig.splice(2, 0, {
-      labelId: 'tabId.materialDisposition',
-      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
-      type: TabTypeOptions.MATERIAL_DISPOSITION,
-    });
   }
 
   useObserver(() => {
@@ -395,11 +386,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                     />
                                   </>
                                 )}
-                                {tabType === TabTypeOptions.TABS_MEQ && (
+                                {tabType === TabTypeOptions.TABS_MEQ && (<>
                                   <FBMaterialEqInfoContainer
                                     documentRevision={documentRevision}
                                     inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                                   />
+                                </>
                                 )}
                                 {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                                   <FBTrainingInfoContainer
@@ -428,10 +420,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 )}
                                 {tabType
                                   === TabTypeOptions.MATERIAL_DISPOSITION
-                                  && _tabsState?.isTabActive(
-                                    TabTypeOptions.MATERIAL_DISPOSITION,
-                                  ) && (
+                                  && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION) && (<>
                                   <FBMaterialDisposition isShowOnly={true} />
+                                  <FBWorkspace
+                                    isPortal={false}
+                                    document={{
+                                      ...formValues.values as unknown as DocumentRevision,
+                                      ...documentRevision as unknown as DocumentRevision,
+                                    }}
+                                    {... { autosaveEnabled, workspaceState }}
+                                    initialValues={formInput}
+                                    schema={schema}
+                                  />
+                                </>
                                 )}
                               </SMBox>
                             )}

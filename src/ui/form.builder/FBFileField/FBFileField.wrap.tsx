@@ -11,6 +11,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 ): React.FC<T> => {
   const Comp = ({
     onUploadClick,
+    forceFileUpload = false,
     onClick,
     onChange,
     fileFieldState,
@@ -24,6 +25,8 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     const isWORecord = checkIsDocumentWO(groupOptions) && isEmpty(workspaceState?.document?.formTemplate);
 
     const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
+
+    const shouldUploadFiles = workspaceState?.mode !== 'preview' || isWORecord || forceFileUpload;
 
     if (fileUploadEl) {
       fileUploadEl.onclick = registerCancel;
@@ -71,7 +74,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
         return;
       }
 
-      if (workspaceState?.mode !== 'preview' || isWORecord) {
+      if (shouldUploadFiles) {
         fileFieldState?.upload(filesToUpload);
       }
     };
@@ -85,7 +88,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       reaction(
         () => fileFieldState?.data,
         (data) => {
-          if (workspaceState?.mode !== 'preview' || isWORecord) {
+          if (shouldUploadFiles) {
             fileUploadState?.addFile(data);
           }
         },

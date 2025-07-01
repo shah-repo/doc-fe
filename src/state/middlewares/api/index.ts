@@ -43,8 +43,7 @@ const apiMiddleware: Middleware = ({
   action: A,
 ) => {
   if (!isApiAction(action)) {
-    next(action);
-    return;
+    return next(action);
   }
 
   dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Active);
