@@ -288,6 +288,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
+          partId={parentPartRevId ?? ''}
           onConfirm={onScanDetailsAdd}
         />
       )}

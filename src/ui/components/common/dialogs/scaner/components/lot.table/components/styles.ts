@@ -51,4 +51,8 @@ export default makeStyles(theme => ({
     margin: theme.spacing(0, -1.125),
     width: `calc(100% + ${theme.spacing(2.25)}px)`,
   },
+  option: {
+    fontSize: 14,
+    overflowWrap: 'anywhere',
+  },
 }));

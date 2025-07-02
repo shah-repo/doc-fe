@@ -9,12 +9,13 @@ import useStyles from './styles';
 interface Props {
   children?: JSX.Element
   handler: DialogHandler
+  partId: string
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCancel, onClose }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCancel, onClose, partId }) => {
   const classes = useStyles();
 
   const keyValues = [
@@ -61,7 +62,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
             </ListItem>
           ))}
         </List>
-        <ScanLotTable scanLots={[]} />
+        <ScanLotTable scanLots={[]} units={[]} lots={[]} partId={partId} />
       </Box>
     </Dialog>
   );

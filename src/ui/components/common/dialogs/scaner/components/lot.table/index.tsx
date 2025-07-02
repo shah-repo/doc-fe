@@ -15,7 +15,7 @@ import useStyles from './styles';
 import { EditableScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -67,6 +67,8 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots }) => {
 
   const schema = buildSchema({
     isInEditMode,
+    units,
+    lots,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,
