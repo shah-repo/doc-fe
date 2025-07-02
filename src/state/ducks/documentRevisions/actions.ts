@@ -707,7 +707,7 @@ const exportToEmailWithPassword = (
   password?: string,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/export/revision/${revisionId}/email`,
+    url: `/export/revision/${revisionId}/email_red_line`,
     method: 'post',
     data: body,
     handlers,

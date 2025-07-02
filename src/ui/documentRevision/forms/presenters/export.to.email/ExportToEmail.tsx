@@ -69,11 +69,17 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   };
 
   const async = useAsync({
-    onError: () => {
+    onError: (message) => {
       setIsDownloadInprogress(false);
       if (!canAccess) {
         toastError(
           intl.formatMessage({ id: 'common.send.to.email.no.access' }),
+        );
+        return;
+      }
+      if (message) {
+        toastError(
+          intl.formatMessage({ id: message }),
         );
         return;
       }
