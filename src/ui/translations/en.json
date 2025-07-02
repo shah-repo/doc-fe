@@ -2621,5 +2621,7 @@
   "bk.audit.log.step.3.edit.table.data": "Step 3: Edit Table Data",
   "bk.audit.log.step.4.upload.attachment": "Step 4: Upload Attachment",
   "bk.audit.log.step.5.approvals": "Step 5: Approvals",
-  "bk.audit.log.step-6-importing": "Step 6: Importing"
+  "bk.audit.log.step-6-importing": "Step 6: Importing",
+  "lhr.materials.quantity.mismatch.error": "Quantity is mismatching",
+  "lhr.materials.total.cannot.exceed.start.quantity":"Total cannot exceed start quantity"
 }

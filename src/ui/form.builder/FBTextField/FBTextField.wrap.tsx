@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import React, { FocusEventHandler, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBTextFieldProps } from '..';
+import { translate } from '../../../common/intl';
 import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
 import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -21,6 +22,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     disabled,
     name = '',
     value,
+    error,
+    helperText,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -87,6 +90,13 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
+      if(workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+        const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
+        if((name === 'lhrs-accepted-quantity' && startQuantity < Number(value) + formState?.getFieldValue('lhrs-rejected-quantity'))
+          || (name === 'lhrs-rejected-quantity' && startQuantity < formState?.getFieldValue('lhrs-accepted-quantity') + Number(value))) {
+          return;
+        }
+      }
       if (!name) {
         return;
       }
@@ -121,6 +131,17 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    if(workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+      const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
+      if(name === 'lhrs-accepted-quantity') {
+        error = startQuantity < Number(value) + formState?.getFieldValue('lhrs-rejected-quantity');
+        helperText = error ? translate('lhr.materials.total.cannot.exceed.start.quantity') : '';
+      } else if(name === 'lhrs-rejected-quantity') {
+        error = startQuantity < formState?.getFieldValue('lhrs-accepted-quantity') + Number(value);
+        helperText = error ? translate('lhr.materials.total.cannot.exceed.start.quantity') : '';
+      }
+    }
+
     return Component({
       ...(props as T),
       onFocus,
@@ -133,6 +154,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       rows,
       mode,
       value,
+      error,
+      helperText,
     });
   };
   return (props: T) => Comp(props);
