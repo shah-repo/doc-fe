@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
-import { calculateTotalFileSize, FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import { getValidSizedFiles } from '../../components/common/attachment.field/utils';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
@@ -62,14 +62,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       if (!event.currentTarget.files) {
         return;
       }
-      const filesToUpload = Array.from(event.currentTarget.files);
-
-      const filesSize = calculateTotalFileSize(filesToUpload);
-      if (filesSize > FILE_UPLOAD_LIMIT) {
-        const names = filesToUpload.map(file => file.name);
-        handleFileSizeExceedLimit(names, filesSize, event);
-        return;
-      }
+      const filesToUpload = getValidSizedFiles(event.currentTarget.files);
 
       if (workspaceState?.mode !== 'preview' || isWORecord) {
         fileFieldState?.upload(filesToUpload);
@@ -85,6 +78,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       reaction(
         () => fileFieldState?.data,
         (data) => {
+          console.log('data', JSON.parse(JSON.stringify(data)));
           if (workspaceState?.mode !== 'preview' || isWORecord) {
             fileUploadState?.addFile(data);
           }
