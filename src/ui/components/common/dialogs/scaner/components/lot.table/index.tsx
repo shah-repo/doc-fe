@@ -12,10 +12,10 @@ import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types'
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableScanLot, ScanLotTableProps } from './types';
+import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addScanLot, updateScanLot }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -27,7 +27,13 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots }) =>
     initialValues: {},
     onSubmit: (values) => {
       const scanLot = omit(values, FIELDS_TO_OMIT);
-      console.log('scanLot', scanLot);
+      if (values[MODE_FIELD] === Mode.add) {
+        addScanLot?.(scanLot as ScanLot);
+        discardScanLot();
+      } else {
+        updateScanLot?.(scanLot as ScanLot);
+        discardScanLot();
+      }
     },
   });
 
@@ -78,12 +84,13 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots }) =>
   const scanLotList = scanLots.reduce(
     (list, item) => {
       const isScanLotEdited = editedScanLot && editedScanLot.id === item.id;
+      console.log('editedScanLot', editedScanLot);
 
       return [
         ...list,
         {
           ...(isScanLotEdited ? editedScanLot : item),
-          [MODE_FIELD]: editedScanLot ? Mode.edit : Mode.show,
+          [MODE_FIELD]: isScanLotEdited ? Mode.edit : Mode.show,
         },
       ];
     },

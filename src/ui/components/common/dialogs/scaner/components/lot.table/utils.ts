@@ -21,7 +21,7 @@ export const useOptions = (partId) => {
   useEffect(() => {
     partId && fetchPartLotsAsync.start(fetchLotsByPartId, partId, fetchPartLotsAsync);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [partId]);
 
   const units = useObserver(() => {
     const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<

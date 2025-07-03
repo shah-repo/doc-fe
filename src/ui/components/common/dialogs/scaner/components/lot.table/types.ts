@@ -19,6 +19,7 @@ export interface ScanLotTableProps {
   partId?: string
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
+  addScanLot?: (item: ScanLot) => void
 }
 
 export interface EditableScanLot extends ScanLot {
