@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { DocumentRevision } from '../../../../../../../state/ducks/documentRevisions/types';
 import { FBInputProps } from '../../../../../../form.builder';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
@@ -20,6 +21,7 @@ export interface ScanLotTableProps {
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
   addScanLot?: (item: ScanLot) => void
+  setScanLots: Dispatch<SetStateAction<ScanLot[]>>
 }
 
 export interface EditableScanLot extends ScanLot {
@@ -36,7 +38,7 @@ export interface SchemaOptions {
   lots: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
-  onDelete?: () => void
+  onDelete?: (item: EditableScanLot) => void
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
 }

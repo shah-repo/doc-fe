@@ -15,7 +15,7 @@ import useStyles from './styles';
 import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addScanLot, updateScanLot }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addScanLot, updateScanLot, deleteScanLot }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -51,9 +51,8 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
 
   const discardScanLot = () => setEditedScanLot(undefined);
 
-  const removeScanLot = () => {
-    if (!editedScanLot) return;
-
+  const removeScanLot = (lot: EditableScanLot) => {
+    deleteScanLot?.(lot);
     discardScanLot();
   };
 
@@ -106,7 +105,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
         hasBoxScrollbars
         schema={schema}
         data={scanLotList as EditableScanLot[]}
-        // onRowClick={handleRowClick}
+        onRowClick={handleRowClick}
         rowRender={rowRender}
       />
       <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={createDraftScanLot} data-cy="add-button">

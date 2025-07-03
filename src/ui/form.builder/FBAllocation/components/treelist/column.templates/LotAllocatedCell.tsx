@@ -191,10 +191,6 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     scanDialog.close();
   };
 
-  const onScanDetailsAdd = () => {
-    scanDialog.close();
-  };
-
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -290,7 +286,6 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
           handler={scanDialog}
           onClose={onClose}
           partId={parentPartRevId ?? ''}
-          onConfirm={onScanDetailsAdd}
         />
       )}
     </td>

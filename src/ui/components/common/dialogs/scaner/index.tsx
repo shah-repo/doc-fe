@@ -1,9 +1,10 @@
 import { Box, List, ListItem } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
 import ScanLotTable from './components/lot.table';
+import { ScanLot } from './components/lot.table/types';
 import useStyles from './styles';
 
 interface Props {
@@ -15,8 +16,9 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCancel, onClose, partId }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId }) => {
   const classes = useStyles();
+  const [scanLots, setScanLots] = useState<ScanLot[]>([]);
 
   const keyValues = [
     { key: 'Item ID', value: 'FG-00100' },
@@ -24,6 +26,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
     { key: 'Qty Needed', value: 20 },
     { key: 'Variance', value: 12 },
   ];
+
+  const onScanLotAdd = () => {
+    console.log('Final Lot scan payload', scanLots);
+  };
 
   return (
     <Dialog
@@ -49,7 +55,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
       }}
       onClose={onClose}
       onCancel={onCancel}
-      onConfirm={onConfirm}
+      onConfirm={onScanLotAdd}
     >
       <Box className={classes.contentWrapper}>
         <List>
@@ -62,7 +68,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onConfirm, children, onCa
             </ListItem>
           ))}
         </List>
-        <ScanLotTable scanLots={[]} units={[]} lots={[]} partId={partId} />
+        <ScanLotTable scanLots={scanLots} units={[]} lots={[]} partId={partId} setScanLots={setScanLots} />
       </Box>
     </Dialog>
   );
