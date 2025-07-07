@@ -1,6 +1,5 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { get } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ReactComponent as CompletedIcon } from '../../../../../../../assets/images/approved_status.svg';
@@ -13,7 +12,6 @@ import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { Button } from '../../../../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import {
-  EMPLOYEE_RESPONSE_FIELD,
   EmployeeStatus,
 } from '../../constants';
 import { CustomTemplateProps } from '../../types';
@@ -23,18 +21,17 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
   props,
 ) => {
   const classes = styles();
-  const { dataItem, employeeStatusUpdates, isDisabled, isClosed } = props;
-  const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
+  const { dataItem, employeeStatusUpdates, isDisabled } = props;
+  const assignees = dataItem?.employeeResponse ?? [];
   const { taskId } = dataItem;
   const handleClick = (employeeId: string) => {
-    employeeStatusUpdates?.(taskId, employeeResponse, employeeId);
+    employeeStatusUpdates?.(taskId, assignees, employeeId);
   };
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
-  const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
 
   return (
     <>
-      {assigneList?.map(({ employeeId, status, updatedAt }) => {
+      {assignees?.map(({ employeeId, status, updatedAt }) => {
         return (
           <div className={classes.employeeResponseFields}>
             {status === EmployeeStatus.Done ? (
@@ -53,7 +50,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                 </span>
               </div>
             ) : employeeId === currentUserId ? (
-              isClosed ? EMPTY_VALUE_PLACEHOLDER : (
+              isDisabled ? EMPTY_VALUE_PLACEHOLDER : (
                 <Button
                   className={classes.assigneeAction}
                   onClick={() => handleClick(employeeId)}
@@ -63,7 +60,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                   {translate('approvalRequest.tasks.list.assignee.complete')}
                 </Button>
               )
-            ) : isClosed ? EMPTY_VALUE_PLACEHOLDER : (
+            ) : isDisabled ? EMPTY_VALUE_PLACEHOLDER : (
               <div className={classes.assigneeActionStatusContainer}>
                 <FontAwesomeIcon
                   icon={solid('circle-check')}
