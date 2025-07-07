@@ -35,15 +35,17 @@ class FBFileUploadState {
     });
   };
 
-  @action public addFile = (file: Attachment | undefined) => {
+  @action public addFile = (file: Attachment | undefined): void => {
     if (isUndefined(file)) {
       return;
     }
-    // Not sure why we are checking s3link, it is always different
-    // const includes = find(this.files, (f) => f.s3link === file.s3link);
-    // isUndefined(includes) &&
     set(this, 'attachments', union(this.attachments, [file]));
     set(this, 'files', union(this.files, [{ id: file.id }]));
+  };
+
+  @action public addFiles = (files: Attachment[]): void => {
+    set(this, 'attachments', union(this.attachments, files));
+    set(this, 'files', union(this.files, files.map(file => ({ id: file.id }))));
   };
 
   @action public removeFile = (file: Attachment) => {
