@@ -21,6 +21,8 @@ import { styles } from './styles';
 interface CustomOptionType extends OptionType{
   calDueDate: string
   pmDueDate: string
+  calDueDateText: string
+  pmDueDateText: string
 }
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -75,6 +77,8 @@ const Editor: React.FC<CustomTemplateProps> = ({
         value: item.id,
         calDueDate: item.calDueDate,
         pmDueDate: item.pmDueDate,
+        calDueDateText: item.calDueDateText,
+        pmDueDateText: item.pmDueDateText,
       })) ?? [];
 
       if (isEmpty(inputValue)) {
@@ -96,6 +100,8 @@ const Editor: React.FC<CustomTemplateProps> = ({
       if (isEqTypeSelected) {
         setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.calDueDate, null);
         setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.pmDueDate, null);
+        setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, null);
+        setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, null);
       } else if (isMaterialTypeSelected) {
         setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
         setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
@@ -134,6 +140,8 @@ const Editor: React.FC<CustomTemplateProps> = ({
     if (isEqTypeSelected) {
       setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.calDueDate, value.calDueDate ?? null);
       setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.pmDueDate, value.pmDueDate ?? null);
+      setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, value.calDueDateText ?? null);
+      setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, value.pmDueDateText ?? null);
     } else if (isMaterialTypeSelected) {
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
