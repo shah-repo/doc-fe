@@ -471,6 +471,18 @@ const uploadFileAsync = (
   });
 };
 
+const uploadFilesAsync = (
+  files: File[],
+  lineType?: string,
+  index?: number,
+  isCleanCopyRequired = false,
+  partSize = PART_SIZE,
+): UploadThunkAction<Promise<Array<PromiseSettledResult<AttachmentUploadEntry>>>> => async (dispatch) => {
+  return await Promise.allSettled(
+    files.map(async file => await dispatch(uploadFileAsync(file, lineType, index, isCleanCopyRequired, partSize))),
+  );
+};
+
 const upload = (
   file: File,
   lineType: string,
@@ -665,6 +677,7 @@ const uploadImage = (
 export default {
   upload,
   uploadFileAsync,
+  uploadFilesAsync,
   cancelUpload,
   download,
   downloadRedLine,
