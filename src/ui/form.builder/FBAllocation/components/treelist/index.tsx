@@ -245,7 +245,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         lotVariance: values.variance,
       };
 
-      partAsync.start(createLot, payload, partAsync);
+      partAsync.start(createLot, [payload], partAsync);
     } else {
       if (!values.isExpired && isRecordUnchanged(values)) {
         return;
@@ -275,7 +275,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         partVariance,
       };
 
-      partAsync.start(createPart, payload, partAsync);
+      partAsync.start(createPart, [payload], partAsync);
     } else {
       if (isRecordUnchanged(values)) {
         return;
