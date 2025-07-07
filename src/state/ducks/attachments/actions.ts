@@ -115,15 +115,16 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
   });
 };
 
-const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
+const cancelUpload = (entryId: string): UploadThunkAction => (dispatch, getState) => {
   const { id, status, cancelSource } = getEntry(entryId, getState());
 
   if (status === AttachmentUploadEntryStatus.Uploading) {
     cancelSource?.cancel(translate('attachment.upload.deleted.by.user'));
   }
-  await dispatch(abortUpload(id));
-  dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
-  dispatch(deleteEntry(id));
+  dispatch(abortUpload(id)).finally(() => {
+    dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
+    dispatch(deleteEntry(id));
+  });
 };
 
 const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -173,8 +174,9 @@ const failUpload = (entryId: string, errorMessage: string): UploadThunkAction =>
     dispatch(_retryEntry(entryId));
     await dispatch(uploadFile(entryId));
   } else {
-    await dispatch(abortUpload(entryId));
-    dispatch(_failEntry(entryId, errorMessage));
+    dispatch(abortUpload(entryId)).finally(() => {
+      dispatch(_failEntry(entryId, errorMessage));
+    });
   }
 };
 
@@ -432,10 +434,10 @@ const updateStats = (force = false): UploadThunkAction => (dispatch, getState) =
   dispatch(_updateStats(currentSpeed, averageSpeed, eta, loaded, progress));
 };
 
-const uploadAsync = (
+const uploadFileAsync = (
   file: File,
-  lineType: string,
-  index: number,
+  lineType?: string,
+  index?: number,
   isCleanCopyRequired = false,
   partSize = PART_SIZE,
 ): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -469,6 +471,18 @@ const uploadAsync = (
   });
 };
 
+const uploadFilesAsync = (
+  files: File[],
+  lineType?: string,
+  index?: number,
+  isCleanCopyRequired = false,
+  partSize = PART_SIZE,
+): UploadThunkAction<Promise<Array<PromiseSettledResult<AttachmentUploadEntry>>>> => async (dispatch) => {
+  return await Promise.allSettled(
+    files.map(async file => await dispatch(uploadFileAsync(file, lineType, index, isCleanCopyRequired, partSize))),
+  );
+};
+
 const upload = (
   file: File,
   lineType: string,
@@ -476,7 +490,7 @@ const upload = (
   handlers: Handlers<Attachment>,
   isCleanCopyRequired = false,
 ): UploadThunkAction => async (dispatch) => {
-  return await dispatch(uploadAsync(file, lineType, index, isCleanCopyRequired))
+  return await dispatch(uploadFileAsync(file, lineType, index, isCleanCopyRequired))
     .then(({ id, attachment }) => {
       attachment && handlers.successHandler.execute(attachment);
       dispatch(deleteEntry(id));
@@ -662,7 +676,8 @@ const uploadImage = (
 
 export default {
   upload,
-  uploadAsync,
+  uploadFileAsync,
+  uploadFilesAsync,
   cancelUpload,
   download,
   downloadRedLine,
