@@ -4,6 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBRequiredApprover } from '..';
 import { SM } from '../../../App';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
@@ -13,8 +14,10 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/do
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
+import { documentVersionPath } from '../../document.revision/utils/paths';
 import { checkIsDocumentReceivable, checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
+import { generateLHRsDocs } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import { FBApprovalsProps } from './FBApprovals.types';
 
@@ -47,7 +50,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
   }: T) => {
     let isComponentVisible = false;
     let inlineApprovalExists = false;
-
+    const history = useHistory();
     const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState } = FB.useStores();
     const {
@@ -160,11 +163,16 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
+    console.log('---1----', { document, workspaceState, formState }, _documentRevisionFormState?.documentRevision, generateLHRsDocs(_documentRevisionFormState?.documentRevision));
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
+      if(approval.status === 'APPROVED' && document?.document.documentType.documentTypeName === 'LHR Step') {
+        const values = generateLHRsDocs(_documentRevisionFormState?.documentRevision);
+        history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''));
+      }
       if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
-        window.location.reload();
+        console.log('---transition----', { document, workspaceState });
+        // window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
         approvalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
