@@ -1,11 +1,23 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
 import { ExportToCsv } from 'export-to-csv';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
-import { DocumentCategory, DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
+import { translate } from '../../../../common/intl';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import {
+  DocumentCategory,
+  DocumentRevisionStatusDisplay,
+  HeaderTableType,
+  POStatusLabelMapping,
+  POStatusType,
+} from '../../../../state/ducks/documentRevisions/types';
+import { SearchContext } from '../../../components/KeywordSearch/types';
+import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
 import { FB } from '../../../form.builder';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './ExportListDialog.styles';
 
@@ -16,7 +28,10 @@ interface Props {
   useKeysAsHeaders?: boolean
   customFileName: string
   categoryName?: string
+  isMultiplePagesDownloadAllowed?: boolean
 }
+
+const DEFAULT_LIMIT = 25;
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
@@ -25,10 +40,14 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   useKeysAsHeaders = false,
   customFileName,
   categoryName,
+  isMultiplePagesDownloadAllowed = true,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
+  const [limit, saveLimit] = useState(DEFAULT_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
+  const context = useContext(SearchContext);
+  const loadAction = useActionCreator(documentRevisionsActions.downloadCSVData);
 
   const options = {
     showLabels: true,
@@ -51,11 +70,17 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     saveFileName(ev.target.value);
   };
 
+  const handleLimit = (ev: ChangeEvent<HTMLInputElement>) => {
+    saveLimit(ev.target.value as unknown as number);
+  };
+
   if (categoryName === DocumentCategory.PurchaseOrder) {
     data = data.map((item) => ({
       ...item,
       ...(item.poStatus === POStatusType.OPENED && { poStatus: POStatusLabelMapping.OPENED }),
-      ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && { displayStatus: DocumentRevisionStatusDisplay.Approved }),
+      ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && {
+        displayStatus: DocumentRevisionStatusDisplay.Approved,
+      }),
     }));
   }
 
@@ -79,16 +104,42 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     });
   }
 
+  const downloadCsvFromString = (csvString?: string) => {
+    try {
+      const blob = new Blob([csvString ?? ''], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName === '' ? customFileName : fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toastError(translate('document.revision.csv.download.failed.error.message'));
+    }
+  };
+
+  const async = useAsync<string>({
+    onSuccess: (csvData) => {
+      downloadCsvFromString(csvData);
+      dialog.close();
+    },
+  });
+
+  const downloadCSVFile = () => {
+    if (isMultiplePagesDownloadAllowed) {
+      async.start(loadAction, { ...context?.tableSearchQueryPayload, ...{ limit: limit ?? DEFAULT_LIMIT } }, async);
+    } else {
+      csvExporter.generateCsv(data);
+      dialog.close();
+    }
+  };
+
   return (
     <>
-      {
-        dialog.isOpen
-        && <Dialog
-          open={dialog.isOpen}
-          onClose={dialog.close}
-          maxWidth="sm"
-          PaperProps={{ id: 'exportListDialog' }}
-        >
+      {dialog.isOpen && (
+        <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'exportListDialog' }}>
           <DialogContent>
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
               <Box textAlign="center">
@@ -108,14 +159,28 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
                     error={fileName === ''}
                     variant="outlined"
                     id="ExportListDialog-fileName"
-                    style={{ width: 400 }}
+                    className={classes.field}
                     onChange={handleFileName}
+                  />
+                </Box>
+                <Box className={classes.dialogContent}>
+                  <Typography variant="subtitle1" className={classes.subtitle}>
+                    <Text translation="document.revision.enter.file.limit" />
+                  </Typography>
+                  <TextField
+                    variant="outlined"
+                    type="number"
+                    inputProps={{ min: DEFAULT_LIMIT }}
+                    value={limit}
+                    data-cy="export-list-dialog-limit"
+                    className={classes.field}
+                    onChange={handleLimit}
                   />
                 </Box>
               </DialogContentText>
             </Box>
           </DialogContent>
-          <Box className={classes.dialogAction} >
+          <Box className={classes.dialogAction}>
             <Button
               variant="contained"
               className={classes.cancelButton}
@@ -130,16 +195,13 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
               className={classes.submitButton}
               id="ExportListDialog-downloadButton"
               data-cy="ExportListDialog-downloadButton"
-              onClick={() => {
-                csvExporter.generateCsv(data);
-                dialog.close();
-              }}
+              onClick={downloadCSVFile}
             >
               <Text translation="common.download" />
             </Button>
           </Box>
         </Dialog>
-      }
+      )}
     </>
   );
 };

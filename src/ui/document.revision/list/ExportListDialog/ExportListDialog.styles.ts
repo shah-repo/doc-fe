@@ -52,5 +52,8 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: 5,
       textAlign: 'start',
     },
+    field: {
+      width: 400,
+    },
   }),
 );

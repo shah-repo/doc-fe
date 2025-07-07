@@ -91,10 +91,11 @@ export function DocumentTypePresenter ({
   ].includes(documentTypeCategory as DocumentCategory);
   const [query, setQuery] = useState<QueryType>();
   const [defaultQuery, setDefaultQuery] = useState<QueryType>();
+  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<QueryType>();
 
   return (
     <Grid container>
-      <SearchContext.Provider value={{ query, defaultQuery, setQuery, setDefaultQuery, isKeywordSearchEnabled }}>
+      <SearchContext.Provider value={{ query, defaultQuery, setQuery, setDefaultQuery, isKeywordSearchEnabled, tableSearchQueryPayload, setTableSearchQueryPayload }}>
         <Grid item xs={12} className={classes.headerGridItem}>
           <CreateDocumentByType
             {...createDocumentProps}
