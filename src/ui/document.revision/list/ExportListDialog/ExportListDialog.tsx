@@ -131,7 +131,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   const downloadCSVFile = () => {
     if (isMultiplePagesDownloadAllowed) {
-      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit } }, async);
+      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit) } }, async);
     } else {
       csvExporter.generateCsv(data);
       dialog.close();
