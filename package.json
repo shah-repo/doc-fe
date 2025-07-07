@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "Document Management - Frontend Application",
-  "version": "25.5",
+  "version": "25.7",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",
@@ -36,7 +36,7 @@
     "@progress/kendo-react-treeview": "^4.13.0",
     "@progress/kendo-svg-icons": "^1.5.0",
     "Base64": "^1.1.0",
-    "ai-widget": "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.12",
+    "ai-widget": "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.11",
     "async-mutex": "^0.5.0",
     "aws-mqtt": "^1.0.0",
     "aws-sdk": "^2.580.0",
