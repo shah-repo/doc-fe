@@ -55,5 +55,16 @@ export const styles = makeStyles((theme: Theme) =>
     field: {
       width: 400,
     },
+    loading: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: -1,
+      zIndex: 3,
+    },
+    loadingAtTop: {
+      bottom: 'auto',
+      top: 0,
+    },
   }),
 );

@@ -13,7 +13,7 @@ import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
 import { USER_LOCKED } from '../../constants/urls';
 import Loader from '../common/kendo/Loader';
-import { SearchContext, SearchContextType } from '../KeywordSearch/types';
+import { SearchContext } from '../KeywordSearch/types';
 import { toastInfo } from '../notifications';
 import { getDynamicPayloadItems, updateDataState } from './DataLoader.util';
 import { DataLoaderProps } from './interfaces';
@@ -31,7 +31,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
 }) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
   const dispatch = useDispatch();
-  const context = React.useContext(SearchContext) as SearchContextType;
+  const { setTableSearchQueryPayload } = React.useContext(SearchContext) ?? {};
   let data = {
     ...defaultPayloadData,
     limit: updatedDataState.take,
@@ -77,7 +77,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
       return;
     }
     pending.current = odString;
-    context?.setTableSearchQueryPayload?.(data);
+    setTableSearchQueryPayload?.(data);
     dispatch(
       tableSearchActions.setSearchCriteria(
         {

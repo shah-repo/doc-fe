@@ -1,4 +1,5 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Dialog, DialogContent, DialogContentText, LinearProgress, TextField, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import { ExportToCsv } from 'export-to-csv';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
@@ -19,6 +20,7 @@ import { FB } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { DialogHandler } from '../../../hooks/useDialog';
+import { withThemeNext } from '../../../layout/theme-next';
 import { styles } from './ExportListDialog.styles';
 
 interface Props {
@@ -40,13 +42,13 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   useKeysAsHeaders = false,
   customFileName,
   categoryName,
-  isMultiplePagesDownloadAllowed = true,
+  isMultiplePagesDownloadAllowed = false,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
   const [limit, saveLimit] = useState(DEFAULT_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
-  const context = useContext(SearchContext);
+  const { tableSearchQueryPayload } = useContext(SearchContext) ?? {};
   const loadAction = useActionCreator(documentRevisionsActions.downloadCSVData);
 
   const options = {
@@ -129,12 +131,13 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   const downloadCSVFile = () => {
     if (isMultiplePagesDownloadAllowed) {
-      async.start(loadAction, { ...context?.tableSearchQueryPayload, ...{ limit: limit ?? DEFAULT_LIMIT } }, async);
+      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit } }, async);
     } else {
       csvExporter.generateCsv(data);
       dialog.close();
     }
   };
+  console.log('isMultiplePagesDownloadAllowed', isMultiplePagesDownloadAllowed, tableSearchQueryPayload);
 
   return (
     <>
@@ -163,20 +166,22 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
                     onChange={handleFileName}
                   />
                 </Box>
-                <Box className={classes.dialogContent}>
-                  <Typography variant="subtitle1" className={classes.subtitle}>
-                    <Text translation="document.revision.enter.file.limit" />
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    type="number"
-                    inputProps={{ min: DEFAULT_LIMIT }}
-                    value={limit}
-                    data-cy="export-list-dialog-limit"
-                    className={classes.field}
-                    onChange={handleLimit}
-                  />
-                </Box>
+                {isMultiplePagesDownloadAllowed && (
+                  <Box className={classes.dialogContent}>
+                    <Typography variant="subtitle1" className={classes.subtitle}>
+                      <Text translation="document.revision.enter.file.limit" />
+                    </Typography>
+                    <TextField
+                      variant="outlined"
+                      type="number"
+                      inputProps={{ min: DEFAULT_LIMIT }}
+                      value={limit}
+                      data-cy="export-list-dialog-limit"
+                      className={classes.field}
+                      onChange={handleLimit}
+                    />
+                  </Box>
+                )}
               </DialogContentText>
             </Box>
           </DialogContent>
@@ -200,10 +205,11 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
               <Text translation="common.download" />
             </Button>
           </Box>
+          {async.isLoading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
         </Dialog>
       )}
     </>
   );
 };
 
-export default ExportListDialog;
+export default withThemeNext(ExportListDialog);
