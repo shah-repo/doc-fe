@@ -28,6 +28,7 @@ import {
   FBTooltip,
 } from '..';
 import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warning.svg';
+import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
@@ -117,7 +118,19 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       )}
       {type !== FBProcedureItemType.attachments && !loading && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
-          {(item: FBProcedureItemConfig, index) => (
+          {(item: FBProcedureItemConfig, index) =>
+          (
+            <Observer>
+              {() => {
+            const totalQuantity = (mpiProcedureState?.partsSelected || []).reduce((sum, selection) => {
+              if (selection.materialId === item.title || selection.equipmentId === item.title) {
+                return sum + Number(selection.quantity || 0);
+              }
+              return sum;
+            }, 0);
+            const parentValues = getProcedureValues?.(item);
+            const showError = totalQuantity > 0 && totalQuantity !== parentValues?.quantity && type === 'materials';
+            return (
             <Box
               borderLeft={0}
               borderRight={0}
@@ -134,6 +147,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                 minHeight={55}
                 border={1}
                 borderRadius= "0 0 3px 3px"
+                borderColor={showError ? Colors.error_red : Colors.hint_gray}
               >
                 <Box flexGrow={1}>
                   <FBText
@@ -306,6 +320,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   </>
                 )}
               </Box>
+              {showError && (
+                <Box
+                  mb={1}
+                >
+                  <span style={{ color: Colors.error_red }}>{translate('lhr.materials.quantity.mismatch.error')}</span>
+                </Box>)}
               <Box
                 key="id"
                 display={isEmpty(item.attachments) ? 'none' : 'flex'}
@@ -317,7 +337,10 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                 <FBFilesPresenter files={item.attachments} mode="raw" />
               </Box>
             </Box>
-          )}
+          ); }
+        }
+        </Observer>
+      )}
         </FBMapWrapper>
       )}
     </FBProvider>
