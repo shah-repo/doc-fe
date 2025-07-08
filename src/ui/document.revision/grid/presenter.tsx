@@ -5,7 +5,7 @@ import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoPresenterProps } from '../../components/KendoGrid/interfaces';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { SearchContext } from '../../components/KeywordSearch/types';
+import { SearchContext, TableSearchQueryPayloadType } from '../../components/KeywordSearch/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
 import { documentRevisionQueryStatus } from '../utils/helpers';
 import CreateButton from './CreateButton/presenter';
@@ -23,7 +23,7 @@ export function DocumentListPresenter ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState();
+  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<TableSearchQueryPayloadType>();
 
   return (
     <Grid container>

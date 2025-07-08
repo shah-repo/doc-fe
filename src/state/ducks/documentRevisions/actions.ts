@@ -836,7 +836,7 @@ const fetchASLSuppliersListData = (
   });
 };
 
-const downloadCSVData = (
+const downloadCsvData = (
   data: TableSearchQueryPayloadType,
   handlers: Handlers<string>,
 ): ApiAction<string> =>
@@ -916,5 +916,5 @@ export default {
   fetchReferencesTableData,
   fetchASLSuppliersListData,
   restrictedEdit,
-  downloadCSVData,
+  downloadCsvData,
 };

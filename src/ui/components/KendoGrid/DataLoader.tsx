@@ -31,7 +31,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
 }) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
   const dispatch = useDispatch();
-  const { setTableSearchQueryPayload } = React.useContext(SearchContext) ?? {};
+  const { setTableSearchQueryPayload } = React.useContext(SearchContext);
   let data = {
     ...defaultPayloadData,
     limit: updatedDataState.take,

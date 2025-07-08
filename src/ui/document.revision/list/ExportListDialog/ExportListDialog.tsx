@@ -48,8 +48,8 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   const [fileName, saveFileName] = useState('');
   const [limit, saveLimit] = useState(DEFAULT_RECORD_DOWNLOAD_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
-  const { tableSearchQueryPayload } = useContext(SearchContext) ?? {};
-  const loadAction = useActionCreator(documentRevisionsActions.downloadCSVData);
+  const { tableSearchQueryPayload } = useContext(SearchContext);
+  const loadAction = useActionCreator(documentRevisionsActions.downloadCsvData);
 
   const options = {
     showLabels: true,

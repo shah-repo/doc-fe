@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl';
 import { DocumentCategory, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { QueryType, SearchContext } from '../../components/KeywordSearch/types';
+import { QueryType, SearchContext, TableSearchQueryPayloadType } from '../../components/KeywordSearch/types';
 import { TableDataProps } from '../../components/table/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
 import { isTranslation } from '../../translations/types';
@@ -91,7 +91,7 @@ export function DocumentTypePresenter ({
   ].includes(documentTypeCategory as DocumentCategory);
   const [query, setQuery] = useState<QueryType>();
   const [defaultQuery, setDefaultQuery] = useState<QueryType>();
-  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<QueryType>();
+  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<TableSearchQueryPayloadType>();
 
   return (
     <Grid container>
