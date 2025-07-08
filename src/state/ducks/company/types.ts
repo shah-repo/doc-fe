@@ -1,4 +1,5 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { LHRBuild } from '../../../ui/administration/general.settings/panels/LHRBuild/types';
 import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { SupplierConfig } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
@@ -287,6 +288,7 @@ export interface GeneralSettings {
     removeFromDam: ApprovalRoleItem[]
     dam: Dam
   }
+  lhrBuildTypeConfig?: LHRBuild[]
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
