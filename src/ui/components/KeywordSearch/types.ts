@@ -17,7 +17,7 @@ export interface TableSearchQueryPayloadType {
   data?: Payload
 }
 
-export interface SearchContextType {
+interface SearchContextType {
   query?: QueryType
   defaultQuery?: QueryType
   setQuery?: Dispatch<SetStateAction<undefined | QueryType>>
