@@ -197,7 +197,7 @@ export const pagerSettings: GridPagerSettings = {
   buttonCount: 5,
   info: true,
   type: 'numeric',
-  pageSizes: [25, 50, 75, 100, 500],
+  pageSizes: [25, 50, 75, 100],
   previousNext: true,
 };
 
