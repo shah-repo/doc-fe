@@ -59,7 +59,6 @@ export const styles = makeStyles((theme: Theme) =>
       position: 'absolute',
       left: 0,
       right: 0,
-      bottom: -1,
       zIndex: 3,
     },
     loadingAtTop: {

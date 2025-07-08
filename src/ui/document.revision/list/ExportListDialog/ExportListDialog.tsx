@@ -33,7 +33,7 @@ interface Props {
   isMultiplePagesDownloadAllowed?: boolean
 }
 
-const DEFAULT_LIMIT = 25;
+const DEFAULT_RECORD_DOWNLOAD_LIMIT = 25;
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
@@ -46,7 +46,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
-  const [limit, saveLimit] = useState(DEFAULT_LIMIT);
+  const [limit, saveLimit] = useState(DEFAULT_RECORD_DOWNLOAD_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
   const { tableSearchQueryPayload } = useContext(SearchContext) ?? {};
   const loadAction = useActionCreator(documentRevisionsActions.downloadCSVData);
@@ -127,6 +127,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
       downloadCsvFromString(csvData);
       dialog.close();
     },
+    onError: toastError,
   });
 
   const downloadCSVFile = () => {
@@ -137,7 +138,6 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
       dialog.close();
     }
   };
-  console.log('isMultiplePagesDownloadAllowed', isMultiplePagesDownloadAllowed, tableSearchQueryPayload);
 
   return (
     <>
@@ -174,7 +174,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
                     <TextField
                       variant="outlined"
                       type="number"
-                      inputProps={{ min: DEFAULT_LIMIT }}
+                      inputProps={{ min: DEFAULT_RECORD_DOWNLOAD_LIMIT }}
                       value={limit}
                       data-cy="export-list-dialog-limit"
                       className={classes.field}
