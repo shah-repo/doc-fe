@@ -1,4 +1,4 @@
-import { FBFileFieldState, FBInputProps, FBProviderProps } from '..';
+import { FBInputProps, FBProviderProps } from '..';
 
 export interface FBFile {
   file: File
@@ -11,8 +11,7 @@ export type FBFileFieldProps =
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => any
   onUploadClick?: () => void
-  fileFieldState?: FBFileFieldState
-  loading?: boolean
+  isLoading?: boolean
   typeToAccept?: string
   className?: string
   labelClassName?: string
