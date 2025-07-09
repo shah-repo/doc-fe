@@ -163,7 +163,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-    console.log('---1----', { document, workspaceState, formState }, _documentRevisionFormState?.documentRevision, generateLHRsDocs(_documentRevisionFormState?.documentRevision));
+
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
       if(approval.status === 'APPROVED' && document?.document.documentType.documentTypeName === 'LHR Step') {
@@ -171,8 +171,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''), { toTabId: 'details' });
       }
       if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
-        console.log('---transition----', { document, workspaceState });
-        // window.location.reload();
+        window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
         approvalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
