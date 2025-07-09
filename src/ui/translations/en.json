@@ -1842,6 +1842,7 @@
   "scan.lot.grid.serial.number": "Serial Number",
   "scan.lot.grid.quantity.assigned": "Quantity Assigned",
   "scan.lot.grid.unit.of.measure": "Unit Of Measure",
+  "scan.lot.grid.add.line.item": "Add Line",
   "integrations.title": "Integrations",
   "integrations.not.available": "There are no available integrations",
   "integrations.enable": "Enable",

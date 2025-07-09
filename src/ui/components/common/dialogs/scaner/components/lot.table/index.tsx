@@ -3,10 +3,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { translate } from '../../../../../../../common/intl';
 import useDialog from '../../../../../../hooks/useDialog';
-import { Button } from '../../../../../forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
@@ -17,7 +14,13 @@ import useStyles from './styles';
 import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addScanLot, updateScanLot, deleteScanLot }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({
+  scanLots,
+  units,
+  lots,
+  updateScanLot,
+  deleteScanLot,
+}) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -31,13 +34,8 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
     initialValues: {},
     onSubmit: (values) => {
       const scanLot = omit(values, FIELDS_TO_OMIT);
-      if (values[MODE_FIELD] === Mode.add) {
-        addScanLot?.(scanLot as ScanLot);
-        discardScanLot();
-      } else {
-        updateScanLot?.(scanLot as ScanLot);
-        discardScanLot();
-      }
+      updateScanLot?.(scanLot as ScanLot);
+      discardScanLot();
     },
   });
 
@@ -46,12 +44,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
   useEffect(() => {
     resetForm({ values: editedScanLot ?? {} });
   }, [editedScanLot, setValues, resetForm]);
-
-  const createDraftScanLot = () =>
-    setEditedScanLot({
-      id: uuidv4(),
-      [MODE_FIELD]: Mode.add,
-    });
 
   const discardScanLot = () => setEditedScanLot(undefined);
 
@@ -85,7 +77,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
   };
 
   const schema = buildSchema({
-    isInEditMode,
     units,
     lots,
     onRowClick: handleRowClick,
@@ -93,12 +84,12 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     onOpenQuickView: openQuickView,
+    onEdit: setEditedScanLot,
   });
 
   const scanLotList = scanLots.reduce(
     (list, item) => {
       const isScanLotEdited = editedScanLot && editedScanLot.id === item.id;
-      console.log('editedScanLot', editedScanLot);
 
       return [
         ...list,
@@ -112,7 +103,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
   );
 
   return (
-    <Box className={classes.root} data-cy="part-vendors">
+    <Box className={classes.root} data-cy="scan-lot-grid">
       <KendoDataGrid<EditableScanLot>
         className={cx(classes.grid, classes.gridWithButton)}
         fullWidth
@@ -123,9 +114,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
-      <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={createDraftScanLot} data-cy="add-button">
-        {translate('form.builder.part.vendors.add')}
-      </Button>
       <DocumentRevisionDialog
         dialog={quickViewDialog}
         {...{

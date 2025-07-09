@@ -14,12 +14,6 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
       setScanLots(state);
     };
 
-    const addScanLot = (lot: ScanLot) => {
-      setScanLots((prev) => {
-        return [...prev, lot];
-      });
-    };
-
     const deleteScanLot = (item: ScanLot) => {
       const filteredScanLots = differenceBy(scanLots, [item], 'id');
       updateState(filteredScanLots);
@@ -42,7 +36,6 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
       ...(props as T),
       disabled: disabled ?? workspaceState?.isPreview,
       scanLots,
-      addScanLot,
       units,
       lots,
       updateScanLot,

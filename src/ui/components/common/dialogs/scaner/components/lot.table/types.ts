@@ -21,7 +21,6 @@ export interface ScanLotTableProps {
   partId?: string
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
-  addScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
 }
 
@@ -33,13 +32,13 @@ export type FBScanLotProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 
 export interface SchemaOptions {
-  isInEditMode: boolean
   isLoading?: boolean
   units: string[]
   lots: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: (item: EditableScanLot) => void
+  onEdit?: (item: EditableScanLot) => void
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (

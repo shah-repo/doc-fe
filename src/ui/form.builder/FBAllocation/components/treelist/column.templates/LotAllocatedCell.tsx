@@ -4,7 +4,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
@@ -191,6 +191,8 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     scanDialog.close();
   };
 
+  console.log('dataItem', dataItem);
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -285,7 +287,8 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
-          partId={parentPartRevId ?? ''}
+          partDocumentId={get(dataItem, 'partDocumentId', '') ?? ''}
+          partId={dataItem?.partRevId ?? ''}
         />
       )}
     </td>

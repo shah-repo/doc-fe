@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../../../../common/intl';
 import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../../../../KendoDataGrid/constants';
 import OverflowContent from '../../../../../../OverflowContent';
 import { FormikField, TextField } from '../../../../../../forms/fields-next';
@@ -17,6 +18,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
       <TextField
         {...getFieldProps(field)}
         defaultValue={undefined}
+        placeholder={translate('common.scan')}
         type="text"
         size="small"
       />

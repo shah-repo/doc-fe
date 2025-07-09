@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../../../../common/intl';
 import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
@@ -20,6 +21,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         {...getFieldProps(field)}
         defaultValue={undefined}
         type="number"
+        placeholder={translate('common.enter')}
         inputProps={{ min: 0 }}
         size="small"
       />
