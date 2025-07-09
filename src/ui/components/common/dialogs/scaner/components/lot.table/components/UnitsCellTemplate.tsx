@@ -32,7 +32,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
         onChange={handleChange}
         value={value}
         size="small"
-        disabled={isEmpty(values)}
+        disabled
       />
     </FormikField>
   );

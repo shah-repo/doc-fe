@@ -56,7 +56,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, isLoading, lots }) => {
         classes={{ option: classes.option }}
         blurOnSelect
         disableClearable
-        placeholder={translate('common.select')}
+        placeholder={translate('common.scan')}
         options={renderOptions()}
         data-cy="lot-id-field"
         value={value}

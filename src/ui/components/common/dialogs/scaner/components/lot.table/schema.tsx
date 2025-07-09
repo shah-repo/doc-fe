@@ -8,13 +8,13 @@ import { UnitsCellTemplate } from './components/UnitsCellTemplate';
 import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  isInEditMode,
   units,
   lots,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
+  onEdit,
 }: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
     {
@@ -59,20 +59,12 @@ export const buildSchema = ({
         <ActionsCellTemplate
           {...props}
           isActive={true}
-          onEdit={onConfirm}
+          onEdit={onEdit}
           onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
         />
       ),
     },
-    // {
-    //   id: 'cost',
-    //   field: 'cost.value',
-    //   title: 'form.builder.part.vendors.cost',
-    //   filterCell: InputFilter,
-    //   template: (props) => <UnitCostCellTemplate {...props} onClick={onRowClick} />,
-    //   width: 150,
-    // },
   ];
 };
