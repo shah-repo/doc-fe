@@ -168,7 +168,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       if (!approval) { return; }
       if(approval.status === 'APPROVED' && document?.document.documentType.documentTypeName === 'LHR Step') {
         const values = generateLHRsDocs(_documentRevisionFormState?.documentRevision);
-        history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''));
+        history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''), { toTabId: 'details' });
       }
       if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
         console.log('---transition----', { document, workspaceState });
