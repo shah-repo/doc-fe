@@ -377,5 +377,12 @@
     "includeRevision": "displayRevision",
     "root": "",
     "hidden": false
+  },
+  {
+    "id": "48",
+    "label": "LHR Build Types",
+    "valueKey": "internalType",
+    "labelKey": "displayLabel",
+    "hidden": false
   }
 ]
