@@ -5,6 +5,7 @@ import cx from 'classnames';
 import React, { MutableRefObject } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import useHover from '../../../../../../../hooks/useHover';
+import { Colors } from '../../../../../../../layout/theme-next';
 import { IconButton } from '../../../../../../forms/fields-next';
 import useStyles from '../styles';
 
@@ -16,6 +17,9 @@ interface Props {
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
+  openQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void
 }
 
 const ActionsButtons: React.FC<Props> = ({
@@ -26,11 +30,12 @@ const ActionsButtons: React.FC<Props> = ({
   onDelete,
   onConfirm,
   onDiscard,
+  openQuickView,
 }, ref: MutableRefObject<HTMLDivElement>) => {
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
-
+  const [viewIconRef, isViewIconHovered] = useHover<HTMLButtonElement>();
   const classes = useStyles();
 
   return (
@@ -70,7 +75,7 @@ const ActionsButtons: React.FC<Props> = ({
         </>
       ) : (
         <>
-          <Tooltip title={translate('common.edit')}>
+          {/* <Tooltip title={translate('common.edit')}>
             <IconButton
               kind="form"
               color="primary"
@@ -80,9 +85,18 @@ const ActionsButtons: React.FC<Props> = ({
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
+          <span ref={viewIconRef} onClick={openQuickView} className={classes.viewIconCont}>
+            <Tooltip arrow title={translate('common.quick.view')} placement="top">
+              <FontAwesomeIcon
+                data-cy="quick-view"
+                icon={isViewIconHovered ? solid('eye') : regular('eye')}
+                color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
+              />
+            </Tooltip>
+          </span>
           {onDelete && (
-            <Tooltip title={translate('common.delete')}>
+            <Tooltip title={translate('common.delete')} placement="top">
               <IconButton
                 kind="destructive"
                 ref={deleteRef}

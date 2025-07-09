@@ -15,6 +15,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  onOpenQuickView,
 }: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
     {
@@ -63,6 +64,7 @@ export const buildSchema = ({
           onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          onOpenQuickView={onOpenQuickView}
         />
       ),
     },

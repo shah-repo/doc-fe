@@ -6,6 +6,7 @@ import { CellTemplateProps } from '../../../../../KendoDataGrid/KendoDataGrid.ty
 
 export interface ScanLot {
   lotId: string
+  lotNumber: {[key: string]: string}
   serialNumber: string
   QuantityAssigned: string
   unitOfMeasure: string
@@ -41,6 +42,10 @@ export interface SchemaOptions {
   onDelete?: (item: EditableScanLot) => void
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableScanLot
+  ) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> {

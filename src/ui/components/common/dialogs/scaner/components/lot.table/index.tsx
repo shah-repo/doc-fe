@@ -5,10 +5,12 @@ import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
+import useDialog from '../../../../../../hooks/useDialog';
 import { Button } from '../../../../../forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
+import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -22,6 +24,8 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
   const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
   const isInEditMode = editedScanLot !== undefined;
   const handleRowClick = !isInEditMode ? editScanLot : undefined;
+  const [selectedDataItem, setSelectedDataItem] = useState<EditableScanLot>();
+  const quickViewDialog = useDialog();
 
   const formik = useFormik<Partial<EditableScanLot>>({
     initialValues: {},
@@ -56,6 +60,16 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
     discardScanLot();
   };
 
+  const openQuickView = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableScanLot,
+  ) => {
+    setSelectedDataItem(dataItem);
+    quickViewDialog.open();
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   const rowRender: DataGridProps<EditableScanLot>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableScanLot;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
@@ -78,6 +92,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
     onConfirm: submitForm,
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
+    onOpenQuickView: openQuickView,
   });
 
   const scanLotList = scanLots.reduce(
@@ -111,6 +126,12 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, lots, addS
       <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={createDraftScanLot} data-cy="add-button">
         {translate('form.builder.part.vendors.add')}
       </Button>
+      <DocumentRevisionDialog
+        dialog={quickViewDialog}
+        {...{
+          docRevId: selectedDataItem?.lotNumber?.id,
+        }}
+      />
     </Box>
   );
 };

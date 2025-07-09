@@ -12,6 +12,10 @@ interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: (item: T) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: T
+  ) => void
 }
 
 function ActionsCellTemplate<T extends EditableItem> ({
@@ -23,6 +27,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   onDelete,
   onConfirm,
   onDiscard,
+  onOpenQuickView,
   isEditButtonHidden = false,
 }: Props<T>): React.ReactElement {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -48,6 +53,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         onDiscard={onDiscard}
         onEdit={() => onEdit?.(dataItem)}
         onDelete={onDelete && (() => onDelete(dataItem))}
+        openQuickView={onOpenQuickView && ((event) => onOpenQuickView(event, dataItem))}
       />
     </>
   );
