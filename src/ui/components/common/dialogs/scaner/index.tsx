@@ -61,6 +61,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId
 
   const handleScan = (data: string) => {
     setScannedValue(data);
+    // validate lot
   };
 
   const handleError = (error: Error) => {
@@ -73,7 +74,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId
 
     const lot = {
       id: '3b801e7a-67f3-4d45-8fd7-dae413815939',
-      lotNumber: { id: '2894a1d2-e004-4cae-bd45-fe7485092daa', name: 'LOT #23120406', documentId: '6844670c-722e-4c1b-b899-87d847e253ff' },
+      lotNumber: {
+        id: '2894a1d2-e004-4cae-bd45-fe7485092daa',
+        name: 'LOT #23120406',
+        documentId: '6844670c-722e-4c1b-b899-87d847e253ff',
+      },
       serialNumber: 'Serial Number #324',
       quantityAssigned: 2,
       unitOfMeasure: 'Pack(s)',
