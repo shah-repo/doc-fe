@@ -36,6 +36,7 @@ const ActionsButtons: React.FC<Props> = ({
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
   const [viewIconRef, isViewIconHovered] = useHover<HTMLButtonElement>();
+  const [editIconRef, isEditIconHovered] = useHover<HTMLButtonElement>();
   const classes = useStyles();
 
   return (
@@ -75,17 +76,6 @@ const ActionsButtons: React.FC<Props> = ({
         </>
       ) : (
         <>
-          {/* <Tooltip title={translate('common.edit')}>
-            <IconButton
-              kind="form"
-              color="primary"
-              onClick={onEdit}
-              disabled={!isActive}
-              data-cy="action-edit"
-            >
-              <FontAwesomeIcon icon={regular('pen-to-square')} />
-            </IconButton>
-          </Tooltip> */}
           <span ref={viewIconRef} onClick={openQuickView} className={classes.viewIconCont}>
             <Tooltip arrow title={translate('common.quick.view')} placement="top">
               <FontAwesomeIcon
@@ -95,6 +85,19 @@ const ActionsButtons: React.FC<Props> = ({
               />
             </Tooltip>
           </span>
+          <Tooltip arrow title={translate('common.edit')} placement="top">
+            <IconButton
+              ref={editIconRef}
+              kind="form"
+              color="primary"
+              onClick={onEdit}
+              disabled={!isActive}
+              size="small"
+              data-cy="action-edit"
+            >
+              <FontAwesomeIcon icon={isEditIconHovered ? solid('pen-to-square') : regular('pen-to-square')} color={isEditIconHovered ? Colors.navigationBg : Colors.textGray} />
+            </IconButton>
+          </Tooltip>
           {onDelete && (
             <Tooltip title={translate('common.delete')} placement="top">
               <IconButton

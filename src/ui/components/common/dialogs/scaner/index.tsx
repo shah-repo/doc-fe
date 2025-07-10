@@ -28,7 +28,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId
   const classes = useStyles();
   const [selectedPart, setSelectedPart] = useState<DocumentRevision>();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
-  // const getDocumentById = useActionCreator(documentRevisionsActions.getDocumentRevisionByRevId);
   const getDocumentById = useActionCreator(documentsActions.getDocumentById);
 
   const docByIdAsync = useAsync({
@@ -97,7 +96,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId
       className={classes.root}
       open={handler?.isOpen}
       maxWidth="xl"
-      hideCloseButton={false}
+      hideCloseButton
       // loading={loading}
       cancelLabel="common.cancel"
       title="scan.lot.dialog.title.message"

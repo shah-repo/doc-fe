@@ -835,13 +835,6 @@ const fetchASLSuppliersListData = (
   });
 };
 
-const getDocumentRevisionByRevId = (id: string, handlers: Handlers): ApiAction<DocumentRevision> =>
-  apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-    method: 'get',
-    handlers,
-  });
-
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -910,6 +903,5 @@ export default {
   fetchReferences,
   fetchReferencesTableData,
   fetchASLSuppliersListData,
-  getDocumentRevisionByRevId,
   restrictedEdit,
 };
