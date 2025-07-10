@@ -6,7 +6,7 @@ import { toastError } from '../../../../../components/notifications';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { Mode } from '../../../../FBApprovalMatrixRoles/constants';
-import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from '../../../../FBPartVendors/constants';
+import { SUPPLIER_FIELD, SUPPLIER_STATE_FIELD, SUPPLIER_STATUS_FIELD } from '../../../../FBPartVendors/constants';
 import { buildSchema } from '../../../../FBPartVendors/schema';
 import { EditableVendor, Vendor } from '../../../../FBPartVendors/types';
 import { useOptions } from '../../../../FBPartVendors/utils';
@@ -56,6 +56,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
     const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
     const supplierName = supplier?.name ?? item.vendor?.name;
     const supplierStatus = supplier?.displayStatus ?? '';
+    const supplierStatusId = supplier?.supplierStatusId ?? '';
 
     return [
       ...list,
@@ -63,6 +64,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
         ...item,
         [SUPPLIER_FIELD]: supplierName,
         [SUPPLIER_STATUS_FIELD]: supplierStatus,
+        [SUPPLIER_STATE_FIELD]: supplierStatusId,
         [MODE_FIELD]: Mode.show,
       },
     ];
