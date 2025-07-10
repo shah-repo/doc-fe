@@ -63,7 +63,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   setDoNotPrompt,
   documentTypesById,
   canChangeOwnerShip,
-  isNewVersion,
+  isNewVersion = false,
   showAdministrativeAndVoidChange,
   redlineActive,
   isOutput,
@@ -363,7 +363,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                         />
                                         <AttachmentsField
                                           isDisabled={isDisabledInput}
-                                          isNewVersion={false}
+                                          isNewVersion={isNewVersion}
                                           docRevId={docRevId}
                                           containsRedline={false}
                                           docRevStatus={documentRevision?.status}
