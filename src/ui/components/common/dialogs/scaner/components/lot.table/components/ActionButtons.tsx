@@ -76,15 +76,20 @@ const ActionsButtons: React.FC<Props> = ({
         </>
       ) : (
         <>
-          <span ref={viewIconRef} onClick={openQuickView} className={classes.viewIconCont}>
-            <Tooltip arrow title={translate('common.quick.view')} placement="top">
+          <Tooltip arrow title={translate('common.quick.view')} placement="top">
+            <IconButton
+              ref={viewIconRef}
+              kind="form"
+              color="primary"
+              onClick={openQuickView}
+              size="small"
+              data-cy="quick-view"
+            >
               <FontAwesomeIcon
-                data-cy="quick-view"
                 icon={isViewIconHovered ? solid('eye') : regular('eye')}
                 color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
-              />
-            </Tooltip>
-          </span>
+              /></IconButton>
+          </Tooltip>
           <Tooltip arrow title={translate('common.edit')} placement="top">
             <IconButton
               ref={editIconRef}
@@ -99,12 +104,13 @@ const ActionsButtons: React.FC<Props> = ({
             </IconButton>
           </Tooltip>
           {onDelete && (
-            <Tooltip title={translate('common.delete')} placement="top">
+            <Tooltip arrow title={translate('common.delete')} placement="top">
               <IconButton
                 kind="destructive"
                 ref={deleteRef}
                 onClick={onDelete}
                 disabled={isLoading}
+                size="small"
                 data-cy="action-delete"
               >
                 <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />

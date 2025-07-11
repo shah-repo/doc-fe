@@ -26,10 +26,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
   console.log('selectedPart', selectedPart);
 
   const keyValues = [
-    { key: 'Item ID', value: selectedPart.docId },
+    { key: 'Item ID', value: selectedPart?.docId },
     { key: 'Part Description', value: 'Sample Desc' }, // TODO ::selectedPart.description this will update after adding keys
-    { key: 'Qty Needed', value: selectedPart.quantityNeeded ?? 0 },
-    { key: 'Variance', value: selectedPart.variance ?? 0 },
+    { key: 'Qty Needed', value: selectedPart?.quantityNeeded ?? 0 },
+    { key: 'Variance', value: selectedPart?.variance ?? 0 },
   ];
 
   const onScanLotAdd = () => {
