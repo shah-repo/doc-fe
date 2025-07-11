@@ -1,10 +1,7 @@
 import { Box, List, ListItem } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
-import { Document, DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import { documentsActions } from '../../../../../state/ducks/documents';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
+import { EditableAllocationItem } from '../../../../form.builder/FBAllocation/interface';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
@@ -17,39 +14,22 @@ import useStyles from './styles';
 interface Props {
   children?: JSX.Element
   handler: DialogHandler
-  partId: string
-  partDocumentId: string
+  selectedPart: EditableAllocationItem
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId, partDocumentId }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, selectedPart }) => {
   const classes = useStyles();
-  const [selectedPart, setSelectedPart] = useState<DocumentRevision>();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
-  const getDocumentById = useActionCreator(documentsActions.getDocumentById);
-
-  const docByIdAsync = useAsync({
-    onSuccess: (data?: Document) => {
-      console.log('Document', data);
-      const partRev = data?.documentRevisions?.find((data) => data.id === partId);
-      setSelectedPart(partRev);
-    },
-  });
-
-  useEffect(() => {
-    docByIdAsync.start(getDocumentById, partDocumentId, docByIdAsync);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   console.log('selectedPart', selectedPart);
 
   const keyValues = [
-    { key: 'Item ID', value: 'FG-00100' },
-    { key: 'Part Description', value: 'Sample Desc' },
-    { key: 'Qty Needed', value: 20 },
-    { key: 'Variance', value: 12 },
+    { key: 'Item ID', value: selectedPart.docId },
+    { key: 'Part Description', value: 'Sample Desc' }, // TODO ::selectedPart.description this will update after adding keys
+    { key: 'Qty Needed', value: selectedPart.quantityNeeded ?? 0 },
+    { key: 'Variance', value: selectedPart.variance ?? 0 },
   ];
 
   const onScanLotAdd = () => {
@@ -129,7 +109,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, partId
           ))}
         </List>
         <Button onClick={addBarcodeScanItem} size="small">scan item </Button>
-        <ScanLotTable scanLots={scanLots} units={[]} lots={[]} partId={partId} setScanLots={setScanLots} />
+        <ScanLotTable scanLots={scanLots} units={[]} lots={[]} partId={selectedPart?.partRevId} setScanLots={setScanLots} />
         <BarcodeReader
           onError={handleError}
           onScan={handleScan}

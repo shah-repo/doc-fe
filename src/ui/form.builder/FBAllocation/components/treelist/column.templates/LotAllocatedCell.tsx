@@ -4,7 +4,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
@@ -287,8 +287,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
-          partDocumentId={get(dataItem, 'partDocumentId', '') ?? ''}
-          partId={dataItem?.partRevId ?? ''}
+          selectedPart ={dataItem}
         />
       )}
     </td>
