@@ -1,4 +1,4 @@
-import { cloneDeep, includes, isArray, isEmpty, map, omit, size, union } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
@@ -8,8 +8,6 @@ import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
-import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
-import { EditableTLItem } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
@@ -43,11 +41,6 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public hiddenFieldsByRules = new Set<string>();
 
   public omitAutosave = false;
-
-  public mdTableData: EditableMDItem[] = [];
-  public tlTableData: EditableTLItem[] = [];
-  public tlUpdatedDataIds: string[] = [];
-  public mdUpdatedDataIds: string[] = [];
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
@@ -113,22 +106,6 @@ class FBWorkspaceState extends FBSchemaState {
   public get isLHRProductionBuild (): boolean {
     return this.document?.smartReferencesTo?.filter(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
-  }
-
-  public get getMDTableData (): EditableMDItem[] {
-    return this.mdTableData;
-  }
-
-  public get getTLTableData (): EditableTLItem[] {
-    return this.tlTableData;
-  }
-
-  public get getTLUpdatedDataIds (): string[] {
-    return this.tlUpdatedDataIds;
-  }
-
-  public get getMDUpdatedDataIds (): string[] {
-    return this.mdUpdatedDataIds;
   }
 
   public get isChangeRequest (): boolean {
@@ -204,22 +181,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setDirty = (isDirty: boolean) => {
     set(this, 'isDirty', isDirty);
-  };
-
-  public setMDTableData = (mdTableData: EditableMDItem[]) => {
-    set(this, 'mdTableData', mdTableData);
-  };
-
-  public setTLTableData = (tlTableData: EditableTLItem[]) => {
-    set(this, 'tlTableData', tlTableData);
-  };
-
-  public addTLUpdatedDataId = (tlUpdatedDataId: string) => {
-    set(this, 'tlUpdatedDataIds', union(this.tlUpdatedDataIds, [tlUpdatedDataId]));
-  };
-
-  public addMDUpdatedDataId = (mdUpdatedDataId: string) => {
-    set(this, 'mdUpdatedDataIds', union(this.mdUpdatedDataIds, [mdUpdatedDataId]));
   };
 
   @action public setFormInputSync = (name: string, value: any) => {
