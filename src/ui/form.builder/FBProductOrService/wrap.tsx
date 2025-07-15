@@ -27,7 +27,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
       const map = new Map();
 
       references.forEach((item) => {
-        map.set(item.revId, { ...item });
+        map.set(item.revId ?? item.id, { ...item });
       });
 
       selectedProductOrServices?.forEach((item) => {

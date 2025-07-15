@@ -21,6 +21,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     documentRevision,
     doNotPrompt,
     setDoNotPrompt,
+    formInput,
     ...props
   }: T) => {
     // MARK: @config
@@ -28,7 +29,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const { _formState, _tabsState } = SM.useStores();
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
-    const formState = FB.useRef<FBFormState>(FBFormState, {});
     const { approvalMatrixFieldState } = FB.useStores();
     isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
@@ -36,6 +36,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       mode: _formState?.mode,
       autosave: _formState?.autosave || false,
     });
+
+    const schema = _documentRevisionFormState?.schema || documentRevision?.schema;
+    const formState = FB.useRef<FBFormState>(FBFormState, {
+      schema,
+      initialValues: formInput ?? {},
+      workspaceMode: workspaceState?.mode || 'form',
+      workspaceState,
+    });
+
     const { document: { outputRevision = false } = {} } = workspaceState || {};
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
@@ -49,15 +58,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     const approvalMatrixState = (props.isDAM && !approvalMatrixFieldState) ? (
       FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
-        formValue: cloneDeep(props?.formInput),
+        formValue: cloneDeep(formInput),
         outputRevision,
         isOutput: props.isDAM,
       })) : undefined;
 
     useEffect(() => {
         approvalMatrixState?.setMode(FBApprovalMatrixFieldModes.REFRESH);
-        approvalMatrixState?.setData(cloneDeep(props?.formInput) as FBApprovalMatrixFieldData);
-    }, [approvalMatrixState, props?.formInput]);
+        approvalMatrixState?.setData(cloneDeep(formInput) as FBApprovalMatrixFieldData);
+    }, [approvalMatrixState, formInput]);
 
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
@@ -138,13 +147,14 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
           <Component
             {...props as T}
             {...{
+              formInput,
               onScroll,
               _documentRevisionFormState,
               _tabsState,
               _formState,
               documentRevision,
               autosaveEnabled,
-              schema: _documentRevisionFormState?.schema || documentRevision?.schema,
+              schema,
               workspaceState,
               isCreateUrl,
               doNotPrompt,

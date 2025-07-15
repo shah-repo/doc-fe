@@ -126,7 +126,6 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               name="descriptionOfChange"
               label="form.builder.description.of.change"
               placeholder="form.builder.enter"
-              rules="required"
             />
           </div>
           <div
@@ -143,7 +142,6 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               name="justificationOfChange"
               label="form.builder.justification.of.change"
               placeholder="form.builder.enter"
-              rules="required"
             />
           </div>
           <div

@@ -50,7 +50,6 @@ definitions:
         artifacts:
           - typecheck-results/**
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/runTypecheck.sh
 
     - step: &RUN_LINTER
@@ -59,7 +58,6 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
@@ -72,7 +70,6 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/runTests.sh
 
     #
@@ -82,7 +79,6 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Dev
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "dev"
         artifacts:
           - compiled.tar.gz
@@ -92,7 +88,6 @@ definitions:
         name: Deploy to Dev
         deployment: Development
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "dev"
     #
     # DEMO
@@ -101,7 +96,6 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Demo
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "demo"
         artifacts:
           - compiled.tar.gz
@@ -111,7 +105,6 @@ definitions:
         name: Deploy to Demo
         deployment: Demo
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "demo"
     #
     # PROD
@@ -120,7 +113,6 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Prod
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "prod"
         artifacts:
           - compiled.tar.gz
@@ -130,7 +122,6 @@ definitions:
         name: Deploy to Prod
         deployment: Production
         script:
-          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "prod"
         trigger: manual
 #

@@ -49,4 +49,15 @@ export default (theme: Theme) =>
       flexGrow: 0,
       margin: '0px 20px',
     },
+    label: {
+      fontSize: 12,
+      color: Colors.almost_black,
+    },
+    inputFieldWrap: {
+      marginTop: `${theme.spacing(1.25)}px !important`,
+    },
+    inputField: {
+      fontSize: 'inherit',
+      padding: theme.spacing(1.5),
+    },
   });

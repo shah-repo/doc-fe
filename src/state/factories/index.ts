@@ -17,7 +17,7 @@ export const apiAction
     return action;
   };
 
-interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
+export interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
   handlers: Handlers<R>
 }
 

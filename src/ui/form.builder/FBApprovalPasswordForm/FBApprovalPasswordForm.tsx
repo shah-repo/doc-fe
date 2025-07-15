@@ -1,6 +1,10 @@
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { FBForm, FBTextField } from '..';
+import { store } from '../../../state/store';
+import { Autocomplete } from '../../components/forms/fields-next';
+import Text from '../../components/Text';
+import { useStyle } from './FBApprovalPasswordForm.styles';
 import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
 
@@ -13,11 +17,23 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
     (event) => event.preventDefault(),
     [],
   );
+  const classes = useStyle();
+  const { name } = store.getState().auth.user;
 
   return (
     <FBForm {...{ formState }}>
       {/* Isolate autocomplete triggering in current form */}
       <form autoComplete="off" onSubmit={submitHandler}>
+        <Box className={classes.labelContainer}>
+          <Typography className={classes.label}>
+            <Text translation="common.approvers" />
+          </Typography>
+          <Autocomplete
+            disabled
+            value={{ label: name, value: name }}
+            getOptionLabel={(option) => option.label}
+          />
+        </Box>
         <FBTextField
           rules="required"
           name="password"

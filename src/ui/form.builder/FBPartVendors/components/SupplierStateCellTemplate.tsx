@@ -3,10 +3,11 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { truncateByMaxChars } from '../../../components/common/header/Helpers';
 import useStyles from '../../../components/common/kendo.column.templates/Status.styles';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
-import { ASL_STATUS_CLASS_MAPPING } from '../../FBProductOrService/constants';
+import { ASL_STATUS_CLASS_MAPPING, MAX_ASL_STATUS_CHAR_LIMIT } from '../../FBProductOrService/constants';
 import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface StatusChipProps {
@@ -22,13 +23,15 @@ const StatusChip: React.FC<StatusChipProps> = ({ value, onClick, supplierStatusI
   const statusData = approvedSupplierStatuses?.find(data => data.displayLabel === searchValue);
   const label = statusData?.displayLabel ?? value;
   const statusClass = label ? (ASL_STATUS_CLASS_MAPPING[statusData?.internalType ?? ''] as keyof typeof classes) : '';
+  const truncatedValue = truncateByMaxChars(label, MAX_ASL_STATUS_CHAR_LIMIT);
+  const forceTooltip = label.length > MAX_ASL_STATUS_CHAR_LIMIT;
 
   return (
-    <OverflowTooltip arrow placement="top" title={value}>
+    <OverflowTooltip arrow placement="top" title={label} forceTooltip={forceTooltip}>
       <Chip
         size="small"
         className={cx(classes.chip, classes[statusClass], classes.aslChipTextOverflow)}
-        label={label}
+        label={truncatedValue}
       />
     </OverflowTooltip>
   );

@@ -294,5 +294,15 @@
   ],
   "blanktplform": [
     "includeNotes"
+  ],
+  "shippingMethod": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue",
+    "includeNotes",
+    "includeNone",
+    "includeContext"
   ]
 }

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { createMigrate, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import attachments from './ducks/attachments';
+import attachments from './ducks/attachments/reducers';
 import auth from './ducks/auth';
 import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from './ducks/auth/constants';
 import bulkImport from './ducks/bulkImport';
