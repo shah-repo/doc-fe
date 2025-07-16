@@ -1,9 +1,11 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { omit } from 'lodash';
+import { differenceBy, omit, unionBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../common/intl';
 import DocumentRevisionDialog from '../../../components/common/dialogs/DocumentRevisionDialog';
+import { Button } from '../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -12,19 +14,16 @@ import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableMaterial, Material, MaterialTableProps } from './types';
-import { withMaterialTableWrap } from './wrap';
+import { useOptions } from './utils';
 
-const ScanLotTable: React.FC<MaterialTableProps> = ({
-  units,
-  materials,
-  updateMaterial,
-  deleteMaterial,
-}) => {
+const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
   const classes = useStyles();
-  const [editedScanLot, setEditedScanLot] = useState<Partial<EditableMaterial>>();
-  const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
+  const [editedMaterial, setEditedScanLot] = useState<Partial<EditableMaterial>>();
+  const [materials, setMaterials] = useState<Material[]>();
+  const isMaterialEdited = editedMaterial?.[MODE_FIELD] === Mode.add;
   const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
-  const isInEditMode = editedScanLot !== undefined;
+  const { units } = useOptions();
+  const isInEditMode = editedMaterial !== undefined;
   const handleRowClick = !isInEditMode ? editScanLot : undefined;
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
@@ -41,20 +40,31 @@ const ScanLotTable: React.FC<MaterialTableProps> = ({
   const { submitForm, resetForm, setValues } = formik;
 
   useEffect(() => {
-    resetForm({ values: editedScanLot ?? {} });
-  }, [editedScanLot, setValues, resetForm]);
+    resetForm({ values: editedMaterial ?? {} });
+  }, [editedMaterial, setValues, resetForm]);
 
   const discardScanLot = () => setEditedScanLot(undefined);
 
-  const removeScanLot = (lot: EditableMaterial) => {
-    deleteMaterial?.(lot);
+  const removeScanLot = (material: EditableMaterial) => {
+    deleteMaterial(material);
     discardScanLot();
   };
 
-  const openQuickView = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    dataItem: EditableMaterial,
-  ) => {
+  const updateState = (materials: Material[]) => {
+    setMaterials(materials);
+  };
+
+  const deleteMaterial = (item: Material) => {
+    const filteredMaterial = differenceBy(materials, [item], 'id');
+    updateState(filteredMaterial);
+  };
+
+  const updateMaterial = (item: Material) => {
+    const updatedVendors = unionBy([{ ...item }], materials, 'id');
+    updateState(updatedVendors);
+  };
+
+  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => {
     setSelectedDataItem(dataItem);
     quickViewDialog.open();
     event.preventDefault();
@@ -85,33 +95,45 @@ const ScanLotTable: React.FC<MaterialTableProps> = ({
     onEdit: setEditedScanLot,
   });
 
-  const scanLotList = materials.reduce(
+  const materialList = materials?.reduce(
     (list, item) => {
-      const isScanLotEdited = editedScanLot && editedScanLot.id === item.id;
+      const isMaterialEdited = editedMaterial && editedMaterial.id === item.id;
 
       return [
         ...list,
         {
-          ...(isScanLotEdited ? editedScanLot : item),
-          [MODE_FIELD]: isScanLotEdited ? Mode.edit : Mode.show,
+          ...(isMaterialEdited ? editedMaterial : item),
+          [MODE_FIELD]: isMaterialEdited ? Mode.edit : Mode.show,
         },
       ];
     },
-    isScanLotEdited ? [editedScanLot] : [],
+    isMaterialEdited ? [editedMaterial] : [],
   );
 
   return (
-    <Box className={classes.root} data-cy="scan-lot-grid">
+    <Box className={classes.root} data-cy="material-grid">
       <KendoDataGrid<EditableMaterial>
         className={cx(classes.grid, classes.gridWithButton)}
         fullWidth
         filterable
         hasBoxScrollbars
         schema={schema}
-        data={scanLotList as EditableMaterial[]}
+        data={materialList as EditableMaterial[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
+      {isActive && (
+        <Button
+          kind="add"
+          fullWidth
+          attached
+          disabled={isInEditMode}
+          // onClick={}
+          data-cy="add-material"
+        >
+          {translate('form.builder.procedure.material.table.add.part')}
+        </Button>
+      )}
       <DocumentRevisionDialog
         dialog={quickViewDialog}
         {...{
@@ -122,4 +144,4 @@ const ScanLotTable: React.FC<MaterialTableProps> = ({
   );
 };
 
-export default withMaterialTableWrap(ScanLotTable);
+export default MaterialsTable;

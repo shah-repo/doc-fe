@@ -1,6 +1,8 @@
 // import ActionsCellTemplate from './components/ActionsCellTemplate';
 // import { UnitsCellTemplate } from './components/UnitsCellTemplate';
+import React from 'react';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { EditableMaterial, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -29,14 +31,14 @@ export const buildSchema = ({
       filterable: false,
       width: 150,
     },
-    {
-      id: 'actualId',
-      field: 'actualId',
-      title: 'form.builder.procedure.material.table.actual.id.title',
-      // template: (props) => <QuantityAssignedCellTemplate {...props} onClick={onRowClick} />,
-      filterable: false,
-      width: 150,
-    },
+    // {
+    //   id: 'actualId',
+    //   field: 'actualId',
+    //   title: 'form.builder.procedure.material.table.actual.id.title',
+    //   // template: (props) => <QuantityAssignedCellTemplate {...props} onClick={onRowClick} />,
+    //   filterable: false,
+    //   width: 150,
+    // },
     {
       id: 'quantity',
       field: 'quantity',
@@ -53,23 +55,23 @@ export const buildSchema = ({
       filterable: false,
       width: 150,
     },
-    // {
-    //   id: 'actions',
-    //   field: 'actions',
-    //   title: 'common.actions',
-    //   width: 75,
-    //   filterable: false,
-    //   template: (props) => (
-    //     <ActionsCellTemplate
-    //       {...props}
-    //       isActive={true}
-    //       onEdit={onEdit}
-    //       onDelete={onDelete}
-    //       onDiscard={onDiscard}
-    //       onConfirm={onConfirm}
-    //       onOpenQuickView={onOpenQuickView}
-    //     />
-    //   ),
-    // },
+    {
+      id: 'actions',
+      field: 'actions',
+      title: 'common.actions',
+      width: 75,
+      filterable: false,
+      template: (props) => (
+        <ActionsCellTemplate
+          {...props}
+          isActive={true}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onDiscard={onDiscard}
+          onConfirm={onConfirm}
+          onOpenQuickView={onOpenQuickView}
+        />
+      ),
+    },
   ];
 };

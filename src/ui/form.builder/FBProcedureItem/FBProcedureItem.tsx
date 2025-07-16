@@ -10,6 +10,7 @@ import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItem
 import Colors from '../../layout/theme/utils/colors';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
 import FBProcedureItemDetails from './FBProcedureItemDetails';
+import MaterialsTable from './MaterialTable';
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
@@ -85,7 +86,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             />
           </Box>
         )}
-        {type !== FBProcedureItemType.attachments && !loading && (
+        {type !== FBProcedureItemType.attachments && !loading && (<>
           <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
@@ -147,6 +148,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               </Box>
             )}
           </FBMapWrapper>
+          <MaterialsTable isActive />
+        </>
         )}
       </Box>
     </FBProvider>
