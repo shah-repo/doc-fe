@@ -27,7 +27,6 @@ import { ColumnMenuContext } from '../../../../components/common/treelist/column
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
-import FBSection from '../../../FBSection/FBSection';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../interface';
 import {
   ADD_FIELD,
@@ -269,6 +268,7 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
       </Grid>
     </GridToolbar>
   );
+  console.log('renderToolbar', renderToolbar);
 
   const cellRender = (
     tdElement: React.ReactElement<
@@ -338,7 +338,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <FBSection label={translate('lhr.equipment.table.title')} data-cy="lhr-equipment-title" />
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider
             value={{
@@ -373,7 +372,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
                   resizable={TREELIST_CONFIG.resizable}
                   reorderable={TREELIST_CONFIG.reorderable}
                   sortable={TREELIST_CONFIG.sortable}
-                  toolbar={renderToolbar}
                   cellRender={cellRender}
                 />
               </Grid>
