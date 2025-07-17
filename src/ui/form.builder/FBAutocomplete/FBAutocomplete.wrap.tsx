@@ -1,14 +1,16 @@
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
+import { debounce, filter, find, get, includes, isEmpty, isNull, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
+import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions, FBLHRBuildOptions } from '..';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { isTranslation } from '../../translations/types';
 
@@ -55,6 +57,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       && !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
+    const isTypeLhrBuild = name === 'lhr-build-type';
+    const lhrBuildDialog = useDialog();
+    const [previousSelectedValue, setPreviousSelectedValue] = React.useState<any>(undefined);
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled
       = PO_REQUESTOR_COMPONENT_NAME === name
@@ -81,6 +86,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
+
     const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
     const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus && workspaceState.mode === FBWorkspaceModeOptions.DESIGN;
     const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
@@ -147,6 +153,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includes(disabledOptions, option.id)
     );
 
+    if(isTypeLhrBuild && !isEmpty(defaultValue)) {
+      const lhrBuildType = defaultValue as LHRBuild;
+      disabled = !isEmpty(lhrBuildType.displayLabel) && lhrBuildType?.displayLabel !== FBLHRBuildOptions.Production;
+    }
+
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
@@ -172,6 +183,16 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (isUndefined(options)) {
         return setModifiedOptions([]);
       }
+      if(isTypeLhrBuild) {
+        const lhrBuildType = defaultValue as LHRBuild;
+        if (inputValue !== FBLHRBuildOptions.Production && !isEmpty(inputValue) && lhrBuildType.displayLabel === FBLHRBuildOptions.Production && !isNull(event)) {
+          setPreviousSelectedValue(lhrBuildType.id);
+          lhrBuildDialog.open();
+        } else if(!isNull(event)) {
+          formState?.getInputState(name)?.setRender();
+        }
+        return;
+      }
       if (inputValue && inputValue.length > 2) {
         const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || '';
         const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
@@ -182,6 +203,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       }
     };
 
+    const onDialogActionClick = (action: 'cancel' | 'confirm') => {
+      if (action === 'cancel') {
+        formState?.setFieldValue(name, previousSelectedValue);
+        formState?.getInputState(name)?.setRender();
+      }
+      setPreviousSelectedValue(undefined);
+      lhrBuildDialog.close();
+    };
     debounceFilterInput = debounce(onFilterInputChange, 1000);
 
     if (isUndefined(defaultValue)) {
@@ -215,6 +244,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       disabledOptions,
       type: schemaItem?.type,
       onBlur: handleBlur,
+      isTypeLhrBuild,
+      lhrBuildDialog,
+      onDialogActionClick,
     });
   };
 
