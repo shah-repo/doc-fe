@@ -18,4 +18,33 @@ export const styles = makeStyles((theme) => ({
   deleteIcon: {
     color: Colors.error,
   },
+  titleInfoCell: (props) => ({
+    maxWidth: 300,
+    fontWeight: props?.hasChildren ? 600 : 400,
+    fontSize: 14,
+    lineHeight: '16.64px',
+  }),
+  idCellEditWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  defaultIcon: {
+    height: 14,
+    width: 14,
+  },
+  disabled: {
+    color: `${Colors.gray} !important`,
+    pointerEvents: 'none',
+  },
+  cellborderBottom: {
+    borderBottom: `1px solid ${Colors.tableCellBorder} !important`,
+    borderLeft: '0 !important',
+  },
+  nameCell: (props) => ({
+    'vertical-align': 'middle',
+    marginLeft: props.isEditMode ? 0 : theme.spacing(1),
+  }),
+  expand: {
+    cursor: 'pointer',
+  },
 }));

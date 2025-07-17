@@ -1,7 +1,9 @@
 // import ActionsCellTemplate from './components/ActionsCellTemplate';
 // import { UnitsCellTemplate } from './components/UnitsCellTemplate';
 import { TreeListColumnProps } from '@progress/kendo-react-treelist';
+import React from 'react';
 import { translate } from '../../../../common/intl';
+import PartIdCellTemplate from './components/PartIdCellTemplate';
 import { SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -18,6 +20,7 @@ export const buildSchema = ({
       id: 'plannedId',
       field: 'plannedId',
       title: translate('form.builder.procedure.material.table.planned.id.title'),
+      cell: (props) => <PartIdCellTemplate {...props} />,
       // template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} />,
       // filterable: false,
       width: 150,

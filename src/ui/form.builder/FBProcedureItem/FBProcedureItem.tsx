@@ -149,8 +149,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               </Box>
             )}
           </FBMapWrapper>
-          <MaterialsTable isActive />
-          <FBEquipmentTable isDisabled={false} />
+          {type === FBProcedureItemType.materials && <MaterialsTable isActive />}
+          {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={false} />}
         </>
         )}
       </Box>
