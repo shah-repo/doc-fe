@@ -1,14 +1,17 @@
+import { TreeListRowProps } from '@progress/kendo-react-treelist';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Mode, MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import { FBInputProps } from '../../FBInput/FBInput.types';
 
 export interface Material {
   id: string
-  plannedId: string
-  actualId: string
-  lotId: string
-  lotNumber: {[key: string]: string}
-  unitOfMeasure: string
+  plannedId?: string
+  actualId?: string
+  lotId?: string
+  lotNumber?: {[key: string]: string}
+  unit?: string
+  quantity?: number
+  items?: Material[]
 }
 
 export interface MaterialTableProps {
@@ -45,4 +48,22 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableMaterial>
 export interface UnitOption {
   value: string
   text: string
+}
+
+export interface ActionsProps<EditableMaterial> {
+  dataItem: EditableMaterial
+  isDeleteDisabled?: boolean
+  deleteTooltipText?: string
+  scrollBehavior?: ScrollBehavior
+  isAddPartEnabled?: boolean
+  onConfirm: () => void
+  onDiscard?: (dataItem: EditableMaterial) => void
+  onDelete?: (dataItem: EditableMaterial) => void
+  onChildPartAdd?: (dataItem: EditableMaterial) => void
+  onRestore?: (dataItem: EditableMaterial) => void
+  onReorder?: () => void
+}
+
+export interface CustomTreeListRowProps extends TreeListRowProps {
+  dataItem: Material
 }

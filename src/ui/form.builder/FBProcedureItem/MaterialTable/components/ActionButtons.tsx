@@ -1,126 +1,114 @@
-import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
-import React, { MutableRefObject } from 'react';
+import React, { useCallback } from 'react';
 import { translate } from '../../../../../common/intl';
 import { IconButton } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import useHover from '../../../../hooks/useHover';
-import { Colors } from '../../../../layout/theme-next';
-import useStyles from '../styles';
+import { ActionsProps, EditableMaterial } from '../types';
+import { styles } from './styles';
 
-interface Props {
-  isActive?: boolean
-  isLoading?: boolean
-  isEditMode?: boolean
-  onEdit?: () => void
-  onConfirm?: () => void
-  onDiscard?: () => void
-  onDelete?: () => void
-  openQuickView?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => void
-}
+export default function ActionButtons (props: ActionsProps<EditableMaterial>): React.ReactElement | null {
+  const {
+    dataItem,
+    scrollBehavior = 'auto',
+    isDeleteDisabled,
+    isAddPartEnabled,
+    onConfirm,
+    onDiscard,
+    onDelete,
+    onChildPartAdd,
+  } = props;
+  const classes = styles();
+  const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
 
-const ActionsButtons: React.FC<Props> = ({
-  isActive,
-  isLoading,
-  isEditMode,
-  onEdit,
-  onDelete,
-  onConfirm,
-  onDiscard,
-  openQuickView,
-}, ref: MutableRefObject<HTMLDivElement>) => {
-  const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
-  const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
-  const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
-  const [viewIconRef, isViewIconHovered] = useHover<HTMLButtonElement>();
-  const [editIconRef, isEditIconHovered] = useHover<HTMLButtonElement>();
-  const classes = useStyles();
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
+    }
+  }, [scrollBehavior]);
+  const isPartEdit = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+
+  if (!dataItem[MODE_FIELD]) {
+    return null;
+  }
 
   return (
     <div
+      className={classes.actions}
       id="row-actions"
       ref={ref}
-      className={cx(classes.actions, { [classes.actionsEdit]: isEditMode })}
     >
-      {isEditMode ? (
-        <>
-          <Tooltip title={translate('common.discard')}>
+      {isAddPartEnabled && onChildPartAdd && (
+        <Tooltip
+          title={translate('bom.add.child.part')}
+          placement="top"
+          arrow
+        >
+          <div>
             <IconButton
-              kind="simple"
-              color="primary"
-              ref={discardRef}
-              onClick={onDiscard}
-              iconSize={22}
-              data-cy="action-discard"
-              disabled={isLoading}
-            >
-              <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={translate('common.save')}>
-            <IconButton
-              kind="simple"
-              color="primary"
-              ref={saveRef}
-              onClick={onConfirm}
-              iconSize={22}
-              disabled={isLoading}
-              data-cy="action-save"
-            >
-              <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
-            </IconButton>
-          </Tooltip>
-        </>
-      ) : (
-        <>
-          <Tooltip arrow title={translate('common.quick.view')} placement="top">
-            <IconButton
-              ref={viewIconRef}
-              kind="form"
-              color="primary"
-              onClick={openQuickView}
+              kind="action"
               size="small"
-              data-cy="quick-view"
+              data-cy="action-add-child-part"
+              onClick={() => onChildPartAdd(dataItem)}
+            >
+              <FontAwesomeIcon icon={solid('plus')} />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )}
+      {isPartEdit && onDelete && (
+        <Tooltip
+          title={translate('common.delete')}
+          placement="top"
+          arrow
+        >
+          <div>
+            <IconButton
+              kind="action"
+              size="small"
+              onClick={() => onDelete(dataItem)}
+              ref={deleteRef}
+              data-cy="action-delete"
+              disabled={isDeleteDisabled}
             >
               <FontAwesomeIcon
-                icon={isViewIconHovered ? solid('eye') : regular('eye')}
-                color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
-              /></IconButton>
-          </Tooltip>
-          <Tooltip arrow title={translate('common.edit')} placement="top">
-            <IconButton
-              ref={editIconRef}
-              kind="form"
-              color="primary"
-              onClick={onEdit}
-              disabled={!isActive}
-              size="small"
-              data-cy="action-edit"
-            >
-              <FontAwesomeIcon icon={isEditIconHovered ? solid('pen-to-square') : regular('pen-to-square')} color={isEditIconHovered ? Colors.navigationBg : Colors.textGray} />
+                className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
+                icon={isHovered ? solid('trash-can') : regular('trash-can')} />
             </IconButton>
-          </Tooltip>
-          {onDelete && (
-            <Tooltip arrow title={translate('common.delete')} placement="top">
-              <IconButton
-                kind="destructive"
-                ref={deleteRef}
-                onClick={onDelete}
-                disabled={isLoading}
-                size="small"
-                data-cy="action-delete"
-              >
-                <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </>
+          </div>
+        </Tooltip>
       )}
+      {onDiscard && <Tooltip
+        title={translate('common.discard')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          data-cy="action-discard"
+          kind="action"
+          size="small"
+          onClick={() => onDiscard(dataItem)}
+        >
+          <FontAwesomeIcon icon={regular('xmark')} />
+        </IconButton>
+      </Tooltip>}
+      <Tooltip
+        title={translate('common.save')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          data-cy="action-save"
+          kind="action"
+          size="small"
+          onClick={onConfirm}
+        >
+          <FontAwesomeIcon icon={regular('check')} />
+        </IconButton>
+      </Tooltip>
     </div>
   );
-};
-
-export default React.forwardRef(ActionsButtons);
+}

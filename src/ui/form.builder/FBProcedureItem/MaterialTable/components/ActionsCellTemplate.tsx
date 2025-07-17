@@ -1,62 +1,50 @@
-import React, { useCallback } from 'react';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { CellTemplateProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import ActionsButtons from './ActionButtons';
+import { makeStyles, Popper } from '@material-ui/core';
+import PopperJs from 'popper.js';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActionsProps, EditableMaterial } from '../types';
+import ActionButtons from './ActionButtons';
 
-interface Props<T extends EditableItem> extends CellTemplateProps<T> {
-  scrollBehavior?: ScrollBehavior
-  isLoading?: boolean
-  isActive?: boolean
-  isEditButtonHidden?: boolean
-  onEdit?: (item: T) => void
-  onConfirm: () => void
-  onDiscard: () => void
-  onDelete?: (item: T) => void
-  onOpenQuickView?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    dataItem: T
-  ) => void
+interface Props extends ActionsProps<EditableMaterial> {
+  rootClassName?: string
+  popperRef?: React.RefObject<PopperJs>
 }
 
-function ActionsCellTemplate<T extends EditableItem> ({
-  dataItem,
-  scrollBehavior = 'auto',
-  isLoading,
-  isActive,
-  onEdit,
-  onDelete,
-  onConfirm,
-  onDiscard,
-  onOpenQuickView,
-  isEditButtonHidden = false,
-}: Props<T>): React.ReactElement {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+const useStyles = makeStyles({
+  popper: {
+    zIndex: 1300,
+  },
+});
 
-  const ref = useCallback((node: HTMLDivElement | null) => {
-    if (node) {
-      requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'center' }));
-    }
-  }, [scrollBehavior]);
+export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
+  const classes = useStyles();
+  const ref = useRef<HTMLDivElement>(null);
+  const [areActionsShowed, setActionsShowed] = useState(false);
 
-  if (isEditButtonHidden && dataItem[MODE_FIELD] === Mode.show) {
-    return <></>;
-  }
+  useEffect(() => {
+    setActionsShowed(true);
+  }, []);
 
   return (
     <>
-      <ActionsButtons
-        ref={ref}
-        isEditMode={isEditMode}
-        isActive={isActive}
-        isLoading={isLoading}
-        onConfirm={onConfirm}
-        onDiscard={onDiscard}
-        onEdit={() => onEdit?.(dataItem)}
-        onDelete={onDelete && (() => onDelete(dataItem))}
-        openQuickView={onOpenQuickView && ((event) => onOpenQuickView(event, dataItem))}
-      />
+      <div ref={ref} className={props.rootClassName} />
+      <Popper
+        open={areActionsShowed}
+        placement="bottom-end"
+        anchorEl={ref.current}
+        modifiers={{
+          keepTogether: {
+            enabled: true,
+          },
+          preventOverflow: {
+            enabled: false,
+          },
+        }}
+        className={classes.popper}
+      >
+        <ActionButtons
+          scrollBehavior="smooth"
+          {...props} />
+      </Popper>
     </>
   );
-}
-
-export default ActionsCellTemplate;
+};
