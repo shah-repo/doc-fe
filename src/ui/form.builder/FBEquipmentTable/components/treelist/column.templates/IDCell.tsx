@@ -12,7 +12,7 @@ import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, openDetailDrawer, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
+const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
   const isEditMode = isEditAllocItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableEquipmentItem>();

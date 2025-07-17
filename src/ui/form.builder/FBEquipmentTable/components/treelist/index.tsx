@@ -8,7 +8,8 @@ import {
   filterBy,
   mapTree,
   orderBy, TreeList,
-  TreeListCellProps, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent,
+  TreeListCellProps, TreeListDataStateChangeEvent,
+  TreeListFilterChangeEvent,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -22,7 +23,7 @@ import * as React from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
+import { ColumnMenuContext } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
@@ -46,7 +47,6 @@ import { TreeListSchema } from './schema';
 import useStyles from './styles';
 
 const FBEquipmentTable: React.FC<FBAllocationProps> = ({
-  documentRevision,
   isDisabled,
   isShowOnly = false,
 }) => {
@@ -54,8 +54,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
   const { useRef } = React;
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
-  const { _documentRevisionFormState } = SM.useStores();
-  const isDocument = !isEmpty(documentRevision?.formTemplate);
 
   const classes = useStyles({ size });
   const alertDialog = useDialog();
@@ -91,14 +89,13 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
   });
 
   const updateState = (stateInfo) => {
-    _documentRevisionFormState?.setAllocationInfo(stateInfo);
     setState(stateInfo);
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
-    parentRevId: documentRevision?.id,
+    parentRevId: '',
     onConfirm: formik.submitForm,
   });
 
@@ -175,11 +172,9 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
   };
 
   const editAllocationItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    if (dataItem.inEdit || isDisabled || isDocument) {
+    if (dataItem.inEdit || isDisabled) {
       return;
     }
-
-    _documentRevisionFormState?.setDirty(true);
     const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
@@ -373,16 +368,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
                   data={processData()}
                   onDataStateChange={handleDataStateChange}
                   columns={sortedColumnDefinitions}
-                  columnMenu={(props) => (
-                    <CustomColumnMenu
-                      {...props}
-                      columns={getColumns()}
-                      {...{
-                        onLock,
-                        onColumnShowHide,
-                      }}
-                    />
-                  )}
                   onRowClick={editAllocationItem}
                   onFilterChange={onFilterChange}
                   resizable={TREELIST_CONFIG.resizable}
@@ -390,7 +375,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
                   sortable={TREELIST_CONFIG.sortable}
                   toolbar={renderToolbar}
                   cellRender={cellRender}
-                  row={TreeListDraggableRow}
                 />
               </Grid>
             </Grid>

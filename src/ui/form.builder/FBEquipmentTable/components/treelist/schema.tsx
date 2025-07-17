@@ -1,4 +1,3 @@
-import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
@@ -18,11 +17,9 @@ export const TreeListSchema = ({
       field: 'plannedId',
       title: translate('lhr.equipment.grid.heading.planned.id'),
       width: 350,
-      filter: TreeListTextFilter,
       expandable: true,
       locked: false,
       mainOrderIndex: 1,
-      disableShowOrHideSelection: true,
       cell: (props) => <IDCell {...props} />,
       sortable: false,
     },
@@ -31,7 +28,6 @@ export const TreeListSchema = ({
       locked: false,
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
-      filter: TreeListTextFilter,
       mainOrderIndex: 2,
       cell: (props) => <LotAllocatedCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
     },
@@ -40,7 +36,6 @@ export const TreeListSchema = ({
       locked: false,
       title: translate('lhr.equipment.grid.heading.cal.due.date'),
       width: 200,
-      filter: TreeListTextFilter,
       mainOrderIndex: 2,
       cell: (props) => <ExpiryDateCellTemplate {...props} />,
     },
@@ -49,7 +44,6 @@ export const TreeListSchema = ({
       locked: false,
       title: translate('lhr.equipment.grid.heading.pm.due.date'),
       width: 200,
-      filter: TreeListTextFilter,
       headerCell: RevHeaderCell,
       mainOrderIndex: 3,
     },

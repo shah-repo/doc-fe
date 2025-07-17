@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from '..';
 import Colors from '../../layout/theme/utils/colors';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
 import FBProcedureItemDetails from './FBProcedureItemDetails';
 import MaterialsTable from './MaterialTable';
@@ -149,6 +150,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             )}
           </FBMapWrapper>
           <MaterialsTable isActive />
+          <FBEquipmentTable isDisabled={false} />
         </>
         )}
       </Box>

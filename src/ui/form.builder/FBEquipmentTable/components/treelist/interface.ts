@@ -1,10 +1,8 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { EquipmentItem } from '../../interface';
 
 export interface FBAllocationProps {
-  documentRevision: DocumentRevision
   isDisabled: boolean
   isShowOnly?: boolean
 }

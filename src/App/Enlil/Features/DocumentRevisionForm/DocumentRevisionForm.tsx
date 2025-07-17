@@ -32,7 +32,6 @@ import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, check
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FB, FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
-import FBEquipmentTable from '../../../../ui/form.builder/FBEquipmentTable/components/treelist';
 import FBLHRSummary from '../../../../ui/form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
@@ -408,7 +407,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
                                   <>
                                     <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabledInput} />
-                                    <FBEquipmentTable documentRevision={documentRevision} isDisabled={false} />
                                   </>
                                 )}
                                 {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
