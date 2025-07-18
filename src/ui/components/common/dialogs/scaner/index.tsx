@@ -3,6 +3,9 @@ import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
+import { allocationActions } from '../../../../../state/ducks/Allocation';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
@@ -46,25 +49,19 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
     },
   ], [selectedPart]);
 
-  const onScanLotAdd = () => {
-    console.log('Final Lot scan payload', scanLots);
-  };
+  const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
+  const validateScanLotAsync = useAsync({
+    onSuccess: (data?: Document) => {
+      console.log('Document', data);
+      addBarCodeItemTOTable();
+    },
+    onError: (error) => {
+      addBarCodeItemTOTable();
+      toastError(error);
+    },
+  });
 
-  const [scannedValue, setScannedValue] = useState<string>('');
-
-  const handleScan = (data: string) => {
-    setScannedValue(data);
-    // validate lot
-  };
-
-  const handleError = (error: Error) => {
-    setScannedValue('');
-    toastError(error);
-  };
-
-  const addBarcodeScanItem = () => {
-    console.log('setScanLots');
-
+  const addBarCodeItemTOTable = () => {
     const lot = {
       id: '3b801e7a-67f3-4d45-8fd7-dae413815939',
       lotNumber: {
@@ -78,6 +75,35 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
     };
 
     setScanLots([lot] as unknown as ScanLot[]);
+  };
+
+  const extractRevision = (url: string): string | null => {
+    const match = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.exec(url);
+    return match ? match[0] : null;
+  };
+
+  // validateScannedLot
+  const onScanLotAdd = () => {
+    console.log('Final Lot scan payload', scanLots);
+  };
+
+  const [scannedValue, setScannedValue] = useState<string>('');
+
+  const handleScan = (data: string) => {
+    setScannedValue(data);
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
+  };
+
+  const handleError = (error: Error) => {
+    setScannedValue('');
+    toastError(error);
+  };
+
+  const addBarcodeScanItem = () => {
+    console.log('setScanLots');
+    // const sampleLOT = 'http://localhost:3000/document_revision/adb675a2-97ac-4ed0-9ae6-e7f20a7c7e47/version/674ba013-5454-4132-9e83-73df8f53c31d';
+    // validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(sampleLOT), validateScanLotAsync);
+    validateScanLotAsync.start(validateScanLot, '61b18bb5-5ee3-4eb5-83c3-0ef61cb2ef1d', 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81', validateScanLotAsync);
   };
 
   // once we do scanning will get the URL from that take the ID and filter in options and
@@ -129,6 +155,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
           scanLots={scanLots}
           units={[]}
           lots={[]}
+          loading={validateScanLotAsync.isLoading}
           partId={selectedPart?.partRevId}
           setScanLots={setScanLots}
         />

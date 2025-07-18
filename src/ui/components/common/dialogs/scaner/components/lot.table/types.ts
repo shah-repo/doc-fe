@@ -19,6 +19,7 @@ export interface ScanLotTableProps {
   lots: DocumentRevision[]
   disabled?: boolean
   partId?: string
+  loading?: boolean
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>

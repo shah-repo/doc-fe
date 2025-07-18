@@ -1,8 +1,7 @@
-import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useDialog from '../../../../../../hooks/useDialog';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
@@ -18,6 +17,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   scanLots,
   units,
   lots,
+  loading,
   updateScanLot,
   deleteScanLot,
 }) => {
@@ -29,6 +29,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   const handleRowClick = !isInEditMode ? editScanLot : undefined;
   const [selectedDataItem, setSelectedDataItem] = useState<EditableScanLot>();
   const quickViewDialog = useDialog();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const formik = useFormik<Partial<EditableScanLot>>({
     initialValues: {},
@@ -101,21 +102,23 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     },
     isScanLotEdited ? [editedScanLot] : [],
   );
-
+  console.log('loading', loading);
   return (
-    <Box className={classes.root} data-cy="scan-lot-grid">
+    <div ref={containerRef} className={classes.root} data-cy="scan-lot-grid">
       <KendoDataGrid<EditableScanLot>
         className={cx(classes.grid, classes.gridWithButton)}
         fullWidth
         filterable
         hasBoxScrollbars
         schema={schema}
+        containerRef={containerRef}
+        loading={loading}
         data={scanLotList as EditableScanLot[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
       <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.lotNumber?.id }} />
-    </Box>
+    </div>
   );
 };
 
