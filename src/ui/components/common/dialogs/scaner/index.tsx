@@ -1,20 +1,21 @@
 import { Box, List, ListItem } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
-import { EditableAllocationItem } from '../../../../form.builder/FBAllocation/interface';
+import { translate } from '../../../../../common/intl';
+import { convertHtmlEntities } from '../../../../../common/utils/helpers';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
 import { Button } from '../../../forms/fields-next';
 import { toastError } from '../../../notifications';
 import ScanLotTable from './components/lot.table';
-import { ScanLot } from './components/lot.table/types';
+import { ScanLot, ScanSelectedPartItem } from './components/lot.table/types';
 import useStyles from './styles';
 
 interface Props {
   children?: JSX.Element
   handler: DialogHandler
-  selectedPart: EditableAllocationItem
+  selectedPart: ScanSelectedPartItem
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
@@ -23,14 +24,27 @@ interface Props {
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
-  console.log('selectedPart', selectedPart);
 
-  const keyValues = [
-    { key: 'Item ID', value: selectedPart?.docId },
-    { key: 'Part Description', value: 'Sample Desc' }, // TODO ::selectedPart.description this will update after adding keys
-    { key: 'Qty Needed', value: selectedPart?.quantityNeeded ?? 0 },
-    { key: 'Variance', value: selectedPart?.variance ?? 0 },
-  ];
+  const keyValues = useCallback(() => [
+    {
+      key: translate('scan.lot.grid.item.id.message'),
+      value: `${selectedPart?.docId}.${selectedPart?.displayRevision}`,
+    },
+    {
+      key: translate('scan.lot.grid.part.description.message'),
+      value: convertHtmlEntities(
+        (selectedPart?.partDescription ?? '').replace(/(<([^>]+)>|\/n)/g, ''),
+      ),
+    },
+    {
+      key: translate('scan.lot.grid.quantity.needed.message'),
+      value: selectedPart?.quantityNeeded ?? 0,
+    },
+    {
+      key: translate('scan.lot.grid.variance.message'),
+      value: selectedPart?.variance ?? 0,
+    },
+  ], [selectedPart]);
 
   const onScanLotAdd = () => {
     console.log('Final Lot scan payload', scanLots);
@@ -99,7 +113,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
     >
       <Box className={classes.contentWrapper}>
         <List>
-          {keyValues?.map((item, index) => (
+          {keyValues()?.map((item, index) => (
             <ListItem key={index} disableGutters>
               <div className={classes.row}>
                 <span className={classes.key}>{item.key}:</span>
@@ -108,15 +122,20 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
             </ListItem>
           ))}
         </List>
-        <Button onClick={addBarcodeScanItem} size="small">scan item </Button>
-        <ScanLotTable scanLots={scanLots} units={[]} lots={[]} partId={selectedPart?.partRevId} setScanLots={setScanLots} />
-        <BarcodeReader
-          onError={handleError}
-          onScan={handleScan}
+        <Button onClick={addBarcodeScanItem} size="small">
+          scan item{' '}
+        </Button>
+        <ScanLotTable
+          scanLots={scanLots}
+          units={[]}
+          lots={[]}
+          partId={selectedPart?.partRevId}
+          setScanLots={setScanLots}
         />
+        <BarcodeReader onError={handleError} onScan={handleScan} />
       </Box>
     </Dialog>
   );
 };
 
-export default ScanCaptureDialog;
+export default memo(ScanCaptureDialog);

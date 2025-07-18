@@ -114,12 +114,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
-      <DocumentRevisionDialog
-        dialog={quickViewDialog}
-        {...{
-          docRevId: selectedDataItem?.lotNumber?.id,
-        }}
-      />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.lotNumber?.id }} />
     </Box>
   );
 };

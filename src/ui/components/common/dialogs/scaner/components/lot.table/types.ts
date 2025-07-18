@@ -60,3 +60,12 @@ export interface UnitOption {
 export type UseOptionsHook = () => {
   units: string[]
 };
+
+export interface ScanSelectedPartItem {
+  docId: string
+  partDescription?: string
+  quantityNeeded?: number
+  displayRevision?: string
+  variance: string
+  partRevId?: string
+}

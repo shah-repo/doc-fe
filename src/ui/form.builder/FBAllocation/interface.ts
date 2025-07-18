@@ -33,6 +33,7 @@ export interface AllocationItem {
   expiryDate?: string
   isExpired?: boolean
   releaseAt?: string
+  partDescription?: string
 }
 
 export interface EditableAllocationItem extends AllocationItem {
