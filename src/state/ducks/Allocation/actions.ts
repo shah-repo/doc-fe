@@ -32,7 +32,9 @@ const addPart = (
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
-    data: data,
+    data: {
+      allocations: data,
+    },
     handlers,
   });
 
@@ -58,13 +60,15 @@ const updatePart = (
   });
 
 const addLot = (
-  data: AllocationLOTBody,
+  data: AllocationLOTBody[],
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
-    data: data,
+    data: {
+      allocations: data,
+    },
     handlers,
   });
 
