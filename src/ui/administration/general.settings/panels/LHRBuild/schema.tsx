@@ -1,6 +1,7 @@
 import React from 'react';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
 import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
+import { AutocompleteCellTemplate } from '../../components/SettingsTable/components/AutocompleteCellTemplate';
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
 import { EditableLHRBuild } from './types';
@@ -29,14 +30,14 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       id: 'internalType',
       field: 'internalType',
       title: 'administration.general.settings.suppliers.enlil.internal',
-      template: TextCellTemplate,
+      template: AutocompleteCellTemplate,
     },
     {
       id: 'displayLabel',
       field: 'displayLabel',
       title: 'administration.general.settings.suppliers.customer.label',
       template: TextCellTemplate,
-      width: 160,
+      width: 360,
     },
     {
       id: 'actions',
