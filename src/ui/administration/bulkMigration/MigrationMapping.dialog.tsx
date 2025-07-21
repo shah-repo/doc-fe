@@ -297,7 +297,9 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   };
 
   const showAllSelectOptions = (schemaItem: FormFieldSchema) => {
-    const options = schemaItem.options?.map((option) => option.value).filter(Boolean);
+    const options = schemaItem.options?.map((option) =>
+      option.value === 'includeContext' ? 'Other' : option.value,
+    ).filter(Boolean);
     return options?.length ? (
       <span className={classes.mappingDialogSelectionOption}>
         {' - [ '}
