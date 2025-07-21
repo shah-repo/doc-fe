@@ -103,7 +103,6 @@ export { default as FBFileDescription } from './FBFileDescription/FBFileDescript
 export { default as FBFileDescriptionActions } from './FBFileDescription/FBFileDescription.actions';
 export * from './FBFileDescription/FBFileDescription.types';
 export { default as FBFileField } from './FBFileField/FBFileField';
-export { default as FBFileFieldState } from './FBFileField/FBFileField.state';
 export * from './FBFileField/FBFileField.types';
 export { default as FBFilePresenter } from './FBFilePresenter/FBFilePresenter';
 export { default as FBFilePresenterIcon } from './FBFilePresenter/FBFilePresenter.icon';

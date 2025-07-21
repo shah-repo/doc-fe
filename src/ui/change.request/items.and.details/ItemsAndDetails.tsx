@@ -2,7 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Divider, Grid, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import { isEmpty, some } from 'lodash';
+import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -139,10 +139,10 @@ const ItemsAndDetails: React.FC<Props> = ({
   };
 
   function addRevisionToChangeRequest () {
-    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
+    const { proposedDocumentRevision }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
-    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision], isEmpty)) {
+    if (isEmpty(proposedDocumentRevision)) {
       return;
     }
 
