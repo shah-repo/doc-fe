@@ -1,11 +1,10 @@
-import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useState } from 'react';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import ApprovalRequestViewGridItem from './ApprovalRequestViewGridItem';
 import ItemsAndDetailsState from './ItemsAndDetails.state';
-import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
+import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 
 const ApprovalRequestItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem
@@ -38,13 +37,6 @@ const ApprovalRequestItem: React.FunctionComponent<{
   }
 
   function addRevisionToChangeRequest () {
-    const { justificationOfChange, descriptionOfChange }
-      = formState?.getValues() as FBDocumentRevisionsValue;
-
-    if (isEmpty(justificationOfChange) || isEmpty(descriptionOfChange)) {
-      return;
-    }
-
     setEditMode(false);
     handleUpdate();
   }

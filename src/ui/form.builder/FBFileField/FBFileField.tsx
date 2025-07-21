@@ -11,10 +11,10 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
   onClick,
   onChange,
   formState,
-  name,
+  name = '',
   multiple = true,
-  loading = false,
-  disabled,
+  isLoading = false,
+  disabled = false,
   typeToAccept = '*',
   className,
   labelClassName,
@@ -46,8 +46,8 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
             onClick={() => onUploadClick?.()}
           >
             <Box pl={1} display="flex" flexDirection="row">
-              {loading && <Box mt={0.3} mr={1}><CircularProgress size={13} /></Box>}
-              {!loading && <AttachFile className={iconClassName} width={20} height={20} />}
+              {isLoading && <Box mt={0.3} mr={1}><CircularProgress size={13} /></Box>}
+              {!isLoading && <AttachFile className={iconClassName} width={20} height={20} />}
               <FBText locale="common.upload.files" boxProps={{ mt: 0.2, className: labelClassName }} />
             </Box>
           </Link>

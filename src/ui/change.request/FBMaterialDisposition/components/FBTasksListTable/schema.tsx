@@ -4,8 +4,8 @@ import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { AssignedTOCellTemplate } from './components/cells/AssignedTOCellTemplate';
 import { AssigneeActionCellTemplate } from './components/cells/AssigneeActionCellTemplate';
 import { CommentCellTemplate } from './components/cells/CommentCellTemplate';
+import { EvidenceCommonCell } from './components/cells/EvidenceCommonCell';
 import { InstructionsCellTemplate } from './components/cells/InstructionsCellTemplate';
-import { UploadEvidenceCellTemplate } from './components/cells/UploadEvidenceCellTemplate';
 import { EditableTLItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -16,7 +16,6 @@ export const buildSchema = ({
   onDelete,
   isDisabled,
   isActionsDisabled,
-  isClosed,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTLItem>> => {
@@ -40,7 +39,7 @@ export const buildSchema = ({
     {
       id: 'assignedTo',
       field: 'employeeResponse',
-      title: 'approvalRequest.grid.heading.assignedto',
+      title: 'approvalRequest.grid.heading.assigned.to',
       show: true,
       template: (props) => <AssignedTOCellTemplate {...props} onClick={onRowClick} />,
       width: 528,
@@ -50,7 +49,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'approvalRequest.grid.heading.attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, isClosed }} />,
+      template: (props) => <EvidenceCommonCell {...props} {...{ employeeEvidenceUpdates, isDisabled }} />,
       width: 324,
     },
     {
@@ -58,14 +57,14 @@ export const buildSchema = ({
       field: 'comments',
       title: 'approvalRequest.grid.heading.comments',
       show: false,
-      template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, isClosed }} />,
+      template: (props) => <CommentCellTemplate {...props} {...{ isDisabled }} />,
       width: 324,
     },
     {
       id: 'assigneeAction',
       title: 'approvalRequest.grid.heading.assignee.action',
       show: false,
-      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled, isClosed }} />,
+      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled }} />,
       width: 350,
     },
     {
