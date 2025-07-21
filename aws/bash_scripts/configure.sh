@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-NPM=${1:-"20.12.0"}
+NPM=${1:-"22.16.0"}
 
 source ~/.bashrc
 source ~/.nvm/nvm.sh

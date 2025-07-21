@@ -54,6 +54,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   doNotPrompt?: boolean
   onDirtyFlagChange?: (dirty: boolean) => void
   isPreview?: boolean
+  isNewVersion?: boolean
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -78,6 +79,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   doNotPrompt,
   onDirtyFlagChange,
   isPreview,
+  isNewVersion = false,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -402,7 +404,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   <Grid item xs={12}>
                     <AttachmentsField
                       isDisabled={isDisabledInput || attachmentsDisabledChangeControl(documentRevision)}
-                      isNewVersion={false}
+                      isNewVersion={isNewVersion}
                       docRevId={docRevId}
                       containsRedline={false}
                       docRevStatus={documentRevision?.status}
@@ -414,7 +416,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   <Grid item xs={12}>
                     <AttachmentsField
                       isDisabled={isDisabledInput || attachmentsDisabledChangeControl(documentRevision)}
-                      isNewVersion={false}
+                      isNewVersion={isNewVersion}
                       docRevId={docRevId}
                       containsRedline={false}
                       docRevStatus={documentRevision?.status}
@@ -428,7 +430,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Grid item xs={12}>
               <AttachmentsField
                 isDisabled={isDisabledInput}
-                isNewVersion={false}
+                isNewVersion={isNewVersion}
                 docRevId={docRevId}
                 containsRedline={false}
                 docRevStatus={documentRevision?.status}

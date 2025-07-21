@@ -48,7 +48,6 @@ export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) =>
               key={attachment.id}
               boxProps={{ className: classes.attachmentsContainer }}
               attachments={[attachment]}
-              fileUploadState={fileUploadState}
               isDisabled={!canBeModified}
             />
           );

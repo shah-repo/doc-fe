@@ -1,11 +1,11 @@
 import { get } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBEditorProps, FBEditorState } from '..';
 import { SM } from '../../../App';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
@@ -40,7 +40,14 @@ export const withFBEditor = <T extends FBEditorProps>(
       const docTypeGroup = get(documentRevision?.document.documentType, 'group', DOC_TYPE_GROUP.OTHER);
       const outputTypeGroup = get(documentRevision.formTemplate?.outputDocumentTypes[0], 'group');
       const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-      tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+      const rawTabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+
+      tabConfig = useMemo(() => {
+        if (group === DocTypeGroups.CHANGE_REQUEST) {
+          return rawTabConfig.filter(tab => tab.type !== TabTypeOptions.ITEMS);
+        }
+        return rawTabConfig;
+      }, [rawTabConfig]);
     }
 
     useEffect(() => {
