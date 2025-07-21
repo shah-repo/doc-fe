@@ -7,5 +7,12 @@ export interface LHRBuild {
   isActive: boolean
 }
 
+export enum FBLHRBuildOptions {
+  'R&D' = 'R&D',
+  Production = 'Production',
+  Clinical = 'Clinical',
+  'V&V' = 'V&V',
+}
+
 export interface EditableLHRBuild extends LHRBuild, EditableItem {
 }

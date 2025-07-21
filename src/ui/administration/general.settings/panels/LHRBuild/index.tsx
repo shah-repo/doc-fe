@@ -46,15 +46,15 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = LHRBuilds?.some(({ internalType, id }) => internalType.toLowerCase() === values?.internalType?.toLowerCase().trim() && id !== values.id);
+      const isDuplicate = LHRBuilds?.some(({ displayLabel, id }) => displayLabel.toLowerCase() === values?.displayLabel?.toLowerCase().trim() && id !== values.id);
       if (isEmpty(values.internalType)) {
         error.internalType = 'validators.required';
       }
       if (isEmpty(values.displayLabel)) {
         error.displayLabel = 'validators.required';
       }
-      if (values.internalType && isDuplicate) {
-        error.internalType = 'validator.lhr.build.same.internal.exist';
+      if (values.displayLabel && isDuplicate) {
+        error.displayLabel = 'validator.lhr.build.same.internal.exist';
       }
       return error;
     },
