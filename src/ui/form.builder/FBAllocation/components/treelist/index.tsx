@@ -410,6 +410,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
+    reloadAllocationList: reloadAllocationList,
     onDeleteLot,
   });
 
@@ -599,6 +600,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
     item.isDisabled = isDisabled || isDocument;
     item.woStatus = documentRevision.status;
+    item.woId = documentRevision.id;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {

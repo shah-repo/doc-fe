@@ -12,79 +12,90 @@ import { DialogCloseReason } from '../../../dialogs/Dialog.types';
 import { Button } from '../../../forms/fields-next';
 import { toastError } from '../../../notifications';
 import ScanLotTable from './components/lot.table';
-import { ScanLot, ScanSelectedPartItem } from './components/lot.table/types';
+import { ScanLot, ScanSelectedPartItem, ValidateLot } from './components/lot.table/types';
 import useStyles from './styles';
 
 interface Props {
   children?: JSX.Element
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
+  reloadGrid?: () => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, selectedPart }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
 
-  const keyValues = useCallback(() => [
-    {
-      key: translate('scan.lot.grid.item.id.message'),
-      value: `${selectedPart?.docId}.${selectedPart?.displayRevision}`,
-    },
-    {
-      key: translate('scan.lot.grid.part.description.message'),
-      value: convertHtmlEntities(
-        (selectedPart?.partDescription ?? '').replace(/(<([^>]+)>|\/n)/g, ''),
-      ),
-    },
-    {
-      key: translate('scan.lot.grid.quantity.needed.message'),
-      value: selectedPart?.quantityNeeded ?? 0,
-    },
-    {
-      key: translate('scan.lot.grid.variance.message'),
-      value: selectedPart?.variance ?? 0,
-    },
-  ], [selectedPart]);
+  const keyValues = useCallback(
+    () => [
+      {
+        key: translate('scan.lot.grid.item.id.message'),
+        value: `${selectedPart?.docId}.${selectedPart?.displayRevision}`,
+      },
+      {
+        key: translate('scan.lot.grid.part.description.message'),
+        value: convertHtmlEntities((selectedPart?.partDescription ?? '').replace(/(<([^>]+)>|\/n)/g, '')),
+      },
+      {
+        key: translate('scan.lot.grid.quantity.needed.message'),
+        value: selectedPart?.quantityNeeded ?? 0,
+      },
+      {
+        key: translate('scan.lot.grid.variance.message'),
+        value: selectedPart?.variance ?? 0,
+      },
+    ],
+    [selectedPart],
+  );
+  console.log('selectedPart', selectedPart);
 
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
   const validateScanLotAsync = useAsync({
-    onSuccess: (data?: Document) => {
-      console.log('Document', data);
-      addBarCodeItemTOTable();
+    onSuccess: (data?: ValidateLot) => {
+      const lot = {
+        ...data,
+        id: data?.lotRevId,
+        lotNumber: {
+          id: data?.lotRevId,
+          name: data?.docId,
+          documentId: data?.documentId,
+        },
+        serialNumber: data?.serialNumber,
+        quantityAssigned: data?.onHand,
+        unitOfMeasure: data?.lotUsedUnit,
+      };
+
+      setScanLots((prevLots) => [...prevLots, lot as ScanLot]);
     },
-    onError: (error) => {
-      addBarCodeItemTOTable();
-      toastError(error);
-    },
+    onError: toastError,
   });
-
-  const addBarCodeItemTOTable = () => {
-    const lot = {
-      id: '3b801e7a-67f3-4d45-8fd7-dae413815939',
-      lotNumber: {
-        id: '2894a1d2-e004-4cae-bd45-fe7485092daa',
-        name: 'LOT #23120406',
-        documentId: '6844670c-722e-4c1b-b899-87d847e253ff',
-      },
-      serialNumber: 'Serial Number #324',
-      quantityAssigned: 2,
-      unitOfMeasure: 'Pack(s)',
-    };
-
-    setScanLots([lot] as unknown as ScanLot[]);
-  };
 
   const extractRevision = (url: string): string | null => {
     const match = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.exec(url);
     return match ? match[0] : null;
   };
 
-  // validateScannedLot
+  const partAsync = useAsync({
+    onSuccess: reloadGrid,
+    onError: toastError,
+  });
+
+  const createLot = useActionCreator(allocationActions.addLot);
+
   const onScanLotAdd = () => {
-    console.log('Final Lot scan payload', scanLots);
+    const lotPayload = scanLots.map((lot: ScanLot) => {
+      return {
+        workOrderId: selectedPart.woId,
+        lotQuantityNeeded: lot.quantityAssigned,
+        partRevId: selectedPart.partRevId,
+        lotRevId: lot.lotRevId,
+        serialNumber: lot.serialNumber,
+      };
+    });
+    partAsync.start(createLot, lotPayload, partAsync);
   };
 
   const [scannedValue, setScannedValue] = useState<string>('');
@@ -99,17 +110,20 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
     toastError(error);
   };
 
-  const addBarcodeScanItem = () => {
-    console.log('setScanLots');
-    // const sampleLOT = 'http://localhost:3000/document_revision/adb675a2-97ac-4ed0-9ae6-e7f20a7c7e47/version/674ba013-5454-4132-9e83-73df8f53c31d';
-    // validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(sampleLOT), validateScanLotAsync);
-    validateScanLotAsync.start(validateScanLot, '61b18bb5-5ee3-4eb5-83c3-0ef61cb2ef1d', 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81', validateScanLotAsync);
+  const validateScannedLot = () => {
+    const sampleLOT = [
+      'http://localhost:3000/document_revision/adb675a2-97ac-4ed0-9ae6-e7f20a7c7e47/version/674ba013-5454-4132-9e83-73df8f53c31d',
+      'http://localhost:3000/document_revision/98e8abb0-1b99-4b4b-9f38-ec3e2ae89ebb/version/5b22dbc8-91ac-491c-9fa2-3171615c75de',
+    ];
+    let lotRevId = '';
+    if (scannedValue) {
+      lotRevId = extractRevision(scannedValue) ?? '';
+    } else {
+      const lotIndex = scanLots.length ? 1 : 0;
+      lotRevId = extractRevision(sampleLOT[lotIndex]) ?? '';
+    }
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync); // partRevId -> 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81'
   };
-
-  // once we do scanning will get the URL from that take the ID and filter in options and
-  // select one lot and update scan lots and pass one extra parameter to the lot object so that that field is not at all editable
-
-  console.log('scannedValue', scannedValue);
 
   return (
     <Dialog
@@ -117,14 +131,13 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
       open={handler?.isOpen}
       maxWidth="xl"
       hideCloseButton
-      // loading={loading}
       cancelLabel="common.cancel"
       title="scan.lot.dialog.title.message"
       confirmLabel="common.add"
       confirmProps={{
         id: 'dialog-add',
         'data-cy': 'dialog-add',
-        // disabled: loading,
+        disabled: partAsync.isLoading,
       }}
       cancelProps={{
         id: 'dialog-cancel',
@@ -135,6 +148,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
       }}
       onClose={onClose}
       onCancel={onCancel}
+      loading={partAsync.isLoading}
       onConfirm={onScanLotAdd}
     >
       <Box className={classes.contentWrapper}>
@@ -148,9 +162,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, select
             </ListItem>
           ))}
         </List>
-        <Button onClick={addBarcodeScanItem} size="small">
+        <Button onClick={validateScannedLot} size="small">
           scan item{' '}
         </Button>
+
         <ScanLotTable
           scanLots={scanLots}
           units={[]}

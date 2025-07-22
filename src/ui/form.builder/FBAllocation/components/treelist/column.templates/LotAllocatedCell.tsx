@@ -118,6 +118,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   ariaColumnIndex,
   colIndex,
   className,
+  reloadAllocationList,
   deleteLot,
 }) => {
   const { isLotAddition, lotRevId, isDisabled, parentPartRevId, lotDocumentId, lotDocId } = dataItem ?? {};
@@ -191,7 +192,10 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     scanDialog.close();
   };
 
-  console.log('dataItem', dataItem);
+  const refreshAndClose = () => {
+    reloadAllocationList?.();
+    onClose();
+  };
 
   return (
     <td
@@ -287,6 +291,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
+          reloadGrid={refreshAndClose}
           selectedPart ={dataItem}
         />
       )}

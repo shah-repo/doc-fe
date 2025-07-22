@@ -1,14 +1,20 @@
 import { differenceBy, unionBy } from 'lodash';
-import { FB } from '../../../../../../form.builder';
-import { ScanLot, ScanLotTableProps } from './types';
-import { useOptions } from './utils';
+import { useObserver } from 'mobx-react';
+import { FB, FBAutocompleteAsyncOption } from '../../../../../../form.builder';
+import FBAutocompleteAsyncStore from '../../../../../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { ScanLot, ScanLotTableProps, UnitOption } from './types';
 
 export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T>): React.FC<T> => {
   const Comp = ({ disabled, partId, setScanLots, scanLots, ...props }: T) => {
     const { workspaceState } = FB.useStores();
-    const partId1 = '1d0e10d6-8b1d-4ea6-a6e8-a00ae30852c6';
-    console.log('partId :', partId);
-    const { units, lots } = useOptions(partId1);
+
+    const units = useObserver(() => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
+      string,
+      UnitOption
+      >;
+      return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
+    });
 
     const updateState = (state: ScanLot[]) => {
       setScanLots(state);
@@ -37,7 +43,6 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
       disabled: disabled ?? workspaceState?.isPreview,
       scanLots,
       units,
-      lots,
       updateScanLot,
       deleteScanLot,
     });

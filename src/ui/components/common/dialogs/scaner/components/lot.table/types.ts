@@ -5,12 +5,14 @@ import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 
 export interface ScanLot {
-  lotId: string
-  lotNumber: {[key: string]: string}
-  serialNumber: string
-  QuantityAssigned: string
-  unitOfMeasure: string
-  id: string
+  lotId?: string
+  lotNumber?: { [key: string]: string }
+  serialNumber?: string
+  QuantityAssigned?: string
+  unitOfMeasure?: string
+  id?: string
+  lotRevId?: string
+  quantityAssigned?: number
 }
 
 export interface ScanLotTableProps {
@@ -25,27 +27,34 @@ export interface ScanLotTableProps {
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
 }
 
+export interface ValidateLot extends DocumentRevision{
+  isExpired: boolean
+  lotRevId: string
+  partRevId: string
+  lotUsedUnit: string
+  onHand: number
+  partRevDisplayRevision: string
+  releasedAt: string
+  used: number
+  serialNumber: string
+}
+
 export interface EditableScanLot extends ScanLot {
   [MODE_FIELD]: Mode
 }
 
-export type FBScanLotProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
+export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 
 export interface SchemaOptions {
   isLoading?: boolean
   units: string[]
-  lots: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
-  onOpenQuickView?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    dataItem: EditableScanLot
-  ) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> {
@@ -69,4 +78,5 @@ export interface ScanSelectedPartItem {
   displayRevision?: string
   variance: string
   partRevId?: string
+  woId?: string
 }

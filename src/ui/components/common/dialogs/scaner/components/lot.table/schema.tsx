@@ -9,7 +9,6 @@ import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
   units,
-  lots,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -22,7 +21,7 @@ export const buildSchema = ({
       id: 'lotNumber',
       field: 'lotNumber',
       title: 'scan.lot.grid.lot.number',
-      template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} lots={lots} />,
+      template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
       filterable: false,
       width: 150,
     },

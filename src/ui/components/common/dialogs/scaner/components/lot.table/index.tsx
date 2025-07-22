@@ -13,14 +13,7 @@ import useStyles from './styles';
 import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({
-  scanLots,
-  units,
-  lots,
-  loading,
-  updateScanLot,
-  deleteScanLot,
-}) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -53,10 +46,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     discardScanLot();
   };
 
-  const openQuickView = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    dataItem: EditableScanLot,
-  ) => {
+  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => {
     setSelectedDataItem(dataItem);
     quickViewDialog.open();
     event.preventDefault();
@@ -79,7 +69,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
 
   const schema = buildSchema({
     units,
-    lots,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,
@@ -102,7 +91,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     },
     isScanLotEdited ? [editedScanLot] : [],
   );
-  console.log('loading', loading);
+
   return (
     <div ref={containerRef} className={classes.root} data-cy="scan-lot-grid">
       <KendoDataGrid<EditableScanLot>

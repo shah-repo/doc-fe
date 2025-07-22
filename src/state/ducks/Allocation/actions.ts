@@ -1,3 +1,4 @@
+import { ValidateLot } from '../../../ui/components/common/dialogs/scaner/components/lot.table/types';
 import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
@@ -129,7 +130,7 @@ const validateScannedLot = (
   partRevId: string,
   lotRevId: string,
   handlers: Handlers,
-): ApiAction<AllocationItem> =>
+): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
     url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}`,
     method: 'get',
