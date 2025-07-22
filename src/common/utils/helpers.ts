@@ -7,6 +7,7 @@ import Config from '../../config';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
+import { AllocationCheckBoxOptions } from '../../ui/form.builder/FBAllocation/components/treelist/constants';
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
 
@@ -113,15 +114,40 @@ export const getPayloadBasedOnWorkOrderType = (payload: Record<string, unknown>)
     if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
       payload[WO_LOT_ID_KEY_NAME] = '';
       payload[WO_LHR_TABLE_KEY_NAME] = [];
-      delete payload[WO_PART_UNIT_KEY_NAME];
-      delete payload[WO_PART_QTY_KEY_NAME];
-      payload[WO_PART_KEY_NAME] = '';
+      payload[WO_PART_KEY_NAME] = { id: '' };
+      payload[WO_PART_UNIT_KEY_NAME] = '';
+      payload[WO_PART_QTY_KEY_NAME] = null;
+
+      if (payload[AllocationCheckBoxOptions.AUTO_ASSIGN]) {
+        payload[AllocationCheckBoxOptions.AUTO_ASSIGN] = false;
+      }
+      if (payload[AllocationCheckBoxOptions.AUTO_TRANSACT]) {
+        payload[AllocationCheckBoxOptions.AUTO_TRANSACT] = false;
+      }
     } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
       payload[WO_LOT_ID_KEY_NAME] = '';
+      payload = getPayloadBasedOnWoTypeMakeKit(payload);
     } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
       payload[WO_LHR_TABLE_KEY_NAME] = [];
+      payload = getPayloadBasedOnWoTypeMakeKit(payload);
     }
   }
 
+  return payload;
+};
+
+const getPayloadBasedOnWoTypeMakeKit = (payload: Record<string, unknown>): Record<string, unknown> => {
+  const woPart = payload[WO_PART_KEY_NAME] as Record<string, unknown>;
+  if (
+    typeof woPart === 'object'
+    && woPart !== null
+    && 'id' in woPart
+    && woPart['id'] === ''
+  ) {
+    payload[WO_PART_UNIT_KEY_NAME] = '';
+    payload[WO_PART_QTY_KEY_NAME] = null;
+    payload[AllocationCheckBoxOptions.AUTO_ASSIGN] = false;
+    payload[AllocationCheckBoxOptions.AUTO_TRANSACT] = false;
+  }
   return payload;
 };

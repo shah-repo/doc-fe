@@ -21,6 +21,7 @@ import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGri
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { changeRequestPreviewPath } from '../../../utils/paths';
@@ -137,19 +138,19 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (isWORecord) {
       loadTasksTableData();
     } else {
-      const data = workspaceState?.getTLTableData;
+      const data = FBDataStore?.getTLTableData;
       if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
         loadTasksTableData();
       } else if (!isEmpty(data)) {
-        setData(data as EditableTLItem[]);
+        setData(data);
       }
     }
   }, [partOfIdToUse]);
 
   const updateUnsavedData = (values: Partial<EditableTLItem>) => {
     const updatedData = updateData(values, data);
-    workspaceState?.setTLTableData(updatedData);
-    workspaceState?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore?.setTLTableData(updatedData);
+    FBDataStore?.addTLUpdatedDataId(values.taskId as string);
     setData(updatedData);
   };
 
@@ -207,15 +208,15 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    const data = workspaceState?.getTLTableData ?? [];
-    const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
+    const data = FBDataStore?.getTLTableData ?? [];
+    const updatedDataItemIds = FBDataStore?.getTLUpdatedDataIds ?? [];
     const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
     if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(updatedData)) {
       setDoNotPrompt?.(true);
       updatedData.forEach((item) => {
         updateTaskItem(item);
       });
-      workspaceState?.setTLTableData([]);
+      FBDataStore?.setTLTableData([]);
     }
   }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
 
