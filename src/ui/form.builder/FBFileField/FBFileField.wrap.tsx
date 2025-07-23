@@ -1,9 +1,12 @@
 import { isEmpty } from 'lodash';
-import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React from 'react';
-import { FB, FBFileFieldProps, FBFileFieldState } from '..';
-import { calculateTotalFileSize, FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import React, { useState } from 'react';
+import { FB, FBFileFieldProps } from '..';
+import AttachmentsActions from '../../../state/ducks/attachments/actions';
+import { Attachment, AttachmentUploadError } from '../../../state/ducks/attachments/types';
+import { useAsyncDispatch } from '../../../state/store';
+import { getValidSizedFiles } from '../../components/common/attachment.field/utils';
+import { toastError } from '../../components/notifications';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
@@ -11,19 +14,22 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 ): React.FC<T> => {
   const Comp = ({
     onUploadClick,
+    forceFileUpload = false,
     onClick,
     onChange,
-    fileFieldState,
     name = '',
     ...props
   }: T) => {
     const { fileUploadState, workspaceState, formState } = FB.useStores();
     const { id } = workspaceState ?? {};
-    fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
     const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
     const isWORecord = checkIsDocumentWO(groupOptions) && isEmpty(workspaceState?.document?.formTemplate);
+    const dispatch = useAsyncDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
     const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
+
+    const shouldUploadFiles = workspaceState?.mode !== 'preview' || isWORecord || forceFileUpload;
 
     if (fileUploadEl) {
       fileUploadEl.onclick = registerCancel;
@@ -62,17 +68,26 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       if (!event.currentTarget.files) {
         return;
       }
-      const filesToUpload = Array.from(event.currentTarget.files);
+      const filesToUpload = getValidSizedFiles(event.currentTarget.files);
 
-      const filesSize = calculateTotalFileSize(filesToUpload);
-      if (filesSize > FILE_UPLOAD_LIMIT) {
-        const names = filesToUpload.map(file => file.name);
-        handleFileSizeExceedLimit(names, filesSize, event);
-        return;
-      }
-
-      if (workspaceState?.mode !== 'preview' || isWORecord) {
-        fileFieldState?.upload(filesToUpload);
+      if (shouldUploadFiles) {
+        setIsLoading(true);
+        dispatch(AttachmentsActions.uploadFilesAsync(filesToUpload))
+          .then(results => {
+            const attachments = results.reduce<{ attachments: Attachment[], errors: string[] }>((acc, result) => {
+              if (result.status === 'fulfilled' && result.value.attachment) {
+                acc.attachments.push(result.value.attachment);
+              } else {
+                const error = result.status === 'rejected' ? (result.reason as AttachmentUploadError).message : 'Unknown error';
+                acc.errors.push(error);
+              }
+              return acc;
+            }, { attachments: [], errors: [] });
+            fileUploadState?.addFiles(attachments.attachments);
+            if (attachments.errors.length) {
+              toastError(attachments.errors.join('\n'));
+            }
+          }).finally(() => setIsLoading(false));
       }
     };
 
@@ -81,25 +96,13 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       element.value = '';
     };
 
-    React.useEffect(() => {
-      reaction(
-        () => fileFieldState?.data,
-        (data) => {
-          if (workspaceState?.mode !== 'preview' || isWORecord) {
-            fileUploadState?.addFile(data);
-          }
-        },
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return useObserver(() => Component({
       ...(props as T),
       onUploadClick,
       onClick,
       onChange,
       formState,
-      loading: fileFieldState?.loading,
+      isLoading,
       name,
     }));
   };
