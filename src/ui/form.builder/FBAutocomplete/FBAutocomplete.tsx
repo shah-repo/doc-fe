@@ -51,6 +51,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   autoCompleteClasses,
   onBlur,
   isTypeLhrBuild = false,
+  selectedLhrBuild,
   lhrBuildDialog,
   onDialogActionClick,
   ...props
@@ -170,8 +171,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             label={{
             locale: 'form.builder.build.production.msg',
             values: {
-              prod: 'form.builder.Production',
-              rd: (value as LHRBuild).displayLabel ?? '',
+              prod: (defaultValue as LHRBuild).displayLabel,
+              rd: selectedLhrBuild?.displayLabel ?? '',
               },
             }}
           />

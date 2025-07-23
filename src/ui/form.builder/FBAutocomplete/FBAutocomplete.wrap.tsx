@@ -59,7 +59,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
     const isTypeLhrBuild = name === 'lhr-build-type';
     const lhrBuildDialog = useDialog();
-    const [previousSelectedValue, setPreviousSelectedValue] = React.useState<any>(undefined);
+    const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled
       = PO_REQUESTOR_COMPONENT_NAME === name
@@ -155,7 +155,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     if(isTypeLhrBuild && !isEmpty(defaultValue)) {
       const lhrBuildType = defaultValue as LHRBuild;
-      disabled = !isEmpty(lhrBuildType.displayLabel) && lhrBuildType?.displayLabel !== FBLHRBuildOptions.Production;
+      disabled = !isEmpty(lhrBuildType.internalType) && lhrBuildType?.internalType !== FBLHRBuildOptions.Production;
     }
 
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -185,10 +185,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       }
       if(isTypeLhrBuild) {
         const lhrBuildType = defaultValue as LHRBuild;
-        if (inputValue !== FBLHRBuildOptions.Production && !isEmpty(inputValue) && lhrBuildType.displayLabel === FBLHRBuildOptions.Production && !isNull(event)) {
-          setPreviousSelectedValue(lhrBuildType.id);
+        const selectedLhrBuild = (options as LHRBuild[])?.filter(value => value.displayLabel === inputValue);
+        if (!isEmpty(selectedLhrBuild) && selectedLhrBuild[0].internalType !== FBLHRBuildOptions.Production && lhrBuildType.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+          setSelectedValue(selectedLhrBuild[0]);
           lhrBuildDialog.open();
         } else if(!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild[0].id);
+          formState?.setFieldAutosave(name);
           formState?.getInputState(name)?.setRender();
         }
         return;
@@ -204,11 +207,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     };
 
     const onDialogActionClick = (action: 'cancel' | 'confirm') => {
-      if (action === 'cancel') {
-        formState?.setFieldValue(name, previousSelectedValue);
-        formState?.getInputState(name)?.setRender();
+      if (action === 'confirm') {
+        formState?.setFieldValue(name, selectedValue?.id);
+        formState?.setFieldAutosave(name);
       }
-      setPreviousSelectedValue(undefined);
+      formState?.getInputState(name)?.setRender();
+      setSelectedValue(undefined);
       lhrBuildDialog.close();
     };
     debounceFilterInput = debounce(onFilterInputChange, 1000);
@@ -245,6 +249,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       type: schemaItem?.type,
       onBlur: handleBlur,
       isTypeLhrBuild,
+      selectedLhrBuild: selectedValue,
       lhrBuildDialog,
       onDialogActionClick,
     });
