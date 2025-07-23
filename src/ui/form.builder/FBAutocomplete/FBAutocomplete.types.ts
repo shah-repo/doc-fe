@@ -1,6 +1,7 @@
 import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import { UseAutocompleteProps } from '@material-ui/lab/useAutocomplete';
 import { FBAutocompleteAsyncConfig, FBInputProps } from '..';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { DialogHandler } from '../../hooks/useDialog';
 
 export type FBAutocompleteProps =
@@ -34,6 +35,7 @@ export type FBAutocompleteProps =
    disableBackspace?: boolean
    disableChipDelete?: boolean
    isTypeLhrBuild? : boolean
+   selectedLhrBuild?: LHRBuild
    lhrBuildDialog?: DialogHandler
    onDialogActionClick?: (action: string) => void
  };
