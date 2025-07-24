@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { translate } from '../../../common/intl';
 import useStyles from './styles';
-import { QueryType, SearchContext, SearchContextType } from './types';
+import { QueryType, SearchContext } from './types';
 
 interface SearchBarProps {
   tableName?: string
@@ -18,7 +18,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ tableName }) => {
   const classes = useStyles();
   const [searchText, setSearchText] = useState<QueryType>('');
-  const { setQuery, defaultQuery, setDefaultQuery } = useContext(SearchContext) as SearchContextType;
+  const { setQuery, defaultQuery, setDefaultQuery } = useContext(SearchContext);
 
   useEffect(() => {
     setSearchText(undefined);

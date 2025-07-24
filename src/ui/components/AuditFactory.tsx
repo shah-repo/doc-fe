@@ -38,9 +38,11 @@ import AuditProcedure from './AuditProcedure';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
+import AuditSupplierContacts from './AuditSupplierContacts';
 import AuditSupplierOfferings from './AuditSupplierOfferings';
 import AuditSupplierReferences from './AuditSupplierReferences';
 import AuditTraineeList from './AuditTraineeList';
+import AuditWoLhr from './AuditWoLhr';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
@@ -205,6 +207,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       supplierOfferings () {
         return <AuditSupplierOfferings {...{ audit, dataCy, auditValue, previousValue }} />;
       },
+      supplierContacts () {
+        return <AuditSupplierContacts {...{ audit, dataCy, auditValue, previousValue }} />;
+      },
       siteInformation () {
         return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
       },
@@ -216,6 +221,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
         }
         return <AuditAutocomplete audit={audit} />;
+      },
+      workOrderLhrTable () {
+        return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

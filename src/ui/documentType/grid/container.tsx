@@ -57,7 +57,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     },
   });
 
-  const getASLStatuses = () => supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
+  const getASLStatuses = () => supplierTypesAsync.start(fetchASLTypes, false, supplierTypesAsync);
 
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
@@ -228,8 +228,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     }
     history.push(urlPath);
   };
+
   return (
-    <DocTypeTableContext.Provider value={{ aslStatuses }}>
+    <DocTypeTableContext.Provider value={{ aslStatuses, isLoading: supplierTypesAsync?.isLoading }}>
       <DocumentTypePresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}

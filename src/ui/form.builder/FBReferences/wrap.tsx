@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
@@ -16,7 +17,8 @@ export const withFBReferences = <T extends FBReferenceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = workspaceState?.formInputSync.get(name) ?? [];
+
+    const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
 
     const mergeArrays = (
       references: Reference[],
@@ -35,12 +37,12 @@ export const withFBReferences = <T extends FBReferenceProps>(
             {
               docId: item.document?.docId,
               displayRevision: item.displayRevision,
-              name: item?.name,
+              name: item.name,
             },
           ),
           revision: item.displayRevision,
-          title: item?.name,
-          status: item.status,
+          title: item.name,
+          status: item.displayStatus,
           createdDate: item.createdAt,
           documentId: item.documentId,
           owner: item.owner.user.id,
@@ -59,10 +61,7 @@ export const withFBReferences = <T extends FBReferenceProps>(
     });
 
     useEffect(() => {
-      if (
-        !workspaceState?.documentId
-        && !workspaceState?.formInputSync.get(name)
-      ) {
+      if (!workspaceState?.formInputSync.get(name)) {
         return;
       }
       fetchOptionsDataAsync.start(

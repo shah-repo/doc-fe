@@ -50,13 +50,11 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableSupplierContact>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const supplierContacts: EditableSupplierContact[]
-        = workspaceState?.formInputSync.get(name) ?? [];
       const updatedContact = omit(values, FIELDS_TO_OMIT);
 
-      const updatedContactsAfterAddition = supplierContacts.length > 0
+      const updatedContactsAfterAddition = contacts.length > 0
         ? [
-          ...supplierContacts.map((contact) => ({
+          ...contacts.map((contact) => ({
             ...contact,
             isPrimary: updatedContact.isPrimary ? false : contact.isPrimary,
           })),
@@ -66,7 +64,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
       const updatedContacts = isAddition
         ? updatedContactsAfterAddition
-        : supplierContacts.map((contact: EditableSupplierContact) =>
+        : contacts.map((contact) =>
           contact.id === values.id
             ? updatedContact
             : {
@@ -79,7 +77,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
       formState?.setFieldValue(name, updatedContacts);
       workspaceState?.saveDocRev({
-        ...workspaceState?.formInput,
+        ...formState?.getValues(),
         [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
           workspaceState.formInputSync.get(
             SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,
@@ -112,7 +110,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     setContacts(updatedContacts);
     formState?.setFieldValue(name, updatedContacts);
     workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
+      ...formState?.getValues(),
       [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
         workspaceState.formInputSync.get(
           SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,

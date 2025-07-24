@@ -108,10 +108,11 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
 
   return (
     <>
-      { isSupplierStatusEditable && <HeaderStatusButton
+      {(statusLabel || isSupplierStatusEditable) && <HeaderStatusButton
         onItemSelect={confirmUpdate}
         label={getStatusLabel()}
         options={options}
+        disabled = {!isSupplierStatusEditable}
         data-cy="supplier-status"
       /> }
       <AlertDialog
@@ -133,7 +134,7 @@ export function shouldShowHeaderStatus (documentRevision?: DocumentRevision): bo
   }
 
   return ![DocumentRevisionStatus.Canceled, DocumentRevisionStatus.Deprecated,
-    DocumentRevisionStatus.Voided, DocumentRevisionStatus.Voided].includes(documentRevision.status);
+    DocumentRevisionStatus.Voided].includes(documentRevision.status) && !!documentRevision.isLatestRevision;
 }
 
 export default withThemeNext(HeaderSupplierStatus);

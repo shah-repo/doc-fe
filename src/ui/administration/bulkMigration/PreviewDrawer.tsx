@@ -92,6 +92,17 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
     [previewDocRevsList],
   );
 
+  useEffect(() => {
+    if (newFormInput && Object.keys(newFormInput).length
+      && workspaceState
+      && selectedPreviewDocRev
+    ) {
+      workspaceState.setId(selectedPreviewDocRev?.id);
+      workspaceState?.setFormInputDirectly(newFormInput);
+      formState?.setValues(newFormInput);
+    }
+  }, [newFormInput]);
+
   const componentToRender = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
     const schemaControl = FBSchemaState.control[type || ''];

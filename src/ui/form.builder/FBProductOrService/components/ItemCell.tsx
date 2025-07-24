@@ -79,7 +79,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
             value: item.id,
             revision: item.displayRevision,
             title: item?.name,
-            status: item.status,
+            status: item.displayStatus,
             createdDate: item.createdAt,
             owner: item.owner.user.id,
             lifecyclePhase: item?.lifecyclePhase?.displayLabel,
@@ -179,11 +179,10 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         options={items}
         getOptionLabel={(option) => option.label ?? ''}
         filterOptions={(x) => x}
-        disabled={isUpdateAction}
         size="small"
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}
-        disableClearable
+        disableClearable={!inputValue}
         open={isOpen}
         onOpen={handleOpen}
         onClose={handleClose}

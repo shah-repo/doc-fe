@@ -90,6 +90,7 @@ DocumentRevisionManagerContainerProps
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}
+            isNewVersion={isNewVersion}
             documentId={documentId}
           />
         )}

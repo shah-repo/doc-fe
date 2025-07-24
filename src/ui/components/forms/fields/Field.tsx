@@ -1,6 +1,7 @@
 import { BoxProps, FormControl, FormHelperText, Typography } from '@material-ui/core';
 import { FormControlProps } from '@material-ui/core/FormControl';
 import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
+import cx from 'classnames';
 import { FieldProps as FormikFieldProps } from 'formik';
 import { get } from 'lodash';
 import * as React from 'react';
@@ -80,7 +81,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
         <LabelField htmlFor={field.name} style={{ position: 'inherit' }} {...inputLabelProps}>
           <Typography
             variant={TypographySize[size]}
-            className={classes.typography}
+            className={cx(classes.typography, labelProps?.className)}
             style={labelProps}
           >
             <Text message={label} />

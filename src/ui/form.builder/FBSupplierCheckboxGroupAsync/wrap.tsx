@@ -37,7 +37,7 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
     const isMaintainOptionsStatus = workspaceState?.document?.status
     && [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview].includes(workspaceState?.document?.status);
     const formValue = formState?.getFieldValue(name) || defaultValue;
-    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview || workspaceState?.isPreviewPanelVisible;
+    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview;
 
     options = useObserver(() => {
       const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [];
@@ -94,6 +94,7 @@ export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGro
         : selectedValues.filter((item) => item.id !== value);
       const uniqValues = uniqBy(updatedValues, 'id');
       formState?.setFieldValue(name, uniqValues);
+      formState?.validate();
       setSelectedCheckBoxOptions?.(uniqValues);
       workspaceState?.saveDocRev(formState?.getValues());
     };

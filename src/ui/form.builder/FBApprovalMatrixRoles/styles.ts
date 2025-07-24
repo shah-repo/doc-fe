@@ -64,4 +64,8 @@ export default makeStyles(theme => ({
   deleteIcon: {
     color: Colors.error,
   },
+  iconContainer: {
+    display: 'flex',
+    justifyContent: 'end',
+  },
 }));

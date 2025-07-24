@@ -52,7 +52,7 @@ export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props)
     [docTypeTableContext?.aslStatuses],
   );
   const defaultValue = { label: defaultItem, value: '' };
-  const filteredAslOptions = [defaultValue, ...aslOptions?.filter((data) => data.isActive)];
+  const filteredAslOptions = [defaultValue, ...aslOptions];
   const updatedValue = aslOptions?.find((option) => option.aslStatusId === value) ?? defaultValue;
 
   return (

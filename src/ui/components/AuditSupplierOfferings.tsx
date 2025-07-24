@@ -65,7 +65,7 @@ const AuditSupplierOfferings: React.FC<Props> = ({
   };
 
   const auditFieldFactory = (): ReactNode => {
-    const auditValueToUse = auditValue ?? '{}';
+    const auditValueToUse = (audit.nextValue as unknown as string) ?? '{}';
     const { revId, title, supplierPartNumber, aslStatus, comment, details }
         = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as ISupplierOffering : auditValueToUse;
 

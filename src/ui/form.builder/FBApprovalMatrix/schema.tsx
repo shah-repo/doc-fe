@@ -20,9 +20,9 @@ import { FBApprovalMatrixRoleTitles } from './types';
 interface Options {
   data?: FBApprovalMatrixFieldData
   withoutStatus?: boolean
-  cellARHeaderClassName: string
-  cellARClassName: string
-  clearRightBorderClassName: string
+  cellARHeaderClassName?: string
+  cellARClassName?: string
+  clearRightBorderClassName?: string
 }
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
@@ -181,7 +181,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
           editable: true,
           template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem, Record<string, unknown>>,
           width: 90,
-          headerClassName: cx(cellARHeaderClassName, { [clearRightBorderClassName]: index !== arr.length - 1 }),
+          headerClassName: cx(cellARHeaderClassName, clearRightBorderClassName && { [clearRightBorderClassName]: index !== arr.length - 1 }),
           className: cellARClassName,
         })),
       });

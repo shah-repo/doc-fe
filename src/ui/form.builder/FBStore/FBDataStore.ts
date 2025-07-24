@@ -1,7 +1,9 @@
-import { findIndex, isArray, map, unionBy } from 'lodash';
+import { findIndex, isArray, map, union, unionBy } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
 import { Approval } from '../../../state/ducks/common/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
+import { EditableTLItem } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { FBDataStoreApprovalKeys } from '../../documentRevision/forms/types';
 import { FBInlineApprovalBody } from '../FBInlineApproval/FBInlineApproval.types';
 
@@ -13,6 +15,10 @@ class FBDataStore {
   @observable public selectedSliderInfo;
   @observable public newlyCreatedDocInfo;
   public documentTypes;
+  public mdTableData: EditableMDItem[] = [];
+  public tlTableData: EditableTLItem[] = [];
+  public tlUpdatedDataIds: string[] = [];
+  public mdUpdatedDataIds: string[] = [];
 
   @computed public get revisionChangeType () {
     return this.refreshData?.revisionChangeType;
@@ -33,6 +39,38 @@ class FBDataStore {
   @action public clearInlineApprovals = () => {
     set(this, FBDataStoreApprovalKeys.INLINE_APPROVALS, []);
   };
+
+  public setMDTableData = (mdTableData: EditableMDItem[]) => {
+    set(this, 'mdTableData', mdTableData);
+  };
+
+  public setTLTableData = (tlTableData: EditableTLItem[]) => {
+    set(this, 'tlTableData', tlTableData);
+  };
+
+  public addTLUpdatedDataId = (tlUpdatedDataId: string) => {
+    set(this, 'tlUpdatedDataIds', union(this.tlUpdatedDataIds, [tlUpdatedDataId]));
+  };
+
+  public addMDUpdatedDataId = (mdUpdatedDataId: string) => {
+    set(this, 'mdUpdatedDataIds', union(this.mdUpdatedDataIds, [mdUpdatedDataId]));
+  };
+
+  public get getMDTableData (): EditableMDItem[] {
+    return this.mdTableData;
+  }
+
+  public get getTLTableData (): EditableTLItem[] {
+    return this.tlTableData;
+  }
+
+  public get getTLUpdatedDataIds (): string[] {
+    return this.tlUpdatedDataIds;
+  }
+
+  public get getMDUpdatedDataIds (): string[] {
+    return this.mdUpdatedDataIds;
+  }
 
   // key would be either "poApprovals", "inlineApprovals"
   @action public setApprovals = (approvals, key) => {

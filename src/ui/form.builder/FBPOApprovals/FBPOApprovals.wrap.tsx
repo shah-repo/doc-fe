@@ -11,7 +11,6 @@ import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters
 import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
 import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
-import FBDataStore from '../FBStore/FBDataStore';
 import { usePoApprovals } from './hooks';
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -165,7 +164,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // On revisionChangeType change
     useEffect(() => reaction(
-      () => FBDataStore.revisionChangeType,
+      () => workspaceState?.revisionChangeType,
       (revisionChangeType) => {
         if (revisionChangeType) {
           Promise.resolve(fetchRequiredGroups()).then(() => {

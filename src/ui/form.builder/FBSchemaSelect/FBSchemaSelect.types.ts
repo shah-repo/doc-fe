@@ -8,4 +8,4 @@ export type FBSchemaSelectProps =
   schemaSelectState?: FBSchemaSelectState
 };
 
-export const FBSchemeMultuValueTypes: FBInputType[] = ['checkboxgroup'];
+export const FBSchemeMultuValueTypes: FBInputType[] = ['checkboxgroup', 'checkboxgroupasync'];

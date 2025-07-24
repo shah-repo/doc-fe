@@ -1,12 +1,7 @@
 import { Box } from '@material-ui/core';
 import { AttachFile } from '@material-ui/icons';
 import React from 'react';
-import {
-  FBAttachment,
-  FBFilesPresenterProps,
-  FBFileUploadState,
-  FBMapWrapper,
-} from '../..';
+import { FBAttachment, FBFilesPresenterProps, FBFileUploadState, FBMapWrapper } from '../..';
 import { ReactComponent as CloseIcon } from '../../../../assets/images/trash.svg';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
@@ -17,7 +12,6 @@ import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { withFBFilesPresenter } from '../../FBFilesPresenter/FBFilesPresenter.wrap';
 import useStyles from './styles';
 
 interface Props extends FBFilesPresenterProps {
@@ -34,6 +28,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   const dialogHandler = useDialog();
   const downloadAttachment = useActionCreator(attachmentsActions.download);
+  const [selectedFile, setSelectedFile] = React.useState<FBAttachment | null>(null);
 
   const removeAttachment = (attachmentId: string) => {
     fileUploadState?.removeAttachment(attachmentId);
@@ -49,10 +44,16 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
 
   const downloadOrViewFile = (file: FBAttachment) => {
     if (checkIfFileIsViewable(file?.type)) {
+      setSelectedFile(file);
       dialogHandler.open();
     } else {
       async.start(downloadAttachment, file, async);
     }
+  };
+
+  const closePreviewFile = () => {
+    setSelectedFile(null);
+    dialogHandler.close();
   };
 
   return (
@@ -77,25 +78,20 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                   <span>{`${name}.${type}`}</span>
                 </OverflowingContent>
               </Box>
-              {file && dialogHandler.isOpen && (
-                <ViewFile
-                  isOpen={dialogHandler.isOpen}
-                  handleClose={dialogHandler.close}
-                  attachments={[file]}
-                  attachment={file}
-                />
-              )}
-              {!isDisabled && (
-                <CloseIcon
-                  cursor="pointer"
-                  onClick={() => removeAttachment(id)}
-                />
-              )}
+              {!isDisabled && <CloseIcon className={classes.pointer} onClick={() => removeAttachment(id)} />}
             </div>
           );
         }}
       </FBMapWrapper>
+      {selectedFile && dialogHandler.isOpen && (
+        <ViewFile
+          isOpen={dialogHandler.isOpen}
+          handleClose={closePreviewFile}
+          attachments={[selectedFile]}
+          attachment={selectedFile}
+        />
+      )}
     </Box>
   );
 };
-export default withFBFilesPresenter(FBAttachmentNamePresenter);
+export default FBAttachmentNamePresenter;

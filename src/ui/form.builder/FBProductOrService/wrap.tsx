@@ -27,7 +27,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
       const map = new Map();
 
       references.forEach((item) => {
-        map.set(item.revId, { ...item });
+        map.set(item.revId ?? item.id, { ...item });
       });
 
       selectedProductOrServices?.forEach((item) => {
@@ -39,10 +39,10 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
               docId: item.document?.docId,
               displayRevision: item.displayRevision,
               name: item?.name,
-              status: item.status,
+              status: item.displayStatus,
             },
           ),
-          status: item.status,
+          status: item.displayStatus,
           lifecyclePhase: item?.lifecyclePhase?.displayLabel,
           documentId: item.documentId,
           aslDisplayLabel:
@@ -62,10 +62,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     });
 
     useEffect(() => {
-      if (
-        !workspaceState?.documentId
-        && !workspaceState?.formInputSync.get(name)
-      ) {
+      if (!workspaceState?.formInputSync.get(name)) {
         return;
       }
 

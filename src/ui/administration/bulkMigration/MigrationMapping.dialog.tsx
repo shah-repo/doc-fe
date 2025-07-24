@@ -132,12 +132,10 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
 
   const handleMappingPreview = () => {
     setIsPreviewPanelVisible(true);
-    workspaceState.setIsPreviewPanelVisible(true);
   };
 
   const handleClosePreview = () => {
     setIsPreviewPanelVisible(false);
-    workspaceState.setIsPreviewPanelVisible(false);
   };
 
   const handleCloseOptionMapper = () => {
@@ -466,7 +464,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
             </Box>
             <Box className={classes.toRevContainer}>
               <Typography variant="h5" className={classes.mappingAreaTitle}>
-                {translate('bulk.migration.form.revision', { revision: toRev?.displayRevision })}
+                {translate('bulk.migration.to.revision', { revision: toRev?.displayRevision })}
               </Typography>
               <Box className={cx({ [classes.mappingView]: !isShowRelationVisible })}>
                 {toRevSchema
