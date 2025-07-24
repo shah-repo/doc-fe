@@ -51,8 +51,9 @@ export function canMapItems (
 
     const hasOptions = FROM_OPTIONS_TYPES.includes(selectedType) && TO_OPTIONS_TYPES.includes(targetType);
     if (selectedType !== targetType) {
-      if (FROM_OPTIONS_TYPES.includes(selectedType) && !TO_OPTIONS_TYPES.includes(targetType)) {
-        // From has options and to doesn't have options.
+      const fromHasOptions = FROM_OPTIONS_TYPES.includes(selectedType);
+      const toHasOptions = TO_OPTIONS_TYPES.includes(targetType);
+      if (fromHasOptions && !toHasOptions) {
         return {
           canMap: false,
           errMessage: translate('bulk.migration.mapping.failure.options.message', { selectedType, targetType }),
