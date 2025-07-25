@@ -76,7 +76,7 @@ const AuditSupplierOfferings: React.FC<Props> = ({
     } = (typeof previousValueToUse === 'string' ? JSON.parse(previousValueToUse) : previousValueToUse) as ISupplierOffering;
 
     if (audit.type.includes('OBJECT_DELETED')) {
-      const identifyingData = prevDetails ?? title ?? prevId;
+      const identifyingData = prevDetails ?? prevId;
       return <p>
         <Text dataCy={dataCy} translation="documentRevision.audit.supplier.entry.removed" values={{ value: identifyingData }}
         /></p>;
