@@ -1,26 +1,48 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { useObserver } from 'mobx-react';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import FBAutocompleteAsyncState from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
+import FBAutocompleteAsyncStore from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
+import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD } from '../constants';
-import { isEditAllocItem } from '../utils';
+import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
-import { CustomTreeListCellProps } from './types';
+import { CustomTreeListCellProps, EquipOption } from './types';
 
-const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
-  const isEditMode = isEditAllocItem(dataItem);
+const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, expanded, getItem, ariaColumnIndex, colIndex, className }) => {
+  const isEditMode = isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableEquipmentItem>();
   const navigationAttributes = useTableKeyboardNavigation(id);
-  const plannedDocId = dataItem?.plannedId;
+  const docId = getItem?.(dataItem.plannedId ?? '');
 
-  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
-  console.log(setParts);
+  const onClick = (ev) => {
+    onExpandChange(ev, dataItem, level);
+  };
+
+  const equipAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.equipment,
+  });
+
+  useEffect(() => {
+    equipAsync.load();
+  }, [equipAsync]);
+
+  const equipDocs = useObserver(
+    () => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.equipment) as Map<string, EquipOption>;
+      return asyncData ? Array.from(asyncData.values()) : [];
+    },
+  );
 
   useEffect(() => {
     if (!isEditMode) {
@@ -33,10 +55,10 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       setFieldValue(field, value);
       setValue(value);
     }
-  }, [parts]);
+  }, [equipDocs]);
 
   const renderOptions = () => {
-    return parts.map((part) => ({
+    return equipDocs.map((part) => ({
       label: translate('wo.displayRevision', { docId: part.document.docId, displayRevision: part?.displayRevision, name: part?.name }),
       value: part.id,
     }));
@@ -44,7 +66,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
-    setFieldValue('partRevId', option?.value);
+    setFieldValue('plannedId', option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
@@ -71,6 +93,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         options={renderOptions()}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
+        freeSolo
         onChange={handleChange}
         size="small"
       />
@@ -89,11 +112,30 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       {...{ colSpan, id, style }}
       data-cy="cell-id"
     >
+      {hasChildren && !isEditMode
+        && <span
+          className={cx(
+            classes.defaultIcon,
+            { [classes.expand]: hasChildren },
+            { [classes.disabled]: !hasChildren },
+          )}
+        >
+          <FontAwesomeIcon
+            data-cy="minimize-row-button"
+            onClick={hasChildren ? onClick : undefined}
+            size="sm"
+            icon={
+              expanded || !hasChildren
+                ? regular('square-minus')
+                : solid('square-plus')
+            }
+          />
+        </span>}
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
         </div>}
-        {!isEditMode && plannedDocId }
+        {!isEditMode && docId}
       </span>
     </td>
   );

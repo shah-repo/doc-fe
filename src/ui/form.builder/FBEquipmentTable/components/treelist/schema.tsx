@@ -9,6 +9,9 @@ import { RevHeaderCell } from './column.templates/RevHeader';
 export const TreeListSchema = ({
   actionsClass,
   popperHolder,
+  getItem,
+  onDiscard,
+  onDelete,
   onConfirm,
   parentRevId,
 }) => {
@@ -20,7 +23,7 @@ export const TreeListSchema = ({
       expandable: true,
       locked: false,
       mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} />,
+      cell: (props) => <IDCell {...props} getItem={getItem} />,
       sortable: false,
     },
     {
@@ -55,8 +58,8 @@ export const TreeListSchema = ({
           <ActionsCell
             {...props}
             onConfirm={onConfirm}
-            // onDiscard={onDiscard}
-            // onDelete={onDelete}
+            onDiscard={onDiscard}
+            onDelete={onDelete}
             onRestore={undefined}
             rootClassName={popperHolder}
           />

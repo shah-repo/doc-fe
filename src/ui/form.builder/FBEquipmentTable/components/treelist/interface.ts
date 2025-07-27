@@ -1,10 +1,15 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EquipmentItem } from '../../interface';
 
-export interface FBAllocationProps {
+export interface FBEquipmentProps {
   isDisabled: boolean
   isShowOnly?: boolean
+  items?: FBProcedureItemConfig[]
+  getItem?: (id: string) => string
+  handleRemove?: (id: string) => void
+  type: FBProcedureItemType
 }
 
 export interface EquipmentItemState {
@@ -25,20 +30,4 @@ export interface CustomTreeListRowProps extends TreeListRowProps {
 
 export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
   dataItem: EquipmentItem
-}
-
-export interface AllocationPartBody {
-  workOrderId: string
-  workOrderPartRevId: string
-  partRevId: string
-  partQuantityNeeded: number
-  partVariance: number
-}
-
-export interface AllocationLOTBody {
-  workOrderId: string
-  partRevId: string
-  lotRevId: string
-  lotQuantityNeeded: number
-  lotVariance: number
 }

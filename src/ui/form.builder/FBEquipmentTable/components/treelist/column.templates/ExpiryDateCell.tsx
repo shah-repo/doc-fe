@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
 import { EditableEquipmentItem } from '../../../interface';
-import { isEditAllocItem } from '../utils';
+import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -17,7 +17,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const isEditMode = isEditAllocItem(dataItem);
+  const isEditMode = isEditEquipItem(dataItem);
   const { values } = useFormikContext<EditableEquipmentItem>();
   const fieldValue = isEditMode ? values[field ?? ''] : field && dataItem[field];
   const isExpired = true;

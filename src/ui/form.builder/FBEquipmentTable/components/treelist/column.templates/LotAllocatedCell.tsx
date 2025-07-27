@@ -23,7 +23,7 @@ import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
-import { isEditAllocItem } from '../utils';
+import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
@@ -127,7 +127,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     lotDocumentId: '',
     lotDocId: '',
   };
-  const isEditMode = isEditAllocItem(dataItem) && !isDisabled;
+  const isEditMode = isEditEquipItem(dataItem) && !isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();

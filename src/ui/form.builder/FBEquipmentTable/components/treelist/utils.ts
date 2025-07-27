@@ -1,12 +1,13 @@
 import { isNil, isNumber } from 'lodash';
-import { EditableEquipmentItem } from '../../interface';
+import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
+import { EditableEquipmentItem, EquipmentItem } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD } from './constants';
 
-export const isAddAllocationItem = (dataItem: EditableEquipmentItem): boolean => {
+export const isAddEquipItem = (dataItem: EditableEquipmentItem): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
 
-export const isEditAllocItem = (dataItem: EditableEquipmentItem): boolean => {
+export const isEditEquipItem = (dataItem: EditableEquipmentItem): boolean => {
   return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
 };
 
@@ -19,4 +20,15 @@ export const getParsedFieldValue = (field) => {
     return 0;
   }
   return isNumber(field) ? field ?? 0 : parseInt(field) ?? 0;
+};
+
+export const prepareData = (items: FBProcedureItemConfig[]): EquipmentItem[] => {
+  return items.map(item => ({
+    id: item?.id,
+    plannedId: item?.title,
+    actualId: '',
+    calDueDate: '',
+    pmDueDate: '',
+    actualItems: [],
+  }));
 };

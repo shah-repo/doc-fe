@@ -8,7 +8,7 @@ import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
 import { EditableEquipmentItem } from '../../../interface';
 import { MODE_FIELD } from '../constants';
-import { isAddAllocationItem, isEditAllocItem } from '../utils';
+import { isAddEquipItem, isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import { AllocItemActionsProps } from './types';
 
@@ -29,7 +29,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableEqui
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
-  const isPartEdit = !isAddAllocationItem(dataItem) && isEditAllocItem(dataItem);
+  const isPartEdit = !isAddEquipItem(dataItem) && isEditEquipItem(dataItem);
 
   if (!dataItem[MODE_FIELD]) {
     return null;

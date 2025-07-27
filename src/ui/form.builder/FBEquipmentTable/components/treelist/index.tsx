@@ -2,36 +2,34 @@ import {
   Grid,
 } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
-import { GridToolbar } from '@progress/kendo-react-grid';
 import {
   extendDataItem,
   filterBy,
   mapTree,
   orderBy, TreeList,
-  TreeListCellProps, TreeListDataStateChangeEvent,
-  TreeListFilterChangeEvent,
+  TreeListCellProps,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, isEmpty,
+  cloneDeep,
+  isEmpty,
   map, replace, uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
-import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { ColumnMenuContext } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
-import useDialog from '../../../../hooks/useDialog';
+import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { FB } from '../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../interface';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
-  EquipTableDtata,
   EXPAND_FIELD,
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
@@ -40,38 +38,29 @@ import {
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   EquipmentItemState,
-  FBAllocationProps,
+  FBEquipmentProps,
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { prepareData } from './utils';
 
-const FBEquipmentTable: React.FC<FBAllocationProps> = ({
+const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
+  items,
+  type,
+  getItem,
+  handleRemove,
   isDisabled,
   isShowOnly = false,
 }) => {
   const { _tabsState } = SM.useStores();
+  const { procedureState, mpiProcedureState, workspaceState } = FB.useStores();
   const { useRef } = React;
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
-
   const classes = useStyles({ size });
-  const alertDialog = useDialog();
-
-  const onConfirmDelete = () => {
-    alertDialog.close();
-  };
-
-  const getAllItemIds = (items: EquipmentItem[]) => {
-    if (!items) return [];
-    const ids: string[] = [];
-    items.forEach((item) => {
-      ids.push(item.id);
-    });
-    return uniq(ids);
-  };
 
   const [state, setState] = React.useState<EquipmentItemState>({
-    data: EquipTableDtata,
+    data: prepareData(cloneDeep(items) ?? []),
     dataState: {
       sort: [],
       filter: [],
@@ -84,17 +73,37 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
       console.log({ values });
+      const { id = '', plannedId = '' } = values;
+      const newEquipItem = {
+        id,
+        title: plannedId,
+      };
+      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+      procedureState?.addItem(newEquipItem, type, allSteps);
+        mpiProcedureState?.addItem(newEquipItem, type, allSteps);
+        discardEquipItem();
     },
   });
 
-  const updateState = (stateInfo) => {
-    setState(stateInfo);
+  const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
+    setState(prevState => ({
+      ...prevState,
+      inEdit: [],
+    }));
+      formik?.resetForm();
+  };
+
+  const removeEquipItem = (dataItem: EditableEquipmentItem) => {
+    handleRemove?.(dataItem.id ?? '');
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',
+    getItem,
+    onDiscard: discardEquipItem,
+    onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
   });
 
@@ -106,17 +115,10 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
       ? state.expanded.filter((id) => id !== event.dataItem.id)
       : uniq([...state.expanded, event.dataItem.id]);
 
-    updateState({
-      ...state,
+    setState(prevState => ({
+      ...prevState,
       expanded,
-    });
-  };
-
-  const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
-    updateState({
-      ...state,
-      dataState: event.dataState,
-    });
+    }));
   };
 
   const addExpandField = (dataTree: EquipmentItem[]) => {
@@ -160,37 +162,44 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
     updateColumns(dataColumns);
   };
 
-  const ignorePreviouslyAddedItems = (data: EquipmentItem[]) => {
-    return data?.filter((data) => {
-      const isAlocationItemAddExist = !data[ADD_FIELD];
-      if (data[SUB_ITEMS_FIELD]) {
-        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
-      }
-      return isAlocationItemAddExist;
-    });
+  const createEquipItem = () => {
+    return {
+      id: FB.uniqid,
+      plannedId: '',
+      actualId: '',
+      calDueDate: '',
+      pmDueDate: '',
+      actualItems: [],
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+    };
   };
 
-  const editAllocationItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
+  const addEquipItem = () => {
+    const newEquipItem = createEquipItem();
+    const isAddAllocationItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
+    if (isAddAllocationItemExists === -1) {
+      state.data.push(newEquipItem);
+      setState(prevState => ({
+        ...prevState,
+        data: [...state.data],
+        inEdit: [newEquipItem],
+      }));
+      formik.setValues(newEquipItem);
+    }
+  };
+
+  const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
     if (dataItem.inEdit || isDisabled) {
       return;
     }
-    const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
-    if (editItemInfo.lotRevId) {
-      editItemInfo.isLotAddition = true;
-    }
-    state.data = ignorePreviouslyAddedItems(state.data);
-
-    if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
-      state.data[index] = editItemInfo;
-    }
-
-    updateState({
+    setState(state => ({
       ...state,
       data: [...state.data],
       inEdit: [editItemInfo],
-    });
+    }));
     formik.setValues(editItemInfo);
   };
 
@@ -226,50 +235,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
     );
   };
 
-  const handleExpandAll = () => {
-    const { data } = state;
-    const expanded = getAllItemIds(data);
-    updateState({
-      ...state,
-      expanded,
-    });
-  };
-
-  const handleCollapseAll = () => {
-    updateState({
-      ...state,
-      expanded: [],
-    });
-  };
-
-  const renderToolbar = (
-    <GridToolbar>
-      <Grid
-        container
-        justify="space-between"
-        className={classes.toolbarContainer}
-      >
-        <Grid
-          item
-          data-cy="collapse-expand-collapse"
-          className={cx(classes.toggleExpandCollapse, {
-            [classes.disabled]: isShowOnly,
-          })}
-          alignItems="center"
-          justify="center"
-        >
-          <span onClick={handleExpandAll}>
-            {translate('common.expand.all')} /{' '}
-          </span>
-          <span onClick={handleCollapseAll}>
-            {translate('common.collapse.all')}
-          </span>
-        </Grid>
-      </Grid>
-    </GridToolbar>
-  );
-  console.log('renderToolbar', renderToolbar);
-
   const cellRender = (
     tdElement: React.ReactElement<
     HTMLTableCellElement,
@@ -293,17 +258,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
-  const onFilterChange = (event: TreeListFilterChangeEvent) => {
-    const { dataState, data } = state;
-    dataState.filter = event.filter;
-    const expanded = getAllItemIds(data);
-    updateState({
-      ...state,
-      dataState: dataState,
-      expanded: isEmpty(event.filter) ? [data[0]?.id] : expanded,
-    });
-  };
-
   const onLock = React.useCallback(
     ({
       field,
@@ -325,16 +279,6 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
     [columns],
   );
 
-  const orderByLockedState = (
-    columnDefinitions: CustomTreeListColumnProps[],
-  ): CustomTreeListColumnProps[] => {
-    return chain([...columnDefinitions])
-      .orderBy(['locked'], ['desc'])
-      .value();
-  };
-
-  const sortedColumnDefinitions = orderByLockedState(getColumns());
-
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
@@ -351,7 +295,7 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
                 <TreeList
                   style={{
                     overflow: 'auto',
-                    height: size?.height ? `${size?.height}px` : '100px',
+                    maxHeight: size?.height ? `${size?.height}px` : '100px',
                   }}
                   {...state.dataState}
                   tableProps={{ style: { tableLayout: 'fixed' } }}
@@ -365,10 +309,8 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
                   onExpandChange={onExpandChange}
                   rowRender={rowRender}
                   data={processData()}
-                  onDataStateChange={handleDataStateChange}
-                  columns={sortedColumnDefinitions}
-                  onRowClick={editAllocationItem}
-                  onFilterChange={onFilterChange}
+                  columns={getColumns()}
+                  onRowClick={editEquipmentItem}
                   resizable={TREELIST_CONFIG.resizable}
                   reorderable={TREELIST_CONFIG.reorderable}
                   sortable={TREELIST_CONFIG.sortable}
@@ -379,14 +321,20 @@ const FBEquipmentTable: React.FC<FBAllocationProps> = ({
           </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
-      <AlertDialog
-        confirmAction={onConfirmDelete}
-        cancelAction={alertDialog.close}
-        confirmLabel="common.yes.proceed"
-        cancelLabel="common.cancel"
-        message="allocation.lot.delete.confirmation"
-        dialog={alertDialog}
-      />
+      <Grid item>
+        {!isDisabled && (
+          <AddButton
+            fullWidth
+            attached
+            kind="add"
+            className={classes.bottomAddButtom}
+            data-cy="fb-control-btn"
+            onClick={addEquipItem}
+          >
+            {translate('form.builder.add.item')}
+          </AddButton>
+        )}
+      </Grid>
     </div>
   );
 };

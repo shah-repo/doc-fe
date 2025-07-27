@@ -1,8 +1,10 @@
 import { TreeListCellProps } from '@progress/kendo-react-treelist';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { EditableEquipmentItem } from '../../../interface';
 
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableEquipmentItem
+  getItem?: (id: string) => string
   addLot?: IAllocationCallback
   deleteLot?: IAllocationCallback
   deletePart?: IAllocationCallback
@@ -31,3 +33,6 @@ export interface LotAutoCompleteOptions {
 }
 
 type IAllocationCallback = (dataItem: EditableEquipmentItem) => void;
+
+export type EquipOption =
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'>;
