@@ -46,11 +46,6 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
-  /* const getConflictingParts = (items: ApprovalItem[]) => {
-    const itemPart = items.map((item) => `${item.docId} - ${item.displayRevision}`);
-    return itemPart.join(', ');
-  }; */
-
   const { isWarning, isSupplierUndefined, errorItems, warningItems, isPartNotReleased } = data ?? {};
 
   const isError = errorItems?.length > 0;
