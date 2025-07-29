@@ -18,6 +18,7 @@ import {
 interface AiWidgetContextType {
   isWidgetActive: boolean
   summarizeAttachments: (attachmentIds: string[]) => void
+  updateAttachments: (attachmentIds: string[]) => void
 }
 
 export const AiWidgetContext = createContext<AiWidgetContextType | undefined>(undefined);
@@ -64,12 +65,16 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
     widgetRef.current?.triggerSummarizeAttachments(attachmentIds);
   }, []);
 
+  const updateAttachments = useCallback((attachmentIds: string[]) => {
+    widgetRef.current?.triggerUpdateAttachments(attachmentIds);
+  }, []);
+
   if (!isWidgetActive) {
     return <>{children}</>;
   }
 
   return (
-    <AiWidgetContext.Provider value={{ summarizeAttachments, isWidgetActive }}>
+    <AiWidgetContext.Provider value={{ summarizeAttachments, updateAttachments, isWidgetActive }}>
       <Widget
         ref={widgetRef}
         appName={AppName.D2M}
@@ -79,8 +84,11 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
         attachmentIds={attachmentIds}
         token={accessToken}
         apiPath={Config.ApiAIEndpoint}
+        dummyPrompts={dummyPrompts}
       />
       {children}
     </AiWidgetContext.Provider>
   );
 };
+
+const dummyPrompts = ['dummy prompts is here', 'dummy prompts is here2', 'dummy prompts is here3', 'dummy prompts is here a long prompt is here'];
