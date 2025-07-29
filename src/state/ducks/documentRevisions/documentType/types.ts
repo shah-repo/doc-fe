@@ -46,6 +46,7 @@ export enum DOC_TYPE_GROUP {
   GROUP_TRAINING = 'GROUP_TRAINING',
   CUSTOMERS = 'CUSTOMERS',
   SHIPPING = 'SHIPPING',
+  MPI_OUTPUT = 'MPI_OUTPUT',
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
