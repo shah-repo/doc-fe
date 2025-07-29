@@ -5,21 +5,20 @@ import cx from 'classnames';
 import React, { useCallback } from 'react';
 import { translate } from '../../../../../common/intl';
 import { IconButton } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import useHover from '../../../../hooks/useHover';
-import { ActionsProps, EditableMaterial } from '../types';
+import { MODE_FIELD } from '../constants';
+import { EditableMaterial, MaterialCellActionsProps } from '../types';
 import { styles } from './styles';
+import { isAddMaterial, isEditMaterial } from './utils';
 
-export default function ActionButtons (props: ActionsProps<EditableMaterial>): React.ReactElement | null {
+export default function ActionButtons (props: MaterialCellActionsProps<EditableMaterial>): React.ReactElement | null {
   const {
     dataItem,
     scrollBehavior = 'auto',
     isDeleteDisabled,
-    isAddPartEnabled,
     onConfirm,
     onDiscard,
     onDelete,
-    onChildPartAdd,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -29,7 +28,7 @@ export default function ActionButtons (props: ActionsProps<EditableMaterial>): R
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
-  const isPartEdit = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isPartEdit = !isAddMaterial(dataItem) && isEditMaterial(dataItem);
 
   if (!dataItem[MODE_FIELD]) {
     return null;
@@ -41,24 +40,6 @@ export default function ActionButtons (props: ActionsProps<EditableMaterial>): R
       id="row-actions"
       ref={ref}
     >
-      {isAddPartEnabled && onChildPartAdd && (
-        <Tooltip
-          title={translate('bom.add.child.part')}
-          placement="top"
-          arrow
-        >
-          <div>
-            <IconButton
-              kind="action"
-              size="small"
-              data-cy="action-add-child-part"
-              onClick={() => onChildPartAdd(dataItem)}
-            >
-              <FontAwesomeIcon icon={solid('plus')} />
-            </IconButton>
-          </div>
-        </Tooltip>
-      )}
       {isPartEdit && onDelete && (
         <Tooltip
           title={translate('common.delete')}

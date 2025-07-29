@@ -1,7 +1,10 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListCellProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
-import { Mode, MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
+import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import { FBInputProps } from '../../FBInput/FBInput.types';
+import { FBProcedureItemConfig, FBProcedureItemType } from '../FBProcedureItem.types';
+import { ADD_FIELD } from './constants';
 
 type MaterialCallback = (dataItem: EditableMaterial) => void;
 
@@ -19,10 +22,17 @@ export interface Material {
 
 export interface MaterialTableProps {
   isActive: boolean
+  isShowOnly?: boolean
+  items?: FBProcedureItemConfig[]
+  getItem?: (id: string) => string
+  handleRemove?: (id: string) => void
+  type: FBProcedureItemType
 }
 
 export interface EditableMaterial extends Material {
-  [MODE_FIELD]: Mode
+  [MODE_FIELD]: boolean
+  [ADD_FIELD]: boolean
+  isNewAddition?: boolean
 }
 
 export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
@@ -30,8 +40,11 @@ export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 export interface SchemaOptions {
   isLoading?: boolean
   units: string[]
+  parts: MaterialOption[]
   onConfirm: () => void
   onDiscard: () => void
+  actionsClass: string
+  popperHolder: string
   onDelete?: MaterialCallback
   onEdit?: MaterialCallback
   onRowClick?: (e) => void
@@ -78,10 +91,32 @@ export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEve
   dataItem: Material
 }
 
+export interface MaterialEditEvent {
+  dataItem: EditableMaterial
+}
+
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableMaterial
   addLot?: MaterialCallback
   deleteLot?: MaterialCallback
   deletePart?: MaterialCallback
   parentRevId?: string
+  parts?: MaterialOption[]
+  units?: string[]
+  onClick?: (e: MaterialEditEvent) => void
+}
+
+export type MaterialOption =
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'>;
+
+export interface MaterialCellActionsProps<EditableMaterial> {
+  dataItem: EditableMaterial
+  isDeleteDisabled?: boolean
+  deleteTooltipText?: string
+  scrollBehavior?: ScrollBehavior
+  isAddPartEnabled?: boolean
+  onConfirm: () => void
+  onDiscard?: MaterialCallback
+  onDelete?: MaterialCallback
+  onReorder?: () => void
 }

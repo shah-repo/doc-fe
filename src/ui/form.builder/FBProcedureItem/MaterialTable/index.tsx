@@ -1,6 +1,14 @@
 import { Box } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
-import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListDataStateChangeEvent } from '@progress/kendo-react-treelist';
+import {
+  extendDataItem,
+  filterBy,
+  mapTree,
+  orderBy,
+  TreeList,
+  TreeListCellProps,
+  TreeListDataStateChangeEvent,
+} from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { useFormik } from 'formik';
 import { isEmpty, replace, uniq } from 'lodash';
@@ -11,18 +19,26 @@ import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
-import { DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD } from './constants';
+import { FB } from '../../helpers';
+import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { CustomTreeListExpandChangeEvent, CustomTreeListRowProps, EditableMaterial, Material, MaterialItemState, MaterialTableProps } from './types';
-import { useOptions } from './utils';
+import {
+  CustomTreeListExpandChangeEvent,
+  CustomTreeListRowProps,
+  EditableMaterial,
+  Material,
+  MaterialItemState,
+  MaterialTableProps,
+} from './types';
+import { useOptions } from './useOptions';
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
   const classes = useStyles();
   const [editedMaterial, setEditedScanLot] = useState<Partial<EditableMaterial>>();
   // const isMaterialEdited = editedMaterial?.[MODE_FIELD] === Mode.add;
   const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
-  const { units } = useOptions();
+  const { units, parts } = useOptions();
   const isInEditMode = editedMaterial !== undefined;
   const handleRowClick = !isInEditMode ? editScanLot : undefined;
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
@@ -67,7 +83,29 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     resetForm({ values: editedMaterial ?? {} });
   }, [editedMaterial, setValues, resetForm]);
 
-  const discardScanLot = () => setEditedScanLot(undefined);
+  const discardScanLot = (dataItem?: EditableMaterial) => {
+    if (dataItem?.[ADD_FIELD]) {
+      if (dataItem.isLotAddition) {
+        // const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
+        // if (parentIndex !== -1) {
+        //   state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
+        //     (data) => !data[ADD_FIELD],
+        //   );
+        // }
+      } else {
+        state.data = state.data?.filter(
+          (data) => !data[ADD_FIELD],
+        );
+      }
+    }
+
+    setState(prevState => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+   formik?.resetForm();
+  };
 
   const removeScanLot = (material: EditableMaterial) => {
     // deleteMaterial(material);
@@ -102,19 +140,20 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
       });
     }
 
-    return React.cloneElement(
-      row,
-      {
-        ...modifiedProps,
-        ['data-cy' as string]: `alloc-row-${item?.id}`,
-        // ['data-parent-rel' as string]: parentChildRelkey,
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    return React.cloneElement(row, {
+      ...modifiedProps,
+      ['data-cy' as string]: `alloc-row-${item?.id}`,
+      // ['data-parent-rel' as string]: parentChildRelkey,
+      className: cx(row.props.className, classes.updatingRow),
+    });
   };
 
+  console.log('units', units);
   const schema = buildSchema({
     units,
+    parts,
+    actionsClass: classes.actionsCell,
+    popperHolder: classes.popperHolder,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,
@@ -123,39 +162,21 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     onEdit: setEditedScanLot,
   });
 
-  // [
-  //               {
-  //                   "id": "md434vsf",
-  //                   "unit": "hours",
-  //                   "title": "b5c9ab44-653e-4d31-843b-c67276a9395f",
-  //                   "partLot": "e7949809-b5e2-4a44-a6f0-2594424c127b",
-  //                   "quantity": 12
-  //               },
-  //               {
-  //                   "id": "md43494c",
-  //                   "unit": "hours",
-  //                   "title": "c5da3376-be66-45b5-811a-ee1c7ba2aedc",
-  //                   "quantity": 13
-  //               }
-  //           ]
-
   const treeData: Material[] = [
     {
       id: '1',
       unit: 'hours',
-      actualId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
+      actualId: '',
       plannedId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
       quantity: 12,
-      // name: 'Jane Doe',
-      // title: 'CEO',
       items: [
         {
           id: '2',
-          unit: 'hours',
-          actualId: '',
+          unit: 'Box(s)',
           plannedId: '',
+          actualId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
           lotId: 'e7949809-b5e2-4a44-a6f0-2594424c127b',
-          quantity: 12,
+          quantity: 14,
         },
       ],
     },
@@ -164,13 +185,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
   useEffect(() => {
     setState({ ...state, data: treeData });
   }, []);
-
-  const extendWithExpanded = (items: Material[]) =>
-    items.map(item => ({
-      ...item,
-      expanded: state.expanded?.includes(item.id),
-      items: item.items ? extendWithExpanded(item.items) : undefined,
-    }));
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
     updateState({
@@ -200,21 +214,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     }
 
     const filter = [...(dataState.filter as FilterDescriptor[])];
-    const filteredData
-        = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
-    const sortedData
-        = dataState.sort
-        && filteredData
-        && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
+    const filteredData = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+    const sortedData = dataState.sort && filteredData && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
 
     return addExpandField(sortedData as Material[]);
   };
 
   const cellRender = (
-    tdElement: React.ReactElement<
-    HTMLTableCellElement,
-    string | React.JSXElementConstructor<any>
-    > | null,
+    tdElement: React.ReactElement<HTMLTableCellElement, string | React.JSXElementConstructor<any>> | null,
     cellProps: TreeListCellProps,
   ): React.ReactElement<HTMLTableCellElement> => {
     const props = {
@@ -225,19 +232,32 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     return defaultRendering as React.ReactElement<HTMLTableCellElement>;
   };
 
-  // const createPartItem = () => {
-  //   return {
-  //     id: uuidv4(),
-  //     plannedId: '',
-  //     actualId: '',
-  //     unit: '',
-  //     quantity: '',
-  //     isLotAddition: false,
-  //     [MODE_FIELD]: Mode.add,
-  //   };
-  // };
+  const createPartItem = (): EditableMaterial => {
+    return {
+      id: FB.uniqid,
+      plannedId: '',
+      actualId: '',
+      unit: '',
+      quantity: undefined,
+      isLotAddition: false,
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+    };
+  };
 
-  console.log('extendWithExpanded(treeData)', extendWithExpanded(treeData));
+  const addPartItem = () => {
+    const newMaterialItem = createPartItem();
+    const isAddMaterialExists = state.data?.findIndex((data) => data[ADD_FIELD]);
+    if (isAddMaterialExists === -1) {
+      state.data.push(newMaterialItem);
+      setState((prevState) => ({
+        ...prevState,
+        data: [...state.data],
+        inEdit: [newMaterialItem],
+      }));
+      formik.setValues(newMaterialItem);
+    }
+  };
 
   return (
     <Box className={classes.root} data-cy="material-grid">
@@ -257,14 +277,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
         columns={schema}
       />
       {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          attached
-          disabled={isInEditMode}
-          // onClick={createPartItem}
-          data-cy="add-material"
-        >
+        <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={addPartItem} data-cy="add-material">
           {translate('form.builder.procedure.material.table.add.part')}
         </Button>
       )}

@@ -1531,7 +1531,6 @@
   "form.builder.lhrs.procedure.equipment.title": "{title} - rev {revision}",
   "form.builder.procedure.material.table.planned.id.title": "Planned Id",
   "form.builder.procedure.material.table.add.part": "Add Part",
-  "form.builder.procedure.material.table.planned.id.title": "Part",
   "form.builder.procedure.material.table.lot.number.title": "Lot Number",
   "form.builder.procedure.material.table.actual.id.title": "Actual Id",
   "form.builder.procedure.material.table.quantity.title": "Quantity",

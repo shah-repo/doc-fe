@@ -32,6 +32,9 @@ export const styles = makeStyles((theme) => ({
     height: 14,
     width: 14,
   },
+  expandCell: {
+    marginRight: theme.spacing(1),
+  },
   disabled: {
     color: `${Colors.gray} !important`,
     pointerEvents: 'none',
@@ -46,5 +49,48 @@ export const styles = makeStyles((theme) => ({
   }),
   expand: {
     cursor: 'pointer',
+  },
+  addChildLotIcon: {
+    color: Colors.primary,
+  },
+  lotNameCell: {
+    verticalAlign: 'middle',
+    marginLeft: 0,
+  },
+  lotInfoWrapper: {
+    '& button': {
+      marginLeft: theme.spacing(1.25),
+    },
+  },
+  flexJustifyBetween: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconGroup: {
+    display: 'flex',
+    gap: theme.spacing(1),
+  },
+  lotInfoId: {
+    marginRight: theme.spacing(1.25),
+  },
+  viewIcon: {
+    color: Colors.textGray,
+  },
+  link: {
+    color: `${Colors.primary} !important`,
+    cursor: 'Pointer',
+    textDecoration: 'initial !important',
+    '&:hover': {
+      textDecoration: 'underline !important',
+    },
+  },
+  scanIcon: {
+    marginLeft: theme.spacing(1.25),
+  },
+  Cell: {
+    fontWeight: 400,
+    fontSize: 14,
+    lineHeight: '17.64px',
   },
 }));

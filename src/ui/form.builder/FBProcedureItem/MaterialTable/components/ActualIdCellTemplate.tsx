@@ -1,23 +1,17 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
+import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 
-const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
+const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   hasChildren,
   colSpan,
   id,
@@ -25,6 +19,7 @@ const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
   field,
   level,
+  parts,
   onExpandChange,
   expanded,
   ariaColumnIndex,
@@ -40,29 +35,14 @@ const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
     onExpandChange(ev, dataItem, level);
   };
 
-  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
-  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
-
-  const fetchAvailablePartsAsync = useAsync({
-    onSuccess: (data: DocumentRevision[] = []) => {
-      setParts(data);
-    },
-  });
-
   useEffect(() => {
-    if (!isEditMode || (isEditMode && dataItem.isLotAddition) || (isEditMode && !isEmpty(dataItem.lotId))) {
-      return;
-    }
+    // if (!isEditMode) {
+    //   return;
+    // }
 
-    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, fetchAvailablePartsAsync);
-  }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+    const value = renderOptions()?.find((option) => option.value === dataItem.plannedId);
 
-  useEffect(() => {
-    if (!isEditMode) {
-      return;
-    }
-
-    const value = renderOptions().find((option) => option.value === dataItem.plannedId);
+    console.log('value', value, dataItem);
 
     if (value && field) {
       setFieldValue(field, value);
@@ -71,7 +51,7 @@ const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   }, [parts]);
 
   const renderOptions = () => {
-    return parts.map((part) => ({
+    return parts?.map((part) => ({
       label: translate('wo.displayRevision', {
         docId: part.document.docId,
         displayRevision: part?.displayRevision,
@@ -113,6 +93,13 @@ const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
       </FormikField>
     );
 
+  const displayValue = value.label ?? dataItem?.[field ?? ''];
+  console.log('Final ', displayValue);
+
+  const handleClick = () => {
+    onClick?.({ dataItem });
+  };
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -122,27 +109,18 @@ const PartIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
       {...navigationAttributes}
       aria-expanded={expanded}
       aria-selected="false"
+      onClick={handleClick}
       {...{ colSpan, id, style }}
-      data-cy="cell-id"
+      data-cy={`${field}-cell`}
     >
-      {hasChildren && !isEditMode && (
-        <span
-          className={cx(classes.defaultIcon, { [classes.expand]: hasChildren }, { [classes.disabled]: !hasChildren })}
-        >
-          <FontAwesomeIcon
-            data-cy="minimize-row-button"
-            onClick={hasChildren ? onClick : undefined}
-            size="sm"
-            icon={expanded || !hasChildren ? regular('square-minus') : solid('square-plus')}
-          />
+      {isEditMode && (
+        <span className={cx(classes.nameCell, classes.titleInfoCell)}>
+          <div className={classes.idCellEditWrapper}>{getFieldInfo()}</div>
         </span>
       )}
-      <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {isEditMode && <div className={classes.idCellEditWrapper}>{getFieldInfo()}</div>}
-        {!isEditMode && <div className={classes.idCellEditWrapper}>{dataItem?.[field ?? '']}</div>}
-      </span>
+      {!isEditMode && <OverflowContent title={displayValue}>{displayValue}</OverflowContent>}
     </td>
   );
 };
 
-export default memo(PartIdCellTemplate);
+export default memo(ActualIdCellTemplate);

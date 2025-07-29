@@ -1,9 +1,23 @@
 import { useObserver } from 'mobx-react';
+import { useEffect } from 'react';
+import FBAutocompleteAsyncState from '../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { UnitOption } from './types';
+import { FB } from '../../helpers';
+import { MaterialOption, UnitOption } from './types';
 
 export const useOptions = () => {
+  const materialAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.materials,
+  });
+
+  const parts = useObserver(
+    () => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<string, MaterialOption>;
+      return asyncData ? Array.from(asyncData.values()) : [];
+    },
+  );
+
   // const [lots, setLots] = useState<DocumentRevision[]>([]);
   // const fetchLotsByPartId = useActionCreator(lhrSummaryActions.fetchLotsByPartId);
 
@@ -18,6 +32,15 @@ export const useOptions = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [partId]);
 
+  const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.unitMeasures,
+  });
+
+  useEffect(() => {
+    materialAsync.load();
+    unitsAsync.load();
+  }, [materialAsync, unitsAsync]);
+
   const units = useObserver(() => {
     const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
     string,
@@ -26,7 +49,10 @@ export const useOptions = () => {
     return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
   });
 
+  console.log('units', units);
+
   return {
+    parts,
     units,
   };
 };
