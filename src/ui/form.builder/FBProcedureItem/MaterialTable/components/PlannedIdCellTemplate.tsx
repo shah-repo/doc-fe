@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
@@ -42,7 +42,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
     //   return;
     // }
 
-    const value = renderOptions()?.find((option) => option.value === dataItem.plannedId);
+    const value = renderOptions?.find((option) => option.value === dataItem.plannedId);
 
     console.log('value', value, dataItem);
 
@@ -52,7 +52,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
     }
   }, [parts]);
 
-  const renderOptions = () => {
+  const renderOptions = useMemo(() => {
     return parts?.map((part) => ({
       label: translate('wo.displayRevision', {
         docId: part.document.docId,
@@ -61,39 +61,18 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
       }),
       value: part.id,
     }));
-  };
+  }, [parts]);
+
+  console.log('parts', renderOptions?.length, parts?.length);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    console.log('option', option);
     setValue(option as OptionType);
     setFieldValue('partRevId', option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-
-  const getFieldInfo = () =>
-    field && (
-      <FormikField name={field} required error={Boolean(errors[field])}>
-        <Autocomplete
-          {...getFieldProps(field)}
-          value={value}
-          disableOpenOnFocus={true}
-          blurOnSelect
-          ListboxComponent={({ children, ...otherProps }) => {
-            return (
-              <>
-                <ul {...otherProps}>{children}</ul>
-              </>
-            );
-          }}
-          options={renderOptions()}
-          placeholder={translate('common.select')}
-          getOptionLabel={(option: OptionType) => option.label}
-          onChange={handleChange}
-          size="small"
-        />
-      </FormikField>
-    );
 
   console.log('Final ', value.label ?? dataItem?.[field ?? '']);
   const displayValue = value.label ?? dataItem?.[field ?? ''];
@@ -115,24 +94,56 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
       {...{ colSpan, id, style }}
       data-cy={`${field}-cell`}
     >
-
       {isEditMode && (
         <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-          <div className={classes.idCellEditWrapper}>{getFieldInfo()}</div>
+          <div className={classes.idCellEditWrapper}>
+            <FormikField name={field ?? ''} required error={Boolean(errors[field ?? ''])}>
+              <Autocomplete
+                {...getFieldProps(field)}
+                value={value}
+                disableOpenOnFocus={true}
+                blurOnSelect
+                ListboxComponent={({ children, ...otherProps }) => {
+                  return (
+                    <>
+                      <ul {...otherProps}>{children}</ul>
+                    </>
+                  );
+                }}
+                options={renderOptions}
+                placeholder={translate('common.select')}
+                getOptionLabel={(option: OptionType) => option.label}
+                onChange={handleChange}
+                size="small"
+              />
+            </FormikField>
+          </div>
         </span>
       )}
-      {!isEditMode && <OverflowContent title={displayValue}><>{hasChildren && !isEditMode && (
-        <span
-          className={cx(classes.defaultIcon, classes.expandCell, { [classes.expand]: hasChildren }, { [classes.disabled]: !hasChildren })}
-        >
-          <FontAwesomeIcon
-            data-cy="minimize-row-button"
-            onClick={hasChildren ? onClick : undefined}
-            size="sm"
-            icon={expanded || !hasChildren ? regular('square-minus') : solid('square-plus')}
-          />
-        </span>
-      )}{displayValue}</></OverflowContent>}
+      {!isEditMode && (
+        <OverflowContent title={displayValue}>
+          <>
+            {hasChildren && !isEditMode && (
+              <span
+                className={cx(
+                  classes.defaultIcon,
+                  classes.expandCell,
+                  { [classes.expand]: hasChildren },
+                  { [classes.disabled]: !hasChildren },
+                )}
+              >
+                <FontAwesomeIcon
+                  data-cy="minimize-row-button"
+                  onClick={hasChildren ? onClick : undefined}
+                  size="sm"
+                  icon={expanded || !hasChildren ? regular('square-minus') : solid('square-plus')}
+                />
+              </span>
+            )}
+            {displayValue}
+          </>
+        </OverflowContent>
+      )}
     </td>
   );
 };

@@ -11,7 +11,7 @@ import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 
-const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
+const ActualIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
   hasChildren,
   colSpan,
   id,

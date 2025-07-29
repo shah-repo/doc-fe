@@ -18,7 +18,6 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ dataItem, field = '', units
   };
 
   const value = values[field] as string;
-  console.log('units', units?.length);
 
   return (
     <FormikField name={field}>
@@ -40,7 +39,6 @@ export const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { dataItem, field = '', colSpan, style, className, hasChildren, onClick, ...otherProps } = props;
   const isEditMode = isEditMaterial(dataItem);
   const classes = styles({ hasChildren });
-  console.log('hasChildren', hasChildren);
 
   const handleClick = () => onClick?.({ dataItem });
   const displayValue = get(dataItem, field, CELL_EMPTY_VALUE) as string;

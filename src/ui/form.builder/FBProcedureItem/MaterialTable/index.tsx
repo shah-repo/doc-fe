@@ -148,7 +148,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     });
   };
 
-  console.log('units', units);
   const schema = buildSchema({
     units,
     parts,

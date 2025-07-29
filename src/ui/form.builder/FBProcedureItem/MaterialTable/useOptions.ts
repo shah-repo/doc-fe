@@ -49,8 +49,6 @@ export const useOptions = () => {
     return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
   });
 
-  console.log('units', units);
-
   return {
     parts,
     units,
