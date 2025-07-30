@@ -39,7 +39,6 @@ export interface SchemaOptions {
   onDelete?: () => void
   isDisabled: boolean
   isActionsDisabled: boolean
-  isClosed: boolean
   onRowClick?: (e: TLItemEditEvent) => void
   employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
   employeeEvidenceUpdates: (dataItem: TasksListItem, employeeId: string, attachmentIds: Attachment[]) => void

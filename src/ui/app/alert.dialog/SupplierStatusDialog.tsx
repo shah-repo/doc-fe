@@ -46,7 +46,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
-  const { isWarning, isSupplierUndefined, errorItems, warningItems } = data ?? {};
+  const { isWarning, isSupplierUndefined, errorItems, warningItems, isPartNotReleased } = data ?? {};
 
   const isError = errorItems?.length > 0;
   const title: Translation = isError ? 'common.alert' : 'common.warning';
@@ -72,18 +72,23 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               </Typography>
               { isError && (
                 <>
-                  { isSupplierUndefined
-                    ? <Typography data-cy="dialog-message" className={classes.contentText}>
-                      <Text message={
-                        translate('purchaseOrder.supplierStatus.dialog.status.error')
-                      } />
-                    </Typography>
-                    : <Typography data-cy="dialog-message" className={classes.contentText}>
-                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
-                      <b> {getConflictingPhases(errorItems)} </b>
-                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
-                    </Typography>
-                  }
+                  { isSupplierUndefined ? (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.status.error')} />
+                      </Typography>
+                  ) : isPartNotReleased ? (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(errorItems)} </b>
+                        <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                      </Typography>
+                  ) : (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(errorItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                  )}
                 </>
               )}
               { !isError && isWarning && (
@@ -95,11 +100,18 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                     }
                     />
                   </Typography> }
-                  <Typography data-cy="dialog-message" className={classes.contentText}>
-                    <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
-                    <b> {getConflictingPhases(warningItems)} </b>
-                    <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
-                  </Typography>
+                  { isPartNotReleased
+                    ? <Typography data-cy="dialog-message" className={classes.contentText}>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                      <b> {getConflictingPhases(warningItems)} </b>
+                      <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                    </Typography>
+                    : <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(warningItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                  }
                 </>
               )}
               { !isError && isWarning

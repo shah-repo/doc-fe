@@ -370,6 +370,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             dialog={exportDialog}
             categoryName={categoryName}
             customFileName="DocumentList"
+            isMultiplePagesDownloadAllowed
           />
           <CustomLabelTooltip {...{ tooltipConfig }}>
             <Button
