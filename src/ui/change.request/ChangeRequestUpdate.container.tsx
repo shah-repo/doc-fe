@@ -148,7 +148,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
-    <FormContext.Provider value={{ submitOnChange: true, isEditing, isLoading: isLoading }}>
+    <FormContext.Provider value={{ submitOnChange: true, isEditing, isLoading }}>
       <FBProvider formState={formState} workspaceState={workspaceState}>
         <ChangeRequestFormContainer
           asyncState={updatingAsyncState}
