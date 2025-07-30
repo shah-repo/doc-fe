@@ -54,5 +54,6 @@ export const DEFAULT_OPTIONS = [
 
 export const PART_PURCHASE_OPTIONS = [
   { label: yesLabel, value: YES },
+  { label: allowWithWarningLabel, value: 'ALLOW_WITH_WARNING' },
   { label: noLabel, value: NO },
 ];

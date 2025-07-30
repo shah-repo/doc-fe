@@ -20,7 +20,7 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
     const defaultValue = formState?.getFieldValue(name) ?? '';
     const shippingAddress = useObserver(() => formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInputSync.get(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInput?.shippingAddress);
     const customerId = useObserver(() => formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInputSync.get(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInput?.customer);
-    const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
+    const isCustomerFieldLoading = useObserver(() => workspaceState?.loading);
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD));
     const isShippingAddressEmpty = isEmpty(formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS));
 

@@ -18,6 +18,7 @@ import { compareValuesToSubmit } from '../components/forms/helpers';
 import { toastError } from '../components/notifications';
 import { FB, FBFormState, FBProvider, FBWorkspaceState } from '../form.builder';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import { useRestrictedEditUpdates } from './FBMaterialDisposition/components/FBTasksListTable/useRestrictedEditUpdates';
 import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
 
@@ -66,6 +67,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
   const { getStartOfDayDateString } = useDate();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
+  const { triggerRestrictEditUpdates } = useRestrictedEditUpdates();
 
   useEffect(() => {
     const isItemsRevDataSame = isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
@@ -131,6 +133,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     if (isEmpty(dataToSubmit)) {
       if (isEditing && !isMDTab) {
         setDoNotPrompt(true);
+        triggerRestrictEditUpdates();
         history.push(changeRequestPreviewPath(changeRequest.id));
       }
       return;
@@ -151,6 +154,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
 
         if (isEditing) {
           setAutosave(true);
+          triggerRestrictEditUpdates();
           history.push(changeRequestPreviewPath(changeRequest.id));
         }
       })
