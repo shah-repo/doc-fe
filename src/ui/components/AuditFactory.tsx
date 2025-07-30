@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
@@ -22,8 +22,8 @@ import { ASLStatus } from '../administration/general.settings/panels/SupplierSet
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
-import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
@@ -378,8 +378,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               />
               <br />
               <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
-              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
-              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments)}</div>
+              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'share.not.selected.watermark.attachment')}</div>
               { includeEffectiveDate && <div data-cy={dataCy}> {translate('share.selected.watermark.attachment.names')}: {watermarkAttachmentsList}</div>
               }
             </>

@@ -10,7 +10,7 @@ import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attach
 import ViewFile from '../../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../../components/common/view.file/utils/helpers';
 import { toastError } from '../../../../../components/notifications';
-import { FBAttachment, FBFilesPresenterProps, FBFileUploadState } from '../../../../../form.builder';
+import { FB, FBAttachment, FBFilesPresenterProps } from '../../../../../form.builder';
 import { withFBFilesPresenter } from '../../../../../form.builder/FBFilesPresenter/FBFilesPresenter.wrap';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
@@ -20,7 +20,6 @@ import { styles } from './cells/styles';
 
 interface Props extends FBFilesPresenterProps {
   isDisabled?: boolean
-  fileUploadState?: FBFileUploadState
   width?: number | string
 }
 
@@ -28,12 +27,12 @@ const FBAttachmentNamePresenter: React.FC<Props> = ({
   attachments = [],
   boxProps,
   isDisabled,
-  fileUploadState,
   width = 235,
 }) => {
   const dialogHandler = useDialog();
   const classes = styles();
   const fileToView = useRef<FBAttachment | null>(null);
+  const { fileUploadState } = FB.useStores();
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {

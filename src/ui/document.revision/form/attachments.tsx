@@ -37,6 +37,8 @@ const Attachments: React.FunctionComponent<Props> = ({
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
   const [isHeaderChecked, setIsHeaderChecked] = React.useState(false);
 
+  const canEdit = !isDisabled && !isNewVersion;
+
   if (!isVisible) {
     return null;
   }
@@ -64,11 +66,11 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Typography>
         <Box display="flex" alignItems="center">
           <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
-          <AttachmentDeleteAllButton {...{ docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderCheck }} />
+          {canEdit && <AttachmentDeleteAllButton {...{ docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderCheck }} />}
           <AttachmentDownloadAllButton {...{ docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision }} />
         </Box>
       </Box>
-      <AttachmentField name="attachments" component="field" disabled={isDisabled} />
+      <AttachmentField name="attachments" component="field" disabled={!canEdit} />
       <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision, onSelectedAttachmentsChange, selectedAttachments, onHeaderCheck, isHeaderChecked }} />
     </Box>
   );
