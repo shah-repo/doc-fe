@@ -701,6 +701,20 @@ const exportToEmail = (
     handlers,
   });
 
+const exportToEmailWithPassword = (
+  revisionId: string,
+  body: ExportToEmailRequest,
+  handlers: Handlers,
+  password?: string,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/revision/${revisionId}/email_red_line`,
+    method: 'post',
+    data: body,
+    handlers,
+    password,
+  });
+
 const updateForm = (
   id: string,
   body: UpdateFormRequestBody,
@@ -886,6 +900,7 @@ export default {
   ownerChange,
   saveWithNoResponse,
   exportToEmail,
+  exportToEmailWithPassword,
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
