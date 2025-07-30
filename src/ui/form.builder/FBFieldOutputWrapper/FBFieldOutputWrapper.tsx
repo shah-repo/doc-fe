@@ -7,12 +7,14 @@ import { withFBFieldOutputWrapper } from './FBFieldOutputWrapper.wrap';
 const FBFieldOutputWrapper: React.FunctionComponent<FBFieldOutputWrapperProps> = ({
   mt,
   mb,
+  name,
   children,
 }) => {
   const classes = useStyles({ mt, mb });
+  const inlineStyle = ['lhrs-start-quantity', 'lhrs-accepted-quantity', 'lhrs-rejected-quantity'].includes(name ?? '');
 
   return (
-    <Box className={classes.root}>
+    <Box className={`${classes.root} ${inlineStyle ? classes.inlineStyle : ''}`} >
       {children}
     </Box>
   );
