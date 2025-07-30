@@ -1,7 +1,7 @@
 import { cloneDeep, debounce, isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { saveApprovalRequest } from '../../App/Shifamed/Utils/API';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions, changeRequestsSelectors } from '../../state/ducks/changeRequest';
@@ -56,7 +56,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   loadAudit,
   setAutosave,
 }) => {
-  const history = useHistory();
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const [isMDTab, setMDTab] = React.useState(false);
@@ -65,7 +64,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
-  const { triggerRestrictEditUpdates } = useRestrictedEditUpdates();
+  const { triggerRestrictEditUpdates, isLoading } = useRestrictedEditUpdates(changeRequest?.id);
 
   useEffect(() => {
     const isItemsRevDataSame = isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
@@ -121,7 +120,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       if (isEditing && !isMDTab) {
         setDoNotPrompt(true);
         triggerRestrictEditUpdates();
-        history.push(changeRequestPreviewPath(changeRequest.id));
       }
       return;
     }
@@ -142,7 +140,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         if (isEditing) {
           setAutosave(true);
           triggerRestrictEditUpdates();
-          history.push(changeRequestPreviewPath(changeRequest.id));
         }
       })
       .catch(toastError);
@@ -151,7 +148,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
-    <FormContext.Provider value={{ submitOnChange: true, isEditing }}>
+    <FormContext.Provider value={{ submitOnChange: true, isEditing, isLoading: isLoading }}>
       <FBProvider formState={formState} workspaceState={workspaceState}>
         <ChangeRequestFormContainer
           asyncState={updatingAsyncState}

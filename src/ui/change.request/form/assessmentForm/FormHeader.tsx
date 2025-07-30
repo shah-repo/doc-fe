@@ -12,11 +12,13 @@ import Actions from './Actions';
 interface Props {
   changeRequest?: ChangeRequest
   asyncState: AsyncState
+  isLoading?: boolean
 }
 
 const FormHeader: React.FC<Props> = ({
   changeRequest,
   asyncState,
+  isLoading,
 }) => (
   <Header status={changeRequest?.state}>
     {changeRequest && (
@@ -47,7 +49,7 @@ const FormHeader: React.FC<Props> = ({
       </Grid>
     </Grid>
     <FormMessage asyncState={asyncState} />
-    <FormProgress asyncState={asyncState} attached />
+    <FormProgress asyncState={asyncState} attached isLoading={isLoading} />
   </Header>
 );
 

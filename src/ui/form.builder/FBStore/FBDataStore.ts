@@ -20,7 +20,6 @@ class FBDataStore {
   public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
   public partOfIdToUse;
-  public changeRequestId;
 
   @computed public get revisionChangeType () {
     return this.refreshData?.revisionChangeType;
