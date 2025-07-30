@@ -152,6 +152,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     const updatedData = updateData(values, data);
     FBDataStore?.setMDTableData(updatedData);
     FBDataStore?.addMDUpdatedDataId(values.id as string);
+    FBDataStore.changeRequestId = changeRequest?.id;
     setData(updatedData);
   };
 

@@ -151,6 +151,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     const updatedData = updateData(values, data);
     FBDataStore?.setTLTableData(updatedData);
     FBDataStore?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore.partOfIdToUse = partOfIdToUse;
     setData(updatedData);
   };
 
@@ -218,7 +219,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       });
       FBDataStore?.setTLTableData([]);
     }
-  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
+  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
