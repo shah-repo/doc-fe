@@ -7,4 +7,5 @@ export type FBFieldOutputWrapperProps =
   & {
     inputProps?: Partial<FBInputProps>
     position: number
+    name?: string
   };
