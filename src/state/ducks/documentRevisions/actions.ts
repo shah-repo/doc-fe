@@ -10,6 +10,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { ApprovalFailureResponse } from '../../../ui/documentRevision/forms/presenters/SubmitForApproval';
 import { DocumentRevisionFormValues } from '../../../ui/documentRevision/forms/types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { BOMResponse, IWhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
@@ -375,6 +376,13 @@ const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Documen
     toastError(intl.formatMessage({ id: 'documentRevision.po.status.update.failed' }));
   },
 });
+
+const validateReleasedPOLineItem = (partId: string, handlers: Handlers): ApiAction<ApprovalFailureResponse> =>
+  apiActionWithCallbacks({
+    url: `${PO_ROOT_URL}/${partId}/validate_released_part`,
+    method: 'get',
+    handlers,
+  });
 
 const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}${PO_ROOT_URL}/obsolete_void/${id}`,
@@ -888,6 +896,7 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   updatePO,
+  validateReleasedPOLineItem,
   obsoletePO,
   cloneDoc,
   finalizeAndRelease,
