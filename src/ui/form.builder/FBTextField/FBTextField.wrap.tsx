@@ -1,4 +1,4 @@
-import { get, isEmpty, isUndefined, toNumber } from 'lodash';
+import { camelCase, get, isEmpty, isUndefined, toNumber } from 'lodash';
 import { reaction } from 'mobx';
 import React, { FocusEventHandler, useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -98,6 +98,24 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         // Setting POAM Item form value back to 0 If the value is removed
         formState?.setFieldValue(name, 0, true);
       }
+
+      if (name.includes('headquarterAddress')) {
+        const siteInformation = workspaceState?.formInput?.siteInformation;
+        const subFieldName = name.split('headquarterAddress')[1];
+        const updatedSites = siteInformation?.map(site => {
+          if (!site?.isSameAsHQ) {
+            return site;
+          }
+
+          return {
+            ...site,
+            ...(subFieldName ? { [camelCase(subFieldName)]: value } : { siteAddress: value }),
+          };
+        });
+
+        formState?.setFieldValue('siteInformation', updatedSites);
+      }
+
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
 

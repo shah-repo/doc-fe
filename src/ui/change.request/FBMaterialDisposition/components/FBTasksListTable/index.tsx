@@ -1,13 +1,14 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
@@ -19,9 +20,9 @@ import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGri
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -58,19 +59,28 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const updateTask = useActionCreator(taskActions.updateTask);
   const deleteTask = useActionCreator(taskActions.deleteTask);
   const formContext = useFormContext();
-  const parentFormik = useFormikContext();
-  const history = useHistory();
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
-  const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+  let enableTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
   const [isActionsDisabled, setIsActionsDisabled] = React.useState<boolean>(false);
+  const changeRequestState = workspaceState?.changeRequest?.state;
 
-  if (enbleTasksAdditionalColumns) {
+  if (changeRequestState) {
+    enableTasksAdditionalColumns = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(changeRequestState);
+  }
+
+  if (enableTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
   }
 
+  const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const isDocRevOwner = workspaceState?.changeRequest?.owner?.id ?? workspaceState?.document?.owner?.id;
+  const isOwner = isDocRevOwner === currentUserId;
+
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    if (isShowOnly || formik.dirty) {
+    const hasEditContext = isShowOnly || formik.dirty;
+    const canEdit = isAdditionalColumnsShown ? !isOwner && hasEditContext : hasEditContext;
+    if (canEdit) {
       return;
     }
 
@@ -103,9 +113,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const updateTaskAsync = useAsync({
     onSuccess: () => {
       loadTasksTableData();
-      if (formContext?.isEditing) {
-        history.push(changeRequestPreviewPath(partOfId ?? ''));
-      }
     },
     onError: toastError,
   });
@@ -124,19 +131,20 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (isWORecord) {
       loadTasksTableData();
     } else {
-      const data = workspaceState?.getTLTableData;
+      const data = FBDataStore?.getTLTableData;
       if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
         loadTasksTableData();
       } else if (!isEmpty(data)) {
-        setData(data as EditableTLItem[]);
+        setData(data);
       }
     }
   }, [partOfIdToUse]);
 
   const updateUnsavedData = (values: Partial<EditableTLItem>) => {
     const updatedData = updateData(values, data);
-    workspaceState?.setTLTableData(updatedData);
-    workspaceState?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore?.setTLTableData(updatedData);
+    FBDataStore?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore.partOfIdToUse = partOfIdToUse;
     setData(updatedData);
   };
 
@@ -192,19 +200,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   useEffect(() => {
     resetForm({ values: editedTLItem ?? {} });
   }, [editedTLItem, setValues, resetForm]);
-
-  useEffect(() => {
-    const data = workspaceState?.getTLTableData ?? [];
-    const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
-    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
-    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(updatedData)) {
-      setDoNotPrompt?.(true);
-      updatedData.forEach((item) => {
-        updateTaskItem(item);
-      });
-      workspaceState?.setTLTableData([]);
-    }
-  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
@@ -278,9 +273,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   };
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
-  const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
   const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
-  const isClosed = isWORecord ? (isWOReleased || isWOVoided) : Boolean(state && [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state));
+  const isDisabled = isWORecord && isWOVoided;
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
@@ -289,9 +283,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     onDelete: deleteTaskItem,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
-    isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
+    isDisabled,
     isActionsDisabled,
-    isClosed,
   });
 
   const getColumns = () => {
@@ -340,6 +333,9 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     ];
   }, isTasksListAdded ? [editedTLItem] : []);
 
+  const canAddTaskInSection = isAdditionalColumnsShown ? !isOwner : isShowOnly || formContext?.isEditing;
+  const canAddTask = (isAdditionalColumnsShown && isOwner) || (!isShowOnly && !formContext?.isEditing);
+
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
@@ -350,7 +346,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
           startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
           onClick={createDraftTLItem}
           data-cy="add-task-small-btn"
-          disabled={isShowOnly || formContext?.isEditing}
+          disabled={canAddTaskInSection}
         >
           {translate('approvalRequest.tasks.list.add')}
         </Button>
@@ -367,15 +363,11 @@ const FBTasksListTable: React.FunctionComponent<props> = (
         containerRef={containerRef}
         resizable={true}
       />
-      {!isShowOnly && !formContext?.isEditing && <Button
-        kind="add"
-        fullWidth
-        attached
-        onClick={createDraftTLItem}
-        data-cy="add-task"
-      >
-        {translate('approvalRequest.tasks.list.add')}
-      </Button>}
+      {canAddTask && (
+        <Button kind="add" fullWidth attached onClick={createDraftTLItem} data-cy="add-task">
+          {translate('approvalRequest.tasks.list.add')}
+        </Button>
+      )}
     </div>
   );
 };

@@ -2305,10 +2305,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@progress/jszip-esm@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@progress/jszip-esm/-/jszip-esm-1.0.3.tgz#778e2845206e2370eb72ca8d5f32041ee0d9dbbb"
-  integrity sha512-qu5qeIlUsJX0Z2oi3Aax3gvfjKrrtVzQ2LIEhmw2CVWffZ0JvtifiomyJOc0ZFk7oEyEyrVvab97bqKkNCKvfQ==
+"@progress/jszip-esm@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@progress/jszip-esm/-/jszip-esm-1.0.4.tgz#cce8dcdbca6794b7621ab414c726fa9b4ac8b67f"
+  integrity sha512-A5i26JcTosFKeHCrklarNsByW3RUJd8osRq69eskZgIaq05weTCXdpztlFMwrHpgOGods1D0WFoSQcMNE0eI8Q==
   dependencies:
     "@progress/pako-esm" "^1.0.1"
 
@@ -2348,9 +2348,9 @@
     "@progress/pako-esm" "^1.0.1"
 
 "@progress/kendo-file-saver@^1.0.0":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-file-saver/-/kendo-file-saver-1.1.1.tgz#4225affb7064fe9e12d3a89f36e00ab6c92deef0"
-  integrity sha512-mo0Cw3MLoLcx2bA+Ma/VAxkM9vHSJ4Sg0vgh6U1ZIvPXmnfO8Dgsdiv/475lafyju0kG8KOhl3bcVagCF71glQ==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-file-saver/-/kendo-file-saver-1.1.2.tgz#4098cd3d4ee92a6574dc2fa4c60d813ad364f90e"
+  integrity sha512-hWpJ67L8b2+GIhsIWR09NgGaEh87jvcHv7kScC671cbVWJycXTGqdy3ZoI0pzIaH8K0IgP2TNkF1ay4HGxe+pg==
 
 "@progress/kendo-licensing@^1.2.1":
   version "1.2.1"
@@ -2360,11 +2360,11 @@
     jsonwebtoken "^8.5.1"
 
 "@progress/kendo-ooxml@^1.6.3":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-ooxml/-/kendo-ooxml-1.7.0.tgz#9d07586704ea3ef9b45dcc8ac0b7da325421ab38"
-  integrity sha512-8jlL4LDRZabKjx1zcpUMvEz0bJ4FjtDxQBb1Z8NQ0XoA5f9SrZJ2JNOKrvAH9DLnVVw6/bzaNh8ETLok5vLTvg==
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-ooxml/-/kendo-ooxml-1.9.2.tgz#222eeb80152e1dfeea48931b29e1aa9a3dca9a00"
+  integrity sha512-z3w8/z+ovJ/mj9FslTmYNbgMGUhsxS2oyJtlnwNsqCJNNleeA76Pm/k0WNVelJYDHA/mmdoiKAtbE7zszcI3ag==
   dependencies:
-    "@progress/jszip-esm" "^1.0.3"
+    "@progress/jszip-esm" "^1.0.4"
     "@progress/pako-esm" "^1.0.1"
 
 "@progress/kendo-popup-common@1.9.0-dev.202111301350":
@@ -2398,10 +2398,10 @@
     "@progress/kendo-draggable-common" dev
     prop-types "^15.6.0"
 
-"@progress/kendo-react-common@5.16.1":
-  version "5.16.1"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.16.1.tgz#ee252f30bb521e10e2322e3532ee19378f958b8a"
-  integrity sha512-SGXqTzR6uBWGKUVb1ZxGX/oYvHmB2AZPxJRdZq88qwatOrs+VP2FEvt8YlsDkS7OzWIRPyRrTgz9t897pjVJJw==
+"@progress/kendo-react-common@5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-common/-/kendo-react-common-5.9.0.tgz#d7238f7fd907a9fa30d878ebce448dfd2e93e36c"
+  integrity sha512-lnitL5z6BqrMYe42NQdVBE1h28ADNTKeMl5yMLK1NICLE2XuUilc1P4Y+LTi//3YkoWpdh5QFISbViHPCQ2zlw==
   dependencies:
     "@progress/kendo-draggable-common" "^0.2.3"
     prop-types "^15.6.0"
@@ -2436,10 +2436,10 @@
     "@progress/kendo-react-popup" "4.13.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-excel-export@^5.16.1":
-  version "5.16.1"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-react-excel-export/-/kendo-react-excel-export-5.16.1.tgz#04f29358926c52407b1eee5c895e9da6c5e10ada"
-  integrity sha512-3gAlqUDYYdNNZxU9/MmTOjzPS5wybDZRHiLWiGMJaJEqjCwJgDy7zQSWuz39TPQ9h2YilDnnBvIPBwaFt7gOFA==
+"@progress/kendo-react-excel-export@5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-excel-export/-/kendo-react-excel-export-5.9.0.tgz#640bc234f4cd7b80848d3c7d1b6547536f2e817f"
+  integrity sha512-ptQslM+E4Do9c4tsKK5PlVOv0CM6yWlwPDwhouKcscy9HtSGcizO4QbBPZn+y80/ExHFpG4Ne51BIwrt0fpfQQ==
   dependencies:
     "@progress/kendo-file-saver" "^1.0.0"
     "@progress/kendo-ooxml" "^1.6.3"
@@ -2496,12 +2496,12 @@
     "@progress/kendo-react-common" "4.13.0"
     prop-types "^15.6.0"
 
-"@progress/kendo-react-treelist@^5.14.0":
-  version "5.16.1"
-  resolved "https://registry.yarnpkg.com/@progress/kendo-react-treelist/-/kendo-react-treelist-5.16.1.tgz#a1e189cc35a709d7bf653b8dda1737ff01048e5e"
-  integrity sha512-C643ejk07wrqblC5Olq8PKtE+RQbiVzHolqCIciv2E4Vc7+VzC7LL9CA1MBrpznaynieeE9a87d9bF67CEZXZQ==
+"@progress/kendo-react-treelist@5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-treelist/-/kendo-react-treelist-5.9.0.tgz#5a2ab850210936e3ee24222a1c3cb704a0ad68a1"
+  integrity sha512-evWEgbF6j8awyYRytv8jdzJTn0HTdoIhV6EPkD32TbvDhWt7jRymqKKCN2lPKfaQ0pYTDAyW06cXj5nKGXcGhQ==
   dependencies:
-    "@progress/kendo-react-common" "5.16.1"
+    "@progress/kendo-react-common" "5.9.0"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-treeview@^4.13.0":
@@ -3590,9 +3590,9 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.11":
-  version "0.1.11"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#c2591af158fd519c1ebbf284bdf0d118c75ef444"
+"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.13":
+  version "0.1.13"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#f5556a54d4371c8754647359b615241772e707ab"
   dependencies:
     "@chatscope/chat-ui-kit-react" "^2.0.3"
     "@chatscope/chat-ui-kit-styles" "^1.4.0"

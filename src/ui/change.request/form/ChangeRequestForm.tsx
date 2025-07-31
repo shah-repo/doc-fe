@@ -10,7 +10,7 @@ import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { companyActions } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { TabIds, TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState, AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -68,7 +68,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
-  const { isEditing } = useFormContext();
+  const { isEditing, isLoading } = useFormContext();
   const dispatch = useDispatch();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
@@ -117,14 +117,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
-  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
-    tabConfig.splice(2, 0, {
-      labelId: 'tabId.materialDisposition',
-      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
-      type: TabTypeOptions.MATERIAL_DISPOSITION,
-    });
-  }
-
   const values = useObserver(() => ({
     ...formValues.values,
     formInput: formState?.getValues(),
@@ -155,7 +147,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
-        <FormHeader {...{ changeRequest, asyncState }} />
+        <FormHeader {...{ changeRequest, asyncState, isLoading }} />
       }
     >
       <PromptIfDirty
@@ -229,8 +221,20 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             />
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
-                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                            && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION)
+                            && <>
+                              <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                              <FBWorkspace
+                                isPortal={false}
+                                initialValues={formInput}
+                                formState={formState}
+                                changeRequest={cloneDeep(changeRequest)}
+                                autosave={autosave}
+                                withoutBottomBar={withoutBottomBar}
+                                schema={schema}
+                                mode={mode}
+                              />
+                            </>
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
