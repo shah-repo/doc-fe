@@ -19,6 +19,7 @@ class FBDataStore {
   public tlTableData: EditableTLItem[] = [];
   public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
+  public partOfIdToUse;
 
   @computed public get revisionChangeType () {
     return this.refreshData?.revisionChangeType;
