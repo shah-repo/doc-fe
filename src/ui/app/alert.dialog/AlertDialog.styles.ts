@@ -97,5 +97,8 @@ export const styles = makeStyles((theme: Theme) =>
     descriptionField: {
       paddingTop: theme.spacing(2),
     },
+    textBold: {
+      fontWeight: 700,
+    },
   }),
 );

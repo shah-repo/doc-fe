@@ -6,12 +6,13 @@ import styles from './FormProgress.styles';
 export interface FormProgressProps {
   asyncState: AsyncState
   attached?: boolean
+  isLoading?: boolean
 }
 
 type Props = FormProgressProps & WithStyles<typeof styles>;
 
-const FormProgress: React.FunctionComponent<Props> = ({ classes, asyncState, attached }) => {
-  if (asyncState.status !== AsyncStatus.Active) {
+const FormProgress: React.FunctionComponent<Props> = ({ classes, asyncState, isLoading, attached }) => {
+  if (asyncState.status !== AsyncStatus.Active && !isLoading) {
     return null;
   }
 

@@ -2,7 +2,6 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import React, { ChangeEvent, FocusEvent, useEffect } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
 import { FB } from '../../form.builder';
 import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
@@ -24,7 +23,6 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
 }) => {
   const { formState } = FB.useStores();
   const formik = useFormikContext();
-  const intl = useIntl();
   const maxAutoRowExpandSize = 4;
   const fieldValue = (defaultValue ?? formState?.getFieldValue(name)) as string;
   const classes = styles();
@@ -61,9 +59,6 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
         rowsMax={maxAutoRowExpandSize}
         placeholder={translate(placeholder)}
       />
-      {!value && <p className={classes.error}>
-        <span>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</span>
-      </p>}
     </>);
   };
 
@@ -73,7 +68,6 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
       type="textarea"
       name={name}
       label={label}
-      required
       component={textEditorRenderComponent}
       defaultVal={fieldValue}
     />);
