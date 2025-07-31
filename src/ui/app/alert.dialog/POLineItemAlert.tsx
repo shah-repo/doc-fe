@@ -1,11 +1,12 @@
-import { Box, Button, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import WarningIcon from '@material-ui/icons/Warning';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Grid, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
 import { Dialog } from '../../components/dialogs';
+import { Button } from '../../components/forms/fields-next';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
@@ -21,7 +22,7 @@ interface Props {
   infoLabel?: Translation
 }
 
-const POLineItemAlert: React.FunctionComponent<Props> = ({
+const POLineItemAlert: React.FC<Props> = ({
   dialog,
   confirmAction,
   data,
@@ -32,9 +33,16 @@ const POLineItemAlert: React.FunctionComponent<Props> = ({
 }) => {
   const classes = useStyles();
 
-  if (!dialog.isOpen) {
-    return null;
-  }
+  const isOpen = dialog.isOpen;
+  if (!isOpen) return null;
+
+  const { isWarning, errorItems = [], warningItems = [] } = data ?? {};
+  const isError = errorItems.length > 0;
+  const title: Translation = isError ? 'common.alert' : 'common.warning';
+
+  const dialogIcon = isError ? solid('triangle-exclamation') : regular('circle-exclamation');
+  const dialogIconClass = isError ? classes.iconError : classes.iconWarning;
+  const items = isError ? errorItems : warningItems;
 
   const getConflictingPhases = (items: ApprovalItem[]) => {
     const itemPhasesSet = new Set(items.map((item) => item.phase));
@@ -46,88 +54,77 @@ const POLineItemAlert: React.FunctionComponent<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
-  const { isWarning, errorItems = [], warningItems = [] } = data ?? {};
+  const renderIcon = () => (
+    <Grid item className={isError ? classes.alertIcon : classes.warningIcon}>
+      <FontAwesomeIcon icon={dialogIcon} className={dialogIconClass} />
+    </Grid>
+  );
 
-  const isError = errorItems?.length > 0;
-  const title: Translation = isError ? 'common.alert' : 'common.warning';
+  const renderMessage = () => (
+    <Typography data-cy="dialog-message" className={classes.contentText}>
+      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+      <b> {getConflictingPhases(items)} </b>
+      <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+    </Typography>
+  );
+
+  const renderButtons = () => {
+    if (isError) {
+      return (
+        <Button
+          size="small"
+          variant="contained"
+          onClick={cancelAction}
+          className={cx(classes.submitButton, classes.buttonLabel)}
+          data-cy="dialog-continue"
+        >
+          {translate(infoLabel)}
+        </Button>
+      );
+    }
+
+    return (
+      <>
+        <Button
+          size="small"
+          variant="text"
+          kind="outlined"
+          onClick={cancelAction}
+          className={cx(classes.cancelButton, classes.buttonLabel)}
+          data-cy="dialog-cancel"
+        >
+          {translate(cancelLabel)}
+        </Button>
+        <Button
+          size="small"
+          variant="contained"
+          onClick={confirmAction}
+          className={cx(classes.submitButton, classes.buttonLabel)}
+          data-cy="dialog-continue"
+        >
+          {translate(confirmLabel)}
+        </Button>
+      </>
+    );
+  };
 
   return (
-    <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'supplierStatusDialog' }}>
-      <DialogContent>
-        <DialogContentText>
-          <Grid container className={classes.contentContainer}>
-            {isError && (
-              <Grid item className={classes.alertIcon}>
-                <WarningIcon />
-              </Grid>
-            )}
-            {!isError && isWarning && (
-              <Grid item className={classes.warningIcon}>
-                <ErrorOutlineIcon />
-              </Grid>
-            )}
-            <Grid item>
-              <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                <Text translation={title} />
-              </Typography>
-              {isError && (
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
-                  <b> {getConflictingPhases(errorItems)} </b>
-                  <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
-                </Typography>
-              )}
-              {!isError && isWarning && (
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
-                  <b> {getConflictingPhases(warningItems)} </b>
-                  <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
-                </Typography>
-              )}
-              {!isError && isWarning && (
-                <Box className={cx(classes.topSpacing, classes.contentText)}>
-                  <Text translation="supplier.status.warning.continue.message" />
-                </Box>
-              )}
-            </Grid>
-          </Grid>
-        </DialogContentText>
-      </DialogContent>
-      <Box className={classes.dialogAction}>
-        {isWarning && !isError && (
-          <Button
-            variant="text"
-            className={cx(classes.cancelButton, classes.buttonLabel)}
-            onClick={cancelAction}
-            id="dialog-cancel"
-            data-cy="dialog-cancel"
-          >
-            <Text translation={cancelLabel} />
-          </Button>
-        )}
-        {isWarning && !isError && (
-          <Button
-            variant="contained"
-            className={cx(classes.submitButton, classes.buttonLabel)}
-            id="dialog-continue"
-            data-cy="dialog-continue"
-            onClick={confirmAction}
-          >
-            <Text translation={confirmLabel} />
-          </Button>
-        )}
-        {isError && (
-          <Button
-            variant="contained"
-            className={cx(classes.submitButton, classes.buttonLabel)}
-            id="dialog-continue"
-            data-cy="dialog-continue"
-            onClick={cancelAction}
-          >
-            <Text translation={infoLabel} />
-          </Button>
-        )}
-      </Box>
+    <Dialog open={isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'poLineItemAlert' }}>
+      <Grid container className={classes.contentContainer}>
+        {renderIcon()}
+        <Grid item>
+          <Typography data-cy="dialog-header" className={classes.alertTitle}>
+            <Text translation={title} />
+          </Typography>
+          {renderMessage()}
+          {!isError && isWarning && (
+            <Box className={cx(classes.topSpacing, classes.contentText)}>
+              <Text translation="supplier.status.warning.continue.message" />
+            </Box>
+          )}
+        </Grid>
+      </Grid>
+      <Box className={classes.dialogAction}>{renderButtons()}</Box>
     </Dialog>
   );
 };
