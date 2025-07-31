@@ -1855,6 +1855,7 @@
   "record.submit.for.approval": "Submit for approval",
   "record.assign": "Assign",
   "record.complete.step": "Complete Step",
+  "record.complete.step.mpi": "Done",
   "record.release.alert": "You are about to release this record, this action can not be undone.\n Would you like to continue?",
   "record.required.approvals": "Required Approvals",
   "record.remove.approval": "Remove Approval",
@@ -2627,5 +2628,5 @@
   "bk.audit.log.step.5.approvals": "Step 5: Approvals",
   "bk.audit.log.step-6-importing": "Step 6: Importing",
   "lhr.materials.quantity.mismatch.error": "Quantity is mismatching",
-  "lhr.materials.total.cannot.exceed.start.quantity":"Total cannot exceed start quantity"
+  "lhr.materials.total.cannot.exceed.start.quantity": "Total cannot exceed start quantity"
 }

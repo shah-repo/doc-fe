@@ -94,6 +94,7 @@ export type FBInputType =
   | 'tasksListTable'
   | 'workOrderLhrTable'
   | 'woApprovals'
+  | 'lhrStepApprovals'
   | 'shippingCustomer'
   | 'shippingMethod'
   | 'workOrderType'
