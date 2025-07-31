@@ -44,10 +44,10 @@ const ActualIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
 
     console.log('value', value, dataItem);
 
-    if (value && field) {
-      setFieldValue(field, value);
-      setValue(value);
-    }
+    // if (value && field) {
+    //   setFieldValue(field, value);
+    //   setValue(value);
+    // }
   }, [parts]);
 
   const renderOptions = () => {

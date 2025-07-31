@@ -4,42 +4,39 @@ import FBAutocompleteAsyncState from '../../FBAutocompleteAsync/FBAutocompleteAs
 import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../helpers';
-import { MaterialOption, UnitOption } from './types';
+import { UnitOption } from './types';
 
 export const useOptions = () => {
-  const materialAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-    optionId: FBAutocompleteAsyncOption.materials,
-  });
-
-  const parts = useObserver(
-    () => {
-      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<string, MaterialOption>;
-      return asyncData ? Array.from(asyncData.values()) : [];
-    },
-  );
-
-  // const [lots, setLots] = useState<DocumentRevision[]>([]);
-  // const fetchLotsByPartId = useActionCreator(lhrSummaryActions.fetchLotsByPartId);
-
-  // const fetchPartLotsAsync = useAsync({
-  //   onSuccess: (data: DocumentRevision[] = []) => {
-  //     setLots(data);
-  //   },
+  // const materialAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+  //   optionId: FBAutocompleteAsyncOption.materials,
   // });
 
-  // useEffect(() => {
-  //   partId && fetchPartLotsAsync.start(fetchLotsByPartId, partId, fetchPartLotsAsync);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [partId]);
+  // const parts = useObserver(
+  //   () => {
+  //     const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<string, MaterialOption>;
+  //     return asyncData ? Array.from(asyncData.values()) : [];
+  //   },
+  // );
+
+  // const partOptionsData = useMemo(() => {
+  //   return parts?.map((part) => ({
+  //     label: translate('wo.displayRevision', {
+  //       docId: part.document.docId,
+  //       displayRevision: part?.displayRevision,
+  //       name: part?.name,
+  //     }),
+  //     value: part.id,
+  //   }));
+  // }, [parts]);
 
   const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.unitMeasures,
   });
 
   useEffect(() => {
-    materialAsync.load();
+    // materialAsync.load();
     unitsAsync.load();
-  }, [materialAsync, unitsAsync]);
+  }, [unitsAsync]);
 
   const units = useObserver(() => {
     const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
@@ -50,7 +47,7 @@ export const useOptions = () => {
   });
 
   return {
-    parts,
+    // partOptionsData,
     units,
   };
 };

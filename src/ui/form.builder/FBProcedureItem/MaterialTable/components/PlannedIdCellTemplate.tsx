@@ -1,8 +1,8 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { useObserver } from 'mobx-react';
 import React, { ChangeEvent, memo, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
@@ -10,7 +10,11 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
-import { CustomTreeListCellProps, EditableMaterial } from '../types';
+import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
+import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
+import { FB } from '../../../helpers';
+import { CustomTreeListCellProps, EditableMaterial, MaterialOption } from '../types';
 import { styles } from './styles';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
@@ -21,7 +25,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   dataItem,
   field,
   level,
-  parts,
   onExpandChange,
   expanded,
   ariaColumnIndex,
@@ -31,28 +34,19 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
-  const navigationAttributes = useTableKeyboardNavigation(id);
 
-  const onClick = (ev) => {
-    onExpandChange(ev, dataItem, level);
-  };
+  const materialAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.materials,
+  });
 
-  useEffect(() => {
-    // if (!isEditMode) {
-    //   return;
-    // }
+  const parts = useObserver(
+    () => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<string, MaterialOption>;
+      return asyncData ? Array.from(asyncData.values()) : [];
+    },
+  );
 
-    const value = renderOptions?.find((option) => option.value === dataItem.plannedId);
-
-    console.log('value', value, dataItem);
-
-    if (value && field) {
-      setFieldValue(field, value);
-      setValue(value);
-    }
-  }, [parts]);
-
-  const renderOptions = useMemo(() => {
+  const partOptionsData = useMemo(() => {
     return parts?.map((part) => ({
       label: translate('wo.displayRevision', {
         docId: part.document.docId,
@@ -63,7 +57,30 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
     }));
   }, [parts]);
 
-  console.log('parts', renderOptions?.length, parts?.length);
+  useEffect(() => {
+    materialAsync.load();
+  }, [materialAsync]);
+
+  const onClick = (ev) => {
+    onExpandChange(ev, dataItem, level);
+  };
+
+  // useEffect(() => {
+  //   // if (!isEditMode) {
+  //   //   return;
+  //   // }
+
+  //   const value = partOptionsData?.find((option) => option.value === dataItem.plannedId);
+
+  //   console.log('useeffect value', field, value, dataItem);
+
+  //   // if (value && field) {
+  //   //   setFieldValue(field, value);
+  //   //   setValue(value);
+  //   // }
+  // }, [partOptionsData, field, dataItem]);
+
+  console.log('parts', partOptionsData?.length);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('option', option);
@@ -87,7 +104,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
       aria-colindex={ariaColumnIndex}
       data-grid-col-index={colIndex}
       role="gridcell"
-      {...navigationAttributes}
       aria-expanded={expanded}
       aria-selected="false"
       onClick={handleClick}
@@ -101,7 +117,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
               <Autocomplete
                 {...getFieldProps(field)}
                 value={value}
-                disableOpenOnFocus={true}
                 blurOnSelect
                 ListboxComponent={({ children, ...otherProps }) => {
                   return (
@@ -110,7 +125,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
                     </>
                   );
                 }}
-                options={renderOptions}
+                options={partOptionsData}
                 placeholder={translate('common.select')}
                 getOptionLabel={(option: OptionType) => option.label}
                 onChange={handleChange}

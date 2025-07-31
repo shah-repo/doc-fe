@@ -1,9 +1,7 @@
-// import ActionsCellTemplate from './components/ActionsCellTemplate';
-// import { UnitsCellTemplate } from './components/UnitsCellTemplate';
-import { TreeListColumnProps } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../common/intl';
-import { ActionsCell } from './components/ActionsCellTemplate';
+import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
+import { ActionsCell } from './components/Actions';
 import ActualIdCellTemplate from './components/ActualIdCellTemplate';
 import LotIdCellTemplate from './components/LotIdCellTemplate';
 import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
@@ -20,15 +18,14 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
-  onOpenQuickView,
-  onEdit,
-}: SchemaOptions): TreeListColumnProps[] => {
+}: SchemaOptions): CustomTreeListColumnProps[] => {
   return [
     {
       id: 'plannedId',
       field: 'plannedId',
       title: translate('form.builder.procedure.material.table.planned.id.title'),
-      cell: (props) => <PlannedIdCellTemplate {...props} parts={parts} />,
+      mainOrderIndex: 1,
+      cell: (props) => <PlannedIdCellTemplate {...props} />,
       width: 150,
     },
     {
@@ -36,6 +33,7 @@ export const buildSchema = ({
       field: 'lotId',
       title: translate('form.builder.procedure.material.table.lot.number.title'),
       cell: (props) => <LotIdCellTemplate {...props} parts={parts} />,
+      mainOrderIndex: 2,
       width: 150,
     },
     {
@@ -43,6 +41,7 @@ export const buildSchema = ({
       field: 'actualId',
       title: translate('form.builder.procedure.material.table.actual.id.title'),
       cell: (props) => <ActualIdCellTemplate {...props} parts={parts} />,
+      mainOrderIndex: 3,
       width: 150,
     },
     {
@@ -50,6 +49,7 @@ export const buildSchema = ({
       field: 'quantity',
       title: translate('form.builder.procedure.material.table.quantity.title'),
       cell: (props) => <QuantityCell {...props} parts={parts} />,
+      mainOrderIndex: 4,
       width: 150,
     },
     {
@@ -57,6 +57,7 @@ export const buildSchema = ({
       field: 'unit',
       title: translate('form.builder.procedure.material.table.unit.title'),
       cell: (props) => <UnitsCellTemplate {...props} units={units} onClick={onRowClick} />,
+      mainOrderIndex: 5,
       width: 150,
     },
     {
@@ -69,7 +70,6 @@ export const buildSchema = ({
             onConfirm={onConfirm}
             onDiscard={onDiscard}
             onDelete={onDelete}
-            onRestore={undefined}
             rootClassName={popperHolder}
           />
         </td>

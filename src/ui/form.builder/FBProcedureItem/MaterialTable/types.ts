@@ -1,6 +1,7 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListCellProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import { FBInputProps } from '../../FBInput/FBInput.types';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../FBProcedureItem.types';
@@ -40,7 +41,8 @@ export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 export interface SchemaOptions {
   isLoading?: boolean
   units: string[]
-  parts: MaterialOption[]
+  parts?: MaterialOption[]
+  partOptionsData?: OptionType[]
   onConfirm: () => void
   onDiscard: () => void
   actionsClass: string
@@ -102,6 +104,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   deletePart?: MaterialCallback
   parentRevId?: string
   parts?: MaterialOption[]
+  partOptionsData?: OptionType[]
   units?: string[]
   onClick?: (e: MaterialEditEvent) => void
 }

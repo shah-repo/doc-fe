@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
   extendDataItem,
@@ -10,11 +10,14 @@ import {
   TreeListDataStateChangeEvent,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
-import { useFormik } from 'formik';
-import { isEmpty, replace, uniq } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { FormikProvider, useFormik } from 'formik';
+import { cloneDeep, isEmpty, replace, uniq } from 'lodash';
+import { useObserver } from 'mobx-react';
+import React, { memo, useRef, useState } from 'react';
+import { SM } from '../../../../App';
 import { translate } from '../../../../common/intl';
 import DocumentRevisionDialog from '../../../components/common/dialogs/DocumentRevisionDialog';
+import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
@@ -28,23 +31,47 @@ import {
   CustomTreeListRowProps,
   EditableMaterial,
   Material,
+  MaterialEditEvent,
   MaterialItemState,
   MaterialTableProps,
 } from './types';
 import { useOptions } from './useOptions';
 
-const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
-  const classes = useStyles();
-  const [editedMaterial, setEditedScanLot] = useState<Partial<EditableMaterial>>();
-  // const isMaterialEdited = editedMaterial?.[MODE_FIELD] === Mode.add;
-  const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
-  const { units, parts } = useOptions();
-  const isInEditMode = editedMaterial !== undefined;
-  const handleRowClick = !isInEditMode ? editScanLot : undefined;
+const MaterialsTable: React.FC<MaterialTableProps> = ({
+  items,
+  type,
+  getItem,
+  handleRemove,
+  isActive,
+  isShowOnly = false,
+}) => {
+  const { _tabsState } = SM.useStores();
+  const size = useObserver(() => _tabsState?.contentSize);
+  const classes = useStyles({ size });
+  const treeListRef = useRef(null);
+  const { units } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: [],
+    data: cloneDeep([
+      {
+        id: '1q',
+        unit: 'hours',
+        actualId: '',
+        plannedId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
+        quantity: 12,
+        items: [
+          {
+            id: '2q',
+            unit: 'Box(s)',
+            plannedId: '',
+            actualId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
+            lotId: 'e7949809-b5e2-4a44-a6f0-2594424c127b',
+            quantity: 14,
+          },
+        ],
+      },
+    ]),
     expanded: [],
     dataState: {
       sort: [],
@@ -77,13 +104,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     },
   });
 
-  const { submitForm, resetForm, setValues } = formik;
-
-  useEffect(() => {
-    resetForm({ values: editedMaterial ?? {} });
-  }, [editedMaterial, setValues, resetForm]);
+  const { submitForm } = formik;
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
+    console.log('discardScanLot');
     if (dataItem?.[ADD_FIELD]) {
       if (dataItem.isLotAddition) {
         // const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
@@ -93,18 +117,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
         //   );
         // }
       } else {
-        state.data = state.data?.filter(
-          (data) => !data[ADD_FIELD],
-        );
+        state.data = state.data?.filter((data) => !data[ADD_FIELD]);
       }
     }
 
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       inEdit: [],
       data: [...state.data],
     }));
-   formik?.resetForm();
+    formik?.resetForm();
   };
 
   const removeScanLot = (material: EditableMaterial) => {
@@ -150,42 +172,18 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
 
   const schema = buildSchema({
     units,
-    parts,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
-    onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     onOpenQuickView: openQuickView,
-    onEdit: setEditedScanLot,
   });
 
-  const treeData: Material[] = [
-    {
-      id: '1',
-      unit: 'hours',
-      actualId: '',
-      plannedId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
-      quantity: 12,
-      items: [
-        {
-          id: '2',
-          unit: 'Box(s)',
-          plannedId: '',
-          actualId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
-          lotId: 'e7949809-b5e2-4a44-a6f0-2594424c127b',
-          quantity: 14,
-        },
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    setState({ ...state, data: treeData });
-  }, []);
+  const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
+    console.log('state change');
     updateState({
       ...state,
       dataState: event.dataState,
@@ -258,36 +256,62 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({ isActive }) => {
     }
   };
 
+  const editPartItem = ({ dataItem }: MaterialEditEvent) => {
+    if (dataItem[MODE_FIELD] || !isActive) {
+      return;
+    }
+
+    const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
+    setState((state) => ({
+      ...state,
+      data: [...state.data],
+      inEdit: [editItemInfo],
+    }));
+    formik.setValues(editItemInfo);
+  };
+
+  console.log('rerender');
+
   return (
     <Box className={classes.root} data-cy="material-grid">
-      <TreeList
-        tableProps={{ style: { tableLayout: 'fixed' } }}
-        className={cx(classes.treeList, 'containing-box-scrollbar')}
-        {...state.dataState}
-        data={processData()}
-        dataItemKey={DATA_ITEM_KEY}
-        subItemsField={SUB_ITEMS_FIELD}
-        expandField={EXPAND_FIELD}
-        rowHeight={50}
-        onExpandChange={handleExpandChange}
-        onDataStateChange={handleDataStateChange}
-        rowRender={rowRender}
-        cellRender={cellRender}
-        columns={schema}
-      />
-      {isActive && (
-        <Button kind="add" fullWidth attached disabled={isInEditMode} onClick={addPartItem} data-cy="add-material">
-          {translate('form.builder.procedure.material.table.add.part')}
-        </Button>
-      )}
-      <DocumentRevisionDialog
-        dialog={quickViewDialog}
-        {...{
-          docRevId: selectedDataItem?.lotNumber?.id,
-        }}
-      />
+      <FormikProvider value={formik}>
+        <Grid item xs={12} ref={treeListRef}>
+          <TreeList
+            style={{
+              overflow: 'auto',
+              maxHeight: size?.height ? `${size?.height}px` : '100px',
+            }}
+            tableProps={{ style: { tableLayout: 'fixed' } }}
+            {...state.dataState}
+            className={cx(classes.treeList, 'containing-box-scrollbar')}
+            data={processData()}
+            dataItemKey={DATA_ITEM_KEY}
+            subItemsField={SUB_ITEMS_FIELD}
+            expandField={EXPAND_FIELD}
+            editField={MODE_FIELD}
+            rowHeight={50}
+            onExpandChange={handleExpandChange}
+            onDataStateChange={handleDataStateChange}
+            onRowClick={editPartItem}
+            rowRender={rowRender}
+            cellRender={cellRender}
+            columns={columns}
+          />
+          {isActive && (
+            <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
+              {translate('form.builder.procedure.material.table.add.part')}
+            </Button>
+          )}
+          <DocumentRevisionDialog
+            dialog={quickViewDialog}
+            {...{
+              docRevId: selectedDataItem?.lotNumber?.id,
+            }}
+          />
+        </Grid>
+      </FormikProvider>
     </Box>
   );
 };
 
-export default React.memo(withThemeNext(MaterialsTable));
+export default memo(withThemeNext(React.forwardRef(MaterialsTable)));
