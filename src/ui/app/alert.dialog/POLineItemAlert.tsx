@@ -3,7 +3,7 @@ import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
-import { AlertDialog, Dialog } from '../../components/dialogs';
+import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -50,42 +50,40 @@ const POLineItemAlert: React.FC<Props> = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'poLineItemAlert' }}>
-      <AlertDialog
-        handler={dialog}
-        actions={
-          isError ? (
-            <Button onClick={cancelAction} data-cy="dialog-continue">
-              {translate(infoLabel)}
+    <AlertDialog
+      handler={dialog}
+      actions={
+        isError ? (
+          <Button onClick={cancelAction} data-cy="dialog-continue">
+            {translate(infoLabel)}
+          </Button>
+        ) : (
+          <>
+            <Button kind="outlined" onClick={cancelAction} data-cy="dialog-cancel">
+              {translate(cancelLabel)}
             </Button>
-          ) : (
-            <>
-              <Button kind="outlined" onClick={cancelAction} data-cy="dialog-cancel">
-                {translate(cancelLabel)}
-              </Button>
-              <Button onClick={confirmAction} data-cy="dialog-continue">
-                {translate(confirmLabel)}
-              </Button>
-            </>
-          )
-        }
-        title={title}
-        warning={!isError}
-      >
-        <Box>
-          <Typography data-cy="dialog-message" className={classes.contentText}>
-            <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
-            <b> {getConflictingPhases(items)} </b>
-            <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
-          </Typography>
-          {!isError && isWarning && (
-            <Box className={cx(classes.topSpacing, classes.contentText)}>
-              <Text translation="supplier.status.warning.continue.message" />
-            </Box>
-          )}
-        </Box>
-      </AlertDialog>
-    </Dialog>
+            <Button onClick={confirmAction} data-cy="dialog-continue">
+              {translate(confirmLabel)}
+            </Button>
+          </>
+        )
+      }
+      title={title}
+      warning={!isError}
+    >
+      <Box>
+        <Typography data-cy="dialog-message" className={classes.contentText}>
+          <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+          <b> {getConflictingPhases(items)} </b>
+          <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+        </Typography>
+        {!isError && isWarning && (
+          <Box className={cx(classes.topSpacing, classes.contentText)}>
+            <Text translation="supplier.status.warning.continue.message" />
+          </Box>
+        )}
+      </Box>
+    </AlertDialog>
   );
 };
 
