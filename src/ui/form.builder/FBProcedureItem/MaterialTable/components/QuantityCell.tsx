@@ -41,8 +41,8 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
       </FormikField>
     );
   const isLotAddition = isEditMode ? values.isLotAddition : dataItem.isLotAddition;
-  const isEnbleEditor = isLotAddition ? isEditMode : isEditMode && dataItem.isNewAddition;
-  const showFieldValue = isLotAddition ? !isEditMode : (!isEditMode || !dataItem.isNewAddition);
+  const isEnableEditor = isLotAddition ? isEditMode : isEditMode && dataItem.isNewAddition;
+  const showFieldValue = isLotAddition ? !isEditMode : !isEditMode || !dataItem.isNewAddition;
 
   return (
     <td
@@ -57,12 +57,8 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
       }}
       data-cy={`${field}-cell`}
     >
-      {isEnbleEditor && getFieldInfo()}
-      {showFieldValue && (
-        <span className={classes.Cell}>
-          {toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}
-        </span>
-      )}
+      {isEnableEditor && getFieldInfo()}
+      {showFieldValue && <span className={classes.Cell}>{toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}</span>}
     </td>
   );
 };

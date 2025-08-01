@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, memo } from 'react';
 import OverflowContent from '../../../../components/OverflowContent';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { CELL_EMPTY_VALUE } from '../constants';
@@ -9,7 +9,7 @@ import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import { isEditMaterial } from './utils';
 
-const Editor: React.FC<CustomTreeListCellProps> = ({ dataItem, field = '', units }) => {
+const Editor: React.FC<{field: string, units?: string[]}> = ({ field = '', units }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
 
@@ -18,6 +18,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ dataItem, field = '', units
   };
 
   const value = values[field] as string;
+  console.log('units editor', units);
 
   return (
     <FormikField name={field}>
@@ -35,13 +36,13 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ dataItem, field = '', units
   );
 };
 
-export const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { dataItem, field = '', colSpan, style, className, hasChildren, onClick, ...otherProps } = props;
+const UnitsCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({ dataItem, field = '', colSpan, style, className, hasChildren, units, unitOptions, onClick, ariaColumnIndex, colIndex, expanded }) => {
   const isEditMode = isEditMaterial(dataItem);
   const classes = styles({ hasChildren });
 
   const handleClick = () => onClick?.({ dataItem });
   const displayValue = get(dataItem, field, CELL_EMPTY_VALUE) as string;
+  console.log('units top', units, unitOptions, ariaColumnIndex, colIndex, expanded);
 
   return (
     <td
@@ -50,13 +51,15 @@ export const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
       role="gridcell"
       className={cx('k-table-td', className, classes.cellborderBottom)}
       {...{
-        'aria-colindex': otherProps.ariaColumnIndex,
-        'data-grid-col-index': otherProps.colIndex,
-        'aria-expanded': otherProps.expanded,
+        'aria-colindex': ariaColumnIndex,
+        'data-grid-col-index': colIndex,
+        'aria-expanded': expanded,
       }}
       data-cy={`${field}-cell`}
     >
-      {isEditMode ? <Editor {...props} /> : <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>}
+      {isEditMode ? <Editor {...{ field, units }} /> : <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>}
     </td>
   );
 };
+
+export default memo(UnitsCellTemplate);

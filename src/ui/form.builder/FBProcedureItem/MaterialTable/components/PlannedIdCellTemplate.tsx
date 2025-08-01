@@ -2,19 +2,14 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { useObserver } from 'mobx-react';
-import React, { ChangeEvent, memo, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, memo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
-import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
-import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
-import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { FB } from '../../../helpers';
-import { CustomTreeListCellProps, EditableMaterial, MaterialOption } from '../types';
+import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
@@ -23,6 +18,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   id,
   style,
   dataItem,
+  materialSelectOptions,
   field,
   level,
   onExpandChange,
@@ -35,32 +31,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
 
-  const materialAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-    optionId: FBAutocompleteAsyncOption.materials,
-  });
-
-  const parts = useObserver(
-    () => {
-      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<string, MaterialOption>;
-      return asyncData ? Array.from(asyncData.values()) : [];
-    },
-  );
-
-  const partOptionsData = useMemo(() => {
-    return parts?.map((part) => ({
-      label: translate('wo.displayRevision', {
-        docId: part.document.docId,
-        displayRevision: part?.displayRevision,
-        name: part?.name,
-      }),
-      value: part.id,
-    }));
-  }, [parts]);
-
-  useEffect(() => {
-    materialAsync.load();
-  }, [materialAsync]);
-
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
   };
@@ -72,15 +42,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
 
   //   const value = partOptionsData?.find((option) => option.value === dataItem.plannedId);
 
-  //   console.log('useeffect value', field, value, dataItem);
-
   //   // if (value && field) {
   //   //   setFieldValue(field, value);
   //   //   setValue(value);
   //   // }
   // }, [partOptionsData, field, dataItem]);
-
-  console.log('parts', partOptionsData?.length);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('option', option);
@@ -90,8 +56,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-
-  console.log('Final ', value.label ?? dataItem?.[field ?? '']);
   const displayValue = value.label ?? dataItem?.[field ?? ''];
 
   const handleClick = () => {
@@ -125,7 +89,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
                     </>
                   );
                 }}
-                options={partOptionsData}
+                options={materialSelectOptions}
                 placeholder={translate('common.select')}
                 getOptionLabel={(option: OptionType) => option.label}
                 onChange={handleChange}

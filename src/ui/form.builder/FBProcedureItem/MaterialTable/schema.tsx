@@ -6,12 +6,12 @@ import ActualIdCellTemplate from './components/ActualIdCellTemplate';
 import LotIdCellTemplate from './components/LotIdCellTemplate';
 import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
 import QuantityCell from './components/QuantityCell';
-import { UnitsCellTemplate } from './components/UnitsCellTemplate';
+import UnitsCellTemplate from './components/UnitsCellTemplate';
 import { SchemaOptions } from './types';
 
 export const buildSchema = ({
   units,
-  parts,
+  materialSelectOptions,
   onRowClick,
   actionsClass,
   popperHolder,
@@ -19,20 +19,21 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
 }: SchemaOptions): CustomTreeListColumnProps[] => {
+  console.log('units in schemea', units);
   return [
     {
       id: 'plannedId',
       field: 'plannedId',
       title: translate('form.builder.procedure.material.table.planned.id.title'),
       mainOrderIndex: 1,
-      cell: (props) => <PlannedIdCellTemplate {...props} />,
+      cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} />,
       width: 150,
     },
     {
       id: 'lotId',
       field: 'lotId',
       title: translate('form.builder.procedure.material.table.lot.number.title'),
-      cell: (props) => <LotIdCellTemplate {...props} parts={parts} />,
+      cell: (props) => <LotIdCellTemplate {...props} />,
       mainOrderIndex: 2,
       width: 150,
     },
@@ -40,7 +41,7 @@ export const buildSchema = ({
       id: 'actualId',
       field: 'actualId',
       title: translate('form.builder.procedure.material.table.actual.id.title'),
-      cell: (props) => <ActualIdCellTemplate {...props} parts={parts} />,
+      cell: (props) => <ActualIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} />,
       mainOrderIndex: 3,
       width: 150,
     },
@@ -48,7 +49,7 @@ export const buildSchema = ({
       id: 'quantity',
       field: 'quantity',
       title: translate('form.builder.procedure.material.table.quantity.title'),
-      cell: (props) => <QuantityCell {...props} parts={parts} />,
+      cell: (props) => <QuantityCell {...props} />,
       mainOrderIndex: 4,
       width: 150,
     },
@@ -56,7 +57,7 @@ export const buildSchema = ({
       id: 'unit',
       field: 'unit',
       title: translate('form.builder.procedure.material.table.unit.title'),
-      cell: (props) => <UnitsCellTemplate {...props} units={units} onClick={onRowClick} />,
+      cell: (props) => <UnitsCellTemplate {...props} units={units} unitOptions={units} onClick={onRowClick} />,
       mainOrderIndex: 5,
       width: 150,
     },
