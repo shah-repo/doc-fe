@@ -11,22 +11,10 @@ import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreeListCellWrapper';
 
-const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
-  hasChildren,
-  colSpan,
-  id,
-  style,
-  dataItem,
-  materialSelectOptions,
-  field,
-  level,
-  onExpandChange,
-  expanded,
-  ariaColumnIndex,
-  colIndex,
-  className,
-}) => {
+const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
+  const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
@@ -58,22 +46,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const displayValue = value.label ?? dataItem?.[field ?? ''];
 
-  const handleClick = () => {
-    onClick?.({ dataItem });
-  };
-
   return (
-    <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
-      aria-colindex={ariaColumnIndex}
-      data-grid-col-index={colIndex}
-      role="gridcell"
-      aria-expanded={expanded}
-      aria-selected="false"
-      onClick={handleClick}
-      {...{ colSpan, id, style }}
-      data-cy={`${field}-cell`}
-    >
+    <TreeListCellWrapper {...props}>
       {isEditMode && (
         <span className={cx(classes.nameCell, classes.titleInfoCell)}>
           <div className={classes.idCellEditWrapper}>
@@ -123,7 +97,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
           </>
         </OverflowContent>
       )}
-    </td>
+    </TreeListCellWrapper>
   );
 };
 

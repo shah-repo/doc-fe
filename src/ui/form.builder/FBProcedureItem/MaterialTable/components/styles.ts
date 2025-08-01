@@ -39,7 +39,7 @@ export const styles = makeStyles((theme) => ({
     color: `${Colors.gray} !important`,
     pointerEvents: 'none',
   },
-  cellborderBottom: {
+  cellBorderBottom: {
     borderBottom: `1px solid ${Colors.tableCellBorder} !important`,
     borderLeft: '0 !important',
   },

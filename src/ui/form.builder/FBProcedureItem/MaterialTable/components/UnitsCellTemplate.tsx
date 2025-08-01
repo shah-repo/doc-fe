@@ -1,15 +1,19 @@
-import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
-import React, { ChangeEvent, memo } from 'react';
+import { useObserver } from 'mobx-react';
+import React, { ChangeEvent, memo, useEffect } from 'react';
 import OverflowContent from '../../../../components/OverflowContent';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
+import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
+import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
+import { FB } from '../../../helpers';
 import { CELL_EMPTY_VALUE } from '../constants';
-import { CustomTreeListCellProps, EditableMaterial } from '../types';
-import { styles } from './styles';
+import { CustomTreeListCellProps, EditableMaterial, UnitOption } from '../types';
+import TreeListCellWrapper from './TreeListCellWrapper';
 import { isEditMaterial } from './utils';
 
-const Editor: React.FC<{field: string, units?: string[]}> = ({ field = '', units }) => {
+const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
 
@@ -18,7 +22,22 @@ const Editor: React.FC<{field: string, units?: string[]}> = ({ field = '', units
   };
 
   const value = values[field] as string;
-  console.log('units editor', units);
+
+  const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.unitMeasures,
+  });
+
+  useEffect(() => {
+    unitsAsync.load();
+  }, [unitsAsync]);
+
+  const units = useObserver(() => {
+    const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
+    string,
+    UnitOption
+    >;
+    return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
+  });
 
   return (
     <FormikField name={field}>
@@ -36,29 +55,17 @@ const Editor: React.FC<{field: string, units?: string[]}> = ({ field = '', units
   );
 };
 
-const UnitsCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({ dataItem, field = '', colSpan, style, className, hasChildren, units, unitOptions, onClick, ariaColumnIndex, colIndex, expanded }) => {
+const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
+  const { field = '', dataItem, onClick } = props;
   const isEditMode = isEditMaterial(dataItem);
-  const classes = styles({ hasChildren });
 
   const handleClick = () => onClick?.({ dataItem });
   const displayValue = get(dataItem, field, CELL_EMPTY_VALUE) as string;
-  console.log('units top', units, unitOptions, ariaColumnIndex, colIndex, expanded);
 
   return (
-    <td
-      colSpan={colSpan}
-      style={style}
-      role="gridcell"
-      className={cx('k-table-td', className, classes.cellborderBottom)}
-      {...{
-        'aria-colindex': ariaColumnIndex,
-        'data-grid-col-index': colIndex,
-        'aria-expanded': expanded,
-      }}
-      data-cy={`${field}-cell`}
-    >
-      {isEditMode ? <Editor {...{ field, units }} /> : <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>}
-    </td>
+    <TreeListCellWrapper {...props}>
+      {isEditMode ? <Editor field={field} /> : <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>}
+    </TreeListCellWrapper>
   );
 };
 

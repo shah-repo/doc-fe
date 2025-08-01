@@ -1,7 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
@@ -24,6 +23,7 @@ import { Colors } from '../../../../layout/theme-next';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreeListCellWrapper';
 
 interface LotAutocompleteProps {
   field?: string
@@ -103,21 +103,16 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   );
 };
 
-const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
-  hasChildren,
-  colSpan,
-  id,
-  style,
-  dataItem,
-  field,
-  parentRevId,
-  addLot,
-  ariaColumnIndex,
-  colIndex,
-  className,
-  deleteLot,
-}) => {
-  const { isLotAddition = '', lotRevId, isDisabled, parentPartRevId, lotDocumentId, lotDocId } = {
+const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
+  const { hasChildren, dataItem, field, parentRevId, addLot, deleteLot } = props;
+  const {
+    isLotAddition = '',
+    lotRevId,
+    isDisabled,
+    parentPartRevId,
+    lotDocumentId,
+    lotDocId,
+  } = {
     isLotAddition: false,
     lotRevId: '',
     isDisabled: false,
@@ -127,7 +122,6 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
   };
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !isDisabled;
   const classes = styles({ hasChildren, isEditMode });
-  const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
@@ -137,7 +131,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const { setFieldValue } = useFormikContext<EditableMaterial>();
-  const isAddLotVisible = hasChildren && (!isEditMode && !isLotAddition && !lotRevId);
+  const isAddLotVisible = hasChildren && !isEditMode && !isLotAddition && !lotRevId;
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -187,51 +181,56 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
   };
 
   return (
-    <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
-      aria-colindex={ariaColumnIndex}
-      data-grid-col-index={colIndex}
-      role="gridcell"
-      {...navigationAttributes}
-      aria-selected="false"
-      {...{ colSpan, id, style }}
-      data-cy={`${field}-cell`}
-    >
-      {isAddLotVisible ? (<>
-        <span className={cx(classes.defaultIcon)}>
-          <StyleTooltip title={translate('common.add')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={addLotRef} disabled={isDisabled} data-cy="add-lot-button">
-              <FontAwesomeIcon
-                size="sm"
-                className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => addLot?.(dataItem)}
-                icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
-              />
-            </IconButton>
-          </StyleTooltip>
-        </span>
-        <span className={cx(classes.defaultIcon)}>
-          <StyleTooltip title={translate('common.scan')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
-              <FontAwesomeIcon
-                size="sm"
-                className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                // onClick={() => openScanDialog?.(dataItem)}
-                icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
-              />
-            </IconButton>
-          </StyleTooltip>
-        </span>
-      </>
+    <TreeListCellWrapper {...props}>
+      {isAddLotVisible ? (
+        <>
+          <span className={cx(classes.defaultIcon)}>
+            <StyleTooltip title={translate('common.add')} placement="top" arrow>
+              <IconButton kind="simple" size="small" ref={addLotRef} disabled={isDisabled} data-cy="add-lot-button">
+                <FontAwesomeIcon
+                  size="sm"
+                  className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
+                  onClick={() => addLot?.(dataItem)}
+                  icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
+                />
+              </IconButton>
+            </StyleTooltip>
+          </span>
+          <span className={cx(classes.defaultIcon)}>
+            <StyleTooltip title={translate('common.scan')} placement="top" arrow>
+              <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
+                <FontAwesomeIcon
+                  size="sm"
+                  className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
+                  // onClick={() => openScanDialog?.(dataItem)}
+                  icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
+                />
+              </IconButton>
+            </StyleTooltip>
+          </span>
+        </>
       ) : (
         (isLotAddition || lotRevId) && (
           <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-            <div className={cx(classes.lotInfoWrapper, {
-              [classes.flexJustifyBetween]: !isEditMode,
-            })}>
+            <div
+              className={cx(classes.lotInfoWrapper, {
+                [classes.flexJustifyBetween]: !isEditMode,
+              })}
+            >
               <span className={classes.lotInfoId}>
                 {isEditMode ? (
-                  <LotAutocomplete {...{ field, lots, value, setValue, dataItem, parentPartRevId, lotRevId, isLoading: fetchAvailablePartsAsync.isLoading }} />
+                  <LotAutocomplete
+                    {...{
+                      field,
+                      lots,
+                      value,
+                      setValue,
+                      dataItem,
+                      parentPartRevId,
+                      lotRevId,
+                      isLoading: fetchAvailablePartsAsync.isLoading,
+                    }}
+                  />
                 ) : lotRevId && lotDocumentId ? (
                   <Link to={documentVersionPath(lotRevId, lotDocumentId)} className={classes.link} target="_blank">
                     {lotDocId}
@@ -278,7 +277,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = ({
         )
       )}
       <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: lotRevId, parentRevId }} />
-    </td>
+    </TreeListCellWrapper>
   );
 };
 

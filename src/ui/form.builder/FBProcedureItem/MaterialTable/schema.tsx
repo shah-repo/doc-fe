@@ -10,7 +10,6 @@ import UnitsCellTemplate from './components/UnitsCellTemplate';
 import { SchemaOptions } from './types';
 
 export const buildSchema = ({
-  units,
   materialSelectOptions,
   onRowClick,
   actionsClass,
@@ -19,7 +18,6 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
 }: SchemaOptions): CustomTreeListColumnProps[] => {
-  console.log('units in schemea', units);
   return [
     {
       id: 'plannedId',
@@ -57,7 +55,7 @@ export const buildSchema = ({
       id: 'unit',
       field: 'unit',
       title: translate('form.builder.procedure.material.table.unit.title'),
-      cell: (props) => <UnitsCellTemplate {...props} units={units} unitOptions={units} onClick={onRowClick} />,
+      cell: (props) => <UnitsCellTemplate {...props} />,
       mainOrderIndex: 5,
       width: 150,
     },

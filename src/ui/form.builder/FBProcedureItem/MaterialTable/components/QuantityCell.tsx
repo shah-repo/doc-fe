@@ -1,4 +1,3 @@
-import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
@@ -6,19 +5,13 @@ import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { MAX_DECIMALS } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreeListCellWrapper';
 import { getCellValue, isEditMaterial } from './utils';
 
-const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
-  dataItem,
-  field,
-  colSpan,
-  style,
-  className,
-  hasChildren,
-  ...otherProps
-}) => {
+const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
+  const { dataItem, field, hasChildren } = props;
   const classes = styles({ hasChildren });
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
 
   const onQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,26 +33,12 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
         />
       </FormikField>
     );
-  const isLotAddition = isEditMode ? values.isLotAddition : dataItem.isLotAddition;
-  const isEnableEditor = isLotAddition ? isEditMode : isEditMode && dataItem.isNewAddition;
-  const showFieldValue = isLotAddition ? !isEditMode : !isEditMode || !dataItem.isNewAddition;
 
   return (
-    <td
-      colSpan={colSpan}
-      style={style}
-      role="gridcell"
-      className={cx('k-table-td', className, classes.cellborderBottom)}
-      {...{
-        'aria-colindex': otherProps.ariaColumnIndex,
-        'data-grid-col-index': otherProps.colIndex,
-        'aria-expanded': otherProps.expanded,
-      }}
-      data-cy={`${field}-cell`}
-    >
-      {isEnableEditor && getFieldInfo()}
-      {showFieldValue && <span className={classes.Cell}>{toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}</span>}
-    </td>
+    <TreeListCellWrapper {...props}>
+      {isEditMode && getFieldInfo()}
+      {!isEditMode && <span className={classes.Cell}>{toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}</span>}
+    </TreeListCellWrapper>
   );
 };
 

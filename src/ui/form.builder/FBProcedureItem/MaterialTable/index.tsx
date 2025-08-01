@@ -49,7 +49,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
-  const { units, materialSelectOptions } = useOptions();
+  const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
@@ -171,7 +171,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const schema = buildSchema({
-    units,
     materialSelectOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,

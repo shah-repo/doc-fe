@@ -40,7 +40,6 @@ export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 
 export interface SchemaOptions {
   isLoading?: boolean
-  units: string[]
   materialSelectOptions: OptionType[]
   parts?: MaterialOption[]
   onConfirm: () => void
@@ -105,8 +104,6 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parentRevId?: string
   parts?: MaterialOption[]
   materialSelectOptions?: OptionType[]
-  units?: string[]
-  unitOptions?: string[]
   onClick?: (e: MaterialEditEvent) => void
 }
 

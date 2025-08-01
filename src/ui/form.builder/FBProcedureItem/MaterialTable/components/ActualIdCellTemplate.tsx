@@ -9,29 +9,13 @@ import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreeListCellWrapper';
 
-const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
-  hasChildren,
-  colSpan,
-  id,
-  style,
-  dataItem,
-  materialSelectOptions,
-  field,
-  level,
-  onExpandChange,
-  expanded,
-  ariaColumnIndex,
-  colIndex,
-  className,
-}) => {
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
+const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
+  const { hasChildren, dataItem, materialSelectOptions, field } = props;
+  const isEditMode = ((dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false) && dataItem?.isLotAddition;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
-
-  const onClick = (ev) => {
-    onExpandChange(ev, dataItem, level);
-  };
 
   // useEffect(() => {
   //   // if (!isEditMode) {
@@ -56,22 +40,8 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const displayValue = value.label ?? dataItem?.[field ?? ''];
 
-  const handleClick = () => {
-    onClick?.({ dataItem });
-  };
-
   return (
-    <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
-      aria-colindex={ariaColumnIndex}
-      data-grid-col-index={colIndex}
-      role="gridcell"
-      aria-expanded={expanded}
-      aria-selected="false"
-      onClick={handleClick}
-      {...{ colSpan, id, style }}
-      data-cy={`${field}-cell`}
-    >
+    <TreeListCellWrapper {...props}>
       {isEditMode && (
         <span className={cx(classes.nameCell, classes.titleInfoCell)}>
           <div className={classes.idCellEditWrapper}>
@@ -97,12 +67,8 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = ({
           </div>
         </span>
       )}
-      {!isEditMode && (
-        <OverflowContent title={displayValue}>
-          {displayValue}
-        </OverflowContent>
-      )}
-    </td>
+      {!isEditMode && <OverflowContent title={displayValue}>{displayValue}</OverflowContent>}
+    </TreeListCellWrapper>
   );
 };
 
