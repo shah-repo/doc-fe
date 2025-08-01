@@ -379,7 +379,7 @@ const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Documen
 
 const validateReleasedPOLineItem = (partId: string, handlers: Handlers): ApiAction<ApprovalFailureResponse> =>
   apiActionWithCallbacks({
-    url: `${PO_ROOT_URL}/${partId}/validate_released_part`,
+    url: `${PO_ROOT_URL}/${partId}/validate-part-released`,
     method: 'get',
     handlers,
   });
