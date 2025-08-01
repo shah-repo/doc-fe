@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +93,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
   const dialog = useDialog();
   const formContext = useFormContext();
-  const parentFormik = useFormikContext();
   const [bulkDataToSubmit, seBulkDataToSubmit] = React.useState<EditableMDItem[]>([]);
   const history = useHistory();
 
@@ -152,7 +151,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     const updatedData = updateData(values, data);
     FBDataStore?.setMDTableData(updatedData);
     FBDataStore?.addMDUpdatedDataId(values.id as string);
-    FBDataStore.changeRequestId = changeRequest?.id;
     setData(updatedData);
   };
 
@@ -337,17 +335,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
     resetForm({ values: editedMDItem ?? {} });
   }, [editedMDItem, setValues, resetForm]);
-
-  useEffect(() => {
-    const data = FBDataStore?.getMDTableData ?? [];
-    const updatedDataItemIds = FBDataStore?.getMDUpdatedDataIds ?? [];
-    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.id));
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(updatedData)) {
-      setDoNotPrompt?.(true);
-      updateMaterialDispositionTableData(updatedData);
-      FBDataStore?.setMDTableData([]);
-    }
-  }, [parentFormik?.isSubmitting]);
 
   const copyClipboardPopupMenu = useDialog();
 

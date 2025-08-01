@@ -1,75 +1,78 @@
 import { isEmpty, pick } from 'lodash';
+import { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import { toastError } from '../../../../components/notifications';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import { changeRequestPreviewPath } from '../../../utils/paths';
 import { FIELDS_TO_PICK } from '../FBMaterialDispositionTable/constants';
-import { EditableMDItem } from '../FBMaterialDispositionTable/types';
 import { EditableTLItem } from './types';
 
-export const useRestrictedEditUpdates = () => {
+export const useRestrictedEditUpdates = (changeRequestId: string) => {
+  const history = useHistory();
+  const isLoadingRef = useRef(false);
   const updateTask = useActionCreator(taskActions.updateTask);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
 
-  const updateTaskAsync = useAsync({
-    onError: toastError,
-  });
-  const partAsync = useAsync({
-    onError: toastError,
-  });
+  const updateTaskAsync = useAsync({ onError: toastError });
+  const partAsync = useAsync({ onError: toastError });
 
-  const updateTaskItem = (values: Partial<EditableTLItem>) => {
+  const updateTaskItem = (item: Partial<EditableTLItem>) => {
     const payload = {
-      instruction: values?.instruction,
-      employeeIds: values?.employeeResponse?.map((data) => data.employeeId),
-      partOfId: FBDataStore?.partOfIdToUse,
-      employeeUpdates: values?.employeeResponse?.map((data) => ({
-        employeeId: data.employeeId,
-      })),
+      instruction: item.instruction,
+      employeeIds: item.employeeResponse?.map((e) => e.employeeId),
+      partOfId: FBDataStore.partOfIdToUse,
+      employeeUpdates: item.employeeResponse?.map((e) => ({ employeeId: e.employeeId })),
     };
 
-    updateTaskAsync.start(updateTask, FBDataStore?.partOfIdToUse, values.taskId, payload, updateTaskAsync);
+    return updateTaskAsync.start(() => updateTask(FBDataStore.partOfIdToUse, item.taskId, payload, partAsync));
   };
 
-  const triggerTaskListUpdates = () => {
-    const data = FBDataStore?.getTLTableData ?? [];
-    const updatedDataItemIds = FBDataStore?.getTLUpdatedDataIds ?? [];
-    const updatedData = data.filter((dataItem) => updatedDataItemIds.includes(dataItem.taskId));
+  const triggerTaskListUpdates = async () => {
+    const data = FBDataStore.getTLTableData ?? [];
+    const updatedIds = FBDataStore.getTLUpdatedDataIds ?? [];
+    const updatedItems = data.filter((item) => updatedIds.includes(item.taskId));
 
-    if (updatedData.length > 0) {
-      updatedData.forEach(updateTaskItem);
-      FBDataStore?.setTLTableData([]);
-    }
+    if (updatedItems.length === 0) return;
+
+    const promises = updatedItems.map(updateTaskItem);
+    FBDataStore.setTLTableData([]);
+    await Promise.all(promises);
   };
 
-  const updateMaterialDispositionTableData = (data: EditableMDItem[]) => {
+  const triggerMDTableUpdates = async () => {
+    const data = FBDataStore.getMDTableData ?? [];
+    const updatedIds = FBDataStore.getMDUpdatedDataIds ?? [];
+    const updatedItems = data.filter((item) => updatedIds.includes(item.id));
+
+    if (isEmpty(updatedItems)) return;
+
     const partToSave = {
-      materialDispositionEntryUpdates: data.map((dataItem) => ({
-        materialDispositionId: dataItem.id,
-        ...pick(dataItem, FIELDS_TO_PICK),
+      materialDispositionEntryUpdates: updatedItems.map((item) => ({
+        materialDispositionId: item.id,
+        ...pick(item, FIELDS_TO_PICK),
       })),
     };
-    partAsync.start(updateItem, FBDataStore.changeRequestId, partToSave, partAsync);
+
+    FBDataStore.setMDTableData([]);
+    await partAsync.start(() => updateItem(changeRequestId, partToSave, partAsync));
   };
 
-  const triggerMDTableUpdates = () => {
-    const data = FBDataStore?.getMDTableData ?? [];
-    const updatedDataItemIds = FBDataStore?.getMDUpdatedDataIds ?? [];
-    const updatedData = data.filter((dataItem) => updatedDataItemIds.includes(dataItem.id));
-    if (!isEmpty(updatedData)) {
-      updateMaterialDispositionTableData(updatedData);
-      FBDataStore?.setMDTableData([]);
+  const triggerRestrictEditUpdates = async () => {
+    isLoadingRef.current = true;
+    try {
+      await Promise.all([triggerTaskListUpdates(), triggerMDTableUpdates()]);
+    } finally {
+      isLoadingRef.current = false;
+      changeRequestId && history.push(changeRequestPreviewPath(changeRequestId));
     }
-  };
-
-  const triggerRestrictEditUpdates = () => {
-    triggerTaskListUpdates();
-    triggerMDTableUpdates();
   };
 
   return {
     triggerRestrictEditUpdates,
+    isLoading: isLoadingRef.current,
   };
 };
