@@ -23,7 +23,8 @@ import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FB } from '../../helpers';
-import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, FIELDS_TO_OMIT, SUB_ITEMS_FIELD } from './constants';
+import { FBProcedureItemConfig } from '../FBProcedureItem.types';
+import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, FIELDS_TO_OMIT, IS_LOT_ADDITION, SUB_ITEMS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -47,31 +48,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
+  const { procedureState, mpiProcedureState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
   const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: cloneDeep([
-      {
-        id: '1q',
-        unit: 'hours',
-        actualId: '',
-        plannedId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
-        quantity: 12,
-        items: [
-          {
-            id: '2q',
-            unit: 'Box(s)',
-            plannedId: '',
-            actualId: 'b5c9ab44-653e-4d31-843b-c67276a9395f',
-            lotId: 'e7949809-b5e2-4a44-a6f0-2594424c127b',
-            quantity: 14,
-          },
-        ],
-      },
-    ]),
+    data: cloneDeep(items as Material[]),
     expanded: [],
     dataState: {
       sort: [],
@@ -98,9 +82,40 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
-      const scanLot = omit(values, FIELDS_TO_OMIT);
+      const scanLot = omit(values, FIELDS_TO_OMIT) as FBProcedureItemConfig;
       console.log('scanLot', scanLot);
-      // updateMaterial?.(scanLot as Material);
+      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+      if (values[IS_LOT_ADDITION]) {
+        // lot adddition
+      } else {
+        // part addition
+        delete scanLot.actualId;
+      }
+      procedureState?.addItem(scanLot, type, allSteps);
+      mpiProcedureState?.addItem(scanLot, type, allSteps);
+
+      setState((prev) => {
+        const existingIndex = prev.data.findIndex((item) => item.id === scanLot.id); // use appropriate key
+
+        let newData;
+        if (existingIndex !== -1) {
+          // Update existing item
+          newData = [...prev.data];
+          newData[existingIndex] = {
+            ...newData[existingIndex],
+            ...scanLot,
+          };
+        } else {
+          // Add new item
+          newData = [...prev.data, scanLot as Material];
+        }
+
+        return {
+          ...prev,
+          data: newData,
+        };
+      });
+
       discardScanLot();
     },
   });
@@ -269,7 +284,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     formik.setValues(editItemInfo);
   };
 
-  console.log('rerender');
+  console.log('rerender', items);
 
   return (
     <Box className={classes.root} data-cy="material-grid">

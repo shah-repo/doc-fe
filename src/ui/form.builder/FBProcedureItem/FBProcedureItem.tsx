@@ -88,7 +88,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
           </Box>
         )}
         {type !== FBProcedureItemType.attachments && !loading && (<>
-          <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+          {type !== FBProcedureItemType.materials && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
                 border={1}
@@ -148,7 +148,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 </Box>
               </Box>
             )}
-          </FBMapWrapper>
+          </FBMapWrapper>}
           {type === FBProcedureItemType.materials && <MaterialsTable isActive={true} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
           {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={false} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
         </>

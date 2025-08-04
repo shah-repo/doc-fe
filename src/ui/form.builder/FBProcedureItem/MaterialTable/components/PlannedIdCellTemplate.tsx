@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
@@ -23,18 +23,18 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     onExpandChange(ev, dataItem, level);
   };
 
-  // useEffect(() => {
-  //   // if (!isEditMode) {
-  //   //   return;
-  //   // }
+  useEffect(() => {
+    // if (!isEditMode) {
+    //   return;
+    // }
 
-  //   const value = partOptionsData?.find((option) => option.value === dataItem.plannedId);
-
-  //   // if (value && field) {
-  //   //   setFieldValue(field, value);
-  //   //   setValue(value);
-  //   // }
-  // }, [partOptionsData, field, dataItem]);
+    const value = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    console.log('filtered value', value);
+    if (value && field) {
+      // setFieldValue(field, value);
+      setValue(value);
+    }
+  }, [materialSelectOptions, field, dataItem]);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('option', option);

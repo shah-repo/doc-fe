@@ -44,4 +44,6 @@ export interface FBProcedureItemConfig {
   LHRTparameter?: boolean
   type?: string
   paramsId?: string
+  actualId?: string
+  plannedId?: string
 }

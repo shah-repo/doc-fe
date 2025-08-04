@@ -17,7 +17,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const onQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     if (!isNaN(Number(val)) && Number(val) >= 0 && field) {
-      setFieldValue(field, val);
+      setFieldValue(field, Number(val));
     }
   };
 

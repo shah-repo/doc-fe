@@ -107,14 +107,12 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, parentRevId, addLot, deleteLot } = props;
   const {
     isLotAddition = '',
-    lotRevId,
     isDisabled,
     parentPartRevId,
     lotDocumentId,
     lotDocId,
   } = {
     isLotAddition: false,
-    lotRevId: '',
     isDisabled: false,
     parentPartRevId: '',
     lotDocumentId: '',
@@ -130,8 +128,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const { setFieldValue } = useFormikContext<EditableMaterial>();
-  const isAddLotVisible = hasChildren && !isEditMode && !isLotAddition && !lotRevId;
+  const isAddLotVisible = true; // hasChildren && !isEditMode && !isLotAddition;
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -153,14 +150,14 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
-    if (!isEditMode) {
-      return;
-    }
+    // if (!isEditMode) {
+    //   return;
+    // }
 
-    const value = renderOptions().find((option) => option.value === lotRevId);
+    const value = renderOptions().find((option) => option.value === dataItem[field ?? '']);
 
     if (value && field) {
-      setFieldValue(field, value);
+      // setFieldValue(field, value);
       setValue(value);
     }
   }, [lots]);
@@ -210,7 +207,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
           </span>
         </>
       ) : (
-        (isLotAddition || lotRevId) && (
+        (isLotAddition) && (
           <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
             <div
               className={cx(classes.lotInfoWrapper, {
@@ -227,12 +224,11 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
                       setValue,
                       dataItem,
                       parentPartRevId,
-                      lotRevId,
                       isLoading: fetchAvailablePartsAsync.isLoading,
                     }}
                   />
-                ) : lotRevId && lotDocumentId ? (
-                  <Link to={documentVersionPath(lotRevId, lotDocumentId)} className={classes.link} target="_blank">
+                ) : dataItem[field ?? ''] && lotDocumentId ? (
+                  <Link to={documentVersionPath(dataItem[field ?? ''], lotDocumentId)} className={classes.link} target="_blank">
                     {lotDocId}
                   </Link>
                 ) : (
@@ -276,7 +272,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
           </span>
         )
       )}
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: lotRevId, parentRevId }} />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem[field ?? ''], parentRevId }} />
     </TreeListCellWrapper>
   );
 };
