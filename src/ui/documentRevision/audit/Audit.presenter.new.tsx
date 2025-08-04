@@ -294,7 +294,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
 
       if (fbType === 'workOrderLhrTable') {
-        fbLabel = 'LHR Table line item';
+        fbLabel = translate('form.builder.audit.workOrderLhrTable');
       }
 
       // LOT TRANSFERS
