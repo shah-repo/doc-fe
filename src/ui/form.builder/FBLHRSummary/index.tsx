@@ -263,6 +263,8 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       comments: '',
       enteredBy: '',
       unit: '',
+      pmDueDateText: null,
+      calDueDateText: null,
       recordCreationDate: new Date().toISOString(),
       customRecordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,

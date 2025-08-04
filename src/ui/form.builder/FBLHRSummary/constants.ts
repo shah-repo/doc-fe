@@ -32,8 +32,10 @@ export const LHR_SUMARY_FIELDS = {
   lotOrEquipment: 'lotOrEquipment',
   recordCreationDate: 'recordCreationDate',
   customRecordCreationDate: 'customRecordCreationDate',
+  calDueDateText: 'calDueDateText',
+  pmDueDateText: 'pmDueDateText',
 };
-export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate', 'unit'];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate', 'unit', 'calDueDateText', 'pmDueDateText'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex', 'show'];
 export const PAGE_SIZE = 25;
 export const ROW_HEIGHT = 50;
@@ -41,4 +43,9 @@ export const ROW_HEIGHT = 50;
 export enum DocType {
   equipment = 'equipment',
   material = 'material',
+}
+
+export enum DATE_TYPE {
+  customPmDueDate = 'customPmDueDate',
+  customCalDueDate = 'customCalDueDate',
 }
