@@ -9,13 +9,14 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
+import { IS_LOT_ADDITION } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded } = props;
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem[IS_LOT_ADDITION];
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
 

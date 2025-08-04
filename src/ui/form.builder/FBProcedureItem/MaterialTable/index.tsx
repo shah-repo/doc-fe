@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, omit, replace, uniq } from 'lodash';
+import { cloneDeep, isEmpty, isNil, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -82,39 +82,39 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
-      const scanLot = omit(values, FIELDS_TO_OMIT) as FBProcedureItemConfig;
-      console.log('scanLot', scanLot);
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       if (values[IS_LOT_ADDITION]) {
-        // lot adddition
+        console.log('values', values);
+        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'quantityOnHand']) as FBProcedureItemConfig;
+        console.log('scanLot', scanLot);
       } else {
-        // part addition
-        delete scanLot.actualId;
-      }
-      procedureState?.addItem(scanLot, type, allSteps);
-      mpiProcedureState?.addItem(scanLot, type, allSteps);
+        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']) as FBProcedureItemConfig;
+        console.log('scanLot', scanLot);
+        procedureState?.addItem(scanLot, type, allSteps);
+        mpiProcedureState?.addItem(scanLot, type, allSteps);
 
-      setState((prev) => {
-        const existingIndex = prev.data.findIndex((item) => item.id === scanLot.id); // use appropriate key
+        setState((prev) => {
+          const existingIndex = prev.data.findIndex((item) => item.id === scanLot.id); // use appropriate key
 
-        let newData;
-        if (existingIndex !== -1) {
-          // Update existing item
-          newData = [...prev.data];
-          newData[existingIndex] = {
-            ...newData[existingIndex],
-            ...scanLot,
+          let newData;
+          if (existingIndex !== -1) {
+            // Update existing item
+            newData = [...prev.data];
+            newData[existingIndex] = {
+              ...newData[existingIndex],
+              ...scanLot,
+            };
+          } else {
+            // Add new item
+            newData = [...prev.data, scanLot as Material];
+          }
+
+          return {
+            ...prev,
+            data: newData,
           };
-        } else {
-          // Add new item
-          newData = [...prev.data, scanLot as Material];
-        }
-
-        return {
-          ...prev,
-          data: newData,
-        };
-      });
+        });
+      }
 
       discardScanLot();
     },
@@ -124,12 +124,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     console.log('discardScanLot');
     if (dataItem?.[ADD_FIELD]) {
       if (dataItem.isLotAddition) {
-        // const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
-        // if (parentIndex !== -1) {
-        //   state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
-        //     (data) => !data[ADD_FIELD],
-        //   );
-        // }
+        const parentIndex = state?.data?.findIndex((data) => {
+          return data.id === dataItem.parentPartPlannedId;
+        });
+        if (parentIndex !== -1) {
+          state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
+            (data) => !data[ADD_FIELD],
+          );
+        }
       } else {
         state.data = state.data?.filter((data) => !data[ADD_FIELD]);
       }
@@ -183,18 +185,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       className: cx(row.props.className, classes.updatingRow),
     });
   };
-
-  const schema = buildSchema({
-    materialSelectOptions,
-    actionsClass: classes.actionsCell,
-    popperHolder: classes.popperHolder,
-    onDiscard: discardScanLot,
-    onDelete: removeScanLot,
-    onOpenQuickView: openQuickView,
-    onConfirm: formik.submitForm,
-  });
-
-  const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
     console.log('state change');
@@ -283,6 +273,69 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     }));
     formik.setValues(editItemInfo);
   };
+
+  const createNewLotItem = () => {
+    return {
+      id: FB.uniqid,
+      plannedId: '',
+      actualId: '',
+      unit: '',
+      quantity: undefined,
+      isLotAddition: true,
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+    };
+  };
+
+  const ignorePreviouslyAddedItems = (data: Material[]) => {
+    return data?.filter((data) => {
+      const isAlocationItemAddExist = !data[ADD_FIELD];
+      if (data[SUB_ITEMS_FIELD]) {
+        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+      }
+      return isAlocationItemAddExist;
+    });
+  };
+
+  const addLot = (dataItem: EditableMaterial) => {
+    const index = state?.data?.findIndex((data) => {
+      return data.id === dataItem.id;
+    });
+    state.data = ignorePreviouslyAddedItems(state.data);
+
+    if (state.data.length && index !== -1) {
+      const newAllocItem: EditableMaterial = createNewLotItem();
+      newAllocItem.parentPartPlannedId = dataItem.plannedId;
+      state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
+
+      if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
+        state.data[index][SUB_ITEMS_FIELD] = [];
+      }
+
+      state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+
+      updateState({
+        ...state,
+        data: [...state.data],
+        expanded: [state.data[index].id],
+        inEdit: [newAllocItem],
+      });
+    }
+  };
+
+  const schema = buildSchema({
+    materialSelectOptions,
+    actionsClass: classes.actionsCell,
+    popperHolder: classes.popperHolder,
+    onDiscard: discardScanLot,
+    onDelete: removeScanLot,
+    addLot: addLot,
+    isDisabled: !isActive,
+    onOpenQuickView: openQuickView,
+    onConfirm: formik.submitForm,
+  });
+
+  const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   console.log('rerender', items);
 

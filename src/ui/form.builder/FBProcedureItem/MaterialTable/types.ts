@@ -34,6 +34,7 @@ export interface EditableMaterial extends Material {
   [MODE_FIELD]: boolean
   [ADD_FIELD]: boolean
   isNewAddition?: boolean
+  parentPartPlannedId?: string
 }
 
 export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
@@ -42,12 +43,14 @@ export interface SchemaOptions {
   isLoading?: boolean
   materialSelectOptions: OptionType[]
   parts?: MaterialOption[]
+  isDisabled?: boolean
   onConfirm: () => void
   onDiscard: () => void
   actionsClass: string
   popperHolder: string
   onDelete?: MaterialCallback
   onEdit?: MaterialCallback
+  addLot?: MaterialCallback
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
@@ -103,6 +106,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   deletePart?: MaterialCallback
   parentRevId?: string
   parts?: MaterialOption[]
+  isDisabled?: boolean
   materialSelectOptions?: OptionType[]
   onClick?: (e: MaterialEditEvent) => void
 }

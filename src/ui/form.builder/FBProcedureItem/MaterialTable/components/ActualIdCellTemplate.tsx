@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
@@ -17,23 +17,20 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
 
-  // useEffect(() => {
-  //   // if (!isEditMode) {
-  //   //   return;
-  //   // }
+  useEffect(() => {
+    // if (!isEditMode) {
+    //   return;
+    // }
+    const value = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
 
-  //   const value = partOptionsData?.find((option) => option.value === dataItem.plannedId);
-
-  //   // if (value && field) {
-  //   //   setFieldValue(field, value);
-  //   //   setValue(value);
-  //   // }
-  // }, [partOptionsData, field, dataItem]);
+    if (value && field) {
+      setValue(value);
+    }
+  }, [materialSelectOptions, field, dataItem]);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('option', option);
     setValue(option as OptionType);
-    // setFieldValue('partRevId', option?.value);
     setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };

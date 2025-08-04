@@ -1,5 +1,7 @@
 import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from '..';
 import { Id } from '../../../state/ducks/common/types';
+import { Material } from '../FBMaterialEquipmentInfo/FBMaterailEqInfo.types';
+import { SUB_ITEMS_FIELD } from './MaterialTable/constants';
 
 export enum FBProcedureItemType {
   attachments = 'attachments',
@@ -46,4 +48,5 @@ export interface FBProcedureItemConfig {
   paramsId?: string
   actualId?: string
   plannedId?: string
+  [SUB_ITEMS_FIELD]?: [Material]
 }

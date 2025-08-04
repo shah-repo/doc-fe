@@ -12,11 +12,13 @@ import { SchemaOptions } from './types';
 export const buildSchema = ({
   materialSelectOptions,
   onRowClick,
+  addLot,
   actionsClass,
   popperHolder,
   onConfirm,
   onDiscard,
   onDelete,
+  isDisabled,
 }: SchemaOptions): CustomTreeListColumnProps[] => {
   return [
     {
@@ -31,7 +33,7 @@ export const buildSchema = ({
       id: 'lotId',
       field: 'lotId',
       title: translate('form.builder.procedure.material.table.lot.number.title'),
-      cell: (props) => <LotIdCellTemplate {...props} />,
+      cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} />,
       mainOrderIndex: 2,
       width: 150,
     },
