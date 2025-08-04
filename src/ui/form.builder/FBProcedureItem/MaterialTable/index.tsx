@@ -125,7 +125,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     if (dataItem?.[ADD_FIELD]) {
       if (dataItem.isLotAddition) {
         const parentIndex = state?.data?.findIndex((data) => {
-          return data.id === dataItem.parentPartPlannedId;
+          return data.plannedId === dataItem.parentPartPlannedId;
         });
         if (parentIndex !== -1) {
           state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
