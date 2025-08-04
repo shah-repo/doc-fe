@@ -3,6 +3,7 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { FBPurchaseOrderActionsProps, FBSubmitButton } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import POLineItemAlert from '../../app/alert.dialog/POLineItemAlert';
 import FormattedNumber from '../../components/FormattedNumber';
 import Text from '../../components/Text';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
@@ -14,6 +15,9 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
   onAlertNotificationCancel,
   onAlertNotificationConfirm,
   purchaseOrderState,
+  poLineAlertDialog,
+  poLineItemValidationErrorResponse,
+  confirmPOLineAlert,
   isEdit,
   dialog,
 }) =>
@@ -53,6 +57,13 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
         message="documentRevision.po.notification.alert.update"
         {...{ dialog }}
       />}
+      { poLineAlertDialog && (
+        <POLineItemAlert
+          data={poLineItemValidationErrorResponse}
+          confirmAction={confirmPOLineAlert}
+          dialog={ poLineAlertDialog}
+        />
+      )}
     </>
   );
 

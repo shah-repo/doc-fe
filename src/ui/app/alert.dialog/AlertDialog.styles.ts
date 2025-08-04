@@ -100,5 +100,11 @@ export const styles = makeStyles((theme: Theme) =>
     textBold: {
       fontWeight: 700,
     },
+    iconError: {
+      color: Colors.error,
+    },
+    iconWarning: {
+      color: Colors.warning,
+    },
   }),
 );
