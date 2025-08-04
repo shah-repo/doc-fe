@@ -39,7 +39,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('option', option);
     setValue(option as OptionType);
-    setFieldValue('partRevId', option?.value);
+    // setFieldValue('partRevId', option?.value);
+    setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 

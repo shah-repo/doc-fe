@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, replace, uniq } from 'lodash';
+import { cloneDeep, isEmpty, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -23,7 +23,7 @@ import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FB } from '../../helpers';
-import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, SUB_ITEMS_FIELD } from './constants';
+import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, FIELDS_TO_OMIT, SUB_ITEMS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -98,13 +98,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
-      // const scanLot = omit(values, FIELDS_TO_OMIT);
+      const scanLot = omit(values, FIELDS_TO_OMIT);
+      console.log('scanLot', scanLot);
       // updateMaterial?.(scanLot as Material);
       discardScanLot();
     },
   });
-
-  const { submitForm } = formik;
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
     console.log('discardScanLot');
@@ -126,7 +125,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       inEdit: [],
       data: [...state.data],
     }));
-    formik?.resetForm();
+    formik.resetForm();
   };
 
   const removeScanLot = (material: EditableMaterial) => {
@@ -174,10 +173,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     materialSelectOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
-    onConfirm: submitForm,
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     onOpenQuickView: openQuickView,
+    onConfirm: formik.submitForm,
   });
 
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
