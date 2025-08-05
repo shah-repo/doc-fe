@@ -68,7 +68,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
-  const { isEditing } = useFormContext();
+  const { isEditing, isLoading } = useFormContext();
   const dispatch = useDispatch();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
@@ -147,7 +147,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
-        <FormHeader {...{ changeRequest, asyncState }} />
+        <FormHeader {...{ changeRequest, asyncState, isLoading }} />
       }
     >
       <PromptIfDirty
