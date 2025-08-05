@@ -91,7 +91,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, addLot, isDisabled } = props;
   const { parentPartPlannedId, lotId } = dataItem;
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !isDisabled;
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
@@ -179,39 +179,37 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      {lotId && (
-        <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-          <span className={classes.lotInfoId}>
-            {isEditMode ? (
-              <LotAutocomplete
-                {...{
-                  field,
-                  lots,
-                  value,
-                  setValue,
-                  dataItem,
-                  parentPartPlannedId,
-                  isLoading: fetchAvailablePartsAsync.isLoading,
-                }}
-              />
-            ) : (
-              value.label
-            )}
-          </span>
-          {!isEditMode && value.label && (
-            <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
-              <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.viewIcon}
-                  icon={isViewLotHovered ? solid('eye') : light('eye')}
-                  onClick={openQuickViewDialog}
-                />
-              </IconButton>
-            </StyleTooltip>
+      <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
+        <span className={classes.lotInfoId}>
+          {isEditMode ? (
+            <LotAutocomplete
+              {...{
+                field,
+                lots,
+                value,
+                setValue,
+                dataItem,
+                parentPartPlannedId,
+                isLoading: fetchAvailablePartsAsync.isLoading,
+              }}
+            />
+          ) : (
+            value.label
           )}
         </span>
-      )}
+        {!isEditMode && value.label && (
+          <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
+            <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
+              <FontAwesomeIcon
+                size="sm"
+                className={classes.viewIcon}
+                icon={isViewLotHovered ? solid('eye') : light('eye')}
+                onClick={openQuickViewDialog}
+              />
+            </IconButton>
+          </StyleTooltip>
+        )}
+      </span>
       <DocumentRevisionDialog
         dialog={quickViewDialog}
         {...{ docRevId: lotId, parentRevId: parentPartPlannedId }}
