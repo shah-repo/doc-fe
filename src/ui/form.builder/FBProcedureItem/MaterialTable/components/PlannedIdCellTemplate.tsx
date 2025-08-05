@@ -25,22 +25,14 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   };
 
   useEffect(() => {
-    // if (!isEditMode) {
-    //   return;
-    // }
-
     const value = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
-    console.log('filtered value', value);
     if (value && field) {
-      // setFieldValue(field, value);
       setValue(value);
     }
   }, [materialSelectOptions, field, dataItem]);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    console.log('option', option);
     setValue(option as OptionType);
-    // setFieldValue('partRevId', option?.value);
     setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };

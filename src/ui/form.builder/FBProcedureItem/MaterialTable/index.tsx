@@ -79,6 +79,27 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     });
   };
 
+  const appendItemToStateData = (scanLot) => {
+    const existingIndex = state.data.findIndex((item) => item.id === scanLot.id);
+    if (existingIndex !== -1) {
+      state.data[existingIndex] = {
+        ...state.data[existingIndex],
+        ...scanLot,
+        [ADD_FIELD]: false,
+      };
+    } else {
+      state.data.push(scanLot as Material);
+    }
+
+    // Then update the state
+    setState((prevState) => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+    formik.resetForm();
+  };
+
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
@@ -93,30 +114,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         procedureState?.addItem(scanLot, type, allSteps);
         mpiProcedureState?.addItem(scanLot, type, allSteps);
 
-        setState((prev) => {
-          const existingIndex = prev.data.findIndex((item) => item.id === scanLot.id); // use appropriate key
-
-          let newData;
-          if (existingIndex !== -1) {
-            // Update existing item
-            newData = [...prev.data];
-            newData[existingIndex] = {
-              ...newData[existingIndex],
-              ...scanLot,
-            };
-          } else {
-            // Add new item
-            newData = [...prev.data, scanLot as Material];
-          }
-
-          return {
-            ...prev,
-            data: newData,
-          };
-        });
+        appendItemToStateData(scanLot);
       }
-
-      discardScanLot();
     },
   });
 
@@ -124,7 +123,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     console.log('discardScanLot');
     if (dataItem?.[ADD_FIELD]) {
       if (dataItem.isLotAddition) {
-        const parentIndex = state?.data?.findIndex((data) => {
+        const parentIndex = state.data?.findIndex((data) => {
           return data.plannedId === dataItem.parentPartPlannedId;
         });
         if (parentIndex !== -1) {
@@ -145,9 +144,20 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     formik.resetForm();
   };
 
+  const deleteItemFromStateData = (scanLot) => {
+    state.data = state.data.filter((item) => item.id !== scanLot.id);
+
+    setState((prevState) => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+    formik.resetForm();
+  };
+
   const removeScanLot = (material: EditableMaterial) => {
-    // deleteMaterial(material);
-    discardScanLot();
+    deleteItemFromStateData(material);
+    handleRemove?.(material.id);
   };
 
   const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => {
@@ -187,7 +197,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
-    console.log('state change');
     updateState({
       ...state,
       dataState: event.dataState,
@@ -336,8 +345,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
-
-  console.log('rerender', items);
 
   return (
     <Box className={classes.root} data-cy="material-grid">

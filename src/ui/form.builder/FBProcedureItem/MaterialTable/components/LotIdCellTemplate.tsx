@@ -195,7 +195,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
           </span>
         </>
       ) : (
-        (isLotAddition) && (
+        isLotAddition && (
           <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
             <div
               className={cx(classes.lotInfoWrapper, {
@@ -203,26 +203,28 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               })}
             >
               <span className={classes.lotInfoId}>
-                {isEditMode ? (
-                  <LotAutocomplete
-                    {...{
-                      field,
-                      lots,
-                      value,
-                      setValue,
-                      dataItem,
-                      parentPartPlannedId,
-                      isLoading: fetchAvailablePartsAsync.isLoading,
-                    }}
-                  />
-                )
-                // dataItem[field ?? ''] && lotDocumentId ? (
-                //   <Link to={documentVersionPath(dataItem[field ?? ''], lotDocumentId)} className={classes.link} target="_blank">
-                //     {lotDocId}
-                //   </Link>
-                // ) : (
-                  : dataItem[field ?? '']
-                // )
+                {
+                  isEditMode ? (
+                    <LotAutocomplete
+                      {...{
+                        field,
+                        lots,
+                        value,
+                        setValue,
+                        dataItem,
+                        parentPartPlannedId,
+                        isLoading: fetchAvailablePartsAsync.isLoading,
+                      }}
+                    />
+                  ) : (
+                    // dataItem[field ?? ''] && lotDocumentId ? (
+                    //   <Link to={documentVersionPath(dataItem[field ?? ''], lotDocumentId)} className={classes.link} target="_blank">
+                    //     {lotDocId}
+                    //   </Link>
+                    // ) : (
+                    dataItem[field ?? '']
+                  )
+                  // )
                 }
               </span>
               {!isEditMode && (

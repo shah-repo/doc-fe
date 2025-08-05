@@ -15,13 +15,10 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
   const { hasChildren, dataItem, materialSelectOptions, field = '' } = props;
   const isEditMode = ((dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false) && dataItem?.isLotAddition;
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
 
   useEffect(() => {
-    // if (!isEditMode) {
-    //   return;
-    // }
-    const value = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    const value = materialSelectOptions?.find((option) => option.value === dataItem.actualId);
 
     if (value && field) {
       setValue(value);
@@ -29,7 +26,6 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
   }, [materialSelectOptions, field, dataItem]);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    console.log('option', option);
     setValue(option as OptionType);
     setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -43,7 +39,7 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
       {isEditMode && (
         <span className={cx(classes.nameCell, classes.titleInfoCell)}>
           <div className={classes.idCellEditWrapper}>
-            <FormikField name={field ?? ''} required error={Boolean(errors[field ?? ''])}>
+            <FormikField name={field ?? ''}>
               <Autocomplete
                 {...getFieldProps(field)}
                 value={value}

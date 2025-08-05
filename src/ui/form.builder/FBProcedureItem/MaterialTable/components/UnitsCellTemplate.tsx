@@ -43,28 +43,26 @@ const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
     <FormikField name={field}>
       <Autocomplete
         {...getFieldProps(field)}
-        key={isEmpty(values) ? 'disabled' : 'enabled'}
+        key={isEmpty(units) ? 'disabled' : 'enabled'}
         blurOnSelect
         options={units}
         onChange={handleChange}
         value={value}
         size="small"
-        disabled={isEmpty(values)}
+        disabled={isEmpty(units)}
       />
     </FormikField>
   );
 };
 
 const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { field = '', dataItem, onClick } = props;
+  const { field = '', dataItem } = props;
   const isEditMode = isEditMaterial(dataItem);
-
-  const handleClick = () => onClick?.({ dataItem });
   const displayValue = get(dataItem, field, CELL_EMPTY_VALUE) as string;
 
   return (
     <TreeListCellWrapper {...props}>
-      {isEditMode ? <Editor field={field} /> : <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>}
+      {isEditMode ? <Editor field={field} /> : <OverflowContent>{displayValue}</OverflowContent>}
     </TreeListCellWrapper>
   );
 };
