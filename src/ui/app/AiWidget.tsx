@@ -2,6 +2,7 @@ import { AppName, Widget, WidgetRef } from 'ai-widget';
 import React, { createContext, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
+import { translate } from '../../common/intl';
 import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../common/utils/selectors';
 import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
@@ -36,6 +37,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+  const dummyPrompts = promptKeys.map((key) => translate(key));
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
@@ -91,10 +93,10 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   );
 };
 
-const dummyPrompts = [
-  'Provide a list of gaps/differences for this attachment vis a vis standards file<file name> attached to <document_number>',
-  'List common components between <document_number>  and <another_document_number>',
-  'Which Parts will get impacted if <supplier_name> supplier is disqualified?',
-  'Which documents has <Employee_name> completed training on',
-  'Find <documents e.g. Pos, Suppliers > which were approved between <date range>',
+const promptKeys = [
+  'example.prompt.provide.list',
+  'example.prompt.list.common.components',
+  'example.prompt.part.impacted',
+  'example.prompt.document.completed',
+  'example.prompt.find.document',
 ];

@@ -2662,5 +2662,10 @@
   "attachment.upload.error.part.failed": "Part upload failed",
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
-  "attachment.upload.error.cancelled": "Upload cancelled"
+  "attachment.upload.error.cancelled": "Upload cancelled",
+  "example.prompt.provide.list": "Provide a list of gaps/differences for this attachment vis a vis standards file<file name> attached to <document_number>",
+  "example.prompt.list.common.components": "List common components between <document_number>  and <another_document_number>",
+  "example.prompt.part.impacted": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
+  "example.prompt.document.completed": "Which documents has <Employee_name> completed training on",
+  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>"
 }
