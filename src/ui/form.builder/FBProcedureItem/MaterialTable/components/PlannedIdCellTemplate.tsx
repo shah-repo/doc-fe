@@ -15,7 +15,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded } = props;
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId;
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (!dataItem.lotId && !dataItem?.isLotAddition);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
 
