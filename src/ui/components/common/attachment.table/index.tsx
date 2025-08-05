@@ -145,8 +145,8 @@ const AttachmentTable: React.FC<Props> = ({
     const data = attachmentsData.map((list) => ({ ...list, [SELECTED_FIELD]: Boolean(selectedAttachments?.[idGetter(list)]) }));
     setAttachmentsData(data);
     const selectedIds = Object.entries(selectedAttachments ?? [])
-    .filter(([id, selected]) => selected)
-    .map(([id]) => id);
+      .filter(([id, selected]) => selected)
+      .map(([id]) => id);
     aiWidgetContext?.updateAttachments(selectedIds);
   }, [selectedAttachments]);
 
