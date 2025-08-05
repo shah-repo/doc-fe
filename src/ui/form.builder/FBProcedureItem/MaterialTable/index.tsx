@@ -106,11 +106,35 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       if (values[IS_LOT_ADDITION]) {
         console.log('values', values);
-        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'quantityOnHand']) as FBProcedureItemConfig;
+        const omitFields = [...FIELDS_TO_OMIT, 'quantityOnHand', 'plannedId'];
+        const scanLot = omit(values, omitFields) as FBProcedureItemConfig;
         console.log('scanLot', scanLot);
+        const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
+
+        if (parentIndex !== -1) {
+          const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+
+          if (Array.isArray(subItems)) {
+            const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
+
+            if (existingSubIndex !== -1) {
+              subItems[existingSubIndex] = {
+                ...omit(subItems[existingSubIndex], omitFields),
+                ...scanLot,
+              };
+            } else {
+              subItems.push(scanLot);
+            }
+            state.data[parentIndex][SUB_ITEMS_FIELD] = subItems;
+          } else {
+            state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
+          }
+        }
+        procedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
+        mpiProcedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
+        discardScanLot(values as EditableMaterial);
       } else {
         const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']) as FBProcedureItemConfig;
-        console.log('scanLot', scanLot);
         procedureState?.addItem(scanLot, type, allSteps);
         mpiProcedureState?.addItem(scanLot, type, allSteps);
 
@@ -315,6 +339,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     if (state.data.length && index !== -1) {
       const newAllocItem: EditableMaterial = createNewLotItem();
       newAllocItem.parentPartPlannedId = dataItem.plannedId;
+      newAllocItem.parentId = dataItem.id;
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][SUB_ITEMS_FIELD])) {

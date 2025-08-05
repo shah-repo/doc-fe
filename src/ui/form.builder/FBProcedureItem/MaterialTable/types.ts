@@ -35,6 +35,7 @@ export interface EditableMaterial extends Material {
   [ADD_FIELD]: boolean
   isNewAddition?: boolean
   parentPartPlannedId?: string
+  parentId?: string
 }
 
 export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
