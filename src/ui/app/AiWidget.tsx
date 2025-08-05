@@ -91,4 +91,10 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   );
 };
 
-const dummyPrompts = ['dummy prompts is here', 'dummy prompts is here2', 'dummy prompts is here3', 'dummy prompts is here a long prompt is here'];
+const dummyPrompts = [
+  'Provide a list of gaps/differences for this attachment vis a vis standards file<file name> attached to <document_number>',
+  'List common components between <document_number>  and <another_document_number>',
+  'Which Parts will get impacted if <supplier_name> supplier is disqualified?',
+  'Which documents has <Employee_name> completed training on',
+  'Find <documents e.g. Pos, Suppliers > which were approved between <date range>',
+];
