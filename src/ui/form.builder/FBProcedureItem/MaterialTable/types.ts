@@ -38,6 +38,12 @@ export interface EditableMaterial extends Material {
   parentId?: string
 }
 
+export interface LotOptions {
+  label: string
+  value: string
+  documentId?: string
+}
+
 export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
 
 export interface SchemaOptions {

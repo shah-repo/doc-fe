@@ -1,33 +1,31 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
-import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
-import { Colors } from '../../../../layout/theme-next';
 import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
-import { CustomTreeListCellProps, EditableMaterial } from '../types';
+import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
 
 interface LotAutocompleteProps {
   field?: string
   lots: DocumentRevision[]
-  value: OptionType
-  setValue: Dispatch<SetStateAction<OptionType>>
+  value: LotOptions
+  setValue: Dispatch<SetStateAction<LotOptions>>
   dataItem: EditableMaterial
   parentPartPlannedId?: string
   lotRevId?: string
@@ -41,8 +39,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   setValue,
   isLoading,
   dataItem,
-  lotRevId,
-  parentPartPlannedId,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableMaterial>();
   const options = useMemo(
@@ -56,8 +52,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     [lots],
   );
 
-  const handleChange = (_, option?: OptionType) => {
-    setValue(option ?? { label: '', value: '' });
+  const handleChange = (_, option?: LotOptions) => {
+    setValue(option ?? { label: '', value: '', documentId: '' });
     const selectedLot = lots.find((lot) => lot.id === option?.value);
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLot?.precalc?.lot_on_hand_quantity);
@@ -73,7 +69,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
-        disabled={!!lotRevId}
+        disabled={!!dataItem[field]}
         options={options}
         blurOnSelect
         disableOpenOnFocus
@@ -83,15 +79,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         renderOption={(option, props) => (
           <ListItem {...props} className="lot-list-item" disableGutters>
             <ListItemText primary={option.label} />
-            {option.isExpired && (
-              <ListItemIcon>
-                <StyleTooltip
-                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
-                >
-                  <FontAwesomeIcon icon={regular('circle-exclamation')} color={Colors.error} size="sm" />
-                </StyleTooltip>
-              </ListItemIcon>
-            )}
           </ListItem>
         )}
         loading={isLoading}
@@ -102,24 +89,18 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, parentRevId, addLot, deleteLot, isDisabled } = props;
-  const {
-    isLotAddition = '',
-    parentPartPlannedId,
-    // lotDocumentId,
-    // lotDocId,
-  } = dataItem;
+  const { hasChildren, dataItem, field, addLot, isDisabled } = props;
+  const { parentPartPlannedId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !isDisabled;
   const classes = styles({ hasChildren, isEditMode });
-  const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
-  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const isAddLotVisible = !isEditMode && !dataItem[IS_LOT_ADDITION];
+  const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
+  const isAddLotVisible = !isEditMode && !lotId;
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -129,145 +110,102 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   });
 
   useEffect(() => {
-    if (!isEditMode) {
-      return;
-    }
-
-    if (isEditMode && isEmpty(parentPartPlannedId) && !isLotAddition) {
+    if (isEmpty(parentPartPlannedId)) {
       return;
     }
 
     fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartPlannedId, fetchAvailablePartsAsync);
-  }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+  }, [parentPartPlannedId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
-    // if (!isEditMode) {
-    //   return;
-    // }
-
-    const value = renderOptions().find((option) => option.value === dataItem[field ?? '']);
+    const value = renderOptions().find((option) => option.value === lotId);
 
     if (value && field) {
-      // setFieldValue(field, value);
       setValue(value);
     }
   }, [lots]);
 
-  const renderOptions = () => {
+  const renderOptions = useCallback(() => {
     return lots.map((lot) => {
-      const { isExpired, id, expiryDate, document } = lot;
-      const formattedExpiryDate = isExpired
-        ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit)
-        : '';
+      const { id, document, documentId } = lot;
       return {
         label: document.docId,
         value: id,
-        expiryDate: formattedExpiryDate,
-        isExpired: isExpired,
+        documentId: documentId,
       };
     });
-  };
+  }, [lots]);
+
+  if (isAddLotVisible) {
+    return (
+      <TreeListCellWrapper {...props}>
+        <span className={cx(classes.defaultIcon)}>
+          <StyleTooltip title={translate('common.add')} placement="top" arrow>
+            <IconButton kind="simple" size="small" ref={addLotRef} disabled={isDisabled} data-cy="add-lot-button">
+              <FontAwesomeIcon
+                size="sm"
+                className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
+                onClick={() => addLot?.(dataItem)}
+                icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
+              />
+            </IconButton>
+          </StyleTooltip>
+        </span>
+        <span className={cx(classes.defaultIcon)}>
+          <StyleTooltip title={translate('common.scan')} placement="top" arrow>
+            <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
+              <FontAwesomeIcon
+                size="sm"
+                className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
+                // onClick={() => openScanDialog?.(dataItem)}
+                icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
+              />
+            </IconButton>
+          </StyleTooltip>
+        </span>
+      </TreeListCellWrapper>
+    );
+  }
 
   return (
     <TreeListCellWrapper {...props}>
-      {isAddLotVisible ? (
-        <>
-          <span className={cx(classes.defaultIcon)}>
-            <StyleTooltip title={translate('common.add')} placement="top" arrow>
-              <IconButton kind="simple" size="small" ref={addLotRef} disabled={isDisabled} data-cy="add-lot-button">
+      {lotId && (
+        <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
+          <span className={classes.lotInfoId}>
+            {isEditMode ? (
+              <LotAutocomplete
+                {...{
+                  field,
+                  lots,
+                  value,
+                  setValue,
+                  dataItem,
+                  parentPartPlannedId,
+                  isLoading: fetchAvailablePartsAsync.isLoading,
+                }}
+              />
+            ) : (
+              value.label
+            )}
+          </span>
+          {!isEditMode && value.label && (
+            <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
+              <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
                 <FontAwesomeIcon
                   size="sm"
-                  className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
-                  onClick={() => addLot?.(dataItem)}
-                  icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
+                  className={classes.viewIcon}
+                  icon={isViewLotHovered ? solid('eye') : light('eye')}
+                  onClick={openQuickViewDialog}
                 />
               </IconButton>
             </StyleTooltip>
-          </span>
-          <span className={cx(classes.defaultIcon)}>
-            <StyleTooltip title={translate('common.scan')} placement="top" arrow>
-              <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
-                <FontAwesomeIcon
-                  size="sm"
-                  className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                  // onClick={() => openScanDialog?.(dataItem)}
-                  icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
-                />
-              </IconButton>
-            </StyleTooltip>
-          </span>
-        </>
-      ) : (
-        isLotAddition && (
-          <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-            <div
-              className={cx(classes.lotInfoWrapper, {
-                [classes.flexJustifyBetween]: !isEditMode,
-              })}
-            >
-              <span className={classes.lotInfoId}>
-                {
-                  isEditMode ? (
-                    <LotAutocomplete
-                      {...{
-                        field,
-                        lots,
-                        value,
-                        setValue,
-                        dataItem,
-                        parentPartPlannedId,
-                        isLoading: fetchAvailablePartsAsync.isLoading,
-                      }}
-                    />
-                  ) : (
-                    // dataItem[field ?? ''] && lotDocumentId ? (
-                    //   <Link to={documentVersionPath(dataItem[field ?? ''], lotDocumentId)} className={classes.link} target="_blank">
-                    //     {lotDocId}
-                    //   </Link>
-                    // ) : (
-                    dataItem[field ?? '']
-                  )
-                  // )
-                }
-              </span>
-              {!isEditMode && (
-                <span className={classes.iconGroup}>
-                  <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
-                    <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
-                      <FontAwesomeIcon
-                        size="sm"
-                        className={classes.viewIcon}
-                        icon={isViewLotHovered ? solid('eye') : light('eye')}
-                        onClick={openQuickViewDialog}
-                      />
-                    </IconButton>
-                  </StyleTooltip>
-
-                  <StyleTooltip title={translate('common.delete')} placement="top" arrow>
-                    <IconButton
-                      kind="simple"
-                      size="small"
-                      ref={removeLotRef}
-                      disabled={isDisabled}
-                      data-cy="remove-lot-button"
-                    >
-                      <FontAwesomeIcon
-                        size="sm"
-                        className={cx(classes.deleteIcon, {
-                          [classes.disabled]: isDisabled,
-                        })}
-                        icon={isRemoveLotHovered ? solid('trash-can') : regular('trash-can')}
-                        onClick={() => deleteLot?.(dataItem)}
-                      />
-                    </IconButton>
-                  </StyleTooltip>
-                </span>
-              )}
-            </div>
-          </span>
-        )
+          )}
+        </span>
       )}
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem[field ?? ''], parentRevId }} />
+      <DocumentRevisionDialog
+        dialog={quickViewDialog}
+        {...{ docRevId: lotId, parentRevId: parentPartPlannedId }}
+      />
     </TreeListCellWrapper>
   );
 };

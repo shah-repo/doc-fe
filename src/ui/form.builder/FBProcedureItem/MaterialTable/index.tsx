@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, isNil, omit, replace, uniq } from 'lodash';
+import { isEmpty, isNil, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -24,6 +24,7 @@ import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FB } from '../../helpers';
 import { FBProcedureItemConfig } from '../FBProcedureItem.types';
+import { prepareData } from './components/utils';
 import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, FIELDS_TO_OMIT, IS_LOT_ADDITION, SUB_ITEMS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -55,7 +56,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: cloneDeep(items as Material[]),
+    data: prepareData(items),
     expanded: [],
     dataState: {
       sort: [],
@@ -370,6 +371,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
+  console.log('state.data ', state.data);
 
   return (
     <Box className={classes.root} data-cy="material-grid">

@@ -67,10 +67,6 @@ export const styles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  iconGroup: {
-    display: 'flex',
-    gap: theme.spacing(1),
-  },
   lotInfoId: {
     marginRight: theme.spacing(1.25),
   },
