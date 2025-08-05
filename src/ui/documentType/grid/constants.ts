@@ -15,4 +15,5 @@ export const cellOverflowFields = [
   'precalc.supplierType',
   'precalc.primaryContactName',
   'name',
+  'document.docId',
 ];

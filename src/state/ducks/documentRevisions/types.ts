@@ -29,6 +29,7 @@ export enum ErrorCodes {
   PRECONDITION_FAILED = 412,
   INTERNAL_SERVER_ERROR = 500,
   GATEWAY_TIMEOUT = 504,
+  CONFLICT = 409,
 }
 
 export enum DocumentRevisionStatusDisplay {

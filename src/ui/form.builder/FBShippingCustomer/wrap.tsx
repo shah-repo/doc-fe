@@ -8,7 +8,7 @@ import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
-import { SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
+import { INPUT_CONTEXT_SHIPPING_METHOD_FIELD, SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
@@ -25,6 +25,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
         || workspaceState?.formInputSync.get(name)
         || workspaceState?.formInput?.shippingCustomer,
     );
+    const hasShippingMethodFieldExists = useObserver(() => workspaceState?.schema?.some((field) => !field.deleted && field.type === SHIPPING_METHOD_FIELD) ?? false);
 
     const [autocompleteKey, setAutocompleteKey] = useState<string | undefined>(customerId);
 
@@ -50,8 +51,10 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           if (!workspaceState?.loading) {
             workspaceState?.saveDocRev(formState?.getValues());
             previousCustomerIdRef.current = customerId;
+            if (hasShippingMethodFieldExists) {
             formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
             formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+            }
           } else {
             debounceTimerRef.current = setTimeout(setCustomerShippingMethod, 0);
           }
@@ -68,8 +71,13 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
           if (currentCustomerId === previousCustomerIdRef.current) return;
 
           const shippingMethod = data?.formInput?.shippingMethod;
+          const inputContextshippingMethod = data?.formInput?.[INPUT_CONTEXT_SHIPPING_METHOD_FIELD];
+
+          if (hasShippingMethodFieldExists) {
           formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod, !shippingMethod);
+          formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, inputContextshippingMethod);
           updateCustomerShippingMethod(currentCustomerId, shippingMethod);
+          }
         },
       );
 
@@ -110,8 +118,11 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     }, [customerId]);
 
     const updatedDefaultShippingMethodField = () => {
+      if (hasShippingMethodFieldExists) {
       formState?.setFieldValue(SHIPPING_METHOD_FIELD, null, true);
       formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      formState?.setFieldValue(INPUT_CONTEXT_SHIPPING_METHOD_FIELD, undefined);
+      }
     };
 
     const updateLatestRevShippingMethod = (selectedCustomerId: string|undefined) => {

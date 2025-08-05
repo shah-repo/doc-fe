@@ -4,8 +4,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { Dialog } from '../../components/dialogs';
 import Text from '../../components/Text';
+import { Dialog } from '../../components/dialogs';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
@@ -36,8 +36,6 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const title: Translation = data.isError ? 'common.alert' : 'common.warning';
-
   const getConflictingPhases = (items: ApprovalItem[]) => {
     const itemPhasesSet = new Set(items.map((item) => item.phase));
     const phases: string[] = Array.from(itemPhasesSet).map((phase) =>
@@ -48,19 +46,22 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
-  const { isError, isWarning, isSupplierUndefined, errorItems, warningItems } = data ?? {};
+  const { isWarning, isSupplierUndefined, errorItems, warningItems, isPartNotReleased } = data ?? {};
+
+  const isError = errorItems?.length > 0;
+  const title: Translation = isError ? 'common.alert' : 'common.warning';
 
   return (
     <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'supplierStatusDialog' }}>
       <DialogContent>
         <DialogContentText>
           <Grid container className={classes.contentContainer}>
-            {isError && (
+            { isError && (
               <Grid item className={classes.alertIcon}>
                 <WarningIcon />
               </Grid>
             )}
-            {isWarning && !isError && (
+            { !isError && isWarning && (
               <Grid item className={classes.warningIcon}>
                 <ErrorOutlineIcon />
               </Grid>
@@ -69,32 +70,51 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               <Typography data-cy="dialog-header" className={classes.alertTitle}>
                 <Text translation={title} />
               </Typography>
-              { isSupplierUndefined
+              { isError && (
+                <>
+                  { isSupplierUndefined ? (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.status.error')} />
+                      </Typography>
+                  ) : isPartNotReleased ? (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(errorItems)} </b>
+                        <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                      </Typography>
+                  ) : (
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(errorItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                  )}
+                </>
+              )}
+              { !isError && isWarning && (
+                <>
+                  { isSupplierUndefined
                   && <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text message={
-                      translate('purchaseOrder.supplierStatus.dialog.status')
-                    } />
-                  </Typography>
-              }
-              {errorItems.length > 0 && (
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text
-                    message={translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(errorItems),
-                    })}
-                  />
-                </Typography>
+                      translate('purchaseOrder.supplierStatus.dialog.status.warning')
+                    }
+                    />
+                  </Typography> }
+                  { isPartNotReleased
+                    ? <Typography data-cy="dialog-message" className={classes.contentText}>
+                      <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
+                      <b> {getConflictingPhases(warningItems)} </b>
+                      <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                    </Typography>
+                    : <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <b> {getConflictingPhases(warningItems)} </b>
+                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                      </Typography>
+                  }
+                </>
               )}
-              {warningItems.length > 0 && errorItems.length === 0 && (
-                <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text
-                    message={translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(warningItems),
-                    })}
-                  />
-                </Typography>
-              )}
-              { isWarning && !isError
+              { !isError && isWarning
                   && <Box className={cx(classes.topSpacing, classes.contentText)}>
                     <Text translation="supplier.status.warning.continue.message" />
                   </Box>

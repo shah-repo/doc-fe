@@ -14,6 +14,8 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
 import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
+import { getHasPermission } from '../../../../../common/utils/selectors';
+import { Permission } from '../../../../../state/ducks/auth/types';
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
@@ -91,6 +93,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const lotStatusDialog = useDialog();
   const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
   const settings = useSelector(companySelectors.getGeneralSettings);
+  const hasCloseARPermission = useSelector(getHasPermission(Permission.CLOSE_AR));
 
   const tasksAsync = useAsync({
     onSuccess: (response?: PendingMDInfoResponse) => {
@@ -259,7 +262,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </>
           }
         />
-        {isHoverItem && (
+        {isHoverItem && hasCloseARPermission && (
           <Box
             component="div"
             className={classes.actionIcons}

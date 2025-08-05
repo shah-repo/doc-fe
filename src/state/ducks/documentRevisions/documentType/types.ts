@@ -156,6 +156,10 @@ export enum TabTypeOptions {
   ALLOCATION = 'ALLOCATION',
 }
 
+export enum TabIds {
+  MATERIAL_DISPOSITION = 'MaterialDisposition',
+}
+
 export enum CATEGORY {
   WORKORDER_CATEGORY = 'Work Order',
 }

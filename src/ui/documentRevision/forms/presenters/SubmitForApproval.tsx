@@ -48,6 +48,7 @@ export interface ApprovalFailureResponse {
   isSupplierUndefined?: boolean
   errorItems: ApprovalItem[]
   warningItems: ApprovalItem[]
+  isPartNotReleased?: boolean
 }
 
 export const SubmitForApproval: React.FC<Props> = ({
