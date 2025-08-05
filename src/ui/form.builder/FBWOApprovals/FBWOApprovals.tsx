@@ -129,7 +129,6 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
                       collection={approvals}
                     >
                       {(approval, index: number) => {
-                        console.log('approval', approval);
                         const isUserNeedToApprove
                           = (documentStatus === DocumentRevisionStatus.InReview || documentStatus === DocumentRevisionStatus.Draft)
                           && approval.approver?.user.id === currentUser
