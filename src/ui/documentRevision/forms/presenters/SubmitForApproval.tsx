@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
@@ -15,6 +16,7 @@ import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
+import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -60,6 +62,7 @@ export const SubmitForApproval: React.FC<Props> = ({
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
+  const history = useHistory();
   const dialog = useDialog();
   const supplierStatusDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
@@ -74,8 +77,6 @@ export const SubmitForApproval: React.FC<Props> = ({
   );
 
   const isDisabledApproval = isTypeMpiOutput && hasPendingApprovals;
-
-  console.log('isDisabledApproval', isDisabledApproval, 'hasPendingApprovals', hasPendingApprovals, 'isTypeMpiOutput', isTypeMpiOutput, 'isNewLayout', isNewLayout);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
@@ -111,6 +112,11 @@ export const SubmitForApproval: React.FC<Props> = ({
   const closeWOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.load(docRevId));
+      const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
+        documentId: documentRevision.smartReferencesTo?.[0]?.toDocRev?.documentId ?? '',
+        documentRevisionId: documentRevision.smartReferencesTo?.[0]?.toDocRevId ?? '',
+      });
+      history.push(documentVersionUrl, { toTabId: 'details' });
     },
   });
 
