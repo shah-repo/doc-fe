@@ -1,6 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
@@ -136,6 +136,8 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     });
   }, [lots]);
 
+  const isLoading = fetchAvailablePartsAsync.isLoading;
+
   if (isAddLotVisible) {
     return (
       <TreeListCellWrapper {...props}>
@@ -163,6 +165,14 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
             </IconButton>
           </StyleTooltip>
         </span>
+      </TreeListCellWrapper>
+    );
+  }
+
+  if (isLoading && !isEditMode) {
+    return (
+      <TreeListCellWrapper {...props}>
+        <CircularProgress size={16} className={classes.progress} />
       </TreeListCellWrapper>
     );
   }

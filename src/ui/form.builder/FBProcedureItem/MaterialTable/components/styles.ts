@@ -15,6 +15,9 @@ export const styles = makeStyles((theme) => ({
     right: 0,
     top: '100%',
   },
+  progress: {
+    marginTop: theme.spacing(0.5),
+  },
   deleteIcon: {
     color: Colors.error,
   },
