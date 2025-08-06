@@ -78,7 +78,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                       </Typography>
                   ) : isPartNotReleased ? (
                       <Typography data-cy="dialog-message" className={classes.contentText}>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
                         <b> {getConflictingPhases(errorItems)} </b>
                         <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
                       </Typography>
@@ -102,7 +102,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                   </Typography> }
                   { isPartNotReleased
                     ? <Typography data-cy="dialog-message" className={classes.contentText}>
-                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                      <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
                       <b> {getConflictingPhases(warningItems)} </b>
                       <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
                     </Typography>

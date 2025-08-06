@@ -4,11 +4,12 @@ import { getSelectedState } from '@progress/kendo-react-data-tools';
 import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import { isNull } from 'lodash';
-import React from 'react';
+import React, { useContext } from 'react';
 import { SM } from '../../../../App';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { AiWidgetContext } from '../../../app/AiWidget';
 import { Attachment } from '../../../change.request/form/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -51,6 +52,7 @@ const AttachmentTable: React.FC<Props> = ({
   const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
   const { _formState } = SM.useStores();
   const isDisabled = [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Approved, DocumentRevisionStatus.Deprecated].includes(documentRevision?.status);
+  const aiWidgetContext = useContext(AiWidgetContext);
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (values?: DocumentRevision) => {
@@ -142,6 +144,10 @@ const AttachmentTable: React.FC<Props> = ({
   React.useEffect(() => {
     const data = attachmentsData.map((list) => ({ ...list, [SELECTED_FIELD]: Boolean(selectedAttachments?.[idGetter(list)]) }));
     setAttachmentsData(data);
+    const selectedIds = Object.entries(selectedAttachments ?? [])
+      .filter(([id, selected]) => selected)
+      .map(([id]) => id);
+    aiWidgetContext?.updateAttachments(selectedIds);
   }, [selectedAttachments]);
 
   React.useEffect(() => {
