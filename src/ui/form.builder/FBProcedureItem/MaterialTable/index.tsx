@@ -126,7 +126,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             } else {
               subItems.push(scanLot);
             }
-            state.data[parentIndex][SUB_ITEMS_FIELD] = subItems;
+            state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.map(item => omit(item, omitFields) as unknown as FBProcedureItemConfig);
           } else {
             state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
           }
@@ -293,6 +293,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       formik.setValues(newMaterialItem);
     }
   };
+
+  // edit part part disabled and icons won't be visible
+  // edit lot lot will be disabled and payload issue fix
+  // actual id any string also allow, attachment cell needs to add
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     if (dataItem[MODE_FIELD] || !isActive) {
