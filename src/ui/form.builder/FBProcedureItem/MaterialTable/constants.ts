@@ -5,6 +5,7 @@ export const ADD_FIELD = 'isNew';
 export const MODE_FIELD = '_mode';
 export const IS_LOT_ADDITION = 'isLotAddition';
 export const FIELDS_TO_OMIT = [MODE_FIELD, ADD_FIELD, IS_LOT_ADDITION, EXPAND_FIELD, 'parentPartPlannedId', 'parentId'];
+export const LOT_FIELDS_TO_OMIT = [...FIELDS_TO_OMIT, 'quantityOnHand', 'plannedId'];
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const MAX_DECIMALS = 4;
 export const CELL_EMPTY_VALUE = '-';

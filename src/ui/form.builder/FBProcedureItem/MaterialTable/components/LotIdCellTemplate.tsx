@@ -101,7 +101,8 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
-  const isAddLotVisible = !isEditMode && !lotId;
+  const isAddLotVisible
+    = dataItem?.isLotAddition || dataItem?.lotId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({

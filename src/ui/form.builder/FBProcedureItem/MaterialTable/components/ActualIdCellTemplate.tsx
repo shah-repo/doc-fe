@@ -13,7 +13,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 
 const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, materialSelectOptions, field = '' } = props;
-  const isEditMode = ((dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false) && dataItem?.isLotAddition;
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
 

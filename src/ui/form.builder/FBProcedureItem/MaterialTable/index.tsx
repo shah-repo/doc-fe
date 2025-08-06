@@ -25,7 +25,15 @@ import { withThemeNext } from '../../../layout/theme-next';
 import { FB } from '../../helpers';
 import { FBProcedureItemConfig } from '../FBProcedureItem.types';
 import { prepareData } from './components/utils';
-import { ADD_FIELD, DATA_ITEM_KEY, EXPAND_FIELD, FIELDS_TO_OMIT, IS_LOT_ADDITION, SUB_ITEMS_FIELD } from './constants';
+import {
+  ADD_FIELD,
+  DATA_ITEM_KEY,
+  EXPAND_FIELD,
+  FIELDS_TO_OMIT,
+  IS_LOT_ADDITION,
+  LOT_FIELDS_TO_OMIT,
+  SUB_ITEMS_FIELD,
+} from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -106,10 +114,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onSubmit: (values) => {
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       if (values[IS_LOT_ADDITION] || values.parentPartPlannedId) {
-        console.log('values', values);
-        const omitFields = [...FIELDS_TO_OMIT, 'quantityOnHand', 'plannedId'];
-        const scanLot = omit(values, omitFields) as FBProcedureItemConfig;
-        console.log('scanLot', scanLot);
+        const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
         if (parentIndex !== -1) {
@@ -120,13 +125,15 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
             if (existingSubIndex !== -1) {
               subItems[existingSubIndex] = {
-                ...omit(subItems[existingSubIndex], omitFields),
+                ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
                 ...scanLot,
               };
             } else {
               subItems.push(scanLot);
             }
-            state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.map(item => omit(item, omitFields) as unknown as FBProcedureItemConfig);
+            state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.map(
+              (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+            );
           } else {
             state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
           }
@@ -135,9 +142,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         mpiProcedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
         discardScanLot(values as EditableMaterial);
       } else {
-        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']) as FBProcedureItemConfig;
-        procedureState?.addItem(scanLot, type, allSteps);
-        mpiProcedureState?.addItem(scanLot, type, allSteps);
+        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']);
+        if (scanLot[SUB_ITEMS_FIELD]) {
+          scanLot[SUB_ITEMS_FIELD] = scanLot[SUB_ITEMS_FIELD]?.map(
+            (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+          );
+        }
+        procedureState?.addItem(scanLot as FBProcedureItemConfig, type, allSteps);
+        mpiProcedureState?.addItem(scanLot as FBProcedureItemConfig, type, allSteps);
 
         appendItemToStateData(scanLot);
       }
@@ -145,7 +157,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
-    console.log('discardScanLot');
     if (dataItem?.[ADD_FIELD]) {
       if (dataItem.isLotAddition) {
         const parentIndex = state.data?.findIndex((data) => {
@@ -375,7 +386,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
-  console.log('state.data ', state.data);
 
   return (
     <Box className={classes.root} data-cy="material-grid">

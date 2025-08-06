@@ -49,6 +49,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 {...getFieldProps(field)}
                 value={value}
                 blurOnSelect
+                disabled={!!dataItem[field]}
                 ListboxComponent={({ children, ...otherProps }) => {
                   return (
                     <>
