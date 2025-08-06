@@ -22,8 +22,8 @@ import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
+import { FBProcedureItemConfig } from '../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../helpers';
-import { FBProcedureItemConfig } from '../FBProcedureItem.types';
 import { prepareData } from './components/utils';
 import {
   ADD_FIELD,

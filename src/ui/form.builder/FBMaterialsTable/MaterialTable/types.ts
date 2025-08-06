@@ -4,7 +4,7 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import { FBInputProps } from '../../FBInput/FBInput.types';
-import { FBProcedureItemConfig, FBProcedureItemType } from '../FBProcedureItem.types';
+import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD } from './constants';
 
 type MaterialCallback = (dataItem: EditableMaterial) => void;

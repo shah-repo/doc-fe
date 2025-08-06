@@ -1,4 +1,4 @@
-import { FBProcedureItemConfig } from '../../FBProcedureItem.types';
+import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD } from '../constants';
 import { EditableMaterial, Material } from '../types';
 

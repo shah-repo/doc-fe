@@ -12,6 +12,7 @@ import {
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
+import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import FBProvider from '../FBProvider/FBProvider';
 import { FBLHRStepProcedureItemProps } from './FBLHRStepProcedureItem.types';
 import { withFBLHRStepProcedureItem } from './FBLHRStepProcedureItem.wrap';
@@ -108,6 +109,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                     </Box>
                   </>
                 )}
+                {(!isPreview || isPendingChange) && (item.type || item.paramsId) && <MaterialsTable isActive={false} type={type} items={value} getItem={getItem} />}
               </Box>
             </Box>
           )}
