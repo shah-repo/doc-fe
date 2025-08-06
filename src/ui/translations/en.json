@@ -1530,6 +1530,12 @@
   "form.builder.mpi.procedure.equipment.title.id": "{id}: {title} ",
   "form.builder.mpi.procedure.equipment.title": "{title}",
   "form.builder.lhrs.procedure.equipment.title": "{title} - rev {revision}",
+  "form.builder.procedure.material.table.planned.id.title": "Planned Id",
+  "form.builder.procedure.material.table.add.part": "Add Part",
+  "form.builder.procedure.material.table.lot.number.title": "Lot Number",
+  "form.builder.procedure.material.table.actual.id.title": "Actual Id",
+  "form.builder.procedure.material.table.quantity.title": "Quantity",
+  "form.builder.procedure.material.table.unit.title": "Unit",
   "form.builder.mpi.part.selection.materials": "{docId} | {lotPart}.{lotPartRevision} | {quantity} {unit}",
   "form.builder.mpi.part.selection.equipment": "{docId}",
   "form.builder.action.mode": "{mode} {title}",
@@ -2331,6 +2337,11 @@
   "lhr.summary.revision.removed.mpi.tooltip.message": "This revision was removed from the selected MPI",
   "lhr.summary.record.not.found.error.message": "{documentNumber} does not exists in D2M application",
   "lhr.summary.total.warning.rows.warning.message": "{rows} rows contain warnings",
+  "lhr.equipment.table.title": "Equipment",
+  "lhr.equipment.grid.heading.planned.id": "Planned ID",
+  "lhr.equipment.grid.heading.actual.id": "Actual ID",
+  "lhr.equipment.grid.heading.cal.due.date": "Cal Due Date",
+  "lhr.equipment.grid.heading.pm.due.date": "PM Due Date",
   "shipping.withdraw.alert": "Are you sure you want to withdraw this Shipping?",
   "controlConfig.editPart.button.text": "Restricted Edit",
   "print.label.dialog.field.quantity.units": "Quantity Units",
@@ -2667,5 +2678,6 @@
   "example.prompt.list.common.components": "List common components between <document_number>  and <another_document_number>",
   "example.prompt.part.impacted": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
   "example.prompt.document.completed": "Which documents has <Employee_name> completed training on",
-  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>"
+  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>",
+  "attachment.upload.error.cancelled": "Upload cancelled"
 }

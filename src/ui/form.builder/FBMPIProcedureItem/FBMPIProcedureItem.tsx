@@ -31,6 +31,7 @@ import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warni
 import { MomentFormats } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
+import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -115,7 +116,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           />
         </Box>
       )}
-      {type !== FBProcedureItemType.attachments && !loading && (
+      {type !== FBProcedureItemType.attachments && !loading && (<>
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
@@ -319,6 +320,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </Box>
           )}
         </FBMapWrapper>
+        {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={true} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
+      </>
       )}
     </FBProvider>
   );
