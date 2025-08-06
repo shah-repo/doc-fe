@@ -28,6 +28,7 @@ export interface MaterialTableProps {
   getItem?: (id: string) => string
   handleRemove?: (id: string) => void
   type: FBProcedureItemType
+  isEnableOnlyLotAddition?: boolean
 }
 
 export interface EditableMaterial extends Material {

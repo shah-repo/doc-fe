@@ -53,7 +53,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   getItem,
   handleRemove,
   isActive,
-  isShowOnly = false,
+  isEnableOnlyLotAddition,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -412,7 +412,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             cellRender={cellRender}
             columns={columns}
           />
-          {isActive && (
+          {isActive && !isEnableOnlyLotAddition && (
             <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
               {translate('form.builder.procedure.material.table.add.part')}
             </Button>

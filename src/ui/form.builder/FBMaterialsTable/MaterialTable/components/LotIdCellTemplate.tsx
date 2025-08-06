@@ -91,7 +91,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, addLot, isDisabled } = props;
   const { parentPartPlannedId, lotId } = dataItem;
-  console.log('LotIdCellTemplate dataItem', dataItem);
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
