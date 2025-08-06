@@ -105,7 +105,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     initialValues: {},
     onSubmit: (values) => {
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
-      if (values[IS_LOT_ADDITION]) {
+      if (values[IS_LOT_ADDITION] || values.parentPartPlannedId) {
         console.log('values', values);
         const omitFields = [...FIELDS_TO_OMIT, 'quantityOnHand', 'plannedId'];
         const scanLot = omit(values, omitFields) as FBProcedureItemConfig;
