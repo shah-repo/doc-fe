@@ -35,6 +35,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
   const handleAdd = () => {
     const formValue = formState?.getValues() as FBDocumentRevisionsValue;
     formValue.id = FB.uniqid;
+    delete formValue.attachments;
 
     map(formValue, (value, key) => {
       formState?.omitFieldValue(key);
