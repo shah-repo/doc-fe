@@ -557,12 +557,24 @@ const downloadAllAttachmentsPassword = (
 });
 
 const downloadSelectedAttachments = (
+  docRevId: string,
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
 ): ApiDownloadAction => downloadApiAction({
-  url: `${ATTACHMENT_ROOT_URL}/file_url`,
+  url: `${ATTACHMENT_ROOT_URL}/download_selected`,
   method: 'get',
-  params: { attachmentIds },
+  params: { docRevId, attachmentIds },
+  handlers,
+});
+
+const downloadSelectedAttachmentsPassword = (
+  docRevId: string,
+  attachmentIds: string[],
+  handlers: Handlers<AttachmentDownloadResponse>,
+): ApiDownloadAction => downloadApiAction({
+  url: `${ATTACHMENT_ROOT_URL}/download_selected_with_password`,
+  method: 'get',
+  params: { docRevId, attachmentIds },
   handlers,
 });
 
@@ -684,6 +696,7 @@ export default {
   downloadAllAttachments,
   downloadAllAttachmentsPassword,
   downloadSelectedAttachments,
+  downloadSelectedAttachmentsPassword,
   requestWatermarkedFile,
   checkWatermarkStatus,
   addWatermark,
