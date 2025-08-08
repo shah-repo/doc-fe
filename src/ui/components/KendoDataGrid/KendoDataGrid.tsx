@@ -1,4 +1,3 @@
-import { Tooltip } from '@material-ui/core';
 import { process, State } from '@progress/kendo-data-query';
 import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, GridHeaderCell, GridNoRecords, GridProps, GridRowClickEvent } from '@progress/kendo-react-grid';
 import invariant from 'invariant';
@@ -7,10 +6,8 @@ import React, { PropsWithChildren, useContext, useEffect, useLayoutEffect, useMe
 import { AutoSizer } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
-import useOverflow from '../../hooks/useOverflow';
 import Loader from '../common/kendo/Loader';
 import { Mode, MODE_FIELD, SOLO_OPERATORS } from './constants';
-import KendoDataGridStyles from './KendoDataGrid.styles';
 import { ColumnDefinition, CustomGridCellProps, CustomGridHeaderCellProps, DataGridProps, GenericColumnDefinition, WidthCalculator } from './KendoDataGrid.types';
 
 const DEFAULT_DATA_STATE: State = {
@@ -54,9 +51,6 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
 };
 
 const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...props }) => {
-  const [overflowRef, isOverflowing] = useOverflow<HTMLDivElement>();
-  const classes = KendoDataGridStyles();
-
   if (column.headerCell) {
     return <column.headerCell {...props} column={column} />;
   }
@@ -65,17 +59,7 @@ const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...prop
     return null;
   }
 
-  return (
-    <Tooltip
-      title={isOverflowing ? translate(column.title) : ''}
-      placement="top-start"
-      arrow
-    >
-      <div ref={overflowRef} className={classes.customHeaderCell}>
-        <GridHeaderCell {...props} />
-      </div>
-    </Tooltip>
-  );
+  return column.title ? <GridHeaderCell {...props} /> : null;
 };
 
 function isGenericColumns (columns: GenericColumnDefinition['children']): columns is GenericColumnDefinition[] {
