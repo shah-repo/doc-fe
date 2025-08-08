@@ -8,9 +8,6 @@ const useStyles = makeStyles({
   popperHolder: {
     height: '100%',
   },
-  popper: {
-    zIndex: 1400,
-  },
 });
 
 export const ActionsCell: React.FC<ActionsProps> = (props) => {
@@ -36,7 +33,6 @@ export const ActionsCell: React.FC<ActionsProps> = (props) => {
               enabled: false,
             },
           }}
-          className={classes.popper}
         >
           <Actions scrollBehavior="smooth" {...props} />
         </Popper>
