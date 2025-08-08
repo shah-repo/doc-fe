@@ -30,9 +30,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
 
   if (!isEditMode) {
     let displayValue = value;
-    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.pmDueDateText) {
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
       displayValue = dataItem.calDueDateText;
-    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.calDueDateText) {
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
       displayValue = dataItem.pmDueDateText;
     }
 
@@ -57,9 +57,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     const dateValue = dateInPST?.utc().format();
     setFieldValue(field, dateValue);
     setFieldValue(removeCustomPrefix(field), dateValue);
-    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.pmDueDateText) {
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
       setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
-    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.calDueDateText) {
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
       setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
     }
   };
@@ -67,9 +67,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
   const handleClear = () => {
     setFieldValue(field, null);
     setFieldValue(removeCustomPrefix(field), null);
-    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.pmDueDateText) {
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
       setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, null);
-    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.calDueDateText) {
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
       setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, null);
     }
   };
