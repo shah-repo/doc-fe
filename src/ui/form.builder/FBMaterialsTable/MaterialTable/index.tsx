@@ -11,12 +11,14 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, isNil, omit, replace, uniq } from 'lodash';
+import { cloneDeep, isEmpty, isNil, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useRef, useState } from 'react';
 import { SM } from '../../../../App';
 import { translate } from '../../../../common/intl';
 import DocumentRevisionDialog from '../../../components/common/dialogs/DocumentRevisionDialog';
+import ScanCaptureDialog from '../../../components/common/dialogs/scaner';
+import { ScanSelectedPartItem } from '../../../components/common/dialogs/scaner/components/lot.table/types';
 import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
@@ -155,6 +157,44 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       }
     },
   });
+
+  const addScanLotsToPart = (scanLots) => {
+    console.log('scanLots ::', scanLots);
+    scanDialog.close();
+    const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedPartInfo.current?.id);
+    if (parentIndex === -1) {
+      return;
+    }
+    const updatedLots = scanLots.map((lot) => {
+      return {
+        id: FB.uniqid,
+        lotId: lot.lotRevId,
+        quantity: lot.quantityAssigned,
+        unit: lot.unitOfMeasure,
+      };
+    });
+    const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+
+    const existingSubItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+
+    const mergedSubItems = [
+      ...(Array.isArray(existingSubItems) ? existingSubItems : []),
+      ...(Array.isArray(updatedLots) ? updatedLots : []),
+    ];
+
+    state.data[parentIndex][SUB_ITEMS_FIELD] = mergedSubItems.map(
+      (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+    );
+
+    procedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
+    mpiProcedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
+    console.log('Final Data', state.data[parentIndex]);
+    setState((prevState) => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+  };
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
     if (dataItem?.[ADD_FIELD]) {
@@ -373,6 +413,30 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     }
   };
 
+  const scanDialog = useDialog();
+  const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
+
+  const openScanDialog = (dataItem) => {
+    const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
+
+    scanSelectedPartInfo.current = {
+      docId: match[1] ?? '',
+      partDescription: match[3],
+      quantityNeeded: dataItem.quantity,
+      displayRevision: match[2],
+      variance: '',
+      partRevId: plannedIdInfo?.value,
+      id: dataItem.id,
+    };
+    scanDialog.open();
+    console.log('scanSelectedPartInfo', scanSelectedPartInfo); // plannedId
+  };
+
+  const onClose = () => {
+    scanDialog.close();
+  };
+
   const schema = buildSchema({
     materialSelectOptions,
     actionsClass: classes.actionsCell,
@@ -383,8 +447,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     isDisabled: !isActive,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
+    onScanClick: openScanDialog,
   });
-
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   return (
@@ -425,6 +489,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           />
         </Grid>
       </FormikProvider>
+      {scanDialog.isOpen && (
+        <ScanCaptureDialog
+          handler={scanDialog}
+          onClose={onClose}
+          addScanLotsToPart={addScanLotsToPart}
+          selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
+        />
+      )}
     </Box>
   );
 };

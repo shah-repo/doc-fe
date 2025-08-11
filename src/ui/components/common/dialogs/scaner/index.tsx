@@ -20,12 +20,13 @@ interface Props {
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
   reloadGrid?: () => void
+  addScanLotsToPart?: (item: ScanLot[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
 
@@ -95,6 +96,12 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         serialNumber: lot.serialNumber,
       };
     });
+
+    if (addScanLotsToPart) {
+      addScanLotsToPart?.(scanLots);
+      return;
+    }
+
     partAsync.start(createLot, lotPayload, partAsync);
   };
 

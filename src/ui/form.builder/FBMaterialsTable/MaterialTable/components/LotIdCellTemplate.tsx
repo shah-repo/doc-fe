@@ -89,7 +89,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, addLot, isDisabled } = props;
+  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick } = props;
   const { parentPartPlannedId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
@@ -160,7 +160,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                // onClick={() => openScanDialog?.(dataItem)}
+                onClick={() => onScanClick?.(dataItem)}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>

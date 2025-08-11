@@ -72,11 +72,12 @@ export type UseOptionsHook = () => {
 };
 
 export interface ScanSelectedPartItem {
+  id?: string
   docId: string
   partDescription?: string
   quantityNeeded?: number
   displayRevision?: string
-  variance: string
+  variance?: string
   partRevId?: string
   woId?: string
 }

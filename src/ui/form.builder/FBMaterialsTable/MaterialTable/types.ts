@@ -59,6 +59,7 @@ export interface SchemaOptions {
   onDelete?: MaterialCallback
   onEdit?: MaterialCallback
   addLot?: MaterialCallback
+  onScanClick?: MaterialCallback
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
@@ -117,6 +118,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   isDisabled?: boolean
   materialSelectOptions?: OptionType[]
   onClick?: (e: MaterialEditEvent) => void
+  onScanClick?: MaterialCallback
 }
 
 export type MaterialOption =
