@@ -159,7 +159,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   const addScanLotsToPart = (scanLots) => {
-    console.log('scanLots ::', scanLots);
     scanDialog.close();
     const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedPartInfo.current?.id);
     if (parentIndex === -1) {
@@ -188,7 +187,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     procedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
     mpiProcedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
-    console.log('Final Data', state.data[parentIndex]);
     setState((prevState) => ({
       ...prevState,
       inEdit: [],
