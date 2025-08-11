@@ -2663,9 +2663,9 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
-  "example.prompt.pm.needs": "what PM needs to be performed for <EQ_ID> and at what interval",
-  "example.prompt.provide.list": "Based on the requirements, generate a test a test plan to meet a particular standard requirements, such 60101-1 as 10993",
-  "example.prompt.part.impacted": "List differences between this attachment and attachment from previous revision",
+  "example.prompt.pm.needs": "What PM needs to be performed for <EQ_ID> and at what interval?",
+  "example.prompt.provide.list": "Based on the requirements, generate a test plan to meet a particular standard such as IEC 60601-1 or ISO 10993",
+  "example.prompt.part.impacted": "List differences between this attachment and the attachment from the previous revision",
   "example.prompt.document.completed": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
-  "example.prompt.description": "What is the Description of Nonconformance and final disposition of <NCMR_id>?"
+  "example.prompt.description": "What is the description of the nonconformance and the final disposition of <NCMR_ID>?"
 }
