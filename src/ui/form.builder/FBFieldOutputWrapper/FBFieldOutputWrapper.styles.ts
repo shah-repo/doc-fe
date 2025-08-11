@@ -13,11 +13,8 @@ export default makeStyles((theme: Theme) =>
     }),
     inlineStyle: {
       display: 'inline-block',
-      width: 'calc((100% - 96px)/3)',
-      marginRight: theme.spacing(6),
-      '&:nth-child(3n)': {
-        marginRight: 0,
-      },
+      width: 'calc(33.333% - 12px)',
+      marginRight: '12px',
     },
   }),
 );
