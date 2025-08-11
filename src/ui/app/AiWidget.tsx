@@ -1,8 +1,7 @@
 import { AppName, Widget, WidgetRef } from 'ai-widget';
-import React, { createContext, useCallback, useRef } from 'react';
+import React, { createContext, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
-import { translate } from '../../common/intl';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../common/utils/selectors';
 import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
@@ -37,7 +36,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
-  const dummyPrompts = promptKeys.map((key) => translate(key));
+  const location = useLocation();
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
@@ -71,6 +70,10 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
     widgetRef.current?.triggerUpdateAttachments(attachmentIds);
   }, []);
 
+  useEffect(() => {
+    widgetRef.current?.triggerUpdateAttachments([]);
+  }, [location.pathname]);
+
   if (!isWidgetActive) {
     return <>{children}</>;
   }
@@ -86,17 +89,8 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
         attachmentIds={attachmentIds}
         token={accessToken}
         apiPath={Config.ApiAIEndpoint}
-        dummyPrompts={dummyPrompts}
       />
       {children}
     </AiWidgetContext.Provider>
   );
 };
-
-const promptKeys = [
-  'example.prompt.pm.needs',
-  'example.prompt.provide.list',
-  'example.prompt.part.impacted',
-  'example.prompt.document.completed',
-  'example.prompt.description',
-];
