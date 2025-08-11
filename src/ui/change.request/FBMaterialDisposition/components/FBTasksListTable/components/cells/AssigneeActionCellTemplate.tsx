@@ -31,7 +31,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
 
   return (
     <>
-      {assignees?.map(({ employeeId, status, updatedAt }) => {
+      {assignees?.map(({ employeeId, status, completedAt }) => {
         return (
           <div className={classes.employeeResponseFields}>
             {status === EmployeeStatus.Done ? (
@@ -44,7 +44,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                 </span>
                 <span className={classes.assigneeActionStatusDate}>
                   {getFormattedDateString(
-                    new Date(updatedAt),
+                    new Date(completedAt),
                     MomentFormats.DateTime,
                   )}
                 </span>
