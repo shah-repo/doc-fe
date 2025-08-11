@@ -2663,9 +2663,9 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
-  "example.prompt.provide.list": "Provide a list of gaps/differences for this attachment vis a vis standards file<file name> attached to <document_number>",
-  "example.prompt.list.common.components": "List common components between <document_number>  and <another_document_number>",
-  "example.prompt.part.impacted": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
-  "example.prompt.document.completed": "Which documents has <Employee_name> completed training on",
-  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>"
+  "example.prompt.pm.needs": "what PM needs to be performed for <EQ_ID> and at what interval",
+  "example.prompt.provide.list": "Based on the requirements, generate a test a test plan to meet a particular standard requirements, such 60101-1 as 10993",
+  "example.prompt.part.impacted": "List differences between this attachment and attachment from previous revision",
+  "example.prompt.document.completed": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
+  "example.prompt.description": "What is the Description of Nonconformance and final disposition of <NCMR_id>?"
 }

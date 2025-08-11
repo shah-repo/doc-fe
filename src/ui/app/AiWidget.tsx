@@ -94,9 +94,9 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
 };
 
 const promptKeys = [
+  'example.prompt.pm.needs',
   'example.prompt.provide.list',
-  'example.prompt.list.common.components',
   'example.prompt.part.impacted',
   'example.prompt.document.completed',
-  'example.prompt.find.document',
+  'example.prompt.description',
 ];
