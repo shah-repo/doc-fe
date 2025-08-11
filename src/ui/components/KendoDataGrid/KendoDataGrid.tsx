@@ -54,6 +54,7 @@ const CustomHeaderCell: React.FC<CustomGridHeaderCellProps> = ({ column, ...prop
   if (column.headerCell) {
     return <column.headerCell {...props} column={column} />;
   }
+
   return column.title ? <GridHeaderCell {...props} /> : null;
 };
 

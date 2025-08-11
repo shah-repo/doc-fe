@@ -294,6 +294,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         } else return;
       }
 
+      if (fbType === 'workOrderLhrTable') {
+        fbLabel = translate('form.builder.audit.workOrderLhrTable');
+      }
+
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');

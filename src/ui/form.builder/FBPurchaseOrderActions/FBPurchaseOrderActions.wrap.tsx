@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import { cloneDeep, each, findIndex, get, isNil, size } from 'lodash';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderActionsProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from '..';
 import { SM } from '../../../App';
@@ -11,7 +11,9 @@ import { GroupTag } from '../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
+import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
 import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -38,10 +40,26 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     const { _documentRevisionFormState } = SM.useStores();
     const history = useHistory();
     const createDocAction = useActionCreator(documentRevisionsActions.create);
+    const validateReleasedPOLineItemAction = useActionCreator(documentRevisionsActions.validateReleasedPOLineItem);
 
     const formik = useFormikContext();
 
     dialog = useDialog();
+    const poLineAlertDialog = useDialog();
+    const [poLineItemValidationErrorResponse, setPoLineItemValidationErrorResponse] = useState<ApprovalFailureResponse>();
+
+    const validatePartAsync = useAsync<ApprovalFailureResponse | undefined>({
+      onSuccess: (response) => {
+        if (response) {
+          setPoLineItemValidationErrorResponse(response);
+          poLineAlertDialog?.open();
+        } else {
+          onAddLineItem();
+        }
+      },
+      onError: toastError,
+    });
+
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     const isPOEditState = isUserAdminEnforce && isDocumentRevisionReleased(workspaceState?.documentStatus)
                           && SM.isNewVersion;
@@ -53,6 +71,18 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
     }, [poApprovalsState, workspaceState]);
 
     onAddClick = () => {
+      const purchaseOrderItem = formState?.getValues() as FBPurchaseOrderItem;
+      const { partNumber } = purchaseOrderItem || {};
+
+      if (partNumber) {
+        validatePartAsync.start(validateReleasedPOLineItemAction, partNumber, validatePartAsync);
+        return;
+      }
+
+      onAddLineItem();
+    };
+
+    const onAddLineItem = () => {
       const values = formState?.getValues() as FBPurchaseOrderItem;
       if (!purchaseOrderState) {
         return;
@@ -74,7 +104,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
         const topApprovals = poApprovalsState?.approvalLevels?.filter((o1) =>
           (o1.limit + o1.threshold) >= totalAmount);
         if (isEdit && topApprovals?.length
-           && (UpdatedAmount * allItems.exchangeRate) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
+          && (UpdatedAmount * allItems.exchangeRate) > (topApprovals[0]?.limit + topApprovals[0]?.threshold)
         ) {
           return dialog?.open();
         }
@@ -113,12 +143,11 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
           FBDataStore.setRefreshData(undefined);
           await clearPOSavedInfo();
           documentRevisionsActions.loadDocument(createdDocumentRevision.document.id);
-          history.push(
-            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
-          );
+          history.push(documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
         }
       },
     });
+
     const getLatestDocRevData = () => {
       const newLineItemvalues = formState?.getValues() as FBPurchaseOrderItem;
       const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
@@ -201,6 +230,9 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       onCancelClick,
       onAlertNotificationCancel,
       onAlertNotificationConfirm,
+      poLineAlertDialog,
+      poLineItemValidationErrorResponse,
+      confirmPOLineAlert: onAddLineItem,
       purchaseOrderState,
       isEdit,
       dialog,

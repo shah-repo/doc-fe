@@ -3590,9 +3590,9 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.13":
-  version "0.1.13"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#f5556a54d4371c8754647359b615241772e707ab"
+"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.14":
+  version "0.1.14"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#09b5eae7704e6a8620f16006efd211b3b7d5dae2"
   dependencies:
     "@chatscope/chat-ui-kit-react" "^2.0.3"
     "@chatscope/chat-ui-kit-styles" "^1.4.0"
