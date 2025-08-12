@@ -320,7 +320,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </Box>
           )}
         </FBMapWrapper>
-        {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={true} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
+        {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={!isPreview} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
       </>
       )}
     </FBProvider>
