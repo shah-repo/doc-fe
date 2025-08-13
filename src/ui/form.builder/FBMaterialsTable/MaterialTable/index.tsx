@@ -55,6 +55,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   getItem,
   handleRemove,
   isActive,
+  isDesign,
+  isDisabled,
   isEnableOnlyLotAddition,
 }) => {
   const { _tabsState } = SM.useStores();
@@ -111,6 +113,17 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     formik.resetForm();
   };
 
+  const saveProcedureItem = (procedureItem: FBProcedureItemConfig) => {
+    const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+    procedureState?.addItem(procedureItem, type, allSteps);
+    mpiProcedureState?.addItem(procedureItem, type, allSteps);
+    const updatedProcedureItem = {
+      ...procedureItem,
+      plannedId: procedureItem.title,
+    };
+    appendItemToStateData(updatedProcedureItem);
+  };
+
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
@@ -144,16 +157,18 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         mpiProcedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
         discardScanLot(values as EditableMaterial);
       } else {
+        if (isDesign) {
+          const procedureItem = { ...omit(values, [...LOT_FIELDS_TO_OMIT, 'actualId']), title: values?.plannedId };
+          saveProcedureItem(procedureItem as FBProcedureItemConfig);
+          return;
+        }
         const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']);
         if (scanLot[SUB_ITEMS_FIELD]) {
           scanLot[SUB_ITEMS_FIELD] = scanLot[SUB_ITEMS_FIELD]?.map(
             (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
           );
         }
-        procedureState?.addItem(scanLot as FBProcedureItemConfig, type, allSteps);
-        mpiProcedureState?.addItem(scanLot as FBProcedureItemConfig, type, allSteps);
-
-        appendItemToStateData(scanLot);
+        saveProcedureItem(scanLot as FBProcedureItemConfig);
       }
     },
   });
@@ -348,7 +363,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   // actual id any string also allow, attachment cell needs to add
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    if (dataItem[MODE_FIELD] || !isActive) {
+    if (dataItem[MODE_FIELD] || !isActive || isDisabled) {
       return;
     }
 
@@ -442,7 +457,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: !isActive,
+    isDisabled: isDisabled || isDesign || !isActive,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
@@ -474,7 +489,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             cellRender={cellRender}
             columns={columns}
           />
-          {isActive && !isEnableOnlyLotAddition && (
+          {isActive && (isDesign || !isEnableOnlyLotAddition) && (
             <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
               {translate('form.builder.procedure.material.table.add.part')}
             </Button>

@@ -56,6 +56,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   defaultValue,
   redlineActive,
   isReleased,
+  isDesign,
 }) => {
   const [isHover, setIsHover] = useState(false);
   return (
@@ -82,7 +83,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           }}
           locale={FBProcedureItemLocale[type]}
         />
-        {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
+        {!isPreview && false && !FBProcedureItemOmitAction.includes(type) && (
           <Box pt={1.6} pr={2}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
@@ -320,7 +321,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </Box>
           )}
         </FBMapWrapper>
-        {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={!isPreview} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
+        {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={!isPreview} type={type} isDisabled={disabled} isDesign={isDesign} items={value} getItem={getItem} handleRemove={handleRemove} />}
       </>
       )}
     </FBProvider>
