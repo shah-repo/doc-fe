@@ -21,6 +21,7 @@ export const prepareData = (items?: FBProcedureItemConfig[]): Material[] => {
 
   return items.map(item => ({
     ...item,
+    plannedId: item.title,
     assignedLots: item.assignedLots?.map(lot => ({
       ...lot,
       parentPartPlannedId: item.plannedId,

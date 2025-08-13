@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from '..';
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -36,6 +36,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     redlineActive,
     isDocumentMPI,
     isReleased,
+    isDesign,
     ...props
   }: T) => {
     // MARK: @config
@@ -61,6 +62,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     dialogState = FB.useRef(FBDialogState);
     isPreview = isPreview && workspaceState?.mode !== 'formPreview';
     isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
+    isDesign = workspaceState?.mode === FBWorkspaceModeOptions.DESIGN;
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319
     isSelectVisible = (!isDocumentForm
@@ -252,6 +254,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       isDocumentMPI,
       redlineActive,
       isReleased,
+      isDesign,
     });
   };
 
