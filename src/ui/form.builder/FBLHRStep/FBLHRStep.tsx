@@ -133,52 +133,78 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           className={classes.panelSummary}
           expandIcon={expand ? <ExpandMoreIcon /> : <CollapseMoreIcon />}
         >
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <Box mr={2} ml={1}>
-              <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
-                <FBText locale={stepLabel} />
-              </Typography>
-            </Box>
-            <Box display="flex" alignItems="flex-start" fontSize={12}>
-              <Box mr={1} display="flex" alignItems="center">
-                {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
-                  <CheckCircle
-                    style={{
-                      color: getStatusColor(),
-                      fontSize: 17,
-                    }}
-                    className="fontSizeSmall"
-                  />
-                )}
-                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
-                {!stepLHRs && renderRemoveCircle()}
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+            <Box display="flex" alignItems="center" flexGrow={1}>
+              <Box mr={2} ml={1}>
+                <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
+                  <FBText locale={stepLabel} />
+                </Typography>
               </Box>
-              <Box
-                fontWeight={700}
-                fontSize={12}
-                color={Colors.almost_black}
-                component="span"
-                mr={0.75}
-              >
-                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}} />)}
-              </Box>
-              {stepLHRs
+              <Box display="flex" alignItems="flex-start" fontSize={12}>
+                <Box mr={1} display="flex" alignItems="center">
+                  {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
+                    <CheckCircle
+                      style={{
+                        color: getStatusColor(),
+                        fontSize: 17,
+                      }}
+                      className="fontSizeSmall"
+                    />
+                  )}
+                  {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
+                  {!stepLHRs && renderRemoveCircle()}
+                </Box>
+                <Box
+                  fontWeight={700}
+                  fontSize={12}
+                  color={Colors.almost_black}
+                  component="span"
+                  mr={0.75}
+                >
+                  {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}} />)}
+                </Box>
+                {stepLHRs
                 && (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status))
                 && (<Box component="span" data-cy={`lhr-step-timestamp-${stepIndex}`}>
                   <Box component="span" marginRight={0.75}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
-                      stepLHRs?.releasedAt,
-                      MomentFormats.DateTime,
+                    stepLHRs?.releasedAt,
+                    MomentFormats.DateTime,
                     )
                     : getFormattedDateString(
-                      stepLHRs?.createdAt,
-                      MomentFormats.DateTime,
+                    stepLHRs?.createdAt,
+                    MomentFormats.DateTime,
                     )}
                 </Box>)}
+              </Box>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <FBButton
+                disabled={isDisabled}
+                label={
+                  stepLHRs ? 'form.builder.view.step' : 'form.builder.start.step'
+                }
+                onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
+                {...{ loading }}
+                className={classes.button}
+                style={
+                  isDisabled ? {
+                    background: Colors.whitest_grey,
+                  }
+                    : stepLHRs
+                      ? {
+                        background: Colors.light_blue,
+                        color: Colors.navy,
+                      }
+                      : {
+                        background: Colors.navy,
+                        color: Colors.white,
+                      }
+                }
+              />
             </Box>
           </Box>
-          <Box flexGrow={1} />
           {stepLHRs?.redline && (
             <Box pr={2}>
               <BorderColorIcon className={classes.borderColorIcon} />
@@ -222,29 +248,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               />
             </Box>
-            <FBButton
-              disabled={isDisabled}
-              label={
-                stepLHRs ? 'form.builder.view.step' : 'form.builder.start.step'
-              }
-              onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
-              {...{ loading }}
-              className={classes.button}
-              style={
-                isDisabled ? {
-                  background: Colors.whitest_grey,
-                }
-                  : stepLHRs
-                    ? {
-                      background: Colors.light_blue,
-                      color: Colors.navy,
-                    }
-                    : {
-                      background: Colors.navy,
-                      color: Colors.white,
-                    }
-              }
-            />
           </Box>
 
           {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
