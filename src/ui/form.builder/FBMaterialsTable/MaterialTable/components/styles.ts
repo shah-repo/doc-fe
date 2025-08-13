@@ -18,6 +18,11 @@ export const styles = makeStyles((theme) => ({
   progress: {
     marginTop: theme.spacing(0.5),
   },
+  optionWrap: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   deleteIcon: {
     color: Colors.error,
   },

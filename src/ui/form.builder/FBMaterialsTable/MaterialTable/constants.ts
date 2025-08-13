@@ -9,3 +9,4 @@ export const LOT_FIELDS_TO_OMIT = [...FIELDS_TO_OMIT, 'quantityOnHand', 'planned
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
 export const MAX_DECIMALS = 4;
 export const CELL_EMPTY_VALUE = '-';
+export const MIN_SEARCH_TERM_LENGTH = 3;
