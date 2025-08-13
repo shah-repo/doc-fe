@@ -11,6 +11,7 @@ class FBLHRStepState {
   // MARK: @api
   public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
   public getDocumentApi = new FBRequest<Document, null>(FBEndpoint.Document);
+  public updateLHRStepApi = new FBRequest<DocumentRevision, any>(FBEndpoint.DocumentRevisionPatch);
   public materialsApi = new FBAutocompleteAsyncState({ optionId: this.materialsId });
   public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
   // MARK @config
@@ -76,12 +77,42 @@ class FBLHRStepState {
 
   public setLHRs = (lhrs) => set(this, 'stepLHRs', lhrs);
 
+  public updateLHRStepDates = async (startDate?: string, endDate?: string): Promise<void> => {
+    if (!this.stepLHRs) { return; }
+    const updatedFormInput = {
+      ...this.stepLHRs.formInput,
+      ...(startDate !== undefined && { 'lhrs-start-date': startDate }),
+      ...(endDate !== undefined && { 'lhrs-end-date': endDate }),
+    };
+
+    // Update local state
+    this.setLHRs({
+      ...this.stepLHRs,
+      formInput: updatedFormInput,
+    });
+
+    // Save to backend
+    try {
+      await this.updateLHRStepApi.set({
+        url: FBEndpoint.DocumentRevisionPatch,
+        urlValues: { id: this.stepLHRs.id },
+        method: 'patch',
+        body: {
+          formInput: updatedFormInput,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to update LHR step dates:', error);
+    }
+  };
+
   public setMaterials = (materials) => set(this, 'materials', materials);
   public setEquipment = (equipment) => set(this, 'equipment', equipment);
   public setEditedParameters = (editedParameters) => set(this, 'editedParameters', editedParameters);
 
-  public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number) => {
+  public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number): void => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.startMpiApi.set({
       url: FBEndpoint.StartMpi,
       method: 'post',

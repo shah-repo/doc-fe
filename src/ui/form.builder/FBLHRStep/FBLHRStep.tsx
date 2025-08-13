@@ -7,7 +7,7 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from '..';
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBLHRStepProps, FBProvider, FBText } from '..';
 import { ReactComponent as CollapseMoreIcon } from '../../../assets/images/CollapseMoreIcon.svg';
 import { ReactComponent as ExpandMoreIcon } from '../../../assets/images/ExpandMoreIcon.svg';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
@@ -48,6 +48,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   gutter,
   autosave,
   lhrBuildTypeExist,
+  startDateFieldName,
+  endDateFieldName,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -292,6 +294,21 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 </Grid>
               </Grid>
             </Box>)}
+          {/* Start and End Date Pickers */}
+          <Box display="flex" mb={2}>
+            <Box mr={2} width="50%">
+              <FBDatePicker
+                name={startDateFieldName || 'lhrs-start-date'}
+                label="Start Date"
+              />
+            </Box>
+            <Box width="50%">
+              <FBDatePicker
+                name={endDateFieldName || 'lhrs-end-date'}
+                label="End Date"
+              />
+            </Box>
+          </Box>
           <Box>
             {!isDocumentLHRT && (
               <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
