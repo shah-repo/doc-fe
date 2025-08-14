@@ -1656,7 +1656,7 @@
   "form.builder.supplier.certifications.grid.heading.uploaded.by": "Uploaded By",
   "form.builder.supplier.certifications.grid.heading.expiry.date": "Expiry Date",
   "form.builder.supplier.references.add": "Add Reference",
-  "form.builder.supplier.references.grid.heading.reference.rev.id": "Id",
+  "form.builder.supplier.references.grid.heading.reference.rev.id": "ID",
   "form.builder.supplier.references.grid.heading.revision": "Revision",
   "form.builder.supplier.references.grid.heading.comments": "Comments",
   "form.builder.supplier.references.grid.heading.title": "Title",
@@ -2007,8 +2007,7 @@
   "share.item.only": "Item only",
   "share.attachments": "Attachments",
   "share.include.effective.date": "Include effective date",
-  "share.not.selected.watermark.attachment": "No, since watermark attachments have not been selected.",
-  "share.selected.watermark.attachment.names": "Watermark Attachments",
+  "share.selected.watermark.attachment.names": "Watermark Attachments Names",
   "share.download.message": "Your download will begin shortly ...",
   "share.download.popup.title": "Your download has started",
   "share.download.popup.desc": "Check progress in your browser's download icon. You can continue using Enlil while your files\n\nare being downloaded",
@@ -2689,6 +2688,5 @@
   "example.prompt.list.common.components": "List common components between <document_number>  and <another_document_number>",
   "example.prompt.part.impacted": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
   "example.prompt.document.completed": "Which documents has <Employee_name> completed training on",
-  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>",
-  "attachment.upload.error.cancelled": "Upload cancelled"
+  "example.prompt.find.document": "Find <documents e.g. Pos, Suppliers > which were approved between <date range>"
 }

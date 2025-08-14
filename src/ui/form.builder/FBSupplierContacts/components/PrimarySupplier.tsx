@@ -1,12 +1,12 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
+import { Box, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { translate } from '../../../../common/intl';
 
 const PrimarySupplier = () => {
   return (
-    <div>
+    <Box display="flex" justifyContent="center">
       <Tooltip
         title={translate('form.builder.part.vendors.primary')}
         placement="top"
@@ -14,7 +14,7 @@ const PrimarySupplier = () => {
       >
         <FontAwesomeIcon icon={solid('star')} />
       </Tooltip>
-    </div>
+    </Box>
   );
 };
 
