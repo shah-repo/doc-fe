@@ -4,7 +4,7 @@ import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { MomentFormats, convertDateTimeToPST, getFormattedDateString } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -177,23 +177,24 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // Watch for date field changes and update LHR step data
     React.useEffect(() => reaction(
       () => [
         formState?.inputState.get(startDateFieldName)?.value,
         formState?.inputState.get(endDateFieldName)?.value,
       ],
       ([startDate, endDate]) => {
-        if (!stepLHRs || !lhrStepState) { return; } // Only update if we have an existing LHR step
+        if (!stepLHRs || !lhrStepState) { return; }
 
         // Check if there are actual changes before updating
         const currentStartDate = stepLHRs.formInput?.['lhrs-start-date'] as string | undefined;
         const currentEndDate = stepLHRs.formInput?.['lhrs-end-date'] as string | undefined;
 
         if (startDate !== currentStartDate || endDate !== currentEndDate) {
-          // Update both local state and save to backend
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          lhrStepState.updateLHRStepDates(startDate, endDate);
+          // Convert dates to ISO format before sending to backend
+          const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
+          const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
+
+          lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate).catch(console.error);
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
