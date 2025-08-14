@@ -9,7 +9,6 @@ import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
-import { Button } from '../../../forms/fields-next';
 import { toastError } from '../../../notifications';
 import ScanLotTable from './components/lot.table';
 import { ScanLot, ScanSelectedPartItem, ValidateLot } from './components/lot.table/types';
@@ -50,7 +49,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     ],
     [selectedPart],
   );
-  console.log('selectedPart', selectedPart);
 
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
   const validateScanLotAsync = useAsync({
@@ -102,27 +100,17 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   const handleScan = (data: string) => {
     setScannedValue(data);
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
+    validateScanLotAsync.start(
+      validateScanLot,
+      selectedPart.partRevId,
+      extractRevision(scannedValue),
+      validateScanLotAsync,
+    );
   };
 
   const handleError = (error: Error) => {
     setScannedValue('');
     toastError(error);
-  };
-
-  const validateScannedLot = () => {
-    const sampleLOT = [
-      'http://localhost:3000/document_revision/adb675a2-97ac-4ed0-9ae6-e7f20a7c7e47/version/674ba013-5454-4132-9e83-73df8f53c31d',
-      'http://localhost:3000/document_revision/98e8abb0-1b99-4b4b-9f38-ec3e2ae89ebb/version/5b22dbc8-91ac-491c-9fa2-3171615c75de',
-    ];
-    let lotRevId = '';
-    if (scannedValue) {
-      lotRevId = extractRevision(scannedValue) ?? '';
-    } else {
-      const lotIndex = scanLots.length ? 1 : 0;
-      lotRevId = extractRevision(sampleLOT[lotIndex]) ?? '';
-    }
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync); // partRevId -> 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81'
   };
 
   return (
@@ -162,9 +150,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             </ListItem>
           ))}
         </List>
-        <Button onClick={validateScannedLot} size="small">
-          scan item{' '}
-        </Button>
 
         <ScanLotTable
           scanLots={scanLots}
