@@ -118,7 +118,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         </Box>
       )}
       {type !== FBProcedureItemType.attachments && !loading && (<>
-        <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {type !== FBProcedureItemType.materials && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
               borderLeft={0}
@@ -320,7 +320,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               </Box>
             </Box>
           )}
-        </FBMapWrapper>
+        </FBMapWrapper>}
         {type === FBProcedureItemType.materials && <MaterialsTable isEnableOnlyLotAddition={true} isActive={!isPreview} type={type} isDisabled={disabled} isDesign={isDesign} items={value} getItem={getItem} handleRemove={handleRemove} />}
       </>
       )}

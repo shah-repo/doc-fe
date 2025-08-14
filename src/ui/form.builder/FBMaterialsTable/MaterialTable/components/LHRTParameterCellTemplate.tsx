@@ -10,7 +10,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 const LHRTParameterCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, hasChildren } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue, values } = useFormikContext<EditableMaterial>();
   const classes = styles({ hasChildren, isEditMode });
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
@@ -21,7 +21,7 @@ const LHRTParameterCellTemplate: React.ComponentType<CustomTreeListCellProps> = 
     <TreeListCellWrapper {...props}>
       {isEditMode && (
         <FormikField name={field} className={classes.activeCheckbox}>
-          <Checkbox checked={dataItem[field]} {...getFieldProps(field)} onChange={handleExpiredLotChange} />
+          <Checkbox checked={values[field]} {...getFieldProps(field)} onChange={handleExpiredLotChange} />
         </FormikField>
       )}
       {!isEditMode && <Checkbox checked={dataItem[field]} disabled={true} />}
