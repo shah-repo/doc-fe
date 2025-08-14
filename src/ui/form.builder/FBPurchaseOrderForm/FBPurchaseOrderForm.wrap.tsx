@@ -34,9 +34,11 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       formState?.setFieldValue('partNumberTitle', partNumber ? value?.name : '', true);
       if (partNumber) {
         formState?.setFieldValue('partNumberDocId', generateDocIdLabel(value));
+        formState?.setFieldValue('partNumberDocumentId', value?.document.id);
       } else {
         formState?.omitFieldValue('partNumber');
         formState?.omitFieldValue('partNumberDocId');
+        formState?.omitFieldValue('partNumberDocumentId');
       }
     };
 
