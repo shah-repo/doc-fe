@@ -37,7 +37,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const displayValue = value?.label ?? dataItem?.[field ?? ''];
+  const fieldValue = value?.label ?? dataItem?.[field ?? ''];
+  const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
 
   return (
     <TreeListCellWrapper {...props}>

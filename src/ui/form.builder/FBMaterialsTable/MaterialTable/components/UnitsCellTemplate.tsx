@@ -49,7 +49,7 @@ const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
         onChange={handleChange}
         value={value}
         size="small"
-        disabled={isEmpty(units)}
+        disabled={isEmpty(units) || values.LHRTparameter}
       />
     </FormikField>
   );

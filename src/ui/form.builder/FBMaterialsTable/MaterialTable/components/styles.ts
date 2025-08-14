@@ -15,6 +15,10 @@ export const styles = makeStyles((theme) => ({
     right: 0,
     top: '100%',
   },
+  activeCheckbox: {
+    margin: theme.spacing(0.75, 0, 0),
+    width: 20,
+  },
   progress: {
     marginTop: theme.spacing(0.5),
   },

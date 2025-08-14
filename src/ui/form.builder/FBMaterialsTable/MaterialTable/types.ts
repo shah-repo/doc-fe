@@ -19,6 +19,7 @@ export interface Material {
   quantity?: number
   items?: Material[]
   isLotAddition?: boolean
+  LHRTparameter?: boolean
 }
 
 export interface MaterialTableProps {

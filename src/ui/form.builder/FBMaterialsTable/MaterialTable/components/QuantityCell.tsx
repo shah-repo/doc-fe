@@ -11,7 +11,7 @@ import { getCellValue, isEditMaterial } from './utils';
 const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { dataItem, field, hasChildren } = props;
   const classes = styles({ hasChildren });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue, values } = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
 
   const onQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +29,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
           type="number"
           onChange={onQuantityChange}
           inputProps={{ min: 0 }}
+          disabled={values.LHRTparameter}
           size="small"
         />
       </FormikField>

@@ -36,6 +36,7 @@ import {
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
+import { buildMPISchema } from './mpiSchema';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -450,7 +451,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanDialog.close();
   };
 
-  const schema = buildSchema({
+  const schema = (isDesign ? buildMPISchema : buildSchema)({
     materialSelectOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
