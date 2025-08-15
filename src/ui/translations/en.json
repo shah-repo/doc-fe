@@ -1204,6 +1204,8 @@
   "form.builder.exit.edit.mode": "Exit edit mode",
   "form.builder.approvalRoles": "Approval Roles",
   "form.builder.approvalRoles.error.empty": "Approval Role name is required",
+  "form.builder.approvalRoles.error.groups": "Approval Role groups are required",
+  "form.builder.approvalRoles.no.groups": "No groups assigned to this role",
   "form.builder.approval.roles": "Approval Roles",
   "form.builder.approval.role": "Approval Role",
   "form.builder.add.another.role": "Add Another Role",
