@@ -7,6 +7,7 @@ import {
   FBMapWrapper,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
+  FBProcedureItemType,
   FBText,
 } from '..';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
@@ -26,6 +27,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   multiplier = 1,
   type,
   value = [],
+  lhrStepIndex,
   isPendingChange,
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -51,7 +53,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           locale={FBProcedureItemLocale[type]}
         />
       </Box>
-      {!loading && (
+      {!loading && type === FBProcedureItemType.materials && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
@@ -109,11 +111,21 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                     </Box>
                   </>
                 )}
-                {(!isPreview || isPendingChange) && (item.type || item.paramsId) && <MaterialsTable isActive={false} type={type} items={value} getItem={getItem} />}
               </Box>
             </Box>
           )}
         </FBMapWrapper>
+      )}
+      {!loading && type === FBProcedureItemType.materials && (
+        <MaterialsTable
+          isActive={!(!isPreview || isPendingChange)}
+          type={type}
+          items={value}
+          getItem={getItem}
+          isDesign={true}
+          isLHRStep={true}
+          lhrStepIndex={lhrStepIndex}
+        />
       )}
     </Box>
   </FBProvider>

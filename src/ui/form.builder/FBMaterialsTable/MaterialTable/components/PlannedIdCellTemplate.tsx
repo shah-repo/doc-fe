@@ -24,7 +24,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   };
 
   useEffect(() => {
-    const value = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    const value = materialSelectOptions?.find((option) => option.value === dataItem[field]);
     if (value && field) {
       setValue(value);
     }

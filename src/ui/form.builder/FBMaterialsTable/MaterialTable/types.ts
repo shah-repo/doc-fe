@@ -14,6 +14,8 @@ type MaterialCallback = (dataItem: EditableMaterial) => void;
 export interface Material {
   id: string
   plannedId?: string
+  title?: string
+  type?: string
   actualId?: string
   lotId?: string
   lotDocId?: string
@@ -40,6 +42,8 @@ export interface MaterialTableProps {
   handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   partsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
+  isLHRStep?: boolean
+  lhrStepIndex?: number
 }
 
 export interface EditableMaterial extends Material {

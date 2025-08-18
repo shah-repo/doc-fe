@@ -22,8 +22,8 @@ export const buildMPISchema = ({
 }: SchemaOptions): CustomTreeListColumnProps[] => {
   return [
     {
-      id: 'plannedId',
-      field: 'plannedId',
+      id: 'title',
+      field: 'title',
       title: translate('form.builder.procedure.material.title'),
       mainOrderIndex: 1,
       cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,

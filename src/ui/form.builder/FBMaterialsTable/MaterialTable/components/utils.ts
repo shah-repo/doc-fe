@@ -14,9 +14,13 @@ export const getCellValue = (dataItem: EditableMaterial, field?: string): string
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
 };
 
-export const prepareData = (items?: FBProcedureItemConfig[]): Material[] => {
+export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean): Material[] => {
   if (!items) {
     return [];
+  }
+
+  if (isDesign) {
+    return items;
   }
 
   return items.map(item => ({

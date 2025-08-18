@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, isNil, omit, replace, uniq } from 'lodash';
+import { cloneDeep, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -60,20 +60,22 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   handleRemove,
   isActive,
   isDesign,
+  lhrStepIndex,
+  isLHRStep,
   isDisabled,
   isEnableOnlyLotAddition,
   partsSelected,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
-  const { procedureState, mpiProcedureState, workspaceState } = FB.useStores();
+  const { procedureState, mpiProcedureState, lhrStepState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
   const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: prepareData(items),
+    data: prepareData(items, isDesign),
     expanded: [],
     dataState: {
       sort: [],
@@ -81,6 +83,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     },
     inEdit: [],
   });
+  console.log('items', items, state.data);
 
   const updateState = (stateInfo) => {
     setState(stateInfo);
@@ -119,6 +122,33 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const saveProcedureItem = (procedureItem: FBProcedureItemConfig) => {
+    if (isLHRStep) {
+      const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
+      lhrStepState?.editItem(procedureItem, type);
+      if (!lhrStepIndex) {
+        return;
+      }
+      if (schemaItem) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        workspaceState!.schema![lhrStepIndex] = {
+          ...schemaItem,
+          editorConfig: {
+            ...schemaItem?.editorConfig,
+            parameters: {
+              ...keyBy(lhrStepState?.editedParameters, 'paramsId'),
+            },
+          },
+        };
+      }
+      workspaceState?.saveDocRev();
+      const updatedProcedureItem = {
+        ...procedureItem,
+        plannedId: procedureItem.title,
+      };
+      appendItemToStateData(updatedProcedureItem);
+      return;
+    }
+
     const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
     procedureState?.addItem(procedureItem, type, allSteps);
     mpiProcedureState?.addItem(procedureItem, type, allSteps);
@@ -287,6 +317,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
       }),
     };
 
@@ -386,7 +417,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   // actual id any string also allow, attachment cell needs to add
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    if (dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled))) {
+    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled));
+    const isEditRestricted = !isEmpty(dataItem.type) && isLHRStep && isDesign ? false : defaultValidation;
+    if (isEditRestricted) {
       return;
     }
 
