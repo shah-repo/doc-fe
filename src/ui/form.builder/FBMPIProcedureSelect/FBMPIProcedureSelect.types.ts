@@ -27,6 +27,8 @@ export interface FBMPIProcedureSelectValue {
   quantity?: number
   unit?: string
   lotPart?: string
+  lotId?: string
+  lotDocId?: string
   lotPartRevision?: string
   pmDueDate?: string
   calDueDate?: string

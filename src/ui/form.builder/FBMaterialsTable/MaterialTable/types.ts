@@ -4,6 +4,8 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import { FBInputProps } from '../../FBInput/FBInput.types';
+import FBMPIProcedureSelectState from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
+import { FBMPIProcedureSelectValue } from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD } from './constants';
 
@@ -14,6 +16,7 @@ export interface Material {
   plannedId?: string
   actualId?: string
   lotId?: string
+  lotDocId?: string
   lotNumber?: { [key: string]: string }
   unit?: string
   quantity?: number
@@ -23,6 +26,7 @@ export interface Material {
 }
 
 export interface MaterialTableProps {
+  name?: string
   isActive: boolean
   isShowOnly?: boolean
   items?: FBProcedureItemConfig[]
@@ -32,6 +36,10 @@ export interface MaterialTableProps {
   isEnableOnlyLotAddition?: boolean
   isDesign?: boolean
   isDisabled?: boolean
+  saveLot?: (values: EditableMaterial) => void
+  handleSelectionDelete?: (refId?: string) => void
+  mpiProcedureSelectState?: FBMPIProcedureSelectState
+  partsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
 }
 
 export interface EditableMaterial extends Material {

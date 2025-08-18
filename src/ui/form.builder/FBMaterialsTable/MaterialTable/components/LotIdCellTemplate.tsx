@@ -102,6 +102,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
   const isAddLotVisible
     = dataItem?.isLotAddition || dataItem?.lotId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
+  const lotDocId = dataItem?.lotDocId ?? '';
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -115,7 +116,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
       return;
     }
 
-    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartPlannedId, fetchAvailablePartsAsync);
+    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartPlannedId, fetchAvailablePartsAsync, false);
   }, [parentPartPlannedId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
@@ -195,7 +196,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               }}
             />
           ) : (
-            value.label
+            lotDocId
           )}
         </span>
         {!isEditMode && value.label && (

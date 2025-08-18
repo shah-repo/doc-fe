@@ -132,6 +132,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
             calDueDate: ref.toDocRev?.precalc?.cali_due_date,
             lotPartRevision: ref.toDocRev?.precalc?.lot_part_revision,
+            lotId: ref.toDocRevId,
           });
         }
         return selected;

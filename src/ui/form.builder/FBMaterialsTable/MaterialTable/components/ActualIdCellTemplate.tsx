@@ -39,7 +39,7 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const displayValue = value.label ?? dataItem?.[field ?? ''];
+  const displayValue = value?.label ?? dataItem?.[field ?? ''];
 
   const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
     if (reason !== 'input') {

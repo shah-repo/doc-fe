@@ -13,7 +13,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { cloneDeep, isEmpty, isNil, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../App';
 import { translate } from '../../../../common/intl';
 import DocumentRevisionDialog from '../../../components/common/dialogs/DocumentRevisionDialog';
@@ -49,16 +49,20 @@ import {
   MaterialTableProps,
 } from './types';
 import { useOptions } from './useOptions';
+import { withMaterialsTable } from './wrap';
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
   items,
   type,
+  saveLot,
+  handleSelectionDelete,
   getItem,
   handleRemove,
   isActive,
   isDesign,
   isDisabled,
   isEnableOnlyLotAddition,
+  partsSelected,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -128,6 +132,11 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
+      if (isEnableOnlyLotAddition) {
+        saveLot?.(values as EditableMaterial);
+        discardScanLot(values as EditableMaterial);
+        return;
+      }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       if (values[IS_LOT_ADDITION] || values.parentPartPlannedId) {
         const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
@@ -235,7 +244,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const deleteItemFromStateData = (scanLot) => {
-    state.data = state.data.filter((item) => item.id !== scanLot.id);
+    if (isEnableOnlyLotAddition) {
+      const parentIndex = state.data?.findIndex((data) => data.id === scanLot.parentId);
+      if (parentIndex === -1) {
+        return;
+      }
+      const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.filter((item) => item.id !== scanLot.id);
+    } else {
+      state.data = state.data.filter((item) => item.id !== scanLot.id);
+    }
 
     setState((prevState) => ({
       ...prevState,
@@ -246,8 +264,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const removeScanLot = (material: EditableMaterial) => {
+    if (isEnableOnlyLotAddition) {
+      handleSelectionDelete?.(material.id);
+    } else {
+      handleRemove?.(material.id);
+    }
     deleteItemFromStateData(material);
-    handleRemove?.(material.id);
   };
 
   const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => {
@@ -364,7 +386,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   // actual id any string also allow, attachment cell needs to add
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    if (dataItem[MODE_FIELD] || !isActive || isDisabled) {
+    if (dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled))) {
       return;
     }
 
@@ -399,6 +421,41 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       return isAlocationItemAddExist;
     });
   };
+
+  useEffect(() => {
+    if (!partsSelected?.length || !items?.length) {
+      return;
+    }
+
+     partsSelected?.map(selected => {
+       const index = items?.findIndex((item) => {
+         return item.title === selected.materialId;
+       });
+
+       if (index !== -1) {
+         state.data[index][SUB_ITEMS_FIELD] = [
+           {
+             id: selected.refId,
+             plannedId: '',
+             actualId: '',
+             lotId: selected.lotId,
+             lotDocId: selected.lotDocId,
+             parentPartPlannedId: selected.materialId,
+             parentId: state.data[index].id,
+             unit: selected.unit,
+             quantity: selected.quantity,
+             [MODE_FIELD]: false,
+           },
+         ];
+
+         updateState({
+           ...state,
+           data: [...state.data],
+           expanded: [state.data[index].id],
+         });
+       }
+     });
+  }, [partsSelected]);
 
   const addLot = (dataItem: EditableMaterial) => {
     const index = state?.data?.findIndex((data) => {
@@ -458,7 +515,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: isDisabled || isDesign || !isActive,
+    isDisabled: isDesign || !isEnableOnlyLotAddition,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
@@ -490,7 +547,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             cellRender={cellRender}
             columns={columns}
           />
-          {isActive && (isDesign || !isEnableOnlyLotAddition) && (
+          {isActive && !isDisabled && (isDesign || !isEnableOnlyLotAddition) && (
             <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
               {translate('form.builder.procedure.material.table.add.part')}
             </Button>
@@ -515,4 +572,4 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   );
 };
 
-export default memo(withThemeNext(React.forwardRef(MaterialsTable)));
+export default memo(withThemeNext(React.forwardRef(withMaterialsTable(MaterialsTable))));
