@@ -15,7 +15,7 @@ import {
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
-import { LHR_SUMARY_FIELDS } from '../../constants';
+import { DATE_TYPE, LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
@@ -26,17 +26,25 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field];
+  const isCalPmDueDate = [DATE_TYPE.customCalDueDate, DATE_TYPE.customPmDueDate].includes(field as DATE_TYPE);
 
   if (!isEditMode) {
+    let displayValue = value;
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
+      displayValue = dataItem.calDueDateText;
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
+      displayValue = dataItem.pmDueDateText;
+    }
+
     return (
       <OverflowTooltip
-        title={value}
+        title={displayValue}
         placement="top"
         onClick={() => onClick?.({ dataItem })}
         interactive
         arrow
       >
-        {value}
+        {displayValue}
       </OverflowTooltip>);
   }
 
@@ -49,11 +57,21 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     const dateValue = dateInPST?.utc().format();
     setFieldValue(field, dateValue);
     setFieldValue(removeCustomPrefix(field), dateValue);
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
+      setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
+      setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
+    }
   };
 
   const handleClear = () => {
     setFieldValue(field, null);
     setFieldValue(removeCustomPrefix(field), null);
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
+      setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, null);
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
+      setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, null);
+    }
   };
 
   return (

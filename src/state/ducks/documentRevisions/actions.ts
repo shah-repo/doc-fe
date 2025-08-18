@@ -10,6 +10,7 @@ import { toastError } from '../../../ui/components/notifications';
 import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
+import { ApprovalFailureResponse } from '../../../ui/documentRevision/forms/presenters/SubmitForApproval';
 import { DocumentRevisionFormValues } from '../../../ui/documentRevision/forms/types';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { BOMResponse, IWhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
@@ -376,6 +377,13 @@ const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<Documen
   },
 });
 
+const validateReleasedPOLineItem = (partId: string, handlers: Handlers): ApiAction<ApprovalFailureResponse> =>
+  apiActionWithCallbacks({
+    url: `${PO_ROOT_URL}/${partId}/validate-part-released`,
+    method: 'get',
+    handlers,
+  });
+
 const obsoletePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}${PO_ROOT_URL}/obsolete_void/${id}`,
   method: 'patch',
@@ -701,6 +709,20 @@ const exportToEmail = (
     handlers,
   });
 
+const exportToEmailWithPassword = (
+  revisionId: string,
+  body: ExportToEmailRequest,
+  handlers: Handlers,
+  password?: string,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/revision/${revisionId}/email_red_line`,
+    method: 'post',
+    data: body,
+    handlers,
+    password,
+  });
+
 const updateForm = (
   id: string,
   body: UpdateFormRequestBody,
@@ -874,6 +896,7 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   updatePO,
+  validateReleasedPOLineItem,
   obsoletePO,
   cloneDoc,
   finalizeAndRelease,
@@ -886,6 +909,7 @@ export default {
   ownerChange,
   saveWithNoResponse,
   exportToEmail,
+  exportToEmailWithPassword,
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,

@@ -6,6 +6,7 @@ import { ChangeRequest, ChangeRequestStatus } from '../../../../state/ducks/chan
 import { companyActions } from '../../../../state/ducks/company';
 import { useFormContext } from '../../../components/forms/FormContext';
 import { Button } from '../../../components/forms/fields-next';
+import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useCanUpdateChangeRequest } from '../../helpers';
 import { changeRequestPreviewPath, changeRequestUpdatePath } from '../../utils/paths';
 
@@ -21,6 +22,8 @@ export const EditButtons: React.FC<{ changeRequest: ChangeRequest }> = ({ change
   };
 
   const undoChanges = () => {
+    FBDataStore?.setMDTableData([]);
+    FBDataStore?.setTLTableData([]);
     dispatch(companyActions.setAutosaveConfig(true));
     history.push(changeRequestPreviewPath(changeRequest.id));
   };

@@ -97,5 +97,14 @@ export const styles = makeStyles((theme: Theme) =>
     descriptionField: {
       paddingTop: theme.spacing(2),
     },
+    textBold: {
+      fontWeight: 700,
+    },
+    iconError: {
+      color: Colors.error,
+    },
+    iconWarning: {
+      color: Colors.warning,
+    },
   }),
 );

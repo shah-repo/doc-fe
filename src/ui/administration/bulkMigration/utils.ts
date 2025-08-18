@@ -50,11 +50,20 @@ export function canMapItems (
     const targetType = toSchemaItem.type as string;
 
     const hasOptions = FROM_OPTIONS_TYPES.includes(selectedType) && TO_OPTIONS_TYPES.includes(targetType);
-    if (selectedType !== targetType && !hasOptions) {
-      return {
-        canMap: false,
-        errMessage: translate('bulk.migration.mapping.message', { selectedType }),
-      };
+    if (selectedType !== targetType) {
+      const fromHasOptions = FROM_OPTIONS_TYPES.includes(selectedType);
+      const toHasOptions = TO_OPTIONS_TYPES.includes(targetType);
+      if (fromHasOptions && !toHasOptions) {
+        return {
+          canMap: false,
+          errMessage: translate('bulk.migration.mapping.failure.options.message', { selectedType, targetType }),
+        };
+      } else if (!hasOptions) {
+        return {
+          canMap: false,
+          errMessage: translate('bulk.migration.mapping.message', { selectedType }),
+        };
+      }
     }
 
     canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
