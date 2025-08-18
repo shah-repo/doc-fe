@@ -198,7 +198,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
-          const procedureItem = { ...omit(values, [...LOT_FIELDS_TO_OMIT, 'actualId']), title: values?.plannedId };
+          const procedureItem = { ...omit(values, [...LOT_FIELDS_TO_OMIT, 'actualId']) };
           saveProcedureItem(procedureItem as FBProcedureItemConfig);
           return;
         }

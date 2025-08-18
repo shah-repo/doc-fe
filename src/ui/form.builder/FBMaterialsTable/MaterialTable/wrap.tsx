@@ -85,6 +85,8 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
 
     return Component({
       ...(props as T),
+      name,
+      type,
       isDisabled: isDisabled ?? workspaceState?.isPreview,
       partsSelected,
       saveLot,
