@@ -90,13 +90,17 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       const newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
+        type: values.type,
       };
+
       if (isDesign) {
         newEquipItem.LHRTparameter = LHRTparameter;
       }
+
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
+      discardEquipItem();
     },
   });
 

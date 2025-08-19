@@ -18,7 +18,7 @@ export const TreeListMPISchema = ({
     {
       id: 'title',
       field: 'title',
-      title: translate('form.builder.procedure.material.title'),
+      title: translate('form.builder.procedure.equipment.grid.title'),
       mainOrderIndex: 1,
       cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
       width: 150,
