@@ -11,7 +11,8 @@ import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../stat
 import Text from '../../../../../components/Text';
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import { FBDAMFields } from '../../../../../form.builder';
-import { FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { FBApprovalMatrixRoleTitles } from '../../../../../form.builder/FBApprovalMatrix/types';
+import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
@@ -34,6 +35,7 @@ interface Props {
   reloadComponent?: () => void
 }
 
+type DamFormInput = FBApprovalMatrixItem[] | { approvalMatrix: FBApprovalMatrixItem[] } | undefined;
 type DarFormInput = FBApprovalRole[] | undefined;
 
 const SyncMessageDialogContainer: React.FC<Props> = ({
@@ -43,7 +45,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const { formInput } = documentRevision;
   const { approvalRoles: approvalRolesState } = useSelector(companySelectors.getGeneralSettings);
-  const { removeFromDam, addToDam, dam } = approvalRolesState;
+  const { removeFromDam, addToDam, dam, approvalRoles } = approvalRolesState;
   const damIsSynced = dam?.isSynced ?? true;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
@@ -61,6 +63,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     && isDraftOrPending;
   const [isDialogMessageOpen, setIsDialogMessageOpen] = React.useState(needsDialogMessage);
 
+  const approvalRolesCount = approvalRoles.length;
   const rolesAddedList = addToDam.map(item => item.name).join(', ');
   const rolesRemovedList = removeFromDam.map(item => item.name).join(', ');
   const isRolesAdded = addToDam.length > 0;
@@ -160,7 +163,22 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       .filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id))
       .sort((a, b) => a.index - b.index);
 
-    documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDar };
+    const damFormInput = formInput?.[FBDAMFields.DAM] as DamFormInput;
+    const existingDam = cloneDeep((Array.isArray(damFormInput) ? damFormInput : damFormInput?.approvalMatrix) ?? []);
+    const updatedDam = existingDam.map(docType => {
+      Object.keys(FBApprovalMatrixRoleTitles).forEach(key => {
+        const rolesFlags = docType.approvalRoles[key as keyof typeof docType.approvalRoles];
+        if (rolesFlags.length < approvalRolesCount) {
+          docType.approvalRoles[key] = [
+            ...rolesFlags,
+            ...Array<boolean>(approvalRolesCount - rolesFlags.length).fill(false),
+          ];
+        }
+      });
+      return docType;
+    });
+
+    documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDar, [FBDAMFields.DAM]: updatedDam };
     _documentRevisionFormState?.setDocumentRevision(documentRevision);
     async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
     reloadComponent?.();
