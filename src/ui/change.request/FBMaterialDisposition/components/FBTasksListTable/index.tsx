@@ -1,11 +1,10 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
@@ -21,9 +20,9 @@ import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGri
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -60,8 +59,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const updateTask = useActionCreator(taskActions.updateTask);
   const deleteTask = useActionCreator(taskActions.deleteTask);
   const formContext = useFormContext();
-  const parentFormik = useFormikContext();
-  const history = useHistory();
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
   let enableTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
@@ -116,9 +113,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const updateTaskAsync = useAsync({
     onSuccess: () => {
       loadTasksTableData();
-      if (formContext?.isEditing) {
-        history.push(changeRequestPreviewPath(partOfId ?? ''));
-      }
     },
     onError: toastError,
   });
@@ -137,19 +131,20 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (isWORecord) {
       loadTasksTableData();
     } else {
-      const data = workspaceState?.getTLTableData;
+      const data = FBDataStore?.getTLTableData;
       if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
         loadTasksTableData();
       } else if (!isEmpty(data)) {
-        setData(data as EditableTLItem[]);
+        setData(data);
       }
     }
   }, [partOfIdToUse]);
 
   const updateUnsavedData = (values: Partial<EditableTLItem>) => {
     const updatedData = updateData(values, data);
-    workspaceState?.setTLTableData(updatedData);
-    workspaceState?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore?.setTLTableData(updatedData);
+    FBDataStore?.addTLUpdatedDataId(values.taskId as string);
+    FBDataStore.partOfIdToUse = partOfIdToUse;
     setData(updatedData);
   };
 
@@ -205,19 +200,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   useEffect(() => {
     resetForm({ values: editedTLItem ?? {} });
   }, [editedTLItem, setValues, resetForm]);
-
-  useEffect(() => {
-    const data = workspaceState?.getTLTableData ?? [];
-    const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
-    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
-    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(updatedData)) {
-      setDoNotPrompt?.(true);
-      updatedData.forEach((item) => {
-        updateTaskItem(item);
-      });
-      workspaceState?.setTLTableData([]);
-    }
-  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
