@@ -132,7 +132,7 @@ const validateScannedLot = (
   handlers: Handlers,
 ): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
-    url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}`,
+    url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}/validate`,
     method: 'get',
     handlers,
   });
