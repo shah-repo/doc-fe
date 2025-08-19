@@ -54,6 +54,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   handleRemove,
   isDisabled,
   isDesign,
+  isLHRStep,
   isShowOnly = false,
 }) => {
   const { _tabsState } = SM.useStores();
@@ -205,7 +206,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    if (dataItem[MODE_FIELD] || isDisabled) {
+    const defaultValidation = dataItem[MODE_FIELD] || isDisabled;
+    const isEditRestricted = !isEmpty(dataItem.type) && isLHRStep && isDesign ? false : defaultValidation;
+
+    if (isEditRestricted) {
       return;
     }
 
@@ -226,6 +230,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
       }),
     };
 

@@ -13,6 +13,7 @@ import {
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import FBProvider from '../FBProvider/FBProvider';
 import { FBLHRStepProcedureItemProps } from './FBLHRStepProcedureItem.types';
@@ -75,22 +76,24 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               >
                 <Box flexGrow={1}>
                   <FBText
-                    locale={item.type
-                      ? `form.builder.mpi.procedure.${type}.title.id`
-                      : `form.builder.mpi.procedure.${type}.title`
+                    locale={
+                      item.type
+                        ? `form.builder.mpi.procedure.${type}.title.id`
+                        : `form.builder.mpi.procedure.${type}.title`
                     }
-                    values={item.type
-                      ? {
-                        id: item.id,
-                        title: getItem?.(item.title),
-                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
-                        unit: item.unit,
-                      }
-                      : {
-                        title: getItem?.(item.title),
-                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
-                        unit: item.unit,
-                      }
+                    values={
+                      item.type
+                        ? {
+                          id: item.id,
+                          title: getItem?.(item.title),
+                          quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
+                          unit: item.unit,
+                        }
+                        : {
+                          title: getItem?.(item.title),
+                          quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
+                          unit: item.unit,
+                        }
                     }
                     boxProps={{
                       color: Colors.almost_black,
@@ -101,11 +104,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                 {(!isPreview || isPendingChange) && (item.type || item.paramsId) && (
                   <>
                     <Box>
-                      <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={() => onClick?.(item)}
-                      >
+                      <IconButton color="inherit" size="small" onClick={() => onClick?.(item)}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Box>
@@ -119,6 +118,17 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
       {!loading && type === FBProcedureItemType.materials && (
         <MaterialsTable
           isActive={!(!isPreview || isPendingChange)}
+          type={type}
+          items={value}
+          getItem={getItem}
+          isDesign={true}
+          isLHRStep={true}
+          lhrStepIndex={lhrStepIndex}
+        />
+      )}
+      {!loading && type === FBProcedureItemType.equipment && (
+        <FBEquipmentTable
+          isDisabled={!isPreview || isPendingChange}
           type={type}
           items={value}
           getItem={getItem}

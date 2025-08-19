@@ -11,6 +11,8 @@ export interface FBEquipmentProps {
   handleRemove?: (id: string) => void
   type: FBProcedureItemType
   isDesign?: boolean
+  isLHRStep?: boolean
+  lhrStepIndex?: number
 }
 
 export interface EquipmentItemState {
