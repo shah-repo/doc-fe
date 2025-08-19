@@ -1,19 +1,17 @@
 import { Box } from '@material-ui/core';
-import { isEmptyArray } from 'formik';
-import { cloneDeep, omit } from 'lodash';
+import { cloneDeep } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { authSelectors } from '../../../../../../state/ducks/auth';
 import { companyActions, companySelectors } from '../../../../../../state/ducks/company';
-import { ApprovalRole } from '../../../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../../components/Text';
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import { FBDAMFields } from '../../../../../form.builder';
-import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
@@ -36,15 +34,16 @@ interface Props {
   reloadComponent?: () => void
 }
 
+type DarFormInput = FBApprovalRole[] | undefined;
+
 const SyncMessageDialogContainer: React.FC<Props> = ({
   documentRevision,
   reloadComponent,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const { formInput } = documentRevision;
-  const generalSettings = useSelector(companySelectors.getGeneralSettings);
-  const { addToDam = [], removeFromDam = [], approvalRoles = [] } = generalSettings?.approvalRoles ?? {};
-  const dam = generalSettings?.approvalRoles?.dam;
+  const { approvalRoles: approvalRolesState } = useSelector(companySelectors.getGeneralSettings);
+  const { removeFromDam, addToDam, dam } = approvalRolesState;
   const damIsSynced = dam?.isSynced ?? true;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
@@ -52,15 +51,20 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
   const isCancelled = isDocumentRevisionCanceled(documentRevision.status);
   const alertDialog = useDialog();
-  const needSyncMessage = isOwner && !damIsSynced;
-  const needAlertMessage = needSyncMessage
+  const needsSyncMessage = isOwner && !damIsSynced;
+  const needsAlertMessage = needsSyncMessage
     && dam?.document?.id === documentRevision.documentId
     && !isDraftOrPending
     && !isCancelled;
-  const needDialogMessage = needSyncMessage
+  const needsDialogMessage = needsSyncMessage
     && dam?.documentRevision?.id === documentRevision.id
     && isDraftOrPending;
-  const [isDialogMessageOpen, setIsDialogMessageOpen] = React.useState(needDialogMessage);
+  const [isDialogMessageOpen, setIsDialogMessageOpen] = React.useState(needsDialogMessage);
+
+  const rolesAddedList = addToDam.map(item => item.name).join(', ');
+  const rolesRemovedList = removeFromDam.map(item => item.name).join(', ');
+  const isRolesAdded = addToDam.length > 0;
+  const isRolesRemoved = removeFromDam.length > 0;
 
   useEffect(() => {
     if (documentRevision.id) {
@@ -69,55 +73,40 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   }, [documentRevision.id]);
 
   useEffect(() => {
-    setIsDialogMessageOpen(needDialogMessage);
-  }, [needDialogMessage]);
+    setIsDialogMessageOpen(needsDialogMessage);
+  }, [needsDialogMessage]);
 
   useEffect(() => {
-    if (needAlertMessage) {
+    if (needsAlertMessage) {
       alertDialog.open();
     }
-  }, [needAlertMessage]);
+  }, [needsAlertMessage]);
 
   const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
-    const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
-    const removeFromDam = generalSettings?.approvalRoles?.removeFromDam;
-    const roleAddedList = addToDam?.map(item => item.name).join(', ');
-    const roleRemovedList = removeFromDam?.map(item => item.name).join(', ');
-    if (addToDam?.length > 0 && removeFromDam.length > 0) {
-      if (isSubLabel) {
-        return translate('dam.sync.message.role.added.removed.sub.label', {
-          addedList: roleAddedList,
-          rolesCount: removeFromDam?.length,
-          removedlist: roleRemovedList,
-        });
-      }
-      return translate('dam.sync.message.role.added.removed.label', {
-        roleAdded: addToDam?.length,
-        addedList: roleAddedList,
-        roleRemoved: removeFromDam?.length,
-        removedlist: roleRemovedList,
+    if (isRolesAdded && isRolesRemoved) {
+      const key = isSubLabel ? 'dam.sync.message.role.added.removed.sub.label' : 'dam.sync.message.role.added.removed.label';
+      return translate(key, {
+        roleAdded: addToDam.length,
+        addedList: rolesAddedList,
+        roleRemoved: removeFromDam.length,
+        rolesCount: removeFromDam.length,
+        removedlist: rolesRemovedList,
       });
-    } else if (addToDam?.length > 0 && isEmptyArray(removeFromDam)) {
-      if (isSubLabel) {
-        return translate('dam.sync.message.role.added.sub.label', {
-          addedList: roleAddedList,
-          rolesCount: removeFromDam?.length,
-        });
-      }
-      return translate('dam.sync.message.role.added.label', {
-        rolesCount: addToDam?.length,
-        addedList: roleAddedList,
+    }
+
+    if (isRolesAdded) {
+      const key = isSubLabel ? 'dam.sync.message.role.added.sub.label' : 'dam.sync.message.role.added.label';
+      return translate(key, {
+        rolesCount: addToDam.length,
+        addedList: rolesAddedList,
       });
-    } else if (isEmptyArray(addToDam) && removeFromDam.length > 0) {
-      if (isSubLabel) {
-        return translate('dam.sync.message.role.removed.sub.label', {
-          rolesCount: removeFromDam?.length,
-          removedlist: roleRemovedList,
-        });
-      }
-      return translate('dam.sync.message.role.removed.label', {
-        rolesCount: removeFromDam?.length,
-        removedlist: roleRemovedList,
+    }
+
+    if (isRolesRemoved) {
+      const key = isSubLabel ? 'dam.sync.message.role.removed.sub.label' : 'dam.sync.message.role.removed.label';
+      return translate(key, {
+        rolesCount: removeFromDam.length,
+        removedlist: rolesRemovedList,
       });
     }
   };
@@ -153,6 +142,11 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
   };
 
+  const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
+  const async = useAsync({
+    onSuccess: () => dispatch(companyActions.getGeneralSettings()),
+  });
+
   const handleConfirm = () => {
     setIsDialogMessageOpen(false);
 
@@ -160,62 +154,19 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       return;
     }
 
-    let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
-    const updatedDAM = cloneDeep(
-      formInput?.[FBDAMFields.DAM]?.approvalMatrix
-      ?? formInput?.[FBDAMFields.DAM]
-      ?? [],
-    ) as FBApprovalMatrixItem[];
+    const darFormInput = formInput?.[FBDAMFields.DAR] as DarFormInput;
+    const existingDar = cloneDeep(darFormInput ?? []);
+    const updatedDar = [...existingDar, ...addToDam]
+      .filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id))
+      .sort((a, b) => a.index - b.index);
 
-    if (!isEmptyArray(removeFromDam)) {
-      updatedDAR = updatedDAR.filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id));
-    }
-
-    if (!isEmptyArray(addToDam)) {
-      const lastIndex = Math.max(0, ...updatedDAR.map(item => item.index));
-
-      addToDam?.forEach((item, index) => {
-        const newRole: ApprovalRole = {
-          id: item.id,
-          name: item.name,
-          index: lastIndex + index + 1,
-          groups: [],
-          employees: [],
-          isActive: false,
-        };
-        const roleToAdd = approvalRoles.find(ar => ar.id === item.id) ?? newRole;
-
-        updatedDAR.push(omit(roleToAdd, 'createdAt', 'updatedAt', 'companyId', 'isActive'));
-
-        const stagesLength = updatedDAM[0].approvalRoles.admStage.length ?? 0;
-
-        if (roleToAdd.index >= stagesLength) {
-          updatedDAM.forEach((item) => {
-            item.approvalRoles.admStage.push(false);
-            item.approvalRoles.stage1.push(false);
-            item.approvalRoles.stage2.push(false);
-            item.approvalRoles.stage3.push(false);
-          });
-        }
-      });
-    }
-
-    updatedDAR = updatedDAR.sort((a, b) => a.index - b.index);
-
-    documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
+    documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDar };
     _documentRevisionFormState?.setDocumentRevision(documentRevision);
     async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
     reloadComponent?.();
   };
 
-  const async = useAsync({
-    onSuccess: () => {
-      dispatch(companyActions.getGeneralSettings());
-    },
-  });
-  const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
-
-  if (needAlertMessage) {
+  if (needsAlertMessage) {
     return (
       <SyncMessageAlert
         alertDialog={alertDialog}
@@ -224,7 +175,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     );
   }
 
-  if (needDialogMessage) {
+  if (needsDialogMessage) {
     return (
       <SyncMessageDialog
         isOpen={isDialogMessageOpen}
