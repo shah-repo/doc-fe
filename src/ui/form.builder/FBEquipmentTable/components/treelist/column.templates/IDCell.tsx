@@ -67,7 +67,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
       />
     </FormikField>
   );
-  const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
+  const displayValue = dataItem.type ? `${dataItem.id}:${fieldValue}` : fieldValue;
 
   return (
     <TreeListCellWrapper {...props}>

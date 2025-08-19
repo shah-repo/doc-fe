@@ -9,6 +9,7 @@ export interface EquipmentItem {
   actualItems?: Array<Partial<EquipmentItem>>
   title?: string
   LHRTparameter?: boolean
+  type?: string
 }
 
 export interface EditableEquipmentItem extends EquipmentItem {

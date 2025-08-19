@@ -2,14 +2,14 @@ import { useFormikContext } from 'formik';
 import React, { ChangeEvent, memo } from 'react';
 import { Checkbox, FormikField } from '../../../../../components/forms/fields-next';
 import { EditableEquipmentItem } from '../../../interface';
-import { isEditEquipItem } from '../utils';
+import { isAddEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
 const LHRTParameterCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, hasChildren } = props;
-  const isEditMode = isEditEquipItem(dataItem);
+  const isEditMode = isAddEquipItem(dataItem);
   const { getFieldProps, setFieldValue, values } = useFormikContext<EditableEquipmentItem>();
   const classes = styles({ hasChildren, isEditMode });
 

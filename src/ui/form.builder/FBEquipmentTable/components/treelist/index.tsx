@@ -74,6 +74,13 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     inEdit: [],
   });
 
+  React.useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      data: prepareData(cloneDeep(items) ?? []),
+    }));
+  }, [items]);
+
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
@@ -89,30 +96,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
-      appendItemToStateData(newEquipItem);
     },
   });
-
-  const appendItemToStateData = (scanLot) => {
-    const existingIndex = state.data.findIndex((item) => item.id === scanLot.id);
-    if (existingIndex !== -1) {
-      state.data[existingIndex] = {
-        ...state.data[existingIndex],
-        ...scanLot,
-        [ADD_FIELD]: false,
-      };
-    } else {
-      state.data.push(scanLot);
-    }
-
-    // Then update the state
-    setState((prevState) => ({
-      ...prevState,
-      inEdit: [],
-      data: [...state.data],
-    }));
-    formik.resetForm();
-  };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
     setState(prevState => ({
