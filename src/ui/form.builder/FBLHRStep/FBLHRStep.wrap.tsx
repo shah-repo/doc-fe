@@ -1,9 +1,10 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { find, flattenDeep, lowerCase, omit } from 'lodash';
-import { reaction, ObservableMap } from 'mobx';
+import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
+import { MomentFormats, convertDateTimeToPST, getFormattedDateString } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -53,8 +54,25 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === 'LHRT-';
 
+    const startDateFieldName = 'lhrs-start-date';
+    const endDateFieldName = 'lhrs-end-date';
+
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
+    } else if (stepLHRs) {
+      const startDate = stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
+      const endDate = stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
+
+      if (startDate) {
+        // Format the date to MM/DD/YYYY format expected by FBDatePicker
+        const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
+        formState?.setFieldValue(startDateFieldName, formattedStartDate);
+      }
+      if (endDate) {
+        // Format the date to MM/DD/YYYY format expected by FBDatePicker
+        const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
+        formState?.setFieldValue(endDateFieldName, formattedEndDate);
+      }
     }
 
     // MARK: @helpers
@@ -159,6 +177,29 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => [
+        formState?.inputState.get(startDateFieldName)?.value,
+        formState?.inputState.get(endDateFieldName)?.value,
+      ],
+      ([startDate, endDate]) => {
+        if (!stepLHRs || !lhrStepState) { return; }
+
+        // Check if there are actual changes before updating
+        const currentStartDate = stepLHRs.formInput?.['lhrs-start-date'] as string | undefined;
+        const currentEndDate = stepLHRs.formInput?.['lhrs-end-date'] as string | undefined;
+
+        if (startDate !== currentStartDate || endDate !== currentEndDate) {
+          // Convert dates to ISO format before sending to backend
+          const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
+          const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
+
+          lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate).catch(console.error);
+        }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @methods
     startMpi = () => {
       lhrStepState.startMpi(
@@ -236,10 +277,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       ownerOfCompleteMPIAction,
       materials,
       index,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       equipment,
       isDocumentLHRT,
       stepIndex,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       lhrBuildTypeExist,
+      startDateFieldName,
+      endDateFieldName,
     });
   };
 
