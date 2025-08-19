@@ -1,7 +1,4 @@
 export const SUB_ITEMS_FIELD = 'actualItems';
-export const ID_FIELD = 'customDocId';
-export const DOC_ID_FIELD = 'docId';
-export const EXCEL_FILE_NAME = 'allocationTree.xlsx';
 export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const MODE_FIELD = 'inEdit';
@@ -15,13 +12,6 @@ export const TREELIST_CONFIG = {
   scrollable: 'virtual',
   rowHeight: 50,
 };
-
-export enum AllocationCheckBoxOptions {
-  AUTO_ASSIGN = 'autoAssign',
-  AUTO_TRANSACT = 'autoTransact',
-}
-
-export const ALLOCATION_TABLE_NAME = 'ALLOCATION_TABLE';
 
 export const EquipTableDtata = [
   {

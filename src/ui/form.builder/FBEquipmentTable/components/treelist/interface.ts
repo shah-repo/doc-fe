@@ -10,6 +10,7 @@ export interface FBEquipmentProps {
   getItem?: (id: string) => string
   handleRemove?: (id: string) => void
   type: FBProcedureItemType
+  isDesign?: boolean
 }
 
 export interface EquipmentItemState {

@@ -24,7 +24,9 @@ export const getParsedFieldValue = (field) => {
 
 export const prepareData = (items: FBProcedureItemConfig[]): EquipmentItem[] => {
   return items.map(item => ({
+    LHRTparameter: item.LHRTparameter,
     id: item?.id,
+    title: item.title,
     plannedId: item?.title,
     actualId: '',
     calDueDate: '',

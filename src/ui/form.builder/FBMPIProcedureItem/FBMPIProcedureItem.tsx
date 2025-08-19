@@ -31,6 +31,7 @@ import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warni
 import { MomentFormats } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
@@ -322,6 +323,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           )}
         </FBMapWrapper>}
         {type === FBProcedureItemType.materials && <MaterialsTable name={name} isEnableOnlyLotAddition={isSelectVisible && !redlineActive} isActive={!isPreview} type={type} isDisabled={disabled} isDesign={isDesign} items={value} getItem={getItem} handleRemove={handleRemove} handleSelectionDelete={handleSelectionDelete} />}
+        {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(isPreview)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isDesign={isDesign} />}
       </>
       )}
     </FBProvider>

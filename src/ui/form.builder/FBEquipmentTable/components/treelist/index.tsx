@@ -25,6 +25,7 @@ import { ColumnMenuContext } from '../../../../components/common/treelist/column
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../interface';
 import {
@@ -40,8 +41,10 @@ import {
   EquipmentItemState,
   FBEquipmentProps,
 } from './interface';
+import { TreeListMPISchema } from './MPISchema';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { useOptions } from './useOptions';
 import { prepareData } from './utils';
 
 const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
@@ -50,6 +53,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   getItem,
   handleRemove,
   isDisabled,
+  isDesign,
   isShowOnly = false,
 }) => {
   const { _tabsState } = SM.useStores();
@@ -58,6 +62,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
+  const { equipmentOptions } = useOptions();
 
   const [state, setState] = React.useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? []),
@@ -73,17 +78,41 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
       console.log({ values });
-      const { id = '', plannedId = '' } = values;
-      const newEquipItem = {
+      const { id = '', plannedId = '', title = '', LHRTparameter } = values;
+      const newEquipItem: EditableEquipmentItem = {
         id,
-        title: plannedId,
+        title: isDesign ? title : plannedId,
       };
+      if (isDesign) {
+        newEquipItem.LHRTparameter = LHRTparameter;
+      }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
-      procedureState?.addItem(newEquipItem, type, allSteps);
-        mpiProcedureState?.addItem(newEquipItem, type, allSteps);
-        discardEquipItem();
+      procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
+      mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
+      appendItemToStateData(newEquipItem);
     },
   });
+
+  const appendItemToStateData = (scanLot) => {
+    const existingIndex = state.data.findIndex((item) => item.id === scanLot.id);
+    if (existingIndex !== -1) {
+      state.data[existingIndex] = {
+        ...state.data[existingIndex],
+        ...scanLot,
+        [ADD_FIELD]: false,
+      };
+    } else {
+      state.data.push(scanLot);
+    }
+
+    // Then update the state
+    setState((prevState) => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+    formik.resetForm();
+  };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
     setState(prevState => ({
@@ -97,11 +126,12 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     handleRemove?.(dataItem.id ?? '');
   };
 
-  const schema: CustomTreeListColumnProps[] = TreeListSchema({
+  const schema: CustomTreeListColumnProps[] = (isDesign ? TreeListMPISchema : TreeListSchema)({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',
     getItem,
+    equipmentOptions,
     onDiscard: discardEquipItem,
     onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
@@ -190,7 +220,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    if (dataItem.inEdit || isDisabled) {
+    if (dataItem[MODE_FIELD] || isDisabled) {
       return;
     }
 

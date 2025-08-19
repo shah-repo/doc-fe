@@ -1,7 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
@@ -25,6 +24,7 @@ import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
 interface LotAutocompleteProps {
@@ -105,20 +105,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   );
 };
 
-const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
-  hasChildren,
-  colSpan,
-  id,
-  style,
-  dataItem,
-  field,
-  parentRevId,
-  addLot,
-  ariaColumnIndex,
-  colIndex,
-  className,
-  deleteLot,
-}) => {
+const LotAllocatedCell: React.FC<CustomTreeListCellProps> = (props) => {
+  const { hasChildren, dataItem, field, parentRevId, addLot, deleteLot } = props;
   const { isLotAddition = '', lotRevId, isDisabled, parentPartRevId, lotDocumentId, lotDocId } = {
     isLotAddition: false,
     lotRevId: '',
@@ -129,7 +117,6 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   };
   const isEditMode = isEditEquipItem(dataItem) && !isDisabled;
   const classes = styles({ hasChildren, isEditMode });
-  const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
@@ -188,16 +175,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   };
 
   return (
-    <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
-      aria-colindex={ariaColumnIndex}
-      data-grid-col-index={colIndex}
-      role="gridcell"
-      {...navigationAttributes}
-      aria-selected="false"
-      {...{ colSpan, id, style }}
-      data-cy="cell-lot-allocated"
-    >
+    <TreeListCellWrapper {...props}>
       {isAddLotVisible ? (
         <span className={cx(classes.defaultIcon)}>
           <StyleTooltip title={translate('common.add')} placement="top" arrow>
@@ -266,7 +244,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         )
       )}
       <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: lotRevId, parentRevId }} />
-    </td>
+    </TreeListCellWrapper>
   );
 };
 

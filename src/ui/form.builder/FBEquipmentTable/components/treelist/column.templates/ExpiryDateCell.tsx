@@ -5,17 +5,15 @@ import { getFormattedDateString, MomentFormats } from '../../../../../../common/
 import { EditableEquipmentItem } from '../../../interface';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
+import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
-const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
-  dataItem,
-  field,
-  colSpan,
-  style,
-  className,
-  hasChildren,
-  ...otherProps
-}) => {
+const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = (props) => {
+  const {
+    dataItem,
+    field,
+    hasChildren,
+  } = props;
   const classes = styles({ hasChildren });
   const isEditMode = isEditEquipItem(dataItem);
   const { values } = useFormikContext<EditableEquipmentItem>();
@@ -23,22 +21,11 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
   const isExpired = true;
 
   return (
-    <td
-      colSpan={colSpan}
-      style={style}
-      role="gridcell"
-      className={cx('k-table-td', className, classes.cellborderBottom)}
-      {...{
-        'aria-colindex': otherProps.ariaColumnIndex,
-        'data-grid-col-index': otherProps.colIndex,
-        'aria-expanded': otherProps.expanded,
-      }}
-      data-cy="expiry-date"
-    >
+    <TreeListCellWrapper {...props}>
       <span className={cx(classes.Cell, { [classes.expired]: isExpired && fieldValue })}>
         {fieldValue && getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit)}
       </span>
-    </td>
+    </TreeListCellWrapper>
   );
 };
 

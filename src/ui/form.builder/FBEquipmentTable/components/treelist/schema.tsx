@@ -8,6 +8,7 @@ import { RevHeaderCell } from './column.templates/RevHeader';
 
 export const TreeListSchema = ({
   actionsClass,
+  equipmentOptions,
   popperHolder,
   getItem,
   onDiscard,
@@ -23,7 +24,7 @@ export const TreeListSchema = ({
       expandable: true,
       locked: false,
       mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} getItem={getItem} />,
+      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
       sortable: false,
     },
     {

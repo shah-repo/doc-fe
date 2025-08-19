@@ -1,5 +1,6 @@
 import { TreeListCellProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { EditableEquipmentItem } from '../../../interface';
 
 export interface CustomTreeListCellProps extends TreeListCellProps {
@@ -8,7 +9,9 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   addLot?: IAllocationCallback
   deleteLot?: IAllocationCallback
   deletePart?: IAllocationCallback
+  onClick?: (e) => void
   parentRevId?: string
+  equipmentOptions: OptionType[]
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {

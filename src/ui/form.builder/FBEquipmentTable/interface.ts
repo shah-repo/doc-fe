@@ -2,15 +2,17 @@ import { MODE_FIELD } from './components/treelist/constants';
 
 export interface EquipmentItem {
   id: string
-  plannedId: string
+  plannedId?: string
   actualId?: string
   calDueDate?: string
   pmDueDate?: string
-  actualItems: Array<Partial<EquipmentItem>>
+  actualItems?: Array<Partial<EquipmentItem>>
+  title?: string
+  LHRTparameter?: boolean
 }
 
 export interface EditableEquipmentItem extends EquipmentItem {
-  [MODE_FIELD]: boolean
+  [MODE_FIELD]?: boolean
 }
 
 export interface EquipmentItemEditEvent {
