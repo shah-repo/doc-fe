@@ -4,7 +4,7 @@ import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, VALIDATE_SCANNED_LOT } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -132,7 +132,7 @@ const validateScannedLot = (
   handlers: Handlers,
 ): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
-    url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}`,
+    url: `/parts/${partRevId}/lots/${lotRevId}/validate`,
     method: 'get',
     handlers,
   });
