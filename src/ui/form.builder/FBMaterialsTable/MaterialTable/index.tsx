@@ -55,6 +55,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   items,
   type,
   saveLot,
+  editLot,
   handleSelectionDelete,
   getItem,
   handleRemove,
@@ -63,6 +64,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   lhrStepIndex,
   isLHRStep,
   isDisabled,
+  isPendingChange,
   isEnableOnlyLotAddition,
   partsSelected,
 }) => {
@@ -163,7 +165,11 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     initialValues: {},
     onSubmit: (values) => {
       if (isEnableOnlyLotAddition) {
-        saveLot?.(values as EditableMaterial);
+        if (values[ADD_FIELD]) {
+          saveLot?.(values as EditableMaterial);
+        } else {
+          editLot?.(values as EditableMaterial);
+        }
         discardScanLot(values as EditableMaterial);
         return;
       }
@@ -418,7 +424,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled));
-    const isEditRestricted = !isEmpty(dataItem.type) && isLHRStep && isDesign ? false : defaultValidation;
+    const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
       return;
     }
@@ -580,7 +586,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             cellRender={cellRender}
             columns={columns}
           />
-          {isActive && !isDisabled && (isDesign || !isEnableOnlyLotAddition) && (
+          {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
             <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
               {translate('form.builder.procedure.material.table.add.part')}
             </Button>
