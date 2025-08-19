@@ -117,7 +117,8 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
       )}
       {!loading && type === FBProcedureItemType.materials && (
         <MaterialsTable
-          isActive={!(!isPreview || isPendingChange)}
+          isActive={!isPreview}
+          isPendingChange={isPendingChange}
           type={type}
           items={value}
           getItem={getItem}

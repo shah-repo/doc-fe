@@ -23,6 +23,7 @@ export interface Material {
   unit?: string
   quantity?: number
   items?: Material[]
+  paramsId?: string
   isLotAddition?: boolean
   LHRTparameter?: boolean
 }
@@ -39,10 +40,12 @@ export interface MaterialTableProps {
   isDesign?: boolean
   isDisabled?: boolean
   saveLot?: (values: EditableMaterial) => void
+  editLot?: (values: EditableMaterial) => void
   handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   partsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
   isLHRStep?: boolean
+  isPendingChange?: boolean
   lhrStepIndex?: number
 }
 

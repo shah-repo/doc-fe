@@ -83,6 +83,29 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       mpiProcedureSelectState?.useOverride(id, part);
     }
 
+    function editLot (values: EditableMaterial) {
+      if (!id) { return; }
+      const { id: refId, quantity, unit } = values;
+
+      if (isUndefined(quantity)) { return; }
+      if (!refId) { return; }
+      if (quantity && quantity <= 0) {
+        toastError(intl.formatMessage({ id: 'document.revision.quantity.positive.error' }));
+        return;
+      }
+      if (quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
+        toastError(intl.formatMessage({ id: 'document.revision.quantity.decimals.error' },
+          { name: intl.formatMessage({ id: 'form.builder.quantity' }) }));
+        return;
+      }
+      const part = {
+        quantity,
+        unit: unit,
+        type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
+      };
+      mpiProcedureSelectState?.editOverride(id, refId, part);
+    }
+
     return Component({
       ...(props as T),
       name,
@@ -90,6 +113,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       isDisabled: isDisabled ?? workspaceState?.isPreview,
       partsSelected,
       saveLot,
+      editLot,
     });
   };
 

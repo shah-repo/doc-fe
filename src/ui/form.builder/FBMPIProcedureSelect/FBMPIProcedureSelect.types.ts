@@ -34,6 +34,12 @@ export interface FBMPIProcedureSelectValue {
   calDueDate?: string
 }
 
+export interface FBMPIProcedureSelectEditRequestBody {
+  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT'
+  quantity?: number
+  unit?: string
+}
+
 export enum DOCUMENT_REVISION_LOT_STATUS {
   QUARANTINE = 'QUARANTINE',
   ACCEPTED = 'ACCEPTED',
