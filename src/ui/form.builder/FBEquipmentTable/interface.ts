@@ -10,6 +10,7 @@ export interface EquipmentItem {
   title?: string
   LHRTparameter?: boolean
   type?: string
+  paramsId?: string
 }
 
 export interface EditableEquipmentItem extends EquipmentItem {

@@ -111,7 +111,13 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     },
   });
 
-  const updateLHRTEquipmentItem = (procedureItem) => {
+  const updateLHRTEquipmentItem = (item) => {
+    const procedureItem = {
+      id: item.id,
+      title: item.title,
+      paramsId: item.paramsId,
+    };
+
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
         lhrStepState?.editItem(procedureItem, type);
         if (!lhrStepIndex) {
@@ -248,6 +254,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
     if (isEditRestricted) {
       return;
+    }
+
+    if (isLHRStep && isDesign && !dataItem.paramsId) {
+      dataItem.paramsId = dataItem?.id;
     }
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);

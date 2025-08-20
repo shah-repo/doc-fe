@@ -85,7 +85,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     },
     inEdit: [],
   });
-  console.log('items', items, state.data);
 
   const updateState = (stateInfo) => {
     setState(stateInfo);
@@ -125,8 +124,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const saveProcedureItem = (procedureItem: FBProcedureItemConfig) => {
     if (isLHRStep) {
+      const updatedItem = omit(procedureItem, ['type', 'LHRTparameter']);
       const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
-      lhrStepState?.editItem(procedureItem, type);
+      lhrStepState?.editItem(updatedItem, type);
       if (!lhrStepIndex) {
         return;
       }
@@ -144,8 +144,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       }
       workspaceState?.saveDocRev();
       const updatedProcedureItem = {
-        ...procedureItem,
-        plannedId: procedureItem.title,
+        ...updatedItem,
+        plannedId: updatedItem.title,
       };
       appendItemToStateData(updatedProcedureItem);
       return;
@@ -154,6 +154,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
     procedureState?.addItem(procedureItem, type, allSteps);
     mpiProcedureState?.addItem(procedureItem, type, allSteps);
+
     const updatedProcedureItem = {
       ...procedureItem,
       plannedId: procedureItem.title,
@@ -427,6 +428,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
       return;
+    }
+
+    if (isLHRStep && isDesign && !dataItem.paramsId) {
+      dataItem.paramsId = dataItem?.id;
     }
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
