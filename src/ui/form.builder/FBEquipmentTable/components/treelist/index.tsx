@@ -15,6 +15,7 @@ import { FormikProvider, useFormik } from 'formik';
 import {
   cloneDeep,
   isEmpty,
+  keyBy,
   map, replace, uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
@@ -55,10 +56,11 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   isDisabled,
   isDesign,
   isLHRStep,
+  lhrStepIndex,
   isShowOnly = false,
 }) => {
   const { _tabsState } = SM.useStores();
-  const { procedureState, mpiProcedureState, workspaceState } = FB.useStores();
+  const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const { useRef } = React;
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
@@ -76,6 +78,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   });
 
   React.useEffect(() => {
+    console.log('items', items);
     setState((prevState) => ({
       ...prevState,
       data: prepareData(cloneDeep(items) ?? []),
@@ -93,6 +96,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         type: values.type,
       };
 
+      if (isLHRStep && lhrStepIndex) {
+        updateLHRTEquipmentItem(values);
+        return;
+      }
       if (isDesign) {
         newEquipItem.LHRTparameter = LHRTparameter;
       }
@@ -103,6 +110,32 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       discardEquipItem();
     },
   });
+
+  const updateLHRTEquipmentItem = (procedureItem) => {
+    const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
+        lhrStepState?.editItem(procedureItem, type);
+        if (!lhrStepIndex) {
+          return;
+        }
+        if (schemaItem) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          workspaceState!.schema![lhrStepIndex] = {
+            ...schemaItem,
+            editorConfig: {
+              ...schemaItem?.editorConfig,
+              parameters: {
+                ...keyBy(lhrStepState?.editedParameters, 'paramsId'),
+              },
+            },
+          };
+        }
+        workspaceState?.saveDocRev();
+        const updatedProcedureItem = {
+          ...procedureItem,
+          plannedId: procedureItem.title,
+        };
+        discardEquipItem(updatedProcedureItem);
+  };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
     setState(prevState => ({

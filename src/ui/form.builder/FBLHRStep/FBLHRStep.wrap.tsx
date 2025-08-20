@@ -1,6 +1,6 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { find, flattenDeep, lowerCase, omit } from 'lodash';
-import { reaction, ObservableMap } from 'mobx';
+import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
@@ -149,6 +149,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           });
           lhrStepState.setMaterials(newMaterials);
           lhrStepState.setEquipment(newEquipments);
+          console.log('newEquipments', newEquipments);
           lhrStepState.setEditedParameters(parameters);
           return;
         }
