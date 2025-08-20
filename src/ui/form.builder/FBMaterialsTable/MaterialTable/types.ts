@@ -41,6 +41,7 @@ export interface MaterialTableProps {
   isDisabled?: boolean
   saveLot?: (values: EditableMaterial) => void
   editLot?: (values: EditableMaterial) => void
+  saveScanedLots?: (lots: EditableMaterial[]) => void
   handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   partsSelected?: Array<Partial<FBMPIProcedureSelectValue>>

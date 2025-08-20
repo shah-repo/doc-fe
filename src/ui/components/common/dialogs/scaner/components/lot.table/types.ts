@@ -80,4 +80,5 @@ export interface ScanSelectedPartItem {
   variance?: string
   partRevId?: string
   woId?: string
+  plannedId?: string
 }
