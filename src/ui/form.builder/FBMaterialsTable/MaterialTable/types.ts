@@ -47,6 +47,7 @@ export interface MaterialTableProps {
   isLHRStep?: boolean
   isPendingChange?: boolean
   lhrStepIndex?: number
+  isMPIProcedure?: boolean
 }
 
 export interface EditableMaterial extends Material {

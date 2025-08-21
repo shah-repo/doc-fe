@@ -67,6 +67,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   isPendingChange,
   isEnableOnlyLotAddition,
   partsSelected,
+  isMPIProcedure,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -552,7 +553,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanDialog.close();
   };
 
-  const schema = (isDesign ? buildMPISchema : buildSchema)({
+  const schema = (isMPIProcedure ? buildMPISchema : buildSchema)({
     materialSelectOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,

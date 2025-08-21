@@ -57,8 +57,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   isDesign,
   isLHRStep,
   lhrStepIndex,
+  isMPIProcedure,
   isShowOnly = false,
 }) => {
+  console.log('isDisabled', isDisabled, isDesign, isLHRStep);
   const { _tabsState } = SM.useStores();
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const { useRef } = React;
@@ -155,7 +157,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     handleRemove?.(dataItem.id ?? '');
   };
 
-  const schema: CustomTreeListColumnProps[] = (isDesign ? TreeListMPISchema : TreeListSchema)({
+  const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',

@@ -13,6 +13,7 @@ export interface FBEquipmentProps {
   isDesign?: boolean
   isLHRStep?: boolean
   lhrStepIndex?: number
+  isMPIProcedure?: boolean
 }
 
 export interface EquipmentItemState {

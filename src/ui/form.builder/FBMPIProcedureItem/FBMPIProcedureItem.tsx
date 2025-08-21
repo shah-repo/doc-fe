@@ -119,7 +119,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         </Box>
       )}
       {type !== FBProcedureItemType.attachments && !loading && (<>
-        {type !== FBProcedureItemType.materials && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
               borderLeft={0}
@@ -322,8 +322,32 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </Box>
           )}
         </FBMapWrapper>}
-        {type === FBProcedureItemType.materials && <MaterialsTable name={name} isEnableOnlyLotAddition={isSelectVisible && !redlineActive} isActive={!isPreview} type={type} isDisabled={disabled} isDesign={isDesign} items={value} getItem={getItem} handleRemove={handleRemove} handleSelectionDelete={handleSelectionDelete} />}
-        {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(isPreview)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isDesign={isDesign} />}
+        {type === FBProcedureItemType.materials && (
+          <MaterialsTable
+            name={name}
+            isEnableOnlyLotAddition={isSelectVisible && !redlineActive}
+            isActive={!isPreview}
+            type={type}
+            isDisabled={disabled}
+            isDesign={isDesign}
+            items={value}
+            getItem={getItem}
+            handleRemove={handleRemove}
+            handleSelectionDelete={handleSelectionDelete}
+            isMPIProcedure={true}
+          />
+        )}
+        {type === FBProcedureItemType.equipment && (
+          <FBEquipmentTable
+            isDisabled={Boolean(disabled)}
+            type={type}
+            items={value}
+            getItem={getItem}
+            handleRemove={handleRemove}
+            isDesign={isDesign}
+            isMPIProcedure={true}
+          />
+        )}
       </>
       )}
     </FBProvider>
