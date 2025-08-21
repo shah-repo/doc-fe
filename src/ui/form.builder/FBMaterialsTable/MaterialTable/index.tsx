@@ -69,6 +69,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   isEnableOnlyLotAddition,
   partsSelected,
   isMPIProcedure,
+  isPreview,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -443,6 +444,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled));
     const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
+      return;
+    }
+
+    if (isMPIProcedure && isDisabled && !isPreview) {
       return;
     }
 

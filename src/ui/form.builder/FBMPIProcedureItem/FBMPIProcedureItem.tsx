@@ -335,6 +335,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             handleRemove={handleRemove}
             handleSelectionDelete={handleSelectionDelete}
             isMPIProcedure={true}
+            isPreview={isPreview}
           />
         )}
         {type === FBProcedureItemType.equipment && (
