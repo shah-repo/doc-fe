@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -56,6 +56,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   type,
   saveLot,
   editLot,
+  saveScanedLots,
   handleSelectionDelete,
   getItem,
   handleRemove,
@@ -229,32 +230,32 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     }
     const updatedLots = scanLots.map((lot) => {
       return {
-        id: FB.uniqid,
-        lotId: lot.lotRevId,
-        quantity: lot.quantityAssigned,
-        unit: lot.unitOfMeasure,
+        ...lot,
+        parentPartPlannedId: scanSelectedPartInfo.current?.plannedId,
       };
     });
-    const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
 
-    const existingSubItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+    saveScanedLots?.(updatedLots);
+    // const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
 
-    const mergedSubItems = [
-      ...(Array.isArray(existingSubItems) ? existingSubItems : []),
-      ...(Array.isArray(updatedLots) ? updatedLots : []),
-    ];
+    // const existingSubItems = state.data[parentIndex][SUB_ITEMS_FIELD];
 
-    state.data[parentIndex][SUB_ITEMS_FIELD] = mergedSubItems.map(
-      (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
-    );
+    // const mergedSubItems = [
+    //   ...(Array.isArray(existingSubItems) ? existingSubItems : []),
+    //   ...(Array.isArray(updatedLots) ? updatedLots : []),
+    // ];
 
-    procedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
-    mpiProcedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
-    setState((prevState) => ({
-      ...prevState,
-      inEdit: [],
-      data: [...state.data],
-    }));
+    // state.data[parentIndex][SUB_ITEMS_FIELD] = mergedSubItems.map(
+    //   (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+    // );
+
+    // procedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
+    // mpiProcedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
+    // setState((prevState) => ({
+    //   ...prevState,
+    //   inEdit: [],
+    //   data: [...state.data],
+    // }));
   };
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
@@ -472,26 +473,38 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       return;
     }
 
-     partsSelected?.map(selected => {
+    const mapByMaterialId = partsSelected?.reduce((acc, selected) => {
+      const materialId = selected?.materialId ?? '';
+      if (!acc[materialId]) {
+        acc[materialId] = [];
+      }
+      const index = items?.findIndex((item) => {
+        return item.title === selected.materialId;
+      });
+
+      const lotItem = {
+        id: selected.refId,
+        plannedId: '',
+        actualId: '',
+        lotId: selected.lotId,
+        lotDocId: selected.lotDocId,
+        parentPartPlannedId: selected.materialId,
+        parentId: index !== -1 ? state.data[index].id : '',
+        unit: selected.unit,
+        quantity: selected.quantity,
+        [MODE_FIELD]: false,
+      };
+      acc[materialId].push(lotItem);
+      return acc;
+    }, {});
+
+     Object.keys(mapByMaterialId)?.map(materialId => {
        const index = items?.findIndex((item) => {
-         return item.title === selected.materialId;
+         return item.title === materialId;
        });
 
        if (index !== -1) {
-         state.data[index][SUB_ITEMS_FIELD] = [
-           {
-             id: selected.refId,
-             plannedId: '',
-             actualId: '',
-             lotId: selected.lotId,
-             lotDocId: selected.lotDocId,
-             parentPartPlannedId: selected.materialId,
-             parentId: state.data[index].id,
-             unit: selected.unit,
-             quantity: selected.quantity,
-             [MODE_FIELD]: false,
-           },
-         ];
+         state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
 
          updateState({
            ...state,
@@ -532,7 +545,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const scanDialog = useDialog();
   const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
 
-  const openScanDialog = (dataItem) => {
+  const openScanDialog = (dataItem: EditableMaterial) => {
     const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
     const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
 
@@ -544,6 +557,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       variance: '',
       partRevId: plannedIdInfo?.value,
       id: dataItem.id,
+      plannedId: dataItem?.plannedId,
     };
     scanDialog.open();
     console.log('scanSelectedPartInfo', scanSelectedPartInfo); // plannedId

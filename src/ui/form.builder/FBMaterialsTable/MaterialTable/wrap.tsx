@@ -1,7 +1,7 @@
 import { concat, isUndefined, uniqBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FB, FBMPIProcedureSelectState, FBMPIProcedureSelectValue } from '../..';
 import { intl } from '../../../../common/intl';
@@ -22,9 +22,10 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState);
     partsSelected = useObserver(() => mpiProcedureState?.partsSelected);
+    const [scannedLots, setScannedLots] = useState<EditableMaterial[]>([]);
 
     useEffect(() => {
-      reaction(
+      const disposer = reaction(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
@@ -49,12 +50,18 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
           }, [] as Array<Partial<FBMPIProcedureSelectValue>>);
 
               mpiProcedureState?.setPartsSelected(partsSelected);
-              id && dispatch(documentRevisionsActions.loadAudit(id));
-              id && dispatch(documentRevisionsActions.reload(id));
+              if (scannedLots.length) {
+                saveLot(scannedLots[0]);
+                setScannedLots(prev => [...prev.slice(1)]);
+              } else {
+                id && dispatch(documentRevisionsActions.loadAudit(id));
+                id && dispatch(documentRevisionsActions.reload(id));
+              }
         },
       );
+      return disposer;
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [scannedLots]);
 
     function saveLot (values: EditableMaterial) {
       if (!id) { return; }
@@ -76,7 +83,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
         forPreselected: { id: values.parentPartPlannedId ?? '' },
         quantity,
         unit: unit,
-        actualId: values.actualId,
+        // actualId: values.actualId,
         usedOverride: { id: values.lotId },
         type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
       };
@@ -106,6 +113,16 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       mpiProcedureSelectState?.editOverride(id, refId, part);
     }
 
+    function saveScanedLots (lots: EditableMaterial[]) {
+      if (!lots?.length) {
+        return;
+      }
+      if (lots?.length > 1) {
+        setScannedLots(lots.slice(1));
+      }
+      saveLot(lots[0]);
+    }
+
     return Component({
       ...(props as T),
       name,
@@ -114,6 +131,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       partsSelected,
       saveLot,
       editLot,
+      saveScanedLots,
     });
   };
 
