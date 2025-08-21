@@ -125,6 +125,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           isDesign={true}
           isLHRStep={true}
           lhrStepIndex={lhrStepIndex}
+          isMPIProcedure={true}
         />
       )}
       {!loading && type === FBProcedureItemType.equipment && (
@@ -136,6 +137,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           isDesign={true}
           isLHRStep={true}
           lhrStepIndex={lhrStepIndex}
+          isMPIProcedure={true}
         />
       )}
     </Box>
