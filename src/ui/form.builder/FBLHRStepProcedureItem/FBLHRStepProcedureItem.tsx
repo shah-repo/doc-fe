@@ -54,7 +54,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           locale={FBProcedureItemLocale[type]}
         />
       </Box>
-      {!loading && type === FBProcedureItemType.materials && (
+      {!loading && ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box

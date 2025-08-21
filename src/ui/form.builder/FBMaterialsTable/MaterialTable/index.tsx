@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -79,7 +79,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: prepareData(items, isDesign),
+    data: prepareData(cloneDeep(items), isDesign),
     expanded: [],
     dataState: {
       sort: [],
@@ -87,6 +87,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     },
     inEdit: [],
   });
+
+  React.useEffect(() => {
+    if (isMPIProcedure) {
+      setState((prevState) => ({
+        ...prevState,
+        data: prepareData(cloneDeep(items), isDesign),
+        inEdit: [],
+      }));
+    }
+  }, [items]);
 
   const updateState = (stateInfo) => {
     setState(stateInfo);
@@ -156,6 +166,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
     procedureState?.addItem(procedureItem, type, allSteps);
     mpiProcedureState?.addItem(procedureItem, type, allSteps);
+
+    if (isMPIProcedure) {
+      return;
+    }
 
     const updatedProcedureItem = {
       ...procedureItem,
