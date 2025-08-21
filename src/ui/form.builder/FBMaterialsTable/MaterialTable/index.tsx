@@ -90,7 +90,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   React.useEffect(() => {
-    if (isMPIProcedure) {
+    if (isMPIProcedure || isLHRStep) {
       setState((prevState) => ({
         ...prevState,
         data: prepareData(cloneDeep(items), isDesign),
@@ -156,11 +156,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         };
       }
       workspaceState?.saveDocRev();
-      const updatedProcedureItem = {
-        ...updatedItem,
-        plannedId: updatedItem.title,
-      };
-      appendItemToStateData(updatedProcedureItem);
       return;
     }
 

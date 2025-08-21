@@ -3,6 +3,10 @@ import { DocumentRevision } from '../../../../../../state/ducks/documentRevision
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { EditableEquipmentItem } from '../../../interface';
 
+export interface customEQOptionType extends OptionType{
+  complianceDueDate: string
+  status: string
+}
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableEquipmentItem
   getItem?: (id: string) => string
@@ -11,7 +15,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   deletePart?: IAllocationCallback
   onClick?: (e) => void
   parentRevId?: string
-  equipmentOptions: OptionType[]
+  equipmentOptions: customEQOptionType[]
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {
@@ -38,4 +42,4 @@ export interface LotAutoCompleteOptions {
 type IAllocationCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput'>;

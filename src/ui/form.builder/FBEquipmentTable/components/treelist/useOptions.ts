@@ -24,14 +24,29 @@ export const useOptions = () => {
   );
 
   const equipmentOptions = useMemo(() => {
-    return equipDocs?.map((material) => ({
-      label: translate('wo.displayRevision', {
-        docId: material.document.docId,
-        displayRevision: material?.displayRevision,
-        name: material?.name,
-      }),
-      value: material.id,
-    }));
+    return equipDocs?.map((material) => {
+      const calibrationKey = Object.keys(material.formInput || {}).find((key) =>
+        key.startsWith('section-ii-calibration'),
+      );
+
+      const calibrationData = calibrationKey
+        ? material.formInput?.[calibrationKey]
+        : {};
+
+      const complianceDueDate = calibrationData?.complianceDueDate;
+      const status = calibrationData?.status;
+
+      return {
+        label: translate('wo.displayRevision', {
+          docId: material.document.docId,
+          displayRevision: material?.displayRevision,
+          name: material?.name,
+        }),
+        complianceDueDate,
+        status,
+        value: material.id,
+      };
+    });
   }, [equipDocs]);
 
   return {
