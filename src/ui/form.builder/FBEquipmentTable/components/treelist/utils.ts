@@ -8,7 +8,7 @@ export const isAddEquipItem = (dataItem: EditableEquipmentItem): boolean => {
 };
 
 export const isEditEquipItem = (dataItem: EditableEquipmentItem): boolean => {
-  return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
+  return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem.actualId || dataItem?.isActualIdAddition);
 };
 
 export const getCellValue = (dataItem: EditableEquipmentItem, field?: string): string => {

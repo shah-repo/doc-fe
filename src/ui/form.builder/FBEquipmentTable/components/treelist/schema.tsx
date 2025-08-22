@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
-import ExpiryDateCellTemplate from './column.templates/ExpiryDateCell';
+import { DateCell } from './column.templates/DateCell';
 import IDCell from './column.templates/IDCell';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import { RevHeaderCell } from './column.templates/RevHeader';
@@ -11,6 +11,7 @@ export const TreeListSchema = ({
   equipmentOptions,
   popperHolder,
   getItem,
+  addActualId,
   onDiscard,
   onDelete,
   onConfirm,
@@ -33,7 +34,7 @@ export const TreeListSchema = ({
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
+      cell: (props) => <LotAllocatedCell {...props} addActualId={addActualId} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} />,
     },
     {
       field: 'calDueDate',
@@ -41,7 +42,7 @@ export const TreeListSchema = ({
       title: translate('lhr.equipment.grid.heading.cal.due.date'),
       width: 200,
       mainOrderIndex: 2,
-      cell: (props) => <ExpiryDateCellTemplate {...props} />,
+      cell: (props) => <DateCell {...props} />,
     },
     {
       field: 'pmDueDate',
@@ -50,6 +51,7 @@ export const TreeListSchema = ({
       width: 200,
       headerCell: RevHeaderCell,
       mainOrderIndex: 3,
+      cell: (props) => <DateCell {...props} />,
     },
     {
       id: 'actions',

@@ -8,14 +8,16 @@ export interface customEQOptionType extends OptionType{
   status: string
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
+  isDisabled?: boolean
   dataItem: EditableEquipmentItem
   getItem?: (id: string) => string
-  addLot?: IAllocationCallback
-  deleteLot?: IAllocationCallback
-  deletePart?: IAllocationCallback
+  addActualId?: EquipmentCallback
+  onScanClick?: EquipmentCallback
+  deleteLot?: EquipmentCallback
+  deletePart?: EquipmentCallback
   onClick?: (e) => void
   parentRevId?: string
-  equipmentOptions: customEQOptionType[]
+  equipmentOptions: OptionType[]
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {
@@ -25,10 +27,10 @@ export interface AllocItemActionsProps<EditableAllocationItem> {
   scrollBehavior?: ScrollBehavior
   isAddPartEnabled?: boolean
   onConfirm: () => void
-  onDiscard?: IAllocationCallback
-  onDelete?: IAllocationCallback
-  onChildPartAdd?: IAllocationCallback
-  onRestore?: IAllocationCallback
+  onDiscard?: EquipmentCallback
+  onDelete?: EquipmentCallback
+  onChildPartAdd?: EquipmentCallback
+  onRestore?: EquipmentCallback
   onReorder?: () => void
 }
 
@@ -39,7 +41,7 @@ export interface LotAutoCompleteOptions {
   expiryDate?: string
 }
 
-type IAllocationCallback = (dataItem: EditableEquipmentItem) => void;
+type EquipmentCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
 & Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput'>;

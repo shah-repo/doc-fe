@@ -20,7 +20,7 @@ const CalDueDateCell: React.ComponentType<CustomTreeListCellProps> = (props) => 
     }
   }, [equipmentOptions]);
 
-  const [value, setValue] = useState<customEQOptionType>();
+  const [value, setValue] = useState<Partial<customEQOptionType>>();
   const complianceDueDate = value?.complianceDueDate;
   const formattedComplianceDueDate
     = complianceDueDate && getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit);

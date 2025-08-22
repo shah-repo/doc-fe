@@ -15,6 +15,7 @@ import { FormikProvider, useFormik } from 'formik';
 import {
   cloneDeep,
   isEmpty,
+  isNil,
   keyBy,
   map, replace, uniq,
 } from 'lodash';
@@ -146,8 +147,24 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
+    if (dataItem?.[ADD_FIELD]) {
+      if (dataItem.isActualIdAddition) {
+        const parentIndex = state.data?.findIndex((data) => {
+          return data.plannedId === dataItem.parentEquipPlannedId;
+        });
+        if (parentIndex !== -1) {
+          state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
+            (data) => !data[ADD_FIELD],
+          );
+        }
+      } else {
+        state.data = state.data?.filter((data) => !data[ADD_FIELD]);
+      }
+    }
+
     setState(prevState => ({
       ...prevState,
+      data: [...state.data],
       inEdit: [],
     }));
       formik?.resetForm();
@@ -157,11 +174,66 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     handleRemove?.(dataItem.id ?? '');
   };
 
+  const updateState = (stateInfo) => {
+    setState(stateInfo);
+  };
+
+  const ignorePreviouslyAddedItems = (data: EditableEquipmentItem[]) => {
+    return data?.filter((data) => {
+      const isEquipmentItemAddExist = !data[ADD_FIELD];
+      if (data[SUB_ITEMS_FIELD]) {
+        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+      }
+      return isEquipmentItemAddExist;
+    });
+  };
+
+  const createNewLotItem = () => {
+    return {
+      id: FB.uniqid,
+      plannedId: '',
+      actualId: '',
+      calDueDate: '',
+      pmDueDate: '',
+      isActualIdAddition: true,
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+    };
+  };
+
+  const addActualId = (dataItem: EditableEquipmentItem) => {
+    const index = state?.data?.findIndex((data) => {
+      return data.id === dataItem.id;
+    });
+    state.data = ignorePreviouslyAddedItems(state.data);
+
+    if (state.data.length && index !== -1) {
+      const newActualItem: EditableEquipmentItem = createNewLotItem();
+      newActualItem.parentEquipPlannedId = dataItem.plannedId;
+      newActualItem.parentId = dataItem.id;
+      state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
+
+      if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
+        state.data[index][SUB_ITEMS_FIELD] = [];
+      }
+
+        state.data[index][SUB_ITEMS_FIELD]?.unshift(newActualItem);
+
+        updateState({
+          ...state,
+          data: [...state.data],
+          expanded: [state.data[index].id],
+          inEdit: [newActualItem],
+        });
+    }
+  };
+
   const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',
     getItem,
+    addActualId: addActualId,
     equipmentOptions,
     onDiscard: discardEquipItem,
     onDelete: removeEquipItem,

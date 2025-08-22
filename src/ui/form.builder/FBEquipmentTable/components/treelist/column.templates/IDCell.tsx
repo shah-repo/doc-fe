@@ -7,15 +7,14 @@ import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { EditableEquipmentItem } from '../../../interface';
-import { ADD_FIELD } from '../constants';
-import { isEditEquipItem } from '../utils';
+import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions } = props;
-  const isEditMode = isEditEquipItem(dataItem);
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (!dataItem.actualId && !dataItem?.isActualIdAddition);
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableEquipmentItem>();
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');

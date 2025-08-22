@@ -3,6 +3,7 @@ export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const MODE_FIELD = 'inEdit';
 export const ADD_FIELD = 'isNew';
+export const IS_ACTUAL_ID_ADDITION = 'isActualIdAddition';
 export const CELL_EMPTY_VALUE = '-';
 export const MAX_DECIMALS = 4;
 export const TREELIST_CONFIG = {

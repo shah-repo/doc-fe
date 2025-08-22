@@ -11,10 +11,14 @@ export interface EquipmentItem {
   LHRTparameter?: boolean
   type?: string
   paramsId?: string
+  actualEquipDocId?: string
+  isActualIdAddition?: boolean
 }
 
 export interface EditableEquipmentItem extends EquipmentItem {
   [MODE_FIELD]?: boolean
+  parentEquipPlannedId?: string
+  parentId?: string
 }
 
 export interface EquipmentItemEditEvent {
