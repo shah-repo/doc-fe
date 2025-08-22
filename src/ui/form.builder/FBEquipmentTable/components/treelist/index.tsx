@@ -85,6 +85,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     setState((prevState) => ({
       ...prevState,
       data: prepareData(cloneDeep(items) ?? []),
+      inEdit: [],
     }));
   }, [items]);
 
@@ -139,11 +140,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           };
         }
         workspaceState?.saveDocRev();
-        const updatedProcedureItem = {
-          ...procedureItem,
-          plannedId: procedureItem.title,
-        };
-        discardEquipItem(updatedProcedureItem);
   };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
