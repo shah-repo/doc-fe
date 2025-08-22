@@ -113,7 +113,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       mpiProcedureSelectState?.editOverride(id, refId, part);
     }
 
-    function saveScanedLots (lots: EditableMaterial[]) {
+    function saveScannedLots (lots: EditableMaterial[]) {
       if (!lots?.length) {
         return;
       }
@@ -131,7 +131,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       partsSelected,
       saveLot,
       editLot,
-      saveScanedLots,
+      saveScannedLots,
     });
   };
 

@@ -2614,6 +2614,7 @@
   "common.refresh": "Refresh",
   "common.or": "OR",
   "common.rev": "Rev.",
+  "common.select.revision": "{docId} Rev {displayRevision} - {name}",
   "supplier.status.warning.continue.message": "Are you sure you want to continue?",
   "purchaseOrder.supplierStatus.dialog.general.prefix": "All Items in",
   "purchaseOrder.supplierStatus.dialog.general.suffix": "need to have an approved supplier.",

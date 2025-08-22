@@ -56,7 +56,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   type,
   saveLot,
   editLot,
-  saveScanedLots,
+  saveScannedLots,
   handleSelectionDelete,
   getItem,
   handleRemove,
@@ -245,7 +245,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       };
     });
 
-    saveScanedLots?.(updatedLots);
+    saveScannedLots?.(updatedLots);
     // const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
 
     // const existingSubItems = state.data[parentIndex][SUB_ITEMS_FIELD];
