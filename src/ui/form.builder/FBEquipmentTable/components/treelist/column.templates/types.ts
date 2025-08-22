@@ -17,7 +17,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   deletePart?: EquipmentCallback
   onClick?: (e) => void
   parentRevId?: string
-  equipmentOptions: OptionType[]
+  equipmentOptions: customEQOptionType[]
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {

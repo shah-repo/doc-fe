@@ -158,7 +158,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           );
         }
       } else {
-        state.data = state.data?.filter((data) => !data[ADD_FIELD]);
+        state.data = state.data?.filter((data) => dataItem?.id ? dataItem.id !== data.id : !data[ADD_FIELD]);
       }
     }
 

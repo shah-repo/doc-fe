@@ -11,27 +11,28 @@ const CalDueDateCell: React.ComponentType<CustomTreeListCellProps> = (props) => 
   const { hasChildren, dataItem, field, equipmentOptions } = props;
   const classes = styles({ hasChildren });
   const { values } = useFormikContext<EditableEquipmentItem>();
+  const [value, setValue] = useState<customEQOptionType>();
+  const title = dataItem.title ?? values.title;
 
   useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === (dataItem.title ?? values.title));
+    if (!field || !equipmentOptions?.length || !title) return;
 
-    if (value && field) {
-      setValue(value);
+    const matchedOption = equipmentOptions.find((option) => option.value === title);
+
+    if (matchedOption) {
+      setValue(matchedOption);
     }
-  }, [equipmentOptions]);
+  }, [equipmentOptions, title]);
 
-  const [value, setValue] = useState<Partial<customEQOptionType>>();
   const complianceDueDate = value?.complianceDueDate;
-  const formattedComplianceDueDate
-    = complianceDueDate && getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit);
-
+  const formattedComplianceDueDate = complianceDueDate
+    ? getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit)
+    : '';
   const isExpired = complianceDueDate ? new Date(complianceDueDate) < new Date() : false;
 
   return (
     <TreeListCellWrapper {...props}>
-      <span className={cx(classes.Cell, { [classes.expired]: isExpired && complianceDueDate })}>
-        {formattedComplianceDueDate}
-      </span>
+      <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{formattedComplianceDueDate}</span>
     </TreeListCellWrapper>
   );
 };
