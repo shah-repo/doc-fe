@@ -3,7 +3,6 @@ import { TreeListCellProps, TreeListExpandChangeEvent, TreeListRowProps } from '
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
-import { FBInputProps } from '../../FBInput/FBInput.types';
 import FBMPIProcedureSelectState from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
 import { FBMPIProcedureSelectValue } from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
@@ -66,8 +65,6 @@ export interface LotOptions {
   documentId?: string
 }
 
-export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
-
 export interface SchemaOptions {
   isLoading?: boolean
   materialSelectOptions: OptionType[]
@@ -89,20 +86,6 @@ export interface SchemaOptions {
 export interface UnitOption {
   value: string
   text: string
-}
-
-export interface ActionsProps<EditableMaterial> {
-  dataItem: EditableMaterial
-  isDeleteDisabled?: boolean
-  deleteTooltipText?: string
-  scrollBehavior?: ScrollBehavior
-  isAddPartEnabled?: boolean
-  onConfirm: () => void
-  onDiscard?: MaterialCallback
-  onDelete?: MaterialCallback
-  onChildPartAdd?: MaterialCallback
-  onRestore?: MaterialCallback
-  onReorder?: () => void
 }
 
 export interface CustomTreeListRowProps extends TreeListRowProps {
