@@ -5,27 +5,17 @@ import { translate } from '../../../common/intl';
 import { Autocomplete } from '../forms/fields-next';
 import { TimezoneOption, TimezoneSelectProps } from './types';
 
-const generateTimezoneOptions = (): TimezoneOption[] => {
-  return moment.tz.names().map((tz) => {
-    const now = moment().tz(tz);
-    const offsetInMinutes = now.utcOffset();
-    const offsetHours = Math.floor(offsetInMinutes / 60);
-    const offsetMinutes = Math.abs(offsetInMinutes % 60);
+const generateTimezoneOptions = (): TimezoneOption[] => moment.tz.names().map((tz) => {
+  const now = moment().tz(tz);
 
-    const offsetFormatted = `GMT${offsetInMinutes >= 0 ? '+' : '-'}${String(Math.abs(offsetHours)).padStart(
-      2,
-      '0',
-    )}:${String(offsetMinutes).padStart(2, '0')}`;
-
-    return {
-      value: tz,
-      label: `(${offsetFormatted}) ${tz.replace(/_/g, ' ')}`,
-      offset: offsetInMinutes / 60,
-      abbrev: now.zoneAbbr(),
-      altName: now.zoneName(),
-    };
-  });
-};
+  return {
+    value: tz,
+    label: `(GMT${moment.tz(now, tz).format('Z')}) ${tz.replace(/_/g, ' ')}`,
+    offset: now.utcOffset(),
+    abbrev: now.zoneAbbr(),
+    altName: now.zoneName(),
+  };
+});
 
 const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   value,

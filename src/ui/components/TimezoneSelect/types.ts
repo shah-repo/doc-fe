@@ -1,3 +1,5 @@
+import { AutocompleteProps } from '../forms/fields-next/Autocomplete/Autocomplete.types';
+
 export interface TimezoneOption {
   value: string
   label: string
@@ -6,10 +8,6 @@ export interface TimezoneOption {
   altName: string
 }
 
-export interface TimezoneSelectProps {
-  value: string | undefined
+export type TimezoneSelectProps = AutocompleteProps & {
   onChange: (value: TimezoneOption | null) => void
-  label?: string
-  placeholder?: string
-  disabled?: boolean
-}
+};
