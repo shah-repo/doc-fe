@@ -41,6 +41,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     // MARK: @config
     const dispatch = useDispatch();
     const [lhrsQuantity, setLhrsQuantity] = useState(1);
+    const [lhrsAcceptedQty, setLhrsAcceptedQty] = useState(NaN);
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document, id } = workspaceState || {};
     const { version, status } = document || {};
@@ -88,6 +89,23 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    React.useEffect(() => {
+      reaction(
+        () => formState?.getInputState('lhrs-accepted-quantity')?.value,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          const formValue = cloneDeep(formState?.getFieldValue('lhrs-accepted-quantity'));
+          setLhrsAcceptedQty(formValue);
+        },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      const formValue = cloneDeep(formState?.getFieldValue('lhrs-accepted-quantity'));
+      formValue && setLhrsQuantity(formValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lhrsAcceptedQty]);
 
     React.useEffect(() => {
       const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
@@ -196,6 +214,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
+      const mimimumQty = item.quantity ? toFixed(item.quantity * lhrsAcceptedQty) || toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
 
       if (isDocumentMPI) {
         return item.type
@@ -204,8 +223,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       }
 
       return usedItem
-        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit }
-        : { title: getItem?.(item.title), quantity, unit };
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit, mimimumQty }
+        : { title: getItem?.(item.title), quantity, unit, mimimumQty };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
