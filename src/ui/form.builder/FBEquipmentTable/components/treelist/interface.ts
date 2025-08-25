@@ -1,9 +1,12 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import FBMPIProcedureSelectState from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
+import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
-import { EquipmentItem } from '../../interface';
+import { EditableEquipmentItem, EquipmentItem } from '../../interface';
 
 export interface FBEquipmentProps {
+  name?: string
   isDisabled: boolean
   isShowOnly?: boolean
   items?: FBProcedureItemConfig[]
@@ -14,6 +17,10 @@ export interface FBEquipmentProps {
   isLHRStep?: boolean
   lhrStepIndex?: number
   isMPIProcedure?: boolean
+  isEnableActualIdAddition?: boolean
+  saveActualEquipment?: (values: EditableEquipmentItem) => void
+  mpiProcedureSelectState?: FBMPIProcedureSelectState
+  equipsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
 }
 
 export interface EquipmentItemState {

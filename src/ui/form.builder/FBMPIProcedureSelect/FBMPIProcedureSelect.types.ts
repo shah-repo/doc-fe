@@ -32,6 +32,7 @@ export interface FBMPIProcedureSelectValue {
   lotPartRevision?: string
   pmDueDate?: string
   calDueDate?: string
+  actualId?: string
 }
 
 export interface FBMPIProcedureSelectEditRequestBody {

@@ -58,6 +58,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   redlineActive,
   isReleased,
   isDesign,
+  isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
   return (
@@ -334,19 +335,21 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             getItem={getItem}
             handleRemove={handleRemove}
             handleSelectionDelete={handleSelectionDelete}
-            isMPIProcedure={true}
+            isMPIProcedure={isDocumentMPI}
             isPreview={isPreview}
           />
         )}
         {type === FBProcedureItemType.equipment && (
           <FBEquipmentTable
+            name={name}
             isDisabled={Boolean(disabled)}
             type={type}
             items={value}
             getItem={getItem}
             handleRemove={handleRemove}
             isDesign={isDesign}
-            isMPIProcedure={true}
+            isMPIProcedure={isDocumentMPI}
+            isEnableActualIdAddition={isSelectVisible && !redlineActive}
           />
         )}
       </>
