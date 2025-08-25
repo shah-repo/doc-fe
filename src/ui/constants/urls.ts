@@ -67,7 +67,6 @@ export const USER_GROUPS_URL = '/user_group/group';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
-export const COMPANY_TIMEZONE_URL = '/company/settings/timezone';
 
 export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions';
 export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;

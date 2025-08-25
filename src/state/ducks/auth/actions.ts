@@ -38,7 +38,7 @@ const userGroups = (groups: Group[]): UserGroupsAction => ({
   payload: groups,
 });
 
-const userTimezone = (timezone: string): LoadUserTimezoneAction => ({
+const setUserTimezone = (timezone: string): LoadUserTimezoneAction => ({
   type: USERS_TIMEZONE_URL,
   payload: timezone,
 });
@@ -266,7 +266,11 @@ const loadUserTimezone = (): ApiAction<string> =>
     url: `${USERS_TIMEZONE_URL}`,
     method: 'get',
     onSuccess: (timezone, dispatch) => {
-      dispatch(userTimezone(timezone));
+      if (!timezone) {
+        return;
+      }
+
+      dispatch(setUserTimezone(timezone));
     },
   });
 

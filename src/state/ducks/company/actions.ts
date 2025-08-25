@@ -6,7 +6,6 @@ import { OptionType } from '../../../ui/administration/general.settings/panels/S
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import {
   ASL_OPTIONS_OPTIONS_URL, COMPANY_MINE_URL, COMPANY_SETTINGS_URL,
-  COMPANY_TIMEZONE_URL,
   CREATE_APPROVAL_ROLES_URL,
   LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
@@ -272,17 +271,6 @@ const fetchDocRevOptionsByDocTypeId = (
   });
 };
 
-const updateCompanyTimezone = (
-  body: {timezone: string},
-  handlers: Handlers,
-): ApiAction<Company> =>
-  apiActionWithCallbacks({
-    url: `${COMPANY_TIMEZONE_URL}`,
-    method: 'patch',
-    data: body,
-    handlers,
-  });
-
 export default {
   selectCompany,
   getCompanyMine,
@@ -303,5 +291,4 @@ export default {
   updatePremiumFeatureSubscription,
   createApprovalRoles,
   updateApprovalRoles,
-  updateCompanyTimezone,
 };

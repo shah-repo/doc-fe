@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { combineReducers } from 'redux';
 import { MomentFormats } from '../../../common/utils/date';
@@ -101,7 +100,7 @@ const user = (
     case USERS_TIMEZONE_URL:
       return {
         ...state,
-        ...(!isEmpty(action.payload) && { timezone: action.payload }),
+        timezone: action.payload,
       };
     case EDIT_EMPLOYEE_USER_INFO:
       if (state.id === action.payload.id) {

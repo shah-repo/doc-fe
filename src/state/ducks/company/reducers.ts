@@ -120,7 +120,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   },
   aslStatusConfig: [],
   supplierConfig: [],
-  timezone: '',
+  timezone: 'America/Los_Angeles',
 };
 
 const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {
