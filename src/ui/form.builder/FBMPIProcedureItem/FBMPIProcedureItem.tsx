@@ -119,94 +119,94 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       {type !== FBProcedureItemType.attachments && !loading && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) =>
-          (
-            <Observer>
-              {() => {
-            const totalQuantity = (mpiProcedureState?.partsSelected || []).reduce((sum, selection) => {
-              if (selection.materialId === item.title || selection.equipmentId === item.title) {
-                return sum + Number(selection.quantity || 0);
-              }
-              return sum;
-            }, 0);
-            const parentValues = getProcedureValues?.(item);
-            const showError = totalQuantity > 0 && totalQuantity !== parentValues?.quantity && type === 'materials';
-            return (
-            <Box
-              borderLeft={0}
-              borderRight={0}
-              borderTop={0}
-              borderColor={Colors.hint_gray}
-              key={`fb-procedure-item-${type}-${index}`}
-              className={FBClasses.hoverVisibility}
-            >
-              <Box
-                display="flex"
-                bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
-                alignItems="center"
-                p={1.5}
-                minHeight={55}
-                border={1}
-                borderRadius= "0 0 3px 3px"
-                borderColor={showError ? Colors.error_red : Colors.hint_gray}
-              >
-                <Box flexGrow={1}>
-                  <FBText
-                    locale={getProcedureLocale?.(item)}
-                    values={getProcedureValues?.(item)}
-                    boxProps={{
-                      color: Colors.raven,
-                      flexGrow: 1,
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '18px',
-                    }}
-                  />
-                  <Observer>
-                    {() => (
-                      <>
-                        {!isEmpty(mpiProcedureState?.partsSelected) && (
-                          <Box mt={1} display="flex" flexWrap="wrap">
-                            <FBMapWrapper<Array<Partial<FBMPIProcedureSelectValue>>>
-                              collection={mpiProcedureState?.partsSelected || []}
-                            >
-                              {(selection: FBMPIProcedureSelectValue, index) => {
-                                const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
-                                const calOverdue = isDateOverdue?.(selection?.calDueDate);
-                                const eqOverdue = type === 'equipment' && (pmOverdue || calOverdue);
+            (
+              <Observer>
+                {() => {
+                  const totalQuantity = (mpiProcedureState?.partsSelected || []).reduce((sum, selection) => {
+                    if (selection.materialId === item.title || selection.equipmentId === item.title) {
+                      return sum + Number(selection.quantity || 0);
+                    }
+                    return sum;
+                  }, 0);
+                  const parentValues = getProcedureValues?.(item);
+                  const showError = totalQuantity > 0 && totalQuantity > parentValues?.mimimumQty && type === 'materials';
+                  return (
+                    <Box
+                      borderLeft={0}
+                      borderRight={0}
+                      borderTop={0}
+                      borderColor={Colors.hint_gray}
+                      key={`fb-procedure-item-${type}-${index}`}
+                      className={FBClasses.hoverVisibility}
+                    >
+                      <Box
+                        display="flex"
+                        bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
+                        alignItems="center"
+                        p={1.5}
+                        minHeight={55}
+                        border={1}
+                        borderRadius= "0 0 3px 3px"
+                        borderColor={showError ? Colors.error_red : Colors.hint_gray}
+                      >
+                        <Box flexGrow={1}>
+                          <FBText
+                            locale={getProcedureLocale?.(item)}
+                            values={getProcedureValues?.(item)}
+                            boxProps={{
+                              color: Colors.raven,
+                              flexGrow: 1,
+                              fontWeight: 400,
+                              fontSize: '14px',
+                              lineHeight: '18px',
+                            }}
+                          />
+                          <Observer>
+                            {() => (
+                              <>
+                                {!isEmpty(mpiProcedureState?.partsSelected) && (
+                                  <Box mt={1} display="flex" flexWrap="wrap">
+                                    <FBMapWrapper<Array<Partial<FBMPIProcedureSelectValue>>>
+                                      collection={mpiProcedureState?.partsSelected || []}
+                                    >
+                                      {(selection: FBMPIProcedureSelectValue, index) => {
+                                        const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
+                                        const calOverdue = isDateOverdue?.(selection?.calDueDate);
+                                        const eqOverdue = type === 'equipment' && (pmOverdue || calOverdue);
 
-                                return (
-                                  <Box key={`fb-mpi-procedure-selection-${index}`}>
-                                    {(selection.materialId === item.title || selection.equipmentId === item.title) && (
-                                      <>
-                                        <Box
-                                          display="flex"
-                                          flexDirection="row"
-                                          bgcolor={ eqOverdue ? Colors.light_red : Colors.bright_gray}
-                                          borderColor={eqOverdue ? Colors.light_red : Colors.bright_gray}
-                                          borderRadius={2}
-                                          border={0.5}
-                                          mr={1}
-                                          mb={1}
-                                          p={0.5}
-                                          style={{
-                                            float: 'left',
-                                          }}
-                                        >
-                                          <FBText
-                                            locale={`form.builder.mpi.part.selection.${type}`}
-                                            values={{
-                                              docId: selection.overrideDocId || '',
-                                              lotPart: selection.lotPart || '',
-                                              quantity: selection.quantity || 0,
-                                              unit: selection.unit || '',
-                                              lotPartRevision: selection.lotPartRevision || '',
-                                            }}
-                                            boxProps={{
-                                              color: Colors.almost_black,
-                                              pr: 1,
-                                            }}
-                                          />
-                                          {(selection.calDueDate !== 'N/A') && type === 'equipment'
+                                        return (
+                                          <Box key={`fb-mpi-procedure-selection-${index}`}>
+                                            {(selection.materialId === item.title || selection.equipmentId === item.title) && (
+                                              <>
+                                                <Box
+                                                  display="flex"
+                                                  flexDirection="row"
+                                                  bgcolor={ eqOverdue ? Colors.light_red : Colors.bright_gray}
+                                                  borderColor={eqOverdue ? Colors.light_red : Colors.bright_gray}
+                                                  borderRadius={2}
+                                                  border={0.5}
+                                                  mr={1}
+                                                  mb={1}
+                                                  p={0.5}
+                                                  style={{
+                                                    float: 'left',
+                                                  }}
+                                                >
+                                                  <FBText
+                                                    locale={`form.builder.mpi.part.selection.${type}`}
+                                                    values={{
+                                                      docId: selection.overrideDocId || '',
+                                                      lotPart: selection.lotPart || '',
+                                                      quantity: selection.quantity || 0,
+                                                      unit: selection.unit || '',
+                                                      lotPartRevision: selection.lotPartRevision || '',
+                                                    }}
+                                                    boxProps={{
+                                                      color: Colors.almost_black,
+                                                      pr: 1,
+                                                    }}
+                                                  />
+                                                  {(selection.calDueDate !== 'N/A') && type === 'equipment'
                                           && <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={calOverdue ? 'bold' : 'normal'}
@@ -223,8 +223,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             Next Cal Due: &nbsp;
                                             {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
-                                          }
-                                          {(selection.pmDueDate !== 'N/A') && type === 'equipment'
+                                                  }
+                                                  {(selection.pmDueDate !== 'N/A') && type === 'equipment'
                                           && <Box
                                             color={pmOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={pmOverdue ? 'bold' : 'normal'}
@@ -241,18 +241,18 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             Next PM Due: &nbsp;
                                             {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
-                                          }
-                                          <IconButton
-                                            size="small"
-                                            style={{ fontSize: 11 }}
-                                            onClick={() => handleSelectionDelete?.(selection.refId)}
-                                            disabled={isReleased}
-                                          >
-                                            <HighlightOffIcon fontSize="inherit" />
-                                          </IconButton>
+                                                  }
+                                                  <IconButton
+                                                    size="small"
+                                                    style={{ fontSize: 11 }}
+                                                    onClick={() => handleSelectionDelete?.(selection.refId)}
+                                                    disabled={isReleased}
+                                                  >
+                                                    <HighlightOffIcon fontSize="inherit" />
+                                                  </IconButton>
 
-                                        </Box>
-                                        {(pmOverdue || calOverdue)
+                                                </Box>
+                                                {(pmOverdue || calOverdue)
                                     && <Box
                                       color={Colors.error_red}
                                       fontWeight="bold"
@@ -262,85 +262,86 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                     >
                                       <WarningIcon width={14} height={14} /> &nbsp; OVERDUE &nbsp; &nbsp;
                                     </Box>
-                                        }
-                                      </>
-                                    )}
+                                                }
+                                              </>
+                                            )}
+                                          </Box>
+                                        );
+                                      }}
+                                    </FBMapWrapper>
                                   </Box>
-                                );
-                              }}
-                            </FBMapWrapper>
-                          </Box>
+                                )}
+                              </>
+                            )}
+                          </Observer>
+                        </Box>
+                        {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
+                          <Observer>
+                            {() => {
+                              const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
+                                (selection) =>
+                                  selection.materialId === item.title || selection.equipmentId === item.title);
+                              return (
+                                <FBButton
+                                  label={hasSelected ? 'form.builder.change' : 'form.builder.select'}
+                                  style={{ margin: 0, padding: '4px' }}
+                                  onClick={() => handleSelect?.({
+                                    ...item,
+                                    id: item.title,
+                                    title: getItem?.(item.title) || '',
+                                  })}
+                                />
+                              );
+                            }}
+                          </Observer>
                         )}
-                      </>
-                    )}
-                  </Observer>
-                </Box>
-                {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
-                  <Observer>
-                    {() => {
-                      const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
-                        (selection) =>
-                          selection.materialId === item.title || selection.equipmentId === item.title);
-                      return (
-                        <FBButton
-                          label={hasSelected ? 'form.builder.change' : 'form.builder.select'}
-                          style={{ margin: 0, padding: '4px' }}
-                          onClick={() => handleSelect?.({
-                            ...item,
-                            id: item.title,
-                            title: getItem?.(item.title) || '',
-                          })}
-                        />
-                      );
-                    }}
-                  </Observer>
-                )}
-                {!isPreview && (
-                  <>
-                    <Box>
-                      <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={() => onClick?.(item)}
-                        {...{ disabled }}
+                        {!isPreview && (
+                          <>
+                            <Box>
+                              <IconButton
+                                color="inherit"
+                                size="small"
+                                onClick={() => onClick?.(item)}
+                                {...{ disabled }}
+                              >
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Box>
+                            <Box color={Colors.error_red}>
+                              <IconButton
+                                color="inherit"
+                                size="small"
+                                onClick={() => handleRemove?.(item.id)}
+                                {...{ disabled }}
+                              >
+                                <RemoveCircleIcon fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                      {showError && (
+                        <Box
+                          mb={1}
+                        >
+                          <span style={{ color: Colors.error_red }}>{translate('lhr.materials.quantity.mismatch.error')}</span>
+                        </Box>)}
+                      <Box
+                        key="id"
+                        display={isEmpty(item.attachments) ? 'none' : 'flex'}
+                        bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
+                        p={1.5}
+                        pt={0}
+                        pb={0}
                       >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
+                        <FBFilesPresenter files={item.attachments} mode="raw" />
+                      </Box>
                     </Box>
-                    <Box color={Colors.error_red}>
-                      <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={() => handleRemove?.(item.id)}
-                        {...{ disabled }}
-                      >
-                        <RemoveCircleIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </>
-                )}
-              </Box>
-              {showError && (
-                <Box
-                  mb={1}
-                >
-                  <span style={{ color: Colors.error_red }}>{translate('lhr.materials.quantity.mismatch.error')}</span>
-                </Box>)}
-              <Box
-                key="id"
-                display={isEmpty(item.attachments) ? 'none' : 'flex'}
-                bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
-                p={1.5}
-                pt={0}
-                pb={0}
-              >
-                <FBFilesPresenter files={item.attachments} mode="raw" />
-              </Box>
-            </Box>
-          ); }
-        }
-        </Observer>
-      )}
+                  );
+                }
+                }
+              </Observer>
+            )}
         </FBMapWrapper>
       )}
     </FBProvider>
