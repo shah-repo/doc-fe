@@ -4,6 +4,7 @@ import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
+import { FBProcedureItemType } from '../../../../form.builder/FBProcedureItem/FBProcedureItem.types';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
@@ -29,9 +30,12 @@ interface Props {
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
+  const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
+  const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
+  const validateEQScan = useActionCreator(allocationActions.validateEQScannedItem);
 
-  const keyValues = useCallback(
-    () => [
+  const keyValues = useCallback(() => {
+    const values = [
       {
         key: translate('scan.lot.grid.item.id.message'),
         value: `${selectedPart?.docId}.${selectedPart?.displayRevision}`,
@@ -40,36 +44,55 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         key: translate('scan.lot.grid.part.description.message'),
         value: convertHtmlEntities((selectedPart?.partDescription ?? '').replace(/(<([^>]+)>|\/n)/g, '')),
       },
-      {
-        key: translate('scan.lot.grid.quantity.needed.message'),
-        value: selectedPart?.quantityNeeded ?? 0,
-      },
-      {
-        key: translate('scan.lot.grid.variance.message'),
-        value: selectedPart?.variance ?? 0,
-      },
-    ],
-    [selectedPart],
-  );
+    ];
+
+    if (!isEquipmentScan) {
+      values.push(
+        {
+          key: translate('scan.lot.grid.quantity.needed.message'),
+          value: String(selectedPart?.quantityNeeded ?? 0),
+        },
+        {
+          key: translate('scan.lot.grid.variance.message'),
+          value: String(selectedPart?.variance ?? 0),
+        },
+      );
+    }
+
+    return values;
+  }, [selectedPart]);
+
   console.log('selectedPart', selectedPart);
 
-  const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
   const validateScanLotAsync = useAsync({
     onSuccess: (data?: ValidateLot) => {
-      const lot = {
-        ...data,
-        id: data?.lotRevId,
-        lotNumber: {
+      const lot: ScanLot = isEquipmentScan
+        ? {
+          ...data,
+          id: data?.id,
+          lotNumber: {
+            id: data?.id,
+            name: data?.document?.docId,
+            documentId: data?.document?.id,
+          },
+        }
+        : {
+          ...data,
           id: data?.lotRevId,
-          name: data?.docId,
-          documentId: data?.documentId,
-        },
-        serialNumber: data?.serialNumber,
-        quantityAssigned: data?.onHand,
-        unitOfMeasure: data?.lotUsedUnit,
-      };
+          lotNumber: {
+            id: data?.lotRevId,
+            name: data?.docId,
+            documentId: data?.documentId,
+          },
+        };
 
-      setScanLots((prevLots) => [...prevLots, lot as ScanLot]);
+      if (!isEquipmentScan) {
+        lot.serialNumber = data?.serialNumber;
+        lot.quantityAssigned = data?.onHand;
+        lot.unitOfMeasure = data?.lotUsedUnit;
+      }
+
+      setScanLots((prevLots) => [...prevLots, lot]);
     },
     onError: toastError,
   });
@@ -109,6 +132,12 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   const handleScan = (data: string) => {
     setScannedValue(data);
+
+    if (isEquipmentScan) {
+      validateScanLotAsync.start(validateEQScan, extractRevision(data), validateScanLotAsync);
+      return;
+    }
+
     validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
   };
 
@@ -130,6 +159,24 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       lotRevId = extractRevision(sampleLOT[lotIndex]) ?? '';
     }
     validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync); // partRevId -> 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81'
+  };
+
+  const validateEQScanItem = () => {
+    const sampleLOT = [
+      'http://localhost:3000/document_revision/cb85c705-8472-4960-8786-234d756a8fc4/version/4561ba79-3fdc-46ca-953c-940d9eb086d0',
+      'http://localhost:3000/document_revision/79fc0517-b6a5-40df-b9e8-0855bbed215b/version/946913df-ae0a-4a08-b9bb-74bf41727d9f',
+      'http://localhost:3000/document_revision/9f90b2c3-3fad-41a2-8f9e-dc33866abcca/version/14e4c185-5b04-4441-95f1-57bced9cef7b',
+    ];
+
+    let lotRevId = '';
+    if (scannedValue) {
+      lotRevId = extractRevision(scannedValue) ?? '';
+    } else {
+      const lotIndex = scanLots.length ? 1 : 0;
+      lotRevId = extractRevision(sampleLOT[lotIndex]) ?? '';
+    }
+
+    validateScanLotAsync.start(validateEQScan, lotRevId, validateScanLotAsync);
   };
 
   return (
@@ -172,6 +219,9 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         <Button onClick={validateScannedLot} size="small">
           scan item{' '}
         </Button>
+        <Button onClick={validateEQScanItem} size="small">
+          EQ scan item{' '}
+        </Button>
 
         <ScanLotTable
           scanLots={scanLots}
@@ -179,6 +229,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           lots={[]}
           loading={validateScanLotAsync.isLoading}
           partId={selectedPart?.partRevId}
+          type={selectedPart?.type}
           setScanLots={setScanLots}
         />
         <BarcodeReader onError={handleError} onScan={handleScan} />

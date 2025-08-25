@@ -16,6 +16,7 @@ export const TreeListSchema = ({
   onDelete,
   onConfirm,
   parentRevId,
+  onScanClick,
 }) => {
   return [
     {
@@ -34,7 +35,7 @@ export const TreeListSchema = ({
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addActualId={addActualId} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} />,
+      cell: (props) => <LotAllocatedCell {...props} addActualId={addActualId} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
     },
     {
       field: 'calDueDate',

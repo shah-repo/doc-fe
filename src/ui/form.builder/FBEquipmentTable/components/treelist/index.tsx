@@ -20,14 +20,17 @@ import {
   map, replace, uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
-import * as React from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import ScanCaptureDialog from '../../../../components/common/dialogs/scaner';
+import { ScanSelectedPartItem } from '../../../../components/common/dialogs/scaner/components/lot.table/types';
 import { ColumnMenuContext } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
+import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../interface';
 import {
@@ -68,13 +71,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   console.log('isDisabled', isDisabled, isDesign, isLHRStep);
   const { _tabsState } = SM.useStores();
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
-  const { useRef } = React;
   const treeListRef = useRef(null);
+  const scanDialog = useDialog();
+  const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
   const { equipmentOptions } = useOptions();
 
-  const [state, setState] = React.useState<EquipmentItemState>({
+  const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? []),
     dataState: {
       sort: [],
@@ -84,7 +88,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     inEdit: [],
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!equipsSelected?.length || !items?.length) {
       return;
     }
@@ -136,7 +140,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     }));
   }, [equipsSelected, items]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     console.log('items', items);
     setState((prevState) => ({
       ...prevState,
@@ -284,6 +288,22 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     }
   };
 
+  const openScanDialog = (dataItem: EditableEquipmentItem) => {
+    const plannedIdInfo = equipmentOptions?.find((option) => option.value === dataItem.title);
+    const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
+
+    scanSelectedPartInfo.current = {
+      docId: match[1] ?? '',
+      partDescription: match[3],
+      displayRevision: match[2],
+      partRevId: plannedIdInfo?.value,
+      id: dataItem.id,
+      type: FBProcedureItemType.equipment,
+    };
+    scanDialog.open();
+    console.log('scanSelectedPartInfo', scanSelectedPartInfo);
+  };
+
   const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
@@ -294,10 +314,11 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     onDiscard: discardEquipItem,
     onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
+    onScanClick: openScanDialog,
   });
 
   const [columns, setColumns]
-    = React.useState<CustomTreeListColumnProps[]>(schema);
+    = useState<CustomTreeListColumnProps[]>(schema);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     const expanded = event.value
@@ -455,7 +476,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
-  const onLock = React.useCallback(
+  const onLock = useCallback(
     ({
       field,
       locked,
@@ -475,6 +496,15 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     },
     [columns],
   );
+
+  const addScanLotsToPart = (scanLots) => {
+    scanDialog.close();
+    console.log('scanLots', scanLots);
+  };
+
+  const onClose = () => {
+    scanDialog.close();
+  };
 
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
@@ -532,8 +562,16 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           </AddButton>
         )}
       </Grid>
+      {scanDialog.isOpen && (
+        <ScanCaptureDialog
+          handler={scanDialog}
+          onClose={onClose}
+          addScanLotsToPart={addScanLotsToPart}
+          selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
+        />
+      )}
     </div>
   );
 };
 
-export default React.memo(withThemeNext(React.forwardRef(withFBEquipmentTable(FBEquipmentTable))));
+export default memo(withThemeNext(React.forwardRef(withFBEquipmentTable(FBEquipmentTable))));

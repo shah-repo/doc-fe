@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DocumentRevision } from '../../../../../../../state/ducks/documentRevisions/types';
-import { FBInputProps } from '../../../../../../form.builder';
+import { FBInputProps, FBProcedureItemType } from '../../../../../../form.builder';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 
 export interface ScanLot {
   lotId?: string
-  lotNumber?: { [key: string]: string }
+  lotNumber?: { [key: string]: string | undefined }
   serialNumber?: string
   QuantityAssigned?: string
   unitOfMeasure?: string
@@ -25,6 +25,7 @@ export interface ScanLotTableProps {
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
+  type?: FBProcedureItemType
 }
 
 export interface ValidateLot extends DocumentRevision{
@@ -81,4 +82,5 @@ export interface ScanSelectedPartItem {
   partRevId?: string
   woId?: string
   plannedId?: string
+  type?: FBProcedureItemType
 }

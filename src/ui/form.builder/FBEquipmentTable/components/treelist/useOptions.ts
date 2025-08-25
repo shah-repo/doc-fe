@@ -25,8 +25,9 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
 };
 
 export const useOptions = () => {
+  const optionId = FBAutocompleteAsyncOption.equipment;
   const equipAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-    optionId: FBAutocompleteAsyncOption.equipment,
+    optionId,
   });
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export const useOptions = () => {
   }, [equipAsync]);
 
   return useObserver(() => {
-    const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.equipment) as Map<
+    const asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<
     string,
     EquipOption
     >;

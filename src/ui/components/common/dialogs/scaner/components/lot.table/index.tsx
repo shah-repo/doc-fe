@@ -2,18 +2,20 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { FBProcedureItemType } from '../../../../../../form.builder';
 import useDialog from '../../../../../../hooks/useDialog';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
 import { FIELDS_TO_OMIT } from './constants';
+import { buildEqSchema } from './eqSchema';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot, type }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
@@ -67,7 +69,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, u
     return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
-  const schema = buildSchema({
+  const schema = (type === FBProcedureItemType.equipment ? buildEqSchema : buildSchema)({
     units,
     onRowClick: handleRowClick,
     onConfirm: submitForm,

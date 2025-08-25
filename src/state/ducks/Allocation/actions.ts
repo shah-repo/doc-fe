@@ -4,7 +4,7 @@ import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, VALIDATE_SCANNED_LOT } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, VALIDATE_EQ_SCAN, VALIDATE_SCANNED_LOT } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -137,6 +137,16 @@ const validateScannedLot = (
     handlers,
   });
 
+const validateEQScannedItem = (
+  equipmentRevId: string,
+  handlers: Handlers,
+): ApiAction<ValidateLot> =>
+  apiActionWithCallbacks({
+    url: `${VALIDATE_EQ_SCAN}/${equipmentRevId}/validate`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   fetchLatestRevisionDetailsByRevId,
   loadAllocationList,
@@ -149,4 +159,5 @@ export default {
   deletePart,
   deleteAllocation,
   validateScannedLot,
+  validateEQScannedItem,
 };

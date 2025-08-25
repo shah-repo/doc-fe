@@ -55,4 +55,7 @@ export default makeStyles(theme => ({
     fontSize: 14,
     overflowWrap: 'anywhere',
   },
+  expired: {
+    color: Colors.errorHighlight,
+  },
 }));
