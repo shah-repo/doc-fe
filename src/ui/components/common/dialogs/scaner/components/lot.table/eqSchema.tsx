@@ -58,7 +58,6 @@ export const buildEqSchema = ({
         <ActionsCellTemplate
           {...props}
           isActive={true}
-          onEdit={onEdit}
           onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}

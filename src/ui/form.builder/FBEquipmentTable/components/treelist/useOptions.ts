@@ -9,8 +9,9 @@ import { customEQOptionType, EquipOption } from './column.templates/types';
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-
+  const preventiveMaintenanceKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
   const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
+  const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
 
   return {
     label: translate('common.select.revision', {
@@ -18,7 +19,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
       displayRevision: equipment?.displayRevision,
       name: equipment?.name,
     }),
-    complianceDueDate: calibrationData?.complianceDueDate,
+    complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
     status: calibrationData?.status,
     value: equipment.id,
   };

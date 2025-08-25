@@ -13,6 +13,8 @@ export interface ScanLot {
   id?: string
   lotRevId?: string
   quantityAssigned?: number
+  calDueDate?: string
+  pmDueDate?: string
 }
 
 export interface ScanLotTableProps {

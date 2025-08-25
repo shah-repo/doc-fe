@@ -41,7 +41,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         value: `${selectedPart?.docId}.${selectedPart?.displayRevision}`,
       },
       {
-        key: translate('scan.lot.grid.part.description.message'),
+        key: translate(isEquipmentScan ? 'scan.lot.grid.eq.description.message' : 'scan.lot.grid.part.description.message'),
         value: convertHtmlEntities((selectedPart?.partDescription ?? '').replace(/(<([^>]+)>|\/n)/g, '')),
       },
     ];
@@ -66,8 +66,14 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   const validateScanLotAsync = useAsync({
     onSuccess: (data?: ValidateLot) => {
-      const lot: ScanLot = isEquipmentScan
-        ? {
+      let lot: ScanLot;
+      if (isEquipmentScan) {
+        const calibrationKey = Object.keys(data?.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
+        const preventiveMaintenanceKey = Object.keys(data?.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
+        const calibrationData = calibrationKey ? data?.formInput?.[calibrationKey] : {};
+        const preventiveMaintenanceData = preventiveMaintenanceKey ? data?.formInput?.[preventiveMaintenanceKey] : {};
+
+        lot = {
           ...data,
           id: data?.id,
           lotNumber: {
@@ -75,8 +81,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             name: data?.document?.docId,
             documentId: data?.document?.id,
           },
-        }
-        : {
+          calDueDate: calibrationData.complianceDueDate,
+          pmDueDate: preventiveMaintenanceData.complianceDueDate,
+        };
+      } else {
+        lot = {
           ...data,
           id: data?.lotRevId,
           lotNumber: {
@@ -84,12 +93,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             name: data?.docId,
             documentId: data?.documentId,
           },
+          serialNumber: data?.serialNumber,
+          quantityAssigned: data?.onHand,
+          unitOfMeasure: data?.lotUsedUnit,
         };
-
-      if (!isEquipmentScan) {
-        lot.serialNumber = data?.serialNumber;
-        lot.quantityAssigned = data?.onHand;
-        lot.unitOfMeasure = data?.lotUsedUnit;
       }
 
       setScanLots((prevLots) => [...prevLots, lot]);
@@ -164,8 +171,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   const validateEQScanItem = () => {
     const sampleLOT = [
       'http://localhost:3000/document_revision/cb85c705-8472-4960-8786-234d756a8fc4/version/4561ba79-3fdc-46ca-953c-940d9eb086d0',
-      'http://localhost:3000/document_revision/79fc0517-b6a5-40df-b9e8-0855bbed215b/version/946913df-ae0a-4a08-b9bb-74bf41727d9f',
-      'http://localhost:3000/document_revision/9f90b2c3-3fad-41a2-8f9e-dc33866abcca/version/14e4c185-5b04-4441-95f1-57bced9cef7b',
+      'http://localhost:3000/document_revision/3c984d43-357c-47fc-9af6-d7fa7451e19a/version/3a6deb34-5d98-4834-9279-6383bc1ab50f',
     ];
 
     let lotRevId = '';
