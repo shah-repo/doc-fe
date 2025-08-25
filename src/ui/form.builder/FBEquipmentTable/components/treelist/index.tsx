@@ -48,18 +48,22 @@ import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';
 import { prepareData } from './utils';
+import { withFBEquipmentTable } from './wrap';
 
 const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   items,
   type,
   getItem,
   handleRemove,
+  saveActualEquipment,
   isDisabled,
   isDesign,
   isLHRStep,
   lhrStepIndex,
   isMPIProcedure,
   isShowOnly = false,
+  equipsSelected,
+  isEnableActualIdAddition,
 }) => {
   console.log('isDisabled', isDisabled, isDesign, isLHRStep);
   const { _tabsState } = SM.useStores();
@@ -81,6 +85,58 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   });
 
   React.useEffect(() => {
+    if (!equipsSelected?.length || !items?.length) {
+      return;
+    }
+
+    const mapByEquipmentId = equipsSelected?.reduce((acc, selected) => {
+      const equipmentId = selected?.equipmentId ?? '';
+      if (!acc[equipmentId]) {
+        acc[equipmentId] = [];
+      }
+      const index = items?.findIndex((item) => {
+        return item.title === selected.equipmentId;
+      });
+
+      const actualEquipItem = {
+        id: selected.refId,
+        plannedId: '',
+        actualId: selected.actualId,
+        actualEquipDocId: selected.overrideDocId,
+        parentEquipPlannedId: selected.equipmentId,
+        parentId: index !== -1 ? state.data[index].id : '',
+        pmDueDate: selected.pmDueDate,
+        calDueDate: selected.calDueDate,
+        [MODE_FIELD]: false,
+      };
+      acc[equipmentId].push(actualEquipItem);
+      return acc;
+    }, {});
+
+    const expandedRows = [] as string[];
+    Object.keys(mapByEquipmentId)?.map(equipmentId => {
+      const index = items?.findIndex((item) => {
+        return item.title === equipmentId;
+      });
+
+      if (index !== -1) {
+        const id = state.data[index]?.id;
+        if (!expandedRows.includes(id)) {
+          expandedRows.push(id);
+        }
+        state.data[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+      }
+    });
+
+    setState(prevState => ({
+      ...prevState,
+      data: [...state.data],
+      expanded: [...expandedRows],
+      inEdit: [],
+    }));
+  }, [equipsSelected, items]);
+
+  React.useEffect(() => {
     console.log('items', items);
     setState((prevState) => ({
       ...prevState,
@@ -93,6 +149,13 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
       console.log({ values });
+      if (isEnableActualIdAddition) {
+        if (values[ADD_FIELD]) {
+                saveActualEquipment?.(values as EditableEquipmentItem);
+        }
+        discardEquipItem(values as EditableEquipmentItem);
+        return;
+      }
       const { id = '', plannedId = '', title = '', LHRTparameter } = values;
       const newEquipItem: EditableEquipmentItem = {
         id,
@@ -104,6 +167,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         updateLHRTEquipmentItem(values);
         return;
       }
+
       if (isDesign) {
         newEquipItem.LHRTparameter = LHRTparameter;
       }
@@ -170,10 +234,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     handleRemove?.(dataItem.id ?? '');
   };
 
-  const updateState = (stateInfo) => {
-    setState(stateInfo);
-  };
-
   const ignorePreviouslyAddedItems = (data: EditableEquipmentItem[]) => {
     return data?.filter((data) => {
       const isEquipmentItemAddExist = !data[ADD_FIELD];
@@ -213,14 +273,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         state.data[index][SUB_ITEMS_FIELD] = [];
       }
 
-        state.data[index][SUB_ITEMS_FIELD]?.unshift(newActualItem);
+      state.data[index][SUB_ITEMS_FIELD]?.unshift(newActualItem);
 
-        updateState({
-          ...state,
-          data: [...state.data],
-          expanded: [state.data[index].id],
-          inEdit: [newActualItem],
-        });
+      setState(prevState => ({
+        ...prevState,
+        data: [...state.data],
+        expanded: [state.data[index].id],
+        inEdit: [newActualItem],
+      }));
     }
   };
 
@@ -476,4 +536,4 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   );
 };
 
-export default React.memo(withThemeNext(React.forwardRef(FBEquipmentTable)));
+export default React.memo(withThemeNext(React.forwardRef(withFBEquipmentTable(FBEquipmentTable))));
