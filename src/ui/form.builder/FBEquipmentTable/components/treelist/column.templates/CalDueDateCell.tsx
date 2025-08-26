@@ -24,11 +24,18 @@ const CalDueDateCell: React.ComponentType<CustomTreeListCellProps> = (props) => 
     }
   }, [equipmentOptions, title]);
 
+  const isDateOverdue = (date?: string) => {
+    if (!date) {
+      return;
+    }
+    return Date.parse(date) < Date.now();
+  };
+
   const complianceDueDate = value?.complianceDueDate;
   const formattedComplianceDueDate = complianceDueDate
     ? getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit)
     : '';
-  const isExpired = complianceDueDate ? new Date(complianceDueDate) < new Date() : false;
+  const isExpired = complianceDueDate ? isDateOverdue(complianceDueDate) : false;
 
   return (
     <TreeListCellWrapper {...props}>

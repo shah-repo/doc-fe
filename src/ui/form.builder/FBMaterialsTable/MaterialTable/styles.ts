@@ -147,7 +147,7 @@ export default makeStyles((theme) => ({
           },
         },
         '&.k-sorted': {
-          backgroundColor: Colors.primaryHighlight, // TODO check with UX team
+          backgroundColor: Colors.primaryHighlight,
         },
         '&:last-child': {
           borderRight: 'none',
