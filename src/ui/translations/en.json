@@ -1852,6 +1852,7 @@
   "user.management.add.codes": "Add Acct Codes",
   "user.management.codes": "Acct Codes",
   "scan.lot.dialog.title.message": "Scan Lot",
+  "scan.eq.dialog.title.message": "Scan Equipment",
   "scan.lot.grid.lot.number": "Lot Number",
   "scan.lot.grid.serial.number": "Serial Number",
   "scan.lot.grid.quantity.assigned": "Quantity Assigned",

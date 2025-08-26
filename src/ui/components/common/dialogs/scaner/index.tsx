@@ -192,7 +192,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       maxWidth="xl"
       hideCloseButton
       cancelLabel="common.cancel"
-      title="scan.lot.dialog.title.message"
+      title={isEquipmentScan ? 'scan.eq.dialog.title.message' : 'scan.lot.dialog.title.message'}
       confirmLabel="common.add"
       confirmProps={{
         id: 'dialog-add',

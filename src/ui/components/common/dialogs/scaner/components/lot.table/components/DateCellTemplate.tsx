@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import { isEmpty } from 'lodash';
 import React, { memo } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../../../../../../../common/utils/date';
 import OverflowContent from '../../../../../../OverflowContent';
@@ -20,7 +21,7 @@ const DateCellTemplate: React.ComponentType<CustomTemplateProps> = (props) => {
 
   return (
     <OverflowContent onClick={handleClick}>
-      <span className={cx({ [classes.expired]: isExpired })}>{formattedComplianceDueDate ?? EMPTY_CELL}</span>
+      <span className={cx({ [classes.expired]: isExpired })}>{isEmpty(formattedComplianceDueDate) ? EMPTY_CELL : formattedComplianceDueDate}</span>
     </OverflowContent>
   );
 };

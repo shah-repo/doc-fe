@@ -15,7 +15,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded } = props;
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (!dataItem.lotId && !dataItem?.isLotAddition);
+  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
 
@@ -28,7 +28,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     if (value && field) {
       setValue(value);
     }
-  }, [materialSelectOptions, field, dataItem]);
+  }, [materialSelectOptions]);
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
@@ -39,6 +39,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const fieldValue = value?.label ?? dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
+  const disabled = dataItem.LHRTparameter ? !dataItem.LHRTparameter : !!dataItem[field];
 
   return (
     <TreeListCellWrapper {...props}>
@@ -50,7 +51,9 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 {...getFieldProps(field)}
                 value={value}
                 blurOnSelect
-                disabled={ dataItem.LHRTparameter ? !dataItem.LHRTparameter : !!dataItem[field]}
+                disableOpenOnFocus={true}
+                freeSolo
+                disabled={disabled}
                 ListboxComponent={({ children, ...otherProps }) => {
                   return (
                     <>

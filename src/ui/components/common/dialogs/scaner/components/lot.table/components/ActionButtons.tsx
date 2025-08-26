@@ -90,7 +90,7 @@ const ActionsButtons: React.FC<Props> = ({
                 color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
               /></IconButton>
           </Tooltip>
-          <Tooltip arrow title={translate('common.edit')} placement="top">
+          {onEdit && <Tooltip arrow title={translate('common.edit')} placement="top">
             <IconButton
               ref={editIconRef}
               kind="form"
@@ -102,7 +102,7 @@ const ActionsButtons: React.FC<Props> = ({
             >
               <FontAwesomeIcon icon={isEditIconHovered ? solid('pen-to-square') : regular('pen-to-square')} color={isEditIconHovered ? Colors.navigationBg : Colors.textGray} />
             </IconButton>
-          </Tooltip>
+          </Tooltip>}
           {onDelete && (
             <Tooltip arrow title={translate('common.delete')} placement="top">
               <IconButton
