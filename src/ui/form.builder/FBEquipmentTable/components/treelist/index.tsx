@@ -59,6 +59,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   getItem,
   handleRemove,
   saveActualEquipment,
+  saveScannedEquipments,
   handleSelectionDelete,
   isActive,
   isDisabled,
@@ -499,9 +500,22 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     [columns],
   );
 
-  const addScanLotsToPart = (scanLots) => {
+  const addScannedEquipments = (scannedEquips) => {
     scanDialog.close();
-    console.log('scanLots', scanLots);
+    const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedPartInfo.current?.id);
+    if (parentIndex === -1) {
+      return;
+    }
+
+    const updatedScannedEquips = scannedEquips.map((equipment) => {
+      return {
+        ...equipment,
+        parentPartPlannedId: scanSelectedPartInfo.current?.plannedId,
+      };
+    });
+
+    saveScannedEquipments?.(updatedScannedEquips);
+    console.log('scannedEquips', scannedEquips);
   };
 
   const onClose = () => {
@@ -568,7 +582,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
-          addScanLotsToPart={addScanLotsToPart}
+          addScanLotsToPart={addScannedEquipments}
           selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
         />
       )}

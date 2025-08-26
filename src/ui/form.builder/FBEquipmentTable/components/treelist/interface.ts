@@ -22,6 +22,7 @@ export interface FBEquipmentProps {
   isMPIProcedure?: boolean
   isEnableActualIdAddition?: boolean
   saveActualEquipment?: (values: EditableEquipmentItem) => void
+  saveScannedEquipments?: (equipments: EditableEquipmentItem[]) => void
   handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   equipsSelected?: Array<Partial<FBMPIProcedureSelectValue>>

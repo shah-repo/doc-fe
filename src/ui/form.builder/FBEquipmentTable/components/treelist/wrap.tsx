@@ -1,7 +1,7 @@
 import { concat, uniqBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FB, FBMPIProcedureSelectState, FBMPIProcedureSelectValue } from '../../..';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -20,9 +20,10 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState);
     equipsSelected = useObserver(() => mpiProcedureState?.partsSelected);
+    const [scannedEquipments, setScannedEquipments] = useState<EditableEquipmentItem[]>([]);
 
     useEffect(() => {
-      reaction(
+      const disposer = reaction(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
@@ -47,12 +48,19 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
           }, [] as Array<Partial<FBMPIProcedureSelectValue>>);
 
           mpiProcedureState?.setPartsSelected(partsSelected);
-          id && dispatch(documentRevisionsActions.loadAudit(id));
-          id && dispatch(documentRevisionsActions.reload(id));
+          if (scannedEquipments.length) {
+            saveActualEquipment(scannedEquipments[0]);
+            setScannedEquipments(prev => [...prev.slice(1)]);
+          } else {
+            id && dispatch(documentRevisionsActions.loadAudit(id));
+            id && dispatch(documentRevisionsActions.reload(id));
+          }
         },
       );
+
+      return disposer;
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [scannedEquipments]);
 
     function saveActualEquipment (values: EditableEquipmentItem) {
       if (!id) { return; }
@@ -69,6 +77,16 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
           mpiProcedureSelectState?.useOverride(id, part);
     }
 
+    function saveScannedEquipments (equipments: EditableEquipmentItem[]) {
+      if (!equipments?.length) {
+        return;
+      }
+      if (equipments?.length > 1) {
+        setScannedEquipments(equipments.slice(1));
+      }
+      saveActualEquipment(equipments[0]);
+    }
+
     return Component({
       ...(props as T),
       name,
@@ -76,6 +94,7 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
       isDisabled: isDisabled ?? workspaceState?.isPreview,
       equipsSelected,
       saveActualEquipment,
+      saveScannedEquipments,
     });
   };
 
