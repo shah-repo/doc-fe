@@ -50,7 +50,7 @@ import { TreeListMPISchema } from './MPISchema';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';
-import { prepareData } from './utils';
+import { getMapSelectedByParentEquipId, prepareData } from './utils';
 import { withFBEquipmentTable } from './wrap';
 
 const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
@@ -59,12 +59,15 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   getItem,
   handleRemove,
   saveActualEquipment,
+  handleSelectionDelete,
+  isActive,
   isDisabled,
   isDesign,
   isLHRStep,
   lhrStepIndex,
   isMPIProcedure,
   isShowOnly = false,
+  isPendingChange,
   equipsSelected,
   isEnableActualIdAddition,
 }) => {
@@ -89,65 +92,39 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   });
 
   useEffect(() => {
-    if (!equipsSelected?.length || !items?.length) {
+    if (!items?.length) {
       return;
     }
 
-    const mapByEquipmentId = equipsSelected?.reduce((acc, selected) => {
-      const equipmentId = selected?.equipmentId ?? '';
-      if (!acc[equipmentId]) {
-        acc[equipmentId] = [];
-      }
-      const index = items?.findIndex((item) => {
-        return item.title === selected.equipmentId;
-      });
-
-      const actualEquipItem = {
-        id: selected.refId,
-        plannedId: '',
-        actualId: selected.actualId,
-        actualEquipDocId: selected.overrideDocId,
-        parentEquipPlannedId: selected.equipmentId,
-        parentId: index !== -1 ? state.data[index].id : '',
-        pmDueDate: selected.pmDueDate,
-        calDueDate: selected.calDueDate,
-        [MODE_FIELD]: false,
-      };
-      acc[equipmentId].push(actualEquipItem);
-      return acc;
-    }, {});
-
+    const mapByEquipmentId = getMapSelectedByParentEquipId(equipsSelected ?? [], items);
+    const updatedItems = prepareData(cloneDeep(items) ?? []);
     const expandedRows = [] as string[];
+
     Object.keys(mapByEquipmentId)?.map(equipmentId => {
-      const index = items?.findIndex((item) => {
+      const index = updatedItems?.findIndex((item) => {
         return item.title === equipmentId;
       });
 
       if (index !== -1) {
-        const id = state.data[index]?.id;
+        const id = updatedItems[index]?.id;
         if (!expandedRows.includes(id)) {
           expandedRows.push(id);
         }
-        state.data[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+        updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
       }
     });
 
     setState(prevState => ({
       ...prevState,
-      data: [...state.data],
+      data: [...updatedItems],
       expanded: [...expandedRows],
       inEdit: [],
     }));
   }, [equipsSelected, items]);
 
   useEffect(() => {
-    console.log('items', items);
-    setState((prevState) => ({
-      ...prevState,
-      data: prepareData(cloneDeep(items) ?? []),
-      inEdit: [],
-    }));
-  }, [items]);
+    updateColumns(schema);
+  }, [state]);
 
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
@@ -179,7 +156,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
-      discardEquipItem();
+      discardEquipItem(values as EditableEquipmentItem);
     },
   });
 
@@ -234,8 +211,33 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       formik?.resetForm();
   };
 
+  const deleteItemFromStateData = (dataItem) => {
+    if (isEnableActualIdAddition) {
+      const parentIndex = state.data?.findIndex((data) => data.id === dataItem.parentId);
+      if (parentIndex === -1) {
+        return;
+      }
+      const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems?.filter((item) => item.id !== dataItem.id);
+    } else {
+      state.data = state.data.filter((item) => item.id !== dataItem.id);
+    }
+
+    setState((prevState) => ({
+      ...prevState,
+      inEdit: [],
+      data: [...state.data],
+    }));
+    formik.resetForm();
+  };
+
   const removeEquipItem = (dataItem: EditableEquipmentItem) => {
-    handleRemove?.(dataItem.id ?? '');
+    if (isEnableActualIdAddition) {
+      handleSelectionDelete?.(dataItem.id);
+    } else {
+      handleRemove?.(dataItem.id ?? '');
+    }
+    deleteItemFromStateData(dataItem);
   };
 
   const ignorePreviouslyAddedItems = (data: EditableEquipmentItem[]) => {
@@ -400,8 +402,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    const defaultValidation = dataItem[MODE_FIELD] || isDisabled;
-    const isEditRestricted = !isEmpty(dataItem.type) && isLHRStep && isDesign ? false : defaultValidation;
+    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled));
+    const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
 
     if (isEditRestricted) {
       return;
