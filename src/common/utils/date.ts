@@ -10,7 +10,7 @@ export const useDate = () => {
   const timezone = useSelector(authSelectors.getUserTimezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
-    moment(date).tz(timezone).format(format);
+    moment(date)?.tz(timezone)?.format(format);
 
   const getStartOfDayDateString = (date: DateTypes, format = '') =>
     moment(date).tz(timezone).startOf('day').format(format);
