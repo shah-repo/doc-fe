@@ -246,26 +246,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     });
 
     saveScannedLots?.(updatedLots);
-    // const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
-
-    // const existingSubItems = state.data[parentIndex][SUB_ITEMS_FIELD];
-
-    // const mergedSubItems = [
-    //   ...(Array.isArray(existingSubItems) ? existingSubItems : []),
-    //   ...(Array.isArray(updatedLots) ? updatedLots : []),
-    // ];
-
-    // state.data[parentIndex][SUB_ITEMS_FIELD] = mergedSubItems.map(
-    //   (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
-    // );
-
-    // procedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
-    // mpiProcedureState?.addItem(cloneDeep(state.data[parentIndex]) as FBProcedureItemConfig, type, allSteps);
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   inEdit: [],
-    //   data: [...state.data],
-    // }));
   };
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
@@ -431,10 +411,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     }
   };
 
-  // edit part part disabled and icons won't be visible
-  // edit lot lot will be disabled and payload issue fix
-  // actual id any string also allow, attachment cell needs to add
-
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled));
     const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
@@ -574,7 +550,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       plannedId: dataItem?.plannedId,
     };
     scanDialog.open();
-    console.log('scanSelectedPartInfo', scanSelectedPartInfo); // plannedId
   };
 
   const onClose = () => {

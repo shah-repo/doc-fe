@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import { isEmpty } from 'lodash';
 import React, { memo } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../../../../../../../common/utils/date';
 import OverflowContent from '../../../../../../OverflowContent';
@@ -14,14 +13,14 @@ const DateCellTemplate: React.ComponentType<CustomTemplateProps> = (props) => {
   const complianceDueDate = dataItem[field];
   const formattedComplianceDueDate = complianceDueDate
     ? getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit)
-    : '';
+    : EMPTY_CELL;
 
   const isExpired = complianceDueDate ? new Date(complianceDueDate) < new Date() : false;
   const handleClick = () => onClick?.({ dataItem });
 
   return (
     <OverflowContent onClick={handleClick}>
-      <span className={cx({ [classes.expired]: isExpired })}>{isEmpty(formattedComplianceDueDate) ? EMPTY_CELL : formattedComplianceDueDate}</span>
+      <span className={cx({ [classes.expired]: isExpired })}>{formattedComplianceDueDate}</span>
     </OverflowContent>
   );
 };
