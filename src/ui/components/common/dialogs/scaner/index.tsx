@@ -96,20 +96,16 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     partAsync.start(createLot, lotPayload, partAsync);
   };
 
-  const [scannedValue, setScannedValue] = useState<string>('');
-
   const handleScan = (data: string) => {
-    setScannedValue(data);
     validateScanLotAsync.start(
       validateScanLot,
       selectedPart.partRevId,
-      extractRevision(scannedValue),
+      extractRevision(data),
       validateScanLotAsync,
     );
   };
 
   const handleError = (error: Error) => {
-    setScannedValue('');
     toastError(error);
   };
 
