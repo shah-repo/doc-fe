@@ -32,7 +32,7 @@ interface LotAutocompleteProps {
   setValue: Dispatch<SetStateAction<OptionType>>
   dataItem: EditableEquipmentItem
   parentPartRevId?: string
-  lotRevId?: string
+  actualId?: string
   isLoading?: boolean
   equipmentOptions: OptionType[]
 }
@@ -44,7 +44,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   setValue,
   isLoading,
   dataItem,
-  lotRevId,
+  actualId,
   parentPartRevId,
   equipmentOptions,
 }) => {
@@ -73,7 +73,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
-        disabled={!!lotRevId}
+        disabled={!!actualId}
         options={equipmentOptions}
         blurOnSelect
         disableOpenOnFocus
@@ -101,7 +101,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   );
 };
 
-const LotAllocatedCell: React.FC<CustomTreeListCellProps> = (props) => {
+const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const isEditMode = isEditEquipItem(dataItem);
@@ -212,6 +212,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = (props) => {
                 value,
                 setValue,
                 dataItem,
+                actualId,
                 isLoading: fetchAvailablePartsAsync.isLoading,
                 equipmentOptions,
               }}
@@ -241,4 +242,4 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = (props) => {
   );
 };
 
-export default LotAllocatedCell;
+export default ActualIdCell;

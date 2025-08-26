@@ -49,3 +49,11 @@ export const prepareData = (items: FBProcedureItemConfig[]): EquipmentItem[] => 
     actualItems: [],
   }));
 };
+
+export const isDateOverdue = (date?: string) => {
+  if (!date) {
+    return;
+  }
+
+  return Date.parse(date) < Date.now();
+};

@@ -1,9 +1,9 @@
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
+import ActualIdCell from './column.templates/ActualIdCell';
 import { DateCell } from './column.templates/DateCell';
 import IDCell from './column.templates/IDCell';
-import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import { RevHeaderCell } from './column.templates/RevHeader';
 
 export const TreeListSchema = ({
@@ -35,7 +35,7 @@ export const TreeListSchema = ({
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addActualId={addActualId} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+      cell: (props) => <ActualIdCell {...props} addActualId={addActualId} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
     },
     {
       field: 'calDueDate',

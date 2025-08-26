@@ -3,6 +3,7 @@ import { useFormikContext } from 'formik';
 import React, { memo, useEffect, useState } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
 import { EditableEquipmentItem } from '../../../interface';
+import { isDateOverdue } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { customEQOptionType, CustomTreeListCellProps } from './types';
@@ -23,13 +24,6 @@ const CalDueDateCell: React.ComponentType<CustomTreeListCellProps> = (props) => 
       setValue(matchedOption);
     }
   }, [equipmentOptions, title]);
-
-  const isDateOverdue = (date?: string) => {
-    if (!date) {
-      return;
-    }
-    return Date.parse(date) < Date.now();
-  };
 
   const complianceDueDate = value?.complianceDueDate;
   const formattedComplianceDueDate = complianceDueDate
