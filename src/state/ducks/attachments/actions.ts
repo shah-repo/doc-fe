@@ -97,9 +97,10 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
 
     const { key, uploadId } = session;
 
-    const parts = session.parts.map(({ eTag, partNumber }) => ({
-      eTag,
+    const parts = session.parts.map(({ eTag, partNumber, checksum }) => ({
       partNumber,
+      eTag,
+      checksum,
     }));
 
     const handlers: Handlers<Attachment> = {
@@ -114,15 +115,16 @@ const completeUpload = (entryId: string): UploadThunkAction<Promise<Attachment>>
   });
 };
 
-const cancelUpload = (entryId: string): UploadThunkAction => async (dispatch, getState) => {
+const cancelUpload = (entryId: string): UploadThunkAction => (dispatch, getState) => {
   const { id, status, cancelSource } = getEntry(entryId, getState());
 
   if (status === AttachmentUploadEntryStatus.Uploading) {
     cancelSource?.cancel(translate('attachment.upload.deleted.by.user'));
   }
-  await dispatch(abortUpload(id));
-  dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
-  dispatch(deleteEntry(id));
+  dispatch(abortUpload(id)).finally(() => {
+    dispatch(_setEntryStatus(id, AttachmentUploadEntryStatus.Cancelled));
+    dispatch(deleteEntry(id));
+  });
 };
 
 const abortUpload = (entryId: string): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -172,8 +174,9 @@ const failUpload = (entryId: string, errorMessage: string): UploadThunkAction =>
     dispatch(_retryEntry(entryId));
     await dispatch(uploadFile(entryId));
   } else {
-    await dispatch(abortUpload(entryId));
-    dispatch(_failEntry(entryId, errorMessage));
+    dispatch(abortUpload(entryId)).finally(() => {
+      dispatch(_failEntry(entryId, errorMessage));
+    });
   }
 };
 
@@ -263,12 +266,20 @@ const uploadParts = (
   return parts;
 };
 
+const calculateChecksum = async (content: File | Blob): Promise<string> => {
+  const checksum = await crypto.subtle.digest('SHA-256', await content.arrayBuffer());
+  const checksumArray = Array.from(new Uint8Array(checksum));
+  return btoa(String.fromCharCode(...checksumArray));
+};
+
 const uploadPart = (
   part: EntryUploadPart,
   chunk: Blob,
   cancelTokenSource: CancelTokenSource,
   entryId: string,
 ): UploadThunkAction<Promise<EntryUploadPart>> => async (dispatch) => {
+  const checksum = await calculateChecksum(chunk);
+
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await axios({
@@ -281,6 +292,7 @@ const uploadPart = (
         },
         headers: {
           'Content-Type': chunk.type ?? 'application/octet-stream',
+          'x-amz-checksum-sha256': checksum,
         },
       });
 
@@ -293,7 +305,7 @@ const uploadPart = (
         throw getUploadError(translate('attachment.upload.error.part.failed'), translate('attachment.upload.error.missing.etag'));
       }
 
-      return { ...part, eTag, uploaded: chunk.size };
+      return { ...part, eTag, checksum, uploaded: chunk.size };
     } catch (error) {
       if (attempt >= MAX_RETRIES || axios.isCancel(error)) {
         throw error;
@@ -422,10 +434,10 @@ const updateStats = (force = false): UploadThunkAction => (dispatch, getState) =
   dispatch(_updateStats(currentSpeed, averageSpeed, eta, loaded, progress));
 };
 
-const uploadAsync = (
+const uploadFileAsync = (
   file: File,
-  lineType: string,
-  index: number,
+  lineType?: string,
+  index?: number,
   isCleanCopyRequired = false,
   partSize = PART_SIZE,
 ): UploadThunkAction<Promise<AttachmentUploadEntry>> => async (dispatch, getState) => {
@@ -459,6 +471,18 @@ const uploadAsync = (
   });
 };
 
+const uploadFilesAsync = (
+  files: File[],
+  lineType?: string,
+  index?: number,
+  isCleanCopyRequired = false,
+  partSize = PART_SIZE,
+): UploadThunkAction<Promise<Array<PromiseSettledResult<AttachmentUploadEntry>>>> => async (dispatch) => {
+  return await Promise.allSettled(
+    files.map(async file => await dispatch(uploadFileAsync(file, lineType, index, isCleanCopyRequired, partSize))),
+  );
+};
+
 const upload = (
   file: File,
   lineType: string,
@@ -466,7 +490,7 @@ const upload = (
   handlers: Handlers<Attachment>,
   isCleanCopyRequired = false,
 ): UploadThunkAction => async (dispatch) => {
-  return await dispatch(uploadAsync(file, lineType, index, isCleanCopyRequired))
+  return await dispatch(uploadFileAsync(file, lineType, index, isCleanCopyRequired))
     .then(({ id, attachment }) => {
       attachment && handlers.successHandler.execute(attachment);
       dispatch(deleteEntry(id));
@@ -652,7 +676,8 @@ const uploadImage = (
 
 export default {
   upload,
-  uploadAsync,
+  uploadFileAsync,
+  uploadFilesAsync,
   cancelUpload,
   download,
   downloadRedLine,

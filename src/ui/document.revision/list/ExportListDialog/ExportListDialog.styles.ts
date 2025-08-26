@@ -52,5 +52,18 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: 5,
       textAlign: 'start',
     },
+    field: {
+      width: 400,
+    },
+    loading: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      zIndex: 3,
+    },
+    loadingAtTop: {
+      bottom: 'auto',
+      top: 0,
+    },
   }),
 );

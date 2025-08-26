@@ -52,6 +52,16 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     />);
 };
 
+const FileUploadStateWrapper = ({ children }) => {
+  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
+
+  return (
+    <FBProvider {...{ fileUploadState }}>
+      {children}
+    </FBProvider>
+  );
+};
+
 export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, isDisabled } = props;
   const classes = styles();
@@ -61,22 +71,21 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
 
   return (<>
     {assignees?.map(({ employeeId, attachments, status, name }: EmployeeResponse, index: number) => {
-      const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
       const canEdit = shouldShowEditor(employeeId, status);
 
       return (
         <div className={classes.employeeResponseFields} key={index}>
-          <FBProvider {...{ fileUploadState }}>
+          <FileUploadStateWrapper>
             {canEdit && <Editor {...props} {...{ employeeId, name, previousAttachments: attachments }} />}
             {!attachments.length ? (
               !canEdit && EMPTY_VALUE_PLACEHOLDER
             ) : (
               <FBAttachmentNamePresenter
-                {...{ files: attachments, fileUploadState, isDisabled: !canEdit }}
+                {...{ files: attachments, isDisabled: !canEdit }}
                 boxProps={{ className: classes.attachmentsContainer }}
               />
             )}
-          </FBProvider>
+          </FileUploadStateWrapper>
         </div>
       );
     })}

@@ -59,6 +59,8 @@ export interface LHRSummaryItem {
   actualDetails?: DetailsObj
   isRevRemoved?: boolean
   unit?: string
+  pmDueDateText?: NullableString
+  calDueDateText?: NullableString
 }
 
 export interface RecordsResponse {
@@ -103,6 +105,8 @@ export interface LHRSummaryRequestBody {
   pmDueDate: Date
   recordCreationDate: Date
   comments: string
+  pmDueDateText: string
+  calDueDateText: string
 }
 
 export interface SchemaOptions {
@@ -125,6 +129,8 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummar
 interface DueDateCombined extends DocumentRevision{
   calDueDate: string
   pmDueDate: string
+  calDueDateText: string
+  pmDueDateText: string
 }
 
 export interface LHRSummaryOptionsResponse {

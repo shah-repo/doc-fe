@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from '@progress/kendo-react-grid';
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
@@ -22,6 +22,7 @@ import Config from '../../../config';
 import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP_OPTION, DocumentType, GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
@@ -415,9 +416,25 @@ export function KendoPanel ({
     }
   };
 
+  const confirmationDialog = useDialog();
+  const documentId = useRef<string>('');
+
+  const confirmDeleteDocumnet = (e: React.MouseEvent<HTMLElement>) => {
+    dispatch(documentTypeActions.deleteDocumentType(documentId.current));
+    documentId.current = '';
+    confirmationDialog.close();
+  };
+
+  const cancelDeleteDocumnet = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    documentId.current = '';
+    confirmationDialog.close();
+  };
+
   // Delete document
   const deleteDocumnet = ({ id }: DTMRowItem) => {
-    dispatch(documentTypeActions.deleteDocumentType(id));
+    documentId.current = id;
+    confirmationDialog.open();
   };
 
   // While editing setting the new values to the dataItem
@@ -615,6 +632,14 @@ export function KendoPanel ({
         {renderBody()}
       </Grid>
       <ExportDAMDetails dialog={exportDAMDialog} />
+      {confirmationDialog.isOpen && (
+        <AlertDialog
+          dialog={confirmationDialog}
+          confirmAction={confirmDeleteDocumnet}
+          cancelAction={cancelDeleteDocumnet}
+          message="documenttype.item.delete.alert"
+        />
+      )}
     </Grid>
   );
 }

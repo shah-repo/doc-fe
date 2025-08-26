@@ -5,9 +5,9 @@ import { FBFileFieldProps } from '..';
 import { withFBAttachmentField } from './FBFileField.wrap';
 
 const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
-  name,
+  name = '',
   multiple = true,
-  loading = false,
+  isLoading = false,
   onChange,
   disabled,
 }) => (
@@ -22,8 +22,8 @@ const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
     <label htmlFor={`fb-attachment-field-${name}`}>
       <Link component="span" variant="button">
         <Box pl={1} display="flex" flexDirection="row">
-          {loading && <Box mt={0.3} mr={1}><CircularProgress size={18} /></Box>}
-          {!loading && <AttachFile width={20} height={20} />}
+          {isLoading && <Box mt={0.3} mr={1}><CircularProgress size={18} /></Box>}
+          {!isLoading && <AttachFile width={20} height={20} />}
         </Box>
       </Link>
     </label>
