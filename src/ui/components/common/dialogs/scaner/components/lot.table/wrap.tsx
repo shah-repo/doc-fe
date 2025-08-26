@@ -9,10 +9,9 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
     const { workspaceState } = FB.useStores();
 
     const units = useObserver(() => {
-      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
-      string,
-      UnitOption
-      >;
+      const asyncData = FBAutocompleteAsyncStore.data.get(
+        FBAutocompleteAsyncOption.unitMeasures,
+      ) as Map<string, UnitOption>;
       return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
     });
 

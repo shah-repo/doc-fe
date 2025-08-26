@@ -184,10 +184,6 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     });
   };
 
-  const openScanDialog = (dataItem) => {
-    scanDialog.open();
-  };
-
   const onClose = () => {
     scanDialog.close();
   };
@@ -220,13 +216,12 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
               />
             </IconButton>
           </StyleTooltip>
-          {/* disabled={isDisabled} */}
           <StyleTooltip title={translate('common.scan')} placement="top" arrow>
             <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => openScanDialog?.(dataItem)}
+                onClick={() => scanDialog.open()}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
