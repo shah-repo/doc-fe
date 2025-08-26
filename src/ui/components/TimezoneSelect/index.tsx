@@ -29,7 +29,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   return (
     <Autocomplete
       options={timezoneOptions}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option: TimezoneOption) => option.label}
       placeholder={placeholder}
       value={timezone}
       onChange={(_, selectedOption) => onChange(selectedOption)}

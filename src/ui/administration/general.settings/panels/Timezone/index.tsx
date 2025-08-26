@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import TimezoneSelect from '../../../../components/TimezoneSelect';
-import { TimezoneOption, TimezoneSelectProps } from '../../../../components/TimezoneSelect/types';
+import { TimezoneOption } from '../../../../components/TimezoneSelect/types';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 
@@ -20,7 +20,7 @@ const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.timezone.title')}>
-      <TimezoneSelect value={companyTimezone} onChange={onChange as TimezoneSelectProps['onChange'] } />
+      <TimezoneSelect value={companyTimezone} onChange={onChange} />
     </SettingsPanel>
   );
 };
