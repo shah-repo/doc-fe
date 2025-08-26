@@ -114,7 +114,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       className={classes.root}
       open={handler?.isOpen}
       maxWidth="xl"
-      hideCloseButton
       cancelLabel="common.cancel"
       title="scan.lot.dialog.title.message"
       confirmLabel="common.add"

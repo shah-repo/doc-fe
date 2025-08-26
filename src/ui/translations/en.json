@@ -1842,7 +1842,7 @@
   "scan.lot.grid.serial.number": "Serial Number",
   "scan.lot.grid.quantity.assigned": "Quantity Assigned",
   "scan.lot.grid.unit.of.measure": "Unit Of Measure",
-  "scan.lot.grid.item.id.message": "Item Id",
+  "scan.lot.grid.item.id.message": "Item ID",
   "scan.lot.grid.part.description.message": "Part Description",
   "scan.lot.grid.quantity.needed.message": "Qty Needed",
   "scan.lot.grid.variance.message": "Variance",
