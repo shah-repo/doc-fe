@@ -7,8 +7,11 @@ import { EditableEquipmentItem, EquipmentItem } from '../../interface';
 
 export interface FBEquipmentProps {
   name?: string
+  isActive?: boolean
   isDisabled: boolean
   isShowOnly?: boolean
+  isPreview?: boolean
+  isPendingChange?: boolean
   items?: FBProcedureItemConfig[]
   getItem?: (id: string) => string
   handleRemove?: (id: string) => void
@@ -19,6 +22,7 @@ export interface FBEquipmentProps {
   isMPIProcedure?: boolean
   isEnableActualIdAddition?: boolean
   saveActualEquipment?: (values: EditableEquipmentItem) => void
+  handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   equipsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
 }
@@ -28,6 +32,10 @@ export interface EquipmentItemState {
   dataState: DataState
   expanded: string[]
   inEdit: Array<{id: string }>
+}
+
+export interface MapSelectedByParentEquipId {
+  [key: string]: Array<Partial<FBMPIProcedureSelectValue>>
 }
 
 interface DataState {

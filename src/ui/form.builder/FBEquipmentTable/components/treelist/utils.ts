@@ -1,13 +1,41 @@
+import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EditableEquipmentItem, EquipmentItem } from '../../interface';
 import { ADD_FIELD, MODE_FIELD } from './constants';
+import { MapSelectedByParentEquipId } from './interface';
 
 export const isAddEquipItem = (dataItem: EditableEquipmentItem): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
 
 export const isEditEquipItem = (dataItem: EditableEquipmentItem): boolean => {
-  return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem.actualId || dataItem?.isActualIdAddition);
+  return (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) ?? false;
+};
+
+export const getMapSelectedByParentEquipId = (equipsSelected: Array<Partial<FBMPIProcedureSelectValue>>, items: FBProcedureItemConfig[]): MapSelectedByParentEquipId => {
+  return equipsSelected?.reduce<MapSelectedByParentEquipId>((acc, selected) => {
+    const equipmentId = selected?.equipmentId ?? '';
+    if (!acc[equipmentId]) {
+      acc[equipmentId] = [];
+    }
+    const index = items?.findIndex((item) => {
+      return item.title === selected.equipmentId;
+    });
+
+    const actualEquipItem = {
+      id: selected.refId,
+      plannedId: '',
+      actualId: selected.actualId,
+      actualEquipDocId: selected.overrideDocId,
+      parentEquipPlannedId: selected.equipmentId,
+      parentId: index !== -1 ? items[index].id : '',
+      pmDueDate: selected.pmDueDate,
+      calDueDate: selected.calDueDate,
+      [MODE_FIELD]: false,
+    };
+    acc[equipmentId].push(actualEquipItem);
+    return acc;
+  }, {});
 };
 
 export const prepareData = (items: FBProcedureItemConfig[]): EquipmentItem[] => {
