@@ -184,13 +184,9 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     });
   };
 
-  const onClose = () => {
-    scanDialog.close();
-  };
-
   const refreshAndClose = () => {
     reloadAllocationList?.();
-    onClose();
+    scanDialog.close();
   };
 
   return (
@@ -221,7 +217,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => scanDialog.open()}
+                onClick={scanDialog.open}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
@@ -285,7 +281,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}
-          onClose={onClose}
+          onClose={scanDialog.close}
           reloadGrid={refreshAndClose}
           selectedPart ={dataItem}
         />

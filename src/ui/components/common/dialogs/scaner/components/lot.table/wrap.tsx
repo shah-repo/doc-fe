@@ -15,13 +15,9 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
       return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
     });
 
-    const updateState = (state: ScanLot[]) => {
-      setScanLots(state);
-    };
-
     const deleteScanLot = (item: ScanLot) => {
       const filteredScanLots = differenceBy(scanLots, [item], 'id');
-      updateState(filteredScanLots);
+      setScanLots(filteredScanLots);
     };
 
     const updateScanLot = (item: ScanLot) => {
@@ -34,7 +30,7 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
         scanLots,
         'id',
       );
-      updateState(updatedVendors);
+      setScanLots(updatedVendors);
     };
 
     return Component({
