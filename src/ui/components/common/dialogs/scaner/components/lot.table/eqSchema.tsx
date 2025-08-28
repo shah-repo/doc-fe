@@ -61,6 +61,7 @@ export const buildEqSchema = ({
           onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          isEditHidden
           onOpenQuickView={onOpenQuickView}
         />
       ),
