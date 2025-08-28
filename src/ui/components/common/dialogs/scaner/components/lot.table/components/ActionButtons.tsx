@@ -12,6 +12,7 @@ import useStyles from '../styles';
 interface Props {
   isActive?: boolean
   isLoading?: boolean
+  isEditHidden?: boolean
   isEditMode?: boolean
   onEdit?: () => void
   onConfirm?: () => void
@@ -26,6 +27,7 @@ const ActionsButtons: React.FC<Props> = ({
   isActive,
   isLoading,
   isEditMode,
+  isEditHidden,
   onEdit,
   onDelete,
   onConfirm,
@@ -90,7 +92,7 @@ const ActionsButtons: React.FC<Props> = ({
                 color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
               /></IconButton>
           </Tooltip>
-          {onEdit && <Tooltip arrow title={translate('common.edit')} placement="top">
+          {!isEditHidden && <Tooltip arrow title={translate('common.edit')} placement="top">
             <IconButton
               ref={editIconRef}
               kind="form"

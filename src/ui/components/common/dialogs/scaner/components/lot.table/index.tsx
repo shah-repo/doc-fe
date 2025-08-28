@@ -18,6 +18,7 @@ import { withFBScanLot } from './wrap';
 const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot, type }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
+  const isEquipmentScan = type === FBProcedureItemType.equipment;
   const isScanLotEdited = editedScanLot?.[MODE_FIELD] === Mode.add;
   const editScanLot = ({ dataItem }) => setEditedScanLot(dataItem);
   const isInEditMode = editedScanLot !== undefined;
@@ -69,7 +70,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, u
     return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
-  const schema = (type === FBProcedureItemType.equipment ? buildEqSchema : buildSchema)({
+  const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
     units,
     onRowClick: handleRowClick,
     onConfirm: submitForm,

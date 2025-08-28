@@ -7,6 +7,7 @@ interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isLoading?: boolean
   isActive?: boolean
+  isEditHidden?: boolean
   isEditButtonHidden?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
@@ -23,6 +24,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   scrollBehavior = 'auto',
   isLoading,
   isActive,
+  isEditHidden,
   onEdit,
   onDelete,
   onConfirm,
@@ -51,6 +53,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         isLoading={isLoading}
         onConfirm={onConfirm}
         onDiscard={onDiscard}
+        isEditHidden={isEditHidden}
         onEdit={() => onEdit?.(dataItem)}
         onDelete={onDelete && (() => onDelete(dataItem))}
         openQuickView={onOpenQuickView && ((event) => onOpenQuickView(event, dataItem))}
