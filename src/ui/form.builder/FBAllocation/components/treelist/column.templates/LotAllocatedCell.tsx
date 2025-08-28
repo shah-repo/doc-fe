@@ -12,6 +12,7 @@ import { getFormattedDateString, MomentFormats } from '../../../../../../common/
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
+import ScanCaptureDialog from '../../../../../components/common/dialogs/scaner';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
@@ -117,6 +118,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   ariaColumnIndex,
   colIndex,
   className,
+  reloadAllocationList,
   deleteLot,
 }) => {
   const { isLotAddition, lotRevId, isDisabled, parentPartRevId, lotDocumentId, lotDocId } = dataItem ?? {};
@@ -125,7 +127,9 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
+  const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
+  const scanDialog = useDialog();
   const quickViewDialog = useDialog();
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -180,6 +184,11 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
     });
   };
 
+  const refreshAndClose = () => {
+    reloadAllocationList?.();
+    scanDialog.close();
+  };
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -200,6 +209,16 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
                 className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
                 onClick={() => addLot?.(dataItem)}
                 icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
+              />
+            </IconButton>
+          </StyleTooltip>
+          <StyleTooltip title={translate('common.scan')} placement="top" arrow>
+            <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
+              <FontAwesomeIcon
+                size="sm"
+                className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
+                onClick={scanDialog.open}
+                icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
           </StyleTooltip>
@@ -259,6 +278,14 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
         )
       )}
       <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: lotRevId, parentRevId }} />
+      {scanDialog.isOpen && (
+        <ScanCaptureDialog
+          handler={scanDialog}
+          onClose={scanDialog.close}
+          reloadGrid={refreshAndClose}
+          selectedPart ={dataItem}
+        />
+      )}
     </td>
   );
 };
