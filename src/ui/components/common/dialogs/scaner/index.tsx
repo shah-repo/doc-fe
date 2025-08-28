@@ -16,12 +16,16 @@ import ScanLotTable from './components/lot.table';
 import { ScanLot, ScanSelectedPartItem, ValidateLot } from './components/lot.table/types';
 import useStyles from './styles';
 
+interface Item {
+  [key: string]: string
+}
+
 interface Props {
   children?: JSX.Element
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
   reloadGrid?: () => void
-  addScanLotsToPart?: (item: ScanLot[]) => void
+  addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
@@ -126,6 +130,17 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         serialNumber: lot.serialNumber,
       };
     });
+
+    if (isEquipmentScan) {
+      const equipPayload = scanLots.map((lot: ScanLot) => {
+        return {
+          actualId: lot.id,
+        };
+      });
+
+      addScanLotsToPart?.(equipPayload as Item[]);
+      return;
+    }
 
     if (addScanLotsToPart) {
       addScanLotsToPart?.(scanLots);

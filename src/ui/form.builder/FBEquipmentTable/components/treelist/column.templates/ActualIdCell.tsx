@@ -3,18 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
-import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
-import useActionCreator from '../../../../../hooks/useActionCreator';
-import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
@@ -27,7 +21,6 @@ import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
 interface LotAutocompleteProps {
   field?: string
-  lots: DocumentRevision[]
   value: OptionType
   setValue: Dispatch<SetStateAction<OptionType>>
   dataItem: EditableEquipmentItem
@@ -39,7 +32,6 @@ interface LotAutocompleteProps {
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   field = '',
-  lots,
   value,
   setValue,
   isLoading,
@@ -111,55 +103,11 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const openQuickViewDialog = () => quickViewDialog.open();
-  const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
       = dataItem?.isActualIdAddition || dataItem?.actualId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
-  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
-
-  const fetchAvailablePartsAsync = useAsync({
-    onSuccess: (data: DocumentRevision[] = []) => {
-      setLots(data);
-    },
-  });
-
-  useEffect(() => {
-    if (isEmpty(parentEquipPlannedId)) {
-      return;
-    }
-
-    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentEquipPlannedId, fetchAvailablePartsAsync);
-  }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
-
-  useEffect(() => {
-    if (!isEditMode) {
-      return;
-    }
-
-    const value = renderOptions().find((option) => option.value === actualId);
-
-    if (value && field) {
-      setValue(value);
-    }
-  }, [lots]);
-
-  const renderOptions = (): LotAutoCompleteOptions[] => {
-    return lots.map((lot) => {
-      const { isExpired, id, expiryDate, document } = lot;
-      const formattedExpiryDate = isExpired
-        ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit)
-        : '';
-      return {
-        label: document.docId,
-        value: id,
-        expiryDate: formattedExpiryDate,
-        isExpired: isExpired,
-      };
-    });
-  };
-
-  const isLoading = fetchAvailablePartsAsync.isLoading;
+  const isLoading = !equipmentOptions.length;
 
   if (isAddActualIdVisible) {
     return (
@@ -208,12 +156,11 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
             <LotAutocomplete
               {...{
                 field,
-                lots,
                 value,
                 setValue,
                 dataItem,
                 actualId,
-                isLoading: fetchAvailablePartsAsync.isLoading,
+                isLoading,
                 equipmentOptions,
               }}
             />

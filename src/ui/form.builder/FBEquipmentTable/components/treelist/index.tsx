@@ -77,7 +77,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const treeListRef = useRef(null);
   const scanDialog = useDialog();
-  const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
+  const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
   const { equipmentOptions } = useOptions();
@@ -295,16 +295,17 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     const plannedIdInfo = equipmentOptions?.find((option) => option.value === dataItem.title);
     const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
 
-    scanSelectedPartInfo.current = {
+    scanSelectedEquipInfo.current = {
       docId: match[1] ?? '',
       partDescription: match[3],
       displayRevision: match[2],
       partRevId: plannedIdInfo?.value,
       id: dataItem.id,
+      plannedId: dataItem.title,
       type: FBProcedureItemType.equipment,
     };
     scanDialog.open();
-    console.log('scanSelectedPartInfo', scanSelectedPartInfo);
+    console.log('scanSelectedEquipInfo', scanSelectedEquipInfo);
   };
 
   const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
@@ -502,7 +503,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
   const addScannedEquipments = (scannedEquips) => {
     scanDialog.close();
-    const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedPartInfo.current?.id);
+    const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedEquipInfo.current?.id);
     if (parentIndex === -1) {
       return;
     }
@@ -510,7 +511,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     const updatedScannedEquips = scannedEquips.map((equipment) => {
       return {
         ...equipment,
-        parentPartPlannedId: scanSelectedPartInfo.current?.plannedId,
+        parentEquipPlannedId: scanSelectedEquipInfo.current?.plannedId,
       };
     });
 
@@ -583,7 +584,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           handler={scanDialog}
           onClose={onClose}
           addScanLotsToPart={addScannedEquipments}
-          selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
+          selectedPart ={scanSelectedEquipInfo.current as ScanSelectedPartItem}
         />
       )}
     </div>
