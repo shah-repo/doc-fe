@@ -34,6 +34,7 @@ export interface FBPurchaseOrderItem {
   partNumberDocId: string
   partNumberTitle: string
   supplierPartNumber: string
+  partNumberDocumentId?: string
   date: Date
   description: string
   unitPrice: string
