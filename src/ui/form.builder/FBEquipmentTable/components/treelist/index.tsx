@@ -189,27 +189,39 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
-    if (dataItem?.[ADD_FIELD]) {
-      if (dataItem.isActualIdAddition) {
-        const parentIndex = state.data?.findIndex((data) => {
-          return data.plannedId === dataItem.parentEquipPlannedId;
-        });
-        if (parentIndex !== -1) {
-          state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
-            (data) => !data[ADD_FIELD],
-          );
-        }
-      } else {
-        state.data = state.data?.filter((data) => dataItem?.id ? dataItem.id !== data.id : !data[ADD_FIELD]);
-      }
-    }
+    setState((prevState) => {
+      const newData = [...prevState.data];
 
-    setState(prevState => ({
-      ...prevState,
-      data: [...state.data],
-      inEdit: [],
-    }));
-      formik?.resetForm();
+      if (dataItem?.[ADD_FIELD]) {
+        if (dataItem.isActualIdAddition) {
+          const parentIndex = newData.findIndex((data) => {
+            return data.plannedId === dataItem.parentEquipPlannedId;
+          });
+
+          if (parentIndex !== -1) {
+            newData[parentIndex][SUB_ITEMS_FIELD] = newData[parentIndex][SUB_ITEMS_FIELD]?.filter(
+              (data) => !data[ADD_FIELD],
+            );
+          }
+        } else {
+          const filtered = newData.filter((data) => (dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]));
+
+          return {
+            ...prevState,
+            data: filtered,
+            inEdit: [],
+          };
+        }
+      }
+
+      return {
+        ...prevState,
+        data: [...newData],
+        inEdit: [],
+      };
+    });
+
+    formik?.resetForm();
   };
 
   const deleteItemFromStateData = (dataItem) => {
@@ -416,6 +428,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     }
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
+
+    if (isMPIProcedure || isLHRStep) {
+      const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+      if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
+        state.data[index] = editItemInfo;
+      }
+    }
+
     setState(state => ({
       ...state,
       data: [...state.data],

@@ -249,26 +249,39 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const discardScanLot = (dataItem?: EditableMaterial) => {
-    if (dataItem?.[ADD_FIELD]) {
-      if (dataItem.isLotAddition) {
-        const parentIndex = state.data?.findIndex((data) => {
-          return data.plannedId === dataItem.parentPartPlannedId;
-        });
-        if (parentIndex !== -1) {
-          state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
-            (data) => !data[ADD_FIELD],
-          );
-        }
-      } else {
-        state.data = state.data?.filter((data) => dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]);
-      }
-    }
+    setState((prevState) => {
+      const newData = [...prevState.data];
 
-    setState((prevState) => ({
-      ...prevState,
-      inEdit: [],
-      data: [...state.data],
-    }));
+      if (dataItem?.[ADD_FIELD]) {
+        if (dataItem.isLotAddition) {
+          const parentIndex = newData.findIndex((data) => {
+            return data.plannedId === dataItem.parentPartPlannedId;
+          });
+
+          if (parentIndex !== -1) {
+            newData[parentIndex][SUB_ITEMS_FIELD] = newData[parentIndex][SUB_ITEMS_FIELD]?.filter(
+              (data) => !data[ADD_FIELD],
+            );
+          }
+        } else {
+          const filtered = newData.filter((data) =>
+            dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD],
+          );
+          return {
+            ...prevState,
+            data: filtered,
+            inEdit: [],
+          };
+        }
+      }
+
+      return {
+        ...prevState,
+        data: [...newData],
+        inEdit: [],
+      };
+    });
+
     formik.resetForm();
   };
 
@@ -427,6 +440,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     }
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
+
+    if (isMPIProcedure || isLHRStep) {
+      const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+      if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
+        state.data[index] = editItemInfo;
+      }
+    }
+
     setState((state) => ({
       ...state,
       data: [...state.data],
