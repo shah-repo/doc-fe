@@ -17,7 +17,7 @@ import { ScanLot, ScanSelectedPartItem, ValidateLot } from './components/lot.tab
 import useStyles from './styles';
 
 interface Item {
-  [key: string]: string
+  [key: string]: string | number
 }
 
 interface Props {
@@ -37,6 +37,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   const [scannedValue, setScannedValue] = useState<string>('');
 
   const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
+  const isLotScan = selectedPart?.type === FBProcedureItemType.materials;
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
   const validateEQScan = useActionCreator(allocationActions.validateEQScannedItem);
 
@@ -141,6 +142,19 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       });
 
       addScanLotsToPart?.(equipPayload as Item[]);
+      return;
+    }
+
+    if (isLotScan) {
+      const lotPayload = scanLots.map((lot: ScanLot) => {
+        return {
+          lotId: lot.id,
+          unit: lot.unitOfMeasure,
+          quantity: lot.quantityAssigned,
+        };
+      });
+
+      addScanLotsToPart?.(lotPayload as Item[]);
       return;
     }
 

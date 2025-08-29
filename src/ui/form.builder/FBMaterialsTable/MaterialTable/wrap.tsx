@@ -82,8 +82,8 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
         fieldId: name ?? '',
         forPreselected: { id: values.parentPartPlannedId ?? '' },
         quantity,
-        unit: unit,
-        // actualId: values.actualId,
+        unit,
+        actualId: values.actualId,
         usedOverride: { id: values.lotId },
         type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
       };

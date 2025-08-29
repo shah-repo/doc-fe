@@ -24,7 +24,7 @@ import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
-import { FBProcedureItemConfig } from '../../FBProcedureItem/FBProcedureItem.types';
+import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../helpers';
 import { prepareData } from './components/utils';
 import {
@@ -237,6 +237,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     if (parentIndex === -1) {
       return;
     }
+
     const updatedLots = scanLots.map((lot) => {
       return {
         ...lot,
@@ -565,6 +566,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       partRevId: plannedIdInfo?.value,
       id: dataItem.id,
       plannedId: dataItem?.plannedId,
+      type: FBProcedureItemType.materials,
     };
     scanDialog.open();
   };
