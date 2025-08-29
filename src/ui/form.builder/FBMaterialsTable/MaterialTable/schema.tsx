@@ -11,6 +11,7 @@ import { SchemaOptions } from './types';
 
 export const buildSchema = ({
   materialSelectOptions,
+  units,
   onRowClick,
   addLot,
   actionsClass,
@@ -58,7 +59,7 @@ export const buildSchema = ({
       id: 'unit',
       field: 'unit',
       title: translate('form.builder.procedure.material.table.unit.title'),
-      cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} />,
+      cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} />,
       mainOrderIndex: 5,
       width: 150,
     },

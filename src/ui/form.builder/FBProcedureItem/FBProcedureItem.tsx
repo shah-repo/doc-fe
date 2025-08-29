@@ -85,7 +85,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             />
           </Box>
         )}
-        {type !== FBProcedureItemType.attachments && !loading && (<>
+        {type !== FBProcedureItemType.attachments && !loading && (
           <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
@@ -147,7 +147,6 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               </Box>
             )}
           </FBMapWrapper>
-        </>
         )}
       </Box>
     </FBProvider>
