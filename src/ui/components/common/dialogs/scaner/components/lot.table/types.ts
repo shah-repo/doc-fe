@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DocumentRevision } from '../../../../../../../state/ducks/documentRevisions/types';
-import { FBInputProps, FBProcedureItemType } from '../../../../../../form.builder';
+import { FBProcedureItemType } from '../../../../../../form.builder';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 
@@ -46,8 +46,6 @@ export interface EditableScanLot extends ScanLot {
   [MODE_FIELD]: Mode
 }
 
-export type FBScanLotProps = Pick<FBInputProps, 'name' | 'label' | 'disabled'>;
-
 export interface SchemaOptions {
   isLoading?: boolean
   units: string[]
@@ -69,10 +67,6 @@ export interface UnitOption {
   value: string
   text: string
 }
-
-export type UseOptionsHook = () => {
-  units: string[]
-};
 
 export interface ScanSelectedPartItem {
   id?: string

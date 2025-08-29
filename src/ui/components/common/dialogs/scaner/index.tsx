@@ -34,6 +34,8 @@ interface Props {
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
+  const [scannedValue, setScannedValue] = useState<string>('');
+
   const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
   const validateEQScan = useActionCreator(allocationActions.validateEQScannedItem);
@@ -150,8 +152,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     partAsync.start(createLot, lotPayload, partAsync);
   };
 
-  const [scannedValue, setScannedValue] = useState<string>('');
-
   const handleScan = (data: string) => {
     setScannedValue(data);
 
@@ -164,7 +164,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleError = (error: Error) => {
-    setScannedValue('');
     toastError(error);
   };
 
@@ -205,7 +204,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       className={classes.root}
       open={handler?.isOpen}
       maxWidth="xl"
-      hideCloseButton
       cancelLabel="common.cancel"
       title={isEquipmentScan ? 'scan.eq.dialog.title.message' : 'scan.lot.dialog.title.message'}
       confirmLabel="common.add"
