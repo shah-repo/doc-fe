@@ -129,7 +129,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                     return sum;
                   }, 0);
                   const parentValues = getProcedureValues?.(item);
-                  const showError = totalQuantity > 0 && totalQuantity > parentValues?.mimimumQty && type === 'materials';
+                  const showError = totalQuantity > 0 && totalQuantity < parentValues?.minimumQty && type === 'materials';
+                  console.log('parentValues?', parentValues);
                   return (
                     <Box
                       borderLeft={0}
@@ -324,7 +325,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                         <Box
                           mb={1}
                         >
-                          <span style={{ color: Colors.error_red }}>{translate('lhr.materials.quantity.mismatch.error')}</span>
+                          <span style={{ color: Colors.error_red }}>{translate('lhr.materials.quantity.mismatch.error', { assignedQty: totalQuantity, neededQty: parentValues?.minimumQty, part: item.title })}</span>
                         </Box>)}
                       <Box
                         key="id"

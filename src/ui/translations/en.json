@@ -2667,6 +2667,6 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
-  "lhr.materials.quantity.mismatch.error": "Quantity is mismatching",
+  "lhr.materials.quantity.mismatch.error": "Lots assigned ({assignedQty}) does not meet the quantity needed ({neededQty}) for the {part}",
   "lhr.materials.total.cannot.exceed.start.quantity": "Total cannot exceed start quantity"
 }
