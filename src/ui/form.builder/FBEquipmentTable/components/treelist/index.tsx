@@ -67,12 +67,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   isLHRStep,
   lhrStepIndex,
   isMPIProcedure,
-  isShowOnly = false,
   isPendingChange,
   equipsSelected,
   isEnableActualIdAddition,
 }) => {
-  console.log('isDisabled', isDisabled, isDesign, isLHRStep);
   const { _tabsState } = SM.useStores();
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const treeListRef = useRef(null);
@@ -130,7 +128,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
-      console.log({ values });
       if (isEnableActualIdAddition) {
         if (values[ADD_FIELD]) {
                 saveActualEquipment?.(values as EditableEquipmentItem);
@@ -317,7 +314,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       type: FBProcedureItemType.equipment,
     };
     scanDialog.open();
-    console.log('scanSelectedEquipInfo', scanSelectedEquipInfo);
   };
 
   const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
@@ -404,8 +400,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
   const addEquipItem = () => {
     const newEquipItem = createEquipItem();
-    const isAddAllocationItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
-    if (isAddAllocationItemExists === -1) {
+    const isAddEquipmentItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
+    if (isAddEquipmentItemExists === -1) {
       state.data.push(newEquipItem);
       setState(prevState => ({
         ...prevState,
@@ -447,7 +443,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableEquipmentItem;
-    // const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
+    const parentChildRelkey = item.parentEquipPlannedId ? `equip-row-${item?.actualId}` : `equip-row-${item?.plannedId}`;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -462,8 +458,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     if (showWithoutActions) {
       return React.cloneElement(row, {
         ...modifiedProps,
-        ['data-cy' as string]: `alloc-row-${item?.id}`,
-        // ['data-parent-rel' as string]: parentChildRelkey,
+        ['data-cy' as string]: `equip-row-${item?.id}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
       });
     }
 
@@ -471,8 +467,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       row,
       {
         ...modifiedProps,
-        ['data-cy' as string]: `alloc-row-${item?.id}`,
-        // ['data-parent-rel' as string]: parentChildRelkey,
+        ['data-cy' as string]: `equip-row-${item?.id}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
         className: cx(row.props.className, classes.updatingRow),
       },
     );
@@ -537,7 +533,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     });
 
     saveScannedEquipments?.(updatedScannedEquips);
-    console.log('scannedEquips', scannedEquips);
   };
 
   const onClose = () => {

@@ -17,8 +17,6 @@ interface EditorProps {
   value: OptionType
   setValue: Dispatch<SetStateAction<OptionType>>
   dataItem: EditableEquipmentItem
-  parentPartRevId?: string
-  actualId?: string
   isLoading?: boolean
   equipmentOptions: OptionType[]
 }

@@ -17,7 +17,7 @@ import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
-import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
+import { CustomTreeListCellProps, EquipAutoCompleteOptions } from './types';
 
 interface LotAutocompleteProps {
   field?: string
@@ -72,7 +72,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
-        renderOption={(option: LotAutoCompleteOptions, props) => (
+        renderOption={(option: EquipAutoCompleteOptions, props) => (
           <ListItem {...props} className="lot-list-item" disableGutters>
             <ListItemText primary={option.label} />
             {option.isExpired && (

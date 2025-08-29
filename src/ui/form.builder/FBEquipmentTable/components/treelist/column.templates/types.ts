@@ -36,7 +36,7 @@ export interface EquipmentItemActionsProps<T> {
   onReorder?: () => void
 }
 
-export interface LotAutoCompleteOptions {
+export interface EquipAutoCompleteOptions {
   label: string
   value: string
   isExpired?: boolean
