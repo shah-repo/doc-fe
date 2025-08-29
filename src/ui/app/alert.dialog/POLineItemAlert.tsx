@@ -49,6 +49,11 @@ const POLineItemAlert: React.FC<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
+  const getConflictingParts = (items: ApprovalItem[]) => {
+    const itemPart = items.map((item) => `${item.docId} - ${item.displayRevision}`);
+    return itemPart.join(', ');
+  };
+
   return (
     <AlertDialog
       handler={dialog}
@@ -76,6 +81,9 @@ const POLineItemAlert: React.FC<Props> = ({
           <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
           <b> {getConflictingPhases(items)} </b>
           <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+        </Typography>
+        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
+          <Text message={!isError && isWarning ? getConflictingParts(warningItems) : getConflictingParts(errorItems)} />
         </Typography>
         {!isError && isWarning && (
           <Box className={cx(classes.topSpacing, classes.contentText)}>
