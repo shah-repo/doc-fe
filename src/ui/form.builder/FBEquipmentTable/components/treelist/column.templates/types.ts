@@ -9,6 +9,7 @@ export interface customEQOptionType extends OptionType{
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
   isDisabled?: boolean
+  isEnableActualIdAddition?: boolean
   dataItem: EditableEquipmentItem
   getItem?: (id: string) => string
   addActualId?: EquipmentCallback
@@ -20,12 +21,13 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   equipmentOptions: customEQOptionType[]
 }
 
-export interface AllocItemActionsProps<EditableAllocationItem> {
-  dataItem: EditableAllocationItem
+export interface EquipmentItemActionsProps<T> {
+  dataItem: T
   isDeleteDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
   isAddPartEnabled?: boolean
+  isEnableActualIdAddition?: boolean
   onConfirm: () => void
   onDiscard?: EquipmentCallback
   onDelete?: EquipmentCallback

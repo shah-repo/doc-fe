@@ -94,7 +94,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled } = props;
+  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const isEditMode = isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
@@ -105,7 +105,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
-      = dataItem?.isActualIdAddition || dataItem?.actualId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
+      = dataItem?.isActualIdAddition || dataItem?.actualId || !isEnableActualIdAddition ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
 

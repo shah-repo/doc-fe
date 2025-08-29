@@ -425,7 +425,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled));
+    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableOnlyLotAddition;
     const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
       return;

@@ -10,9 +10,9 @@ import { EditableEquipmentItem } from '../../../interface';
 import { MODE_FIELD } from '../constants';
 import { isAddEquipItem, isEditEquipItem } from '../utils';
 import { styles } from './styles';
-import { AllocItemActionsProps } from './types';
+import { EquipmentItemActionsProps } from './types';
 
-export default function ActionButtons (props: AllocItemActionsProps<EditableEquipmentItem>): React.ReactElement | null {
+export default function ActionButtons (props: EquipmentItemActionsProps<EditableEquipmentItem>): React.ReactElement | null {
   const {
     dataItem,
     scrollBehavior = 'auto',
@@ -20,6 +20,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableEqui
     onConfirm,
     onDiscard,
     onDelete,
+    isEnableActualIdAddition,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -77,7 +78,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableEqui
           <FontAwesomeIcon icon={regular('xmark')} />
         </IconButton>
       </Tooltip>}
-      <Tooltip
+      {(!isEnableActualIdAddition || (isEnableActualIdAddition && dataItem.isActualIdAddition)) && <Tooltip
         title={translate('common.save')}
         placement="top"
         arrow
@@ -90,7 +91,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableEqui
         >
           <FontAwesomeIcon icon={regular('check')} />
         </IconButton>
-      </Tooltip>
+      </Tooltip>}
     </div>
   );
 }

@@ -3,9 +3,9 @@ import PopperJs from 'popper.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { EditableEquipmentItem } from '../../../interface';
 import ActionButtons from './ActionsButtons';
-import { AllocItemActionsProps } from './types';
+import { EquipmentItemActionsProps } from './types';
 
-interface Props extends AllocItemActionsProps<EditableEquipmentItem> {
+interface Props extends EquipmentItemActionsProps<EditableEquipmentItem> {
   rootClassName?: string
   popperRef?: React.RefObject<PopperJs>
 }

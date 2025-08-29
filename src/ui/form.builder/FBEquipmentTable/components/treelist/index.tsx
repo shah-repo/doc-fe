@@ -331,6 +331,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
+    isEnableActualIdAddition,
   });
 
   const [columns, setColumns]
@@ -416,7 +417,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled));
+    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableActualIdAddition;
     const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
 
     if (isEditRestricted) {
