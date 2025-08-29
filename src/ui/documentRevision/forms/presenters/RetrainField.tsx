@@ -31,12 +31,14 @@ const RetrainField: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange || isDisabled;
+  const isAdminChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
+  const disabled = isAdminChange || isDisabled;
+
   return (
     <CheckboxField
       name="retrain"
       label="document.revision.trainingRequired"
-      tooltipTitle={translate('training.required.tooltip.message')}
+      tooltipTitle={isAdminChange ? translate('training.required.tooltip.message') : ''}
       checkboxProps={{ disabled }}
     />
   );
