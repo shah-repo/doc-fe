@@ -1,5 +1,6 @@
 import { useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
+import { translate } from '../../../../common/intl';
 import { RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import CheckboxField from '../../../components/forms/fields/Checkbox';
 import { useTraining } from '../../../hooks/docCustomization/useCustomization';
@@ -35,6 +36,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
     <CheckboxField
       name="retrain"
       label="document.revision.trainingRequired"
+      tooltipTitle={translate('training.required.tooltip.message')}
       checkboxProps={{ disabled }}
     />
   );

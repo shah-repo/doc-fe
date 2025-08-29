@@ -2671,5 +2671,6 @@
   "attachment.upload.error.part.failed": "Part upload failed",
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
-  "attachment.upload.error.cancelled": "Upload cancelled"
+  "attachment.upload.error.cancelled": "Upload cancelled",
+  "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision"
 }
