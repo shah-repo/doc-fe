@@ -76,7 +76,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { procedureState, mpiProcedureState, lhrStepState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
-  const { materialSelectOptions, units } = useOptions();
+  const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
@@ -422,7 +422,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableOnlyLotAddition;
-    const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
+    const isEditRestricted = (isLHRStep || isMPIProcedure) && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
       return;
     }
@@ -575,7 +575,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const schema = (isMPIProcedure ? buildMPISchema : buildSchema)({
     materialSelectOptions,
-    units,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     onDiscard: discardScanLot,
