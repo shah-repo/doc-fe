@@ -24,14 +24,6 @@ export const buildEqSchema = ({
       filterable: false,
       width: 150,
     },
-    // {
-    //   id: 'serialNumber',
-    //   field: 'serialNumber',
-    //   title: 'scan.lot.grid.serial.number',
-    //   template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} />,
-    //   filterable: false,
-    //   width: 150,
-    // },
     {
       id: 'calDueDate',
       field: 'calDueDate',

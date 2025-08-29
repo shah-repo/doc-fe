@@ -5,21 +5,16 @@ import FBAutocompleteAsyncState from '../../FBAutocompleteAsync/FBAutocompleteAs
 import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../helpers';
-import { MaterialOption, UnitOption } from './types';
+import { MaterialOption } from './types';
 
 export const useOptions = () => {
   const materialState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.materials,
   });
 
-  const unitState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-    optionId: FBAutocompleteAsyncOption.unitMeasures,
-  });
-
   useEffect(() => {
     materialState.load();
-    unitState.load();
-  }, [materialState, unitState]);
+  }, [materialState]);
 
   return useObserver(() => {
     const materialMap = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials) as Map<
@@ -38,16 +33,8 @@ export const useOptions = () => {
       }))
       : [];
 
-    const unitMap = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<
-    string,
-    UnitOption
-    >;
-
-    const units = unitMap ? Array.from(unitMap.values()).map((unit) => unit.text) : [];
-
     return {
       materialSelectOptions,
-      units,
     };
   });
 };

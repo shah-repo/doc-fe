@@ -68,6 +68,7 @@ export interface LotOptions {
 export interface SchemaOptions {
   isLoading?: boolean
   materialSelectOptions: OptionType[]
+  units?: string[]
   parts?: MaterialOption[]
   isDisabled?: boolean
   onConfirm: () => void
@@ -121,6 +122,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parts?: MaterialOption[]
   isDisabled?: boolean
   materialSelectOptions?: OptionType[]
+  units?: string[]
   onClick?: (e: MaterialEditEvent) => void
   onScanClick?: MaterialCallback
 }

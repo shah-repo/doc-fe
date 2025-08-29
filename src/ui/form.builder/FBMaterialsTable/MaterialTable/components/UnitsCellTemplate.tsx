@@ -13,15 +13,12 @@ import { CustomTreeListCellProps, EditableMaterial, UnitOption } from '../types'
 import TreeListCellWrapper from './TreeListCellWrapper';
 import { isEditMaterial } from './utils';
 
-const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+const Editor: React.FC<CustomTreeListCellProps> = ({ field = '' }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: string) => {
+  const handleChange = (_: ChangeEvent<unknown>, value?: string) => {
     setFieldValue(field, value);
   };
-
-  const value = values[field] as string;
 
   const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.unitMeasures,
@@ -38,6 +35,8 @@ const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
     >;
     return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
   });
+
+  const value = values[field] as string;
 
   return (
     <FormikField name={field}>
@@ -62,7 +61,7 @@ const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      {isEditMode ? <Editor field={field} /> : <OverflowContent>{displayValue}</OverflowContent>}
+      {isEditMode ? <Editor {...props} /> : <OverflowContent>{displayValue}</OverflowContent>}
     </TreeListCellWrapper>
   );
 };

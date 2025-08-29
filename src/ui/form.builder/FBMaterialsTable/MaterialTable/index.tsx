@@ -126,7 +126,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       state.data.push(scanLot as Material);
     }
 
-    // Then update the state
     setState((prevState) => ({
       ...prevState,
       inEdit: [],
@@ -323,7 +322,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableMaterial;
-    // const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -339,14 +337,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       return React.cloneElement(row, {
         ...modifiedProps,
         ['data-cy' as string]: `alloc-row-${item?.id}`,
-        // ['data-parent-rel' as string]: parentChildRelkey,
       });
     }
 
     return React.cloneElement(row, {
       ...modifiedProps,
       ['data-cy' as string]: `alloc-row-${item?.id}`,
-      // ['data-parent-rel' as string]: parentChildRelkey,
       className: cx(row.props.className, classes.updatingRow),
     });
   };
@@ -426,7 +422,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableOnlyLotAddition;
-    const isEditRestricted = isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
+    const isEditRestricted = (isLHRStep || isMPIProcedure) && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
     if (isEditRestricted) {
       return;
     }

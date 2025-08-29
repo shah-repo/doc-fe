@@ -11,7 +11,6 @@ const baseInputStyles = (theme: Theme) => ({
   borderRadius: theme.shape.borderRadius / 2,
   border: `1px solid ${Colors.tableCellBorder}`,
 
-  // TODO check and remove if needed after upgrading Kendo Grid
   '&::selection': {
     backgroundColor: 'highlight !important',
     color: 'highlighttext !important',

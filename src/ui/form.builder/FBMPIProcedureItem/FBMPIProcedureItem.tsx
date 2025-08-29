@@ -61,6 +61,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
@@ -85,7 +86,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           }}
           locale={FBProcedureItemLocale[type]}
         />
-        {!isPreview && false && !FBProcedureItemOmitAction.includes(type) && (
+        {!isPreview && isUnrelatedToMaterialAndEquipment && !FBProcedureItemOmitAction.includes(type) && (
           <Box pt={1.6} pr={2}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
@@ -120,7 +121,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         </Box>
       )}
       {type !== FBProcedureItemType.attachments && !loading && (<>
-        {![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {isUnrelatedToMaterialAndEquipment && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
               borderLeft={0}

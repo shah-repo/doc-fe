@@ -149,7 +149,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           });
           lhrStepState.setMaterials(newMaterials);
           lhrStepState.setEquipment(newEquipments);
-          console.log('newEquipments', newEquipments);
           lhrStepState.setEditedParameters(parameters);
           return;
         }

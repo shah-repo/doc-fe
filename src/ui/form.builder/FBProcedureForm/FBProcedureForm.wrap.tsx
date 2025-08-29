@@ -163,9 +163,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
             },
           };
         }
-        console.log('workspaceState!.schema', workspaceState!.schema![lhrStepIndex]);
-
-        // workspaceState?.saveDocRev();
+        workspaceState?.saveDocRev();
         return handleCancel?.();
       }
       if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
