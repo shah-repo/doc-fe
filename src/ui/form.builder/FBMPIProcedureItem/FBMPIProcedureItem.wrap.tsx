@@ -214,7 +214,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
-      const mimimumQty = item.quantity ? toFixed(item.quantity * lhrsAcceptedQty) || toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
+      const minimumQty = item.quantity ? toFixed(item.quantity * lhrsAcceptedQty) || toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
 
       if (isDocumentMPI) {
         return item.type
@@ -223,8 +223,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       }
 
       return usedItem
-        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit, mimimumQty }
-        : { title: getItem?.(item.title), quantity, unit, mimimumQty };
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit, minimumQty }
+        : { title: getItem?.(item.title), quantity, unit, minimumQty };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
