@@ -25,9 +25,9 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
   const classes = styles();
   return (
     <Field {...fieldProps} >
-      <FormControlLabel id="Checkbox-label" className={classes.checkbox}
-        control={
-          <Tooltip title={tooltipTitle ?? ''} placement="bottom-start">
+      <Tooltip title={tooltipTitle ?? ''} placement="bottom-start">
+        <FormControlLabel id="Checkbox-label" className={classes.checkbox}
+          control={
             <MuiCheckbox
               {...fieldProps.field}
               {...checkboxProps}
@@ -40,10 +40,10 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
                 submitForm();
               }}
               />
-            </Tooltip>
-        }
+          }
         label={<Text translation={label} />}
-      />
+        />
+    </Tooltip>
     </Field>
   );
 };
