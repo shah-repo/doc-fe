@@ -14,10 +14,9 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 import { isEditMaterial } from './utils';
 
 const Editor: React.FC<{ field: string }> = ({ field = '' }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: string) => {
+  const handleChange = (_: ChangeEvent<unknown>, value?: string) => {
     setFieldValue(field, value);
   };
 
