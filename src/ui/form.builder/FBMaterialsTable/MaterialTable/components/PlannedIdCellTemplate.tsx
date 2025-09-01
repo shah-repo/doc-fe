@@ -11,6 +11,7 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
+import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -46,7 +47,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   useEffect(() => {
     const title = cloneDeep(values?.title);
 
-    if (!isUpdateAction) {
+    if (!isUpdateAction || FB.isUUID(title ?? '')) {
       return;
     }
 
@@ -60,7 +61,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     }
   }, [values]);
 
-  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    if (reason !== 'input') {
+      return;
+    }
+
     if (!isFreeSolo) {
       setFieldValue(field, '');
       setInputValue('');

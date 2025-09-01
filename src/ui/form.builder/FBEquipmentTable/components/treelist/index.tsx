@@ -47,7 +47,7 @@ import {
   FBEquipmentProps,
 } from './interface';
 import { TreeListLHRTSchema } from './lhrtSchema';
-import { TreeListMPISchema } from './mpiSchema';
+import { TreeListMPISchema } from './MPISchema';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';

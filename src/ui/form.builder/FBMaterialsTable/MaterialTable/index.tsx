@@ -342,11 +342,17 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       });
     }
 
-    return React.cloneElement(row, {
+    const editedRow = React.cloneElement(row, {
       ...modifiedProps,
       ['data-cy' as string]: `alloc-row-${item?.id}`,
       className: cx(row.props.className, classes.updatingRow),
     });
+
+    return (
+      <FormikProvider value={formik}>
+        {editedRow}
+      </FormikProvider>
+    );
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
@@ -400,6 +406,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       id: FB.uniqid,
       plannedId: '',
       actualId: '',
+      ...(isMPIProcedure && !isLHRStep && { title: '' }),
       unit: '',
       quantity: undefined,
       isLotAddition: false,
@@ -599,42 +606,40 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   return (
     <Box className={classes.root} data-cy="material-grid">
-      <FormikProvider value={formik}>
-        <Grid item xs={12} ref={treeListRef}>
-          <TreeList
-            style={{
-              overflow: 'auto',
-              maxHeight: size?.height ? `${size?.height}px` : '100px',
-            }}
-            tableProps={{ style: { tableLayout: 'fixed' } }}
-            {...state.dataState}
-            className={cx(classes.treeList, 'containing-box-scrollbar')}
-            data={processData()}
-            dataItemKey={DATA_ITEM_KEY}
-            subItemsField={SUB_ITEMS_FIELD}
-            expandField={EXPAND_FIELD}
-            editField={MODE_FIELD}
-            rowHeight={50}
-            onExpandChange={handleExpandChange}
-            onDataStateChange={handleDataStateChange}
-            onRowClick={editPartItem}
-            rowRender={rowRender}
-            cellRender={cellRender}
-            columns={columns}
-          />
-          {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
-            <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
-              {translate('form.builder.procedure.material.table.add.part')}
-            </Button>
-          )}
-          <DocumentRevisionDialog
-            dialog={quickViewDialog}
-            {...{
-              docRevId: selectedDataItem?.lotNumber?.id,
-            }}
-          />
-        </Grid>
-      </FormikProvider>
+      <Grid item xs={12} ref={treeListRef}>
+        <TreeList
+          style={{
+            overflow: 'auto',
+            maxHeight: size?.height ? `${size?.height}px` : '100px',
+          }}
+          tableProps={{ style: { tableLayout: 'fixed' } }}
+          {...state.dataState}
+          className={cx(classes.treeList, 'containing-box-scrollbar')}
+          data={processData()}
+          dataItemKey={DATA_ITEM_KEY}
+          subItemsField={SUB_ITEMS_FIELD}
+          expandField={EXPAND_FIELD}
+          editField={MODE_FIELD}
+          rowHeight={50}
+          onExpandChange={handleExpandChange}
+          onDataStateChange={handleDataStateChange}
+          onRowClick={editPartItem}
+          rowRender={rowRender}
+          cellRender={cellRender}
+          columns={columns}
+        />
+        {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
+          <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
+            {translate('form.builder.procedure.material.table.add.part')}
+          </Button>
+        )}
+        <DocumentRevisionDialog
+          dialog={quickViewDialog}
+          {...{
+            docRevId: selectedDataItem?.lotNumber?.id,
+          }}
+        />
+      </Grid>
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}

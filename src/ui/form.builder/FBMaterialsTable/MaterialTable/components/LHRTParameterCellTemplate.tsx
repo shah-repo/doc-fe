@@ -3,6 +3,7 @@ import React, { ChangeEvent, memo } from 'react';
 import { Checkbox, FormikField } from '../../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
+import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -15,7 +16,7 @@ const LHRTParameterCellTemplate: React.ComponentType<CustomTreeListCellProps> = 
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
     setFieldValue(field, !!checked);
-    if (!checked) {
+    if (!checked && !FB.isUUID(values?.title ?? '')) {
       setFieldValue('title', '');
     }
   };
