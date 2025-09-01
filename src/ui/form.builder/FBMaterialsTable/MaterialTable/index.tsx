@@ -36,6 +36,7 @@ import {
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
+import { buildLHRTSchema } from './lhrtSchema';
 import { buildMPISchema } from './mpiSchema';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -575,7 +576,13 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanDialog.close();
   };
 
-  const schema = (isMPIProcedure ? buildMPISchema : buildSchema)({
+  const getSchemaBuilder = () => {
+    if (isMPIProcedure && !isLHRStep) return buildMPISchema;
+    if (isLHRStep) return buildLHRTSchema;
+    return buildSchema;
+  };
+
+  const schema = getSchemaBuilder()({
     materialSelectOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
@@ -587,6 +594,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
   });
+
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   return (

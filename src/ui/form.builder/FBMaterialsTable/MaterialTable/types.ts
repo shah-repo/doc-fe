@@ -125,6 +125,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   units?: string[]
   onClick?: (e: MaterialEditEvent) => void
   onScanClick?: MaterialCallback
+  isLHRT?: boolean
 }
 
 export type MaterialOption =

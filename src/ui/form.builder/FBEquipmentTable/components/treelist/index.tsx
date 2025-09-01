@@ -46,7 +46,8 @@ import {
   EquipmentItemState,
   FBEquipmentProps,
 } from './interface';
-import { TreeListMPISchema } from './MPISchema';
+import { TreeListLHRTSchema } from './lhrtSchema';
+import { TreeListMPISchema } from './mpiSchema';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';
@@ -316,7 +317,13 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     scanDialog.open();
   };
 
-  const schema: CustomTreeListColumnProps[] = (isMPIProcedure ? TreeListMPISchema : TreeListSchema)({
+  const getSchemaBuilder = () => {
+    if (isMPIProcedure && !isLHRStep) return TreeListMPISchema;
+    if (isLHRStep) return TreeListLHRTSchema;
+    return TreeListSchema;
+  };
+
+  const schema: CustomTreeListColumnProps[] = getSchemaBuilder()({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',

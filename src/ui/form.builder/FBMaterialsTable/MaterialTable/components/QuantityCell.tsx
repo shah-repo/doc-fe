@@ -9,7 +9,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 import { getCellValue, isEditMaterial } from './utils';
 
 const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { dataItem, field, hasChildren } = props;
+  const { dataItem, field, hasChildren, isLHRT } = props;
   const classes = styles({ hasChildren });
   const { getFieldProps, setFieldValue, values } = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
@@ -21,6 +21,8 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
     }
   };
 
+  const shouldDisable = !isLHRT && values?.LHRTparameter;
+
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
@@ -29,7 +31,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
           type="number"
           onChange={onQuantityChange}
           inputProps={{ min: 0 }}
-          disabled={values.LHRTparameter}
+          disabled={shouldDisable}
           size="small"
         />
       </FormikField>
