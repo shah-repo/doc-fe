@@ -1,7 +1,9 @@
+import Typography from '@material-ui/core/Typography';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { translate } from '../../../../../../../common/intl';
 import { FBProcedureItemType } from '../../../../../../form.builder';
 import useDialog from '../../../../../../hooks/useDialog';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
@@ -109,6 +111,9 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, u
         data={scanLotList as EditableScanLot[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
+        fallback={
+          <Typography className={classes.emptyTableMessage}>{translate('scan.lot.grid.empty.message')}</Typography>
+        }
       />
       <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.lotNumber?.id }} />
     </div>
