@@ -50,8 +50,7 @@ const POLineItemAlert: React.FC<Props> = ({
   };
 
   const getConflictingParts = (items: ApprovalItem[]) => {
-    const itemPart = items.map((item) => `${item.docId} - ${item.displayRevision}`);
-    return itemPart.join(', ');
+    return items.map((item) => `${item.docId} - ${item.displayRevision}`).join(', ');
   };
 
   return (
