@@ -1,7 +1,9 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createFilterOptions } from '@material-ui/lab/useAutocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
@@ -14,21 +16,72 @@ import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded } = props;
+  const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded, isLHRT } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
+  const isUpdateAction = dataItem[MODE_FIELD];
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue, values, errors } = useFormikContext<EditableMaterial>();
+  const isFreeSolo = !isLHRT && values?.LHRTparameter;
+  const [inputValue, setInputValue] = useState('');
+  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+  const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
   };
 
   useEffect(() => {
+    if (!materialSelectOptions?.length) {
+      return;
+    }
+
+    setModifiedOptions(materialSelectOptions);
     const value = materialSelectOptions?.find((option) => option.value === dataItem[field]);
     if (value && field) {
       setValue(value);
+      setInputValue(value?.label ?? '');
     }
   }, [materialSelectOptions]);
+
+  useEffect(() => {
+    const title = dataItem?.title || values?.title;
+
+    if (isEmpty(title)) {
+      return;
+    }
+
+    if (isUpdateAction && !inputValue) {
+      setInputValue(title ?? '');
+    }
+  }, [dataItem[field], values[field]]);
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (!isFreeSolo) {
+      setFieldValue(field, '');
+      setInputValue('');
+      return;
+    }
+
+    if (!inputVal && inputValue) {
+      setFieldValue(field, '');
+    }
+
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
+    if (inputValue && inputValue.length > 2 && modifiedOptions?.length) {
+      const stringify = (option: OptionType) => option.label || '';
+      const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+      const updatedOptions = filterOptions(modifiedOptions, { inputValue });
+      setModifiedOptions(updatedOptions);
+    } else if (!inputValue) {
+      setModifiedOptions(materialSelectOptions ?? []);
+    }
+
+    setInputValue(inputVal);
+    setFieldValue(field, inputVal);
+  };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
@@ -36,8 +89,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const fieldValue = value?.label ?? dataItem?.[field ?? ''];
+  const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
   const disabled = dataItem.LHRTparameter ? !dataItem.LHRTparameter : !!dataItem[field];
 
@@ -49,7 +101,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
             <FormikField name={field ?? ''} required error={Boolean(errors[field ?? ''])}>
               <Autocomplete
                 {...getFieldProps(field)}
-                value={value}
+                value={inputValue ? { label: inputValue } : value}
                 blurOnSelect
                 disableOpenOnFocus={true}
                 freeSolo
@@ -61,10 +113,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                     </>
                   );
                 }}
-                options={materialSelectOptions}
+                options={modifiedOptions}
                 placeholder={translate('common.select')}
                 getOptionLabel={(option: OptionType) => option.label}
                 onChange={handleChange}
+                onInputChange={onInputChange}
                 size="small"
               />
             </FormikField>
