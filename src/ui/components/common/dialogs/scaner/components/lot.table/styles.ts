@@ -58,4 +58,8 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  emptyTableMessage: {
+    fontSize: 12,
+    fontWeight: 600,
+  },
 }));
