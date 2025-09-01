@@ -44,7 +44,6 @@ const Editor: React.FC<CustomCellProps> = ({
     <FormikField name={field}>
       <Autocomplete
         {...getFieldProps(field)}
-        disabled={Mode.edit === dataItem[MODE_FIELD]}
         blurOnSelect
         disableClearable
         getOptionLabel={(option: ASLStatus) => option.internalType}
