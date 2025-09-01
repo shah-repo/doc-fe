@@ -15,6 +15,9 @@ const LHRTParameterCellTemplate: React.ComponentType<CustomTreeListCellProps> = 
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
     setFieldValue(field, !!checked);
+    if (!checked) {
+      setFieldValue('title', '');
+    }
   };
 
   return (

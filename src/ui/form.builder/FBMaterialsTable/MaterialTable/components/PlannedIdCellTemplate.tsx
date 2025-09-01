@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createFilterOptions } from '@material-ui/lab/useAutocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
@@ -44,16 +44,21 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   }, [materialSelectOptions]);
 
   useEffect(() => {
-    const title = dataItem?.title || values?.title;
+    const title = cloneDeep(values?.title);
 
-    if (isEmpty(title)) {
+    if (!isUpdateAction) {
       return;
     }
 
-    if (isUpdateAction && !inputValue) {
+    if (!values.LHRTparameter && inputValue && !title) {
+      setInputValue('');
+      return;
+    }
+
+    if (values.LHRTparameter && !inputValue) {
       setInputValue(title ?? '');
     }
-  }, [dataItem[field], values[field]]);
+  }, [values]);
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     if (!isFreeSolo) {
