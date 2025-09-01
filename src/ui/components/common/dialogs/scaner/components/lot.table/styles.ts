@@ -59,7 +59,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
   },
   emptyTableMessage: {
-    fontSize: 12,
-    fontWeight: 600,
+    fontSize: 14,
+    color: Colors.textDisabled,
   },
 }));
