@@ -47,7 +47,7 @@ import {
   FBEquipmentProps,
 } from './interface';
 import { TreeListLHRTSchema } from './lhrtSchema';
-import { TreeListMPISchema } from './MPISchema';
+import { TreeListMPISchema } from './mpiSchema';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';
@@ -606,6 +606,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           onClose={onClose}
+          isSerialNumberHidden
           addScanLotsToPart={addScannedEquipments}
           selectedPart ={scanSelectedEquipInfo.current as ScanSelectedPartItem}
         />

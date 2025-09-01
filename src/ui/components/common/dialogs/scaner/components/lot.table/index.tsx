@@ -15,7 +15,7 @@ import useStyles from './styles';
 import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
-const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot, type }) => {
+const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, updateScanLot, deleteScanLot, type, isSerialNumberHidden }) => {
   const classes = useStyles();
   const [editedScanLot, setEditedScanLot] = useState<Partial<EditableScanLot>>();
   const isEquipmentScan = type === FBProcedureItemType.equipment;
@@ -72,6 +72,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, u
 
   const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
     units,
+    isSerialNumberHidden,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,

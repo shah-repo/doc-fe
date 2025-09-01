@@ -4,7 +4,6 @@ import { ActionsCell } from './column.templates/Actions';
 import ActualIdCell from './column.templates/ActualIdCell';
 import { DateCell } from './column.templates/DateCell';
 import IDCell from './column.templates/IDCell';
-import { RevHeaderCell } from './column.templates/RevHeader';
 
 export const TreeListSchema = ({
   actionsClass,
@@ -51,7 +50,6 @@ export const TreeListSchema = ({
       locked: false,
       title: translate('lhr.equipment.grid.heading.pm.due.date'),
       width: 200,
-      headerCell: RevHeaderCell,
       mainOrderIndex: 3,
       cell: (props) => <DateCell {...props} />,
     },

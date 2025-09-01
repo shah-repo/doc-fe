@@ -9,6 +9,7 @@ import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
   units,
+  isSerialNumberHidden,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -25,14 +26,18 @@ export const buildSchema = ({
       filterable: false,
       width: 150,
     },
-    {
-      id: 'serialNumber',
-      field: 'serialNumber',
-      title: 'scan.lot.grid.serial.number',
-      template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} />,
-      filterable: false,
-      width: 150,
-    },
+    ...(isSerialNumberHidden
+      ? []
+      : [
+        {
+          id: 'serialNumber',
+          field: 'serialNumber',
+          title: 'scan.lot.grid.serial.number',
+          template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} />,
+          filterable: false,
+          width: 150,
+        },
+      ]),
     {
       id: 'quantityAssigned',
       field: 'quantityAssigned',

@@ -29,6 +29,7 @@ export interface ScanLotTableProps {
   deleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
   type?: FBProcedureItemType
+  isSerialNumberHidden?: boolean
 }
 
 export interface ValidateLot extends DocumentRevision{
@@ -49,6 +50,7 @@ export interface EditableScanLot extends ScanLot {
 
 export interface SchemaOptions {
   isLoading?: boolean
+  isSerialNumberHidden?: boolean
   units: string[]
   onConfirm: () => void
   onDiscard: () => void

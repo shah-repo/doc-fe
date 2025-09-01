@@ -24,6 +24,7 @@ interface Props {
   children?: JSX.Element
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
+  isSerialNumberHidden?: boolean
   reloadGrid?: () => void
   addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
@@ -31,7 +32,7 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const [scannedValue, setScannedValue] = useState<string>('');
@@ -57,19 +58,17 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       values.push(
         {
           key: translate('scan.lot.grid.quantity.needed.message'),
-          value: String(selectedPart?.quantityNeeded ?? 0),
+          value: String(selectedPart?.quantityNeeded || 0),
         },
         {
           key: translate('scan.lot.grid.variance.message'),
-          value: String(selectedPart?.variance ?? 0),
+          value: String(selectedPart?.variance || 0),
         },
       );
     }
 
     return values;
   }, [selectedPart]);
-
-  console.log('selectedPart', selectedPart);
 
   const validateScanLotAsync = useAsync({
     onSuccess: (data?: ValidateLot) => {
@@ -152,7 +151,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         return {
           lotId: lot.id,
           unit: lot.unitOfMeasure,
-          quantity: lot.quantityAssigned,
+          quantity: Number(lot.quantityAssigned),
         };
       });
 
@@ -262,6 +261,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           scanLots={scanLots}
           units={[]}
           lots={[]}
+          isSerialNumberHidden={isSerialNumberHidden}
           loading={validateScanLotAsync.isLoading}
           partId={selectedPart?.partRevId}
           type={selectedPart?.type}
