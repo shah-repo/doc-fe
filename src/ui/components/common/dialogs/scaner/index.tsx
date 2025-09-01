@@ -242,10 +242,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       onConfirm={onScanLotAdd}
     >
       <Button onClick={validateScannedLot} size="small">
-          scan item{' '}
+        scan item{' '}
       </Button>
       <Button onClick={validateEQScanItem} size="small">
-          EQ scan item{' '}
+        EQ scan item{' '}
       </Button>
       <Box className={classes.contentWrapper}>
         <List>
@@ -258,10 +258,10 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             </ListItem>
           ))}
         </List>
-        <Box className={classes.infoContainer} >
+        <Box className={classes.infoContainer}>
           <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />
           <Box component="span" ml={1.5}>
-            {translate('scan.lot.grid.scan.info.message')}
+            {translate(isEquipmentScan ? 'scan.lot.grid.scan.eq.info.message' : 'scan.lot.grid.scan.lot.info.message')}
           </Box>
         </Box>
         <ScanLotTable
