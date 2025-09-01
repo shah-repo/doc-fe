@@ -29,6 +29,26 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     valueKey = 'attachments';
   }
 
+  const renderLotValue = (value?: string) => {
+    const result = procedureState.getLot(value ?? '');
+    if (!result) {
+      return <div data-cy={dataCy}>{getAuditDefaultValue(value)}</div>;
+    }
+    return renderWithLoader(result);
+  };
+
+  const renderPartValue = (value?: string) => {
+    const result = procedureState.getItem(value ?? '', FBProcedureItemType.materials);
+    return renderWithLoader(result ?? '');
+  };
+
+  const renderWithLoader = (value: string) => {
+    if (FB.isUUID(value ?? '')) {
+      return <CircularProgress size={12} />;
+    }
+    return <div data-cy={dataCy}>{value}</div>;
+  };
+
   const el = {
     description () {
       return (
@@ -43,11 +63,22 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     materials () {
-      auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
-      if (FB.isUUID(auditValue ?? '')) {
-        return <CircularProgress size={12} />;
+      if (audit.type === 'ARRAY_DELETED') {
+        try {
+          const data = JSON.parse(auditValue as string);
+          if (data && data.plannedId) {
+            return renderPartValue(data.plannedId);
+          }
+        } catch (err) {
+          return getAuditDefaultValue(auditValue);
+        }
+      } else {
+        auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
+        if (FB.isUUID(auditValue ?? '')) {
+          return <CircularProgress size={12} />;
+        }
+        return (<div data-cy={dataCy}>{auditValue}</div>);
       }
-      return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     equipment () {
       auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.equipment);
@@ -58,6 +89,32 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     },
     attachments () {
       return <AuditAttachment {...{ audit }} />;
+    },
+        plannedId () {
+      return renderPartValue(auditValue);
+    },
+    actualId() {
+      if (!FB.isUUID(auditValue ?? '')) {
+        return getAuditDefaultValue(auditValue);
+      } else {
+        auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
+        return (<div data-cy={dataCy}>{auditValue}</div>);
+      }
+    },
+    lotId () {
+      return renderLotValue(auditValue);
+    },
+    assignedLots() {
+      if (audit.type === 'ARRAY_DELETED') {
+        try {
+          const data = JSON.parse(auditValue as string);
+          if (data && data.lotId) {
+            return renderLotValue(data.lotId);
+          }
+        } catch (err) {
+          return getAuditDefaultValue(auditValue);
+        }
+      }
     },
     default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
   };

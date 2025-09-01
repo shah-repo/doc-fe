@@ -200,6 +200,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // PROCEDURE
       if (fbType === 'procedure') {
+        const isAssignedLots = change.field.includes('assignedLots');
         let valueKey = last(change.field.split('.'));
         let valueKeyType = '';
         if (valueKey === 'id' && !change.field.includes('attachments')) { return; }
@@ -216,13 +217,19 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
         let keyLabel = '';
+        let keyLabelType = '';
         if (isTranslation(`form.builder.${valueKeyType}`)) {
-          keyLabel = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
+          keyLabelType = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
         }
         if (isTranslation(`form.builder.${valueKey}`)) {
-          keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
+          keyLabel = intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
-        fbLabel = `${stepLabel} ${keyLabel}`;
+
+        if(isAssignedLots) {
+          fbLabel = `${stepLabel} ${keyLabelType} Lot ${keyLabel}`;
+        } else {
+          fbLabel = `${stepLabel} ${keyLabelType} ${keyLabel}`;
+        }
       }
       // LHRSTEP
       if (fbType === 'lhrstep') {
