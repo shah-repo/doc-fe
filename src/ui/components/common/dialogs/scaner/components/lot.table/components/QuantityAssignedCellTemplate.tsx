@@ -6,11 +6,27 @@ import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../../../../../
 import OverflowContent from '../../../../../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
 import { positiveNumber, validator } from '../../../../../../../components/forms/fields/validators';
+import { toastError } from '../../../../../../notifications';
 import { CustomTemplateProps } from '../types';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps } = useFormikContext();
+  const { getFieldProps, setFieldValue } = useFormikContext();
+  const max = dataItem?.onHand;
+
+  const onChange = (event) => {
+    const value = event.target.value;
+
+    if (max && value > max) {
+      toastError(translate('scan.lot.grid.quantity.max.error.message', { max }));
+      return;
+    } else if (value < 0) {
+      toastError(translate('scan.lot.grid.quantity.min.error.message'));
+      return;
+    }
+
+    setFieldValue(field, value);
+  };
 
   return (
     <FormikField
@@ -22,7 +38,8 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         defaultValue={undefined}
         type="number"
         placeholder={translate('common.enter')}
-        inputProps={{ min: 0 }}
+        onChange={onChange}
+        inputProps={{ min: 0, max }}
         size="small"
       />
     </FormikField>

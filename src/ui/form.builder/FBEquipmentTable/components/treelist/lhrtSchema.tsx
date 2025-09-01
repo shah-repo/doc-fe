@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../../../common/intl';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { ActionsCell } from './column.templates/Actions';
 import CalDueDateCell from './column.templates/CalDueDateCell';
 import IDCell from './column.templates/IDCell';
@@ -13,7 +14,7 @@ export const TreeListLHRTSchema = ({
   onConfirm,
   equipmentOptions,
   parentRevId,
-}) => {
+}): CustomTreeListColumnProps[] => {
   return [
     {
       id: 'title',
@@ -40,8 +41,6 @@ export const TreeListLHRTSchema = ({
             {...props}
             onConfirm={onConfirm}
             onDiscard={onDiscard}
-            onDelete={onDelete}
-            onRestore={undefined}
             rootClassName={popperHolder}
           />
         </td>

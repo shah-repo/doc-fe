@@ -15,6 +15,7 @@ export interface ScanLot {
   quantityAssigned?: number
   calDueDate?: string
   pmDueDate?: string
+  onHand?: number
 }
 
 export interface ScanLotTableProps {

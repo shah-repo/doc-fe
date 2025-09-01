@@ -88,6 +88,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             name: data?.document?.docId,
             documentId: data?.document?.id,
           },
+          onHand: data?.onHand,
           calDueDate: calibrationData.complianceDueDate,
           pmDueDate: preventiveMaintenanceData.complianceDueDate,
         };
@@ -100,6 +101,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             name: data?.docId,
             documentId: data?.documentId,
           },
+          onHand: data?.onHand,
           serialNumber: data?.serialNumber,
           quantityAssigned: data?.onHand,
           unitOfMeasure: data?.lotUsedUnit,
