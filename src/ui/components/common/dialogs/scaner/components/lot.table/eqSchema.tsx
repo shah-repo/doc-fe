@@ -1,5 +1,4 @@
 import React from 'react';
-import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import DateCellTemplate from './components/DateCellTemplate';
@@ -19,7 +18,7 @@ export const buildEqSchema = ({
     {
       id: 'lotNumber',
       field: 'lotNumber',
-      title: 'scan.lot.grid.lot.number',
+      title: 'scan.lot.grid.equipment.number',
       template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
       filterable: false,
       width: 150,
@@ -27,7 +26,7 @@ export const buildEqSchema = ({
     {
       id: 'calDueDate',
       field: 'calDueDate',
-      title: translate('lhr.equipment.grid.heading.cal.due.date'),
+      title: 'lhr.equipment.grid.heading.cal.due.date',
       template: (props) => <DateCellTemplate {...props} onClick={onRowClick} />,
       filterable: false,
       width: 150,
@@ -35,7 +34,7 @@ export const buildEqSchema = ({
     {
       id: 'pmDueDate',
       field: 'pmDueDate',
-      title: translate('lhr.equipment.grid.heading.pm.due.date'),
+      title: 'lhr.equipment.grid.heading.pm.due.date',
       template: (props) => <DateCellTemplate {...props} onClick={onRowClick} />,
       filterable: false,
       width: 150,

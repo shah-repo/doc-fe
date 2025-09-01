@@ -1854,6 +1854,7 @@
   "scan.lot.dialog.title.message": "Scan Lot",
   "scan.eq.dialog.title.message": "Scan Equipment",
   "scan.lot.grid.lot.number": "Lot Number",
+  "scan.lot.grid.equipment.number": "Equipment ID",
   "scan.lot.grid.serial.number": "Serial Number",
   "scan.lot.grid.quantity.assigned": "Quantity Assigned",
   "scan.lot.grid.unit.of.measure": "Unit Of Measure",
