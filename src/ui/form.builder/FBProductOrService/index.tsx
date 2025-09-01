@@ -131,7 +131,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     );
 
     setProductOrServices(updatedProductOrServices);
-    formState?.setFieldValue(name, updatedProductOrServices);
+    formState?.setFieldValue(name, payload);
     workspaceState?.saveDocRev({
       ...formState?.getValues(),
       [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(
