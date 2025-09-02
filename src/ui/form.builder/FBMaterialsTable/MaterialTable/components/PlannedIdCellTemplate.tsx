@@ -40,7 +40,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     const value = materialSelectOptions?.find((option) => option.value === dataItem[field]);
     if (value && field) {
       setValue(value);
-      setInputValue(value?.label ?? '');
+    } else {
+      setInputValue(values?.title ?? '');
     }
   }, [materialSelectOptions]);
 
@@ -56,19 +57,13 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
       return;
     }
 
-    if (values.LHRTparameter && !inputValue) {
-      setInputValue(title ?? '');
+    if (values.LHRTparameter && inputValue) {
+      setFieldValue(field, inputValue);
     }
   }, [values]);
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
     if (reason !== 'input') {
-      return;
-    }
-
-    if (!isFreeSolo) {
-      setFieldValue(field, '');
-      setInputValue('');
       return;
     }
 
@@ -90,6 +85,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     }
 
     setInputValue(inputVal);
+
+    if (!isFreeSolo) {
+      return;
+    }
+
     setFieldValue(field, inputVal);
   };
 
@@ -97,11 +97,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     setValue(option as OptionType);
     setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+    setInputValue('');
   };
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const disabled = dataItem.LHRTparameter ? !dataItem.LHRTparameter : !!dataItem[field];
 
   return (
     <TreeListCellWrapper {...props}>
@@ -115,7 +115,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 blurOnSelect
                 disableOpenOnFocus={true}
                 freeSolo
-                disabled={disabled}
                 ListboxComponent={({ children, ...otherProps }) => {
                   return (
                     <>
