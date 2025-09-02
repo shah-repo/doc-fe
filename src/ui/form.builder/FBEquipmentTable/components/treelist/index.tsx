@@ -46,9 +46,9 @@ import {
   EquipmentItemState,
   FBEquipmentProps,
 } from './interface';
-import { TreeListLHRTSchema } from './lhrtSchema';
-import { TreeListMPISchema } from './mpiSchema';
-import { TreeListSchema } from './schema';
+import { TreeListLHRTSchema } from './schemas/lhrtSchema';
+import { TreeListMPISchema } from './schemas/mpiSchema';
+import { TreeListSchema } from './schemas/schema';
 import useStyles from './styles';
 import { useOptions } from './useOptions';
 import { getMapSelectedByParentEquipId, prepareData } from './utils';

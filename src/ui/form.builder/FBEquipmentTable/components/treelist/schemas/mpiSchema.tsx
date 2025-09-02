@@ -1,11 +1,11 @@
 import React from 'react';
-import { translate } from '../../../../../common/intl';
-import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
-import { ActionsCell } from './column.templates/Actions';
-import CalDueDateCell from './column.templates/CalDueDateCell';
-import IDCell from './column.templates/IDCell';
+import { translate } from '../../../../../../common/intl';
+import { ActionsCell } from '../column.templates/Actions';
+import CalDueDateCell from '../column.templates/CalDueDateCell';
+import IDCell from '../column.templates/IDCell';
+import LHRTParameterCell from '../column.templates/LHRTParameterCell';
 
-export const TreeListLHRTSchema = ({
+export const TreeListMPISchema = ({
   actionsClass,
   popperHolder,
   getItem,
@@ -14,7 +14,7 @@ export const TreeListLHRTSchema = ({
   onConfirm,
   equipmentOptions,
   parentRevId,
-}): CustomTreeListColumnProps[] => {
+}) => {
   return [
     {
       id: 'title',
@@ -22,6 +22,14 @@ export const TreeListLHRTSchema = ({
       title: translate('form.builder.procedure.equipment.grid.title'),
       mainOrderIndex: 1,
       cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+      width: 150,
+    },
+    {
+      id: 'LHRTparameter',
+      field: 'LHRTparameter',
+      title: translate('form.builder.procedure.lhrt.parameter.title'),
+      cell: (props) => <LHRTParameterCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
+      mainOrderIndex: 2,
       width: 150,
     },
     {
@@ -41,6 +49,8 @@ export const TreeListLHRTSchema = ({
             {...props}
             onConfirm={onConfirm}
             onDiscard={onDiscard}
+            onDelete={onDelete}
+            onRestore={undefined}
             rootClassName={popperHolder}
           />
         </td>
