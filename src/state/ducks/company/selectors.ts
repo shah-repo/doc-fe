@@ -80,6 +80,8 @@ const getGeneralSettings = (state: ApplicationState) => omit(
   ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
+const isTrainingForApprovedRevisionsEnabled = (state: ApplicationState) => state.company.generalSettings.isTrainingForApprovedRevisionsEnabled;
+
 const getGeneralSettingsId = (state: ApplicationState) => state.company.generalSettings.id;
 
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
@@ -145,4 +147,5 @@ export default {
   getPremiumFeatureSubscriptions,
   getSubscriptionsAsyncState,
   hasActivePremiumFeatureSubscription,
+  isTrainingForApprovedRevisionsEnabled,
 };
