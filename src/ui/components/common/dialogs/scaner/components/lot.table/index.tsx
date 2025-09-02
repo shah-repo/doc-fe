@@ -71,10 +71,15 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({ scanLots, units, loading, u
 
     return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
+  const checkAndUpdate = (values) => {
+    const scanLot = omit(values, FIELDS_TO_OMIT);
+    updateScanLot?.(scanLot as ScanLot);
+  };
 
   const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
     units,
     isSerialNumberHidden,
+    updateScanLot: checkAndUpdate,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardScanLot,

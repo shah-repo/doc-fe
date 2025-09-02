@@ -56,6 +56,7 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
+  updateScanLot?: (item: EditableScanLot) => void
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => void
@@ -64,6 +65,7 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> {
   onClick?: (e) => void
   isLoading?: boolean
+  updateScanLot?: (item: EditableScanLot) => void
 }
 
 export interface UnitOption {

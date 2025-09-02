@@ -15,6 +15,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   onOpenQuickView,
+  updateScanLot,
   onEdit,
 }: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
@@ -33,7 +34,7 @@ export const buildSchema = ({
           id: 'serialNumber',
           field: 'serialNumber',
           title: 'scan.lot.grid.serial.number',
-          template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} />,
+          template: (props) => <SerialNumberCellTemplate {...props} onClick={onRowClick} updateScanLot={updateScanLot} />,
           filterable: false,
           width: 150,
         },
@@ -42,7 +43,7 @@ export const buildSchema = ({
       id: 'quantityAssigned',
       field: 'quantityAssigned',
       title: 'scan.lot.grid.quantity.assigned',
-      template: (props) => <QuantityAssignedCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <QuantityAssignedCellTemplate {...props} onClick={onRowClick} updateScanLot={updateScanLot} />,
       filterable: false,
       width: 150,
     },

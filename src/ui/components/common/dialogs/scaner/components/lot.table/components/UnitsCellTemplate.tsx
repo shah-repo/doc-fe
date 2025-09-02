@@ -1,9 +1,7 @@
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { Autocomplete, FormikField } from '../../../../../../forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../../../KendoDataGrid/constants';
-import OverflowContent from '../../../../../../OverflowContent';
 import { CustomTemplateProps, EditableScanLot } from '../types';
 
 interface Props extends CustomTemplateProps {
@@ -39,20 +37,5 @@ const Editor: React.FC<Props> = ({ dataItem, field, options }) => {
 };
 
 export const UnitsCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem, field, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  if (isEditMode) {
-    return <Editor {...props} />;
-  }
-
-  const handleClick = () => onClick?.({ dataItem });
-
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
-
-  return (
-    <OverflowContent onClick={handleClick}>
-      {displayValue}
-    </OverflowContent>
-  );
+  return <Editor {...props} />;
 };
