@@ -7,7 +7,6 @@ export default makeStyles(theme => ({
   },
   contentWrapper: {
     width: '100%',
-    paddingTop: theme.spacing(0.75),
   },
   row: {
     display: 'flex',

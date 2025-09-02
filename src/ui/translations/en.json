@@ -1868,6 +1868,7 @@
   "scan.lot.grid.empty.message": "Scanned Items will be displayed here",
   "scan.lot.grid.scan.lot.info.message": "Scan a lot to add below",
   "scan.lot.grid.scan.eq.info.message": "Scan an equipment to add below",
+  "scan.lot.grid.scan.barcode.error.message": "Barcode not recognized",
   "integrations.title": "Integrations",
   "integrations.not.available": "There are no available integrations",
   "integrations.enable": "Enable",
