@@ -64,11 +64,6 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> 
   updateScanLot?: (item: EditableScanLot) => void
 }
 
-export interface UnitOption {
-  value: string
-  text: string
-}
-
 export interface ScanSelectedPartItem {
   id?: string
   docId: string
