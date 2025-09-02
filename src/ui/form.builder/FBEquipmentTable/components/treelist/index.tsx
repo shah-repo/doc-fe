@@ -420,8 +420,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableActualIdAddition;
-    const isEditRestricted = (isLHRStep || isMPIProcedure) && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
+    const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled)) || (!isEnableActualIdAddition && !isActive);
+    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
 
     if (isEditRestricted) {
       return;

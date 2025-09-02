@@ -2,11 +2,12 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { debounce } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
 import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { styles } from './styles';
@@ -30,8 +31,10 @@ const Editor: React.FC<EditorProps> = ({
   dataItem,
   equipmentOptions,
 }) => {
-  const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+  const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const isUpdateAction = dataItem[MODE_FIELD];
+  const isFreeSolo = values?.LHRTparameter;
 
   useEffect(() => {
     const fieldValue = dataItem[field ?? ''];
@@ -46,6 +49,18 @@ const Editor: React.FC<EditorProps> = ({
     setItems(equipmentOptions);
   }, [equipmentOptions]);
 
+  useEffect(() => {
+    const title = cloneDeep(values?.title);
+
+    if (!isUpdateAction || FB.isUUID(title ?? '')) {
+      return;
+    }
+
+    if (!isFreeSolo && !title) {
+      setItems(equipmentOptions ?? []);
+    }
+  }, [values]);
+
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     console.log('handle change');
     setValue(option as OptionType);
@@ -59,6 +74,11 @@ const Editor: React.FC<EditorProps> = ({
       return;
     }
 
+    if (!isFreeSolo) {
+      setFieldValue(field, '');
+      return;
+    }
+
     setFieldValue(field, inputVal);
     setValue({ label: inputVal, value: inputVal });
 
@@ -67,6 +87,8 @@ const Editor: React.FC<EditorProps> = ({
         option.label.toLowerCase().includes(inputVal?.toLowerCase()),
       );
       setItems(filteredOptions);
+    } else if (!inputVal) {
+      setItems(equipmentOptions ?? []);
     }
   };
 
