@@ -1,9 +1,9 @@
 import React from 'react';
-import { translate } from '../../../../../common/intl';
-import { ActionsCell } from './column.templates/Actions';
-import ActualIdCell from './column.templates/ActualIdCell';
-import { DateCell } from './column.templates/DateCell';
-import IDCell from './column.templates/IDCell';
+import { translate } from '../../../../../../common/intl';
+import { ActionsCell } from '../column.templates/Actions';
+import ActualIdCell from '../column.templates/ActualIdCell';
+import { DateCell } from '../column.templates/DateCell';
+import IDCell from '../column.templates/IDCell';
 
 export const TreeListSchema = ({
   actionsClass,
