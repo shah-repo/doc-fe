@@ -101,6 +101,9 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
         && document && !document?.formTemplate
         && !activeApprovals?.length) {
         // Add Default owner as approver on Work order case
+        if (Object.keys(formState?.oldValues || {}).includes('lhrs-start-date')) {
+          return;
+        }
         addApprover([authUser?.employeeId]);
         formState?.setFieldValue(name, [authUser?.employeeId], false);
       }
