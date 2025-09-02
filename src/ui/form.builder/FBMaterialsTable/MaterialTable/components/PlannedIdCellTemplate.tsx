@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createFilterOptions } from '@material-ui/lab/useAutocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
@@ -11,6 +11,7 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
+import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -39,26 +40,30 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     const value = materialSelectOptions?.find((option) => option.value === dataItem[field]);
     if (value && field) {
       setValue(value);
-      setInputValue(value?.label ?? '');
+    } else {
+      setInputValue(values?.title ?? '');
     }
   }, [materialSelectOptions]);
 
   useEffect(() => {
-    const title = dataItem?.title || values?.title;
+    const title = cloneDeep(values?.title);
 
-    if (isEmpty(title)) {
+    if (!isUpdateAction || FB.isUUID(title ?? '')) {
       return;
     }
 
-    if (isUpdateAction && !inputValue) {
-      setInputValue(title ?? '');
-    }
-  }, [dataItem[field], values[field]]);
-
-  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-    if (!isFreeSolo) {
-      setFieldValue(field, '');
+    if (!values.LHRTparameter && inputValue && !title) {
       setInputValue('');
+      return;
+    }
+
+    if (values.LHRTparameter && inputValue) {
+      setFieldValue(field, inputValue);
+    }
+  }, [values]);
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    if (reason !== 'input') {
       return;
     }
 
@@ -80,6 +85,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     }
 
     setInputValue(inputVal);
+
+    if (!isFreeSolo) {
+      return;
+    }
+
     setFieldValue(field, inputVal);
   };
 
@@ -87,11 +97,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     setValue(option as OptionType);
     setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+    setInputValue('');
   };
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const disabled = dataItem.LHRTparameter ? !dataItem.LHRTparameter : !!dataItem[field];
 
   return (
     <TreeListCellWrapper {...props}>
@@ -105,7 +115,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 blurOnSelect
                 disableOpenOnFocus={true}
                 freeSolo
-                disabled={disabled}
                 ListboxComponent={({ children, ...otherProps }) => {
                   return (
                     <>

@@ -2,12 +2,14 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { cloneDeep, debounce } from 'lodash';
 import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../interface';
-import { ADD_FIELD, MODE_FIELD } from '../constants';
+import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
@@ -29,22 +31,71 @@ const Editor: React.FC<EditorProps> = ({
   dataItem,
   equipmentOptions,
 }) => {
-  const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+  const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
+  const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const isUpdateAction = dataItem[MODE_FIELD];
+  const isFreeSolo = values?.LHRTparameter;
 
   useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
+    const fieldValue = dataItem[field ?? ''];
+    const value = equipmentOptions.find((option) => option.value === fieldValue);
 
     if (value && field) {
       setValue(value);
       setFieldValue(field, value?.value);
+    } else if (fieldValue) {
+      setValue({ label: fieldValue, value: fieldValue });
     }
+    setItems(equipmentOptions);
   }, [equipmentOptions]);
 
+  useEffect(() => {
+    const title = cloneDeep(values?.title);
+
+    if (!isUpdateAction || FB.isUUID(title ?? '')) {
+      return;
+    }
+
+    if (!isFreeSolo && !title) {
+      setItems(equipmentOptions ?? []);
+    }
+  }, [values]);
+
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    console.log('handle change');
     setValue(option as OptionType);
     field && setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
+
+  const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    console.log('reason', reason, inputVal);
+    if (reason !== 'input') {
+      return;
+    }
+
+    if (!isFreeSolo) {
+      setFieldValue(field, '');
+      return;
+    }
+
+    setFieldValue(field, inputVal);
+    setValue({ label: inputVal, value: inputVal });
+
+    if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
+      const filteredOptions = equipmentOptions?.filter((option) =>
+        option.label.toLowerCase().includes(inputVal?.toLowerCase()),
+      );
+      setItems(filteredOptions);
+    } else if (!inputVal) {
+      setItems(equipmentOptions ?? []);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
 
   return (
     <FormikField
@@ -55,7 +106,11 @@ const Editor: React.FC<EditorProps> = ({
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
-        disableOpenOnFocus={true}
+        disableClearable
+        forcePopupIcon
+        options={items}
+        onInputChange={debounceFunction}
+        disableOpenOnFocus
         blurOnSelect
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
@@ -64,7 +119,6 @@ const Editor: React.FC<EditorProps> = ({
             </ul>
           </>);
         }}
-        options={equipmentOptions}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
         freeSolo

@@ -342,11 +342,17 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       });
     }
 
-    return React.cloneElement(row, {
+    const editedRow = React.cloneElement(row, {
       ...modifiedProps,
       ['data-cy' as string]: `alloc-row-${item?.id}`,
       className: cx(row.props.className, classes.updatingRow),
     });
+
+    return (
+      <FormikProvider value={formik}>
+        {editedRow}
+      </FormikProvider>
+    );
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
@@ -400,6 +406,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       id: FB.uniqid,
       plannedId: '',
       actualId: '',
+      ...(isMPIProcedure && !isLHRStep && { title: '' }),
       unit: '',
       quantity: undefined,
       isLotAddition: false,
@@ -423,8 +430,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    const defaultValidation = dataItem[MODE_FIELD] || ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || !isEnableOnlyLotAddition;
-    const isEditRestricted = (isLHRStep || isMPIProcedure) && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation;
+    const defaultValidation = ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || (!isEnableOnlyLotAddition && isPreview);
+    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
     if (isEditRestricted) {
       return;
     }

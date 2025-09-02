@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, memo } from 'react';
 import { Checkbox, FormikField } from '../../../../../components/forms/fields-next';
+import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../interface';
 import { isAddEquipItem } from '../utils';
 import { styles } from './styles';
@@ -15,6 +16,9 @@ const LHRTParameterCell: React.ComponentType<CustomTreeListCellProps> = (props) 
 
   const handleExpiredLotChange = (_: ChangeEvent<{}>, checked: boolean) => {
     setFieldValue(field, !!checked);
+    if (values.title && !FB.isUUID(values.title) && !checked) {
+      setFieldValue('title', undefined);
+    }
   };
 
   return (

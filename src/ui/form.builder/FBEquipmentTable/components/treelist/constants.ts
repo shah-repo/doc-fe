@@ -11,3 +11,4 @@ export const TREELIST_CONFIG = {
   scrollable: 'virtual',
   rowHeight: 50,
 };
+export const MIN_SEARCH_TERM_LENGTH = 3;
