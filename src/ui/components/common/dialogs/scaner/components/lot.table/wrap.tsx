@@ -1,4 +1,3 @@
-import { differenceBy } from 'lodash';
 import { FB } from '../../../../../../form.builder';
 import { ScanLot, ScanLotTableProps } from './types';
 
@@ -7,7 +6,9 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
     const { workspaceState } = FB.useStores();
 
     const deleteScanLot = (item: ScanLot) => {
-      const filteredScanLots = differenceBy(scanLots, [item], 'id');
+      if (!item.id) return;
+
+      const filteredScanLots = scanLots?.filter(lot => lot.id !== item.id);
       setScanLots(filteredScanLots);
     };
 

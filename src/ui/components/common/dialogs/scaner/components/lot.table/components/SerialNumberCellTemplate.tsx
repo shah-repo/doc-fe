@@ -13,7 +13,7 @@ export const SerialNumberCellTemplate: React.FC<CustomTemplateProps> = ({ field,
 
   return (
     <TextField
-      defaultValue={undefined}
+      value={dataItem[field]}
       placeholder={translate('common.enter')}
       type="text"
       onChange={onChange}

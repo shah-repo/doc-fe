@@ -28,7 +28,7 @@ export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = ({ fi
 
   return (
     <TextField
-      defaultValue={dataItem[field]}
+      value={dataItem[field]}
       type="number"
       placeholder={translate('common.enter')}
       onChange={onChange}
