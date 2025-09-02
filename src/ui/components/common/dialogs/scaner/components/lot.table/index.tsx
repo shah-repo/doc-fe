@@ -10,14 +10,14 @@ import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
 import { buildEqSchema } from './eqSchema';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableScanLot, ScanLot, ScanLotTableProps } from './types';
+import { EditableScanLot, ScanLotTableProps } from './types';
 import { withFBScanLot } from './wrap';
 
 const ScanLotTable: React.FC<ScanLotTableProps> = ({
   scanLots,
-  loading,
-  updateScanLot,
-  deleteScanLot,
+  isLoading,
+  onUpdateScanLot,
+  onDeleteScanLot,
   type,
   isSerialNumberHidden,
 }) => {
@@ -28,10 +28,10 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const removeScanLot = (lot: EditableScanLot) => {
-    deleteScanLot?.(lot);
+    onDeleteScanLot?.(lot);
   };
 
-  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => {
+  const onOpenQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => {
     setSelectedDataItem(dataItem);
     quickViewDialog.open();
     event.preventDefault();
@@ -42,15 +42,11 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     return row;
   };
 
-  const checkAndUpdate = (values) => {
-    updateScanLot?.(values as ScanLot);
-  };
-
   const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
     isSerialNumberHidden,
-    updateScanLot: checkAndUpdate,
+    onUpdateScanLot,
     onDelete: removeScanLot,
-    onOpenQuickView: openQuickView,
+    onOpenQuickView: onOpenQuickView,
   });
 
   return (
@@ -62,7 +58,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
         hasBoxScrollbars
         schema={schema}
         containerRef={containerRef}
-        loading={loading}
+        loading={isLoading}
         data={scanLots as EditableScanLot[]}
         rowRender={rowRender}
         fallback={

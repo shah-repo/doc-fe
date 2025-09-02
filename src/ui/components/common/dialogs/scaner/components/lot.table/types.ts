@@ -24,9 +24,9 @@ export interface ScanLotTableProps {
   lots: DocumentRevision[]
   disabled?: boolean
   partId?: string
-  loading?: boolean
-  updateScanLot?: (item: ScanLot) => void
-  deleteScanLot?: (item: ScanLot) => void
+  isLoading?: boolean
+  onUpdateScanLot?: (item: ScanLot) => void
+  onDeleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
   type?: FBProcedureItemType
   isSerialNumberHidden?: boolean
@@ -53,7 +53,7 @@ export interface SchemaOptions {
   isSerialNumberHidden?: boolean
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
-  updateScanLot?: (item: EditableScanLot) => void
+  onUpdateScanLot?: (item: EditableScanLot) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => void
 }
@@ -61,7 +61,7 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> {
   onClick?: (e) => void
   isLoading?: boolean
-  updateScanLot?: (item: EditableScanLot) => void
+  onUpdateScanLot?: (item: EditableScanLot) => void
 }
 
 export interface ScanSelectedPartItem {

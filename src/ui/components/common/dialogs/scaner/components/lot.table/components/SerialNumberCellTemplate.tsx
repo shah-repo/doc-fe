@@ -3,9 +3,9 @@ import { translate } from '../../../../../../../../common/intl';
 import { TextField } from '../../../../../../forms/fields-next';
 import { CustomTemplateProps } from '../types';
 
-export const SerialNumberCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, updateScanLot }) => {
+export const SerialNumberCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, onUpdateScanLot }) => {
   const onChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-    updateScanLot?.({
+    onUpdateScanLot?.({
       ...dataItem,
       [field]: value,
     });

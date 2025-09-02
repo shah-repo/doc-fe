@@ -4,7 +4,7 @@ import { TextField } from '../../../../../../../components/forms/fields-next';
 import { toastError } from '../../../../../../notifications';
 import { CustomTemplateProps } from '../types';
 
-export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, updateScanLot }) => {
+export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, onUpdateScanLot }) => {
   const max = dataItem?.onHand;
 
   const onChange = ({ target: { value: rawValue } }: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,7 @@ export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = ({ fi
       return;
     }
 
-    updateScanLot?.({
+    onUpdateScanLot?.({
       ...dataItem,
       [field]: value,
     });

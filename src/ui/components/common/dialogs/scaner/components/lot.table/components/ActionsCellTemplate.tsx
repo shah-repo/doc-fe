@@ -31,7 +31,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         ref={ref}
         isLoading={isLoading}
         onDelete={onDelete && (() => onDelete(dataItem))}
-        openQuickView={onOpenQuickView && ((event) => onOpenQuickView(event, dataItem))}
+        onOpenQuickView={onOpenQuickView && ((event) => onOpenQuickView(event, dataItem))}
       />
     </>
   );

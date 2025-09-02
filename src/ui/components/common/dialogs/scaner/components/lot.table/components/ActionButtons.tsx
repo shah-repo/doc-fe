@@ -12,11 +12,11 @@ import useStyles from '../styles';
 interface Props {
   isLoading?: boolean
   onDelete?: () => void
-  openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 const ActionsButtons: React.FC<Props> = (
-  { isLoading, onDelete, openQuickView },
+  { isLoading, onDelete, onOpenQuickView },
   ref: MutableRefObject<HTMLDivElement>,
 ) => {
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
@@ -31,7 +31,7 @@ const ActionsButtons: React.FC<Props> = (
             ref={viewIconRef}
             kind="form"
             color="primary"
-            onClick={openQuickView}
+            onClick={onOpenQuickView}
             size="small"
             data-cy="quick-view"
           >
