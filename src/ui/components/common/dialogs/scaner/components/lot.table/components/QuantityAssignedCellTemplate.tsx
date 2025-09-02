@@ -1,75 +1,39 @@
-import { useFormikContext } from 'formik';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
-import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
-import { positiveNumber, validator } from '../../../../../../../components/forms/fields/validators';
+import { TextField } from '../../../../../../../components/forms/fields-next';
 import { toastError } from '../../../../../../notifications';
 import { CustomTemplateProps } from '../types';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, updateScanLot }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, setFieldValue } = useFormikContext();
+export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, updateScanLot }) => {
   const max = dataItem?.onHand;
 
-  const onChange = (event) => {
-    const value = event.target.value;
+  const onChange = ({ target: { value: rawValue } }: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(rawValue ?? 0);
 
-    if (max && value > max) {
-      toastError(translate('scan.lot.grid.quantity.max.error.message', { max }));
-      return;
-    } else if (value < 0) {
+    if (value < 0) {
       toastError(translate('scan.lot.grid.quantity.min.error.message'));
       return;
     }
 
-    setFieldValue(field, value);
-    updateItemData(value);
-  };
+    if (max !== undefined && value > max) {
+      toastError(translate('scan.lot.grid.quantity.max.error.message', { max }));
+      return;
+    }
 
-  const updateItemData = (value) => {
-    console.log('value', value);
-    const dataItem1 = {
+    updateScanLot?.({
       ...dataItem,
       [field]: value,
-    };
-
-    updateScanLot?.(dataItem1);
+    });
   };
 
-  console.log('dataItem[field]', dataItem[field]);
-
   return (
-    <FormikField
-      name={field}
-      validate={validator(positiveNumber)}
-    >
-      <TextField
-        {...getFieldProps(field)}
-        defaultValue={dataItem[field]}
-        type="number"
-        placeholder={translate('common.enter')}
-        onChange={onChange}
-        inputProps={{ min: 0, max }}
-        size="small"
-      />
-    </FormikField>
+    <TextField
+      defaultValue={dataItem[field]}
+      type="number"
+      placeholder={translate('common.enter')}
+      onChange={onChange}
+      inputProps={{ min: 0, max }}
+      size="small"
+    />
   );
-};
-
-export const QuantityAssignedCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  // const { dataItem, field, onClick } = props;
-  // const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  // if (isEditMode) {
-  return <Editor {...props} />;
-  // }
-
-  // const handleClick = () => onClick?.({ dataItem });
-  // const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
-
-  // return (
-  //   <OverflowContent onClick={handleClick}>
-  //     {displayValue}
-  //   </OverflowContent>
-  // );
 };

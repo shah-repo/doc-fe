@@ -6,20 +6,15 @@ import { LotIdCellTemplate } from './components/LotIdCellTemplate';
 import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildEqSchema = ({
-  units,
-  onRowClick,
-  onConfirm,
-  onDiscard,
   onDelete,
   onOpenQuickView,
-  onEdit,
 }: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
     {
       id: 'lotNumber',
       field: 'lotNumber',
       title: 'scan.lot.grid.equipment.number',
-      template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <LotIdCellTemplate {...props} />,
       filterable: false,
       width: 150,
     },
@@ -27,7 +22,7 @@ export const buildEqSchema = ({
       id: 'calDueDate',
       field: 'calDueDate',
       title: 'lhr.equipment.grid.heading.cal.due.date',
-      template: (props) => <DateCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <DateCellTemplate {...props} />,
       filterable: false,
       width: 150,
     },
@@ -35,7 +30,7 @@ export const buildEqSchema = ({
       id: 'pmDueDate',
       field: 'pmDueDate',
       title: 'lhr.equipment.grid.heading.pm.due.date',
-      template: (props) => <DateCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <DateCellTemplate {...props} />,
       filterable: false,
       width: 150,
     },
@@ -45,17 +40,7 @@ export const buildEqSchema = ({
       title: 'common.actions',
       width: 75,
       filterable: false,
-      template: (props) => (
-        <ActionsCellTemplate
-          {...props}
-          isActive={true}
-          onDelete={onDelete}
-          onDiscard={onDiscard}
-          onConfirm={onConfirm}
-          isEditHidden
-          onOpenQuickView={onOpenQuickView}
-        />
-      ),
+      template: (props) => <ActionsCellTemplate {...props} onDelete={onDelete} onOpenQuickView={onOpenQuickView} />,
     },
   ];
 };

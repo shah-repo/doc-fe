@@ -52,12 +52,9 @@ export interface SchemaOptions {
   isLoading?: boolean
   isSerialNumberHidden?: boolean
   units: string[]
-  onConfirm: () => void
-  onDiscard: () => void
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
   updateScanLot?: (item: EditableScanLot) => void
-  onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => void
 }

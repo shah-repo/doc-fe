@@ -43,10 +43,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     margin: theme.spacing(0, -1.5),
   },
-  actionsEdit: {
-    gap: theme.spacing(0, 1.12),
-    margin: theme.spacing(0.5, 0, 0),
-  },
   activeCheckbox: {
     margin: theme.spacing(0.75, 0, 0),
   },

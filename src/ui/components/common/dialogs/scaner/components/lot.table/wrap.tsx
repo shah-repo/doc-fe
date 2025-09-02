@@ -1,4 +1,4 @@
-import { differenceBy, unionBy } from 'lodash';
+import { differenceBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { FB, FBAutocompleteAsyncOption } from '../../../../../../form.builder';
 import FBAutocompleteAsyncStore from '../../../../../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
@@ -21,16 +21,11 @@ export const withFBScanLot = <T extends ScanLotTableProps>(Component: React.FC<T
     };
 
     const updateScanLot = (item: ScanLot) => {
-      const updatedVendors = unionBy(
-        [
-          {
-            ...item,
-          },
-        ],
-        scanLots,
-        'id',
-      );
-      setScanLots(updatedVendors);
+      const updatedLots = scanLots.some(lot => lot.id === item.id)
+        ? scanLots.map(lot => lot.id === item.id ? item : lot)
+        : [...scanLots, item];
+
+      setScanLots(updatedLots);
     };
 
     return Component({

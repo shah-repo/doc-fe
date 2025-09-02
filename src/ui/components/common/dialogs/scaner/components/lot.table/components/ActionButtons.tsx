@@ -1,4 +1,4 @@
-import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
@@ -10,117 +10,52 @@ import { IconButton } from '../../../../../../forms/fields-next';
 import useStyles from '../styles';
 
 interface Props {
-  isActive?: boolean
   isLoading?: boolean
-  isEditHidden?: boolean
-  isEditMode?: boolean
-  onEdit?: () => void
-  onConfirm?: () => void
-  onDiscard?: () => void
   onDelete?: () => void
-  openQuickView?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => void
+  openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
-const ActionsButtons: React.FC<Props> = ({
-  isActive,
-  isLoading,
-  isEditMode,
-  isEditHidden,
-  onEdit,
-  onDelete,
-  onConfirm,
-  onDiscard,
-  openQuickView,
-}, ref: MutableRefObject<HTMLDivElement>) => {
+const ActionsButtons: React.FC<Props> = (
+  { isLoading, onDelete, openQuickView },
+  ref: MutableRefObject<HTMLDivElement>,
+) => {
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
-  const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
-  const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
   const [viewIconRef, isViewIconHovered] = useHover<HTMLButtonElement>();
-  const [editIconRef, isEditIconHovered] = useHover<HTMLButtonElement>();
   const classes = useStyles();
 
   return (
-    <div
-      id="row-actions"
-      ref={ref}
-      className={cx(classes.actions, { [classes.actionsEdit]: isEditMode })}
-    >
-      {isEditMode ? (
-        <>
-          <Tooltip title={translate('common.discard')}>
+    <div id="row-actions" ref={ref} className={cx(classes.actions)}>
+      <>
+        <Tooltip arrow title={translate('common.quick.view')} placement="top">
+          <IconButton
+            ref={viewIconRef}
+            kind="form"
+            color="primary"
+            onClick={openQuickView}
+            size="small"
+            data-cy="quick-view"
+          >
+            <FontAwesomeIcon
+              icon={isViewIconHovered ? solid('eye') : regular('eye')}
+              color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
+            />
+          </IconButton>
+        </Tooltip>
+        {onDelete && (
+          <Tooltip arrow title={translate('common.delete')} placement="top">
             <IconButton
-              kind="simple"
-              color="primary"
-              ref={discardRef}
-              onClick={onDiscard}
-              iconSize={22}
-              data-cy="action-discard"
+              kind="destructive"
+              ref={deleteRef}
+              onClick={onDelete}
               disabled={isLoading}
-            >
-              <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={translate('common.save')}>
-            <IconButton
-              kind="simple"
-              color="primary"
-              ref={saveRef}
-              onClick={onConfirm}
-              iconSize={22}
-              disabled={isLoading}
-              data-cy="action-save"
-            >
-              <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
-            </IconButton>
-          </Tooltip>
-        </>
-      ) : (
-        <>
-          <Tooltip arrow title={translate('common.quick.view')} placement="top">
-            <IconButton
-              ref={viewIconRef}
-              kind="form"
-              color="primary"
-              onClick={openQuickView}
               size="small"
-              data-cy="quick-view"
+              data-cy="action-delete"
             >
-              <FontAwesomeIcon
-                icon={isViewIconHovered ? solid('eye') : regular('eye')}
-                color={isViewIconHovered ? Colors.navigationBg : Colors.textGray}
-              /></IconButton>
-          </Tooltip>
-          {!isEditHidden && <Tooltip arrow title={translate('common.edit')} placement="top">
-            <IconButton
-              ref={editIconRef}
-              kind="form"
-              color="primary"
-              onClick={onEdit}
-              disabled={!isActive}
-              size="small"
-              data-cy="action-edit"
-            >
-              <FontAwesomeIcon icon={isEditIconHovered ? solid('pen-to-square') : regular('pen-to-square')} color={isEditIconHovered ? Colors.navigationBg : Colors.textGray} />
+              <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
             </IconButton>
-          </Tooltip>}
-          {onDelete && (
-            <Tooltip arrow title={translate('common.delete')} placement="top">
-              <IconButton
-                kind="destructive"
-                ref={deleteRef}
-                onClick={onDelete}
-                disabled={isLoading}
-                size="small"
-                data-cy="action-delete"
-              >
-                <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </>
-      )}
+          </Tooltip>
+        )}
+      </>
     </div>
   );
 };
