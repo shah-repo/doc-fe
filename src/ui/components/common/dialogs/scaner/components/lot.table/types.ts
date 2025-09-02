@@ -32,7 +32,7 @@ export interface ScanLotTableProps {
   isSerialNumberHidden?: boolean
 }
 
-export interface ValidateLot extends DocumentRevision{
+export interface ValidateLot extends DocumentRevision {
   isExpired: boolean
   lotRevId: string
   partRevId: string
@@ -51,7 +51,6 @@ export interface EditableScanLot extends ScanLot {
 export interface SchemaOptions {
   isLoading?: boolean
   isSerialNumberHidden?: boolean
-  units: string[]
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
   updateScanLot?: (item: EditableScanLot) => void

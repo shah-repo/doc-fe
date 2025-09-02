@@ -15,7 +15,6 @@ import { withFBScanLot } from './wrap';
 
 const ScanLotTable: React.FC<ScanLotTableProps> = ({
   scanLots,
-  units,
   loading,
   updateScanLot,
   deleteScanLot,
@@ -48,7 +47,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   };
 
   const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
-    units,
     isSerialNumberHidden,
     updateScanLot: checkAndUpdate,
     onDelete: removeScanLot,
@@ -56,7 +54,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   });
 
   return (
-    <div ref={containerRef} className={classes.root} data-cy="scan-lot-grid">
+    <div ref={containerRef} data-cy="scan-lot-grid">
       <KendoDataGrid<EditableScanLot>
         className={cx(classes.grid, classes.gridWithButton)}
         fullWidth

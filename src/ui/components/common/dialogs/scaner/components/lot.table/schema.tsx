@@ -8,7 +8,6 @@ import { UnitsCellTemplate } from './components/UnitsCellTemplate';
 import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  units,
   isSerialNumberHidden,
   onDelete,
   onOpenQuickView,
