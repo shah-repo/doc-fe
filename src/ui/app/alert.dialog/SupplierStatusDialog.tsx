@@ -84,10 +84,11 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                       <>
                         <Typography data-cy="dialog-message" className={classes.contentText}>
                           <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
-                          <b> [{getConflictingParts(errorItems)}] </b>
-                          <Text message="in" />
                           <b> {getConflictingPhases(errorItems)} </b>
                           <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                        </Typography>
+                        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
+                          [{getConflictingParts(errorItems)}]
                         </Typography>
                       </>
                   ) : (
@@ -112,10 +113,11 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                     ? <>
                         <Typography data-cy="dialog-message" className={classes.contentText}>
                           <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
-                          <b> [{getConflictingParts(warningItems)}] </b>
-                          <Text message="in" />
                           <b> {getConflictingPhases(warningItems)} </b>
                           <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+                        </Typography>
+                        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
+                          [{getConflictingParts(warningItems)}]
                         </Typography>
                       </>
                     : <Typography data-cy="dialog-message" className={classes.contentText}>
