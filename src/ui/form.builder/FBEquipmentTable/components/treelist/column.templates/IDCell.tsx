@@ -21,6 +21,7 @@ interface EditorProps {
   dataItem: EditableEquipmentItem
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  isMPIForm?: boolean
 }
 
 const Editor: React.FC<EditorProps> = ({
@@ -30,9 +31,11 @@ const Editor: React.FC<EditorProps> = ({
   isLoading,
   dataItem,
   equipmentOptions,
+  isMPIForm,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
   const isFreeSolo = values?.LHRTparameter;
 
@@ -50,6 +53,20 @@ const Editor: React.FC<EditorProps> = ({
   }, [equipmentOptions]);
 
   useEffect(() => {
+    if (!isMPIForm) {
+      return;
+    }
+
+    const fieldValue = values[field ?? ''] || inputValue;
+
+    if (fieldValue && !FB.isUUID(fieldValue)) {
+      const updatedValue = isFreeSolo ? fieldValue : '';
+      setValue({ label: updatedValue, value: updatedValue });
+      setFieldValue(field, updatedValue);
+    }
+  }, [isFreeSolo]);
+
+  useEffect(() => {
     const title = cloneDeep(values?.title);
 
     if (!isUpdateAction || FB.isUUID(title ?? '')) {
@@ -61,25 +78,25 @@ const Editor: React.FC<EditorProps> = ({
     }
   }, [values]);
 
-  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    console.log('handle change');
+  const handleChange = (_: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
     field && setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
   const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
-    console.log('reason', reason, inputVal);
     if (reason !== 'input') {
       return;
     }
 
     if (!isFreeSolo) {
+      setInputValue(inputVal);
       setFieldValue(field, '');
       return;
     }
 
     setFieldValue(field, inputVal);
+    setInputValue(inputVal);
     setValue({ label: inputVal, value: inputVal });
 
     if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
@@ -131,7 +148,7 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions } = props;
+  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (!dataItem.actualId && !dataItem?.isActualIdAddition);
   const classes = styles({ hasChildren, isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
@@ -183,6 +200,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
               dataItem,
               isLoading,
               equipmentOptions,
+              isMPIForm,
             }}
           />
         </div>}

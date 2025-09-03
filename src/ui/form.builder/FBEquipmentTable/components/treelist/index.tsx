@@ -327,6 +327,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     parentRevId: '',
+    isMPIForm: Boolean(isMPIProcedure && !isLHRStep),
     getItem,
     addActualId: addActualId,
     equipmentOptions,

@@ -13,6 +13,7 @@ export const TreeListMPISchema = ({
   onDelete,
   onConfirm,
   equipmentOptions,
+  isMPIForm,
   parentRevId,
 }) => {
   return [
@@ -21,7 +22,7 @@ export const TreeListMPISchema = ({
       field: 'title',
       title: translate('form.builder.procedure.equipment.grid.title'),
       mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} isMPIForm={isMPIForm} />,
       width: 150,
     },
     {

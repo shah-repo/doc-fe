@@ -19,6 +19,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onClick?: (e) => void
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
+  isMPIForm?: boolean
 }
 
 export interface EquipmentItemActionsProps<T> {
