@@ -82,7 +82,7 @@ const POLineItemAlert: React.FC<Props> = ({
           <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
         </Typography>
         <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
-          <Text message={!isError && isWarning ? getConflictingParts(warningItems) : getConflictingParts(errorItems)} />
+          [{!isError && isWarning ? getConflictingParts(warningItems) : getConflictingParts(errorItems)}]
         </Typography>
         {!isError && isWarning && (
           <Box className={cx(classes.topSpacing, classes.contentText)}>
