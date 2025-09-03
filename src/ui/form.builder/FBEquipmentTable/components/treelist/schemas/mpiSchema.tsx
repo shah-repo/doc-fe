@@ -1,7 +1,6 @@
 import React from 'react';
 import { translate } from '../../../../../../common/intl';
 import { ActionsCell } from '../column.templates/Actions';
-import CalDueDateCell from '../column.templates/CalDueDateCell';
 import IDCell from '../column.templates/IDCell';
 import LHRTParameterCell from '../column.templates/LHRTParameterCell';
 
@@ -31,14 +30,6 @@ export const TreeListMPISchema = ({
       title: translate('form.builder.procedure.lhrt.parameter.title'),
       cell: (props) => <LHRTParameterCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
       mainOrderIndex: 2,
-      width: 150,
-    },
-    {
-      id: 'complianceDueDate',
-      field: 'complianceDueDate',
-      title: translate('form.builder.procedure.cal.due.date.title'),
-      mainOrderIndex: 3,
-      cell: (props) => <CalDueDateCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
       width: 150,
     },
     {
