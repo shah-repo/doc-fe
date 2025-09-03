@@ -17,15 +17,14 @@ import {
   isEmpty,
   isNil,
   keyBy,
-  map, replace, uniq,
+  replace, uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import ScanCaptureDialog from '../../../../components/common/dialogs/scaner';
 import { ScanSelectedPartItem } from '../../../../components/common/dialogs/scaner/components/lot.table/types';
-import { ColumnMenuContext } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import useDialog from '../../../../hooks/useDialog';
@@ -383,16 +382,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     return addExpandField(sortedData as EquipmentItem[]);
   };
 
-  const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
-    const dataColumns = map(columns, (column: CustomTreeListColumnProps) => {
-      if (column.field === field) {
-        column.isHidden = !column.isHidden;
-      }
-      return column;
-    });
-    updateColumns(dataColumns);
-  };
-
   const createEquipItem = () => {
     return {
       id: FB.uniqid,
@@ -505,27 +494,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
-  const onLock = useCallback(
-    ({
-      field,
-      locked,
-    }: CustomTreeListColumnProps) => {
-      const index = columns.findIndex((c) => c.field === field);
-      const column = columns[index];
-      if (column) {
-        const newColumns = [...columns];
-        newColumns.splice(index, 1, {
-          ...column,
-          locked: !locked,
-          reorderable: locked,
-          orderIndex: !locked ? 0 : undefined,
-        });
-        updateColumns(newColumns);
-      }
-    },
-    [columns],
-  );
-
   const addScannedEquipments = (scannedEquips) => {
     scanDialog.close();
     const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedEquipInfo.current?.id);
@@ -551,42 +519,34 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
         <FormikProvider value={formik}>
-          <ColumnMenuContext.Provider
-            value={{
-              columns: getColumns(),
-              onLock,
-              onColumnShowHide,
-            }}
-          >
-            <Grid container>
-              <Grid item xs={12} ref={treeListRef}>
-                <TreeList
-                  style={{
-                    overflow: 'auto',
-                    maxHeight: size?.height ? `${size?.height}px` : '100px',
-                  }}
-                  {...state.dataState}
-                  tableProps={{ style: { tableLayout: 'fixed' } }}
-                  rowHeight={TREELIST_CONFIG.rowHeight}
-                  scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
-                  editField={MODE_FIELD}
-                  expandField={EXPAND_FIELD}
-                  dataItemKey={DATA_ITEM_KEY}
-                  subItemsField={SUB_ITEMS_FIELD}
-                  className={cx(classes.treeList, 'containing-box-scrollbar')}
-                  onExpandChange={onExpandChange}
-                  rowRender={rowRender}
-                  data={processData()}
-                  columns={getColumns()}
-                  onRowClick={editEquipmentItem}
-                  resizable={TREELIST_CONFIG.resizable}
-                  reorderable={TREELIST_CONFIG.reorderable}
-                  sortable={TREELIST_CONFIG.sortable}
-                  cellRender={cellRender}
-                />
-              </Grid>
+          <Grid container>
+            <Grid item xs={12} ref={treeListRef}>
+              <TreeList
+                style={{
+                  overflow: 'auto',
+                  maxHeight: size?.height ? `${size?.height}px` : '100px',
+                }}
+                {...state.dataState}
+                tableProps={{ style: { tableLayout: 'fixed' } }}
+                rowHeight={TREELIST_CONFIG.rowHeight}
+                scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
+                editField={MODE_FIELD}
+                expandField={EXPAND_FIELD}
+                dataItemKey={DATA_ITEM_KEY}
+                subItemsField={SUB_ITEMS_FIELD}
+                className={cx(classes.treeList, 'containing-box-scrollbar')}
+                onExpandChange={onExpandChange}
+                rowRender={rowRender}
+                data={processData()}
+                columns={getColumns()}
+                onRowClick={editEquipmentItem}
+                resizable={TREELIST_CONFIG.resizable}
+                reorderable={TREELIST_CONFIG.reorderable}
+                sortable={TREELIST_CONFIG.sortable}
+                cellRender={cellRender}
+              />
             </Grid>
-          </ColumnMenuContext.Provider>
+          </Grid>
         </FormikProvider>
       </Grid>
       <Grid item>
