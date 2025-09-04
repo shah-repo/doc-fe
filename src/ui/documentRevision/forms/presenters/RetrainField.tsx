@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import { translate } from '../../../../common/intl';
@@ -35,12 +36,15 @@ const RetrainField: React.FunctionComponent<Props> = ({
   const disabled = isAdminChange || isDisabled;
 
   return (
-    <CheckboxField
-      name="retrain"
-      label="document.revision.trainingRequired"
-      tooltipTitle={isAdminChange ? translate('training.required.tooltip.message') : ''}
-      checkboxProps={{ disabled }}
-    />
+    <Tooltip title={isAdminChange ? translate('training.required.tooltip.message') : ''} placement="bottom-start">
+      <span>
+        <CheckboxField
+          name="retrain"
+          label="document.revision.trainingRequired"
+          checkboxProps={{ disabled }}
+        />
+      </span>
+    </Tooltip>
   );
 };
 

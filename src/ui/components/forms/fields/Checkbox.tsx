@@ -1,4 +1,4 @@
-import { FormControlLabel, Checkbox as MuiCheckbox, Tooltip } from '@material-ui/core';
+import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
 import { CheckboxProps as MuiCheckboxProps } from '@material-ui/core/Checkbox';
 import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import * as React from 'react';
@@ -10,7 +10,6 @@ import Field, { FieldOwnProps } from './Field';
 
 interface CheckboxOwnProps extends FieldOwnProps {
   checkboxProps?: MuiCheckboxProps
-  tooltipTitle?: string
 }
 
 interface OwnProps {
@@ -19,31 +18,29 @@ interface OwnProps {
 
 type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;
 
-const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, tooltipTitle, ...fieldProps }) => {
+const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, ...fieldProps }) => {
   const { field } = fieldProps;
   const { submitForm } = useFormContext();
   const classes = styles();
   return (
     <Field {...fieldProps} >
-      <Tooltip title={tooltipTitle ?? ''} placement="bottom-start">
-        <FormControlLabel id="Checkbox-label" className={classes.checkbox}
-          control={
-            <MuiCheckbox
-              {...fieldProps.field}
-              {...checkboxProps}
-              checked={field.value}
-              value={field.value ? 'checked' : ''}
-              id="Checkbox-box"
-              onChange={(evt, checked: boolean) => {
-                field.onChange(evt);
-                checkboxProps?.onChange?.(evt, checked);
-                submitForm();
-              }}
-              />
-          }
-        label={<Text translation={label} />}
-        />
-    </Tooltip>
+      <FormControlLabel id="Checkbox-label" className={classes.checkbox}
+        control={
+          <MuiCheckbox
+            {...fieldProps.field}
+            {...checkboxProps}
+            checked={field.value}
+            value={field.value ? 'checked' : ''}
+            id="Checkbox-box"
+            onChange={(evt, checked: boolean) => {
+              field.onChange(evt);
+              checkboxProps?.onChange?.(evt, checked);
+              submitForm();
+            }}
+            />
+        }
+      label={<Text translation={label} />}
+      />
     </Field>
   );
 };
