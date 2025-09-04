@@ -35,17 +35,23 @@ const RetrainField: React.FunctionComponent<Props> = ({
   const isAdminChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
   const disabled = isAdminChange || isDisabled;
 
-  return (
-    <Tooltip title={isAdminChange ? translate('training.required.tooltip.message') : ''} placement="bottom-start">
-      <span>
-        <CheckboxField
-          name="retrain"
-          label="document.revision.trainingRequired"
-          checkboxProps={{ disabled }}
-        />
-      </span>
-    </Tooltip>
+  const checkbox = (
+    <CheckboxField
+      name="retrain"
+      label="document.revision.trainingRequired"
+      checkboxProps={{ disabled }}
+    />
   );
+
+  if(isAdminChange) {
+    return (
+      <Tooltip title={translate('training.required.tooltip.message')} placement="bottom-start">
+        <span>{checkbox}</span>
+      </Tooltip>
+    );
+  }
+
+  return checkbox;
 };
 
 export default React.memo(RetrainField);
