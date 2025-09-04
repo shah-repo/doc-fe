@@ -2,13 +2,13 @@ import { Box, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { styles as useStyles } from '../../app/alert.dialog/AlertDialog.styles';
 import Text from '../../components/Text';
 import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
-import { styles as useStyles } from './AlertDialog.styles';
 
 interface Props {
   confirmAction?: (values?) => void
