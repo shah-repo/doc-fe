@@ -43,7 +43,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
     />
   );
 
-  if(isAdminChange) {
+  if (isAdminChange) {
     return (
       <Tooltip title={translate('training.required.tooltip.message')} placement="bottom-start">
         <span>{checkbox}</span>
