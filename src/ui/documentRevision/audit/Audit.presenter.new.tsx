@@ -226,7 +226,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         if(isAssignedLots) {
-          fbLabel = `${stepLabel} ${keyLabelType} Lot ${keyLabel}`;
+          fbLabel = intl.formatMessage({
+            id: 'form.builder.assigned.lots.label'
+          }, {
+            stepLabel,
+            keyLabelType,
+            keyLabel
+          });
         } else {
           fbLabel = `${stepLabel} ${keyLabelType} ${keyLabel}`;
         }
