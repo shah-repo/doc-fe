@@ -90,7 +90,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     attachments () {
       return <AuditAttachment {...{ audit }} />;
     },
-        plannedId () {
+    plannedId () {
       return renderPartValue(auditValue);
     },
     actualId() {
