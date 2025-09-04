@@ -501,7 +501,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const lotItem = {
         id: selected.refId,
         plannedId: '',
-        actualId: '',
+        actualId: selected.actualId,
         lotId: selected.lotId,
         lotDocId: selected.lotDocId,
         parentPartPlannedId: selected.materialId,
@@ -579,10 +579,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanDialog.open();
   };
 
-  const onClose = () => {
-    scanDialog.close();
-  };
-
   const getSchemaBuilder = () => {
     if (isMPIProcedure && !isLHRStep) return buildMPISchema;
     if (isLHRStep) return buildLHRTSchema;
@@ -647,7 +643,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         <ScanCaptureDialog
           handler={scanDialog}
           isSerialNumberHidden
-          onClose={onClose}
+          onClose={scanDialog.close}
           addScanLotsToPart={addScanLotsToPart}
           selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
         />

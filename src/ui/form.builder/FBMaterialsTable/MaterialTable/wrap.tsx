@@ -107,7 +107,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       }
       const part = {
         quantity,
-        unit: unit,
+        unit,
         type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
       };
       mpiProcedureSelectState?.editOverride(id, refId, part);

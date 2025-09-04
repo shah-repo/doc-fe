@@ -77,6 +77,7 @@ const ActualIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (prop
                 options={items}
                 onInputChange={debounceFunction}
                 value={value}
+                disabled={!!dataItem[field]}
                 getOptionLabel={(option: OptionType) => option.label}
                 renderOption={(option) => {
                   return <div className={classes.optionWrap}>{option.label}</div>;
