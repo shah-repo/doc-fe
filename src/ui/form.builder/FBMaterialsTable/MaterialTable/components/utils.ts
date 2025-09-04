@@ -26,6 +26,7 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean)
   return items.map(item => ({
     ...item,
     plannedId: item.title,
+    isLotAdditionIconsShown: true,
     assignedLots: item.assignedLots?.map(lot => ({
       ...lot,
       parentPartPlannedId: item.plannedId,

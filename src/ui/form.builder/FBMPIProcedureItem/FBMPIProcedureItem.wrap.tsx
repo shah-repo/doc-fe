@@ -120,11 +120,15 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       return Date.parse(date) < Date.now();
     };
 
+    const isLotUsage = (type) => {
+      return type === SmartReferenceType.LotUsage;
+    };
+
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
             && ref.active
-            && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
+            && (ref?.type === SmartReferenceType.EquipmentReplacement || isLotUsage(ref?.type))) {
           selected.push({
             ...ref?.metadata,
             refId: ref?.id,
@@ -133,7 +137,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             calDueDate: ref.toDocRev?.precalc?.cali_due_date,
             lotPartRevision: ref.toDocRev?.precalc?.lot_part_revision,
             lotId: ref.toDocRevId,
-            actualId: ref?.metadata?.actualId,
+            actualId: isLotUsage(ref?.type) ? ref?.metadata?.actualId : ref?.toDocRevId,
           });
         }
         return selected;

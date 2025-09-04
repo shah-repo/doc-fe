@@ -511,10 +511,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     saveScannedEquipments?.(updatedScannedEquips);
   };
 
-  const onClose = () => {
-    scanDialog.close();
-  };
-
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
@@ -566,7 +562,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}
-          onClose={onClose}
+          onClose={scanDialog.close}
           isSerialNumberHidden
           addScanLotsToPart={addScannedEquipments}
           selectedPart ={scanSelectedEquipInfo.current as ScanSelectedPartItem}
