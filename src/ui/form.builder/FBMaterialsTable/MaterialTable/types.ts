@@ -82,6 +82,7 @@ export interface SchemaOptions {
   onRowClick?: (e) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
+  isLHRT?: boolean
 }
 
 export interface UnitOption {

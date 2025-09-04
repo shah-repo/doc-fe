@@ -14,6 +14,7 @@ export const buildLHRTSchema = ({
   popperHolder,
   onConfirm,
   onDiscard,
+  isLHRT,
 }: SchemaOptions): CustomTreeListColumnProps[] => {
   return [
     {
@@ -21,7 +22,7 @@ export const buildLHRTSchema = ({
       field: 'title',
       title: translate('form.builder.procedure.material.title'),
       mainOrderIndex: 1,
-      cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
+      cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} isLHRT={isLHRT} />,
       width: 150,
     },
     {

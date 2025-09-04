@@ -52,6 +52,12 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
       return;
     }
 
+    if (isLHRT) {
+      setFieldValue(field, inputValue);
+      setInputValue('');
+      return;
+    }
+
     if (!values.LHRTparameter && inputValue && !title) {
       setInputValue('');
       return;

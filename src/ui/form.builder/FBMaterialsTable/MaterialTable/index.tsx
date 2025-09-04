@@ -597,6 +597,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDelete: removeScanLot,
     addLot: addLot,
     isDisabled: isDesign || !isEnableOnlyLotAddition,
+    isLHRT: isLHRStep && isMPIProcedure,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
