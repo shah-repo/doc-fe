@@ -43,7 +43,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
   };
 
   const renderWithLoader = (value: string) => {
-    if (FB.isUUID(value ?? '')) {
+    if (FB.isUUID(value)) {
       return <CircularProgress size={12} />;
     }
     return <div data-cy={dataCy}>{value}</div>;
