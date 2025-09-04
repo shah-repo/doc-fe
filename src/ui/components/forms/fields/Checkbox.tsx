@@ -37,9 +37,9 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
               checkboxProps?.onChange?.(evt, checked);
               submitForm();
             }}
-            />
+          />
         }
-      label={<Text translation={label} />}
+        label={<Text translation={label} />}
       />
     </Field>
   );
