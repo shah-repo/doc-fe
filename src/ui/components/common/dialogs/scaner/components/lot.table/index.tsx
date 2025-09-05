@@ -48,7 +48,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
         schema={schema}
         containerRef={containerRef}
         loading={isLoading}
-        data={scanLots as EditableScanLot[]}
+        data={scanLots}
         fallback={
           <Typography className={classes.emptyTableMessage}>{translate('scan.lot.grid.empty.message')}</Typography>
         }
