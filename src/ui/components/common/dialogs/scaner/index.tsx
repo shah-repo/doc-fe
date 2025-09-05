@@ -42,11 +42,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       },
       {
         key: translate('scan.lot.grid.quantity.needed.message'),
-        value: selectedPart?.quantityNeeded ?? 0,
+        value: selectedPart?.quantityNeeded || 0,
       },
       {
         key: translate('scan.lot.grid.variance.message'),
-        value: selectedPart?.variance ?? 0,
+        value: selectedPart?.variance || 0,
       },
     ],
     [selectedPart],
