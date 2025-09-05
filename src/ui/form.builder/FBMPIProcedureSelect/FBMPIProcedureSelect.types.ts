@@ -16,6 +16,7 @@ export type FBMPIProcedureSelectProps =
 };
 
 export interface FBMPIProcedureSelectValue {
+  id?: string
   fieldId: string
   forPreselected: { id: string }
   usedOverride: Partial<DocumentRevision> | string

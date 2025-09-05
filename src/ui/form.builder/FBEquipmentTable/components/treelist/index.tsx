@@ -109,7 +109,19 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         if (!expandedRows.includes(id)) {
           expandedRows.push(id);
         }
-        updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+
+        const subItems = state.data[index][SUB_ITEMS_FIELD];
+        if (subItems?.length) {
+          mapByEquipmentId[equipmentId]?.forEach((item) => {
+            const matchedItem = subItems?.find((entry) => entry.id === item.id);
+            if (matchedItem) {
+              item.actualId = matchedItem.actualId;
+            }
+          });
+          updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+        } else {
+          updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+        }
       }
     });
 
