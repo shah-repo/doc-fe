@@ -16,9 +16,8 @@ export type TimezoneSelectProps = Omit<AutocompleteProps, 'onChange' | 'value'> 
 export interface TimezoneResponseBody {
   createdAt: string
   updatedAt: string
-  id: string
+  id: number
   name: string
   abbreviation: string
   utc_offset: string
-  is_dst: boolean
 }

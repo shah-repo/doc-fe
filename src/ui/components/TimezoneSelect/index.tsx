@@ -1,4 +1,4 @@
-import { find } from 'lodash';
+import { find, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { timezoneActions } from '../../../state/ducks/timezoneSelect';
@@ -46,6 +46,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       options={timezoneOptions}
       getOptionLabel={(option: TimezoneOption) => option.label}
       placeholder={placeholder}
+      key={isEmpty(timezoneOptions) ? 'disable' : 'enable'}
       value={timezone}
       onChange={(_, selectedOption) => onChange(selectedOption)}
       autoHighlight
