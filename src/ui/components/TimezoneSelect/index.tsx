@@ -1,21 +1,12 @@
 import { find } from 'lodash';
-import moment from 'moment-timezone';
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
+import { timezoneActions } from '../../../state/ducks/timezoneSelect';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import { Autocomplete } from '../forms/fields-next';
-import { TimezoneOption, TimezoneSelectProps } from './types';
-
-const generateTimezoneOptions = (): TimezoneOption[] => moment.tz.names().map((tz) => {
-  const now = moment().tz(tz);
-
-  return {
-    value: tz,
-    label: `(GMT${moment.tz(now, tz).format('Z')}) ${tz.replace(/_/g, ' ')}`,
-    offset: now.utcOffset(),
-    abbrev: now.zoneAbbr(),
-    altName: now.zoneName(),
-  };
-});
+import { toastError } from '../notifications';
+import { TimezoneOption, TimezoneResponseBody, TimezoneSelectProps } from './types';
 
 const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   value,
@@ -23,8 +14,32 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   placeholder = translate('common.select'),
   disabled = false,
 }) => {
-  const timezoneOptions = useMemo(() => generateTimezoneOptions(), []);
+  const [timezoneOptions, setTimezoneOptions] = useState<TimezoneOption[]>();
   const timezone = find(timezoneOptions, { value });
+  const fetchTimezonesList = useActionCreator(timezoneActions.fetchTimezonesList);
+
+  const prepareTimzoneOptions = (timezoneOptions: TimezoneResponseBody[]) => timezoneOptions.map(timzone => ({
+    value: timzone?.name ?? '',
+    label: `(GMT${timzone?.utc_offset}) ${timzone?.name.replace(/_/g, ' ')}`,
+    offset: timzone?.utc_offset ?? '',
+    abbrev: timzone?.abbreviation ?? '',
+    altName: timzone?.abbreviation ?? '',
+  }));
+
+  const timzoneAsync = useAsync<TimezoneResponseBody[]>({
+    onSuccess: (data: TimezoneResponseBody[] | undefined) => {
+      setTimezoneOptions(prepareTimzoneOptions(data ?? []));
+    },
+    onError: toastError,
+  });
+
+  const loadTimezonesList = () => {
+    timzoneAsync.start(fetchTimezonesList, timzoneAsync);
+  };
+
+  useEffect(() => {
+    loadTimezonesList();
+  }, []);
 
   return (
     <Autocomplete
