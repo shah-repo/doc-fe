@@ -24,8 +24,6 @@ export interface ScanLotTableProps {
   isLoading?: boolean
   onUpdateScanLot?: (item: ScanLot) => void
   onDeleteScanLot?: (item: ScanLot) => void
-  updateScanLot?: (item: ScanLot) => void
-  deleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
 }
 
