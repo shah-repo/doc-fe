@@ -107,8 +107,8 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     );
   };
 
-  const handleError = (error: Error) => {
-    toastError(error);
+  const handleError = () => {
+    toastError(translate('scan.lot.grid.scan.barcode.error.message'));
   };
 
   return (
