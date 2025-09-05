@@ -45,7 +45,7 @@ export interface ValidateLot extends DocumentRevision {
 }
 
 export interface EditableScanLot extends ScanLot {
-  [MODE_FIELD]: Mode
+  [MODE_FIELD]?: Mode
 }
 
 export interface SchemaOptions {

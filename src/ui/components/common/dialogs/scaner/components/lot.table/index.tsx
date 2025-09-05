@@ -5,7 +5,6 @@ import { translate } from '../../../../../../../common/intl';
 import { FBProcedureItemType } from '../../../../../../form.builder';
 import useDialog from '../../../../../../hooks/useDialog';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
-import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
 import { buildEqSchema } from './eqSchema';
 import { buildSchema } from './schema';
@@ -38,10 +37,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     event.stopPropagation();
   };
 
-  const rowRender: DataGridProps<EditableScanLot>['rowRender'] = (row) => {
-    return row;
-  };
-
   const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
     isSerialNumberHidden,
     onUpdateScanLot,
@@ -59,8 +54,7 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
         schema={schema}
         containerRef={containerRef}
         loading={isLoading}
-        data={scanLots as EditableScanLot[]}
-        rowRender={rowRender}
+        data={scanLots}
         fallback={
           <Typography className={classes.emptyTableMessage}>{translate('scan.lot.grid.empty.message')}</Typography>
         }

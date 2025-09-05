@@ -27,6 +27,9 @@ export default makeStyles(theme => ({
     height: 16,
     color: Colors.primaryLight,
   },
+  infoMessage: {
+    marginLeft: theme.spacing(1.5),
+  },
   infoContainer: {
     backgroundColor: Colors.primaryHighlight,
     color: Colors.black,
@@ -35,7 +38,7 @@ export default makeStyles(theme => ({
     fontSize: 14,
     display: 'flex',
     alignItems: 'center',
-    margin: `${theme.spacing(2.5)}px 0px`,
+    margin: theme.spacing(2.5, 0),
     padding: theme.spacing(1),
   },
 }));

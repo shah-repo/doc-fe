@@ -1,15 +1,16 @@
 import React, { useCallback } from 'react';
-import { CellTemplateProps, EditableItem } from '../../../../../../KendoDataGrid/KendoDataGrid.types';
+import { CellTemplateProps } from '../../../../../../KendoDataGrid/KendoDataGrid.types';
+import { EditableScanLot } from '../types';
 import ActionsButtons from './ActionButtons';
 
-interface Props<T extends EditableItem> extends CellTemplateProps<T> {
+interface Props<T extends EditableScanLot> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isLoading?: boolean
   onDelete?: (item: T) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: T) => void
 }
 
-function ActionsCellTemplate<T extends EditableItem> ({
+function ActionsCellTemplate<T extends EditableScanLot> ({
   dataItem,
   scrollBehavior = 'auto',
   isLoading,
