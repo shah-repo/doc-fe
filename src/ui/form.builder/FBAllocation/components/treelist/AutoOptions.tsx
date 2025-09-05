@@ -56,6 +56,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
 }) => {
   const { formState, workspaceState } = FB.useStores();
   const classes = styles();
+  const confirmationDialog = useDialog();
   const [autoAssign, setAutoAssign] = useState<boolean>(
     workspaceState?.formInput?.autoAssign ?? documentRevision?.formInput?.autoAssign ?? false,
   );
@@ -63,9 +64,8 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
   const [autoTransact, setAutoTransact] = useState<boolean>(
     workspaceState?.formInput?.autoTransact ?? documentRevision?.formInput?.autoTransact ?? false,
   );
-  const confirmationDialog = useDialog();
 
-  const updateAutoAssign = (value: boolean) => {
+  const onAutoAssignChange = (value: boolean) => {
     setAutoAssign(value);
     formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_ASSIGN, value);
     onAutoAssign?.(value);
@@ -73,10 +73,6 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
       ...workspaceState?.formInput,
       autoAssign: value,
     });
-  };
-
-  const onAutoAssignChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateAutoAssign(event.target.checked);
   };
 
   const onAutoTransactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,16 +88,12 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
     if (event.target.checked) {
       confirmationDialog.open();
     } else {
-      onAutoAssignChange(event);
+      onAutoAssignChange(event.target.checked);
     }
   };
 
   const onConfirmAlertDialog = () => {
-    updateAutoAssign(true);
-    onCancelAlertDialog();
-  };
-
-  const onCancelAlertDialog = () => {
+    onAutoAssignChange(true);
     confirmationDialog.close();
   };
 
@@ -168,7 +160,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
         <AlertDialog
           handler={confirmationDialog}
           onConfirm={onConfirmAlertDialog}
-          onCancel={onCancelAlertDialog}
+          onCancel={confirmationDialog.close}
           title="common.warning"
           confirmLabel="common.yes.continue"
           cancelLabel="common.no.go.back"
