@@ -12,6 +12,7 @@ export interface ScanLot {
   id?: string
   lotRevId?: string
   quantityAssigned?: number
+  onHand?: number
 }
 
 export interface ScanLotTableProps {
@@ -20,7 +21,9 @@ export interface ScanLotTableProps {
   lots: DocumentRevision[]
   disabled?: boolean
   partId?: string
-  loading?: boolean
+  isLoading?: boolean
+  onUpdateScanLot?: (item: ScanLot) => void
+  onDeleteScanLot?: (item: ScanLot) => void
   updateScanLot?: (item: ScanLot) => void
   deleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
@@ -44,12 +47,10 @@ export interface EditableScanLot extends ScanLot {
 
 export interface SchemaOptions {
   isLoading?: boolean
-  units: string[]
-  onConfirm: () => void
-  onDiscard: () => void
+  isSerialNumberHidden?: boolean
   onDelete?: (item: EditableScanLot) => void
   onEdit?: (item: EditableScanLot) => void
-  onRowClick?: (e) => void
+  onUpdateScanLot?: (item: EditableScanLot) => void
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableScanLot) => void
 }
@@ -57,6 +58,7 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> {
   onClick?: (e) => void
   isLoading?: boolean
+  onUpdateScanLot?: (item: EditableScanLot) => void
 }
 
 export interface UnitOption {

@@ -1,3 +1,5 @@
+import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, List, ListItem } from '@material-ui/core';
 import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
@@ -145,12 +147,18 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
             </ListItem>
           ))}
         </List>
+        <Box className={classes.infoContainer}>
+          <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />
+          <Box component="span" ml={1.5}>
+            {translate('scan.lot.grid.scan.lot.info.message')}
+          </Box>
+        </Box>
 
         <ScanLotTable
           scanLots={scanLots}
           units={[]}
           lots={[]}
-          loading={validateScanLotAsync.isLoading}
+          isLoading={validateScanLotAsync.isLoading}
           partId={selectedPart?.partRevId}
           setScanLots={setScanLots}
         />

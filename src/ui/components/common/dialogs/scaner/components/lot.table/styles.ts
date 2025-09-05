@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
-  root: {},
   grid: {
     borderCollapse: 'collapse',
     '& .k-grid-content': {
@@ -43,10 +42,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     margin: theme.spacing(0, -1.5),
   },
-  actionsEdit: {
-    gap: theme.spacing(0, 1.12),
-    margin: theme.spacing(0.5, 0, 0),
-  },
   activeCheckbox: {
     margin: theme.spacing(0.75, 0, 0),
   },
@@ -57,5 +52,9 @@ export default makeStyles((theme) => ({
   viewIconCont: {
     display: 'flex',
     alignItems: 'center',
+  },
+  emptyTableMessage: {
+    fontSize: 14,
+    color: Colors.textDisabled,
   },
 }));
