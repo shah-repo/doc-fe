@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import useDialog from '../../../../../../hooks/useDialog';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
-import { DataGridProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -33,10 +32,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     event.stopPropagation();
   };
 
-  const rowRender: DataGridProps<EditableScanLot>['rowRender'] = (row) => {
-    return row;
-  };
-
   const schema = buildSchema({
     onUpdateScanLot,
     onDelete: removeScanLot,
@@ -54,7 +49,6 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
         containerRef={containerRef}
         loading={isLoading}
         data={scanLots as EditableScanLot[]}
-        rowRender={rowRender}
         fallback={
           <Typography className={classes.emptyTableMessage}>{translate('scan.lot.grid.empty.message')}</Typography>
         }

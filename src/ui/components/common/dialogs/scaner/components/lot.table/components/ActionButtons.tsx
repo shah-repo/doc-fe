@@ -1,7 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
-import cx from 'classnames';
 import React, { MutableRefObject } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import useHover from '../../../../../../../hooks/useHover';
@@ -24,7 +23,7 @@ const ActionsButtons: React.FC<Props> = (
   const classes = useStyles();
 
   return (
-    <div id="row-actions" ref={ref} className={cx(classes.actions)}>
+    <div id="row-actions" ref={ref} className={classes.actions}>
       <>
         <Tooltip arrow title={translate('common.quick.view')} placement="top">
           <IconButton

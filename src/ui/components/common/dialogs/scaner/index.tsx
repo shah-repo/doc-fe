@@ -42,11 +42,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       },
       {
         key: translate('scan.lot.grid.quantity.needed.message'),
-        value: selectedPart?.quantityNeeded || 0,
+        value: selectedPart?.quantityNeeded ?? 0,
       },
       {
         key: translate('scan.lot.grid.variance.message'),
-        value: selectedPart?.variance || 0,
+        value: selectedPart?.variance ?? 0,
       },
     ],
     [selectedPart],
@@ -149,7 +149,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         </List>
         <Box className={classes.infoContainer}>
           <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />
-          <Box component="span" ml={1.5}>
+          <Box component="span" className={classes.infoMessage}>
             {translate('scan.lot.grid.scan.lot.info.message')}
           </Box>
         </Box>

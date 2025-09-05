@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../../../layout/theme-next';
 
-export default makeStyles(() => ({
+export default makeStyles({
   option: {
     fontSize: 14,
     overflowWrap: 'anywhere',
@@ -9,4 +9,4 @@ export default makeStyles(() => ({
   expired: {
     color: Colors.errorHighlight,
   },
-}));
+});
