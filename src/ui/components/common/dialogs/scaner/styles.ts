@@ -7,7 +7,6 @@ export default makeStyles(theme => ({
   },
   contentWrapper: {
     width: '100%',
-    paddingTop: theme.spacing(0.75),
   },
   row: {
     display: 'flex',
@@ -22,5 +21,24 @@ export default makeStyles(theme => ({
   value: {
     fontSize: 14,
     color: Colors.textGray,
+  },
+  infoIcon: {
+    width: 16,
+    height: 16,
+    color: Colors.primaryLight,
+  },
+  infoMessage: {
+    marginLeft: theme.spacing(1.5),
+  },
+  infoContainer: {
+    backgroundColor: Colors.primaryHighlight,
+    color: Colors.black,
+    border: `1px solid ${Colors.primaryLight}`,
+    borderRadius: theme.spacing(0.5),
+    fontSize: 14,
+    display: 'flex',
+    alignItems: 'center',
+    margin: theme.spacing(2.5, 0),
+    padding: theme.spacing(1),
   },
 }));
