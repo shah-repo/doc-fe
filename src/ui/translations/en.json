@@ -1852,6 +1852,12 @@
   "scan.lot.grid.part.description.message": "Part Description",
   "scan.lot.grid.quantity.needed.message": "Qty Needed",
   "scan.lot.grid.variance.message": "Variance",
+  "scan.lot.grid.quantity.max.error.message": "Quantity assigned should not be greater than on hand quantity {max}",
+  "scan.lot.grid.quantity.min.error.message": "Quantity assigned should not be greater than 0",
+  "scan.lot.grid.empty.message": "Scanned Items will be displayed here",
+  "scan.lot.grid.scan.lot.info.message": "Scan a lot to add below",
+  "scan.lot.grid.scan.eq.info.message": "Scan an equipment to add below",
+  "scan.lot.grid.scan.barcode.error.message": "Barcode not recognized",
   "integrations.title": "Integrations",
   "integrations.not.available": "There are no available integrations",
   "integrations.enable": "Enable",
@@ -2244,6 +2250,7 @@
   "allocation.checkbox.group.option.autoAssign.label": "Auto-assign LOTs",
   "allocation.checkbox.group.option.autoTransact.label": "Auto-transact all LOTs",
   "allocation.checkbox.group.option.autoTransact.title.message": "Auto-transaction of all lots will be done once the work order is assigned.",
+  "allocation.checkbox.group.option.autoAssign.enable.popup.message": "Enabling auto-assign will wipe out manually added or scanned lot entries.\n\nAre you sure you want to continue?",
   "allocation.treelist.treeColumns.field.expiry.date.title": "Expiry Date",
   "allocation.lot.delete.confirmation": "Are you sure you want to delete LOT?",
   "allocation.part.selection.error": "Please select part to continue",
@@ -2673,5 +2680,6 @@
   "attachment.upload.error.part.failed": "Part upload failed",
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
-  "attachment.upload.error.cancelled": "Upload cancelled"
+  "attachment.upload.error.cancelled": "Upload cancelled",
+  "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision"
 }
