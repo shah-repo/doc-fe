@@ -130,8 +130,8 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
       )}
       {!loading && type === FBProcedureItemType.equipment && (
         <FBEquipmentTable
-          isActive={!isPreview}
           isPendingChange={isPendingChange}
+          isPreview={isPreview}
           isDisabled={!isPreview || isPendingChange}
           type={type}
           items={value}

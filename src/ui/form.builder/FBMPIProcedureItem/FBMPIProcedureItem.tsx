@@ -342,7 +342,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         )}
         {type === FBProcedureItemType.equipment && (
           <FBEquipmentTable
-            isActive={!isPreview}
             name={name}
             isDisabled={Boolean(disabled)}
             type={type}
@@ -351,6 +350,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             handleRemove={handleRemove}
             handleSelectionDelete={handleSelectionDelete}
             isDesign={isDesign}
+            isPreview={isPreview}
             isMPIProcedure={isDocumentMPI}
             isEnableActualIdAddition={isSelectVisible && !redlineActive}
           />

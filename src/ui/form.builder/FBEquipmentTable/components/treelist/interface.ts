@@ -7,7 +7,6 @@ import { EditableEquipmentItem, EquipmentItem } from '../../interface';
 
 export interface FBEquipmentProps {
   name?: string
-  isActive?: boolean
   isDisabled: boolean
   isShowOnly?: boolean
   isPreview?: boolean

@@ -61,8 +61,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   saveActualEquipment,
   saveScannedEquipments,
   handleSelectionDelete,
-  isActive,
   isDisabled,
+  isPreview,
   isDesign,
   isLHRStep,
   lhrStepIndex,
@@ -422,10 +422,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isActive || isDisabled)) || (!isEnableActualIdAddition && !isActive);
-    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
+    const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isPreview || isDisabled)) || (!isEnableActualIdAddition && isPreview);
+    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isPreview || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
 
     if (isEditRestricted) {
+      return;
+    }
+
+    if (isMPIProcedure && isDisabled && !isPreview) {
       return;
     }
 
