@@ -429,7 +429,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       return;
     }
 
-    if (isMPIProcedure && isDisabled && !isPreview) {
+    if ((isMPIProcedure && !isLHRStep) && isDisabled && !isPreview) {
       return;
     }
 
