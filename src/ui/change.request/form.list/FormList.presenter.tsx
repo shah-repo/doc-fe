@@ -1,7 +1,7 @@
 import { Button, Dialog, Grid } from '@material-ui/core';
 import React from 'react';
 import { HeaderTableType } from '../../../state/ducks/documentRevisions/types';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import GridHeaderWithSearch from '../../components/KeywordSearch/GridHeaderWithSearch';
 import Text from '../../components/Text';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
@@ -21,6 +21,7 @@ interface Props {
   exportDialog: DialogHandler
   isGrouped: boolean
   isLoading?: boolean
+  tableName: string
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -33,14 +34,13 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   data,
   isGrouped,
   isLoading,
+  tableName,
 }) => {
   const classes = styles();
   return (
     <>
       <Grid container alignItems="center" justify="space-between">
-        <Grid item>
-          <GridTitle translation="page.table.title.changeRequest" />
-        </Grid>
+        <GridHeaderWithSearch titleTranslationKey="page.table.title.changeRequest" tableName={tableName} />
         <Grid item>
           <Button
             variant="outlined"

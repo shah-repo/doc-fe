@@ -1,11 +1,11 @@
 import { Grid } from '@material-ui/core';
 import React, { useState } from 'react';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoPresenterProps } from '../../components/KendoGrid/interfaces';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { SearchContext, TableSearchQueryPayloadType } from '../../components/KeywordSearch/types';
+import GridHeaderWithSearch from '../../components/KeywordSearch/GridHeaderWithSearch';
+import { SearchProvider } from '../../components/KeywordSearch/SearchProvider';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
 import { documentRevisionQueryStatus } from '../utils/helpers';
 import CreateButton from './CreateButton/presenter';
@@ -23,16 +23,13 @@ export function DocumentListPresenter ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<TableSearchQueryPayloadType>();
 
   return (
     <Grid container>
-      <SearchContext.Provider value={{ tableSearchQueryPayload, setTableSearchQueryPayload }}>
+      <SearchProvider>
         <Grid item xs={12} className={classes.headerGridItem}>
           <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <GridTitle translation="navigation.document.list" />
-            </Grid>
+            <GridHeaderWithSearch titleTranslationKey="navigation.document.list" tableName={tableName} />
             <Grid item>
               <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
               <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
@@ -54,7 +51,7 @@ export function DocumentListPresenter ({
             }}
           />
         </Grid>
-      </SearchContext.Provider>
+      </SearchProvider>
     </Grid>
   );
 }

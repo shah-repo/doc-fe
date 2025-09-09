@@ -6,6 +6,7 @@ import { CHANGE_REQUEST_ROOT_URL_SEARCH } from '../../../state/ducks/changeReque
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { SearchProvider } from '../../components/KeywordSearch/SearchProvider';
 import FormListContainer from '../form.list/FormList.container';
 import { KendoPresenterProps } from './interfaces';
 
@@ -29,20 +30,22 @@ export function DocumentListPresenter ({
 
   return (
     <Grid container>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <FormListContainer {...{ headers, tableData: dataToBeExported, isGrouped }} />
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        <KendoGrid
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-          schema={schema}
-          exportDataChanges={setDataToBeExported}
-          onRowClick={onRowClick}
-          queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
-          defaultPayloadData={{}}
-        />
-      </Grid>
+      <SearchProvider>
+        <Grid item xs={12} className={classes.headerGridItem}>
+          <FormListContainer {...{ headers, tableData: dataToBeExported, isGrouped, tableName }} />
+        </Grid>
+        <Grid item xs={12} className={classes.kendoGridItem}>
+          <KendoGrid
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            exportDataChanges={setDataToBeExported}
+            onRowClick={onRowClick}
+            queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
+            defaultPayloadData={{}}
+          />
+        </Grid>
+      </SearchProvider>
     </Grid>
   );
 }
