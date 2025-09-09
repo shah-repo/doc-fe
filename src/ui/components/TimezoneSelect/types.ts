@@ -19,5 +19,5 @@ export interface TimezoneResponseBody {
   id: number
   name: string
   abbreviation: string
-  utcOffset: string
+  offsetFromUTC: string
 }

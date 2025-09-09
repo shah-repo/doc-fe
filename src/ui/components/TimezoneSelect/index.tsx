@@ -20,8 +20,8 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
 
   const prepareTimzoneOptions = (timezoneOptions: TimezoneResponseBody[]) => timezoneOptions.map(timzone => ({
     value: timzone?.name ?? '',
-    label: `(GMT${timzone?.utcOffset}) ${timzone?.name.replace(/_/g, ' ')}`,
-    offset: timzone?.utcOffset ?? '',
+    label: `(GMT${timzone?.offsetFromUTC}) ${timzone?.name.replace(/_/g, ' ')}`,
+    offset: timzone?.offsetFromUTC ?? '',
     abbrev: timzone?.abbreviation ?? '',
     altName: timzone?.abbreviation ?? '',
   }));
