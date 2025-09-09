@@ -81,14 +81,7 @@ export function DocumentTypePresenter ({
     setDataToBeExported(copyDate);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  const isKeywordSearchEnabled = [
-    DocumentCategory.Parts,
-    DocumentCategory.EB,
-    DocumentCategory.Receive,
-    DocumentCategory.Supplier,
-    DocumentCategory.Equipment,
-    DocumentCategory.PurchaseOrder,
-  ].includes(documentTypeCategory as DocumentCategory);
+  const isKeywordSearchEnabled = true;
   const [query, setQuery] = useState<QueryType>();
   const [defaultQuery, setDefaultQuery] = useState<QueryType>();
   const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<TableSearchQueryPayloadType>();
