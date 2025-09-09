@@ -30,12 +30,14 @@ import { prepareData } from './components/utils';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
+  EB_FIELDS_TO_OMIT,
   EXPAND_FIELD,
   FIELDS_TO_OMIT,
   IS_LOT_ADDITION,
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
+import { buildEBSchema } from './ebSchema';
 import { buildLHRTSchema } from './lhrtSchema';
 import { buildMPISchema } from './mpiSchema';
 import { buildSchema } from './schema';
@@ -71,6 +73,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   partsSelected,
   isMPIProcedure,
   isPreview,
+  isEBProcedure,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -81,7 +84,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const [state, setState] = React.useState<MaterialItemState>({
-    data: prepareData(cloneDeep(items), isDesign),
+    data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
     expanded: [],
     dataState: {
       sort: [],
@@ -91,10 +94,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   React.useEffect(() => {
-    if (isMPIProcedure || isLHRStep) {
+    if (isMPIProcedure || isLHRStep || isEBProcedure) {
       setState((prevState) => ({
         ...prevState,
-        data: prepareData(cloneDeep(items), isDesign),
+        data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
         inEdit: [],
       }));
     }
@@ -213,8 +216,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
           }
         }
-        procedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
-        mpiProcedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
+
+        let payload = state.data[parentIndex];
+        if (isEBProcedure) {
+          payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        }
+
+        procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+        mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
         discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
@@ -222,7 +231,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           saveProcedureItem(procedureItem as FBProcedureItemConfig);
           return;
         }
-        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']);
+
+        const omitFields = isEBProcedure ? EB_FIELDS_TO_OMIT : [...FIELDS_TO_OMIT, 'actualId'];
+        const scanLot = omit(values, omitFields);
         if (scanLot[SUB_ITEMS_FIELD]) {
           scanLot[SUB_ITEMS_FIELD] = scanLot[SUB_ITEMS_FIELD]?.map(
             (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
@@ -594,6 +605,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const getSchemaBuilder = () => {
     if (isMPIProcedure && !isLHRStep) return buildMPISchema;
     if (isLHRStep) return buildLHRTSchema;
+    if (isEBProcedure) return buildEBSchema;
     return buildSchema;
   };
 
@@ -604,7 +616,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: isDesign || !isEnableOnlyLotAddition,
+    isDisabled: isEBProcedure ? isDisabled : (isDesign || !isEnableOnlyLotAddition),
     isLHRT: isLHRStep && isMPIProcedure,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,

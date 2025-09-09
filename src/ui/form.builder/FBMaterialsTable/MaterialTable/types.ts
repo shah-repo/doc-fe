@@ -49,6 +49,7 @@ export interface MaterialTableProps {
   lhrStepIndex?: number
   isMPIProcedure?: boolean
   isPreview?: boolean
+  isEBProcedure?: boolean
 }
 
 export interface EditableMaterial extends Material {
