@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getCurrentDate, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import { trainingStatsActions, trainingStatsSelectors } from '../../../../state/ducks/dashboard.new/training.stats';
 import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from '../../../../state/ducks/dashboard.new/training.stats/constants';
 import AsyncGate from '../../../components/AsyncGate';
@@ -17,6 +17,7 @@ interface TrainingLineItemsProps {
 const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   tabValue,
 }) => {
+  const { getCurrentDate } = useDate();
   const didMount = useDidMount();
   const async = useAsync();
   const [offset, setOffset] = React.useState(TRAINING_STATS_INITIAL_OFFSET);

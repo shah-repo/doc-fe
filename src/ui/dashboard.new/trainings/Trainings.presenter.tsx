@@ -2,8 +2,8 @@ import { Divider, List } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../common/utils/date';
 import { trainingSelectors } from '../../../state/ducks/dashboard.new/training';
 import { ActionTypes } from '../../../state/ducks/dashboard/types';
@@ -27,6 +27,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
   overallLimit,
 }) => {
   const classes = useStyles();
+  const { getFormattedDateString } = useDate();
   const [hoverItemId, setHoverItemId] = React.useState('');
   const onMouseHoverItem = (id) => {
     setHoverItemId(id);

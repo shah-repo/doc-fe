@@ -1,6 +1,6 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
 
@@ -15,6 +15,7 @@ export const DateCompleted = ({
   cellRowClick,
 }: CustomGridCellProps) => {
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
   const date = dataItem[field || ''];
   const formattedDate = date
     ? getFormattedDateString(date, MomentFormats.DateTimeComplete)

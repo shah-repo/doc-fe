@@ -1,13 +1,16 @@
 import { Chip, CircularProgress, Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { get } from 'lodash';
-import React, { useContext } from 'react';
+import React, { lazy, Suspense, useContext } from 'react';
 import useCommonStatusStyles from '../../../../../src/ui/components/common/kendo.column.templates/Status.styles';
+import { translate } from '../../../../common/intl';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
 import { ASL_STATUS_CLASS_MAPPING } from '../../../form.builder/FBProductOrService/constants';
-import OverflowTooltip from '../../OverflowTooltip';
+import useHoverOnce from '../../../hooks/useHoverOnce';
 import { CustomGridCellProps } from '../kendo/types';
 import useStyles from './Status.styles';
+
+const LazyOverflowTooltip = lazy(async () => await import('../../OverflowTooltip'));
 
 export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   dataItem,
@@ -26,6 +29,7 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   const statusData = docTypeTableContext?.aslStatuses?.find((data) => data.id === defaultValue);
   const statusClassLabel = statusData?.internalType;
   const label = statusData?.displayLabel ?? defaultValue;
+  const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   if (docTypeTableContext?.isLoading) {
     return <td><CircularProgress size={16} /></td>;
@@ -47,17 +51,34 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
         container
         data-cy={`supplier-status-button-${label}`}
       >
-        {label && <OverflowTooltip arrow placement="top" title={label}>
-          <Chip
-            size="small"
-            className={cx(
-              statusClasses.chip,
-              classes.aslChipTextOverflow,
-              statusClasses[ASL_STATUS_CLASS_MAPPING[statusClassLabel ?? '']],
-            )}
-            label={label}
-          />
-        </OverflowTooltip>}
+        {label && <>
+          {!isHovered
+            ? <span ref={elementRef}>
+              <Chip
+                size="small"
+                className={cx(
+                  statusClasses.chip,
+                  classes.aslChipTextOverflow,
+                  statusClasses[ASL_STATUS_CLASS_MAPPING[statusClassLabel ?? '']],
+                )}
+                label={label}
+              />
+            </span>
+            : <Suspense fallback={<div>{translate('common.loading')}</div>}>
+              <LazyOverflowTooltip arrow placement="top" title={label}>
+                <Chip
+                  size="small"
+                  className={cx(
+                    statusClasses.chip,
+                    classes.aslChipTextOverflow,
+                    statusClasses[ASL_STATUS_CLASS_MAPPING[statusClassLabel ?? '']],
+                  )}
+                  label={label}
+                />
+              </LazyOverflowTooltip>
+            </Suspense>}
+        </>
+        }
       </Grid>
     </td>
   );

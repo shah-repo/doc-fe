@@ -10,6 +10,7 @@ import PrintingSettingsPanel from './panels/Printing';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
+import TimezoneSettings from './panels/Timezone';
 import Training from './panels/Training';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
@@ -92,5 +93,10 @@ export const panels = [
     key: GeneralSettingsTabs.ApprovalRoles,
     title: 'administration.general.settings.approvalRoles.tab',
     component: ApprovalRolesSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.Timezone,
+    title: 'administration.general.settings.timezone.title',
+    component: TimezoneSettings,
   },
 ];

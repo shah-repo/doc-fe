@@ -11,7 +11,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import { deleteBulkImportSuccess, getReportsExcelFile, patchBulkImport, setBulkImport, setBulkImportsStatus, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
@@ -64,6 +64,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const totalExcelErrors = Number(item?.process?.totalExcelErrors ?? 0);
   const isWarning = !showErrorMessage && !(item?.attachmentId || Number(item.process?.step) <= 3) && totalExcelErrors >= 1;
   const openDeleteDialog = useDialog();
+  const { getFormattedDateString } = useDate();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {

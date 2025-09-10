@@ -32,6 +32,8 @@ export const VALIDATORS_HELPER_REMOTE_URL_URL = '/remoteValidators/helper';
 export const SESSION_DETAILS_URL = '/auth/sessionDetails';
 export const USERS_URL = '/users';
 export const USERS_ME_URL = '/users/me';
+export const USERS_TIMEZONE_URL = '/users/timezone';
+export const USERS_TIMEZONE_PATCH_URL = '/users/mine/timezone';
 
 export const RESEND_SIGNUP_EMAIL_URL = '/auth/resend_confirmation_email';
 export const SEND_PASSWORD_RESET_EMAIL = '/auth/send_password_reset_email';

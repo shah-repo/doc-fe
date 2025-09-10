@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { useDate } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
@@ -40,6 +41,7 @@ const Container: React.FunctionComponent<Props> = ({
   _formState,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
+  const { getStartOfDayDateString } = useDate();
 
   const changeOpenStatus = (isDrawerOpen) => {
     setOpen(isDrawerOpen);
@@ -76,9 +78,22 @@ const Container: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     const formStateContext = FBFormStateContext as any;
+    const updatedFormInput = formStateContext?._currentValue?.formInput;
     const dataToSubmit = compareValuesToSubmit(
-      initialValues,
-      { ...values, formInput: formStateContext?._currentValue },
+      {
+        ...initialValues,
+        formInput: {
+          ...initialValues.formInput,
+          ...(!isEmpty(initialValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(initialValues.formInput?.effectiveDate) } : {}),
+        },
+      },
+      {
+        ...values,
+        formInput: {
+          ...updatedFormInput,
+          ...(!isEmpty(updatedFormInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedFormInput?.effectiveDate) } : {}),
+        },
+      },
       toChangeRequestEditRequestBody,
     );
 

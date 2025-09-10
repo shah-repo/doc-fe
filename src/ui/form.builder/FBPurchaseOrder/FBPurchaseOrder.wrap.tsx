@@ -1,9 +1,10 @@
 import { isEmpty, map } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from '..';
 import { SM } from '../../../App';
+import { useDate } from '../../../common/utils/date';
 import { Id } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -28,6 +29,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     ...props
   }: T) => {
     const dispatch = useDispatch();
+    const { timezone } = useDate();
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const headerContext = React.useContext(FormHeaderContext)!;
     const { _documentRevisionFormState } = SM.useStores();
@@ -45,6 +47,14 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     useObserver(() => {
       disabled = _documentRevisionFormState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
     });
+
+    useEffect(() => {
+      if (!purchaseOrderState || !timezone) {
+        return;
+      }
+
+      purchaseOrderState.timezone = timezone;
+    }, [timezone]);
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {

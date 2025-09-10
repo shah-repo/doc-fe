@@ -5,6 +5,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableAllocationItem
   openDetailDrawer?: IAllocationCallback
   addLot?: IAllocationCallback
+  reloadAllocationList?: () => void
   deleteLot?: IAllocationCallback
   deletePart?: IAllocationCallback
   parentRevId?: string
