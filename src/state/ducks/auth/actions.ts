@@ -287,12 +287,18 @@ const loadUserCompanyTimezone = (): ApiAction<string> =>
 const updateUserTimezone = (
   body: {timezone: string},
   handlers: Handlers,
-): ApiAction<Partial<AuthResponse>> =>
-  apiActionWithCallbacks({
+): ApiAction =>
+  apiAction({
     url: `${USERS_TIMEZONE_PATCH_URL}`,
     method: 'patch',
     data: body,
-    handlers,
+    onSuccess: (message, dispatch) => {
+      if (message.affected) {
+        const timezone = body?.timezone;
+        dispatch(setUserTimezone(timezone));
+        dispatch(setUserCompanyTimezone(timezone));
+      }
+    },
   });
 
 const getIotCreds = (): ApiAction =>
