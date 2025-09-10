@@ -10,8 +10,6 @@ export const TIME_ZONE = 'America/Los_Angeles';
 export const useDate = () => {
   const defaultUserCompanyTimeZone = useSelector(authSelectors.getUserCompanyTimezone);
   const timezone = isEmpty(defaultUserCompanyTimeZone) ? TIME_ZONE : defaultUserCompanyTimeZone;
-  console.log('timezone', timezone);
-  console.log('defaultUserCompanyTimeZone', defaultUserCompanyTimeZone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
