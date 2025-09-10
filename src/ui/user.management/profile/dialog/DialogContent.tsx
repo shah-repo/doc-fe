@@ -104,6 +104,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const asyncUserTimezone = useAsync({
     onSuccess: (data: any) => {
       if (data?.affected) {
+        dispatch(authActions.loadUserCompanyTimezone());
         asyncUserTimezone.start(loadUserTimezone);
       }
     },
