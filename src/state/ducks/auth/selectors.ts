@@ -67,6 +67,9 @@ const getAvatarInitialColor = (state: ApplicationState): string =>
 const getUserTimezone = (state: ApplicationState): string =>
   state.auth.user.timezone;
 
+const getUserCompanyTimezone = (state: ApplicationState): string =>
+  state.auth.user.userCompanyTimezone;
+
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
@@ -144,4 +147,5 @@ export default {
   getIsScheduledForDeletion,
   getAvatarInitialColor,
   getUserTimezone,
+  getUserCompanyTimezone,
 };

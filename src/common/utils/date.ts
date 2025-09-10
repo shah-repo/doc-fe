@@ -7,7 +7,7 @@ import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
 export const TIME_ZONE = 'America/Los_Angeles';
 
 export const useDate = () => {
-  const timezone = useSelector(authSelectors.getUserTimezone);
+  const timezone = useSelector(authSelectors.getUserCompanyTimezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
