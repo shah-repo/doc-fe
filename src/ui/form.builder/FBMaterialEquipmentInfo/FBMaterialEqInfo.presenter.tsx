@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { SMText } from '../../../App';
 import { ReactComponent as ExpandIcon } from '../../../assets/images/tabExpand.svg';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from './FBMaterailEqInfo.types';
 import useStyles, { useItemStatusStyles } from './FBMaterialEqInfo.styles';
@@ -31,6 +31,7 @@ const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
 
 const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
 
   return (
     <>

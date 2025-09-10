@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { ReactComponent as CompletedIcon } from '../../../../../../../assets/images/approved_status.svg';
 import { translate } from '../../../../../../../common/intl';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../../../../common/utils/date';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { Button } from '../../../../../../components/forms/fields-next';
@@ -28,6 +28,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
     employeeStatusUpdates?.(taskId, assignees, employeeId);
   };
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const { getFormattedDateString } = useDate();
 
   return (
     <>

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActionCreator } from 'redux';
 import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
-import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -32,7 +32,7 @@ const VOID_DESCRIPTION_FIELD = 'void-description';
 
 const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
   const { dialog, documentRevision } = props;
-
+  const { timezone } = useDate();
   const docRevId = documentRevision.id;
   const docRevOwner = documentRevision.owner.user.name;
 
@@ -68,7 +68,7 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
     onSubmit: (values) => {
       let description = `<p>Void</p>
       <p>${values[VOID_DESCRIPTION_FIELD]}</p>
-      <p data-source="void">${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
+      <p data-source="void">${docRevOwner}, ${moment().tz(timezone).format(MomentFormats.DateTime)}</p>`;
 
       if (isLot || isWO) {
         description += documentRevision.description ?? '';

@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
@@ -135,6 +135,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const classes = useStyles();
+  const { getFormattedDateString } = useDate();
 
   const formDialog = useDialog();
   const multipleFormDialog = useDialog();

@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -49,6 +49,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   lotRevId,
   parentPartRevId,
 }) => {
+  const { getFormattedDateString } = useDate();
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableAllocationItem>();
   const options = useMemo(
     () =>
@@ -121,6 +122,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
   reloadAllocationList,
   deleteLot,
 }) => {
+  const { getFormattedDateString } = useDate();
   const { isLotAddition, lotRevId, isDisabled, parentPartRevId, lotDocumentId, lotDocId } = dataItem ?? {};
   const isEditMode = isEditAllocItem(dataItem) && !isDisabled;
   const classes = styles({ hasChildren, isEditMode });
