@@ -20,10 +20,9 @@ interface Props {
   headers: HeaderTableType[]
   tableData: TableDataProps<ChangeRequest>
   isGrouped: boolean
-  tableName: string
 }
 
-const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData, isGrouped, tableName }) => {
+const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData, isGrouped }) => {
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const history = useHistory();
@@ -95,7 +94,6 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
       dialog,
       handleCreateButton,
       headers,
-      tableName,
       data,
       exportDialog,
       handleTemplateSelection: processCreatingRevision,
