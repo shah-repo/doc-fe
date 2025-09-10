@@ -70,6 +70,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   isPendingChange,
   equipsSelected,
   isEnableActualIdAddition,
+  isEBProcedure,
 }) => {
   const { _tabsState } = SM.useStores();
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
@@ -140,13 +141,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
-      if (isEnableActualIdAddition) {
+      if (isEnableActualIdAddition && !isEBProcedure) {
         if (values[ADD_FIELD]) {
-                saveActualEquipment?.(values as EditableEquipmentItem);
+          saveActualEquipment?.(values as EditableEquipmentItem);
         }
         discardEquipItem(values as EditableEquipmentItem);
         return;
       }
+
       const { id = '', plannedId = '', title = '', LHRTparameter } = values;
       const newEquipItem: EditableEquipmentItem = {
         id,
@@ -161,6 +163,48 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
       if (isDesign) {
         newEquipItem.LHRTparameter = LHRTparameter;
+      }
+      console.log('dataItem.isActualIdAddition', values.isActualIdAddition);
+
+      if (isEBProcedure && values) {
+        if (values[ADD_FIELD]) {
+          // ADD
+        } else {
+          // UPDATE
+
+        }
+        return;
+        // const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        // const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
+
+        // if (parentIndex !== -1) {
+        //   const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+
+        //   if (Array.isArray(subItems)) {
+        //     const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
+
+        //     if (existingSubIndex !== -1) {
+        //       subItems[existingSubIndex] = {
+        //         ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
+        //         ...scanLot,
+        //       };
+        //     } else {
+        //       subItems.push(scanLot);
+        //     }
+        //     state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.map(
+        //       (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+        //     );
+        //   } else {
+        //     state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
+        //   }
+        // }
+        // let payload = state.data[parentIndex];
+        // if (isEBProcedure) {
+        //   payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        // }
+        //         procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+        //         mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+        //         discardScanLot(values as EditableMaterial);
       }
 
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
@@ -439,7 +483,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
 
-    if (isMPIProcedure || isLHRStep) {
+    if (isMPIProcedure || isLHRStep || isEBProcedure) {
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
       if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
         state.data[index] = editItemInfo;

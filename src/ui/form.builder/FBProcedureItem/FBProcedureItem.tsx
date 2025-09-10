@@ -150,7 +150,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             )}
           </FBMapWrapper>}
           {type === FBProcedureItemType.materials && <MaterialsTable isDisabled={disabled} isActive={!isPreview} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure />}
-          {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(isPreview)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} />}
+          {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(disabled)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure isEnableActualIdAddition />}
         </>
         )}
       </Box>

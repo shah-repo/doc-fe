@@ -25,6 +25,7 @@ export interface FBEquipmentProps {
   handleSelectionDelete?: (refId?: string) => void
   mpiProcedureSelectState?: FBMPIProcedureSelectState
   equipsSelected?: Array<Partial<FBMPIProcedureSelectValue>>
+  isEBProcedure?: boolean
 }
 
 export interface EquipmentItemState {

@@ -109,6 +109,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
 
+  console.log('dataItem', dataItem, isAddActualIdVisible);
   if (isAddActualIdVisible) {
     return (
       <TreeListCellWrapper {...props}>
