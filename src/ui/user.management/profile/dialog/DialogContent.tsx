@@ -93,6 +93,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const loadUserTimezone = useActionCreator(authActions.loadUserTimezone);
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
+  const loadUserCompanyTimezone = useActionCreator(authActions.loadUserCompanyTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
 
   const TABLE_NAME = 'userManagement';
@@ -104,7 +105,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const asyncUserTimezone = useAsync({
     onSuccess: (data: any) => {
       if (data?.affected) {
-        dispatch(authActions.loadUserCompanyTimezone());
+        asyncUserTimezone.start(loadUserCompanyTimezone);
         asyncUserTimezone.start(loadUserTimezone);
       }
     },
