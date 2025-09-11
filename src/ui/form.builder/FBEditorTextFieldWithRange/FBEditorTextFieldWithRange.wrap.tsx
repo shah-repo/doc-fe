@@ -21,6 +21,13 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     ), []);
 
     useEffect(() => reaction(
+      () => formState?.getInputState('editorConfig.toleranceOption')?.value,
+      (value: boolean | undefined) => setTolerance(value),
+      { fireImmediately: true },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.inspection')?.value,
       (value: boolean) => setInspection(value),
       { fireImmediately: true },
@@ -46,6 +53,13 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
       formState.getInputState('editorConfig.range')?.setHidden(!value);
       if (!value) {
         formState.omitFieldValue('editorConfig.range');
+      }
+    }
+
+    function setTolerance (value?: boolean) {
+      formState.getInputState('editorConfig.tolerance')?.setHidden(!value);
+      if (!value) {
+        formState.omitFieldValue('editorConfig.tolerance');
       }
     }
 

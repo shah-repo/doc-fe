@@ -12,11 +12,13 @@ interface FBPassValue {
 }
 
 interface FBEditorTextFieldWithRangeConfig {
-  rangeOption?: boolean
-  passValue?: boolean
-  range?: FBRangeValue
   criticalToQuality?: boolean
+  rangeOption?: boolean
+  range?: FBRangeValue
+  toleranceOption?: boolean
+  tolerance?: number
   inspection?: boolean
+  passValue?: boolean
   pass?: FBPassValue
 }
 
