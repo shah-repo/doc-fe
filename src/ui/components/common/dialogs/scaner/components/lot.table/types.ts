@@ -14,6 +14,7 @@ export interface ScanLot {
   quantityAssigned?: number
   onHand?: number
   isExpired?: boolean
+  expiryDate?: string
 }
 
 export interface ScanLotTableProps {
