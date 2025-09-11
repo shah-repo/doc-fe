@@ -78,7 +78,7 @@ const Container: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     const formStateContext = FBFormStateContext as any;
-    const updatedFormInput = formStateContext?._currentValue?.formInput;
+    const updatedValues = formStateContext?._currentValue;
     const dataToSubmit = compareValuesToSubmit(
       {
         ...initialValues,
@@ -90,8 +90,8 @@ const Container: React.FunctionComponent<Props> = ({
       {
         ...values,
         formInput: {
-          ...updatedFormInput,
-          ...(!isEmpty(updatedFormInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedFormInput?.effectiveDate) } : {}),
+          ...updatedValues,
+          ...(!isEmpty(updatedValues?.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedValues?.formInput?.effectiveDate) } : {}),
         },
       },
       toChangeRequestEditRequestBody,

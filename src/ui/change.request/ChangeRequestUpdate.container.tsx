@@ -122,7 +122,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       {
         ...values,
         formInput: {
-          ...updatedValues.formInput,
+          ...updatedValues,
           ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedValues.formInput?.effectiveDate) } : {}),
         },
       },
