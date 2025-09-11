@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
 import { DataProps } from '../../../state/ducks/common/types';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
@@ -85,9 +86,10 @@ const Presenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !attachments?.length;
   const { _tabsState } = SM.useStores();
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
-  const shouldRenderTrainingButton = isDocumentRevisionInStatus(
-    [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
-    status);
+  const isTrainingForApprovedRevisionsEnabled = useSelector(companySelectors.isTrainingForApprovedRevisionsEnabled);
+  const shouldRenderTrainingButton
+    = (isTrainingForApprovedRevisionsEnabled && status === DocumentRevisionStatus.Approved)
+    || status === DocumentRevisionStatus.Released;
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(', ') : []);
