@@ -14,37 +14,33 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIt
   const classes = useStyles();
   const options = [{ label: dataItem[field]?.name, value: dataItem[field]?.id }];
   const { getFormattedDateString } = useDate();
-  console.log('dataItem.expiryDate', dataItem);
 
-  return (<Box className={classes.lotContainer}>
-    <FormikField name={field}>
-      <Autocomplete
-        classes={{ option: classes.option }}
-        disableClearable
-        placeholder={translate('common.scan')}
-        options={options}
-        data-cy="lot-id-field"
-        value={options[0]}
-        disabled
-        getOptionLabel={(option) => option?.label ?? ''}
-        size="small"
-      />
-    </FormikField>
-    {dataItem.isExpired && (
-      <StyleTooltip
-        title={translate('allocation.lot.expired.tooltip.message', {
-          expiryDate: getFormattedDateString(dataItem.expiryDate, MomentFormats.MonthDateYearTwoDigit),
-        })}
-        arrow
-        placement="top"
-      >
-        <FontAwesomeIcon
-          icon={solid('circle-exclamation')}
-          color={Colors.error}
-          className={classes.icon}
+  return (
+    <Box className={classes.lotContainer}>
+      <FormikField name={field}>
+        <Autocomplete
+          classes={{ option: classes.option }}
+          disableClearable
+          placeholder={translate('common.scan')}
+          options={options}
+          data-cy="lot-id-field"
+          value={options[0]}
+          disabled
+          getOptionLabel={(option) => option?.label ?? ''}
+          size="small"
         />
-      </StyleTooltip>
-    )}
-  </Box>
+      </FormikField>
+      {dataItem.isExpired && (
+        <StyleTooltip
+          title={translate('allocation.lot.expired.tooltip.message', {
+            expiryDate: getFormattedDateString(dataItem.expiryDate, MomentFormats.MonthDateYearTwoDigit),
+          })}
+          arrow
+          placement="top"
+        >
+          <FontAwesomeIcon icon={solid('circle-exclamation')} color={Colors.error} className={classes.icon} />
+        </StyleTooltip>
+      )}
+    </Box>
   );
 };
