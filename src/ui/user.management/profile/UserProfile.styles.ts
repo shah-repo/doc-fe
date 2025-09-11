@@ -63,5 +63,8 @@ export default makeStyles((theme: Theme) =>
       display: 'flex',
       margin: 0,
     },
+    fieldMargin: {
+      marginBottom: theme.spacing(3),
+    },
   }),
 );

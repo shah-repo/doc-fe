@@ -3,7 +3,7 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { DOCUMENT_REVISION_LOT_STATUS, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBMPIProcedureSelectProps, FBProcedureItemType, FBQuantityUnitField } from '..';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
@@ -41,6 +41,8 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
 
     return isAcceptedStatus && !isZeroOnHandQuantity;
   };
+
+  const { getFormattedDateString } = useDate();
 
   const getLotOptions = (): DocumentRevision[] | undefined =>
     mpiProcedureSelectState?.lotsApi.data?.filter((option) => {

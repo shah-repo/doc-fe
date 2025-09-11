@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import moment from 'moment';
 import React from 'react';
-import { MomentFormats, TIME_ZONE, getFormattedDateString } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
@@ -13,6 +13,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const { getFieldProps, setFieldValue, errors } = useFormikContext() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field] as string;
+  const { timezone, getFormattedDateString } = useDate();
 
   const handleChange = (date: MaterialUiPickersDate) => {
     if (!date) {
@@ -33,7 +34,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
       <FormikField name={field} error={get(errors, field)}>
         <DatePicker
           {...fieldProps}
-          value={moment(fieldValue).tz(TIME_ZONE)}
+          value={moment(fieldValue).tz(timezone)}
           size="small"
           onChange={handleChange}
           onClear={handleClear}

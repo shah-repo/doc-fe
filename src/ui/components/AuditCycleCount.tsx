@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { companySelectors } from '../../state/ducks/company';
 import { getAuditDefaultValue } from '../common/utils/audit';
@@ -21,6 +21,7 @@ const AuditCycleCount: React.FC<Props> = ({
 }) => {
   const field = audit.field.split('.').at(-1) as string;
   const employees = useSelector(companySelectors.getAllEmployees);
+  const { getFormattedDateString } = useDate();
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
     by: () => employees?.find(employee => employee.id === auditValue)?.user?.name ?? translate('common.not.applicable'),

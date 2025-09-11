@@ -88,6 +88,8 @@ const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.compan
 
 const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.generalSettings.updatedAt;
 
+const getCompanyTimezone = (state: ApplicationState) => state.company.generalSettings.timezone;
+
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
@@ -140,6 +142,7 @@ export default {
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
   getPremiumFeatureSubscriptionsUpdatedAt,
+  getCompanyTimezone,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
   getPremiumFeatureSubscriptions,

@@ -8,7 +8,7 @@ import moment from 'moment';
 import React from 'react';
 import { FBInput } from '..';
 import { ReactComponent as DatePickerIcon } from '../../../assets/images/formBuilder/DatePickerIcon.svg';
-import { MomentFormats, TIME_ZONE, getStartOfDayDateString } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBTextFieldStyles } from '../styles/FBTextField.styles';
 import { FBDatePickerProps } from './FBDatePicker.types';
@@ -24,6 +24,8 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   ...props
 }) => {
   const classes = FBTextFieldStyles();
+  const { timezone, getStartOfDayDateString } = useDate();
+
   return (
     <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
       <Observer>
@@ -44,7 +46,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             label=""
             value={datePickerState?.date || null}
             initialFocusedDate={getStartOfDayDateString(
-              moment().tz(TIME_ZONE).toISOString(),
+              moment().tz(timezone).toISOString(),
             )}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => (

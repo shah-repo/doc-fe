@@ -7,7 +7,7 @@ import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as ExportIcon } from '../../../../../assets/images/export_menu.svg';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../components/Text';
 import ExportListDialog from '../../../../document.revision/list/ExportListDialog/ExportListDialog';
@@ -22,6 +22,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
   renderAsButton,
 }) => {
+  const { getFormattedDateString } = useDate();
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const schema = documentRevision?.schema || documentRevision?.formDocument?.formTemplate?.schema;

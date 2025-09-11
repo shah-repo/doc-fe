@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../common/utils/date';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, EditableReference } from '../types';
@@ -11,6 +11,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
   dataItem,
 }) => {
+  const { getFormattedDateString } = useDate();
   const formik = useFormikContext<EditableReference>();
   const fieldValue = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])
     ? formik?.values[field] || dataItem[field]
