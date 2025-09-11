@@ -13,6 +13,7 @@ export interface ScanLot {
   lotRevId?: string
   quantityAssigned?: number
   onHand?: number
+  isExpired?: boolean
 }
 
 export interface ScanLotTableProps {

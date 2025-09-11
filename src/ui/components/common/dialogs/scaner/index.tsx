@@ -6,11 +6,13 @@ import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
+import { Button } from '../../../forms/fields-next';
 import { toastError } from '../../../notifications';
 import ScanLotTable from './components/lot.table';
 import { ScanLot, ScanSelectedPartItem, ValidateLot } from './components/lot.table/types';
@@ -29,6 +31,7 @@ interface Props {
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
+  const expiredDialog = useDialog();
 
   const keyValues = useCallback(
     () => [
@@ -98,7 +101,14 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     partAsync.start(createLot, lotPayload, partAsync);
   };
 
+  const onConfirmLotAddition = () => {
+    console.log('alert');
+    // const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
+  };
+
+  const [scannedValue, setScannedValue] = useState<string>('');
   const handleScan = (data: string) => {
+    setScannedValue(data);
     validateScanLotAsync.start(
       validateScanLot,
       selectedPart.partRevId,
@@ -109,6 +119,23 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   const handleError = () => {
     toastError(translate('scan.lot.grid.scan.barcode.error.message'));
+  };
+
+  const validateScannedLot = () => {
+    const sampleLOT = [
+      'http://localhost:3000/document_revision/bb525d00-912c-43bc-8de3-f7c5a1023523/version/560cdfc8-1d63-4a7e-bfa6-88b520f048f4',
+      'http://localhost:3000/document_revision/98e8abb0-1b99-4b4b-9f38-ec3e2ae89ebb/version/5b22dbc8-91ac-491c-9fa2-3171615c75de',
+    ];
+
+    // 'http://localhost:3000/document_revision/adb675a2-97ac-4ed0-9ae6-e7f20a7c7e47/version/674ba013-5454-4132-9e83-73df8f53c31d',
+    let lotRevId = '';
+    if (scannedValue) {
+      lotRevId = extractRevision(scannedValue) ?? '';
+    } else {
+      const lotIndex = scanLots.length ? 1 : 0;
+      lotRevId = extractRevision(sampleLOT[lotIndex]) ?? '';
+    }
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync); // partRevId -> 'b82bb579-60eb-4d21-abbd-d6e9b4ec6c81'
   };
 
   return (
@@ -136,6 +163,9 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       loading={partAsync.isLoading}
       onConfirm={onScanLotAdd}
     >
+      <Button onClick={validateScannedLot} size="small">
+        scan Lot Item{' '}
+      </Button>
       <Box className={classes.contentWrapper}>
         <List>
           {keyValues()?.map((item, index) => (
@@ -164,6 +194,15 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         />
         <BarcodeReader onError={handleError} onScan={handleScan} />
       </Box>
+      <ExpiredLOTDialog
+        dialog={expiredDialog}
+        message="allocation.lot.expired.confirm.prompt.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirmLotAddition}
+      />
     </Dialog>
   );
 };
