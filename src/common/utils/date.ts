@@ -21,7 +21,7 @@ export const useDate = () => {
   const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
 
   const convertDateTimeToUserTz = (date: string, format: string): string => {
-    return moment.tz(date, format, timezone).startOf('day').toISOString();
+    return moment.tz(date, format, timezone).toISOString();
   };
 
   return {
