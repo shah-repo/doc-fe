@@ -1,7 +1,6 @@
 import { Box } from '@material-ui/core';
 import { Form, FormikProps } from 'formik';
 import { Dictionary, isEmpty, isObject } from 'lodash';
-import moment from 'moment';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useDate } from '../../../../../common/utils/date';
@@ -69,7 +68,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   // MARK: @selectors
 
   // MARK: @state
-  const { timezone, getStartOfDayDateString } = useDate();
+  const { getCurrentDate } = useDate();
 
   // MARK: @config
 
@@ -181,8 +180,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           label="transition.action.effective.date"
           name="effectiveDate"
           size="sm"
-          minDate={getStartOfDayDateString(moment().tz(timezone).toISOString())}
-          value={getStartOfDayDateString(moment().tz(timezone).toISOString())}
+          minDate={getCurrentDate()}
+          value={getCurrentDate()}
           validate={validator(required)}
         />
       )}

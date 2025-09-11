@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment';
-import 'moment-timezone';
+import * as momentTz from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../state/ducks/auth';
 import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
@@ -8,6 +8,7 @@ export const TIME_ZONE = 'America/Los_Angeles';
 
 export const useDate = () => {
   const timezone = useSelector(authSelectors.getUserTimezone);
+  momentTz.tz.setDefault(timezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
@@ -18,7 +19,7 @@ export const useDate = () => {
   const getFormattedStartOfDayDateString = (date: DateTypes) =>
     getStartOfDayDateString(date, 'LL');
 
-  const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
+  const getCurrentDate = (format?: string) => moment().tz(timezone).format(format);
 
   const convertDateTimeToUserTz = (date: string, format: string): string => {
     return moment.tz(date, format, timezone).toISOString();
