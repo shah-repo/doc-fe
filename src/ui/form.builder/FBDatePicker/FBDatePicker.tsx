@@ -49,12 +49,17 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
               moment().tz(timezone).toISOString(),
             )}
             onChange={(date, value) => onChange?.(date, value)}
-            TextFieldComponent={(props) => (
-              <TextField
+            TextFieldComponent={(props) => {
+              const displayValue = datePickerState?.date
+                ? moment.tz(datePickerState.date, timezone).format(MomentFormats.MonthDateYearTwoDigit)
+                : '';
+
+              return (<TextField
                 {...props}
                 disabled={props.disabled}
                 className={classes.textfield}
                 inputProps={{ disabled: true }}
+                value={displayValue}
                 InputProps={{
                   ...props.InputProps,
                   endAdornment: (
@@ -77,7 +82,8 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
                   ),
                 }}
               />
-            )}
+              );
+            }}
             keyboardIcon={<DatePickerIcon />}
           />
         )}
