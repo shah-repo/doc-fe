@@ -24,7 +24,7 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
 import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import { FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -35,6 +35,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingCustomer from './AuditShippingCustomer';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
@@ -218,10 +219,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
       },
       shippingCustomer () {
-        if (audit.fbSchemaItem) {
-          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
-        }
-        return <AuditAutocomplete audit={audit} />;
+        return <AuditShippingCustomer {...{ audit, dataCy, auditValue }} />;
       },
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
