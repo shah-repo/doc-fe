@@ -1,10 +1,10 @@
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
+import { UnitOption, UseOptionsHook } from '..';
 import FBAutocompleteAsyncState from '../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../helpers';
-import { UnitOption, UseOptionsHook } from './FBTextFieldWithRange.types';
 
 export const useOptions: UseOptionsHook = () => {
   const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
