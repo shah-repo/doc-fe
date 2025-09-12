@@ -176,7 +176,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       if (isEBProcedure && values.isActualIdAddition) {
         newEquipItem = {
           id,
-          equipmentId: values.actualId,
+          equipmentId: values.equipmentId,
         };
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
         if (parentIndex !== -1) {

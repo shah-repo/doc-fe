@@ -113,6 +113,8 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
 
     if (value && field) {
       setValue(value);
+      // setFieldValue('calDueDate', value?.calDueDate);
+      //  setFieldValue('pmDueDate', value?.pmDueDate);
     }
   }, [equipmentOptions]);
 

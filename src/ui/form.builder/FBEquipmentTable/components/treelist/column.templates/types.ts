@@ -5,6 +5,8 @@ import { EditableEquipmentItem } from '../../../interface';
 
 export interface customEQOptionType extends OptionType{
   complianceDueDate: string
+  calDueDate?: string
+  pmDueDate?: string
   status: string
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
