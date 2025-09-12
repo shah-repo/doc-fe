@@ -64,7 +64,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
-  const { getStartOfDayDateString } = useDate();
+  const { getFormattedDateString } = useDate();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
   const { triggerRestrictEditUpdates, isLoading } = useRestrictedEditUpdates(changeRequest?.id);
 
@@ -116,14 +116,14 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         ...frozenInitialValues,
         formInput: {
           ...frozenInitialValues.formInput,
-          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(frozenInitialValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: getFormattedDateString(frozenInitialValues.formInput?.effectiveDate) } : {}),
         },
       },
       {
         ...values,
         formInput: {
           ...updatedValues,
-          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: getFormattedDateString(updatedValues.formInput?.effectiveDate) } : {}),
         },
       },
       toChangeRequestEditRequestBody,

@@ -1,6 +1,5 @@
 import { withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
-import moment from 'moment';
 import * as React from 'react';
 import { useDate } from '../../../../common/utils/date';
 import { AsyncState, AsyncStatus } from '../../../../state/types';
@@ -18,7 +17,7 @@ interface EffectiveDateFormProps extends WithStyles<typeof styles> {
 }
 
 const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ cancel, classes, asyncState }) => {
-  const { timezone, getStartOfDayDateString } = useDate();
+  const { getCurrentDate } = useDate();
 
   return (
     <Form className={classes.form}>
@@ -26,8 +25,8 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
       <DatePickerField
         label="transition.action.effective.date"
         name="effectiveDate"
-        minDate={getStartOfDayDateString(moment().tz(timezone).toISOString())}
-        value={getStartOfDayDateString(moment().tz(timezone).toISOString())}
+        minDate={getCurrentDate()}
+        value={getCurrentDate()}
         validate={validator(required)}
       />
       <FormProgress asyncState={asyncState} />
