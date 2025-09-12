@@ -266,18 +266,9 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     },
   });
 
-const loadUserTimezone = (): ApiAction<string> =>
-  apiAction({
-    url: `${USERS_TIMEZONE_URL}`,
-    method: 'get',
-    onSuccess: (timezone, dispatch) => {
-      dispatch(setUserTimezone(timezone));
-    },
-  });
-
 const loadUserCompanyTimezone = (): ApiAction<string> =>
   apiAction({
-    url: `${USERS_COMPANY_TIMEZONE_URL}`,
+    url: `${USERS_TIMEZONE_URL}`,
     method: 'get',
     onSuccess: (timezone, dispatch) => {
       dispatch(setUserCompanyTimezone(timezone));
@@ -343,6 +334,7 @@ const getSessionDetails = (employeeId: string) =>
       const company = employee.company;
       dispatch(companyActions.selectCompany(company));
       dispatch(selectEmployee(employee));
+      dispatch(setUserTimezone(data.timezone));
     },
   });
 
@@ -359,7 +351,6 @@ export default {
   loginWithCode,
   getIotCreds,
   loadUserGroups,
-  loadUserTimezone,
   loadUserCompanyTimezone,
   updateUserTimezone,
   pingServer,
