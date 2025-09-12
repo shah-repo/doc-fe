@@ -106,7 +106,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
       = dataItem?.isActualIdAddition || !isEnableActualIdAddition || dataItem.equipmentId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
-  const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
 
   useEffect(() => {
@@ -174,7 +173,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
               }}
             />
           ) : (
-            actualEquipDocId
+            value.label
           )}
         </span>
         {!isEditMode && value.label && (

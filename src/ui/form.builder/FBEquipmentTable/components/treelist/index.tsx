@@ -88,7 +88,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { equipmentOptions } = useOptions();
 
   const [state, setState] = useState<EquipmentItemState>({
-    data: prepareData(cloneDeep(items) ?? []),
+    data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
     dataState: {
       sort: [],
       filter: [],
@@ -103,7 +103,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     }
 
     const mapByEquipmentId = getMapSelectedByParentEquipId(equipsSelected ?? [], items);
-    const updatedItems = prepareData(cloneDeep(items) ?? []);
+    const updatedItems = prepareData(cloneDeep(items) ?? [], isEBProcedure);
     const expandedRows = [] as string[];
 
     Object.keys(mapByEquipmentId)?.map(equipmentId => {
