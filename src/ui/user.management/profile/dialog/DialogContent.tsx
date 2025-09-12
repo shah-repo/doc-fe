@@ -91,7 +91,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const loadUserTimezone = useActionCreator(authActions.loadUserTimezone);
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
 
@@ -101,13 +100,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
 
-  const asyncUserTimezone = useAsync({
-    onSuccess: (data: any) => {
-      if (data?.affected) {
-        asyncUserTimezone.start(loadUserTimezone);
-      }
-    },
-  });
+  const asyncUserTimezone = useAsync();
 
   const onChange = (value) => {
     asyncUserTimezone.start(updateUserTimezone, { timezone: value?.value }, asyncUserTimezone);

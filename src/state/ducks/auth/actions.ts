@@ -9,8 +9,8 @@ import { ApiAction, Handlers } from '../../types';
 import { companyActions } from '../company';
 import { Employee } from '../company/types';
 import { userManagementActions } from '../userManagement';
-import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_CALLBACK_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_TIMEZONE_PATCH_URL, USERS_TIMEZONE_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
-import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoadUserTimezoneAction, LoginRequestBody, LoginSSORequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from './types';
+import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_CALLBACK_URL, TOGGLE_CUSTOM_LABELS, USERS_COMPANY_TIMEZONE_URL, USERS_ME_URL, USERS_TIMEZONE_PATCH_URL, USERS_TIMEZONE_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
+import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoadUserCompanyTimezoneAction, LoadUserTimezoneAction, LoginRequestBody, LoginSSORequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from './types';
 
 const authSignup = (): SignupAction => ({
   type: SIGNUP_URL,
@@ -40,6 +40,11 @@ const userGroups = (groups: Group[]): UserGroupsAction => ({
 
 const setUserTimezone = (timezone: string): LoadUserTimezoneAction => ({
   type: USERS_TIMEZONE_URL,
+  payload: timezone,
+});
+
+const setUserCompanyTimezone = (timezone: string): LoadUserCompanyTimezoneAction => ({
+  type: USERS_COMPANY_TIMEZONE_URL,
   payload: timezone,
 });
 
@@ -261,28 +266,30 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     },
   });
 
-const loadUserTimezone = (): ApiAction<string> =>
+const loadUserCompanyTimezone = (): ApiAction<string> =>
   apiAction({
     url: `${USERS_TIMEZONE_URL}`,
     method: 'get',
     onSuccess: (timezone, dispatch) => {
-      if (!timezone) {
-        return;
-      }
-
-      dispatch(setUserTimezone(timezone));
+      dispatch(setUserCompanyTimezone(timezone));
     },
   });
 
 const updateUserTimezone = (
   body: {timezone: string},
   handlers: Handlers,
-): ApiAction<Partial<AuthResponse>> =>
-  apiActionWithCallbacks({
+): ApiAction =>
+  apiAction({
     url: `${USERS_TIMEZONE_PATCH_URL}`,
     method: 'patch',
     data: body,
-    handlers,
+    onSuccess: (message, dispatch) => {
+      if (message.affected) {
+        const timezone = body?.timezone;
+        dispatch(setUserTimezone(timezone));
+        dispatch(setUserCompanyTimezone(timezone));
+      }
+    },
   });
 
 const getIotCreds = (): ApiAction =>
@@ -327,6 +334,7 @@ const getSessionDetails = (employeeId: string) =>
       const company = employee.company;
       dispatch(companyActions.selectCompany(company));
       dispatch(selectEmployee(employee));
+      dispatch(setUserTimezone(data.timezone));
     },
   });
 
@@ -343,7 +351,7 @@ export default {
   loginWithCode,
   getIotCreds,
   loadUserGroups,
-  loadUserTimezone,
+  loadUserCompanyTimezone,
   updateUserTimezone,
   pingServer,
   selectEmployee,

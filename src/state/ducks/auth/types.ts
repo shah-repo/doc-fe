@@ -1,6 +1,6 @@
 import { Nullable } from '../common/types';
 import { Employee } from '../company/types';
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_REDIRECT_PARAM, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_TIMEZONE_URL, USER_GROUPS } from './constants';
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_REDIRECT_PARAM, TOGGLE_CUSTOM_LABELS, USERS_COMPANY_TIMEZONE_URL, USERS_ME_URL, USERS_TIMEZONE_URL, USER_GROUPS } from './constants';
 
 export interface LoginRequestBody {
   email: string
@@ -122,6 +122,11 @@ export interface LoadUserTimezoneAction {
   payload: string
 }
 
+export interface LoadUserCompanyTimezoneAction {
+  type: typeof USERS_COMPANY_TIMEZONE_URL
+  payload: string
+}
+
 export interface UserState {
   id: string
   email: string
@@ -138,6 +143,7 @@ export interface UserState {
   daysUntilPasswordExpires: number
   initialColor: string
   timezone: string
+  userCompanyTimezone: string
 }
 
 export interface AuthProps {

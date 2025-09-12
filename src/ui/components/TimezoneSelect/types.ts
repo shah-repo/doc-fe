@@ -9,7 +9,7 @@ export interface TimezoneOption {
 }
 
 export type TimezoneSelectProps = Omit<AutocompleteProps, 'onChange' | 'value'> & {
-  value: string
+  value?: string
   onChange: (value: TimezoneOption | null) => void
 };
 
