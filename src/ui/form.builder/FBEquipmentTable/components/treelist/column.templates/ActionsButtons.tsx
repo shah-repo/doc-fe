@@ -21,6 +21,7 @@ export default function ActionButtons (props: EquipmentItemActionsProps<Editable
     onDiscard,
     onDelete,
     isEnableActualIdAddition,
+    isEBProcedure,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -78,7 +79,7 @@ export default function ActionButtons (props: EquipmentItemActionsProps<Editable
           <FontAwesomeIcon icon={regular('xmark')} />
         </IconButton>
       </Tooltip>}
-      {(!isEnableActualIdAddition || (isEnableActualIdAddition && dataItem.isActualIdAddition)) && <Tooltip
+      {(!isEnableActualIdAddition || (isEnableActualIdAddition && dataItem.isActualIdAddition) || isEBProcedure) && <Tooltip
         title={translate('common.save')}
         placement="top"
         arrow

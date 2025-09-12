@@ -17,6 +17,7 @@ import {
   isEmpty,
   isNil,
   keyBy,
+  omit,
   replace, uniq,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
@@ -35,6 +36,9 @@ import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '..
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
+  EB_FIELDS_TO_OMIT,
+  EB_PARENT_FIELDS_TO_OMIT,
+  EB_SUB_ITEMS_FIELD,
   EXPAND_FIELD,
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
@@ -76,6 +80,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const treeListRef = useRef(null);
   const scanDialog = useDialog();
+  const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
@@ -111,7 +116,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           expandedRows.push(id);
         }
 
-        const subItems = state.data[index][SUB_ITEMS_FIELD];
+        const subItems = state.data[index][subItemsKey];
         if (subItems?.length) {
           mapByEquipmentId[equipmentId]?.forEach((item) => {
             const matchedItem = subItems?.find((entry) => entry.id === item.id);
@@ -119,9 +124,9 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
               item.actualId = matchedItem.actualId;
             }
           });
-          updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+          updatedItems[index][subItemsKey] = mapByEquipmentId[equipmentId];
         } else {
-          updatedItems[index][SUB_ITEMS_FIELD] = mapByEquipmentId[equipmentId];
+          updatedItems[index][subItemsKey] = mapByEquipmentId[equipmentId];
         }
       }
     });
@@ -150,7 +155,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       }
 
       const { id = '', plannedId = '', title = '', LHRTparameter } = values;
-      const newEquipItem: EditableEquipmentItem = {
+      let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
         type: values.type,
@@ -164,50 +169,43 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       if (isDesign) {
         newEquipItem.LHRTparameter = LHRTparameter;
       }
+      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       console.log('dataItem.isActualIdAddition', values.isActualIdAddition);
 
-      if (isEBProcedure && values) {
-        if (values[ADD_FIELD]) {
-          // ADD
-        } else {
-          // UPDATE
+      if (isEBProcedure && values.isActualIdAddition) {
+        newEquipItem = {
+          id,
+          equipmentId: values.actualId,
+        };
+        const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
+        if (parentIndex !== -1) {
+          if (values[ADD_FIELD]) {
+            const subItems = state.data[parentIndex][subItemsKey];
 
+            if (Array.isArray(subItems)) {
+              const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
+
+              if (existingSubIndex !== -1) {
+                subItems[existingSubIndex] = newEquipItem;
+              } else {
+                subItems.push(newEquipItem);
+              }
+              state.data[parentIndex][subItemsKey] = subItems.map(
+                (item) => omit(item, EB_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
+              );
+            } else {
+              state.data[parentIndex][subItemsKey] = [newEquipItem];
+            }
+          }
         }
-        return;
-        // const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
-        // const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
-        // if (parentIndex !== -1) {
-        //   const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
-
-        //   if (Array.isArray(subItems)) {
-        //     const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
-
-        //     if (existingSubIndex !== -1) {
-        //       subItems[existingSubIndex] = {
-        //         ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
-        //         ...scanLot,
-        //       };
-        //     } else {
-        //       subItems.push(scanLot);
-        //     }
-        //     state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.map(
-        //       (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
-        //     );
-        //   } else {
-        //     state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
-        //   }
-        // }
-        // let payload = state.data[parentIndex];
-        // if (isEBProcedure) {
-        //   payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
-        // }
-        //         procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
-        //         mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
-        //         discardScanLot(values as EditableMaterial);
+      const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+      procedureState?.addItem(payload, type, allSteps);
+      mpiProcedureState?.addItem(payload, type, allSteps);
+      discardEquipItem(values as EditableEquipmentItem);
+      return;
       }
 
-      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       discardEquipItem(values as EditableEquipmentItem);
@@ -252,7 +250,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           });
 
           if (parentIndex !== -1) {
-            newData[parentIndex][SUB_ITEMS_FIELD] = newData[parentIndex][SUB_ITEMS_FIELD]?.filter(
+            newData[parentIndex][subItemsKey] = newData[parentIndex][subItemsKey]?.filter(
               (data) => !data[ADD_FIELD],
             );
           }
@@ -283,8 +281,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       if (parentIndex === -1) {
         return;
       }
-      const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
-      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems?.filter((item) => item.id !== dataItem.id);
+      const subItems = state.data[parentIndex][subItemsKey];
+      state.data[parentIndex][subItemsKey] = subItems?.filter((item) => item.id !== dataItem.id);
     } else {
       state.data = state.data.filter((item) => item.id !== dataItem.id);
     }
@@ -298,7 +296,9 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const removeEquipItem = (dataItem: EditableEquipmentItem) => {
-    if (isEnableActualIdAddition) {
+    console.log('dataItem', dataItem);
+    // Do something here
+    if (isEnableActualIdAddition && !isEBProcedure) {
       handleSelectionDelete?.(dataItem.id);
     } else {
       handleRemove?.(dataItem.id ?? '');
@@ -309,8 +309,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const ignorePreviouslyAddedItems = (data: EditableEquipmentItem[]) => {
     return data?.filter((data) => {
       const isEquipmentItemAddExist = !data[ADD_FIELD];
-      if (data[SUB_ITEMS_FIELD]) {
-        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+      if (data[subItemsKey]) {
+        data[subItemsKey] = data[subItemsKey]?.filter((lot) => !lot[ADD_FIELD]);
       }
       return isEquipmentItemAddExist;
     });
@@ -339,13 +339,13 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       const newActualItem: EditableEquipmentItem = createNewLotItem();
       newActualItem.parentEquipPlannedId = dataItem.plannedId;
       newActualItem.parentId = dataItem.id;
-      state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
+      state.data[index][subItemsKey] = state.data[index][subItemsKey]?.filter((data) => !data[ADD_FIELD]);
 
-      if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
-        state.data[index][SUB_ITEMS_FIELD] = [];
+      if (isNil(state.data[index][subItemsKey])) {
+        state.data[index][subItemsKey] = [];
       }
 
-      state.data[index][SUB_ITEMS_FIELD]?.unshift(newActualItem);
+      state.data[index][subItemsKey]?.unshift(newActualItem);
 
       setState(prevState => ({
         ...prevState,
@@ -391,6 +391,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
     isEnableActualIdAddition,
+    isEBProcedure,
   });
 
   const [columns, setColumns]
@@ -409,8 +410,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
   const addExpandField = (dataTree: EquipmentItem[]) => {
     const { expanded, inEdit } = state;
-    return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
-      extendDataItem(item, SUB_ITEMS_FIELD, {
+    return mapTree(dataTree, subItemsKey, (item) =>
+      extendDataItem(item, subItemsKey, {
         [EXPAND_FIELD]: expanded.includes(item.id),
         [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
       }),
@@ -429,11 +430,11 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
     const filter = [...(dataState.filter as FilterDescriptor[])];
     const filteredData
-      = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+      = dataState.filter && filterBy(data, filter, subItemsKey);
     const sortedData
       = dataState.sort
       && filteredData
-      && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
+      && orderBy(filteredData, dataState?.sort, subItemsKey);
 
     return addExpandField(sortedData as EquipmentItem[]);
   };
@@ -468,8 +469,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
     const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isPreview || isDisabled)) || (!isEnableActualIdAddition && isPreview);
     const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isPreview || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
+    const isEBEditEnabled = isEBProcedure && !isDisabled;
+    console.log('isEBEditEnabled', isEBEditEnabled);
 
-    if (isEditRestricted) {
+    if ((isEditRestricted && !isEBProcedure) || !isEBEditEnabled) {
       return;
     }
 
@@ -481,7 +484,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       dataItem.paramsId = dataItem?.id;
     }
 
-    const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
+    const editItemInfo = extendDataItem(dataItem, subItemsKey);
 
     if (isMPIProcedure || isLHRStep || isEBProcedure) {
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
@@ -489,6 +492,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         state.data[index] = editItemInfo;
       }
     }
+
+    console.log('state?.data', editItemInfo);
 
     setState(state => ({
       ...state,
@@ -504,8 +509,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[subItemsKey]),
+        [classes.grayBg]: !isEmpty(item[subItemsKey]),
         [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
       }),
     };
@@ -589,7 +594,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
                 editField={MODE_FIELD}
                 expandField={EXPAND_FIELD}
                 dataItemKey={DATA_ITEM_KEY}
-                subItemsField={SUB_ITEMS_FIELD}
+                subItemsField={subItemsKey}
                 className={cx(classes.treeList, 'containing-box-scrollbar')}
                 onExpandChange={onExpandChange}
                 rowRender={rowRender}

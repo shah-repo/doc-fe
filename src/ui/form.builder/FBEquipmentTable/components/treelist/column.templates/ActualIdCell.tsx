@@ -94,9 +94,9 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition } = props;
+  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
-  const isEditMode = isEditEquipItem(dataItem);
+  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && dataItem.isActualIdAddition : isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();

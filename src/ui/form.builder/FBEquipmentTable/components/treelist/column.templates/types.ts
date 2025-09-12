@@ -20,6 +20,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
   isMPIForm?: boolean
+  isEBProcedure?: boolean
 }
 
 export interface EquipmentItemActionsProps<T> {
@@ -29,6 +30,7 @@ export interface EquipmentItemActionsProps<T> {
   scrollBehavior?: ScrollBehavior
   isAddPartEnabled?: boolean
   isEnableActualIdAddition?: boolean
+  isEBProcedure?: boolean
   onConfirm: () => void
   onDiscard?: EquipmentCallback
   onDelete?: EquipmentCallback
