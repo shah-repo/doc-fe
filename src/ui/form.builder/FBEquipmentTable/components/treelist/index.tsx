@@ -49,6 +49,7 @@ import {
   EquipmentItemState,
   FBEquipmentProps,
 } from './interface';
+import { TreeListEBSchema } from './schemas/ebSchema';
 import { TreeListLHRTSchema } from './schemas/lhrtSchema';
 import { TreeListMPISchema } from './schemas/mpiSchema';
 import { TreeListSchema } from './schemas/schema';
@@ -199,7 +200,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           }
         }
 
-      const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
       procedureState?.addItem(payload, type, allSteps);
       mpiProcedureState?.addItem(payload, type, allSteps);
       discardEquipItem(values as EditableEquipmentItem);
@@ -375,6 +376,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const getSchemaBuilder = () => {
     if (isMPIProcedure && !isLHRStep) return TreeListMPISchema;
     if (isLHRStep) return TreeListLHRTSchema;
+    if (isEBProcedure) return TreeListEBSchema;
     return TreeListSchema;
   };
 
