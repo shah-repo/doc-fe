@@ -41,7 +41,7 @@ const Container: React.FunctionComponent<Props> = ({
   _formState,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
-  const { getStartOfDayDateString } = useDate();
+  const { getFormattedDateString } = useDate();
 
   const changeOpenStatus = (isDrawerOpen) => {
     setOpen(isDrawerOpen);
@@ -84,14 +84,14 @@ const Container: React.FunctionComponent<Props> = ({
         ...initialValues,
         formInput: {
           ...initialValues.formInput,
-          ...(!isEmpty(initialValues.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(initialValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(initialValues.formInput?.effectiveDate) ? { effectiveDate: getFormattedDateString(initialValues.formInput?.effectiveDate) } : {}),
         },
       },
       {
         ...values,
         formInput: {
           ...updatedValues,
-          ...(!isEmpty(updatedValues?.formInput?.effectiveDate) ? { effectiveDate: getStartOfDayDateString(updatedValues?.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(updatedValues?.formInput?.effectiveDate) ? { effectiveDate: getFormattedDateString(updatedValues?.formInput?.effectiveDate) } : {}),
         },
       },
       toChangeRequestEditRequestBody,

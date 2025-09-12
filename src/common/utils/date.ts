@@ -13,11 +13,8 @@ export const useDate = () => {
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
 
-  const getStartOfDayDateString = (date: DateTypes, format = '') =>
-    moment(date).tz(timezone).startOf('day').format(format);
-
   const getFormattedStartOfDayDateString = (date: DateTypes) =>
-    getStartOfDayDateString(date, 'LL');
+    getFormattedDateString(date, 'LL');
 
   const getCurrentDate = (format?: string) => moment().tz(timezone).format(format);
 
@@ -30,7 +27,6 @@ export const useDate = () => {
     getCurrentDate,
     convertDateTimeToUserTz,
     getFormattedDateString,
-    getStartOfDayDateString,
     getFormattedStartOfDayDateString,
   };
 };
