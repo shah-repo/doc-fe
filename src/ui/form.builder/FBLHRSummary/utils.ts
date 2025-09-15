@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { LotStatus } from '../../../state/ducks/documentRevisions/types';
@@ -72,13 +71,10 @@ export const setFieldValuesForOriginalAndPrefixed = (
 const addCustomPrefix = (fieldName: string): string =>
     `custom${fieldName[0].toUpperCase()}${fieldName.slice(1)}`;
 
-const formatDate = (date, format) => {
-  return moment(date).format(format);
-};
-
 export const processData = (
   data: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
+  formatDate: (date: string, format: string) => string,
 ): EditableLHRSummaryItem[] => {
   return data?.map(item => {
     const modifiedItem = {
@@ -88,10 +84,10 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.MonthDateYearTwoDigit),
-      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.MonthDateYearTwoDigit),
+      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.DateTimeComplete),
+      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.DateTimeComplete),
+      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.DateTimeComplete),
+      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.DateTimeComplete),
       customEnteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,

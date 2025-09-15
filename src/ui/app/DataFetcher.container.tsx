@@ -33,6 +33,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
       dispatch(authActions.loadUserGroups());
       dispatch(userManagementActions.loadCompanyGroups());
       dispatch(changeRequestsActions.loadAvailableApprovers());
+      dispatch(authActions.loadUserCompanyTimezone());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, employeeId]);

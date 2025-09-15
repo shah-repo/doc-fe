@@ -6,7 +6,7 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -41,6 +41,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   dataItem,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableMaterial>();
+  const { getFormattedDateString } = useDate();
   const options = useMemo(
     () =>
       lots.map((lot) => ({

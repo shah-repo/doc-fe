@@ -2,6 +2,7 @@ import { Dictionary, filter, isEmpty, isNil, isNumber, isUndefined, size, templa
 import { action, observable, set } from 'mobx';
 import moment, { MomentInput } from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
+import { TIME_ZONE } from '../../../common/utils/date';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } from '../../form.builder';
 import FBRequest from '../FBApi/FBApi.request';
@@ -15,6 +16,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   @observable public hasPartNumber = false;
   @observable public isAllItemsReceived = false;
   @observable public rerenderCurrency = false;
+  @observable public timezone = TIME_ZONE;
   @observable value: FBPurchaseOrderValue = {
     tax: '0.00',
     taxRate: TAX_RATE,
@@ -106,7 +108,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       const data = await this.exchangeRate.fetch();
       this.value.currency = currency;
       this.value.exchangeRate = parseFloat(data.rate.toFixed(2));
-      this.value.dateOfExchangeRate = moment().format('LL');
+      this.value.dateOfExchangeRate = moment().tz(this.timezone).format();
       this.reCalculateValue();
     } catch (e) {
       setToUsd();

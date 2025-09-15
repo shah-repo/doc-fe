@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Autocomplete, FormField } from '../../../components/forms/fields-next';
-import { MODE_FIELD, Mode } from '../constants';
+import { ERROR_FIELD, MODE_FIELD, Mode } from '../constants';
 import useStyles from '../styles';
 import { EditableRole, RoleEditEvent, RoleGroup } from '../types';
 
@@ -27,6 +27,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
   const isEditMode = (
     dataItem[MODE_FIELD] === Mode.add || (dataItem[MODE_FIELD] === Mode.edit && column.editable)
   );
+  const isError = dataItem[ERROR_FIELD] === column.id;
 
   const placeholder = dataItem.groups.length === 0 ? translate('form.builder.approving.groups') : undefined;
 
@@ -43,7 +44,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
   };
   if (isEditMode) {
     return (
-      <FormField>
+      <FormField error={isError}>
         <Autocomplete
           placeholder={placeholder}
           value={dataItem.groups}

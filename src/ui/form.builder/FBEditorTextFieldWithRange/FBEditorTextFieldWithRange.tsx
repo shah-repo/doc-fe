@@ -1,8 +1,9 @@
-import { Box } from '@material-ui/core';
+import { Box, InputAdornment } from '@material-ui/core';
 import React from 'react';
 import { FBCheckbox, FBData, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from '..';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorCheckbox.styles';
+import useToleranceStyles from './FBEditorTextFieldWithRange.styles';
 import { withFBEditorTextFieldWithRange } from './FBEditorTextFieldWithRange.wrap';
 
 const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithRangeProps> = ({
@@ -13,6 +14,8 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
   ...props
 }) => {
   const classes = styles();
+  const toleranceClasses = useToleranceStyles();
+
   return (
     <FBEditor {...props} {...{ inputProps, formState, type }}>
       <FBTextField
@@ -24,11 +27,15 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}
+        isFbEditorField
       />
-      <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`}
+      <FBEditorPlaceholder
+        key={`fb-editor-placeholder-${type}`}
         boxProps={{ mb: 3.125 }}
         labelProps={AutoCompleteStyles.labelProps}
-        className={classes.textfield} />
+        className={classes.textfield}
+        isFbEditorField
+      />
 
       <Box mb={5}>
         <FBCheckbox
@@ -38,6 +45,29 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           gutter={false}
         />
         <FBRange name="editorConfig.range" />
+        <FBCheckbox
+          label="form.builder.tolerance"
+          name="editorConfig.toleranceOption"
+          withState
+          gutter={false}
+        />
+        <FBTextField
+          name="editorConfig.tolerance"
+          type="number"
+          gutter={false}
+          withState
+          labelProps={AutoCompleteStyles.labelProps}
+          boxProps={{ mb: 2 }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start" className={toleranceClasses.toleranceAdornment}>+/-</InputAdornment>
+            ),
+            className: toleranceClasses.toleranceField,
+          }}
+          inputProps={{
+            min: 0,
+          }}
+        />
         <FBCheckbox
           label="form.builder.critical.to.quality"
           name="editorConfig.criticalToQuality"

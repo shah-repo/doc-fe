@@ -4,7 +4,7 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceSocket } from '..';
 import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import {
   DOC_TYPE_GROUP,
   DocumentGroupType,
@@ -29,6 +29,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   withoutBottomBar = false,
   _tabsState,
 }) => {
+  const { getFormattedDateString } = useDate();
+
   const addLHRStep = () => {
     const index = size(workspaceState?.getSchema());
     workspaceState?.setSchemaItemAt(

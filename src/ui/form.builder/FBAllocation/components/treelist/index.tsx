@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FB } from '../../..';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -83,6 +83,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   const { useEffect, useRef, useState } = React;
+  const { getFormattedDateString } = useDate();
   const dispatch = useDispatch();
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);

@@ -5,18 +5,21 @@ export enum FBPassType {
   value = 'value',
 }
 
-interface FBPassValue {
+export interface FBPassValue {
   type?: string
   value?: FBRangeValue
   percentage?: FBPassPercentageValue
 }
 
-interface FBEditorTextFieldWithRangeConfig {
-  rangeOption?: boolean
-  passValue?: boolean
-  range?: FBRangeValue
+export interface FBEditorTextFieldWithRangeConfig {
+  aql?: string
   criticalToQuality?: boolean
+  rangeOption?: boolean
+  range?: FBRangeValue
+  toleranceOption?: boolean
+  tolerance?: number
   inspection?: boolean
+  passValue?: boolean
   pass?: FBPassValue
 }
 

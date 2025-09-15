@@ -183,6 +183,8 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
           width: 90,
           headerClassName: cx(cellARHeaderClassName, clearRightBorderClassName && { [clearRightBorderClassName]: index !== arr.length - 1 }),
           className: cellARClassName,
+          isRoleCheckbox: true,
+          role,
         })),
       });
     }

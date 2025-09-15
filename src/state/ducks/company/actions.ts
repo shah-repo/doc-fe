@@ -16,6 +16,7 @@ import {
 } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
+import { authActions } from '../auth';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
 import {
   AUTOSAVE_CONFIG,
@@ -177,6 +178,7 @@ const updateGeneralSettings = (
     data: omit(payload, OMIT_FIELDS),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
+      dispatch(authActions.loadUserCompanyTimezone());
       dispatch(setGeneralSettings(data));
     },
   });
