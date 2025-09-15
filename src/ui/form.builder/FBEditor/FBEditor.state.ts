@@ -218,6 +218,7 @@ class FBEditorState {
     mpiprocedure: ProcedureIcon,
     eqmaintenance: EquipmentIcon,
     textfieldwithrange: TextfieldwithrangeIcon,
+    samplingPlan: TextfieldwithrangeIcon,
     supplier: SupplierIcon,
     lhrstep: StepsectionIcon,
     approvals: ApprovalsIcon,
