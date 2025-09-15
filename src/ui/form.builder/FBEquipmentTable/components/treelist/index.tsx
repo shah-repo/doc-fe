@@ -14,6 +14,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
   cloneDeep,
+  concat,
   isEmpty,
   isNil,
   keyBy,
@@ -574,6 +575,23 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         parentEquipPlannedId: scanSelectedEquipInfo.current?.plannedId,
       };
     });
+
+    if (isEBProcedure) {
+      const newSubItems = scannedEquips.map((equipment) => ({
+        id: FB.uniqid,
+        equipmentId: equipment.actualId,
+      }));
+
+      const parentItem = state.data[parentIndex];
+      const existingSubItems = parentItem[subItemsKey] ?? [];
+      const updatedSubItems = concat(newSubItems, existingSubItems).map((item) => omit(item, EB_FIELDS_TO_OMIT));
+      state.data[parentIndex][subItemsKey] = updatedSubItems;
+      const payload = omit(parentItem, EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+      procedureState?.addItem(payload, type, allSteps);
+      mpiProcedureState?.addItem(payload, type, allSteps);
+      return;
+    }
 
     saveScannedEquipments?.(updatedScannedEquips);
   };
