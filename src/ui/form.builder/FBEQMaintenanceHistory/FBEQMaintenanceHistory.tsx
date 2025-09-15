@@ -6,7 +6,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Link } from 'react-router-dom';
 import { FBMapWrapper, FBText } from '..';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 
@@ -16,41 +16,45 @@ interface FBEQMaintenanceHistoryProps {
 
 const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
   maintenanceHistory = [],
-}) => (
-  <Box mb={5} fontWeight="fontWeightBold">
-    <Box display="flex" alignItems="center" mb={1}>
-      <FBText
-        locale="document.revision.history"
-      />
-      <ArrowDropDownIcon />
-    </Box>
-    <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
-      {(item: DocumentRevision, index) => {
-        const releaseDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
-        const areTasksCompleted = get(item.formInput, 'fb-maintenance-all-tasks-completed') === 'Yes';
-        const isReleased = item.status === DocumentRevisionStatus.Released;
+}) => {
+  const { getFormattedDateString } = useDate();
 
-        return (
-          <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
-            <Box mr={0.5}>
-              <Link
-                to={documentVersionPath(item.id, item.document?.id)}
-                target="_blank"
-              >
-                {item.document?.docId} - {item.name}
-              </Link>
+  return (
+    <Box mb={5} fontWeight="fontWeightBold">
+      <Box display="flex" alignItems="center" mb={1}>
+        <FBText
+          locale="document.revision.history"
+        />
+        <ArrowDropDownIcon />
+      </Box>
+      <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
+        {(item: DocumentRevision, index) => {
+          const releaseDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+          const areTasksCompleted = get(item.formInput, 'fb-maintenance-all-tasks-completed') === 'Yes';
+          const isReleased = item.status === DocumentRevisionStatus.Released;
+
+          return (
+            <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
+              <Box mr={0.5}>
+                <Link
+                  to={documentVersionPath(item.id, item.document?.id)}
+                  target="_blank"
+                >
+                  {item.document?.docId} - {item.name}
+                </Link>
+              </Box>
+              <Box fontWeight="fontWeightRegular">
+                {`| ${item.owner.user.name} | ${item.status}`}
+                {isReleased && releaseDate && ` | ${getFormattedDateString(releaseDate, MomentFormats.MonthDateYearAlt)}`}
+                {!isReleased && item.createdAt && ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
+                {isReleased && areTasksCompleted && ` | ${translate('document.equipment.cal.pm.tasks.completed')}`}
+              </Box>
             </Box>
-            <Box fontWeight="fontWeightRegular">
-              {`| ${item.owner.user.name} | ${item.status}`}
-              {isReleased && releaseDate && ` | ${getFormattedDateString(releaseDate, MomentFormats.MonthDateYearAlt)}`}
-              {!isReleased && item.createdAt && ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
-              {isReleased && areTasksCompleted && ` | ${translate('document.equipment.cal.pm.tasks.completed')}`}
-            </Box>
-          </Box>
-        );
-      }}
-    </FBMapWrapper>
-  </Box>
-);
+          );
+        }}
+      </FBMapWrapper>
+    </Box>
+  );
+};
 
 export default FBEQMaintenanceHistory;

@@ -80,6 +80,8 @@ const getGeneralSettings = (state: ApplicationState) => omit(
   ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
+const isTrainingForApprovedRevisionsEnabled = (state: ApplicationState) => state.company.generalSettings.isTrainingForApprovedRevisionsEnabled;
+
 const getGeneralSettingsId = (state: ApplicationState) => state.company.generalSettings.id;
 
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
@@ -87,6 +89,8 @@ const getZebraPrintSettings = (state: ApplicationState) => state.company.general
 const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.company.generalSettings.approvalRequestAdmin;
 
 const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.generalSettings.updatedAt;
+
+const getCompanyTimezone = (state: ApplicationState) => state.company.generalSettings.timezone;
 
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
@@ -140,9 +144,11 @@ export default {
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
   getPremiumFeatureSubscriptionsUpdatedAt,
+  getCompanyTimezone,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
   getPremiumFeatureSubscriptions,
   getSubscriptionsAsyncState,
   hasActivePremiumFeatureSubscription,
+  isTrainingForApprovedRevisionsEnabled,
 };

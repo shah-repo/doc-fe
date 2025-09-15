@@ -1,6 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
@@ -18,6 +18,7 @@ const CRReferences: React.FunctionComponent<OwnProps> = ({
   chosenForm,
 }) => {
   const classes = styles();
+  const { getFormattedDateString } = useDate();
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">
       <Typography className={classes.generalInfo}>

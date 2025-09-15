@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
 import DocumentRevisionDialog from '../../components/common/dialogs/DocumentRevisionDialog';
@@ -27,6 +27,7 @@ interface TrainingDetailsProps {
 
 const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog, training }) => {
   const classes = styles();
+  const { getFormattedDateString } = useDate();
   const { id: documentRevisionId, documentId, displayRevision } = training.documentRevision ?? {};
   const referencesIds = training.trainingPlan?.sourceReferencesIds ?? [];
   const references = training.trainingPlan?.sourceReferences ?? [];

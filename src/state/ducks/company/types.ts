@@ -280,6 +280,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
+  isTrainingForApprovedRevisionsEnabled: boolean
   trainingReminders: TrainingReminders
   approvalRoles: {
     approvalRoles: ApprovalRole[]
@@ -287,6 +288,7 @@ export interface GeneralSettings {
     removeFromDam: ApprovalRoleItem[]
     dam: Dam
   }
+  timezone: string
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

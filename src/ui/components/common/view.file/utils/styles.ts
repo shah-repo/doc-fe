@@ -24,6 +24,10 @@ export const styles = makeStyles((theme: NextTheme) => ({
     textAlign: 'center',
     overflow: 'hidden',
     height: '85%',
+
+    '& .MuiTypography-colorError': {
+      opacity: 0,
+    },
   },
   buttonsContainer: {
     position: 'absolute',
