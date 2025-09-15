@@ -1,10 +1,9 @@
 import { Box } from '@material-ui/core';
 import { Form, FormikProps } from 'formik';
 import { Dictionary, isEmpty, isObject } from 'lodash';
-import moment from 'moment';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
+import { useDate } from '../../../../../common/utils/date';
 import { Group } from '../../../../../state/ducks/auth/types';
 import { Owner } from '../../../../../state/ducks/common/types';
 import { AsyncState, AsyncStatus } from '../../../../../state/types';
@@ -69,6 +68,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   // MARK: @selectors
 
   // MARK: @state
+  const { getCurrentDate } = useDate();
 
   // MARK: @config
 
@@ -180,8 +180,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           label="transition.action.effective.date"
           name="effectiveDate"
           size="sm"
-          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
-          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          minDate={getCurrentDate()}
+          value={getCurrentDate()}
           validate={validator(required)}
         />
       )}

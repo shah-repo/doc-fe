@@ -2,12 +2,12 @@ import { each, groupBy, map, pick, sortBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { Employee } from '../../../state/ducks/company/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
-import { ACTION_TITLE_MAPPING, AUDIT_FIELD_PATHS, UMAuditGroupProps, UMAuditProps, UM_AUDIT_CONCAT_KEYS } from '../../../state/ducks/userManagement/types';
+import { ACTION_TITLE_MAPPING, AUDIT_FIELD_PATHS, UM_AUDIT_CONCAT_KEYS, UMAuditGroupProps, UMAuditProps } from '../../../state/ducks/userManagement/types';
 import Colors from '../../layout/theme/utils/colors';
 import AuditItemPresenter from './presenter';
 
@@ -25,6 +25,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   closeHistoryPanel,
 }) => {
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
   const getTranslatedText = (key: string, values: TranslatedTextProps) =>
     intl.formatMessage({ id: `user.management.audit.history.${key}` }, values);
 

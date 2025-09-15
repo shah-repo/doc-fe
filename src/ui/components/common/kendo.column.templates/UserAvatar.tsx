@@ -1,7 +1,8 @@
 import { Avatar, Box } from '@material-ui/core';
 import { get } from 'lodash';
-import React from 'react';
-import OverflowTooltip from '../../OverflowTooltip';
+import React, { lazy, Suspense } from 'react';
+import { translate } from '../../../../common/intl';
+import useHoverOnce from '../../../hooks/useHoverOnce';
 import { getInitalsFromName } from '../../icons/avatar/helpers';
 import { CustomGridCellProps } from '../kendo/types';
 import { styles } from './UserAvatar.style';
@@ -12,9 +13,12 @@ interface AvatarComponentProps {
   initialColor?: string
 }
 
+const LazyOverflowTooltip = lazy(async () => await import('../../OverflowTooltip'));
+
 export const AvatarComponent: React.FC<AvatarComponentProps> = (props) => {
   const { avatar, name, initialColor } = props;
   const classes = styles();
+  const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   return (
     <Box className={classes.avatar}>
@@ -24,13 +28,19 @@ export const AvatarComponent: React.FC<AvatarComponentProps> = (props) => {
           {getInitalsFromName(name)}
         </Avatar>
       )}
-      <OverflowTooltip
-        arrow
-        placement="top"
-        title={name ?? ''}
-      >
-        {name ?? '-'}
-      </OverflowTooltip>
+      {!isHovered
+        ? <span ref={elementRef}>
+          {name ?? '-'}
+        </span>
+        : <Suspense fallback={<div>{translate('common.loading')}</div>}>
+          <LazyOverflowTooltip
+            arrow
+            placement="top"
+            title={name ?? ''}
+          >
+            {name ?? '-'}
+          </LazyOverflowTooltip>
+        </Suspense>}
     </Box>
   );
 };

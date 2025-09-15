@@ -1,15 +1,17 @@
 import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, List, ListItem } from '@material-ui/core';
+import { isEmpty } from 'lodash';
 import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import { FBProcedureItemType } from '../../../../form.builder/FBProcedureItem/FBProcedureItem.types';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Dialog from '../../../dialogs/Dialog';
 import { DialogCloseReason } from '../../../dialogs/Dialog.types';
 import { Button } from '../../../forms/fields-next';
@@ -37,6 +39,7 @@ interface Props {
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
+  const expiredDialog = useDialog();
 
   const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
   const isLotScan = selectedPart?.type === FBProcedureItemType.materials;
@@ -125,7 +128,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   const createLot = useActionCreator(allocationActions.addLot);
 
-  const onScanLotAdd = () => {
+  const addLotToAllocation = () => {
     const lotPayload = scanLots.map((lot: ScanLot) => {
       return {
         workOrderId: selectedPart.woId,
@@ -166,6 +169,21 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
     }
 
     partAsync.start(createLot, lotPayload, partAsync);
+  };
+
+  const onScanLotAdd = () => {
+    if (isEmpty(scanLots)) {
+      toastError(translate('scan.lot.grid.empty.lots.message'));
+      return;
+    }
+
+    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
+
+    if (hasExpiredLot) {
+      expiredDialog.open();
+    } else {
+      addLotToAllocation();
+    }
   };
 
   const handleScan = (data: string) => {
@@ -272,6 +290,15 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         />
         <BarcodeReader onError={handleError} onScan={handleScan} />
       </Box>
+      <ExpiredLOTDialog
+        dialog={expiredDialog}
+        message="allocation.scan.lot.expired.confirm.prompt.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={addLotToAllocation}
+      />
     </Dialog>
   );
 };

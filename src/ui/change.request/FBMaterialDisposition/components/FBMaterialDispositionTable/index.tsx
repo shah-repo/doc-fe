@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
@@ -59,6 +59,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     [id: string]: boolean | number[]
   }>({});
   const [isDeleteDisabled, setIsDeleteDisabled] = React.useState<boolean>(false);
+  const { getFormattedDateString } = useDate();
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {

@@ -16,6 +16,8 @@ export interface ScanLot {
   calDueDate?: string
   pmDueDate?: string
   onHand?: number
+  isExpired?: boolean
+  expiryDate?: string
 }
 
 export interface ScanLotTableProps {

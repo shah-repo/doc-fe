@@ -2,7 +2,7 @@ import { Box, FormControlLabel, Typography } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentRevisionFooterNew, SMText } from '../../../App';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Checkbox } from '../../components/forms/fields-next';
@@ -26,6 +26,7 @@ const References = ({
   edit,
 }: ReferencesProps) => {
   const classes = styles();
+  const { getFormattedDateString } = useDate();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { owner, status, deprecatedAt, referenceTo, releasedAt, retrain, document } = selectedDocument!;
   const initialValues = useMemo(

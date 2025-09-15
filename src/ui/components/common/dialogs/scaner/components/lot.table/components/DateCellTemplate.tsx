@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import React, { memo } from 'react';
-import { getFormattedDateString, MomentFormats } from '../../../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../../../common/utils/date';
 import OverflowContent from '../../../../../../OverflowContent';
 import { CustomTemplateProps } from '../types';
 import useStyles from './styles';
@@ -8,6 +8,7 @@ import useStyles from './styles';
 const DateCellTemplate: React.ComponentType<CustomTemplateProps> = ({ field, dataItem }) => {
   const classes = useStyles();
   const complianceDueDate = dataItem[field];
+  const { getFormattedDateString } = useDate();
   const formattedComplianceDueDate = complianceDueDate
     ? getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearTwoDigit)
     : '-';
