@@ -5,7 +5,7 @@ import { ReactComponent as ExpandIcon } from '../../../../../assets/images/arrow
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/arrow_up.svg';
 import { ReactComponent as EmailSuccessIcon } from '../../../../../assets/images/email_success.svg';
 import { ReactComponent as ModelCloseIcon } from '../../../../../assets/images/model_close.svg';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { emailAllActions } from '../../../../../state/ducks/email.all';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
@@ -50,6 +50,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
   const [openPending, setOpenPending] = React.useState(true);
   const [openApproved, setOpenApproved] = React.useState(false);
   const [emailSuccess, setEmailSuccess] = React.useState(false);
+  const { getFormattedDateString } = useDate();
 
   const handleClickPending = () => {
     setOpenPending(!openPending);

@@ -3,8 +3,8 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../common/utils/date';
 import {
   DisplayText,
@@ -15,6 +15,7 @@ export const DateFilterTemplate = ({
   onChange,
   value,
 }: GridFilterCellProps) => {
+  const { getFormattedDateString } = useDate();
   const hasValue = (value: string) => value;
   const intl = useIntl();
   const handleDateChange = ({ target, syntheticEvent }: any) => {

@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { SMText } from '../../../App';
 import { styles } from '../../../App/Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.new.styles';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
 import { generateRevisionNumber } from '../helpers/generateRevisionNumber';
 
@@ -22,7 +22,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   } = formDocument || {};
 
   const version = generateRevisionNumber(revision, revisionStage as number, subRevision, revisionChangeType);
-
+  const { getFormattedDateString } = useDate();
   const docId = formDocument?.document?.docId;
   const classes = styles();
   return (

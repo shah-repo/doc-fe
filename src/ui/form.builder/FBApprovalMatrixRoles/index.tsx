@@ -45,13 +45,19 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   });
 
   const isRoleValid = (role: EditableRole) => {
+    let isValid = true;
     if (role.name === '') {
       toastError(translate('form.builder.approvalRoles.error.empty'));
       setFieldError(ErrorField.name);
-      return false;
+      isValid = false;
+    }
+    if (role.groups.length === 0) {
+      toastError(translate('form.builder.approvalRoles.error.groups'));
+      setFieldError(ErrorField.groups);
+      isValid = false;
     }
 
-    return true;
+    return isValid;
   };
 
   const saveRole = () => {
