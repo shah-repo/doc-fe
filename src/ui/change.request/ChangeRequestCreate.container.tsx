@@ -28,7 +28,7 @@ const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
 
 const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps>
   = ({ history, match }) => {
-    const { getFormattedDateString } = useDate();
+    const { getStartOfDayDateString } = useDate();
     const documentTypeId = match.params.documentTypeId;
     const formId = match.params.formId;
     const create = useActionCreator(changeRequestsActions.create);
@@ -62,7 +62,7 @@ const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateC
     }, []);
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
-      const effectiveDate = getFormattedDateString(values.formInput?.effectiveDate);
+      const effectiveDate = getStartOfDayDateString(values.formInput?.effectiveDate);
       const updatedValues = {
         ...values,
         formInput: { ...values.formInput, ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate } : {}) },

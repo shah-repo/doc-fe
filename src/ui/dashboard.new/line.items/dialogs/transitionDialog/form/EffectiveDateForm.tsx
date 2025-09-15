@@ -1,6 +1,7 @@
 import { Box, Grid, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { Styles } from '@material-ui/core/styles/withStyles';
 import { Form } from 'formik';
+import moment from 'moment';
 import * as React from 'react';
 import { ReactComponent as ScheduleIcon } from '../../../../../../assets/images/ScheduleIcon.svg';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
@@ -29,7 +30,7 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFi
   ...fieldProps
 }) => {
   const { values } = fieldProps;
-  const { getFormattedDateString, getCurrentDate } = useDate();
+  const { timezone, getFormattedDateString, getStartOfDayDateString } = useDate();
 
   return (
     <Form className={classes.form}>
@@ -37,8 +38,8 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFi
       <Box className={classes.pendingBox}>
         <DatePickerStaticField
           name="effectiveDate"
-          minDate={getCurrentDate()}
-          value={getCurrentDate()}
+          minDate={getStartOfDayDateString(moment().tz(timezone).toISOString())}
+          value={getStartOfDayDateString(moment().tz(timezone).toISOString())}
           validate={validator(required)}
         />
       </Box>
