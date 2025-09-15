@@ -57,6 +57,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     || isDocumentRevisionPendingChange(docRevStatus)
     || isDocumentRevisionInReview(docRevStatus)
   );
+  const isDocumentStatusRequirePassword = (
+    isDocumentRevisionObsolete(docRevStatus)
+    || isDocumentRevisionDeprecated(docRevStatus)
+  );
   const isDownloadAll = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachmentsData?.length;
 
   const async = useAsync<AttachmentDownloadResponse>({
@@ -104,8 +108,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       attachment => attachment.lineType === LINE_TYPES.RED_LINE,
     );
 
+    const isPasswordRequiredByRedline = hasRedlineAttachmentToDownload && !isDocumentStatusAllowRedlineDowload;
+
     setIsDownloading(true);
-    if (!hasRedlineAttachmentToDownload || isDocumentStatusAllowRedlineDowload) {
+    if (!isDocumentStatusRequirePassword && !isPasswordRequiredByRedline) {
       isDownloadAll
         ? async.start(downloadAllAttachments, docRevId, async)
         : async.start(downloadSelectedAttachments, docRevId, attachments, async);
