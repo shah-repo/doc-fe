@@ -38,7 +38,7 @@ export const getMapSelectedByParentEquipId = (equipsSelected: Array<Partial<FBMP
   }, {});
 };
 
-export const prepareData = (items: FBProcedureItemConfig[], isEBProcedure): EquipmentItem[] => {
+export const prepareData = (items: FBProcedureItemConfig[], isEBProcedure?: boolean): EquipmentItem[] => {
   if (isEBProcedure) {
     return items.map(item => ({
       ...item,

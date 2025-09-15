@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../../../../common/intl';
 import { ActionsCell } from '../column.templates/Actions';
-import { DateCell } from '../column.templates/DateCell';
+import { EBDateCell } from '../column.templates/EBDateCell';
 import EquipmentIdCell from '../column.templates/EquipmentIdCell';
 import IDCell from '../column.templates/IDCell';
 
@@ -44,7 +44,7 @@ export const TreeListEBSchema = ({
       title: translate('lhr.equipment.grid.heading.cal.due.date'),
       width: 200,
       mainOrderIndex: 2,
-      cell: (props) => <DateCell {...props} />,
+      cell: (props) => <EBDateCell {...props} equipmentOptions={equipmentOptions} isEBProcedure={isEBProcedure} />,
     },
     {
       field: 'pmDueDate',
@@ -52,7 +52,7 @@ export const TreeListEBSchema = ({
       title: translate('lhr.equipment.grid.heading.pm.due.date'),
       width: 200,
       mainOrderIndex: 3,
-      cell: (props) => <DateCell {...props} />,
+      cell: (props) => <EBDateCell {...props} equipmentOptions={equipmentOptions} isEBProcedure={isEBProcedure} />,
     },
     {
       id: 'actions',
