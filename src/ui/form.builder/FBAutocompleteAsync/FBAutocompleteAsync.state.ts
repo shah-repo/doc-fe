@@ -129,7 +129,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
         );
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {
-          const latestDocRev = option?.documentRevisions.pop();
+          const latestDocRev = option?.documentRevisions.at(-1);
           return ({
             ...option,
             name: latestDocRev?.name ?? '',
