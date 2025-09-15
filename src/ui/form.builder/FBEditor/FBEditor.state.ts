@@ -86,6 +86,7 @@ class FBEditorState {
     'mpiprocedure',
     'eqmaintenance',
     'textfieldwithrange',
+    'samplingPlan',
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -167,6 +168,7 @@ class FBEditorState {
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
+    samplingPlan: FBEditorLabel,
     supplier: FBEditorLabel,
     lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,

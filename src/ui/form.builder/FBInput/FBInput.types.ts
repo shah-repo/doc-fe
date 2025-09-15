@@ -68,6 +68,7 @@ export type FBInputType =
   | 'ebpart'
   | 'eqmaintenance'
   | 'textfieldwithrange'
+  | 'samplingPlan'
   | 'range'
   | 'passpercentage'
   | 'supplier'
@@ -289,6 +290,7 @@ export const FBAutosave: FBInputType[] = [
   'supplierSupportingDocs',
   'supplierReferences',
   'textfieldwithrange',
+  'samplingPlan',
 ];
 
 export const SectionTypeField: FBInputType[] = [
