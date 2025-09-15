@@ -18,10 +18,12 @@ const getValue = (item?: DocumentOption) => {
     return undefined;
   }
 
+  const latestDocRev = item.documentRevisions.at(-1);
+
   return {
     docId: item.docId,
     documentId: item.id,
-    docRevId: item.documentRevisions?.[0]?.id,
+    docRevId: latestDocRev?.id,
     displayRevision: item.displayRevision,
   };
 };
