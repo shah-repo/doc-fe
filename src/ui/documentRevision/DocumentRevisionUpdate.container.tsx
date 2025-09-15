@@ -123,6 +123,17 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
       set(values, 'formInput', formStateContext?._currentValue);
     }
+
+    console.log('Values to be saved:', values); // --- IGNORE ---
+
+    if (values && has(values, 'lhrstep-built-in')) {
+      if (has(values, 'lhrs-start-date')) {
+        delete values['lhrs-start-date'];
+      }
+      if (has(values, 'lhrs-end-date')) {
+        delete values['lhrs-end-date'];
+      }
+    }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, 'formInput');
 

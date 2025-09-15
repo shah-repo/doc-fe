@@ -60,15 +60,15 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
     } else if (stepLHRs) {
-      const startDate = stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
-      const endDate = stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
+      const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
+      const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
 
-      if (startDate) {
+      if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(startDateFieldName, formattedStartDate);
       }
-      if (endDate) {
+      if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(endDateFieldName, formattedEndDate);
@@ -177,28 +177,54 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => reaction(
-      () => [
-        formState?.inputState.get(startDateFieldName)?.value,
-        formState?.inputState.get(endDateFieldName)?.value,
-      ],
-      ([startDate, endDate]) => {
-        if (!stepLHRs || !lhrStepState) { return; }
+    React.useEffect(() => {
+      let timeoutId: NodeJS.Timeout;
 
-        // Check if there are actual changes before updating
-        const currentStartDate = stepLHRs.formInput?.['lhrs-start-date'] as string | undefined;
-        const currentEndDate = stepLHRs.formInput?.['lhrs-end-date'] as string | undefined;
+      const disposer = reaction(
+        () => [
+          formState?.inputState.get(startDateFieldName)?.value,
+          formState?.inputState.get(endDateFieldName)?.value,
+        ],
+        ([startDate, endDate]) => {
+          if (!stepLHRs || !lhrStepState) { return; }
 
-        if (startDate !== currentStartDate || endDate !== currentEndDate) {
-          // Convert dates to ISO format before sending to backend
-          const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
-          const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.MonthDateYearTwoDigit) : undefined;
+          // Clear any existing timeout to debounce rapid changes
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
 
-          lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate).catch(console.error);
+          // Debounce the update to prevent multiple API calls
+          timeoutId = setTimeout(() => {
+            // Re-check stepLHRs since it might have changed during the timeout
+            if (!stepLHRs || !lhrStepState) { return; }
+
+            // Check if there are actual changes before updating
+            const currentStartDate = stepLHRs.formInput?.['lhrs-start-date'] as string | undefined;
+            const currentEndDate = stepLHRs.formInput?.['lhrs-end-date'] as string | undefined;
+
+            // Convert form dates to ISO format for comparison
+            const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
+            const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
+
+            // Only update if there are actual changes
+            if (isoStartDate !== currentStartDate || isoEndDate !== currentEndDate) {
+              lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate);
+            }
+          }, 500); // 500ms debounce to allow both dates to be set
+        },
+        { fireImmediately: false },
+      );
+
+      // Cleanup function
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
         }
-      },
+        disposer();
+        lhrStepState?.cleanup?.();
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    }, [stepLHRs?.id]);
 
     // MARK: @methods
     startMpi = () => {

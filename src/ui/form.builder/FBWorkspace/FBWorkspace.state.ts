@@ -1,4 +1,4 @@
-import { cloneDeep, includes, isArray, isEmpty, map, omit, size } from 'lodash';
+import { cloneDeep, has, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
@@ -198,6 +198,16 @@ class FBWorkspaceState extends FBSchemaState {
       return;
     }
     this.loading = true;
+
+    if (values && has(values, 'lhrstep-built-in')) {
+      if (has(values, 'lhrs-start-date')) {
+        delete values['lhrs-start-date'];
+      }
+      if (has(values, 'lhrs-end-date')) {
+        delete values['lhrs-end-date'];
+      }
+    }
+
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
     let body = {};
     switch (mode) {
