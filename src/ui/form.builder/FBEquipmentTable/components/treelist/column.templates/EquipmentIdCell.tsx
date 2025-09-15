@@ -1,4 +1,4 @@
-import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
@@ -96,13 +96,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
-  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && dataItem.isActualIdAddition : isEditEquipItem(dataItem);
+  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
-  const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
-  const openQuickViewDialog = () => quickViewDialog.open();
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
       = dataItem?.isActualIdAddition || !isEnableActualIdAddition || dataItem.equipmentId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
@@ -118,7 +116,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     }
   }, [equipmentOptions]);
 
-  console.log('dataItem', dataItem, isAddActualIdVisible);
   if (isAddActualIdVisible) {
     return (
       <TreeListCellWrapper {...props}>
@@ -178,18 +175,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
             value.label
           )}
         </span>
-        {!isEditMode && value.label && (
-          <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
-              <FontAwesomeIcon
-                size="sm"
-                className={classes.viewIcon}
-                icon={isViewLotHovered ? solid('eye') : light('eye')}
-                onClick={openQuickViewDialog}
-              />
-            </IconButton>
-          </StyleTooltip>
-        )}
       </span>
       <DocumentRevisionDialog
         dialog={quickViewDialog}

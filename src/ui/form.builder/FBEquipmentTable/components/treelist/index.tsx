@@ -171,16 +171,15 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         newEquipItem.LHRTparameter = LHRTparameter;
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
-      console.log('dataItem.isActualIdAddition', values.isActualIdAddition);
 
-      if (isEBProcedure && values.isActualIdAddition) {
+      if (isEBProcedure && (values.isActualIdAddition || values.equipmentId)) {
         newEquipItem = {
           id,
           equipmentId: values.equipmentId,
         };
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
         if (parentIndex !== -1) {
-          if (values[ADD_FIELD]) {
+          if (values[ADD_FIELD] || values.equipmentId) {
             const subItems = state.data[parentIndex][subItemsKey];
 
             if (Array.isArray(subItems)) {
@@ -472,7 +471,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isPreview || isDisabled)) || (!isEnableActualIdAddition && isPreview);
     const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isPreview || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
     const isEBEditEnabled = isEBProcedure && !isDisabled;
-    console.log('isEBEditEnabled', isEBEditEnabled);
 
     if ((isEditRestricted && !isEBProcedure) || !isEBEditEnabled) {
       return;

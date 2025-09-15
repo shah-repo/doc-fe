@@ -27,7 +27,7 @@ export const TreeListEBSchema = ({
       expandable: true,
       locked: false,
       mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} isEBProcedure={isEBProcedure} />,
       sortable: false,
     },
     {
