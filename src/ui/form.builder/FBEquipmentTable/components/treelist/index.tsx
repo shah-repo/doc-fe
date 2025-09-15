@@ -300,6 +300,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     // Do something here
     if (isEnableActualIdAddition && !isEBProcedure) {
       handleSelectionDelete?.(dataItem.id);
+    } else if (isEBProcedure && dataItem.equipmentId) {
+      procedureState?.removeEBChildrenItem(dataItem.parentId ?? '', dataItem.id, type, subItemsKey);
     } else {
       handleRemove?.(dataItem.id ?? '');
     }
