@@ -50,6 +50,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   aql,
   name,
   index = 0,
+  label = '',
   type = 'textfieldwithrange',
   criticalToQuality,
   includeInFaiInspection,
@@ -96,7 +97,15 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   }
 
   return (
-    <FBInput name={name} type={type} index={index} autosave={autosave} disabled={disabled}>
+    <FBInput
+      {...props}
+      name={name}
+      type={type}
+      index={index}
+      value={value}
+      autosave={autosave}
+      disabled={disabled}
+    >
       <div data-cy={`${type}-${index}`}>
         <Grid container spacing={1}>
           <Grid item md={8} xs={6}>
@@ -113,7 +122,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                       ...props.labelProps,
                       ...FBFontStyle.labelProps,
                     }}
-                    locale={String(props.label)}
+                    locale={String(label)}
                   />
                   <div className={classes.options}>
                     {isPartFaiRequired && (

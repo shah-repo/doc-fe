@@ -65,10 +65,11 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 
     function setPassValue (value?: boolean) {
       formState.getInputState('editorConfig.pass.type')?.setHidden(!value);
-      const typeValue = value
-        ? inputProps?.editorConfig?.pass.type || FBPassType.value
-        : undefined;
-      formState.setFieldValue('editorConfig.pass.type', typeValue, true);
+      if (value) {
+        formState.setFieldValue('editorConfig.pass.type', FBPassType.value, true);
+      } else {
+        formState.omitFieldValue('editorConfig.pass.type');
+      }
     }
 
     function setInspection (value?: boolean) {
