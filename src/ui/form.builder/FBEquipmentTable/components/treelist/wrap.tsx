@@ -64,12 +64,13 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
 
     function saveActualEquipment (values: EditableEquipmentItem) {
       if (!id) { return; }
-      const { actualId, parentEquipPlannedId } = values;
+      const { actualId, parentEquipPlannedId, serialNumber } = values;
 
       if (!actualId) { return; }
 
       const part = {
         fieldId: name ?? '',
+        ...(serialNumber && { serialNumber }),
         forPreselected: { id: parentEquipPlannedId ?? '' },
         usedOverride: { id: actualId },
         type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',

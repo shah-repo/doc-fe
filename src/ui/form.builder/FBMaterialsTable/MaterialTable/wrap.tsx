@@ -65,7 +65,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
 
     function saveLot (values: EditableMaterial) {
       if (!id) { return; }
-      const { quantity, unit, lotId } = values;
+      const { quantity, unit, lotId, serialNumber } = values;
 
       if (isUndefined(quantity)) { return; }
       if (!lotId) { return; }
@@ -84,6 +84,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
         quantity,
         unit,
         actualId: values.actualId,
+        ...(serialNumber && { serialNumber }),
         usedOverride: { id: values.lotId },
         type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
       };

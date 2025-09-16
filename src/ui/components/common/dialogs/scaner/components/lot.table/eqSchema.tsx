@@ -3,11 +3,13 @@ import { ColumnDefinition } from '../../../../../KendoDataGrid/KendoDataGrid.typ
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import DateCellTemplate from './components/DateCellTemplate';
 import { LotIdCellTemplate } from './components/LotIdCellTemplate';
+import { SerialNumberCellTemplate } from './components/SerialNumberCellTemplate';
 import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildEqSchema = ({
   onDelete,
   onOpenQuickView,
+  onUpdateScanLot,
 }: SchemaOptions): Array<ColumnDefinition<EditableScanLot>> => {
   return [
     {
@@ -15,6 +17,14 @@ export const buildEqSchema = ({
       field: 'lotNumber',
       title: 'scan.lot.grid.equipment.number',
       template: (props) => <LotIdCellTemplate {...props} />,
+      filterable: false,
+      width: 150,
+    },
+    {
+      id: 'serialNumber',
+      field: 'serialNumber',
+      title: 'scan.lot.grid.serial.number',
+      template: (props) => <SerialNumberCellTemplate {...props} onUpdateScanLot={onUpdateScanLot} />,
       filterable: false,
       width: 150,
     },

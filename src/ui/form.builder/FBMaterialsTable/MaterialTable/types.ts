@@ -58,6 +58,7 @@ export interface EditableMaterial extends Material {
   parentPartPlannedId?: string
   parentId?: string
   isLotAdditionIconsShown?: boolean
+  serialNumber?: string
 }
 
 export interface LotOptions {

@@ -142,6 +142,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       const equipPayload = scanLots.map((lot: ScanLot) => {
         return {
           actualId: lot.id,
+          serialNumber: lot.serialNumber,
         };
       });
 
@@ -155,6 +156,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           lotId: lot.id,
           unit: lot.unitOfMeasure,
           quantity: Number(lot.quantityAssigned),
+          serialNumber: lot.serialNumber,
         };
       });
 

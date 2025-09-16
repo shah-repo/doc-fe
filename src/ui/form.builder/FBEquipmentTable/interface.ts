@@ -13,6 +13,7 @@ export interface EquipmentItem {
   paramsId?: string
   actualEquipDocId?: string
   isActualIdAddition?: boolean
+  serialNumber?: string
 }
 
 export interface EditableEquipmentItem extends EquipmentItem {
