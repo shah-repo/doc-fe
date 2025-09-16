@@ -106,7 +106,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
               helperText={helperText}
               disabled={disabled}
               label={
-                <div className={classes.label}>
+                <div className={cx(classes.label, { [classes.labelWithAlert]: criticalToQuality })}>
                   <FBText
                     loading={loading || isLoading}
                     labelProps={{
