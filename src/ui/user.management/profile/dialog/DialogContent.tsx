@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReactComponent as SlackLogo } from '../../../../assets/images/slack_full_logo.svg';
+import { translate } from '../../../../common/intl';
 import { getTableCriteria } from '../../../../common/utils/selectors';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { authActions, authSelectors } from '../../../../state/ducks/auth';
@@ -93,6 +94,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
+  const companyTimezone = useSelector(companySelectors.getCompanyTimezone);
 
   const TABLE_NAME = 'userManagement';
 
@@ -235,18 +237,19 @@ const DialogContent: React.FunctionComponent<Props> = ({
           {email}
         </Typography>
       </Box>
-      {isCurrentUser && <Box display="flex" justifyContent="center">
-        <Button
-          variant="text"
-          color="primary"
-          style={{ width: 'auto' }}
-          onClick={showEdit}
-          id="DialogContent-showEdit"
-        >
-          <Text translation="common.edit" />
-        </Button>
-      </Box>
-      }
+      {isCurrentUser && (
+        <Box display="flex" justifyContent="center">
+          <Button
+            variant="text"
+            color="primary"
+            style={{ width: 'auto' }}
+            onClick={showEdit}
+            id="DialogContent-showEdit"
+          >
+            <Text translation="common.edit" />
+          </Button>
+        </Box>
+      )}
       <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}
@@ -276,12 +279,23 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <NavigationManagementContainer />
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
-        {isCurrentUser && <Box className={classes.fieldMargin}>
-          <Typography variant="h6" className={classes.title}>
-            <Text message="administration.general.settings.timezone.title" />
-          </Typography>
-          <TimezoneSelect value={timezone} onChange={onChange} />
-        </Box>}
+        {isCurrentUser && (
+          <Box className={classes.fieldMargin}>
+            <Typography variant="h6" className={classes.title}>
+              {translate('user.management.timezone.title')}
+            </Typography>
+            {!timezone && (
+              <Typography
+                variant="body2"
+                className={classes.userTimezoneNote}
+                dangerouslySetInnerHTML={{
+                  __html: translate('user.management.timezone.note.message', { timezone: companyTimezone }),
+                }}
+              />
+            )}
+            <TimezoneSelect value={timezone} onChange={onChange} />
+          </Box>
+        )}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
