@@ -2,15 +2,14 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, IconButton, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { isEmpty, isUndefined } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../../state/ducks/attachments/constants';
 import { Attachment, AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import { AsyncStatus } from '../../../../../state/types';
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../../documentRevision/helpers/documentRevisionStatus';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -36,29 +35,32 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   selectedAttachments,
   documentRevision,
 }) => {
-  const passwordState = {
-    status: AsyncStatus.Idle,
-    message: '',
-  };
-
-  const warningState = {
-    status: AsyncStatus.Idle,
-    message: '',
-  };
-
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getFieldProps } = useFormikContext();
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const downloadAllAttachments = useActionCreator(attachmentsActions.downloadAllAttachments);
-  const downloadSelectedAttachments = useActionCreator(attachmentsActions.downloadSelectedAttachments);
   const downloadAllAttachmentsPassword = useActionCreator(attachmentsActions.downloadAllAttachmentsPassword);
+  const downloadSelectedAttachments = useActionCreator(attachmentsActions.downloadSelectedAttachments);
+  const downloadSelectedAttachmentsPassword = useActionCreator(attachmentsActions.downloadSelectedAttachmentsPassword);
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
   const selectedAttachmentsCount = Object.values(selectedAttachments ?? {}).filter(value => value === true).length;
   const attachments = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
   const classes = useStyles();
-  const { getFieldProps } = useFormikContext();
+
   const attachmentsData = (
     documentRevision?.attachments ?? getFieldProps('attachments').value ?? []
   ) as Attachment[];
+
+  const isDocumentStatusAllowRedlineDowload = (
+    isDocumentRevisionInDraft(docRevStatus)
+    || isDocumentRevisionPendingChange(docRevStatus)
+    || isDocumentRevisionInReview(docRevStatus)
+  );
+  const isDocumentStatusRequirePassword = (
+    isDocumentRevisionObsolete(docRevStatus)
+    || isDocumentRevisionDeprecated(docRevStatus)
+  );
   const isDownloadAll = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachmentsData?.length;
 
   const async = useAsync<AttachmentDownloadResponse>({
@@ -69,16 +71,15 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     },
     onError: (message) => {
       setIsDownloading(false);
-      message && toastError(message as unknown as string);
+      message && toastError(message);
     },
   });
 
-  const passwordSubmit = (values: Password) => {
-    if (isDownloadAll) {
-      async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
-    } else {
-      async.start(downloadSelectedAttachments, attachments, async);
-    }
+  const sendRequestWithPassword = (values: Password) => {
+    isDownloadAll
+      ? async.start(downloadAllAttachmentsPassword, docRevId, async, values.password)
+      : async.start(downloadSelectedAttachmentsPassword, docRevId, attachments, async);
+
     passwordDialogHandler.close();
   };
 
@@ -94,44 +95,34 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     return 'common.attachment.redline.warning.download.redlineAll';
   };
 
-  const warningSubmit = () => {
+  const openPasswordDialog = () => {
     redlineWarningDialogHandler.close();
     passwordDialogHandler.open();
   };
 
-  const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
-    const isRedlineAttachmentExist = attachmentsData.filter(item => item.lineType === LINE_TYPES.RED_LINE);
-    if (isDocumentRevisionInDraft(docRevStatus) && !isEmpty(isRedlineAttachmentExist) && (selectedAttachmentsCount === 1 || attachmentsData.length === 1)) {
-      const attachments = attachmentsData.map(item => item.id);
-      setIsDownloading(true);
-      async.start(downloadSelectedAttachments, attachments, async);
-    } else if (isDocumentRevisionInDraft(docRevStatus) || isUndefined(documentRevision?.attachments)) {
-      setIsDownloading(true);
-      async.start(downloadAllAttachments, documentRevisionId, async);
-    } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
-      setIsDownloading(true);
-      async.start(downloadAllAttachments, documentRevisionId, async);
-    } else {
-      setIsDownloading(true);
-      redlineWarningDialogHandler.open();
+  const dowloadAttachments = () => {
+    const attachmentsToDownload = attachmentsData.filter(
+      attachment => isDownloadAll || attachments?.includes(attachment.id),
+    );
+    const hasRedlineAttachmentToDownload = attachmentsToDownload.some(
+      attachment => attachment.lineType === LINE_TYPES.RED_LINE,
+    );
+
+    const isPasswordRequiredByRedline = hasRedlineAttachmentToDownload && !isDocumentStatusAllowRedlineDowload;
+
+    setIsDownloading(true);
+    if (!isDocumentStatusRequirePassword && !isPasswordRequiredByRedline) {
+      isDownloadAll
+        ? async.start(downloadAllAttachments, docRevId, async)
+        : async.start(downloadSelectedAttachments, docRevId, attachments, async);
+      return;
     }
+
+    redlineWarningDialogHandler.open();
   };
 
-  const handleSelectedDownload = (attachments: string[]) => () => {
-    const isRedlineAttachmentExist = attachmentsData.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE);
-    if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {
-      setIsDownloading(true);
-      async.start(downloadSelectedAttachments, attachments, async);
-    } else if (isEmpty(isRedlineAttachmentExist) && isDocumentRevisionInStatusFlag(docRevStatus)) {
-      setIsDownloading(true);
-      async.start(downloadSelectedAttachments, attachments, async);
-    } else if (!isEmpty(isRedlineAttachmentExist)) {
-      setIsDownloading(true);
-      redlineWarningDialogHandler.open();
-    }
-  };
-
-  const closeDialog = () => {
+  const closeDialogs = () => {
+    passwordDialogHandler.close();
     redlineWarningDialogHandler.close();
     setIsDownloading(false);
   };
@@ -144,26 +135,20 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     <>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
-        onSubmit={warningSubmit}
-        closeDialog={closeDialog}
-        asyncState={warningState}
+        onSubmit={openPasswordDialog}
+        closeDialog={closeDialogs}
+        asyncState={async.asyncState}
         translationText={warningPasswordText()}
         translationButtonText="common.attachment.redline.warning.download.labelAll"
       />
       <PasswordDialog
         isDialogOpen={passwordDialogHandler.isOpen}
-        onSubmit={passwordSubmit}
-        closeDialog={passwordDialogHandler.close}
-        asyncState={passwordState}
+        onSubmit={sendRequestWithPassword}
+        closeDialog={closeDialogs}
+        asyncState={async.asyncState}
       />
       <Tooltip title={translate(isDownloadAll ? 'common.download.all.files' : 'common.download.selected.files')}>
-        <IconButton
-          className={classes.actionButton}
-          onClick={isDownloadAll
-            ? handleAllDownload(docRevId, undefined)
-            : handleSelectedDownload(attachments ?? [])
-          }
-        >
+        <IconButton className={classes.actionButton} onClick={dowloadAttachments}>
           {isDownloading
             ? <CircularProgress className={classes.actionButtonIcon} />
             : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.actionButtonIcon} />
