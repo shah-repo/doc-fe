@@ -45,7 +45,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const { formInput } = documentRevision;
   const { approvalRoles: approvalRolesState } = useSelector(companySelectors.getGeneralSettings);
-  const { removeFromDam, addToDam, dam, approvalRoles } = approvalRolesState;
+  const { dam, addToDam = [], removeFromDam = [], approvalRoles = [] } = approvalRolesState;
   const damIsSynced = dam?.isSynced ?? true;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
