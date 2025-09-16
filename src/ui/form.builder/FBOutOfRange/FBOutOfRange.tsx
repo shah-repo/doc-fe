@@ -16,12 +16,14 @@ const FBOutOfRange: React.FunctionComponent<FBOutOfRangeProps> = ({
   const classes = useStyles();
 
   const isInRange = useObserver(() => {
-    const fieldValue = formState?.inputState.get(parentName ?? '')?.value;
+    const fieldValue = formState?.newValues.get(parentName) ?? formState?.getFieldValue(parentName);
     const value = path ? get(fieldValue, path) : fieldValue;
     const isNotDefined = !value || value === '';
     const isInRange = (!pass?.from || value >= pass?.from) && (!pass?.to || value <= pass?.to);
     return isNotDefined || isInRange;
   });
+
+  console.log({ pass, isInRange });
 
   if (!pass || isEmpty(pass) || isInRange) {
     return null;
