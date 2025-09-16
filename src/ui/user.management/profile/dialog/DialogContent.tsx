@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReactComponent as SlackLogo } from '../../../../assets/images/slack_full_logo.svg';
+import { translate } from '../../../../common/intl';
 import { getTableCriteria } from '../../../../common/utils/selectors';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { authActions, authSelectors } from '../../../../state/ducks/auth';
@@ -93,6 +94,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
+  const companyTimezone = useSelector(companySelectors.getCompanyTimezone);
 
   const TABLE_NAME = 'userManagement';
 
@@ -278,7 +280,10 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <WhiteLabelingManagementContainer />
         {isCurrentUser && <Box className={classes.fieldMargin}>
           <Typography variant="h6" className={classes.title}>
-            <Text message="administration.general.settings.timezone.title" />
+            {translate('user.management.timezone.title')}
+          </Typography>
+          <Typography variant="body2" className={classes.userTimezoneNote}>
+            {translate('user.management.timezone.note.message', { timezone: companyTimezone })}
           </Typography>
           <TimezoneSelect value={timezone} onChange={onChange} />
         </Box>}
