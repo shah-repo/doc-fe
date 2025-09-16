@@ -94,6 +94,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
+  const companyTimezone = useSelector(companySelectors.getCompanyTimezone);
 
   const TABLE_NAME = 'userManagement';
 
@@ -236,18 +237,19 @@ const DialogContent: React.FunctionComponent<Props> = ({
           {email}
         </Typography>
       </Box>
-      {isCurrentUser && <Box display="flex" justifyContent="center">
-        <Button
-          variant="text"
-          color="primary"
-          style={{ width: 'auto' }}
-          onClick={showEdit}
-          id="DialogContent-showEdit"
-        >
-          <Text translation="common.edit" />
-        </Button>
-      </Box>
-      }
+      {isCurrentUser && (
+        <Box display="flex" justifyContent="center">
+          <Button
+            variant="text"
+            color="primary"
+            style={{ width: 'auto' }}
+            onClick={showEdit}
+            id="DialogContent-showEdit"
+          >
+            <Text translation="common.edit" />
+          </Button>
+        </Box>
+      )}
       <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}
@@ -277,15 +279,23 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <NavigationManagementContainer />
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
-        {isCurrentUser && <Box className={classes.fieldMargin}>
-          <Typography variant="h6" className={classes.title}>
-            {translate('user.management.timezone.title')}
-          </Typography>
-          {!timezone && <Typography variant="body2" className={classes.userTimezoneNote}>
-            {translate('user.management.timezone.note.message')}
-          </Typography>}
-          <TimezoneSelect value={timezone} onChange={onChange} />
-        </Box>}
+        {isCurrentUser && (
+          <Box className={classes.fieldMargin}>
+            <Typography variant="h6" className={classes.title}>
+              {translate('user.management.timezone.title')}
+            </Typography>
+            {!timezone && (
+              <Typography
+                variant="body2"
+                className={classes.userTimezoneNote}
+                dangerouslySetInnerHTML={{
+                  __html: translate('user.management.timezone.note.message', { timezone: companyTimezone }),
+                }}
+              />
+            )}
+            <TimezoneSelect value={timezone} onChange={onChange} />
+          </Box>
+        )}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
