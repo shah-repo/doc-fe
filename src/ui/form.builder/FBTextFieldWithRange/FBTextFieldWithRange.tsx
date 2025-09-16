@@ -49,6 +49,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   tolerance,
   aql,
   name,
+  placeholder,
   index = 0,
   label = '',
   type = 'textfieldwithrange',
@@ -155,6 +156,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
             >
               <TextField
                 defaultValue={value?.value}
+                placeholder={placeholder}
                 endAdornment={<span className={classes.outOfRange}><FBOutOfRange {...{ pass }} parentName={name} path="value" /></span>}
                 inputProps={{
                   type: 'number',

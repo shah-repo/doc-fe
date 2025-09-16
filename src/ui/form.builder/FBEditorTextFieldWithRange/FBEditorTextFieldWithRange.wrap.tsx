@@ -3,16 +3,14 @@ import React, { useEffect } from 'react';
 import { FB, FBEditorTextFieldWithRangeProps, FBFormState, FBPassType } from '..';
 
 export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRangeProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     inputProps,
     ...props
   }: T) => {
-    // MARK: @config
     const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
 
-    // MARK: @reactions
     useEffect(() => reaction(
       () => formState?.getInputState('editorConfig.rangeOption')?.value,
       (value: boolean | undefined) => setRange(value),
@@ -93,10 +91,6 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
         : 'editorConfig.pass.percentage';
       formState.omitFieldValue(omitFieldName);
     }
-
-    // MARK: @methods
-
-    // MARK: @observer
 
     return Component({
       ...(props as T),
