@@ -94,7 +94,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
   const timezone = useSelector(authSelectors.getUserTimezone);
-  const companyTimezone = useSelector(companySelectors.getCompanyTimezone);
 
   const TABLE_NAME = 'userManagement';
 
@@ -282,9 +281,9 @@ const DialogContent: React.FunctionComponent<Props> = ({
           <Typography variant="h6" className={classes.title}>
             {translate('user.management.timezone.title')}
           </Typography>
-          <Typography variant="body2" className={classes.userTimezoneNote}>
-            {translate('user.management.timezone.note.message', { timezone: companyTimezone })}
-          </Typography>
+          {!timezone && <Typography variant="body2" className={classes.userTimezoneNote}>
+            {translate('user.management.timezone.note.message')}
+          </Typography>}
           <TimezoneSelect value={timezone} onChange={onChange} />
         </Box>}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />

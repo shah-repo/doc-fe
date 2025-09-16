@@ -1851,7 +1851,7 @@
   "user.management.add.codes": "Add Acct Codes",
   "user.management.codes": "Acct Codes",
   "user.management.timezone.title": "User Timezone",
-  "user.management.timezone.note.message": "If not specified, the company time zone ({timezone}) will be used to display dates and times throughout the application.",
+  "user.management.timezone.note.message": "If not specified, the company time zone will be used to display dates and times throughout the application.",
   "scan.lot.dialog.title.message": "Scan Lot",
   "scan.lot.grid.lot.number": "Lot Number",
   "scan.lot.grid.serial.number": "Serial Number",
