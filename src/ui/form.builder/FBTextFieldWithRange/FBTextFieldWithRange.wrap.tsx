@@ -7,8 +7,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
   const Comp = ({
-    editorConfig,
-    includeInFaiInspection,
+    editorConfig = {},
     name = '',
     label = '',
     ...props
@@ -87,7 +86,6 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       error: isError,
       helperText,
       criticalToQuality,
-      includeInFaiInspection,
       isPartFaiRequired,
       isPartIqcRequired,
       onUpdate: updateValue,
