@@ -129,7 +129,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
         <SyncLabelElement
           label={getSyncMessageTranslation()}
           subLabel={translate('dam.sync.message.in.review.role.sub.label', {
-            docId: dam.document.docId,
+            docId: dam?.document?.docId,
           })}
         />
       );
