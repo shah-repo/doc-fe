@@ -37,6 +37,10 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       displayValue = dataItem.pmDueDateText;
     }
 
+    if(isCalPmDueDate && displayValue) {
+      displayValue = moment(displayValue).format(MomentFormats.MonthDateYearTwoDigit);
+    }
+
     return (
       <OverflowTooltip
         title={displayValue}
