@@ -59,6 +59,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   value,
   error,
   helperText,
+  disabled = false,
   loading = false,
   onUpdate,
   ...props
@@ -94,7 +95,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   }
 
   return (
-    <FBInput name={name} type={type} index={index} autosave>
+    <FBInput name={name} type={type} index={index} autosave disabled={disabled}>
       <div data-cy={`${type}-${index}`}>
         <Grid container spacing={1}>
           <Grid item md={8} xs={6}>
@@ -102,6 +103,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
               loading={isLoading}
               error={error}
               helperText={helperText}
+              disabled={disabled}
               label={
                 <div className={classes.label}>
                   <FBText
@@ -155,7 +157,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
             </FormField>
           </Grid>
           <Grid item md={4} xs={6}>
-            <FormField label="form.builder.unit" loading={isLoading}>
+            <FormField label="form.builder.unit" loading={isLoading} disabled={disabled}>
               <Autocomplete
                 options={units}
                 value={value?.unit}
