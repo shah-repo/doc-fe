@@ -1,5 +1,7 @@
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { useDate } from '../../common/utils/date';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { documentTypeActions } from '../../state/ducks/documentRevisions/documentType';
@@ -26,6 +28,7 @@ const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
 
 const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps>
   = ({ history, match }) => {
+    const { getFormattedDateString } = useDate();
     const documentTypeId = match.params.documentTypeId;
     const formId = match.params.formId;
     const create = useActionCreator(changeRequestsActions.create);
@@ -59,7 +62,12 @@ const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateC
     }, []);
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
-      async.start(create, toChangeRequestEditRequestBody(values), async);
+      const effectiveDate = getFormattedDateString(values.formInput?.effectiveDate);
+      const updatedValues = {
+        ...values,
+        formInput: { ...values.formInput, ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate } : {}) },
+      };
+      async.start(create, toChangeRequestEditRequestBody(updatedValues), async);
     };
 
     return (

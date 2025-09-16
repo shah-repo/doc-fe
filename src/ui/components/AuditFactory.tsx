@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
@@ -24,7 +24,7 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
 import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import { FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -35,6 +35,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingCustomer from './AuditShippingCustomer';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
@@ -66,6 +67,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+  const { getFormattedDateString, getFormattedStartOfDayDateString } = useDate();
 
   const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
@@ -217,10 +219,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
       },
       shippingCustomer () {
-        if (audit.fbSchemaItem) {
-          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
-        }
-        return <AuditAutocomplete audit={audit} />;
+        return <AuditShippingCustomer {...{ audit, dataCy, auditValue }} />;
       },
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
@@ -818,6 +817,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } catch (err) {
           // do nothing
         }
+        break;
+      case 'formInput.po-items-built-in.dateOfExchangeRate':
+        returnValue = (<div data-cy={dataCy}>{getFormattedStartOfDayDateString(auditValue)}</div>);
         break;
       case 'formInput.po-items-built-in.items.order':
       case 'formInput.po-items-built-in.items.totalAmount':

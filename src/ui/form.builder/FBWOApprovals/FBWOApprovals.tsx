@@ -23,7 +23,7 @@ import {
 import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
 import {
   MomentFormats,
-  getFormattedDateString,
+  useDate,
 } from '../../../common/utils/date';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../../ui/components/Text';
@@ -57,6 +57,7 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
     FBInlineApprovalStatusIdent.PENDING,
   ];
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
 
   const approvalsByStatus = approvals?.reduce<
   Record<string, FBInlineApprovalBody[]>

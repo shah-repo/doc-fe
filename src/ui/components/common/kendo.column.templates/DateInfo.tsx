@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { get } from 'lodash';
 import React from 'react';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
 
@@ -16,6 +16,7 @@ export const DateInfo = ({
   cellRowClick,
 }: CustomGridCellProps) => {
   const date = get(dataItem, field || '');
+  const { getFormattedDateString } = useDate();
   const formattedDate = date ? getFormattedDateString(date, MomentFormats.MonthDateYear) : null;
   if (rowType === 'groupHeader') {
     return null;

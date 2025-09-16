@@ -127,8 +127,16 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ),
           this.additionalData ?? [],
         );
-      case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
+        return data.map((option) => {
+          const latestDocRev = option?.documentRevisions.pop();
+          return ({
+            ...option,
+            name: latestDocRev?.name ?? '',
+            displayRevision: latestDocRev?.displayRevision ?? '',
+          });
+        });
+      case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {
           const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
           return ({

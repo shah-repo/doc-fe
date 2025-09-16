@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { Attachment, AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
+import { toastError } from '../../../../ui/components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import ViewFilePresenter from './presenter';
@@ -18,6 +19,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
   const downloadWithPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => downloadInfo && setSignedUrl(downloadInfo.url),
+    onError: toastError,
   });
   useEffect(() => {
     if (isOpen && password) {

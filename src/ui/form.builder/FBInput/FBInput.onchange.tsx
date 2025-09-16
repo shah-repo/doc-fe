@@ -70,14 +70,16 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue (formValue: any, state = false) {
+    function setValue (formValue: any, state = false, omitFormValue = false) {
       if (!name) { return; }
       if(name === 'lhr-build-type') {
         return;
       }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      if (!omitFormValue) {
+        formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      }
 
       if (!isFbEditorField) {
         FBDataStore?.setRefreshData(workspaceState?.isPreview ? FBDataStore?.refreshData : cloneDeep(FBDataStore?.refreshData));
@@ -185,7 +187,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         return intl.formatMessage({ id: `form.builder.${name.split('-').slice(1).join('.')}` });
       }
 
-      function isDefault () {
+      function isDefault (omitFormValue = false) {
         const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === 'number' && value !== '') {
@@ -210,7 +212,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (isFbEditorField) {
           setTextValue(value);
         }
-        setValue(value);
+        setValue(value, false, omitFormValue);
       }
 
       const changedValue = {
@@ -221,6 +223,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         datepicker () { return dateValue(ev as string); },
         radiogroup () { return isGroupCheck(); },
         select () { return isGroupCheck(); },
+        textfieldwithrange () { return isDefault(true); },
         default () { return isDefault(); },
       };
 

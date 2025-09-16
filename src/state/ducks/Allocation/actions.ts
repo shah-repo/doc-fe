@@ -1,9 +1,10 @@
+import { ValidateLot } from '../../../ui/components/common/dialogs/scaner/components/lot.table/types';
 import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, VALIDATE_EQ_SCAN, VALIDATE_SCANNED_LOT } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -32,7 +33,9 @@ const addPart = (
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
-    data: data,
+    data: {
+      allocations: data,
+    },
     handlers,
   });
 
@@ -58,13 +61,15 @@ const updatePart = (
   });
 
 const addLot = (
-  data: AllocationLOTBody,
+  data: AllocationLOTBody[],
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
-    data: data,
+    data: {
+      allocations: data,
+    },
     handlers,
   });
 
@@ -121,6 +126,27 @@ const fetchLatestRevisionDetailsByRevId = (
     handlers,
   });
 
+const validateScannedLot = (
+  partRevId: string,
+  lotRevId: string,
+  handlers: Handlers,
+): ApiAction<ValidateLot> =>
+  apiActionWithCallbacks({
+    url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}/validate`,
+    method: 'get',
+    handlers,
+  });
+
+const validateEQScannedItem = (
+  equipmentRevId: string,
+  handlers: Handlers,
+): ApiAction<ValidateLot> =>
+  apiActionWithCallbacks({
+    url: `${VALIDATE_EQ_SCAN}/${equipmentRevId}/validate`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   fetchLatestRevisionDetailsByRevId,
   loadAllocationList,
@@ -132,4 +158,6 @@ export default {
   fetchLatestPartRevision,
   deletePart,
   deleteAllocation,
+  validateScannedLot,
+  validateEQScannedItem,
 };

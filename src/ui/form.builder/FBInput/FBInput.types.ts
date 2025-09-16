@@ -289,6 +289,7 @@ export const FBAutosave: FBInputType[] = [
   'supplierOfferings',
   'supplierSupportingDocs',
   'supplierReferences',
+  'textfieldwithrange',
 ];
 
 export const SectionTypeField: FBInputType[] = [
