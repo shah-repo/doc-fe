@@ -32,7 +32,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     || fieldName.includes('documentRevisions.id')
     || fieldName.includes('approver.id')
     || fieldName.includes('signatureGroupId.id')
-    || fieldName.includes('formInput.approvers');
+    || fieldName.includes('formInput.approvers')
+    || fieldName.includes('documentRevisions.whereUsedView.parentRevId');
   };
 
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
