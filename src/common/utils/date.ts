@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash';
 import moment, { MomentInput } from 'moment';
-import * as momentTz from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../state/ducks/auth';
 import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
@@ -10,7 +9,7 @@ export const TIME_ZONE = 'America/Los_Angeles';
 export const useDate = () => {
   const defaultUserCompanyTimeZone = useSelector(authSelectors.getUserCompanyTimezone);
   const timezone = isEmpty(defaultUserCompanyTimeZone) ? TIME_ZONE : defaultUserCompanyTimeZone;
-  momentTz.tz.setDefault(timezone);
+  moment.tz.setDefault(timezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
