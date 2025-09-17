@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import moment, { MomentInput } from 'moment';
-import 'moment-timezone';
+import * as momentTz from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../state/ducks/auth';
 import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
@@ -10,6 +10,7 @@ export const TIME_ZONE = 'America/Los_Angeles';
 export const useDate = () => {
   const defaultUserCompanyTimeZone = useSelector(authSelectors.getUserCompanyTimezone);
   const timezone = isEmpty(defaultUserCompanyTimeZone) ? TIME_ZONE : defaultUserCompanyTimeZone;
+  momentTz.tz.setDefault(timezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
@@ -23,8 +24,21 @@ export const useDate = () => {
   const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
 
   const convertDateTimeToUserTz = (date: string, format: string): string => {
-    // return moment.tz(date, format, timezone).toISOString();
-    return moment.tz(date, format, timezone).format('YYYY-MM-DD');
+    return moment.tz(date, format, timezone).format(MomentFormats.YearMonthDateDash);
+  };
+
+  const formatDisplayDate = (dateStr?: string) => {
+    if (!dateStr) {
+      return dateStr;
+    }
+
+    const isYMDFormat = moment(dateStr, MomentFormats.YearMonthDateDash, true).isValid();
+
+    if (isYMDFormat) {
+      return moment.utc(dateStr, MomentFormats.YearMonthDateDash).format(MomentFormats.MonthDateYearTwoDigit);
+    }
+
+    return dateStr;
   };
 
   return {
@@ -34,6 +48,7 @@ export const useDate = () => {
     getFormattedDateString,
     getStartOfDayDateString,
     getFormattedStartOfDayDateString,
+    formatDisplayDate,
   };
 };
 
@@ -51,6 +66,7 @@ export const getHumanizedFormat = (dateString: string) => moment.utc(dateString)
 
 export enum MomentFormats {
   MonthDateYear = 'M/D/YYYY',
+  YearMonthDateDash = 'YYYY-MM-DD',
   MonthDateYearTwoDigit = 'MM/DD/YYYY',
   MonthDateYearAlt = 'MMMM D, YYYY',
   DateTime = 'MMMM D, YYYY hh:mm A z',
