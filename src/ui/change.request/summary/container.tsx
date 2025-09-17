@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
-import { useDate } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
@@ -41,7 +40,6 @@ const Container: React.FunctionComponent<Props> = ({
   _formState,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
-  const { parseDateToYMD } = useDate();
 
   const changeOpenStatus = (isDrawerOpen) => {
     setOpen(isDrawerOpen);
@@ -84,14 +82,14 @@ const Container: React.FunctionComponent<Props> = ({
         ...initialValues,
         formInput: {
           ...initialValues.formInput,
-          ...(!isEmpty(initialValues.formInput?.effectiveDate) ? { effectiveDate: parseDateToYMD(initialValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(initialValues.formInput?.effectiveDate) ? { effectiveDate: initialValues.formInput?.effectiveDate } : {}),
         },
       },
       {
         ...values,
         formInput: {
           ...updatedValues,
-          ...(!isEmpty(updatedValues?.formInput?.effectiveDate) ? { effectiveDate: parseDateToYMD(updatedValues?.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(updatedValues?.formInput?.effectiveDate) ? { effectiveDate: updatedValues?.formInput?.effectiveDate } : {}),
         },
       },
       toChangeRequestEditRequestBody,
