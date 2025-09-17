@@ -1,6 +1,6 @@
 import { Box, InputAdornment } from '@material-ui/core';
 import React from 'react';
-import { FBCheckbox, FBData, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from '..';
+import { FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBRange, FBTextField } from '..';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorCheckbox.styles';
 import useToleranceStyles from './FBEditorTextFieldWithRange.styles';
@@ -9,12 +9,13 @@ import { withFBEditorTextFieldWithRange } from './FBEditorTextFieldWithRange.wra
 const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithRangeProps> = ({
   formState,
   children,
-  inputProps: { type } = {},
   inputProps,
   ...props
 }) => {
   const classes = styles();
   const toleranceClasses = useToleranceStyles();
+
+  const type = inputProps?.type ?? 'textfieldwithrange';
 
   return (
     <FBEditor {...props} {...{ inputProps, formState, type }}>
@@ -78,40 +79,6 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           name="editorConfig.inspection"
           gutter={false}
           withState
-        />
-        <FBCheckbox
-          label="form.builder.pass.value"
-          name="editorConfig.passValue"
-          gutter={false}
-          withState
-        />
-        <Box display="flex">
-          <FBRange
-            name="editorConfig.pass.value"
-            boxProps={{ flexGrow: 1 }}
-            gutter={false}
-          />
-          <FBPassPercentage
-            name="editorConfig.pass.percentage"
-            boxProps={{ height: 47 }}
-            gutter={false}
-          />
-          <FBSelect
-            name="editorConfig.pass.type"
-            style={{ height: 47 }}
-            boxProps={{ minWidth: '27%', ml: 2 }}
-            options={FBData.passTypeOptions}
-            gutter={false}
-            withState
-          />
-        </Box>
-        <FBSelect
-          style={{ height: 47 }}
-          boxProps={{ mt: 3.125, mb: 3.125 }}
-          labelProps={{ fontWeight: 600, fontSize: 14, marginBottom: 1.25 }}
-          label="form.builder.aql"
-          name="editorConfig.aql"
-          options={FBData.aqlOptions}
         />
       </Box>
       {children}
