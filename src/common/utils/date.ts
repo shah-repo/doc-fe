@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash';
 import moment, { MomentInput } from 'moment';
-import 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../state/ducks/auth';
 import { MyFeedsItems } from '../../state/ducks/dashboard.new/my.feeds/types';
@@ -10,6 +9,7 @@ export const TIME_ZONE = 'America/Los_Angeles';
 export const useDate = () => {
   const defaultUserCompanyTimeZone = useSelector(authSelectors.getUserCompanyTimezone);
   const timezone = isEmpty(defaultUserCompanyTimeZone) ? TIME_ZONE : defaultUserCompanyTimeZone;
+  moment?.tz?.setDefault(timezone);
 
   const getFormattedDateString = (date: DateTypes, format = '') =>
     moment(date)?.tz(timezone)?.format(format);
@@ -23,7 +23,43 @@ export const useDate = () => {
   const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
 
   const convertDateTimeToUserTz = (date: string, format: string): string => {
-    return moment.tz(date, format, timezone).toISOString();
+    return moment.tz(date, format, timezone).format(MomentFormats.YearMonthDateDash);
+  };
+
+  const parseDateToYMD = (date: string): string => {
+    if (!date) return date;
+
+    const isDisplayFormat = moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid();
+    const isISODate = moment.utc(date, moment.ISO_8601, true).isValid();
+
+    if (isDisplayFormat) {
+      return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    if (isISODate) {
+      return moment.utc(date).tz(timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    return date;
+  };
+
+  const formatDisplayDate = (dateStr?: string) => {
+    if (!dateStr) {
+      return dateStr;
+    }
+
+    const isYMDFormat = moment(dateStr, MomentFormats.YearMonthDateDash, true).isValid();
+    const isISODateTime = moment.utc(dateStr, moment.ISO_8601, true).isValid();
+
+    if (isYMDFormat) {
+      return moment.utc(dateStr, MomentFormats.YearMonthDateDash).format(MomentFormats.MonthDateYearTwoDigit);
+    }
+
+    if (isISODateTime) {
+      return moment.utc(dateStr).format(MomentFormats.MonthDateYearTwoDigit);
+    }
+
+    return dateStr;
   };
 
   return {
@@ -33,6 +69,8 @@ export const useDate = () => {
     getFormattedDateString,
     getStartOfDayDateString,
     getFormattedStartOfDayDateString,
+    formatDisplayDate,
+    parseDateToYMD,
   };
 };
 
@@ -50,6 +88,7 @@ export const getHumanizedFormat = (dateString: string) => moment.utc(dateString)
 
 export enum MomentFormats {
   MonthDateYear = 'M/D/YYYY',
+  YearMonthDateDash = 'YYYY-MM-DD',
   MonthDateYearTwoDigit = 'MM/DD/YYYY',
   MonthDateYearAlt = 'MMMM D, YYYY',
   DateTime = 'MMMM D, YYYY hh:mm A z',
