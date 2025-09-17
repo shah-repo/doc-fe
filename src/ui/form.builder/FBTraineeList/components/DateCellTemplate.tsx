@@ -20,7 +20,8 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
       return;
     }
 
-    setFieldValue(field, date.startOf('day').toISOString());
+    const updatedDate = date && moment(date).format(MomentFormats.YearMonthDateDash);
+    setFieldValue(field, updatedDate);
   };
 
   const handleClear = () => {
