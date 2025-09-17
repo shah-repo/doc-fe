@@ -27,6 +27,18 @@ export const useDate = () => {
     return moment.tz(date, format, timezone).format(MomentFormats.YearMonthDateDash);
   };
 
+  const parseDateToYMD = (date: string): string => {
+    if (moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid()) {
+      return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    if (moment.utc(date, moment.ISO_8601, true).isValid()) {
+      return moment.utc(date).tz(timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    return date;
+  };
+
   const formatDisplayDate = (dateStr?: string) => {
     if (!dateStr) {
       return dateStr;
@@ -54,6 +66,7 @@ export const useDate = () => {
     getStartOfDayDateString,
     getFormattedStartOfDayDateString,
     formatDisplayDate,
+    parseDateToYMD,
   };
 };
 
