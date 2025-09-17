@@ -33,9 +33,14 @@ export const useDate = () => {
     }
 
     const isYMDFormat = moment(dateStr, MomentFormats.YearMonthDateDash, true).isValid();
+    const isISODateTime = moment.utc(dateStr, moment.ISO_8601, true).isValid();
 
     if (isYMDFormat) {
       return moment.utc(dateStr, MomentFormats.YearMonthDateDash).format(MomentFormats.MonthDateYearTwoDigit);
+    }
+
+    if (isISODateTime) {
+      return moment.utc(dateStr).format(MomentFormats.MonthDateYearTwoDigit);
     }
 
     return dateStr;
