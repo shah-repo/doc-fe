@@ -7,6 +7,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { panels } from '../../constants';
 import { GeneralSettingsProps, GeneralSettingsTabs } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
+import SettingsHistoryDialog from './SettingsHistoryDialog';
 import useStyles from './styles';
 
 const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
@@ -26,6 +27,14 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
     state.includes(key) ? state.filter(it => it !== key) : [...state, key]
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
+
+  const [isShowHistoryDialog, setIsShowHistoryDialog] = useState<boolean>(false);
+  const showHistoryDialog = () => {
+    setIsShowHistoryDialog(true);
+  };
+  const handleHistoryDialogClose = () => {
+    setIsShowHistoryDialog(false);
+  };
 
   return (
     <Box className={classes.root}>
@@ -53,7 +62,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
             />
           )}
           <Box className={classes.buttons}>
-            <Button kind="outlined" data-cy="settings-history" disabled>{translate('common.history')}</Button>
+            <Button onClick={showHistoryDialog} kind="outlined" data-cy="settings-history">{translate('common.history')}</Button>
             <Button onClick={onSave} data-cy="settings-save">{translate('common.save.changes')}</Button>
           </Box>
         </Box>
@@ -91,6 +100,12 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           />
         ))}
       </div>
+      {isShowHistoryDialog && (
+        <SettingsHistoryDialog
+          isOpen={isShowHistoryDialog}
+          handleClose={handleHistoryDialogClose}
+        />
+      )}
     </Box>
   );
 };

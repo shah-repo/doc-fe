@@ -2271,7 +2271,7 @@
   "allocation.part.quantity.short.info.message": "Based on your Qty needed and Variance, you are short {quantityShort} {unit} for {partID}",
   "allocation.rev.header.title": "This is the revision of the part in the Lot",
   "allocation.lot.expired.confirm.prompt.message": "The selected lot has expired.\n\nAre you sure you want to continue?",
-   "allocation.scan.lot.expired.confirm.prompt.message": "The scannned lot has expired.\n\nAre you sure you want to continue?",
+  "allocation.scan.lot.expired.confirm.prompt.message": "The scannned lot has expired.\n\nAre you sure you want to continue?",
   "allocation.lot.expired.tooltip.message": "Lot expired on {expiryDate}",
   "wo.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "wo.withdraw.alert": "Are you sure you want to withdraw this Work Order?",
@@ -2695,5 +2695,6 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
-  "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision"
+  "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision",
+  "settings.audit.logs.dialog.title": "Audit History"
 }
