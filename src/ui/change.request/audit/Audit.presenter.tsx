@@ -62,7 +62,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
 
     if (change.fbSchemaItem?.name === 'documentRevisions') {
-      const fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      let fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      if(change.type === 'ARRAY_DELETED') {
+        fieldName = fieldName.replace(/\.\d+\./, '.');
+      }
       return `changeRequest.audit.${fieldName}.${change.type}`;
     }
 
