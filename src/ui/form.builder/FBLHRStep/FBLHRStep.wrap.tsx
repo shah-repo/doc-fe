@@ -4,7 +4,7 @@ import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
-import { MomentFormats, convertDateTimeToPST, getFormattedDateString } from '../../../common/utils/date';
+import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -32,6 +32,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   }: T) => {
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const { getFormattedDateString } = useDate();
     const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
       && ref.metadata.fieldId === name);
