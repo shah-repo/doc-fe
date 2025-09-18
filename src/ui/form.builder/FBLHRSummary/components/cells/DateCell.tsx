@@ -38,7 +38,11 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     }
 
     if(isCalPmDueDate && displayValue) {
-      displayValue = moment(displayValue).format(MomentFormats.MonthDateYearTwoDigit);
+      // displayValue = moment(displayValue).format(MomentFormats.MonthDateYearTwoDigit);
+      const momentObject = moment(displayValue, Object.values(MomentFormats));
+      const formattedDate = momentObject.format(MomentFormats.MonthDateYearTwoDigit);
+      console.log('field', field, 'displayValue', displayValue, 'formattedDate', formattedDate);
+      displayValue = formattedDate;
     }
 
     return (
