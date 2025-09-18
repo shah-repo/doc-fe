@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
-import { useDate } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -88,7 +88,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
-    trainingCompletionDate: moment().tz(timezone).startOf('day').toISOString(),
+    trainingCompletionDate: moment().tz(timezone).format(MomentFormats.YearMonthDateDash),
     createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });
@@ -130,10 +130,11 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
     }
 
     const lastTrainee = last(traineeList);
+    const updatedDate = lastTrainee?.trainingCompletionDate && moment(lastTrainee?.trainingCompletionDate).format(MomentFormats.YearMonthDateDash);
 
     setEditedTrainee({
       id: uuidv4(),
-      trainingCompletionDate: lastTrainee?.trainingCompletionDate,
+      trainingCompletionDate: updatedDate,
       trainingDocument: lastTrainee?.trainingDocument,
       createdAt: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
