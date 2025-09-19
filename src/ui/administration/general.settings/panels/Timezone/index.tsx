@@ -15,6 +15,10 @@ const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
   const { setFieldValue } = useFormikContext<GeneralSettings>();
 
   const onChange = (value: TimezoneOption | null) => {
+    if (!value) {
+      return;
+    }
+
     const updatedTimezone = value?.value;
     setCompanyTimeZone(updatedTimezone);
     setFieldValue('timezone', updatedTimezone);
