@@ -13,6 +13,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   onChange,
   placeholder = translate('common.select'),
   disabled = false,
+  disableClearable,
 }) => {
   const [timezoneOptions, setTimezoneOptions] = useState<TimezoneOption[]>();
   const timezone = find(timezoneOptions, { value });
@@ -52,7 +53,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       autoHighlight
       clearOnEscape
       disabled={disabled}
-      disableClearable
+      disableClearable={disableClearable || !timezone}
     />
   );
 };
