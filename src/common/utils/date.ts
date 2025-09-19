@@ -26,6 +26,23 @@ export const useDate = () => {
     return moment.tz(date, format, timezone).format(MomentFormats.YearMonthDateDash);
   };
 
+  const parseDateToYMD = (date: string): string => {
+    if (!date) return date;
+
+    const isDisplayFormat = moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid();
+    const isISODate = moment.utc(date, moment.ISO_8601, true).isValid();
+
+    if (isDisplayFormat) {
+      return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    if (isISODate) {
+      return moment.utc(date).tz(timezone).format(MomentFormats.YearMonthDateDash);
+    }
+
+    return date;
+  };
+
   const formatDisplayDate = (dateStr?: string, format = MomentFormats.MonthDateYearTwoDigit) => {
     if (!dateStr) {
       return dateStr;
@@ -53,6 +70,7 @@ export const useDate = () => {
     getStartOfDayDateString,
     getFormattedStartOfDayDateString,
     formatDisplayDate,
+    parseDateToYMD,
   };
 };
 
