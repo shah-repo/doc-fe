@@ -35,7 +35,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     inputState,
     transform,
     withState,
-    omitFormValue,
+    omitFormValue: omitFormstateValue,
     hidden,
     isFbEditorField = false,
     ...props
@@ -75,7 +75,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       if (!omitFormValue) {
-        formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+        formState?.setFieldValue(name, formValue, state || withState, omitFormValue || omitFormstateValue);
       }
 
       if (!isFbEditorField) {
@@ -251,7 +251,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       inputState,
       transform,
       withState,
-      omitFormValue,
+      omitFormValue: omitFormstateValue,
       type,
       name,
       hidden,
