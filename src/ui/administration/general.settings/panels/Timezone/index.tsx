@@ -30,7 +30,7 @@ const TimezoneSettings: React.FC<SettingsPanelProps> = (props) => {
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.timezone.title')}>
-      <TimezoneSelect value={companyTimeZone} onChange={onChange} />
+      <TimezoneSelect value={companyTimeZone} onChange={onChange} disableClearable />
     </SettingsPanel>
   );
 };

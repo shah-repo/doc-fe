@@ -293,7 +293,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
                 }}
               />
             )}
-            <TimezoneSelect value={timezone} onChange={onChange} isUserTimeZone />
+            <TimezoneSelect value={timezone} onChange={onChange} />
           </Box>
         )}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
