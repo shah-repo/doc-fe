@@ -40,7 +40,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
 }) => {
   const classes = styles();
   const isOverdue = status === TrainingStatusTypes.OVERDUE;
-  const { formatDisplayDate } = useDate();
+  const { getFormattedDateString } = useDate();
 
   const titleRender = (
     avatar,
@@ -128,7 +128,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             color="textPrimary"
           >
             <Text translation="common.due.date" />:{' '}
-            {formatDisplayDate(date, MomentFormats.BriefDate)}
+            {getFormattedDateString(date, MomentFormats.BriefDateTime)}
           </Typography>
         </Grid>
       </Grid>

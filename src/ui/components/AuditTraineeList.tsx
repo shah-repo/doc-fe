@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { useDate } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../state/reducers';
@@ -21,14 +21,14 @@ const AuditTraineeList: React.FC<Props> = ({
   dataCy,
   auditValue,
 }) => {
-  const { formatDisplayDate } = useDate();
+  const { getFormattedDateString } = useDate();
   const field = audit.field.split('.').at(-1) as string;
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, audit?.documentRevisionId ?? ''),
   );
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
-    trainingCompletionDate: () => formatDisplayDate(auditValue),
+    trainingCompletionDate: () => getFormattedDateString(auditValue as string, MomentFormats.DateTimeComplete),
     attachmentIds () {
       return <AuditAttachment {...{ audit }} />;
     },
