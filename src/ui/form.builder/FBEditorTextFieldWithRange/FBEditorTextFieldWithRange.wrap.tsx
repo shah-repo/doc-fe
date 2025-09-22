@@ -12,14 +12,14 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
 
     useEffect(() => reaction(
-      () => formState?.getInputState('editorConfig.rangeOption')?.value,
+      () => formState?.getInputState('editorConfig.hasRange')?.value,
       (value: boolean | undefined) => setRange(value),
       { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
-      () => formState?.getInputState('editorConfig.toleranceOption')?.value,
+      () => formState?.getInputState('editorConfig.hasTolerance')?.value,
       (value: boolean | undefined) => setTolerance(value),
       { fireImmediately: true },
     // eslint-disable-next-line react-hooks/exhaustive-deps

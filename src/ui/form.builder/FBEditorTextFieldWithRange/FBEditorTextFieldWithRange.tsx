@@ -41,24 +41,27 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
       <Box mb={5}>
         <FBCheckbox
           label="form.builder.range"
-          name="editorConfig.rangeOption"
+          name="editorConfig.hasRange"
           withState
           gutter={false}
         />
         <FBRange name="editorConfig.range" />
         <FBCheckbox
           label="form.builder.tolerance"
-          name="editorConfig.toleranceOption"
+          name="editorConfig.hasTolerance"
+          validationAttribute="form.builder.tolerance"
           withState
           gutter={false}
         />
         <FBTextField
           name="editorConfig.tolerance"
           type="number"
+          validationAttribute="common.empty.string"
           gutter={false}
           withState
           labelProps={AutoCompleteStyles.labelProps}
           boxProps={{ mb: 2 }}
+          rules="required_if:editorConfig.hasTolerance,true"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start" className={toleranceClasses.toleranceAdornment}>+/-</InputAdornment>
@@ -71,12 +74,19 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         />
         <FBCheckbox
           label="form.builder.critical.to.quality"
-          name="editorConfig.criticalToQuality"
+          name="editorConfig.isCriticalToQuality"
           gutter={false}
+          withState
         />
         <FBCheckbox
           label="form.builder.inspection"
-          name="editorConfig.inspection"
+          name="editorConfig.isInspected"
+          gutter={false}
+          withState
+        />
+        <FBCheckbox
+          label="form.builder.include.units"
+          name="editorConfig.hasUnits"
           gutter={false}
           withState
         />

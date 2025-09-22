@@ -16,13 +16,13 @@ export interface FBTextFieldWithRangeValue {
 }
 
 export interface FBTextFieldWithRangeProps extends FBTextFieldProps {
+  hasUnits?: boolean
+  hasRange?: boolean
+  hasTolerance?: boolean
+  isCriticalToQuality?: boolean
+  isInspected?: boolean
   range?: FBRangeValue
-  pass?: FBRangeValue
   tolerance?: number
-  aql?: string
-  rules?: string
-  includeInFaiInspection?: boolean
-  criticalToQuality?: boolean
   isPartFaiRequired?: boolean
   isPartIqcRequired?: boolean
   value?: FBTextFieldWithRangeValue

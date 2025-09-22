@@ -5,7 +5,7 @@ import { styles } from '../styles/FBEditorCheckbox.styles';
 import { withFBRange } from './FBRange.wrap';
 
 const FBRange: React.FunctionComponent<FBInputProps> = ({
-  name,
+  name = '',
   ...props
 }) => {
   const classes = styles();
@@ -20,12 +20,16 @@ const FBRange: React.FunctionComponent<FBInputProps> = ({
           boxProps={{ mr: 2, flexGrow: 1 }}
           className={classes.passValue}
           type="number"
+          rules="required_if:editorConfig.hasRange,true"
+          validationAttribute="common.empty.string"
           placeholder="form.builder.from"
           name={`${name}.from`}
           gutter={false}
         />
         <FBTextField
           type="number"
+          rules="required_if:editorConfig.hasRange,true"
+          validationAttribute="common.empty.string"
           placeholder="form.builder.to"
           name={`${name}.to`}
           boxProps={{ flexGrow: 1 }}
