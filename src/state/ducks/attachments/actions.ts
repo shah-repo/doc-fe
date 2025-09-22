@@ -571,10 +571,12 @@ const downloadSelectedAttachmentsPassword = (
   docRevId: string,
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
+  password?: string,
 ): ApiDownloadAction => downloadApiAction({
   url: `${ATTACHMENT_ROOT_URL}/download_selected_with_password`,
   method: 'get',
   params: { docRevId, attachmentIds },
+  password,
   handlers,
 });
 
