@@ -48,4 +48,6 @@ export enum DocType {
 export enum DATE_TYPE {
   customPmDueDate = 'customPmDueDate',
   customCalDueDate = 'customCalDueDate',
+  customExpiryDate = 'customExpiryDate',
+  customRecordCreationDate = 'customRecordCreationDate',
 }
