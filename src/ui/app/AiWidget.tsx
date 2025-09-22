@@ -15,6 +15,7 @@ import { store } from '../../state/store';
 import {
   DOCUMENT_REVISION_VERSION_URL,
 } from '../constants/urls';
+import { promptKeys } from './constants';
 
 interface AiWidgetContextType {
   isWidgetActive: boolean
@@ -97,11 +98,3 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
     </AiWidgetContext.Provider>
   );
 };
-
-const promptKeys = [
-  'example.prompt.requirements.list',
-  'example.prompt.attachment.attachment',
-  'example.prompt.compare,document',
-  'example.prompt.find.document',
-  'example.prompt.completed.training',
-];
