@@ -1,4 +1,5 @@
-import { isEmpty } from 'lodash';
+import { useFormikContext } from 'formik';
+import { isEmpty, pick } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
@@ -7,7 +8,7 @@ import FBFileUploadState from '../../../FBFileUpload/FBFileUpload.state';
 import FBProvider from '../../../FBProvider/FBProvider';
 import { FB } from '../../../helpers';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD } from '../constants';
-import { CustomTreeListCellProps } from '../types';
+import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import AttachmentNamePresenter from './AttachmentNamePresenter';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -16,10 +17,10 @@ interface Props extends CustomTreeListCellProps {
   previousAttachments: Attachment[]
 }
 
-const Editor: React.FC<Props> = ({ dataItem, isDisabled, previousAttachments, hasChildren }) => {
+const Editor: React.FC<Props> = ({ dataItem, isDisabled, previousAttachments, hasChildren, field = '' }) => {
   const classes = styles({ hasChildren });
   const { fileUploadState } = FB.useStores();
-  const { id: taskId } = dataItem; // TODO check and modify
+  const { setFieldValue } = useFormikContext<EditableMaterial>();
 
   React.useEffect(() => {
     if (!isEmpty(previousAttachments)) {
@@ -32,7 +33,8 @@ const Editor: React.FC<Props> = ({ dataItem, isDisabled, previousAttachments, ha
       () => fileUploadState?.attachments,
       (attachments) => {
         if (attachments?.length !== previousAttachments.length) {
-          // employeeEvidenceUpdates?.(dataItem, employeeId, attachments as Attachment[]);
+          const updatedAttachments = attachments?.map((item) => pick(item, ['id']));
+          setFieldValue(field, updatedAttachments);
         }
       },
     );
@@ -42,43 +44,38 @@ const Editor: React.FC<Props> = ({ dataItem, isDisabled, previousAttachments, ha
   }, [dataItem]);
 
   return (
-    <FBFileField className={classes.uploadEvidenceField}
-      labelClassName={classes.uploadEvidenceFieldLabel}
-      iconClassName={classes.uploadEvidenceFieldIcon}
+    <FBFileField
+      className={classes.attachmentField}
+      labelClassName={classes.attachmentFieldLabel}
+      iconClassName={classes.attachmentFieldIcon}
       disabled={isDisabled}
-      name={taskId}
+      name={dataItem?.id}
       forceFileUpload
-    />);
-};
-
-const FileUploadStateWrapper = ({ children }) => {
-  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
-
-  return (
-    <FBProvider {...{ fileUploadState }}>
-      {children}
-    </FBProvider>
+    />
   );
 };
 
 export const Attachments: React.FC<CustomTreeListCellProps> = (props) => {
-  const { dataItem, isDisabled } = props;
-  // const classes = styles({ hasChildren });
-  const attachments = dataItem?.attachments ?? [];
+  const { dataItem, isDisabled, field = '', hasChildren } = props;
+  const { values } = useFormikContext<EditableMaterial>();
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
-  // const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const attachments = (isEditMode ? values[field] : dataItem?.attachments) ?? [];
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
+  const classes = styles({ hasChildren });
 
-  return (<TreeListCellWrapper {...props}>
-    <FileUploadStateWrapper>
-      {isEditMode && <Editor {...props} {...{ previousAttachments: attachments, isDisabled }} />}
-      {!attachments.length ? (
-        !isEditMode && CELL_EMPTY_VALUE
-      ) : (
-        <AttachmentNamePresenter
-          {...{ files: attachments, isDisabled: !isEditMode || isDisabled, fileUploadState }}
-        />
-      )}
-    </FileUploadStateWrapper>
-  </TreeListCellWrapper>);
+  return (
+    <TreeListCellWrapper {...props}>
+      <FBProvider {...{ fileUploadState }}>
+        {isEditMode && <Editor {...props} {...{ previousAttachments: attachments, isDisabled, field }} />}
+        {!attachments.length ? (
+          !isEditMode && CELL_EMPTY_VALUE
+        ) : (
+          <AttachmentNamePresenter
+            {...{ files: attachments, isDisabled: !isEditMode || isDisabled, fileUploadState }}
+            boxProps={{ className: classes.attachmentsContainer }}
+          />
+        )}
+      </FBProvider>
+    </TreeListCellWrapper>
+  );
 };

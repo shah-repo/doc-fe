@@ -36,7 +36,6 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   const [selectedFile, setSelectedFile] = React.useState<FBAttachment | null>(null);
 
   const removeAttachment = (attachmentId: string) => {
-    console.log('removeAttachment', attachmentId);
     fileUploadState?.removeAttachment(attachmentId);
   };
 
@@ -74,19 +73,30 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
         {(file: FBAttachment) => {
           const { name, type, id } = file;
           return (
-            <div key={id} className={classes.attachmentName}>
-              <AttachFile />
-              <Box
-                className={classes.fileName}
-                onClick={() => downloadOrViewFile(file)}
-              >
-                <OverflowingContent>
-                  <span>{`${name}.${type}`}</span>
-                </OverflowingContent>
+            <Box key={id} className={classes.attachmentName}>
+              <AttachFile className={classes.attachmentIcon} />
+              <Box className={classes.fileRow}>
+                <Box
+                  className={classes.fileName}
+                  onClick={() => downloadOrViewFile(file)}
+                  title={`${name}.${type}`}
+                >
+                  <OverflowingContent>
+                    <span>{`${name}.${type}`}</span>
+                  </OverflowingContent>
+                </Box>
+                {!isDisabled && (
+                  <FontAwesomeIcon
+                    icon={regular('trash-can')}
+                    className={classes.deleteIcon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeAttachment(id);
+                    }}
+                  />
+                )}
               </Box>
-              {/* {!isDisabled && <CloseIcon className={classes.pointer} onClick={() => removeAttachment(id)} />} */}
-              {!isDisabled && <FontAwesomeIcon icon={regular('remove')} onClick={() => removeAttachment(id)} />}
-            </div>
+            </Box>
           );
         }}
       </FBMapWrapper>

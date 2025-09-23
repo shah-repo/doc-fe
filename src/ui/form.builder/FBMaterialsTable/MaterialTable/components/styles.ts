@@ -27,9 +27,6 @@ export const styles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  deleteIcon: {
-    color: Colors.error,
-  },
   titleInfoCell: (props) => ({
     maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
@@ -117,7 +114,7 @@ export const styles = makeStyles((theme) => ({
     alignItems: 'center',
     fontSize: 12,
   },
-  uploadEvidenceField: {
+  attachmentField: {
     height: 20,
     padding: theme.spacing(0.625, 1.25),
     marginBottom: theme.spacing(1.25),
@@ -125,12 +122,12 @@ export const styles = makeStyles((theme) => ({
       marginBottom: theme.spacing(0),
     },
   },
-  uploadEvidenceFieldIcon: {
+  attachmentFieldIcon: {
     transform: 'rotate(45deg)',
     height: '0.7em',
     width: '0.7em',
   },
-  uploadEvidenceFieldLabel: {
+  attachmentFieldLabel: {
     fontSize: 12,
     fontWeight: 400,
     marginLeft: theme.spacing(0.75),
@@ -146,24 +143,41 @@ export const styles = makeStyles((theme) => ({
       marginBottom: theme.spacing(0),
     },
   },
+  attachmentIcon: {
+    color: Colors.primary,
+    transform: 'rotate(45deg)',
+    fontSize: 18,
+  },
   attachmentName: {
     display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(1),
 
-    '& svg:first-child': {
-      transform: 'rotate(45deg)',
-      height: '0.7em',
-      width: '0.7em',
-    },
-    '& svg:last-child': {
-      height: '1em',
-      width: '1em',
+    '& svg': {
+      fontSize: 16,
     },
   },
-  pointer: {
-    cursor: 'pointer',
+  fileRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    flex: 1,
   },
   fileName: {
-    width: 235,
-    marginX: theme.spacing(0.75),
+    flex: 1,
+    fontSize: 14,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    minWidth: 0,
+    color: Colors.primary,
+    cursor: 'pointer',
+  },
+  deleteIcon: {
+    fontSize: 16,
+    cursor: 'pointer',
+    color: Colors.error,
+    marginLeft: theme.spacing(1),
   },
 }));
