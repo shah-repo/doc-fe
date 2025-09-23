@@ -21,16 +21,16 @@ const FBRange: React.FunctionComponent<FBInputProps> = ({
           className={classes.passValue}
           type="number"
           rules="required_if:editorConfig.hasRange,true"
-          validationAttribute="common.empty.string"
           placeholder="form.builder.from"
+          validationAttribute="form.builder.from"
           name={`${name}.from`}
           gutter={false}
         />
         <FBTextField
           type="number"
           rules="required_if:editorConfig.hasRange,true"
-          validationAttribute="common.empty.string"
           placeholder="form.builder.to"
+          validationAttribute="form.builder.to"
           name={`${name}.to`}
           boxProps={{ flexGrow: 1 }}
           className={classes.passValue}

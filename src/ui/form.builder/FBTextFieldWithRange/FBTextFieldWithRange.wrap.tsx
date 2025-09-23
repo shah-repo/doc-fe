@@ -67,6 +67,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
         ...value,
         ...newValue,
       });
+      formState?.validate();
       formState?.setFieldAutosave(name);
     };
 

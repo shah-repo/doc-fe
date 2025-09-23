@@ -25,20 +25,18 @@ const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
 
   return (
     <Tooltip title={tooltip} placement="top" arrow>
-      <>
-        <Chip
-          label={<>
-            <span className={cx(classes.chipIcon, { [classes.chipIconActive]: isActive })}>
-              <Zoom in={isActive}>
-                <FontAwesomeIcon icon={solid('circle-check')} />
-              </Zoom>
-            </span>
-            {label}
-          </>}
-          className={cx(classes.chip, className, { [classes.chipActive]: isActive })}
-          onClick={() => onChange?.(!isActive)}
-        />
-      </>
+      <Chip
+        label={<>
+          <span className={cx(classes.chipIcon, { [classes.chipIconActive]: isActive })}>
+            <Zoom in={isActive}>
+              <FontAwesomeIcon icon={solid('circle-check')} />
+            </Zoom>
+          </span>
+          {label}
+        </>}
+        className={cx(classes.chip, className, { [classes.chipActive]: isActive })}
+        onClick={() => onChange?.(!isActive)}
+      />
     </Tooltip>
   );
 });
@@ -123,7 +121,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                       {isPartFaiRequired && (
                         <ChipComponent
                           label={translate('form.builder.fai')}
-                          tooltip={translate('form.builder.fai.not.required')}
+                          tooltip={value?.isFaiRequired ? translate('form.builder.fai.required') : translate('form.builder.fai.not.required')}
                           isActive={value?.isFaiRequired}
                           className={cx(classes.chip, { [classes.chipActive]: value?.isFaiRequired })}
                           onChange={(isActive) => onUpdate?.({ isFaiRequired: isActive })}
@@ -132,7 +130,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                       {isPartIqcRequired && (
                         <ChipComponent
                           label={translate('form.builder.iqc')}
-                          tooltip={translate('form.builder.iqc.not.required')}
+                          tooltip={value?.isIqcRequired ? translate('form.builder.iqc.required') : translate('form.builder.iqc.not.required')}
                           isActive={value?.isIqcRequired}
                           className={cx(classes.chip, { [classes.chipActive]: value?.isIqcRequired })}
                           onChange={(isActive) => onUpdate?.({ isIqcRequired: isActive })}
