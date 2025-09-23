@@ -2,8 +2,10 @@ import { AppBar, Box, Button, Dialog, DialogContent, Typography } from '@materia
 import Email from '@material-ui/icons/EmailRounded';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { companyActions } from '../../../../../state/ducks/company';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { CompanySettingsChangeLog } from '../../types';
@@ -19,6 +21,7 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
   handleClose,
 }) => {
   const classes = useStyles();
+  const { getFormattedDateString } = useDate();
 
   const [auditLogsMap, setAuditLogsMap] = useState<{[key: string]: CompanySettingsChangeLog[]}>({});
   const handleAuditLogs = (logs: CompanySettingsChangeLog[] | undefined) => {
@@ -61,26 +64,29 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
             {
               auditLogsMap[groupId]?.map(companySettingLog => (
                 <Box key={companySettingLog.id} className={classes.logEntry}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Box style={{ width: '15%' }}>
                       <Typography variant="subtitle2">
-                        {companySettingLog.updatedAt}
+                        <Text message={getFormattedDateString(
+                          companySettingLog.updatedAt,
+                          MomentFormats.BriefDateTime,
+                        )} />
                       </Typography>
                     </Box>
-                    <Box style={{ width: '65%' }}>
-                      <Typography variant="body1">
+                    <Box style={{ width: '60%' }}>
+                      <Typography variant="body1" className={classes.parentKey}>
                         {companySettingLog.parentKeyLabel}
                       </Typography>
-                      <Typography variant="subtitle2">
+                      <Typography variant="subtitle2" className={classes.displayText}>
                         {companySettingLog.displayText}
                       </Typography>
                     </Box>
-                    <Box style={{ width: '20%', textAlign: 'right' }}>
-                      <Typography variant="subtitle2">
+                    <Box style={{ width: '25%', textAlign: 'right' }}>
+                      <Typography variant="subtitle2" className={classes.ownerName}>
                         {companySettingLog.ownerName}
                       </Typography>
-                      <Typography variant="subtitle2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <Email /> {companySettingLog.ownerEmail}
+                      <Typography variant="subtitle2" className={classes.ownerEmail}>
+                        <Email className={classes.email} /> {companySettingLog.ownerEmail}
                       </Typography>
                     </Box>
                   </Box>

@@ -122,4 +122,23 @@ export default makeStyles<NextTheme>(theme => ({
     fontSize: 12,
     marginTop: theme.spacing(4),
   },
+  parentKey: {
+    color: Colors.primaryDark,
+  },
+  displayText: {
+    color: Colors.textGray,
+  },
+  ownerName: {
+    color: Colors.textBlack,
+  },
+  ownerEmail: {
+    color: Colors.textBlack,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  email: {
+    color: Colors.primaryLight,
+    fontSize: 13,
+  },
 }));
