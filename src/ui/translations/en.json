@@ -1627,7 +1627,7 @@
   "form.builder.part.vendors.audit.delete": "{name}",
   "form.builder.part.vendors.title": "Suppliers",
   "form.builder.part.vendors.add": "Add Supplier",
-  "form.builder.part.vendors.primary": "Primary Supplier",
+  "form.builder.part.vendors.primary": "Primary Contact",
   "form.builder.part.vendors.primary.delete.message": "You cannot delete Primary Supplier",
   "form.builder.part.vendors.vendor": "Supplier",
   "form.builder.part.vendors.vendor.status": "Supplier Status",
