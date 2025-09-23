@@ -78,7 +78,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const sendRequestWithPassword = (values: Password) => {
     isDownloadAll
       ? async.start(downloadAllAttachmentsPassword, docRevId, async, values.password)
-      : async.start(downloadSelectedAttachmentsPassword, docRevId, attachments, async);
+      : async.start(downloadSelectedAttachmentsPassword, docRevId, attachments, async, values.password);
 
     passwordDialogHandler.close();
   };
