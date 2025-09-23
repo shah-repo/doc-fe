@@ -178,8 +178,6 @@ export * from './FBParts/FBParts.types';
 export { default as FBPartsItem } from './FBPartsItem/FBPartsItem';
 export * from './FBPartsItem/FBPartsItem.types';
 export * from './FBPartsSelection/FBPartsSelection.types';
-export { default as FBPassPercentage } from './FBPassPercentage/FBPassPercentage';
-export * from './FBPassPercentage/FBPassPercentage.types';
 export { default as FBPOApprovalMatrixState } from './FBPOApprovalMatrix/FBPOApprovalMatrix.state';
 export { default as FBPOApprovalsState } from './FBPOApprovals/FBPOApprovals.state';
 export * from './FBPOApprovals/FBPOApprovals.types';
