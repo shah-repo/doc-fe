@@ -23,8 +23,6 @@ const FBOutOfRange: React.FunctionComponent<FBOutOfRangeProps> = ({
     return isNotDefined || isInRange;
   });
 
-  console.log({ pass, isInRange });
-
   if (!pass || isEmpty(pass) || isInRange) {
     return null;
   }
