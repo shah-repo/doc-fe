@@ -1,19 +1,43 @@
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB, FBPassValue, FBRangeValue, FBTextFieldWithRangeProps, FBTextFieldWithRangeValue } from '..';
+import { FB, FBTextFieldWithRangeProps, FBTextFieldWithRangeValue } from '..';
 import { translate } from '../../../common/intl';
+
+const getRules = (from?: number, to?: number): string => {
+  if (from && to) {
+    return `between:${from},${to}`;
+  }
+  if (from && !to) {
+    return `min:${from}`;
+  }
+  if (!from && to) {
+    return `max:${to}`;
+  }
+  return '';
+};
 
 export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
   const Comp = ({
-    editorConfig,
-    includeInFaiInspection,
+    editorConfig = {},
     name = '',
     label = '',
     ...props
   }: T) => {
-    const { aql, pass, range, criticalToQuality, tolerance } = editorConfig;
+    const {
+      hasUnits,
+      isCriticalToQuality,
+      isInspected,
+      hasRange,
+      range,
+      hasTolerance,
+      tolerance = 0,
+    } = editorConfig;
+
+    const from = range?.from ? range.from + tolerance : undefined;
+    const to = range?.to ? range.to - tolerance : undefined;
+
     const { formState } = FB.useStores();
 
     const value = useObserver<FBTextFieldWithRangeValue | undefined>(
@@ -31,36 +55,11 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       ) === translate('form.builder.yes'),
     );
 
-    const [helperText, isError] = useObserver(
+    const [helperText, isInvalid] = useObserver(
       () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
     );
 
-    const calculatePassValue = (passRange?: FBPassValue): FBRangeValue | undefined => {
-      if (!passRange) { return; }
-      if (passRange.type === 'value') { return passRange.value; }
-      if (!passRange.percentage) { return; }
-      const { decrease, increase, value } = passRange.percentage;
-      if (!decrease || !increase || !value) { return; }
-      const from = Number(value) * (1 - decrease / 100);
-      const to = Number(value) * (1 + increase / 100);
-      return { from, to };
-    };
-
-    const getRules = (): string => {
-      if (!range) { return ''; }
-      if (range.from && range.to) {
-        return `between:${range.from},${range.to}`;
-      }
-      if (range.from && !range.to) {
-        return `min:${range?.from}`;
-      }
-      if (!range.from && range.to) {
-        return `max:${range?.to}`;
-      }
-      return '';
-    };
-
-    formState?.setFieldRules(`${name}.value`, getRules());
+    formState?.setFieldRules(`${name}.value`, getRules(from, to));
     formState?.setValidationAttributeName(`${name}.value`, String(label));
 
     const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
@@ -68,6 +67,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
         ...value,
         ...newValue,
       });
+      formState?.validate();
       formState?.setFieldAutosave(name);
     };
 
@@ -76,24 +76,25 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
         isFaiRequired: isPartFaiRequired && value?.isFaiRequired,
         isIqcRequired: isPartIqcRequired && value?.isIqcRequired,
       });
-    }, [isPartFaiRequired, isPartIqcRequired, value?.isFaiRequired, value?.isIqcRequired]);
+    }, [isInspected, isPartFaiRequired, isPartIqcRequired, value?.isFaiRequired, value?.isIqcRequired]);
 
     return Component({
       ...(props as T),
       name,
       label,
       value,
-      aql,
-      error: isError,
+      error: isInvalid,
       helperText,
-      criticalToQuality,
-      includeInFaiInspection,
+      isCriticalToQuality,
+      isInspected,
+      hasUnits,
+      hasRange,
+      hasTolerance,
       isPartFaiRequired,
       isPartIqcRequired,
-      onUpdate: updateValue,
-      pass: calculatePassValue(pass),
-      range,
+      range: { from, to },
       tolerance,
+      onUpdate: updateValue,
     });
   };
 

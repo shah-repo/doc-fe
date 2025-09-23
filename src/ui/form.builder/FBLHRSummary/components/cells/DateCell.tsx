@@ -28,6 +28,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
   const value = dataItem[field];
   const { timezone } = useDate();
   const isCalPmDueDate = [DATE_TYPE.customCalDueDate, DATE_TYPE.customPmDueDate].includes(field as DATE_TYPE);
+  const isExpiryCreateDate = [DATE_TYPE.customExpiryDate, DATE_TYPE.customRecordCreationDate].includes(field as DATE_TYPE);
 
   if (!isEditMode) {
     let displayValue = value;
@@ -37,8 +38,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       displayValue = dataItem.pmDueDateText;
     }
 
-    if(isCalPmDueDate && displayValue) {
-      displayValue = moment(displayValue).format(MomentFormats.MonthDateYearTwoDigit);
+    if((isCalPmDueDate || isExpiryCreateDate) && displayValue) {
+     const momentObject = moment(displayValue, Object.values(MomentFormats));
+      displayValue = momentObject.format(MomentFormats.MonthDateYearTwoDigit);
     }
 
     return (
