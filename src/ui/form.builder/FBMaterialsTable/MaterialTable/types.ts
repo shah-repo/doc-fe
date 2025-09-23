@@ -50,9 +50,11 @@ export interface MaterialTableProps {
   isMPIProcedure?: boolean
   isPreview?: boolean
   isEBProcedure?: boolean
+  attachments?: any // modify at last
 }
 
 export interface EditableMaterial extends Material {
+  attachments?: never[]
   [MODE_FIELD]: boolean
   [ADD_FIELD]: boolean
   isNewAddition?: boolean

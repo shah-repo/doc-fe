@@ -3,6 +3,7 @@ import { translate } from '../../../../common/intl';
 import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { ActionsCell } from './components/Actions';
 import ActualIdCellTemplate from './components/ActualIdCellTemplate';
+import { Attachments } from './components/Attachments';
 import LotIdCellTemplate from './components/LotIdCellTemplate';
 import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
 import QuantityCell from './components/QuantityCell';
@@ -62,6 +63,14 @@ export const buildEBSchema = ({
       cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} />,
       mainOrderIndex: 5,
       width: 150,
+    },
+    {
+      id: 'attachments',
+      field: 'attachments',
+      title: translate('form.builder.procedure.material.table.attachments.title'),
+      cell: (props) => <Attachments {...props} onClick={onRowClick} />,
+      mainOrderIndex: 6,
+      width: 300,
     },
     {
       id: 'actions',

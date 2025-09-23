@@ -101,4 +101,69 @@ export const styles = makeStyles((theme) => ({
     fontSize: 14,
     lineHeight: '17.64px',
   },
+  employeeResponseFields: {
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  assigneeAction: {
+    display: 'flex',
+    padding: theme.spacing(1, 1.75),
+    minHeight: 30,
+  },
+  assigneeActionStatusContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: 12,
+  },
+  uploadEvidenceField: {
+    height: 20,
+    padding: theme.spacing(0.625, 1.25),
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  uploadEvidenceFieldIcon: {
+    transform: 'rotate(45deg)',
+    height: '0.7em',
+    width: '0.7em',
+  },
+  uploadEvidenceFieldLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    marginLeft: theme.spacing(0.75),
+  },
+  attachmentsContainer: {
+    color: Colors.primary,
+    fontSize: 12,
+    marginBottom: theme.spacing(1.25),
+    overflow: 'auto',
+    maxHeight: 105,
+    width: 'fit-content',
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  attachmentName: {
+    display: 'flex',
+
+    '& svg:first-child': {
+      transform: 'rotate(45deg)',
+      height: '0.7em',
+      width: '0.7em',
+    },
+    '& svg:last-child': {
+      height: '1em',
+      width: '1em',
+    },
+  },
+  pointer: {
+    cursor: 'pointer',
+  },
+  fileName: {
+    width: 235,
+    marginX: theme.spacing(0.75),
+  },
 }));
