@@ -90,7 +90,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const currentUser = useSelector(authSelectors.currentUser);
-  const { timezone, parseDateToYMD } = useDate();
+  const { timezone } = useDate();
 
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
@@ -441,13 +441,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       ...values,
       formInput: {
         ...values.formInput,
-        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: parseDateToYMD(values.formInput?.effectiveDate) } : {}),
+        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: values.formInput?.effectiveDate } : {}),
       },
     };
-
-    if (updatedValues.effectiveDate) {
-      updatedValues.effectiveDate = parseDateToYMD(values.effectiveDate);
-    }
 
     if (selectedInvalid) {
       asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(updatedValues)), asyncAR);
@@ -461,7 +457,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       ? [getApproverPayload(owner?.id)]
       : approvalsBody.map((approver) => (getApproverPayload(approver.value)));
     const effectiveDate = values.effectiveDate !== ''
-      ? parseDateToYMD(values.effectiveDate)
+      ? values.effectiveDate
       : undefined;
     const password = values.password !== ''
       ? values.password
@@ -487,7 +483,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         finalizeAction,
         id,
         {
-          effectiveDate: parseDateToYMD(moment().tz(timezone).toISOString()),
+          effectiveDate: moment().tz(timezone).toISOString(),
         },
         async,
       );

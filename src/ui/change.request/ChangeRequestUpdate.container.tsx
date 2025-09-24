@@ -3,7 +3,6 @@ import React, { useEffect, useMemo } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { saveApprovalRequest } from '../../App/Shifamed/Utils/API';
-import { useDate } from '../../common/utils/date';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions, changeRequestsSelectors } from '../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
@@ -64,7 +63,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
-  const { parseDateToYMD } = useDate();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
   const { triggerRestrictEditUpdates, isLoading } = useRestrictedEditUpdates(changeRequest?.id);
 
@@ -116,14 +114,14 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         ...frozenInitialValues,
         formInput: {
           ...frozenInitialValues.formInput,
-          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: parseDateToYMD(frozenInitialValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: frozenInitialValues.formInput?.effectiveDate } : {}),
         },
       },
       {
         ...values,
         formInput: {
           ...updatedValues,
-          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: parseDateToYMD(updatedValues.formInput?.effectiveDate) } : {}),
+          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: updatedValues.formInput?.effectiveDate } : {}),
         },
       },
       toChangeRequestEditRequestBody,
