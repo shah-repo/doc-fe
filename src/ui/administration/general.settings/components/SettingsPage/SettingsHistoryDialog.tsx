@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Dialog, DialogContent, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, DialogContent, Drawer, Typography } from '@material-ui/core';
 import Email from '@material-ui/icons/EmailRounded';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
@@ -33,7 +33,6 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
       logsMap[log.groupId].push(log);
     });
     setAuditLogsMap(logsMap);
-    // console.log(logs);
   };
 
   const fetchSettingsLog = useActionCreator(companyActions.fetchSettingsAuditLogs);
@@ -47,9 +46,10 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
   }, []);
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="audit-logs-dialog-title">
+    <Drawer anchor="right" open={isOpen} onClose={handleClose} aria-labelledby="audit-logs-dialog-title"
+      classes={{ paper: classes.drawerAuditLogsPaper }}>
       <AppBar position="static" color="default" elevation={0}>
-        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '8px 16px' }}>
+        <Box className={classes.appBarBox}>
           <Typography variant="h4">
             {translate('settings.audit.logs.dialog.title')}
           </Typography>
@@ -64,7 +64,7 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
             {
               auditLogsMap[groupId]?.map(companySettingLog => (
                 <Box key={companySettingLog.id} className={classes.logEntry}>
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box className={classes.logEntryBox}>
                     <Box style={{ width: '15%' }}>
                       <Typography variant="subtitle2">
                         <Text message={getFormattedDateString(
@@ -96,7 +96,7 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
           </Box>
         ))}
       </DialogContent>
-    </Dialog>
+    </Drawer>
   );
 };
 

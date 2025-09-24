@@ -108,6 +108,17 @@ export default makeStyles<NextTheme>(theme => ({
       display: 'block',
     },
   },
+  drawerAuditLogsPaper: {
+    width: '72vw',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  appBarBox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: theme.spacing(2, 4),
+  },
   groupBox: {
     fontSize: 16,
     marginTop: theme.spacing(4),
@@ -122,11 +133,17 @@ export default makeStyles<NextTheme>(theme => ({
     fontSize: 12,
     marginTop: theme.spacing(4),
   },
+  logEntryBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   parentKey: {
     color: Colors.primaryDark,
   },
   displayText: {
     color: Colors.textGray,
+    lineHeight: 1.75,
   },
   ownerName: {
     color: Colors.textBlack,
