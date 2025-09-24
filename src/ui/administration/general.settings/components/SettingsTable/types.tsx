@@ -11,6 +11,7 @@ export interface SettingsTableProps<T extends EditableItem = EditableItem> exten
   isEditing?: boolean
   isActive?: boolean
   isFilterable?: boolean
+  addButtonClass?: string
 }
 
 interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {

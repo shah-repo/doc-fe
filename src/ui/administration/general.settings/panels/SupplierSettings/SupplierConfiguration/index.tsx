@@ -1,3 +1,4 @@
+import { Grid, makeStyles } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { groupBy, has, isArray, isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
@@ -20,6 +21,7 @@ import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { EDIT_FIELDS } from './constants';
 import { buildSchema } from './schema';
+import SupplierLabelsGrid from './SupplierLabelGrid';
 import {
   EditableSupplierConfig,
   OptionType,
@@ -27,7 +29,14 @@ import {
   SupplierConfig,
 } from './types';
 
+const useStyles = makeStyles(theme => ({
+  labelsGridContainer: {
+    marginBottom: theme.spacing(2),
+  },
+}));
+
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
+  const classes = useStyles();
   const isActive = useSelector(
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
   );
@@ -240,6 +249,17 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       title={translate(props.title)}
       onAddNew={isActive ? addSupplierConfig : undefined}
     >
+      <Grid container justify="space-between" spacing={1} className={classes.labelsGridContainer}>
+        <Grid item xs={4}>
+          <SupplierLabelsGrid name="supplierTypes" title="administration.general.settings.suppliers.label.grid.supplierType.title" />
+        </Grid>
+        <Grid item xs={4}>
+          <SupplierLabelsGrid name="supplierCapabilities" title="administration.general.settings.suppliers.label.grid.supplierCapabilities.title" />
+        </Grid>
+        <Grid item xs={4}>
+          <SupplierLabelsGrid name="supplierServices"title="administration.general.settings.suppliers.label.grid.supplierServices.title" />
+        </Grid>
+      </Grid>
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}
