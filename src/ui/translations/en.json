@@ -1569,7 +1569,7 @@
   "form.builder.iqc": "IQC",
   "form.builder.iqc.required": "IQC is Required",
   "form.builder.iqc.not.required": "IQC is not Required",
-  "form.builder.allowed.range": "Limit: {from}-{to}",
+  "form.builder.allowed.range": "Range: {from}-{to}",
   "form.builder.allowed.tolerance": "Tolerance: +/-{tolerance}",
   "form.builder.audit.deleted": "Deleted",
   "form.builder.audit.updated": "Updated",

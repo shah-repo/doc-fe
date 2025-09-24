@@ -4,13 +4,13 @@ import { FB, FBTextFieldWithRangeProps, FBTextFieldWithRangeValue } from '..';
 import { translate } from '../../../common/intl';
 
 const getRules = (from?: number, to?: number): string => {
-  if (from && to) {
+  if (from !== undefined && to !== undefined) {
     return `between:${from},${to}`;
   }
-  if (from && !to) {
+  if (from !== undefined && to === undefined) {
     return `min:${from}`;
   }
-  if (!from && to) {
+  if (from === undefined && to !== undefined) {
     return `max:${to}`;
   }
   return '';
@@ -35,10 +35,12 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       tolerance = 0,
     } = editorConfig;
 
-    const from = range?.from ? range.from + tolerance : undefined;
-    const to = range?.to ? range.to - tolerance : undefined;
-
     const { formState } = FB.useStores();
+
+    const validationRange = hasRange && range?.from !== undefined && range?.to !== undefined ? {
+      from: range.from - tolerance,
+      to: range.to + tolerance,
+    } : undefined;
 
     const value = useObserver<FBTextFieldWithRangeValue | undefined>(
       () => formState?.newValues.get(name) ?? formState?.getFieldValue(name),
@@ -59,7 +61,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
     );
 
-    formState?.setFieldRules(`${name}.value`, getRules(from, to));
+    formState?.setFieldRules(`${name}.value`, getRules(validationRange?.from, validationRange?.to));
     formState?.setValidationAttributeName(`${name}.value`, String(label));
 
     const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
@@ -92,7 +94,8 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       hasTolerance,
       isPartFaiRequired,
       isPartIqcRequired,
-      range: { from, to },
+      range,
+      validationRange,
       tolerance,
       onUpdate: updateValue,
     });
