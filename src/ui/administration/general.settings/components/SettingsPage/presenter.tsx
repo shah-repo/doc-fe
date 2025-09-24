@@ -7,7 +7,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { panels } from '../../constants';
 import { GeneralSettingsProps, GeneralSettingsTabs } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
-import SettingsHistoryDialog from './SettingsHistoryDialog';
+import SettingsHistoryDrawer from './SettingsHistoryDrawer';
 import useStyles from './styles';
 
 const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
@@ -28,12 +28,12 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
 
-  const [isShowHistoryDialog, setIsShowHistoryDialog] = useState<boolean>(false);
+  const [isShowHistoryDrawer, setIsShowHistoryDrawer] = useState<boolean>(false);
   const showHistoryDialog = () => {
-    setIsShowHistoryDialog(true);
+    setIsShowHistoryDrawer(true);
   };
-  const handleHistoryDialogClose = () => {
-    setIsShowHistoryDialog(false);
+  const handleHistoryDrawerClose = () => {
+    setIsShowHistoryDrawer(false);
   };
 
   return (
@@ -100,10 +100,10 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           />
         ))}
       </div>
-      {isShowHistoryDialog && (
-        <SettingsHistoryDialog
-          isOpen={isShowHistoryDialog}
-          handleClose={handleHistoryDialogClose}
+      {isShowHistoryDrawer && (
+        <SettingsHistoryDrawer
+          isOpen={isShowHistoryDrawer}
+          handleClose={handleHistoryDrawerClose}
         />
       )}
     </Box>

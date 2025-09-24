@@ -11,12 +11,12 @@ import useAsync from '../../../../hooks/useAsync';
 import { CompanySettingsChangeLog } from '../../types';
 import useStyles from './styles';
 
-interface SettingsHistoryDialogProps {
+interface SettingsHistoryDrawerProps {
   isOpen: boolean
   handleClose: () => void
 }
 
-const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
+const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   isOpen,
   handleClose,
 }) => {
@@ -100,4 +100,4 @@ const SettingsHistoryDialog: React.FC<SettingsHistoryDialogProps> = ({
   );
 };
 
-export default SettingsHistoryDialog;
+export default SettingsHistoryDrawer;
