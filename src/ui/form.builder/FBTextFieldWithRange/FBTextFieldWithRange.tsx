@@ -12,8 +12,6 @@ import useStyles from './FBTextFieldWithRange.styles';
 import { useOptions } from './FBTextFieldWithRange.utils';
 import { withFBTextFieldWithRange } from './FBTextFieldWithRange.wrap';
 
-const naText = translate('common.not.applicable');
-
 const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
   label,
   tooltip,
@@ -61,8 +59,9 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   hasUnits = false,
   isPartFaiRequired = false,
   isPartIqcRequired = false,
-  range,
   tolerance,
+  range,
+  validationRange,
   onUpdate,
   ...props
 }) => {
@@ -71,17 +70,12 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
 
   const attributeConfig: string[] = [];
 
-  if (hasRange && range) {
-    attributeConfig.push(translate('form.builder.allowed.range', {
-      from: range.from ?? naText,
-      to: range.to ?? naText,
-    }));
+  if (hasRange && range?.from !== undefined && range?.to !== undefined) {
+    attributeConfig.push(translate('form.builder.allowed.range', { ...range }));
   }
 
   if (hasTolerance && tolerance) {
-    attributeConfig.push(translate('form.builder.allowed.tolerance', {
-      tolerance: tolerance,
-    }));
+    attributeConfig.push(translate('form.builder.allowed.tolerance', { tolerance }));
   }
 
   const isToleranceDefined = hasTolerance && tolerance !== undefined;
@@ -152,13 +146,13 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                 placeholder={placeholder}
                 endAdornment={hasRange && (
                   <span className={classes.outOfRange}>
-                    <FBOutOfRange pass={range} parentName={name} path="value" />
+                    <FBOutOfRange pass={validationRange} parentName={name} path="value" />
                   </span>
                 )}
                 inputProps={isNumericInput ? {
                   type: 'number',
-                  min: range?.from,
-                  max: range?.to,
+                  min: validationRange?.from,
+                  max: validationRange?.to,
                   step: tolerance,
                 } : {}}
                 onBlur={e => onUpdate?.({ value: parseFloat(e.target.value) })}
