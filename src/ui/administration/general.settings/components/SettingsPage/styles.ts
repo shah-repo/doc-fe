@@ -141,6 +141,21 @@ export default makeStyles<NextTheme>(theme => ({
   parentKey: {
     color: Colors.primaryDark,
   },
+  changeType: {
+    color: Colors.statusDraft,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
+  deletedChangeType: {
+    color: Colors.statusVoid,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
+  editedChangeType: {
+    color: Colors.statusReview,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
   displayText: {
     color: Colors.textGray,
     lineHeight: 1.75,

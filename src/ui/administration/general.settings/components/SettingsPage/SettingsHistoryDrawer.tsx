@@ -8,7 +8,7 @@ import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { CompanySettingsChangeLog } from '../../types';
+import { AUDIT_CHANGE_TYPE, CompanySettingsChangeLog } from '../../types';
 import useStyles from './styles';
 
 interface SettingsHistoryDrawerProps {
@@ -45,6 +45,20 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     settingsLogsAsync.start(fetchSettingsLog, settingsLogsAsync);
   }, []);
 
+  const getChangeStyle = (changeType: AUDIT_CHANGE_TYPE | undefined) => {
+    if (changeType === AUDIT_CHANGE_TYPE.ADDED) {
+      return classes.changeType;
+    }
+
+    if (changeType === AUDIT_CHANGE_TYPE.DELETED) {
+      return classes.deletedChangeType;
+    }
+
+    if (changeType === AUDIT_CHANGE_TYPE.UPDATED) {
+      return classes.editedChangeType;
+    }
+  };
+
   return (
     <Drawer anchor="right" open={isOpen} onClose={handleClose} aria-labelledby="audit-logs-dialog-title"
       classes={{ paper: classes.drawerAuditLogsPaper }}>
@@ -75,7 +89,8 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
                     </Box>
                     <Box style={{ width: '60%' }}>
                       <Typography variant="body1" className={classes.parentKey}>
-                        {companySettingLog.parentKeyLabel}
+                        {companySettingLog.parentKeyLabel} -
+                        <span className={getChangeStyle(companySettingLog.changeType)}>{companySettingLog.changeType}</span>
                       </Typography>
                       <Typography variant="subtitle2" className={classes.displayText}>
                         {companySettingLog.displayText}
