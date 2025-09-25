@@ -34,7 +34,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
           size="small"
           onChange={handleChange}
           onClear={handleClear}
-          format={MomentFormats.MonthDateYearTwoDigit}
+          format={MomentFormats.MonthDateYear}
         />
       </FormikField>
     );
