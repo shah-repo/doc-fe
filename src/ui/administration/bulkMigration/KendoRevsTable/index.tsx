@@ -30,6 +30,7 @@ import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.t
 import { Colors } from '../../../layout/theme-next';
 import { MigrationStatus, SelectedItemDetails, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
+import { useBulkMigrationContext } from './components/BulkMigtationContext';
 import {
   DATA_ITEM_KEY,
   DEFAULT_FILTER,
@@ -72,6 +73,8 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     selected,
     setSelected,
   } = useBulkMigration();
+  const { selectedItems, setSelectedItems } = useBulkMigrationContext();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -110,10 +113,23 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
         {},
       );
       setSelectedRows(newSelectedRows);
+
+      // global state update - add current page all item
+      const existingRevIds = new Set(selectedItems.map(item => item.docRevId));
+      const uniqueNewItems = newSelectedDetails.filter(
+        item => !existingRevIds.has(item.docRevId),
+      );
+      setSelectedItems((prev) => [...prev, ...uniqueNewItems]);
       return;
     }
     setSelected([]);
     setSelectedRows(undefined);
+
+    // global state update - remove current page all item
+    const revIds = new Set(data.map(item => item.docRevId));
+    setSelectedItems((prev) =>
+      prev.filter(item => !revIds.has(item.docRevId)),
+    );
   };
 
   useEffect(() => {
@@ -196,6 +212,19 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
       return selectedDetails;
     }, []);
     setSelected(newSelectedDetails);
+
+    // global state update - current page selected/disselected item
+    const isSelected = newSelectedState[dataItem.docRevId];
+    const itemDetails = { docRevId: dataItem.docRevId, action: dataItem.proposedAction };
+    let updatedSelectedItems;
+
+    if (isSelected) {
+      const exists = selectedItems.some(item => item.docRevId === itemDetails.docRevId);
+      updatedSelectedItems = exists ? selectedItems : [...selectedItems, itemDetails];
+    } else {
+      updatedSelectedItems = selectedItems.filter(item => item.docRevId !== itemDetails.docRevId);
+    }
+    setSelectedItems(updatedSelectedItems);
   };
 
   const getRowColor = (row: SupplierScanResultRevision) => {

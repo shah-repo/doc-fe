@@ -12,6 +12,7 @@ import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { ListType, MigrationStatus, SelectedItemDetails } from './interface';
 import KendoRevsTable from './KendoRevsTable';
+import { useBulkMigrationContext } from './KendoRevsTable/components/BulkMigtationContext';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import useStyles from './styles';
@@ -56,6 +57,8 @@ const BulkMigrationContainer: React.FC = () => {
     confirmSubmission,
     handleMigrationConfirmationDialogClose,
   } = useBulkMigration();
+  const { selectedItems } = useBulkMigrationContext();
+  console.log('final selected items', selectedItems, 'rows', selectedRows);
 
   useEffect(() => {
     fetchAllDocumentTypes();
@@ -182,7 +185,7 @@ const BulkMigrationContainer: React.FC = () => {
             )}
           </Grid>
           <Grid item xs={2}>
-            {selectedRows.length > 0 && (
+            {selectedItems.length > 0 && (
               <Button
                 size="small"
                 data-cy="migrate-revisions-btn"
@@ -387,7 +390,7 @@ const BulkMigrationContainer: React.FC = () => {
         <MigrationConfirmationDialog
           isOpen={isConfirmationDialogVisible}
           handleClose={handleMigrationConfirmationDialogClose}
-          selectedDetails={selectedRows}
+          selectedDetails={selectedItems}
           handleConfirmation={handleMigrationConfirmation}
           toDocumentTypeId={toDocumentTypeId}
           toFormRev={toRev}
