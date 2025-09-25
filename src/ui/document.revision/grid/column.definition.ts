@@ -1,118 +1,63 @@
-import { chain } from 'lodash';
+import { ColumnInfo } from '../../common/utils/helpers';
 import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
-import { pagerSettings } from '../../components/common/kendo/helpers';
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import { KendoCellTemplates } from '../../components/common/kendo/types';
 
-const columns: KendoColumn[] = [
-  {
-    field: 'document.docId',
-    title: 'document.revision.list.docId',
-    show: true,
-    filter: 'text',
-    locked: false,
+export const predefinedColumnDetails: {[key: string]: ColumnInfo} = {
+  'document.docId': {
     width: 8,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 1,
     showTooltip: true,
-    extraFields: ['id', 'document.id'],
-  },
-  {
-    field: 'displayRevision',
-    title: 'document.revision.list.revision',
-    show: true,
     filter: 'text',
     locked: false,
+  },
+  displayRevision: {
     width: 8,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 2,
-  },
-  {
-    field: 'name',
-    title: 'document.revision.list.name',
-    show: true,
     filter: 'text',
     locked: false,
+  },
+  name: {
     width: 30,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 3,
     showTooltip: true,
     tooltipField: 'description',
-  },
-  {
-    field: 'document.documentType.documentTypeAcronym',
-    title: 'document.revision.list.type',
-    show: true,
     filter: 'text',
     locked: false,
+  },
+  'document.documentType.documentTypeAcronym': {
     width: 12,
     groupable: true,
-    cell: KendoCellTemplates.DOCUMENT_TYPE,
-    filterCell: KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM,
-    showColumnMenu: true,
-    orderIndex: 4,
     showTooltip: true,
     tooltipField: 'document.documentType.documentTypeName',
-  },
-  {
-    field: 'owner.user.name',
-    title: 'common.owner',
-    show: true,
-    filter: 'text',
+    cell: KendoCellTemplates.DOCUMENT_TYPE,
+    filterCell: KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM,
     locked: false,
+  },
+  'owner.user.name': {
     width: 20,
     groupable: true,
-    cell: KendoCellTemplates.USER_AVATAR,
-    showColumnMenu: true,
-    orderIndex: 5,
-    extraFields: ['owner.user.avatar', 'owner.user.initialColor'],
-  },
-  {
-    field: 'changeRequest.crId',
-    title: 'common.crid',
-    show: true,
     filter: 'text',
+    cell: KendoCellTemplates.USER_AVATAR,
     locked: false,
+  },
+  'changeRequest.crId': {
     width: 8,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 6,
-  },
-  {
-    field: 'displayStatus',
-    title: 'document.revision.list.state',
-    show: true,
+    filter: 'text',
     locked: false,
+  },
+  displayStatus: {
     width: 14,
     groupable: true,
     cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.DISPLAY_STATUS,
-    showColumnMenu: true,
-    orderIndex: 7,
-  },
-  {
-    field: 'effectiveDate',
-    title: 'common.effective.date',
-    show: true,
     locked: false,
+  },
+  effectiveDate: {
     width: 12,
     groupable: false,
     cell: KendoCellTemplates.DATE_INFO,
     filterCell: KendoGridFilterCell.EFFECTIVE_DATE,
-    showColumnMenu: true,
-    orderIndex: 8,
+    locked: false,
   },
-];
-
-const gridConfiguration: KendoGridConfiguration = {
-  groupableFields: chain(columns)
-    .filter({ groupable: true })
-    .map('field')
-    .value(),
-  columns,
-  pagerSettings,
 };
-
-export default gridConfiguration;

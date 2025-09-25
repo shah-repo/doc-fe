@@ -19,16 +19,10 @@ import { columnSearchConfiguration } from '../../documentType/grid/helpers';
 import { isTranslation } from '../../translations/types';
 import { canEditChangeRequest } from '../helpers';
 import { changeRequestEditPath, changeRequestPreviewPath } from '../utils/paths';
-import gridConfiguration from './column.definition';
+import { predefinedColumnDetails } from './column.definition';
 import { DocumentListPresenter } from './presenter';
 
 export const CR_TABLE_NAME = 'changeRequests';
-const predefinedColumnWidths: {[key: string]: number} = {
-  crId: 10,
-  title: 40,
-  'owner.user.name': 30,
-  state: 20,
-};
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const dispatch = useDispatch();
@@ -56,19 +50,15 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       ? intl.formatMessage({ id: columnDetails.label })
       : columnDetails.label;
 
-    const dynamicCellGroupable = ['owner', 'state'].includes(columnDetails.searchOptions?.dataKey ?? '');
-
     return {
       field: columnDetails.key,
       title: columnLabel,
       filter: 'text',
-      width: predefinedColumnWidths[columnDetails.key] ?? 15,
-      groupable: dynamicCellGroupable,
-      locked: true,
       show: true,
       showColumnMenu: true,
       key: { index },
       extraFields: ['id', ...ownerFieldsMapping[columnDetails.key] || []],
+      ...predefinedColumnDetails[columnDetails.key],
     };
   });
   const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);
@@ -85,7 +75,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           queryDict: {
             dataState,
           },
-          columnConfig: JSON.stringify(gridConfiguration.columns),
+          columnConfig: JSON.stringify(columns),
         },
         CR_TABLE_NAME,
       ),
@@ -115,7 +105,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
         take: 25,
         group: [],
       };
-      setSearchStatus(dataState, gridConfiguration.columns);
+      setSearchStatus(dataState, kendoColumnDef as KendoColumn[]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -136,7 +126,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableName={CR_TABLE_NAME}
       tableCriteria={tableCriteria}
       schema={schema}
-      columns={gridConfiguration.columns}
+      columns={kendoColumnDef as KendoColumn[]}
       onRowClick={onRowClick}
     />
   );
