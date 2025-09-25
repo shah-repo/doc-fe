@@ -394,6 +394,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
     onScanClick: openScanDialog,
+    isDisabled,
     isEnableActualIdAddition,
     isEBProcedure,
   });

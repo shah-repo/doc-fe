@@ -16,6 +16,7 @@ export const TreeListEBSchema = ({
   onConfirm,
   parentRevId,
   onScanClick,
+  isDisabled,
   isEnableActualIdAddition,
   isEBProcedure,
 }) => {
@@ -36,7 +37,7 @@ export const TreeListEBSchema = ({
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
       mainOrderIndex: 2,
-      cell: (props) => <EquipmentIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+      cell: (props) => <EquipmentIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} isDisabled={isDisabled} />,
     },
     {
       field: 'calDueDate',
