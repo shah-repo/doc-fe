@@ -5,7 +5,7 @@ import moment from 'moment';
 import React, { useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName, FBInputType } from '..';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
 
@@ -23,6 +23,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     type,
     ...props
   }: T) => {
+    const { getFormattedDateString } = useDate();
     const { workspaceState, formState } = FB.useStores();
     const {
       id: documentId,

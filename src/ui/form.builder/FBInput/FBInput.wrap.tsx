@@ -138,10 +138,13 @@ export const withFBInput = <T extends FBInputProps>(
       if (!initialValues || isEmpty(initialValues)) {
         return;
       }
-      if (get(initialValues, property)) {
+      const defaultSpecificValue = get(INDIVIDUAL_INITIAL_VALUES, property);
+      const initialValue = get(initialValues, property);
+
+      if (initialValue || initialValue === defaultSpecificValue) {
         return;
       }
-      formState?.setFieldValue(property, get(INDIVIDUAL_INITIAL_VALUES, property), withState, omitFormValue);
+      formState?.setFieldValue(property, defaultSpecificValue, withState, omitFormValue);
     };
 
     defaultValue = setDefaultValue();

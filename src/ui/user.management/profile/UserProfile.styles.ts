@@ -63,5 +63,12 @@ export default makeStyles((theme: Theme) =>
       display: 'flex',
       margin: 0,
     },
+    fieldMargin: {
+      marginBottom: theme.spacing(3),
+    },
+    userTimezoneNote: {
+      margin: theme.spacing(1, 0),
+      color: Colors.gray,
+    },
   }),
 );

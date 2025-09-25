@@ -4,7 +4,7 @@ import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-reac
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
+import { cloneDeep, isEmpty, last, pick, uniq, uniqBy } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -580,8 +580,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     },
     [columns],
   );
+  const isLCPAddButtonVisible = hasEditLCPPermission && isEmpty(editGroup);
 
-  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={hasEditLCPPermission ? addLCP : undefined}>
+  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={isLCPAddButtonVisible ? addLCP : undefined}>
     <Grid item>
       <ColumnMenuContext.Provider
         value={{
@@ -633,7 +634,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </ColumnMenuContext.Provider>
     </Grid>
     <Grid item>
-      {hasEditLCPPermission && <AddButton
+      {isLCPAddButtonVisible && <AddButton
         fullWidth
         attached
         kind="add"

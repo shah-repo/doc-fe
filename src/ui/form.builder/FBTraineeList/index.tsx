@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
-import { TIME_ZONE } from '../../../common/utils/date';
+import { useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -41,6 +41,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
     documentOptionsAsync,
   } = props;
   const classes = useStyles();
+  const { timezone } = useDate();
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
   const [dialogTrainee, setDialogTrainee] = React.useState<TrainingRecordQuery>();
   const trainingRecordDialog = useDialog();
@@ -87,7 +88,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
-    trainingCompletionDate: moment().tz(TIME_ZONE).startOf('day').toISOString(),
+    trainingCompletionDate: moment().tz(timezone).startOf('day').toISOString(),
     createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });

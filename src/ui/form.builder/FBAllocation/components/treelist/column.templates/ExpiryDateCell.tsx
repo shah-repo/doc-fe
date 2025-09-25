@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
-import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { EditableAllocationItem } from '../../../interface';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
@@ -21,6 +21,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
   const { values } = useFormikContext<EditableAllocationItem>();
   const fieldValue = isEditMode ? values?.expiryDate : field && dataItem[field];
   const isExpired = isEditMode ? values.isExpired : dataItem.isExpired;
+  const { getFormattedDateString } = useDate();
 
   return (
     <td

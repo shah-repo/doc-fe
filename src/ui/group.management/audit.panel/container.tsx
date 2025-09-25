@@ -2,7 +2,7 @@ import { each, groupBy, map, pick, sortBy, uniq, without } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ACTION_TITLE_MAPPING, GMAuditGroupProps, GMAuditProps, UM_AUDIT_CONCAT_KEYS } from '../../../state/ducks/userManagement/types';
@@ -23,6 +23,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
   closeHistoryPanel,
 }) => {
   const intl = useIntl();
+  const { getFormattedDateString } = useDate();
   const getTranslatedText = (key: string, values: TranslatedTextProps) =>
     intl.formatMessage({ id: `group.management.audit.history.${key}` }, values);
 

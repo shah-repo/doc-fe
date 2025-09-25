@@ -1,14 +1,14 @@
-import React from 'react';
 import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
-import { find, capitalize } from 'lodash';
+import { capitalize, find } from 'lodash';
 import { observer } from 'mobx-react';
+import React from 'react';
 import { FBInlineApprovalStatusIdent, FBLHRStepState } from '../../../';
 import { ReactComponent as OperatorApprovedIcon } from '../../../../../assets/images/OperatorApproved.svg';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { Nullable, User } from '../../../../../state/ducks/common/types';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import styles from './styles';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 interface OperatorsListProps {
   operators: Array<{ stepId: string, user: User }>
@@ -18,6 +18,7 @@ interface OperatorsListProps {
 }
 
 const OperatorsList: React.FC<OperatorsListProps> = (props) => {
+  const { getFormattedDateString } = useDate();
   const { operators, stepLHRs, lhrStepState, stepIndex } = props;
   const classes = styles();
 

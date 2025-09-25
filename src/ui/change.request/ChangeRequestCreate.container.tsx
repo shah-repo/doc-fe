@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
@@ -59,7 +60,12 @@ const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateC
     }, []);
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
-      async.start(create, toChangeRequestEditRequestBody(values), async);
+      const effectiveDate = values.formInput?.effectiveDate;
+      const updatedValues = {
+        ...values,
+        formInput: { ...values.formInput, ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate } : {}) },
+      };
+      async.start(create, toChangeRequestEditRequestBody(updatedValues), async);
     };
 
     return (

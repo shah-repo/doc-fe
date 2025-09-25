@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
-import { concat, filter, find, flatten, includes, sortBy, uniqBy } from 'lodash';
+import { concat, filter, find, flatten, includes, isEmpty, sortBy, uniqBy } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
+import { useDate } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
@@ -90,6 +90,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const currentUser = useSelector(authSelectors.currentUser);
+  const { timezone } = useDate();
 
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
@@ -436,8 +437,16 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const onSubmit = (values: any) => {
+    const updatedValues = {
+      ...values,
+      formInput: {
+        ...values.formInput,
+        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: values.formInput?.effectiveDate } : {}),
+      },
+    };
+
     if (selectedInvalid) {
-      asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
+      asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(updatedValues)), asyncAR);
       return;
     }
 
@@ -474,7 +483,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         finalizeAction,
         id,
         {
-          effectiveDate: getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString()),
+          effectiveDate: moment().tz(timezone).toISOString(),
         },
         async,
       );
