@@ -120,11 +120,11 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   aslStatusConfig: [],
   supplierConfig: [],
   timezone: 'America/Los_Angeles',
-  status: AsyncStatus.Idle,
-  message: '',
   supplierTypes: [],
   supplierCapabilities: [],
   supplierServices: [],
+  status: AsyncStatus.Idle,
+  message: '',
 };
 
 const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {
