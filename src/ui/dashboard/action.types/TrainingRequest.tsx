@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedStartOfDayDateString } from '../../../common/utils/date';
+import { useDate } from '../../../common/utils/date';
 import { TrainingRecord } from '../../../state/ducks/training/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import DashboardActionTypeBase from './DashboardActionTypeBase';
@@ -17,6 +17,7 @@ const TrainingRequest: React.FunctionComponent<Props> = ({
 }) => {
   const isDue = useMemo(() => moment().isAfter(trainingRecord.dueOn), [trainingRecord.dueOn]);
   const intl = useIntl();
+  const { getFormattedStartOfDayDateString } = useDate();
 
   const docRevId = trainingRecord.documentRevision.id || '';
   const docId = trainingRecord.trainingPlan?.document.id || '';

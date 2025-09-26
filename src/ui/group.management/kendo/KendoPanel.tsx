@@ -80,7 +80,7 @@ export function KendoPanel ({
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [Official, setOfficial] = useState(false);
+  const [Official, setOfficial] = useState(true);
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);

@@ -107,11 +107,22 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const frozenInitialValues = cloneDeep(initialValues);
 
   const onSubmit = (values: ChangeRequestFormValues) => {
+    const updatedValues = formState.getValues();
+
     const dataToSubmit = compareValuesToSubmit(
-      frozenInitialValues,
+      {
+        ...frozenInitialValues,
+        formInput: {
+          ...frozenInitialValues.formInput,
+          ...(!isEmpty(frozenInitialValues.formInput?.effectiveDate) ? { effectiveDate: frozenInitialValues.formInput?.effectiveDate } : {}),
+        },
+      },
       {
         ...values,
-        formInput: formState.getValues(),
+        formInput: {
+          ...updatedValues,
+          ...(!isEmpty(updatedValues.formInput?.effectiveDate) ? { effectiveDate: updatedValues.formInput?.effectiveDate } : {}),
+        },
       },
       toChangeRequestEditRequestBody,
     );

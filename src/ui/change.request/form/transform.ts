@@ -1,5 +1,4 @@
-import { isEmpty, pick } from 'lodash';
-import { getStartOfDayDateString } from '../../../common/utils/date';
+import { pick } from 'lodash';
 import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/ducks/changeRequest/types';
 import { ChangeRequestFormValues, TemplateOption } from './types';
 
@@ -54,16 +53,11 @@ export const templateOptionToChangeRequestCreateBody = (option: TemplateOption):
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
-  const effectiveDate = getStartOfDayDateString(values.formInput?.effectiveDate);
-  const formInput = {
-    ...values.formInput,
-    ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate } : {}),
-  };
   let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     ...pick(values, ['formDocument']),
     title: values.title,
     description: values.description,
-    formInput,
+    formInput: values.formInput,
   };
   if (!values.id) {
     changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };

@@ -178,8 +178,6 @@ export * from './FBParts/FBParts.types';
 export { default as FBPartsItem } from './FBPartsItem/FBPartsItem';
 export * from './FBPartsItem/FBPartsItem.types';
 export * from './FBPartsSelection/FBPartsSelection.types';
-export { default as FBPassPercentage } from './FBPassPercentage/FBPassPercentage';
-export * from './FBPassPercentage/FBPassPercentage.types';
 export { default as FBPOApprovalMatrixState } from './FBPOApprovalMatrix/FBPOApprovalMatrix.state';
 export { default as FBPOApprovalsState } from './FBPOApprovals/FBPOApprovals.state';
 export * from './FBPOApprovals/FBPOApprovals.types';
@@ -257,7 +255,6 @@ export { default as FBTextEditorOptionsState } from './FBTextEditorOptions/FBTex
 export * from './FBTextEditorOptions/FBTextEditorOptions.types';
 export { default as FBTextField } from './FBTextField/FBTextField';
 export * from './FBTextField/FBTextField.types';
-export { default as FBTextFieldWithRangeState } from './FBTextFieldWithRange/FBTextFieldWithRange.state';
 export * from './FBTextFieldWithRange/FBTextFieldWithRange.types';
 export * from './FBTimerField/FBTimerField.types';
 export { default as FBTooltip } from './FBTooltip/FBTooltip';

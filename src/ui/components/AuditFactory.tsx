@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
@@ -22,9 +22,9 @@ import { ASLStatus } from '../administration/general.settings/panels/SupplierSet
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
-import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
+import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
+import { FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -35,6 +35,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingCustomer from './AuditShippingCustomer';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
@@ -66,6 +67,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+  const { getFormattedDateString, getFormattedStartOfDayDateString } = useDate();
 
   const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
@@ -217,13 +219,33 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
       },
       shippingCustomer () {
-        if (audit.fbSchemaItem) {
-          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
-        }
-        return <AuditAutocomplete audit={audit} />;
+        return <AuditShippingCustomer {...{ audit, dataCy, auditValue }} />;
       },
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
+      },
+      documentRevisions () {
+        const isWhereUsedViewDeleted = (
+          audit.type === 'ARRAY_DELETED'
+          && audit.field.replace(/\.\d+\./, '.') === 'formInput.documentRevisions.whereUsedView'
+          && audit.previousValue
+        );
+        if (isWhereUsedViewDeleted) {
+          try {
+            const data = JSON.parse(audit.previousValue as string);
+            let whereUserValue = '';
+
+            if (Array.isArray(data) && data.length > 0) {
+              whereUserValue = data.map(item => item.name).join(', ');
+            } else {
+              whereUserValue = data.name;
+            }
+            return (<div data-cy={dataCy}>{whereUserValue}</div>);
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
@@ -379,7 +401,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               <br />
               <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
               <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
-              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'share.not.selected.watermark.attachment')}</div>
+              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>
               { includeEffectiveDate && <div data-cy={dataCy}> {translate('share.selected.watermark.attachment.names')}: {watermarkAttachmentsList}</div>
               }
             </>
@@ -818,6 +840,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } catch (err) {
           // do nothing
         }
+        break;
+      case 'formInput.po-items-built-in.dateOfExchangeRate':
+        returnValue = (<div data-cy={dataCy}>{getFormattedStartOfDayDateString(auditValue)}</div>);
         break;
       case 'formInput.po-items-built-in.items.order':
       case 'formInput.po-items-built-in.items.totalAmount':

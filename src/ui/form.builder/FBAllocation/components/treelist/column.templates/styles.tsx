@@ -158,6 +158,9 @@ export const styles = makeStyles((theme) => ({
   addChildLotIcon: {
     color: ThemeColors.primary,
   },
+  scanIcon: {
+    marginLeft: theme.spacing(1.25),
+  },
   lotInfoWrapper: {
     '& button': {
       marginLeft: theme.spacing(1.25),

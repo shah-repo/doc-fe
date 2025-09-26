@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { companySelectors } from '../../state/ducks/company';
 import { getAuditDefaultValue } from '../common/utils/audit';
@@ -22,6 +22,7 @@ const AuditLotTransfer: React.FC<Props> = ({
   const field = audit.field.split('.').at(-1) as string;
   const locations = useSelector(companySelectors.getAllLocations);
   const employees = useSelector(companySelectors.getAllEmployees);
+  const { getFormattedDateString } = useDate();
 
   const locationAuditValue = (id: string) => locations?.find(location => location.id === id)?.name ?? translate('common.not.applicable');
 
