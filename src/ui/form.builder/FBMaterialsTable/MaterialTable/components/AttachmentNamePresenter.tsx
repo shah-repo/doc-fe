@@ -24,7 +24,7 @@ interface Props extends FBFilesPresenterProps {
   fileUploadState: FBFileUploadState
 }
 
-const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
+const AttachmentNamePresenter: React.FunctionComponent<Props> = ({
   attachments = [],
   boxProps,
   isDisabled,
@@ -62,13 +62,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box
-      {...boxProps}
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      flexWrap="wrap"
-    >
+    <Box {...boxProps} className={classes.attachmentNameContainer}>
       <FBMapWrapper<FBAttachment[]> collection={attachments}>
         {(file: FBAttachment) => {
           const { name, type, id } = file;
@@ -76,11 +70,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
             <Box key={id} className={classes.attachmentName}>
               <AttachFile className={classes.attachmentIcon} />
               <Box className={classes.fileRow}>
-                <Box
-                  className={classes.fileName}
-                  onClick={() => downloadOrViewFile(file)}
-                  title={`${name}.${type}`}
-                >
+                <Box className={classes.fileName} onClick={() => downloadOrViewFile(file)} title={`${name}.${type}`}>
                   <OverflowingContent>
                     <span>{`${name}.${type}`}</span>
                   </OverflowingContent>
@@ -111,4 +101,4 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 };
-export default withFBFilesPresenter(FBAttachmentNamePresenter);
+export default withFBFilesPresenter(AttachmentNamePresenter);

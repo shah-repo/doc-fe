@@ -180,4 +180,10 @@ export const styles = makeStyles((theme) => ({
     color: Colors.error,
     marginLeft: theme.spacing(1),
   },
+  attachmentNameContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
 }));

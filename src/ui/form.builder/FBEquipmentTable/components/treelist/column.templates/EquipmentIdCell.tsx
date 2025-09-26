@@ -73,7 +73,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         size="small"
         getOptionLabel={(opt) => opt.label}
         renderOption={(option: EquipAutoCompleteOptions, props) => (
-          <ListItem {...props} className="lot-list-item" disableGutters>
+          <ListItem {...props} className="eq-list-item" disableGutters>
             <ListItemText primary={option.label} />
             {option.isExpired && (
               <ListItemIcon>
@@ -94,16 +94,30 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
+  const {
+    hasChildren,
+    dataItem,
+    field,
+    equipmentOptions,
+    addActualId,
+    onScanClick,
+    isDisabled,
+    isEnableActualIdAddition,
+    isEBProcedure,
+  } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
-  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
+  const isEditMode = isEBProcedure
+    ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId)
+    : isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
-      = dataItem?.isActualIdAddition || !isEnableActualIdAddition || dataItem.equipmentId ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
+    = dataItem?.isActualIdAddition || !isEnableActualIdAddition || dataItem.equipmentId
+      ? false
+      : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const isLoading = !equipmentOptions.length;
 
   useEffect(() => {
@@ -111,8 +125,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
 
     if (value && field) {
       setValue(value);
-      // setFieldValue('calDueDate', value?.calDueDate);
-      //  setFieldValue('pmDueDate', value?.pmDueDate);
     }
   }, [equipmentOptions]);
 
@@ -176,10 +188,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
           )}
         </span>
       </span>
-      <DocumentRevisionDialog
-        dialog={quickViewDialog}
-        {...{ docRevId: actualId, parentRevId: parentEquipPlannedId }}
-      />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: actualId, parentRevId: parentEquipPlannedId }} />
     </TreeListCellWrapper>
   );
 };
