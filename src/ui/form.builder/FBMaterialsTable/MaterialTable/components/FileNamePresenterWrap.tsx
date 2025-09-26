@@ -25,7 +25,6 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
     useObserver(() => {
       if (!isEmpty(files)) {
         attachments = filesPresenterState?.filesApi.data ?? [];
-        console.log('attachments', attachments);
       }
     });
 

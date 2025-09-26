@@ -297,7 +297,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   const removeEquipItem = (dataItem: EditableEquipmentItem) => {
-    console.log('dataItem', dataItem);
     // Do something here
     if (isEnableActualIdAddition && !isEBProcedure) {
       handleSelectionDelete?.(dataItem.id);
@@ -496,8 +495,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         state.data[index] = editItemInfo;
       }
     }
-
-    console.log('state?.data', editItemInfo);
 
     setState(state => ({
       ...state,
