@@ -17,7 +17,6 @@ function SettingsTable<T extends EditableItem> ({
   onAdd,
   getRowProperties,
   rowRender,
-  addButtonClass,
   ...props
 }: PropsWithChildren<SettingsTableProps<T>>): React.ReactElement {
   const classes = useStyles();
@@ -55,7 +54,6 @@ function SettingsTable<T extends EditableItem> ({
           data-cy={kebabCase(addButtonLabel)}
           disabled={isEditing}
           onClick={onAdd}
-          {...(addButtonClass && { className: addButtonClass })}
         >
           {addButtonLabel}
         </Button>

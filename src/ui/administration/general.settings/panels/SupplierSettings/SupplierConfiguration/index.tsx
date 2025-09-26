@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { groupBy, has, isArray, isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
@@ -21,6 +21,7 @@ import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { EDIT_FIELDS } from './constants';
 import { buildSchema } from './schema';
+import useStyles from './styles';
 import SupplierLabelsGrid from './SupplierLabelGrid';
 import {
   EditableSupplierConfig,
@@ -28,12 +29,6 @@ import {
   SUPPLIER_FIELDS,
   SupplierConfig,
 } from './types';
-
-const useStyles = makeStyles(theme => ({
-  labelsGridContainer: {
-    marginBottom: theme.spacing(2),
-  },
-}));
 
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const classes = useStyles();

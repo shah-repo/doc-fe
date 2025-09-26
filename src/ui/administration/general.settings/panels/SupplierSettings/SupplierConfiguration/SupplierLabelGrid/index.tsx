@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit } from 'lodash';
@@ -22,19 +22,12 @@ import {
   SupplierLabel,
 } from './types';
 
-const useStyles = makeStyles({
-  addButton: {
-    maxWidth: '450px',
-  },
-});
-
 interface SupplierLabelsGridProps {
   name: string
   title: Translation
 }
 
 const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) => {
-  const classes = useStyles();
   const isActive = useSelector(
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
   );
@@ -112,7 +105,7 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) 
     });
   };
 
-  const mappedLocations
+  const mappedLabels
     = labels?.map((supplierConfiguration: SupplierLabel) => {
       return {
         ...supplierConfiguration,
@@ -123,10 +116,10 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) 
       };
     }) ?? [];
 
-  const locationsList = (
+  const supplierLabelsList = (
     editedLabel?.[MODE_FIELD] === Mode.add
-      ? [...mappedLocations, editedLabel]
-      : mappedLocations
+      ? [...mappedLabels, editedLabel]
+      : mappedLabels
   );
 
   const dataCyGenerator = (supplierLabel: EditableSupplierLabel) => ({
@@ -154,14 +147,13 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) 
       <SettingsTable
         isActive={isActive}
         style={{ maxWidth: '450px', maxHeight: '200px', overflow: 'auto' }}
-        data={locationsList as unknown as EditableSupplierLabel[]}
+        data={supplierLabelsList}
         isEditing={editedLabel !== undefined}
         schema={schema}
         addButtonLabel={translate('common.add.new')}
         onAdd={addSupplierLabel}
         getRowProperties={dataCyGenerator}
         isFilterable
-        addButtonClass={classes.addButton}
       >
         <GridToolbar>
           <Grid container>
