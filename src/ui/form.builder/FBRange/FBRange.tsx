@@ -23,6 +23,7 @@ const FBRange: React.FunctionComponent<FBInputProps> = ({
           rules="required_if:editorConfig.hasRange,true"
           placeholder="form.builder.from"
           validationAttribute="form.builder.from"
+          helperText="required"
           name={`${name}.from`}
           gutter={false}
         />
