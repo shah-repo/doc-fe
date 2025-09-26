@@ -108,11 +108,13 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
         action: n.proposedAction,
       }));
       setSelected(newSelectedDetails);
-      const newSelectedRows = data.reduce<{ [id: string]: boolean }>(
-        (selectedRows, item) => ({ ...selectedRows, [idGetter(item)]: true }),
-        {},
-      );
-      setSelectedRows(newSelectedRows);
+      setSelectedRows((prevSelectedRows = {}) => {
+        const newSelectedRows = data.reduce<{ [id: string]: boolean }>(
+          (rows, item) => ({ ...rows, [idGetter(item)]: true }),
+          {},
+        );
+        return { ...prevSelectedRows, ...newSelectedRows };
+      });
 
       // global state update - add current page all item
       const existingRevIds = new Set(selectedItems.map(item => item.docRevId));
@@ -123,7 +125,12 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
       return;
     }
     setSelected([]);
-    setSelectedRows(undefined);
+    setSelectedRows((prevSelectedRows = {}) => {
+      const currentPageKeys = data.map(item => idGetter(item));
+      const newSelectedRows = { ...prevSelectedRows };
+      currentPageKeys.forEach(key => delete newSelectedRows[key]);
+      return newSelectedRows;
+    });
 
     // global state update - remove current page all item
     const revIds = new Set(data.map(item => item.docRevId));
