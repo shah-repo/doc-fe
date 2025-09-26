@@ -17,6 +17,7 @@ import Text from '../../../../../../components/Text';
 import { Translation } from '../../../../../../translations/types';
 import SettingsTable from '../../../../components/SettingsTable';
 import { buildSchema } from './schema';
+import useStyle from './styles';
 import {
   EditableSupplierLabel,
   SupplierLabel,
@@ -28,6 +29,7 @@ interface SupplierLabelsGridProps {
 }
 
 const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) => {
+  const classes = useStyle();
   const isActive = useSelector(
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
   );
@@ -146,7 +148,7 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) 
     <FormikProvider value={formik}>
       <SettingsTable
         isActive={isActive}
-        style={{ maxWidth: '450px', maxHeight: '200px', overflow: 'auto' }}
+        className={classes.root}
         data={supplierLabelsList}
         isEditing={editedLabel !== undefined}
         schema={schema}
