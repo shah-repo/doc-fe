@@ -107,16 +107,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     setState(stateInfo);
   };
 
-  const addMaterialItemToState = (item: Material | FBProcedureItemConfig) => {
-    if (!procedureState || !mpiProcedureState || !workspaceState?.schema) return;
-
-    const allSteps = workspaceState.schema.filter((step) => step.type === 'mpiprocedure');
-    const fbItem = item as FBProcedureItemConfig;
-
-    procedureState.addItem(fbItem, type, allSteps);
-    mpiProcedureState.addItem(fbItem, type, allSteps);
-  };
-
   const handleExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     const expanded = event.value
       ? state.expanded.filter((id) => id !== event.dataItem.id)
@@ -173,7 +163,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       return;
     }
 
-    addMaterialItemToState(procedureItem);
+    const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
+    procedureState?.addItem(procedureItem, type, allSteps);
+    mpiProcedureState?.addItem(procedureItem, type, allSteps);
 
     if (isMPIProcedure) {
       return;
@@ -230,7 +222,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         }
 
-        addMaterialItemToState(payload);
+        const allSteps = workspaceState?.schema?.filter((step) => step.type === 'mpiprocedure');
+        procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+        mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+
         discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
@@ -276,7 +271,11 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         omit(item, EB_FIELDS_TO_OMIT),
       );
       state.data[parentIndex][SUB_ITEMS_FIELD] = updatedSubItems;
-      addMaterialItemToState(omit(parentItem, EB_FIELDS_TO_OMIT) as Material);
+      const payload = omit(parentItem, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+
+      const allSteps = workspaceState?.schema?.filter((step) => step.type === 'mpiprocedure');
+      procedureState?.addItem(payload, type, allSteps);
+      mpiProcedureState?.addItem(payload, type, allSteps);
       return;
     }
 
