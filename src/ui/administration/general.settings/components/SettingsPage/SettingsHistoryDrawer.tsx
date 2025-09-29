@@ -64,7 +64,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   return (
     <Drawer anchor="right" open={isOpen} onClose={onClose} aria-labelledby="audit-logs-drawer-title"
       classes={{ paper: classes.drawerAuditLogsPaper }}>
-      <AppBar position="static" color="default" elevation={0}>
+      <AppBar position="sticky" color="default" elevation={0}>
         <Box className={classes.appBarBox}>
           <Typography variant="h4">
             {translate('settings.audit.logs.drawer.title')}
