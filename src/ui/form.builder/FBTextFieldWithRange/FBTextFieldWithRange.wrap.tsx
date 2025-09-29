@@ -32,15 +32,10 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       hasRange,
       range,
       hasTolerance,
-      tolerance = 0,
+      tolerance,
     } = editorConfig;
 
     const { formState } = FB.useStores();
-
-    const validationRange = hasRange && range?.from !== undefined && range?.to !== undefined ? {
-      from: range.from - tolerance,
-      to: range.to + tolerance,
-    } : undefined;
 
     const value = useObserver<FBTextFieldWithRangeValue | undefined>(
       () => formState?.newValues.get(name) ?? formState?.getFieldValue(name),
@@ -61,7 +56,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
     );
 
-    formState?.setFieldRules(`${name}.value`, getRules(validationRange?.from, validationRange?.to));
+    formState?.setFieldRules(`${name}.value`, getRules(range?.from, range?.to));
     formState?.setValidationAttributeName(`${name}.value`, String(label));
 
     const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
@@ -95,7 +90,6 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       isPartFaiRequired,
       isPartIqcRequired,
       range,
-      validationRange,
       tolerance,
       onUpdate: updateValue,
     });

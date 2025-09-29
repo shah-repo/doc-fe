@@ -170,8 +170,6 @@ export * from './FBNotes/FBNotes.types';
 export { default as FBNotesForm } from './FBNotesForm/FBNotesForm';
 export * from './FBNotesForm/FBNotesForm.types';
 export * from './FBOption/FBOption.types';
-export { default as FBOutOfRange } from './FBOutOfRange/FBOutOfRange';
-export * from './FBOutOfRange/FBOutOfRange.types';
 export * from './FBParagraph/FBParagraph.types';
 export { default as FBPartsState } from './FBParts/FBParts.state';
 export * from './FBParts/FBParts.types';

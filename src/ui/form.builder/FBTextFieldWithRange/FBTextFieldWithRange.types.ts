@@ -22,7 +22,6 @@ export interface FBTextFieldWithRangeProps extends FBTextFieldProps {
   isCriticalToQuality?: boolean
   isInspected?: boolean
   range?: FBRangeValue
-  validationRange?: FBRangeValue
   tolerance?: number
   isPartFaiRequired?: boolean
   isPartIqcRequired?: boolean
