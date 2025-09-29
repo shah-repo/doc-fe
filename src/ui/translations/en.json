@@ -2696,5 +2696,5 @@
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
   "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision",
-  "settings.audit.logs.dialog.title": "Audit History"
+  "settings.audit.logs.drawer.title": "Audit History"
 }

@@ -137,6 +137,25 @@ export default makeStyles<NextTheme>(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    '& > :nth-child(1)': {
+      flex: '0 0 15%',
+      '& > h6': {
+        fontSize: 11,
+      },
+    },
+    '& > :nth-child(2)': {
+      flex: '0 0 60%',
+    },
+    '& > :nth-child(3)': {
+      flex: '0 0 25%',
+      textAlign: 'right',
+      '& > h6': {
+        fontSize: 11,
+      },
+    },
+  },
+  contentBox: {
+    margin: theme.spacing(0, 4),
   },
   parentKey: {
     color: Colors.primaryDark,

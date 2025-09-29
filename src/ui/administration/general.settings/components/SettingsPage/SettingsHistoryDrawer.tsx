@@ -1,24 +1,26 @@
-import { AppBar, Box, Button, DialogContent, Drawer, Typography } from '@material-ui/core';
+import { AppBar, Box, Drawer, Typography } from '@material-ui/core';
 import Email from '@material-ui/icons/EmailRounded';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { companyActions } from '../../../../../state/ducks/company';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import { withThemeNext } from '../../../../layout/theme-next';
 import { AUDIT_CHANGE_TYPE, CompanySettingsChangeLog } from '../../types';
 import useStyles from './styles';
 
 interface SettingsHistoryDrawerProps {
   isOpen: boolean
-  handleClose: () => void
+  onClose: () => void
 }
 
 const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   isOpen,
-  handleClose,
+  onClose,
 }) => {
   const classes = useStyles();
   const { getFormattedDateString } = useDate();
@@ -60,26 +62,27 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   };
 
   return (
-    <Drawer anchor="right" open={isOpen} onClose={handleClose} aria-labelledby="audit-logs-dialog-title"
+    <Drawer anchor="right" open={isOpen} onClose={onClose} aria-labelledby="audit-logs-drawer-title"
       classes={{ paper: classes.drawerAuditLogsPaper }}>
       <AppBar position="static" color="default" elevation={0}>
         <Box className={classes.appBarBox}>
           <Typography variant="h4">
-            {translate('settings.audit.logs.dialog.title')}
+            {translate('settings.audit.logs.drawer.title')}
           </Typography>
-          <Button size="small" variant="outlined" onClick={handleClose} className={classes.buttonSpacing}>
+          <Button size="small" variant="outlined" onClick={onClose} className={classes.buttonSpacing}
+            data-cy="settings-drawer-close-btn">
             {translate('common.close')}
           </Button>
         </Box>
       </AppBar>
-      <DialogContent>
+      <Box className={classes.contentBox}>
         {Object.keys(auditLogsMap).map(groupId => (
           <Box key={groupId} className={classes.groupBox}>
             {
               auditLogsMap[groupId]?.map(companySettingLog => (
                 <Box key={companySettingLog.id} className={classes.logEntry}>
                   <Box className={classes.logEntryBox}>
-                    <Box style={{ width: '15%' }}>
+                    <Box>
                       <Typography variant="subtitle2">
                         <Text message={getFormattedDateString(
                           companySettingLog.updatedAt,
@@ -87,7 +90,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
                         )} />
                       </Typography>
                     </Box>
-                    <Box style={{ width: '60%' }}>
+                    <Box>
                       <Typography variant="body1" className={classes.parentKey}>
                         {companySettingLog.parentKeyLabel} -
                         <span className={getChangeStyle(companySettingLog.changeType)}>{companySettingLog.changeType}</span>
@@ -96,7 +99,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
                         {companySettingLog.displayText}
                       </Typography>
                     </Box>
-                    <Box style={{ width: '25%', textAlign: 'right' }}>
+                    <Box>
                       <Typography variant="subtitle2" className={classes.ownerName}>
                         {companySettingLog.ownerName}
                       </Typography>
@@ -110,9 +113,9 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
             }
           </Box>
         ))}
-      </DialogContent>
+      </Box>
     </Drawer>
   );
 };
 
-export default SettingsHistoryDrawer;
+export default withThemeNext(SettingsHistoryDrawer);

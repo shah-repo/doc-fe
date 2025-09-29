@@ -103,7 +103,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
       {isShowHistoryDrawer && (
         <SettingsHistoryDrawer
           isOpen={isShowHistoryDrawer}
-          handleClose={handleHistoryDrawerClose}
+          onClose={handleHistoryDrawerClose}
         />
       )}
     </Box>
