@@ -75,7 +75,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const addApprovalRole = () => {
-    const lastIndex = Math.max(0, ...approvalRoles.map(item => item.index));
+    const lastIndex = approvalRoles?.length > 0 ? Math.max(-1, ...approvalRoles.map(item => item.index)) : -1;
 
     setEditedApprovalRole({
       id: uuidv4(),
