@@ -52,6 +52,7 @@ NavigationLinkPresenterProps
   checkIfItemIsActive,
   isNew,
 }) => {
+  const isExternalLink = type === NavigationItems.EXTERNAL_LINK;
   const isMenu = type === NavigationItems.MENU;
   const classes = styles({
     iconLink: icon,
@@ -67,7 +68,7 @@ NavigationLinkPresenterProps
   );
   return (
     <ListItem
-      component={path || category ? NavLink : null}
+      component={isExternalLink ? 'a' : (path || category ? NavLink : null)}
       button
       className={classNames(classes.link, {
         [classes.childLink]: isChild,
@@ -77,8 +78,11 @@ NavigationLinkPresenterProps
       to={
         type === NavigationItems.CATEGORY
           ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`
-          : path
+          : (!isExternalLink ? path : undefined)
       }
+      href={isExternalLink ? path : undefined}
+      target={isExternalLink ? '_blank' : undefined}
+      rel={isExternalLink ? 'noopener noreferrer' : undefined}
       onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
       onMouseLeave={onMouseLeave}
       data-cy={`navigation.${camelCase(label)}`}
