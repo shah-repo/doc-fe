@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext, useState } from 'react';
-import { SelectedItemDetails } from '../../interface';
+import { SelectedItemDetails } from './interface';
 
 interface BulkMigrationConextType {
   selectedItems: SelectedItemDetails[]

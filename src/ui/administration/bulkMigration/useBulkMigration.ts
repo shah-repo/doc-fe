@@ -10,8 +10,8 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
+import { useBulkMigrationContext } from './BulkMigtationContext';
 import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, FormFieldSchema, ListType, MappingOptions, ScanFetchOptions, SelectedItemDetails, SupplierScanResultRevision } from './interface';
-import { useBulkMigrationContext } from './KendoRevsTable/components/BulkMigtationContext';
 import { DATA_ITEM_KEY } from './KendoRevsTable/constants';
 import { promptUserToRerunScan } from './utils';
 

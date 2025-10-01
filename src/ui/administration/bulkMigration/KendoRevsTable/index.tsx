@@ -28,9 +28,9 @@ import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Colors } from '../../../layout/theme-next';
+import { useBulkMigrationContext } from '../BulkMigtationContext';
 import { MigrationStatus, SelectedItemDetails, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { useBulkMigrationContext } from './components/BulkMigtationContext';
 import {
   DATA_ITEM_KEY,
   DEFAULT_FILTER,

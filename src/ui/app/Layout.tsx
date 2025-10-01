@@ -7,7 +7,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
 import BulkMigrationPage from '../administration/bulkMigration';
-import { BulkMigrationProvider } from '../administration/bulkMigration/KendoRevsTable/components/BulkMigtationContext';
+import { BulkMigrationProvider } from '../administration/bulkMigration/BulkMigtationContext';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
 import UserGroupManagment from '../administration/UserGroupManagement';

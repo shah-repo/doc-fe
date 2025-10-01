@@ -10,9 +10,9 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
+import { useBulkMigrationContext } from './BulkMigtationContext';
 import { ListType, MigrationStatus, SelectedItemDetails } from './interface';
 import KendoRevsTable from './KendoRevsTable';
-import { useBulkMigrationContext } from './KendoRevsTable/components/BulkMigtationContext';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import useStyles from './styles';
@@ -58,7 +58,7 @@ const BulkMigrationContainer: React.FC = () => {
     handleMigrationConfirmationDialogClose,
   } = useBulkMigration();
   const { selectedItems } = useBulkMigrationContext();
-  console.log('final selected items', selectedItems, 'rows', selectedRows);
+  console.log('rows', selectedRows);
 
   useEffect(() => {
     fetchAllDocumentTypes();
