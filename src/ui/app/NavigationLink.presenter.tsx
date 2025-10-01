@@ -53,6 +53,10 @@ NavigationLinkPresenterProps
   isNew,
 }) => {
   const isExternalLink = type === NavigationItems.EXTERNAL_LINK;
+  if (isExternalLink && path === 'PROJECT_MILESTONE_NAV_URL') {
+    path = process.env.REACT_APP_PROJECT_MILESTONE_NAV_URL;
+  }
+
   const isMenu = type === NavigationItems.MENU;
   const classes = styles({
     iconLink: icon,
