@@ -2695,5 +2695,10 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
+  "example.prompt.requirements.list": "Based on the requirements, generate a test plan to meet a particular standard requirements, such as 60101 or 10993",
+  "example.prompt.attachment.attachment": "This attachment is a requirements attachment, take standards file from <document_number> attachment name ISO 14971 and list gaps in the requirements when compared with the standard",
+  "example.prompt.compare,document": "Compare this document with previous revision",
+  "example.prompt.find.document": "Find <documents e.g. PO's, Suppliers > which were approved between <date range>, display the supplier and amount",
+  "example.prompt.completed.training": "Which documents has <Employee_name> completed training on",
   "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision"
 }

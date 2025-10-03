@@ -2,6 +2,7 @@ import { AppName, Widget, WidgetRef } from 'ai-widget';
 import React, { createContext, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useRouteMatch } from 'react-router-dom';
+import { translate } from '../../common/intl';
 import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../common/utils/selectors';
 import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
@@ -14,6 +15,7 @@ import { store } from '../../state/store';
 import {
   DOCUMENT_REVISION_VERSION_URL,
 } from '../constants/urls';
+import { promptKeys } from './constants';
 
 interface AiWidgetContextType {
   isWidgetActive: boolean
@@ -36,6 +38,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+  const dummyPrompts = promptKeys.map((key) => translate(key));
   const location = useLocation();
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
@@ -89,6 +92,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
         attachmentIds={attachmentIds}
         token={accessToken}
         apiPath={Config.ApiAIEndpoint}
+        dummyPrompts={dummyPrompts}
       />
       {children}
     </AiWidgetContext.Provider>
