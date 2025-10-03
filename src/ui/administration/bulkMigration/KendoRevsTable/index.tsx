@@ -48,13 +48,11 @@ const idGetter = getter(DATA_ITEM_KEY);
 interface KendoRevsTableProps {
   scanId: string
   updateRevsTable: number
-  handleSelectedRowsChange: (selected: SelectedItemDetails[]) => void
 }
 
 const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
   scanId,
   updateRevsTable,
-  handleSelectedRowsChange,
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{ [key: string]: string }>({});
@@ -96,10 +94,6 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
       prevIds.includes(selectedId) ? prevIds.filter((id) => id !== selectedId) : [...prevIds, selectedId],
     );
   }, []);
-
-  useEffect(() => {
-    handleSelectedRowsChange(selected);
-  }, [selected.length]);
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {

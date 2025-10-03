@@ -374,7 +374,6 @@ export const useBulkMigration = () => {
     scanId: string, options: ScanFetchOptions,
     searchQueries: {[key: string]: string},
   ) {
-    console.log('api call');
     setIsLoading(true);
     setErrorMessage('');
     setSelected([]);
