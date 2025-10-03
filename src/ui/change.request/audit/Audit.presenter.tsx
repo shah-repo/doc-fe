@@ -32,7 +32,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     || fieldName.includes('documentRevisions.id')
     || fieldName.includes('approver.id')
     || fieldName.includes('signatureGroupId.id')
-    || fieldName.includes('formInput.approvers');
+    || fieldName.includes('formInput.approvers')
+    || fieldName.includes('documentRevisions.whereUsedView.parentRevId');
   };
 
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
@@ -61,7 +62,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
 
     if (change.fbSchemaItem?.name === 'documentRevisions') {
-      const fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      let fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      if(change.type === 'ARRAY_DELETED') {
+        fieldName = fieldName.replace(/\.\d+\./, '.');
+      }
       return `changeRequest.audit.${fieldName}.${change.type}`;
     }
 

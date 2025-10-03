@@ -224,6 +224,29 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
       },
+      documentRevisions () {
+        const isWhereUsedViewDeleted = (
+          audit.type === 'ARRAY_DELETED'
+          && audit.field.replace(/\.\d+\./, '.') === 'formInput.documentRevisions.whereUsedView'
+          && audit.previousValue
+        );
+        if (isWhereUsedViewDeleted) {
+          try {
+            const data = JSON.parse(audit.previousValue as string);
+            let whereUserValue = '';
+
+            if (Array.isArray(data) && data.length > 0) {
+              whereUserValue = data.map(item => item.name).join(', ');
+            } else {
+              whereUserValue = data.name;
+            }
+            return (<div data-cy={dataCy}>{whereUserValue}</div>);
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+      },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();

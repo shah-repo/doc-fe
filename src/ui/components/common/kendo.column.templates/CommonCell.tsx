@@ -1,4 +1,5 @@
 import { get } from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import { MomentFormats, toValidateIfDate, useDate } from '../../../../common/utils/date';
 import Tooltip from '../kendo/Tooltip';
@@ -16,7 +17,7 @@ export const CommonCell = ({
 }: CustomGridCellProps) => {
   const value = get(dataItem, field || '');
   const toCheckIfDate = toValidateIfDate(value);
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, formatDisplayDate } = useDate();
   let formattedValue = toCheckIfDate
     ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
@@ -36,6 +37,10 @@ export const CommonCell = ({
 
   if (rowType === 'groupHeader') {
     return null;
+  }
+
+  if (formattedValue && moment.utc(formattedValue, moment.ISO_8601, true).isValid()) {
+    formattedValue = formatDisplayDate(formattedValue);
   }
 
   return (

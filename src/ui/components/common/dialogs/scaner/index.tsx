@@ -188,12 +188,20 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleScan = (data: string) => {
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
+    const lotRevId = extractRevision(data);
+    const isDuplicateScan = scanLots?.some((lot: ScanLot) => lot.lotRevId === lotRevId);
+    if (isDuplicateScan) {
+      toastError(translate('scan.lot.grid.scan.duplicate.error.message'));
+      return;
+    }
+
     if (isEquipmentScan) {
       validateScanLotAsync.start(validateEQScan, extractRevision(data), validateScanLotAsync);
       return;
     }
 
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync);
   };
 
   const handleError = () => {
