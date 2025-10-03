@@ -17,6 +17,7 @@ export const TreeListSchema = ({
   parentRevId,
   onScanClick,
   isEnableActualIdAddition,
+  isEBProcedure,
 }) => {
   return [
     {
@@ -35,7 +36,7 @@ export const TreeListSchema = ({
       title: translate('lhr.equipment.grid.heading.actual.id'),
       width: 350,
       mainOrderIndex: 2,
-      cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+      cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
     },
     {
       field: 'calDueDate',
@@ -66,6 +67,7 @@ export const TreeListSchema = ({
             onRestore={undefined}
             rootClassName={popperHolder}
             isEnableActualIdAddition={isEnableActualIdAddition}
+            isEBProcedure={isEBProcedure}
           />
         </td>
       ),

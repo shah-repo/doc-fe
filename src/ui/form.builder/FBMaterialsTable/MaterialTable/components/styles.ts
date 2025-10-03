@@ -27,9 +27,6 @@ export const styles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  deleteIcon: {
-    color: Colors.error,
-  },
   titleInfoCell: (props) => ({
     maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
@@ -100,5 +97,93 @@ export const styles = makeStyles((theme) => ({
     fontWeight: 400,
     fontSize: 14,
     lineHeight: '17.64px',
+  },
+  employeeResponseFields: {
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  assigneeAction: {
+    display: 'flex',
+    padding: theme.spacing(1, 1.75),
+    minHeight: 30,
+  },
+  assigneeActionStatusContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: 12,
+  },
+  attachmentField: {
+    height: 20,
+    padding: theme.spacing(0.625, 1.25),
+    marginBottom: theme.spacing(1.25),
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  attachmentFieldIcon: {
+    transform: 'rotate(45deg)',
+    height: '0.7em',
+    width: '0.7em',
+  },
+  attachmentFieldLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    marginLeft: theme.spacing(0.75),
+  },
+  attachmentsContainer: {
+    color: Colors.primary,
+    fontSize: 12,
+    marginBottom: theme.spacing(1.25),
+    overflow: 'auto',
+    maxHeight: 105,
+    width: 'fit-content',
+    '&:last-child': {
+      marginBottom: theme.spacing(0),
+    },
+  },
+  attachmentIcon: {
+    color: Colors.primary,
+    transform: 'rotate(45deg)',
+    fontSize: 18,
+  },
+  attachmentName: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+
+    '& svg': {
+      fontSize: 16,
+    },
+  },
+  fileRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    flex: 1,
+  },
+  fileName: {
+    flex: 1,
+    fontSize: 14,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    minWidth: 0,
+    color: Colors.primary,
+    cursor: 'pointer',
+  },
+  deleteIcon: {
+    fontSize: 16,
+    cursor: 'pointer',
+    color: Colors.error,
+    marginLeft: theme.spacing(1),
+  },
+  attachmentNameContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
 }));

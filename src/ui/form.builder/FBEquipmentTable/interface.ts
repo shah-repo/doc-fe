@@ -20,6 +20,7 @@ export interface EditableEquipmentItem extends EquipmentItem {
   [MODE_FIELD]?: boolean
   parentEquipPlannedId?: string
   parentId?: string
+  equipmentId?: string
 }
 
 export interface EquipmentItemEditEvent {

@@ -12,7 +12,6 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   const preventiveMaintenanceKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
   const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
   const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
-
   return {
     label: translate('common.select.revision', {
       docId: equipment.document.docId,
@@ -20,6 +19,8 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
       name: equipment?.name,
     }),
     complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
+    calDueDate: calibrationData.complianceDueDate,
+    pmDueDate: preventiveMaintenanceData.complianceDueDate,
     status: calibrationData?.status,
     value: equipment.id,
   };

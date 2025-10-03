@@ -67,6 +67,24 @@ class FBProcedureState {
     this.setValue(value);
   };
 
+  @action public removeEBChildrenItem = (parentId: string, id: string, type: FBProcedureItemType, subItemsKey: string) => {
+    const items = get(this, `value.${type}`) || [];
+    const updatedItems = items.map((item) => {
+      if (item.id !== parentId) return item;
+
+      return {
+        ...item,
+        [subItemsKey]: (item[subItemsKey] || []).filter((child) => child.id !== id),
+      };
+    });
+
+    const value = {
+      ...this.value,
+      [type]: updatedItems,
+    };
+    this.setValue(value);
+  };
+
   @action public setValue = (value?: FBProcedureValue) => {
     set(this, 'value', value);
   };

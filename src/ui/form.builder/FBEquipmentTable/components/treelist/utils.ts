@@ -1,7 +1,7 @@
 import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EditableEquipmentItem, EquipmentItem } from '../../interface';
-import { ADD_FIELD, MODE_FIELD } from './constants';
+import { ADD_FIELD, EB_SUB_ITEMS_FIELD, MODE_FIELD } from './constants';
 import { MapSelectedByParentEquipId } from './interface';
 
 export const isAddEquipItem = (dataItem: EditableEquipmentItem): boolean => {
@@ -38,7 +38,24 @@ export const getMapSelectedByParentEquipId = (equipsSelected: Array<Partial<FBMP
   }, {});
 };
 
-export const prepareData = (items: FBProcedureItemConfig[]): EquipmentItem[] => {
+export const prepareData = (items: FBProcedureItemConfig[], isEBProcedure?: boolean): EquipmentItem[] => {
+  if (isEBProcedure) {
+    return items.map(item => ({
+      ...item,
+      id: item?.id,
+      plannedId: item?.title,
+      calDueDate: '',
+      pmDueDate: '',
+      [EB_SUB_ITEMS_FIELD]: item[EB_SUB_ITEMS_FIELD]?.map((ebInfo) => {
+        return {
+          ...ebInfo,
+          parentId: item?.id,
+          parentEquipPlannedId: item?.title,
+        };
+      }) ?? [],
+    }));
+  }
+
   return items.map(item => ({
     ...item,
     id: item?.id,

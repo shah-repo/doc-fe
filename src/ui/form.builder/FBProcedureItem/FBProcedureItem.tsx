@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from '..';
 import Colors from '../../layout/theme/utils/colors';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
+import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
 import FBProcedureItemDetails from './FBProcedureItemDetails';
 
@@ -26,6 +28,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   locked,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const isMaterialOrEquipmentType = [FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
+
   return (
     <FBProvider {...{ dialogState }}>
       <Box
@@ -52,7 +56,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             }}
             locale={FBProcedureItemLocale[type]}
           />
-          {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
+          {!isPreview && !FBProcedureItemOmitAction.includes(type) && !isMaterialOrEquipmentType && (
             <Box pt={1.8} pr={2}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}>
@@ -85,8 +89,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             />
           </Box>
         )}
-        {type !== FBProcedureItemType.attachments && !loading && (
-          <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {type !== FBProcedureItemType.attachments && !loading && (<>
+          { !isMaterialOrEquipmentType && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
                 border={1}
@@ -146,7 +150,10 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 </Box>
               </Box>
             )}
-          </FBMapWrapper>
+          </FBMapWrapper>}
+          {type === FBProcedureItemType.materials && <MaterialsTable isDisabled={disabled} isActive={!isPreview} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure />}
+          {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(disabled)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure isEnableActualIdAddition />}
+        </>
         )}
       </Box>
     </FBProvider>

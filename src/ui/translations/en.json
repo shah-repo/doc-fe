@@ -1542,6 +1542,7 @@
   "form.builder.procedure.material.table.actual.id.title": "Actual Id",
   "form.builder.procedure.material.table.quantity.title": "Quantity",
   "form.builder.procedure.material.table.unit.title": "Unit",
+  "form.builder.procedure.material.table.attachments.title": "Attachments",
   "form.builder.mpi.part.selection.materials": "{docId} | {lotPart}.{lotPartRevision} | {quantity} {unit}",
   "form.builder.mpi.part.selection.equipment": "{docId}",
   "form.builder.action.mode": "{mode} {title}",

@@ -14,7 +14,7 @@ export const getCellValue = (dataItem: EditableMaterial, field?: string): string
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
 };
 
-export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean): Material[] => {
+export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean, isEBProcedure?: boolean): Material[] => {
   if (!items) {
     return [];
   }
@@ -29,7 +29,7 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean)
     isLotAdditionIconsShown: true,
     assignedLots: item.assignedLots?.map(lot => ({
       ...lot,
-      parentPartPlannedId: item.plannedId,
+      parentPartPlannedId: isEBProcedure ? item.title : item.plannedId,
       parentId: item.id,
     })),
   }));

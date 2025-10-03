@@ -1,6 +1,7 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListCellProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { Attachment } from '../../../change.request/form/types';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import FBMPIProcedureSelectState from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
@@ -49,9 +50,12 @@ export interface MaterialTableProps {
   lhrStepIndex?: number
   isMPIProcedure?: boolean
   isPreview?: boolean
+  isEBProcedure?: boolean
+  attachments?: Attachment
 }
 
 export interface EditableMaterial extends Material {
+  attachments?: never[]
   [MODE_FIELD]: boolean
   [ADD_FIELD]: boolean
   isNewAddition?: boolean

@@ -106,7 +106,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     && dataItem?.isLotAdditionIconsShown === true
     && !(dataItem?.[MODE_FIELD] || dataItem?.[ADD_FIELD]);
 
-  const lotDocId = dataItem?.lotDocId ?? '';
+  const lotDocId = dataItem?.lotDocId ?? value.label ?? '';
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
