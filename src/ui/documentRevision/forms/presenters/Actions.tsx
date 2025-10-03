@@ -14,8 +14,8 @@ import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { documentTypeActions, documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION, DocumentTypeById, DocumentTypeByIdForm } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -39,6 +39,8 @@ import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
@@ -58,6 +60,7 @@ import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
+import FormSelectionDialog from './FormSelectionDialog';
 import GenerateHtmlPreview from './GenerateHtmlPreview';
 import RedlineButton from './redline/Redline.button';
 import { SubmitForApproval } from './SubmitForApproval';
@@ -185,6 +188,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
   const isCustomers = checkIsDocumentCustomers(documentRevision?.document?.documentType?.groupOptions);
+  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+
+  const formDialog = useDialog();
+  const [forms, setForms] = React.useState<DocumentTypeByIdForm[]>();
+  const [selectedForm, setSelectedForm] = React.useState<DocumentTypeByIdForm>();
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -271,7 +279,46 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     dispatch(documentRevisionsActions.load(documentRevision.id));
   };
 
-  const onFormClick = async () => {
+  const idAsync = useAsync<DocumentTypeById>({
+    onSuccess: (data?: DocumentTypeById) => {
+      const { forms, documentType } = data ?? {};
+      console.log('---1---', { forms });
+      if(!isEmpty(forms)) {
+        console.log('---2---');
+        if(forms?.length === 1) {
+          console.log('---3---', forms[0]);
+          setSelectedForm(forms[0]);
+        } else {
+          setForms(forms ?? [] as DocumentTypeByIdForm[]);
+          formDialog.open();
+          return;
+        }
+        return;
+      }
+      console.log('-----data----', { data, documentType, selectedForm, forms });
+      // return;
+      createDocument();
+    },
+    onError: (msg) => {
+      // setErrorMessage(msg);
+    },
+  });
+
+  React.useEffect(() => {
+    if(selectedForm?.id) {
+      createDocument();
+    }
+  }, [selectedForm]);
+
+  // console.log('---formIds---', { formIds });
+  const onFormClick = () => {
+    const values = get(formik, 'values') as DocumentRevision;
+    console.log('---documentRevision----', { values, _formState, formik });
+    // return;
+    idAsync.start(getDocRevByIds, values.document.documentType.id, idAsync);
+  };
+
+  const createDocument = async () => {
     if (redlineActive) {
       formik.setFieldValue('redline', true);
       _formState?.setMode('form');
@@ -285,7 +332,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue('attachments', attachments);
       }
     }
-
+console.log('---formik---', { formik, selectedForm });
+    if(selectedForm?.id) {
+      formik.setFieldValue('formDocument', { id: selectedForm?.id });
+    }
+// formik.setFieldValue('formDocument', { id: '933e61f9-d1f5-49aa-835d-a94b0224ef88' });
     formik.submitForm();
     if (isPOEditState) {
       setDoNotPrompt(true);
@@ -572,6 +623,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
           )}
         </>
+      )}
+      {formDialog.isOpen && (
+        <FormSelectionDialog dialog={formDialog} formIds={forms} />
       )}
     </div>
   );
