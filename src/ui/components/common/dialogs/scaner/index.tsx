@@ -246,7 +246,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         </List>
         <Box className={classes.infoContainer}>
           <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />
-          <Box component="span" ml={1.5}>
+          <Box component="span" className={classes.infoMessage}>
             {translate(isEquipmentScan ? 'scan.lot.grid.scan.eq.info.message' : 'scan.lot.grid.scan.lot.info.message')}
           </Box>
         </Box>

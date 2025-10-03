@@ -472,9 +472,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
     const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isPreview || isDisabled)) || (!isEnableActualIdAddition && isPreview);
     const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isPreview || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
-    const isEBEditEnabled = isEBProcedure && !isDisabled;
 
-    if ((isEditRestricted && !isEBProcedure) || !isEBEditEnabled) {
+    if ((isEditRestricted && !isEBProcedure) || (isEBProcedure && isDisabled)) {
       return;
     }
 

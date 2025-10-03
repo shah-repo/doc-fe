@@ -466,9 +466,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       || (isLHRStep && isDesign
         ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId))
         : defaultValidation);
-    const isEBEditEnabled = isEBProcedure && !isDisabled;
 
-    if ((isEditRestricted && !isEBProcedure) || !isEBEditEnabled) {
+    if ((isEditRestricted && !isEBProcedure) || (isEBProcedure && isDisabled)) {
       return;
     }
 
