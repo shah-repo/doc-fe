@@ -146,7 +146,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       const sections = filter(schemaDiff, (schemaItem) =>
         schemaItem.type && FBSectionTypes.includes(schemaItem.type));
       bookmarkState?.removeBookmarks(map(sections, 'name'));
-      workspaceState?.initSchema(schema);
+      setTimeout(() => workspaceState?.initSchema(schema), 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [schema, workspaceState]);
 
@@ -169,15 +169,26 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.externalState = store.getState();
     }, [workspaceState, changeRequest]);
 
-    useEffect(() => reaction(
-      () => workspaceState?.schema,
-      () => {
-        const canAddFBFields = workspaceState?.mode === 'design' || workspaceState?.mode === 'formDesign';
-        if (!canAddFBFields) { return; }
-        workspaceState?.saveDocRev();
-      },
+    useEffect(() => {
+      let saveSchemaTimer;
+      const disposeReaction = reaction(
+        () => workspaceState?.schema,
+        () => {
+          const canAddFBFields = workspaceState?.mode === 'design' || workspaceState?.mode === 'formDesign';
+          if (!canAddFBFields) { return; }
+          if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
+          saveSchemaTimer = setTimeout(() => {
+            workspaceState?.saveDocRev();
+            saveSchemaTimer = undefined;
+          }, 250);
+        },
+      );
+      return () => {
+        if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
+        disposeReaction();
+      };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    }, []);
 
     return Component({
       ...(props as T),
