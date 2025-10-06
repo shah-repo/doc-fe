@@ -139,9 +139,11 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
         label={
           <Typography variant="body2" className={classes.label}>
             {translate('allocation.checkbox.group.option.autoTransact.label')}
-            <Tooltip title={translate(
-              'allocation.checkbox.group.option.autoTransact.title.message',
-            )} placement="right" arrow>
+            <Tooltip
+              title={translate('allocation.checkbox.group.option.autoTransact.title.message')}
+              placement="right"
+              arrow
+            >
               <span ref={tansactIconRef}>
                 <FontAwesomeIcon
                   data-cy="auto-transact-icon"

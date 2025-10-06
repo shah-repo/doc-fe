@@ -16,6 +16,7 @@ export type FBMPIProcedureSelectProps =
 };
 
 export interface FBMPIProcedureSelectValue {
+  id?: string
   fieldId: string
   forPreselected: { id: string }
   usedOverride: Partial<DocumentRevision> | string
@@ -27,9 +28,18 @@ export interface FBMPIProcedureSelectValue {
   quantity?: number
   unit?: string
   lotPart?: string
+  lotId?: string
+  lotDocId?: string
   lotPartRevision?: string
   pmDueDate?: string
   calDueDate?: string
+  actualId?: string
+}
+
+export interface FBMPIProcedureSelectEditRequestBody {
+  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT'
+  quantity?: number
+  unit?: string
 }
 
 export enum DOCUMENT_REVISION_LOT_STATUS {

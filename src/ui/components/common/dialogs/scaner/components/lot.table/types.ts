@@ -1,17 +1,20 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DocumentRevision } from '../../../../../../../state/ducks/documentRevisions/types';
+import { FBProcedureItemType } from '../../../../../../form.builder';
 import { Mode, MODE_FIELD } from '../../../../../KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../KendoDataGrid/KendoDataGrid.types';
 
 export interface ScanLot {
   lotId?: string
-  lotNumber?: { [key: string]: string }
+  lotNumber?: { [key: string]: string | undefined }
   serialNumber?: string
   QuantityAssigned?: string
   unitOfMeasure?: string
   id?: string
   lotRevId?: string
   quantityAssigned?: number
+  calDueDate?: string
+  pmDueDate?: string
   onHand?: number
   isExpired?: boolean
   expiryDate?: string
@@ -27,9 +30,11 @@ export interface ScanLotTableProps {
   onUpdateScanLot?: (item: ScanLot) => void
   onDeleteScanLot?: (item: ScanLot) => void
   setScanLots: Dispatch<SetStateAction<ScanLot[]>>
+  type?: FBProcedureItemType
+  isSerialNumberHidden?: boolean
 }
 
-export interface ValidateLot extends DocumentRevision{
+export interface ValidateLot extends DocumentRevision {
   isExpired: boolean
   lotRevId: string
   partRevId: string
@@ -62,11 +67,14 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableScanLot> 
 }
 
 export interface ScanSelectedPartItem {
+  id?: string
   docId: string
   partDescription?: string
   quantityNeeded?: number
   displayRevision?: string
-  variance: string
+  variance?: string
   partRevId?: string
   woId?: string
+  plannedId?: string
+  type?: FBProcedureItemType
 }

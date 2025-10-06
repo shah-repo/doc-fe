@@ -20,6 +20,8 @@ class FBLHRStepState {
   @observable public equipment: any;
   @observable public editedParameters: any;
   @observable public approvals: any;
+  private dateUpdateTimeout?: NodeJS.Timeout;
+  private pendingDateUpdate = false;
 
   public constructor (lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
@@ -77,23 +79,38 @@ class FBLHRStepState {
 
   public setLHRs = (lhrs) => set(this, 'stepLHRs', lhrs);
 
-  public updateLHRStepDates = async (startDate?: string, endDate?: string): Promise<void> => {
+  public updateLHRStepDates = (startDate?: string, endDate?: string): void => {
     if (!this.stepLHRs) { return; }
+
+    // Clear existing timeout to debounce multiple rapid calls
+    if (this.dateUpdateTimeout) {
+      clearTimeout(this.dateUpdateTimeout);
+    }
+
+    // If there's already a pending update, don't trigger another one
+    if (this.pendingDateUpdate) {
+      return;
+    }
+
     const updatedFormInput = {
       ...this.stepLHRs.formInput,
       ...(startDate !== undefined && { 'lhrs-start-date': startDate }),
       ...(endDate !== undefined && { 'lhrs-end-date': endDate }),
     };
 
-    // Update local state
+    // Update local state immediately
     this.setLHRs({
       ...this.stepLHRs,
       formInput: updatedFormInput,
     });
 
-    // Save to backend
-    try {
-      await this.updateLHRStepApi.set({
+    // Debounce the API call
+    this.dateUpdateTimeout = setTimeout(() => {
+      if (this.pendingDateUpdate || !this.stepLHRs) { return; }
+
+      this.pendingDateUpdate = true;
+
+      const apiPromise = this.updateLHRStepApi.set({
         url: FBEndpoint.DocumentRevisionPatch,
         urlValues: { id: this.stepLHRs.id },
         method: 'patch',
@@ -101,9 +118,28 @@ class FBLHRStepState {
           formInput: updatedFormInput,
         },
       });
-    } catch (error) {
-      console.error('Failed to update LHR step dates:', error);
+
+      // Handle the promise if it exists
+      if (apiPromise && typeof apiPromise.then === 'function') {
+        apiPromise.then(() => {
+          this.pendingDateUpdate = false;
+        }).catch((error) => {
+          console.error('Failed to update LHR step dates:', error);
+          this.pendingDateUpdate = false;
+        });
+      } else {
+        // If it's not a promise, just reset the flag
+        this.pendingDateUpdate = false;
+      }
+    }, 300); // 300ms debounce
+  };
+
+  public cleanup = (): void => {
+    if (this.dateUpdateTimeout) {
+      clearTimeout(this.dateUpdateTimeout);
+      this.dateUpdateTimeout = undefined;
     }
+    this.pendingDateUpdate = false;
   };
 
   public setMaterials = (materials) => set(this, 'materials', materials);
