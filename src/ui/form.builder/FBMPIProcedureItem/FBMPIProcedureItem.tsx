@@ -29,7 +29,7 @@ import {
 } from '..';
 import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warning.svg';
 import { translate } from '../../../common/intl';
-import { MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
@@ -62,7 +62,15 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
-  const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
+  const { timezone } = useDate();
+  const getDueDate = (date?: string) => {
+    if (!date) {
+      return;
+    }
+
+    return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.BriefDate);
+  };
+
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
@@ -228,7 +236,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next Cal Due: &nbsp;
-                                            {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
+                                            {getDueDate(selection.calDueDate)}
                                           </Box>
                                                     }
                                                     {(selection.pmDueDate !== 'N/A') && type === 'equipment'
@@ -246,7 +254,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next PM Due: &nbsp;
-                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
+                                            {getDueDate(selection.pmDueDate)}
                                           </Box>
                                                     }
                                                     <IconButton

@@ -1,5 +1,5 @@
 import { map, template } from 'lodash';
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType, FBSchemaProps } from '..';
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBSchemaProps } from '..';
 import { FBCurrencyOption } from '../FBPurchaseOrderTable/types';
 import actionOptions from './actionOptions.json';
 import additionalSchema from './additionalSchema.json';
@@ -12,7 +12,6 @@ import editorPropertiesControl from './editorPropertiesControl.json';
 import eqMaintenanceOptions from './eqMaintenanceOptions.json';
 import icons from './icons.json';
 import partTypeOptions from './partTypeOptions.json';
-import passTypeOptions from './passTypeOptions.json';
 import requirementOptions from './requirementOptions.json';
 import taskSchema from './taskSchema.json';
 import testStepSchema from './testStepSchema.json';
@@ -83,16 +82,6 @@ class FBData {
 
   public static get closingTaskSchema (): FBSchemaProps[] {
     return closingTaskSchema as FBSchemaProps[];
-  }
-
-  public static get passTypeOptions (): FBOption[] {
-    const tplKeys: Record<string, string> = {};
-    map(Object.values(FBPassType), (key, index) => {
-      tplKeys[`value${index}`] = `${key}`;
-    });
-    const compiled = template(JSON.stringify(passTypeOptions));
-    const parsed = JSON.parse(compiled(tplKeys));
-    return parsed;
   }
 
   public static get yesNoOptions (): FBOption[] {

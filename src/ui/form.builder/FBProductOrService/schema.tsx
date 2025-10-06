@@ -5,7 +5,6 @@ import { ASLCell } from './components/ASLCell';
 import { ItemCell } from './components/ItemCell';
 import { LifeCyclePhaseCell } from './components/LifeCyclePhaseCell';
 import { StatusCell } from './components/StatusCell';
-import { SupplierPartNumberHeader } from './components/SupplierPartNumberHeader';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableProductORService, SchemaOptions } from './types';
 
@@ -38,12 +37,11 @@ export const buildSchema = ({
       field: 'supplierPartNumber',
       title:
         'form.builder.supplier.product.or.service.grid.heading.supplier.part.number',
-      headerCell: (props) => <SupplierPartNumberHeader {...props} />,
       filterable: false,
       template: (props) => (
         <TextFieldCellTemplate {...props} onClick={onRowClick} />
       ),
-      width: 150,
+      width: 200,
     },
     {
       id: 'lifecycle-phase',

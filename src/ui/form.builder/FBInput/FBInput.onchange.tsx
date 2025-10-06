@@ -70,14 +70,14 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue (formValue: any, state = false, omitFormValue = false) {
+    function setValue (formValue: any, state = false, shouldOmitSetValue = false) {
       if (!name) { return; }
       if(name === 'lhr-build-type') {
         return;
       }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      if (!omitFormValue) {
+      if (!shouldOmitSetValue) {
         formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
       }
 
@@ -187,7 +187,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         return intl.formatMessage({ id: `form.builder.${name.split('-').slice(1).join('.')}` });
       }
 
-      function isDefault (omitFormValue = false) {
+      function isDefault (shouldOmitSetValue = false) {
         const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === 'number' && value !== '') {
@@ -212,7 +212,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (isFbEditorField) {
           setTextValue(value);
         }
-        setValue(value, false, omitFormValue);
+        setValue(value, false, shouldOmitSetValue);
       }
 
       const changedValue = {

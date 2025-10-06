@@ -16,11 +16,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const { timezone, getFormattedDateString } = useDate();
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    if (!date) {
-      return;
-    }
-
-    setFieldValue(field, date.startOf('day').toISOString());
+    setFieldValue(field, date?.toISOString());
   };
 
   const handleClear = () => {
@@ -38,7 +34,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
           size="small"
           onChange={handleChange}
           onClear={handleClear}
-          format={MomentFormats.MonthDateYearTwoDigit}
+          format={MomentFormats.MonthDateYear}
         />
       </FormikField>
     );
@@ -46,7 +42,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
 
   return (
     <>
-      {getFormattedDateString(value, MomentFormats.MonthDateYearTwoDigit)}
+      {getFormattedDateString(value, MomentFormats.DateTimeComplete)}
     </>
   );
 };
