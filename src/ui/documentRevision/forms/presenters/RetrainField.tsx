@@ -1,5 +1,7 @@
+import { Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
+import { translate } from '../../../../common/intl';
 import { RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import CheckboxField from '../../../components/forms/fields/Checkbox';
 import { useTraining } from '../../../hooks/docCustomization/useCustomization';
@@ -30,14 +32,26 @@ const RetrainField: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange || isDisabled;
-  return (
+  const isAdminChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
+  const disabled = isAdminChange || isDisabled;
+
+  const checkbox = (
     <CheckboxField
       name="retrain"
       label="document.revision.trainingRequired"
       checkboxProps={{ disabled }}
     />
   );
+
+  if (isAdminChange) {
+    return (
+      <Tooltip title={translate('training.required.tooltip.message')} placement="bottom-start">
+        <span>{checkbox}</span>
+      </Tooltip>
+    );
+  }
+
+  return checkbox;
 };
 
 export default React.memo(RetrainField);

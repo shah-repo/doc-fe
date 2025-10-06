@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -38,6 +38,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   }: T) => {
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     const getDocTypeGroups = useDocTypeGroups();
+    const { getFormattedDateString } = useDate();
 
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};

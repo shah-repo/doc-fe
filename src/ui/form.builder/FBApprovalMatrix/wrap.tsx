@@ -41,7 +41,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
             ...omit(docType, 'updatedCategory'),
             acronym: docType.acronym.toUpperCase(),
           },
-          ...omit(restItem, MODE_FIELD),
+          ...omit(restItem, MODE_FIELD, 'errors'),
         });
       });
 

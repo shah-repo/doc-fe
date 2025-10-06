@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBLHRStepProps, FBProvider, FBText } from '..';
 import { ReactComponent as CollapseMoreIcon } from '../../../assets/images/CollapseMoreIcon.svg';
 import { ReactComponent as ExpandMoreIcon } from '../../../assets/images/ExpandMoreIcon.svg';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import Text from '../../components/Text';
@@ -53,6 +53,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
+  const { getFormattedDateString } = useDate();
   const classes = FBLHRStepStyles();
   const documentOperators = workspaceState?.document?.document?.operators
     ?.map(({ user }) => ({ stepId: user?.id, user }));

@@ -1,5 +1,6 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
+import moment from 'moment';
 import React from 'react';
 import { MomentFormats } from '../../../../common/utils/date';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
@@ -13,7 +14,13 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const value = dataItem[field] as React.ReactElement;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue('date', date?.toISOString());
+    if (!date) {
+      setFieldValue('date', null);
+      return;
+    }
+
+    const updatedDate = moment(date).format(MomentFormats.YearMonthDateDash);
+    setFieldValue('date', updatedDate);
   };
 
   const handleClear = () => {

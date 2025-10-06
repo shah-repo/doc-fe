@@ -8,8 +8,8 @@ import {
 import cx from 'classnames';
 import React from 'react';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../common/utils/date';
 import { Nullable } from '../../../../state/ducks/common/types';
 import { TrainingStatusTypes } from '../../../../state/ducks/dashboard.new/training.stats/types';
@@ -40,6 +40,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
 }) => {
   const classes = styles();
   const isOverdue = status === TrainingStatusTypes.OVERDUE;
+  const { getFormattedDateString } = useDate();
 
   const titleRender = (
     avatar,

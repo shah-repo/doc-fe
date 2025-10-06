@@ -224,18 +224,19 @@ const DialogContent: React.FunctionComponent<Props> = ({
           {email}
         </Typography>
       </Box>
-      {isCurrentUser && <Box display="flex" justifyContent="center">
-        <Button
-          variant="text"
-          color="primary"
-          style={{ width: 'auto' }}
-          onClick={showEdit}
-          id="DialogContent-showEdit"
-        >
-          <Text translation="common.edit" />
-        </Button>
-      </Box>
-      }
+      {isCurrentUser && (
+        <Box display="flex" justifyContent="center">
+          <Button
+            variant="text"
+            color="primary"
+            style={{ width: 'auto' }}
+            onClick={showEdit}
+            id="DialogContent-showEdit"
+          >
+            <Text translation="common.edit" />
+          </Button>
+        </Box>
+      )}
       <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}
