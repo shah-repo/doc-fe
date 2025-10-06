@@ -43,7 +43,6 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
   const isLotScan = selectedPart?.type === FBProcedureItemType.materials;
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
-  const validateEQScan = useActionCreator(allocationActions.validateEQScannedItem);
 
   const keyValues = useCallback(() => {
     const values = [

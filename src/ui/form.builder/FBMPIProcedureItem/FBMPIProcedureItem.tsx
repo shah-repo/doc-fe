@@ -62,6 +62,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const { timezone } = useDate();
   const getDueDate = (date?: string) => {
     if (!date) {
