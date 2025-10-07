@@ -97,20 +97,50 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       formState?.setFieldValue(name, fieldValue, false);
 
       const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      // Auto-add current user as approver for LHR steps if not already added
       if (authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate
         && !activeApprovals?.length) {
-        // Add Default owner as approver on Work order case
-        if (Object.keys(formState?.oldValues || {}).includes('lhrs-start-date')) {
+        // Check if this is an LHR-related work order field
+        if (Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date')) {
+          // Don't add default owner for LHR step fields - user will be added when they complete entries
           return;
         }
-        addApprover([authUser?.employeeId]);
-        formState?.setFieldValue(name, [authUser?.employeeId], false);
+        // Add Default owner as approver on Work order case (non-LHR)
+        if (authUser.employeeId) {
+          addApprover([authUser.employeeId]);
+          formState?.setFieldValue(name, [authUser.employeeId], false);
+        }
       }
 
       formState?.inputState.get(name)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Effect to automatically add current user when LHR step entries are being completed
+    React.useEffect(() => {
+      // Check if this is an LHR step completion scenario
+      const isLHRStep = Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date');
+
+      if (isLHRStep && authUser?.employeeId && formState) {
+        const currentApprovers = (formState?.getFieldValue(name) as string[]) ?? [];
+
+        // Only add user if they're not already in the list
+        if (!currentApprovers.includes(authUser.employeeId) && authUser.employeeId) {
+          const updatedApprovers = [...currentApprovers, authUser.employeeId];
+
+          // Add to form state
+          formState?.setFieldValue(name, updatedApprovers, false);
+
+          // Add approval via API if document exists
+          if (id && authUser.employeeId) {
+            addApprover([authUser.employeeId]);
+          }
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formState?.newValues, authUser?.employeeId, id]);
+
     const completeWO = useActionCreator(taskActions.completeWO);
 
     const closeWOAsync = useAsync({
