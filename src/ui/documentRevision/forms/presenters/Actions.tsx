@@ -281,12 +281,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: (data?: DocumentTypeById) => {
-      const { forms, documentType } = data ?? {};
-      console.log('---1---', { forms });
+      const { forms } = data ?? {};
       if(!isEmpty(forms)) {
-        console.log('---2---');
         if(forms?.length === 1) {
-          console.log('---3---', forms[0]);
           setSelectedForm(forms[0]);
         } else {
           setForms(forms ?? [] as DocumentTypeByIdForm[]);
@@ -295,14 +292,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         }
         return;
       }
-      console.log('-----data----', { data, documentType, selectedForm, forms });
-      // return;
       createDocument();
     },
-    onError: (msg) => {
-      // setErrorMessage(msg);
-    },
   });
+
+  const onFormSelection = (formValue) => {
+    setSelectedForm(formValue);
+    formDialog.close();
+  };
 
   React.useEffect(() => {
     if(selectedForm?.id) {
@@ -310,11 +307,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
   }, [selectedForm]);
 
-  // console.log('---formIds---', { formIds });
   const onFormClick = () => {
     const values = get(formik, 'values') as DocumentRevision;
-    console.log('---documentRevision----', { values, _formState, formik });
-    // return;
     idAsync.start(getDocRevByIds, values.document.documentType.id, idAsync);
   };
 
@@ -332,11 +326,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue('attachments', attachments);
       }
     }
-console.log('---formik---', { formik, selectedForm });
+
     if(selectedForm?.id) {
       formik.setFieldValue('formDocument', { id: selectedForm?.id });
     }
-// formik.setFieldValue('formDocument', { id: '933e61f9-d1f5-49aa-835d-a94b0224ef88' });
+
     formik.submitForm();
     if (isPOEditState) {
       setDoNotPrompt(true);
@@ -625,7 +619,7 @@ console.log('---formik---', { formik, selectedForm });
         </>
       )}
       {formDialog.isOpen && (
-        <FormSelectionDialog dialog={formDialog} formIds={forms} />
+        <FormSelectionDialog dialog={formDialog} formIds={forms} onFormSelection={onFormSelection} />
       )}
     </div>
   );
