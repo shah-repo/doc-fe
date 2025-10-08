@@ -104,6 +104,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
 
     orderBy(audits, ['field']).forEach((change, index) => {
+      console.log('change', change);
       let crItemRevAttachment = false;
       if (change.fbSchemaItem && change.fbSchemaItem['type'] === 'documentRevisions' && change.field.includes('attachments')) {
         crItemRevAttachment = true;
@@ -174,14 +175,19 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
   };
 
-  const renderGroupChanges = (auditGroup: Audit[]) => {
-    const field = auditGroup[0].field;
-    const type = auditGroup[0].type;
+  const getAttachmentMessage = (change: Audit) => {
+    if(change.field.startsWith('formInput.attachments') && change.fbSchemaItem?.type === 'fileupload') {
+      const fieldName = 'formInput.attachments';
+      return `changeRequest.audit.${fieldName}.${change.type}`;
+    }
+    return `changeRequest.audit.${change.field}.${change.type}`;
+  };
 
+  const renderGroupChanges = (auditGroup: Audit[]) => {
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Box>
-          <Text message={`changeRequest.audit.${field}.${type}`} />
+          <Text message={getAttachmentMessage(auditGroup[0])} />
         </Box>
         {auditGroup.map((change, index) => (
           <div
