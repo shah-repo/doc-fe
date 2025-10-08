@@ -33,7 +33,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     || fieldName.includes('approver.id')
     || fieldName.includes('signatureGroupId.id')
     || fieldName.includes('formInput.approvers')
-    || fieldName.includes('documentRevisions.whereUsedView.parentRevId');
+    || fieldName.includes('documentRevisions.whereUsedView.parentRevId')
+    || fieldName.startsWith('formInput.documentRevisions.attachments');
   };
 
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
@@ -103,7 +104,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
 
     orderBy(audits, ['field']).forEach((change, index) => {
-      if (change.field.includes('attachments') && !change.field.includes('upload-attachments-as-needed')) {
+      let crItemRevAttachment = false;
+      if (change.fbSchemaItem && change.fbSchemaItem['type'] === 'documentRevisions' && change.field.includes('attachments')) {
+        crItemRevAttachment = true;
+      }
+
+      if (change.field.includes('attachments') && !change.field.includes('upload-attachments-as-needed') && !crItemRevAttachment) {
         attachments.push(change);
       } else if (change.field.includes('referenceTo')) {
         references.push(change);
