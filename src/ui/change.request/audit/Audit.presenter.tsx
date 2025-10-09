@@ -104,12 +104,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
 
     orderBy(audits, ['field']).forEach((change, index) => {
+      const attachmentField = change.field.includes('attachments');
       let crItemRevAttachment = false;
-      if (change.fbSchemaItem && change.fbSchemaItem['type'] === 'documentRevisions' && change.field.includes('attachments')) {
+      if (change.fbSchemaItem && change.fbSchemaItem['type'] === 'documentRevisions' && attachmentField) {
         crItemRevAttachment = true;
       }
 
-      if (change.field.includes('attachments') && !change.field.includes('upload-attachments-as-needed') && !crItemRevAttachment) {
+      if (attachmentField && !change.field.includes('upload-attachments-as-needed') && !crItemRevAttachment) {
         attachments.push(change);
       } else if (change.field.includes('referenceTo')) {
         references.push(change);
