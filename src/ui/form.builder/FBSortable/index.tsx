@@ -64,8 +64,8 @@ const FBSortable: React.FC<FBSortableProps> = ({
         items={localItems.map((item) => ({ id: item.name ?? '' }))}
         strategy={verticalListSortingStrategy}
       >
-        {localItems.map((item, position) => (
-          <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader />}>
+          {localItems.map((item, position) => (
             <SortableItemLazy
               key={item.name}
               item={item}
@@ -73,8 +73,8 @@ const FBSortable: React.FC<FBSortableProps> = ({
               isDesignMode={isDesignMode}
               isAutosaveEnabled={isAutosaveEnabled}
             />
-          </Suspense>
-        ))}
+          ))}
+        </Suspense>
       </SortableContext>
       <DragOverlay>
         {activeItem && (

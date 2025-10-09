@@ -32,7 +32,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     || fieldName.includes('documentRevisions.id')
     || fieldName.includes('approver.id')
     || fieldName.includes('signatureGroupId.id')
-    || fieldName.includes('formInput.approvers');
+    || fieldName.includes('formInput.approvers')
+    || fieldName.includes('documentRevisions.whereUsedView.parentRevId')
+    || fieldName.startsWith('formInput.documentRevisions.attachments');
   };
 
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
@@ -61,7 +63,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
 
     if (change.fbSchemaItem?.name === 'documentRevisions') {
-      const fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      let fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      if(change.type === 'ARRAY_DELETED') {
+        fieldName = fieldName.replace(/\.\d+\./, '.');
+      }
       return `changeRequest.audit.${fieldName}.${change.type}`;
     }
 
@@ -99,7 +104,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
 
     orderBy(audits, ['field']).forEach((change, index) => {
-      if (change.field.includes('attachments') && !change.field.includes('upload-attachments-as-needed')) {
+      const attachmentField = change.field.includes('attachments');
+      let crItemRevAttachment = false;
+      if (change.fbSchemaItem && change.fbSchemaItem['type'] === 'documentRevisions' && attachmentField) {
+        crItemRevAttachment = true;
+      }
+
+      if (attachmentField && !change.field.includes('upload-attachments-as-needed') && !crItemRevAttachment) {
         attachments.push(change);
       } else if (change.field.includes('referenceTo')) {
         references.push(change);
@@ -164,14 +175,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
   };
 
-  const renderGroupChanges = (auditGroup: Audit[]) => {
-    const field = auditGroup[0].field;
-    const type = auditGroup[0].type;
+  const getAttachmentMessage = (change: Audit) => {
+    if(change.field.startsWith('formInput.attachments') && change.fbSchemaItem?.type === 'fileupload') {
+      return `changeRequest.audit.formInput.attachments.${change.type}`;
+    }
+    return `changeRequest.audit.${change.field}.${change.type}`;
+  };
 
+  const renderGroupChanges = (auditGroup: Audit[]) => {
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Box>
-          <Text message={`changeRequest.audit.${field}.${type}`} />
+          <Text message={getAttachmentMessage(auditGroup[0])} />
         </Box>
         {auditGroup.map((change, index) => (
           <div

@@ -1,5 +1,6 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
+import moment from 'moment';
 import React from 'react';
 import {
   MomentFormats,
@@ -25,7 +26,8 @@ export const ExpiryDateCell: React.FC<CustomTemplateProps> = ({
 
   const { getFieldProps, setFieldValue } = useFormikContext();
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, date?.toISOString());
+    const updatedDate = date && moment(date).format(MomentFormats.YearMonthDateDash);
+    setFieldValue(field, updatedDate);
   };
 
   return (

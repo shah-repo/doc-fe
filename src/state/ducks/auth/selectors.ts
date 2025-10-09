@@ -64,8 +64,8 @@ const getPasswordSoonToExpire = (state: ApplicationState): boolean =>
 const getAvatarInitialColor = (state: ApplicationState): string =>
   state.auth.user.initialColor;
 
-const getUserTimezone = (state: ApplicationState): string =>
-  state.auth.user.timezone;
+const getUserCompanyTimezone = (state: ApplicationState): string =>
+  state.auth.user.userCompanyTimezone;
 
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
@@ -143,5 +143,5 @@ export default {
   getPasswordSoonToExpire,
   getIsScheduledForDeletion,
   getAvatarInitialColor,
-  getUserTimezone,
+  getUserCompanyTimezone,
 };

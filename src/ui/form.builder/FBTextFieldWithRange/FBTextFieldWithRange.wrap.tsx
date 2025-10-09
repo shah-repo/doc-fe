@@ -1,56 +1,97 @@
-import React from 'react';
-import { FBPassValueRange, FBRangeValue, FBTextFieldWithRangeProps } from '..';
+import { useObserver } from 'mobx-react';
+import React, { useEffect } from 'react';
+import { FB, FBTextFieldWithRangeProps, FBTextFieldWithRangeValue } from '..';
+import { translate } from '../../../common/intl';
+
+const getRules = (from?: number, to?: number): string => {
+  if (from !== undefined && to !== undefined) {
+    return `between:${from},${to}`;
+  }
+  if (from !== undefined && to === undefined) {
+    return `min:${from}`;
+  }
+  if (from === undefined && to !== undefined) {
+    return `max:${to}`;
+  }
+  return '';
+};
 
 export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
-    editorConfig,
-    includeInFaiInspection,
+    editorConfig = {},
+    name = '',
+    label = '',
     ...props
   }: T) => {
-    // MARK: @config
-    const { aql, pass, range, criticalToQuality } = editorConfig;
-    // MARK: @reactions
+    const {
+      hasUnits,
+      isCriticalToQuality,
+      isInspected,
+      hasRange,
+      range,
+      hasTolerance,
+      tolerance,
+    } = editorConfig;
 
-    // MARK: @helpers
+    const { formState } = FB.useStores();
 
-    // MARK: @methods
-    const calculatePassValue = (passRange?: FBPassValueRange): FBRangeValue | undefined => {
-      if (!passRange) { return; }
-      if (passRange.type === 'value') { return passRange.value; }
-      if (!passRange.percentage) { return; }
-      const { decrease, increase, value } = passRange.percentage;
-      if (!decrease || !increase || !value) { return; }
-      const from = Number(value) * (1 - decrease / 100);
-      const to = Number(value) * (1 + increase / 100);
-      return { from, to };
+    const value = useObserver<FBTextFieldWithRangeValue | undefined>(
+      () => formState?.newValues.get(name) ?? formState?.getFieldValue(name),
+    );
+
+    const isPartFaiRequired = useObserver(
+      () => (
+        formState?.newValues.get('fai-required') ?? formState?.getFieldValue('fai-required')
+      ) === translate('form.builder.yes'),
+    );
+    const isPartIqcRequired = useObserver(
+      () => (
+        formState?.newValues.get('iqc-required') ?? formState?.getFieldValue('iqc-required')
+      ) === translate('form.builder.yes'),
+    );
+
+    const [helperText, isInvalid] = useObserver(
+      () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
+    );
+
+    formState?.setFieldRules(`${name}.value`, getRules(range?.from, range?.to));
+    formState?.setValidationAttributeName(`${name}.value`, String(label));
+
+    const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
+      formState?.setFieldValue(name, {
+        ...value,
+        ...newValue,
+      });
+      formState?.validate();
+      formState?.setFieldAutosave(name);
     };
 
-    const getRules = (): string => {
-      if (!range) { return ''; }
-      if (range.from && range.to) {
-        return `between:${range?.from},${range?.to}`;
-      }
-      if (range.from && !range.to) {
-        return `min:${range?.from}`;
-      }
-      if (!range.from && range.to) {
-        return `max:${range?.to}`;
-      }
-      return '';
-    };
-
-    // MARK: @observer
+    useEffect(() => {
+      updateValue({
+        isFaiRequired: isPartFaiRequired && value?.isFaiRequired,
+        isIqcRequired: isPartIqcRequired && value?.isIqcRequired,
+      });
+    }, [isInspected, isPartFaiRequired, isPartIqcRequired, value?.isFaiRequired, value?.isIqcRequired]);
 
     return Component({
       ...(props as T),
-      aql,
-      criticalToQuality,
-      includeInFaiInspection,
-      pass: calculatePassValue(pass),
+      name,
+      label,
+      value,
+      error: isInvalid,
+      helperText,
+      isCriticalToQuality,
+      isInspected,
+      hasUnits,
+      hasRange,
+      hasTolerance,
+      isPartFaiRequired,
+      isPartIqcRequired,
       range,
-      rules: getRules(),
+      tolerance,
+      onUpdate: updateValue,
     });
   };
 
