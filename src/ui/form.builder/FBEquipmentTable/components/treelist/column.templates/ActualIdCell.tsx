@@ -42,14 +42,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
 
-  useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
-
-    if (value && field) {
-      setValue(value);
-    }
-  }, [equipmentOptions]);
-
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
     field && setFieldValue(field, option?.value);
@@ -109,6 +101,14 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
 
+  useEffect(() => {
+    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
+
+    if (value && field) {
+      setValue(value);
+    }
+  }, [equipmentOptions]);
+
   if (isAddActualIdVisible) {
     return (
       <TreeListCellWrapper {...props}>
@@ -151,7 +151,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{

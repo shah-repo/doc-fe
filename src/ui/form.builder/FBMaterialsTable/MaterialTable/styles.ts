@@ -428,6 +428,9 @@ export default makeStyles((theme) => ({
     '& td': {
       whiteSpace: 'normal !important' as 'normal',
     },
+    '& td:not(:last-child)': {
+      verticalAlign: 'top !important',
+    },
   },
   actionsCell: {
     overflow: 'visible !important',
