@@ -1,8 +1,11 @@
 import { get } from 'lodash';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+import { translate } from '../../../../common/intl';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
-import OverflowContent from '../../OverflowContent';
+import useHoverOnce from '../../../hooks/useHoverOnce';
 import { CustomGridCellProps } from '../kendo/types';
+
+const LazyOverflowTooltip = lazy(async () => await import('../../OverflowTooltip'));
 
 export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   dataItem,
@@ -17,6 +20,7 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   const fieldValue = get(dataItem, field ?? '', '') ?? '';
   const dataString = Array.isArray(fieldValue) ? fieldValue.join(', ') : fieldValue;
   const dataItemValue = convertHtmlEntities(dataString) ?? '';
+  const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
@@ -36,9 +40,14 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <OverflowContent title={dataItemValue}>
+      {!isHovered ? <span ref={elementRef}>
         {dataItemValue}
-      </OverflowContent>
+      </span>
+        : <Suspense fallback={<div>{translate('common.loading')}</div>}>
+          <LazyOverflowTooltip title={dataItemValue} placement="top" interactive arrow>
+            {dataItemValue}
+          </LazyOverflowTooltip>
+        </Suspense>}
     </td>
   );
 };

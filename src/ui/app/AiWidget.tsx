@@ -1,7 +1,8 @@
 import { AppName, Widget, WidgetRef } from 'ai-widget';
-import React, { createContext, useCallback, useRef } from 'react';
+import React, { createContext, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
+import { translate } from '../../common/intl';
 import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../common/utils/selectors';
 import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
@@ -14,10 +15,12 @@ import { store } from '../../state/store';
 import {
   DOCUMENT_REVISION_VERSION_URL,
 } from '../constants/urls';
+import { promptKeys } from './constants';
 
 interface AiWidgetContextType {
   isWidgetActive: boolean
   summarizeAttachments: (attachmentIds: string[]) => void
+  updateAttachments: (attachmentIds: string[]) => void
 }
 
 export const AiWidgetContext = createContext<AiWidgetContextType | undefined>(undefined);
@@ -35,6 +38,8 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+  const dummyPrompts = promptKeys.map((key) => translate(key));
+  const location = useLocation();
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
@@ -64,12 +69,20 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
     widgetRef.current?.triggerSummarizeAttachments(attachmentIds);
   }, []);
 
+  const updateAttachments = useCallback((attachmentIds: string[]) => {
+    widgetRef.current?.triggerUpdateAttachments(attachmentIds);
+  }, []);
+
+  useEffect(() => {
+    widgetRef.current?.triggerUpdateAttachments([]);
+  }, [location.pathname]);
+
   if (!isWidgetActive) {
     return <>{children}</>;
   }
 
   return (
-    <AiWidgetContext.Provider value={{ summarizeAttachments, isWidgetActive }}>
+    <AiWidgetContext.Provider value={{ summarizeAttachments, updateAttachments, isWidgetActive }}>
       <Widget
         ref={widgetRef}
         appName={AppName.D2M}
@@ -79,6 +92,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
         attachmentIds={attachmentIds}
         token={accessToken}
         apiPath={Config.ApiAIEndpoint}
+        dummyPrompts={dummyPrompts}
       />
       {children}
     </AiWidgetContext.Provider>

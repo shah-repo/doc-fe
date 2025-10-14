@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { Audit, AuditGroupType, LifeCyclePhaseOptions } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
@@ -58,6 +58,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const { getFormattedDateString } = useDate();
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
   const docTypeId = documentRevisions[0].document?.documentType?.id;
@@ -291,6 +292,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (result) {
           ({ change, fbLabel } = result);
         } else return;
+      }
+
+      if (fbType === 'workOrderLhrTable') {
+        fbLabel = translate('form.builder.audit.workOrderLhrTable');
       }
 
       // LOT TRANSFERS

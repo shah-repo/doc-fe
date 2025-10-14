@@ -33,7 +33,6 @@ import {
   FBTaskState,
   FBTextEditorOptionsState,
   FBTextEditorState,
-  FBTextFieldWithRangeState,
   FBWorkspaceState,
 } from '..';
 import FBLeftPanelState from '../FBLeftPanel/FBLeftPanel.state';
@@ -70,7 +69,6 @@ export interface FBProviderProps {
   partsState?: FBPartsState
   eqMaintenanceState?: FBEQMaintenanceState
   ebPartState?: FBEBPartState
-  textFieldWithRangeState?: FBTextFieldWithRangeState
   filesPresenterState?: FBFilesPresenterState
   supplierState?: FBSupplierState
   mpiProcedureState?: FBMPIProcedureState

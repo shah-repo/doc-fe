@@ -8,7 +8,7 @@ import moment from 'moment';
 import React from 'react';
 import { FBInput } from '..';
 import { ReactComponent as DatePickerIcon } from '../../../assets/images/formBuilder/DatePickerIcon.svg';
-import { MomentFormats, TIME_ZONE, getStartOfDayDateString } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBTextFieldStyles } from '../styles/FBTextField.styles';
 import { FBDatePickerProps } from './FBDatePicker.types';
@@ -24,6 +24,10 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   ...props
 }) => {
   const classes = FBTextFieldStyles();
+  const { getCurrentDate, formatDisplayDate } = useDate();
+  const currentDate = getCurrentDate(MomentFormats.YearMonthDateDash);
+  const selectedDate = formatDisplayDate(datePickerState?.date);
+
   return (
     <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
       <Observer>
@@ -42,10 +46,8 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             autoOk={true}
             disablePast={disablePastDates}
             label=""
-            value={datePickerState?.date || null}
-            initialFocusedDate={getStartOfDayDateString(
-              moment().tz(TIME_ZONE).toISOString(),
-            )}
+            value={selectedDate || currentDate}
+            initialFocusedDate={currentDate}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => (
               <TextField
@@ -53,6 +55,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
                 disabled={props.disabled}
                 className={classes.textfield}
                 inputProps={{ disabled: true }}
+                value={selectedDate}
                 InputProps={{
                   ...props.InputProps,
                   endAdornment: (

@@ -10,7 +10,8 @@ import PrintingSettingsPanel from './panels/Printing';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
-import TrainingReminders from './panels/TrainingReminders';
+import TimezoneSettings from './panels/Timezone';
+import Training from './panels/Training';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
@@ -24,9 +25,9 @@ export const panels = [
     component: PrintingSettingsPanel,
   },
   {
-    key: GeneralSettingsTabs.TrainingReminders,
-    title: 'administration.general.settings.training.reminders',
-    component: TrainingReminders,
+    key: GeneralSettingsTabs.Training,
+    title: 'administration.general.settings.training',
+    component: Training,
   },
   {
     key: GeneralSettingsTabs.AR,
@@ -92,5 +93,10 @@ export const panels = [
     key: GeneralSettingsTabs.ApprovalRoles,
     title: 'administration.general.settings.approvalRoles.tab',
     component: ApprovalRolesSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.Timezone,
+    title: 'administration.general.settings.timezone.title',
+    component: TimezoneSettings,
   },
 ];

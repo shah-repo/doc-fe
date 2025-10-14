@@ -5,7 +5,7 @@ import { ReactComponent as EmailSuccessIcon } from '../../../../../../../src/ass
 import { ReactComponent as ListCollapseIcon } from '../../../../../../../src/assets/images/list_collapse.svg';
 import { ReactComponent as ListExpandIcon } from '../../../../../../../src/assets/images/list_expand.svg';
 import { ReactComponent as NoTrainingIcon } from '../../../../../../../src/assets/images/no_training_icon.svg';
-import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import Loader from '../../../../../../ui/components/common/kendo/Loader';
 import { getInitalsFromName } from '../../../../../../ui/components/icons/avatar/helpers';
 import Text from '../../../../../../ui/components/Text';
@@ -19,6 +19,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
   docRevStatus,
 }) => {
   const classes = styles();
+  const { getFormattedDateString } = useDate();
   const [open, setOpen] = React.useState({ [TrainingStates.COMPLETED]: true, [TrainingStates.PENDING]: true });
   const handleClick = (selectedListItem: string) => {
     const updatedOpen = { [selectedListItem]: !open[selectedListItem] };

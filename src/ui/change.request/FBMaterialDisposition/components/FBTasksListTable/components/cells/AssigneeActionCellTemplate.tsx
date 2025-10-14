@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { ReactComponent as CompletedIcon } from '../../../../../../../assets/images/approved_status.svg';
 import { translate } from '../../../../../../../common/intl';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../../../../common/utils/date';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { Button } from '../../../../../../components/forms/fields-next';
@@ -28,10 +28,11 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
     employeeStatusUpdates?.(taskId, assignees, employeeId);
   };
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
+  const { getFormattedDateString } = useDate();
 
   return (
     <>
-      {assignees?.map(({ employeeId, status, updatedAt }) => {
+      {assignees?.map(({ employeeId, status, completedAt }) => {
         return (
           <div className={classes.employeeResponseFields}>
             {status === EmployeeStatus.Done ? (
@@ -44,7 +45,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                 </span>
                 <span className={classes.assigneeActionStatusDate}>
                   {getFormattedDateString(
-                    new Date(updatedAt),
+                    new Date(completedAt),
                     MomentFormats.DateTime,
                   )}
                 </span>

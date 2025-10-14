@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from '..';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
@@ -42,6 +42,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
     const enforceFlag = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
     const intl = useIntl();
+    const { getFormattedDateString } = useDate();
 
     React.useEffect(() => {
       dialogState?.setActions(

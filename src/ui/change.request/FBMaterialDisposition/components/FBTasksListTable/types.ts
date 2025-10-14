@@ -9,6 +9,7 @@ export interface EmployeeResponse extends User{
   status: string
   attachments: Attachment[]
   updatedAt: string
+  completedAt: string
 }
 export interface TasksListItem {
   taskId: string

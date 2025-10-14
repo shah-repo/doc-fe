@@ -41,7 +41,7 @@ export const buildSchema = ({
       template: (props) => (
         <TextFieldCellTemplate {...props} onClick={onRowClick} />
       ),
-      width: 150,
+      width: 200,
     },
     {
       id: 'lifecycle-phase',

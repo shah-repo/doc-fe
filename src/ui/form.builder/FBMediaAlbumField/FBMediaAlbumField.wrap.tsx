@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
-import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import { getValidSizedFiles } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -79,14 +79,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!event.currentTarget.files) {
         return;
       }
-      const filesToUpload = Array.from(event.currentTarget.files);
-
-      const filesSize = calculateTotalFileSize(filesToUpload);
-      if (filesSize > FILE_UPLOAD_LIMIT) {
-        const names = filesToUpload.map(file => file.name);
-        handleFileSizeExceedLimit(names, filesSize, event);
-        return;
-      }
+      const filesToUpload = getValidSizedFiles(event.currentTarget.files);
 
       const duplicateFiles = filesToUpload.filter((file) => {
         const name = file.name.substring(0, file.name.lastIndexOf('.'));

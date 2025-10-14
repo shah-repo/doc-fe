@@ -132,9 +132,10 @@ const apiMiddleware: Middleware = ({
         break;
       }
       default: {
-        const {
-          data: { message },
-        } = (exception as AxiosError)?.response as AsyncActionErrorResponse;
+        const typedException = exception as AxiosError;
+        const response = typedException.response as AsyncActionErrorResponse;
+        const message = response?.data?.message ?? typedException.message;
+
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
         } else {

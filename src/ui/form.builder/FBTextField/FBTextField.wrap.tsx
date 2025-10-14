@@ -102,7 +102,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       if (name.includes('headquarterAddress')) {
         const siteInformation = workspaceState?.formInput?.siteInformation;
         const subFieldName = name.split('headquarterAddress')[1];
-        const updatedSites = siteInformation.map(site => {
+        const updatedSites = siteInformation?.map(site => {
           if (!site?.isSameAsHQ) {
             return site;
           }

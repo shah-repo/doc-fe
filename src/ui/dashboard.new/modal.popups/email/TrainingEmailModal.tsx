@@ -17,8 +17,8 @@ import { ReactComponent as CollapseIcon } from '../../../../assets/images/arrow_
 import { ReactComponent as EmailSuccessIcon } from '../../../../assets/images/email_success.svg';
 import { ReactComponent as ModelCloseIcon } from '../../../../assets/images/model_close.svg';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../../common/utils/date';
 import { Nullable } from '../../../../state/ducks/common/types';
 import { emailAllActions } from '../../../../state/ducks/email.all';
@@ -52,6 +52,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openOverdue, setOpenOverdue] = React.useState(true);
   const [emailSuccess, setEmailSuccess] = React.useState(false);
+  const { getFormattedDateString } = useDate();
 
   const handleClickOverdue = () => {
     setOpenOverdue(!openOverdue);

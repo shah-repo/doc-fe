@@ -14,6 +14,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { useDate } from '../../../common/utils/date';
 import { hasActivePremiumFeatureSubscription } from '../../../common/utils/selectors';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
@@ -81,6 +82,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const [skip, setSkip] = React.useState(0);
   const isAddButtonVisible = !isShowOnly && !isDisabled;
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
+  const { getFormattedDateString } = useDate();
 
   const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
     setSkip(skip);
@@ -103,7 +105,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers);
+      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers, getFormattedDateString);
       data && setData(updatedData);
       setOrigionalData(updatedData);
     },
@@ -263,6 +265,8 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       comments: '',
       enteredBy: '',
       unit: '',
+      pmDueDateText: null,
+      calDueDateText: null,
       recordCreationDate: new Date().toISOString(),
       customRecordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,

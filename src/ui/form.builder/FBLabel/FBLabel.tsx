@@ -21,16 +21,18 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
       color={Colors.dark_gray}
       {...boxProps}
     >
-      {isString(label) && (
-        <FBText {...{ loading, labelProps }} locale={label} />
-      )}
-      {hasIn(label, 'locale') && (
+      {hasIn(label, 'locale') ? (
         <FBText
           {...{ loading, labelProps }}
           locale={(label as FBLabelLocaleProps).locale}
           values={(label as FBLabelLocaleProps).values}
         />
-      )}
+      ) : isString(label) ? (
+        <FBText
+          {...{ loading, labelProps }}
+          locale={label}
+        />
+      ) : label}
     </Box>
   </FormLabel>
 );

@@ -4,14 +4,14 @@ import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
@@ -25,7 +25,8 @@ import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDat
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { FB, FBSection } from '../../../../form.builder';
+import { FBSection } from '../../../../form.builder';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -58,6 +59,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     [id: string]: boolean | number[]
   }>({});
   const [isDeleteDisabled, setIsDeleteDisabled] = React.useState<boolean>(false);
+  const { getFormattedDateString } = useDate();
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {
@@ -92,8 +94,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
   const dialog = useDialog();
   const formContext = useFormContext();
-  const parentFormik = useFormikContext();
-  const { workspaceState } = FB.useStores();
   const [bulkDataToSubmit, seBulkDataToSubmit] = React.useState<EditableMDItem[]>([]);
   const history = useHistory();
 
@@ -130,11 +130,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [nonSelectableColumnIndexes, setNonSelectableColumnIndexes] = React.useState<number[]>([]);
 
   useEffect(() => {
-    const data = workspaceState?.getMDTableData;
+    const data = FBDataStore?.getMDTableData;
     if ((isEmpty(data) && formContext.isEditing) || !formContext.isEditing) {
       fetchMaterialDispositionTableData();
     } else if (!isEmpty(data)) {
-      setData(data as EditableMDItem[]);
+      setData(data);
     }
 
     const columnIndexes: number[] = [];
@@ -150,16 +150,16 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const updateUnsavedData = (values: Partial<EditableMDItem>) => {
     const updatedData = updateData(values, data);
-    workspaceState?.setMDTableData(updatedData);
-    workspaceState?.addMDUpdatedDataId(values.id as string);
+    FBDataStore?.setMDTableData(updatedData);
+    FBDataStore?.addMDUpdatedDataId(values.id as string);
     setData(updatedData);
   };
 
   const updateUnsavedCopiedData = () => {
     const selectedRowIds = keys(selectedState);
     const updatedData = updateDataWithCopiedValue(selectedRowIds, copiedItems as CopiedItems, data);
-        workspaceState?.setMDTableData(updatedData);
-        selectedRowIds.forEach(id => workspaceState?.addMDUpdatedDataId(id));
+        FBDataStore?.setMDTableData(updatedData);
+        selectedRowIds.forEach(id => FBDataStore?.addMDUpdatedDataId(id));
         setData(updatedData);
   };
 
@@ -336,17 +336,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
     resetForm({ values: editedMDItem ?? {} });
   }, [editedMDItem, setValues, resetForm]);
-
-  useEffect(() => {
-    const data = workspaceState?.getMDTableData ?? [];
-    const updatedDataItemIds = workspaceState?.getMDUpdatedDataIds ?? [];
-    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.id));
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(updatedData)) {
-      setDoNotPrompt?.(true);
-      updateMaterialDispositionTableData(updatedData);
-      workspaceState?.setMDTableData([]);
-    }
-  }, [parentFormik?.isSubmitting]);
 
   const copyClipboardPopupMenu = useDialog();
 

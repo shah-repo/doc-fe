@@ -5,6 +5,8 @@ import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoPresenterProps } from '../../components/KendoGrid/interfaces';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import SearchBar from '../../components/KeywordSearch';
+import { SearchProvider } from '../../components/KeywordSearch/SearchProvider';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
 import { documentRevisionQueryStatus } from '../utils/helpers';
 import CreateButton from './CreateButton/presenter';
@@ -25,32 +27,41 @@ export function DocumentListPresenter ({
 
   return (
     <Grid container>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <GridTitle translation="navigation.document.list" />
-          </Grid>
-          <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
-            <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
+      <SearchProvider>
+        <Grid item xs={12} className={classes.headerGridItem}>
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item>
+              <Grid container alignItems="center" spacing={2}>
+                <Grid item>
+                  <GridTitle translation="navigation.document.list" />
+                </Grid>
+                <Grid item xs>
+                  <SearchBar tableName={tableName} />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
+              <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        <KendoGrid<DocumentRevision>
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-          schema={schema}
-          statuses={statuses}
-          exportDataChanges={setDataToBeExported}
-          onRowClick={onRowClick}
-          queryUrl={queryUrl}
-          defaultPayloadData={{
-            documentTypeWithoutCategory: 'true',
-            status: documentRevisionQueryStatus(),
-          }}
-        />
-      </Grid>
+        <Grid item xs={12} className={classes.kendoGridItem}>
+          <KendoGrid<DocumentRevision>
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            statuses={statuses}
+            exportDataChanges={setDataToBeExported}
+            onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={{
+              documentTypeWithoutCategory: 'true',
+              status: documentRevisionQueryStatus(),
+            }}
+          />
+        </Grid>
+      </SearchProvider>
     </Grid>
   );
 }

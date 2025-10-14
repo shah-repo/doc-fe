@@ -179,8 +179,9 @@ export interface UploadUrl {
 }
 
 export interface UploadPart {
-  eTag?: string
   partNumber: number
+  eTag?: string
+  checksum?: string
 }
 
 export interface EntryUploadPart extends UploadPart, UploadUrl {
