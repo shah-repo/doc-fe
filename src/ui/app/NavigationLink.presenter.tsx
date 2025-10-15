@@ -54,7 +54,7 @@ NavigationLinkPresenterProps
 }) => {
   const isExternalLink = type === NavigationItems.EXTERNAL_LINK;
   if (isExternalLink && path === 'PROJECT_MILESTONE_NAV_URL') {
-    path = process.env.REACT_APP_PROJECT_MILESTONE_NAV_URL;
+    path = process.env.REACT_APP_PROJECT_MILESTONE_NAV_URL || 'http://pm.qa.enlil.io';
   }
 
   const isMenu = type === NavigationItems.MENU;
