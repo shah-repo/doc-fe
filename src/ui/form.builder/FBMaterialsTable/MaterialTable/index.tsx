@@ -557,7 +557,19 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       });
 
       if (index !== -1) {
-        state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
+        const subItems = state.data[index][SUB_ITEMS_FIELD];
+
+        if (subItems) {
+          subItems?.forEach((item) => {
+            const matchedItem = mapByMaterialId[materialId]?.find((entry) => entry.id === item.id);
+            if (matchedItem) {
+              item.quantity = matchedItem.quantity;
+              item.unit = matchedItem.unit;
+            }
+          });
+        } else {
+          state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
+        }
 
         updateState({
           ...state,
