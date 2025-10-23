@@ -186,4 +186,28 @@ export const styles = makeStyles((theme) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
   },
+  expiredIcon: {
+    color: Colors.error,
+    flexShrink: 0,
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.5),
+  },
+  cellContent: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+    maxWidth: '100%',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    minWidth: 0,
+  },
+  cellValue: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    flexGrow: 1,
+    minWidth: 0,
+    cursor: 'default',
+  },
 }));
