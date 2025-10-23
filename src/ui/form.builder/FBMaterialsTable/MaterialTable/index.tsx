@@ -339,7 +339,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const removeScanLot = (material: EditableMaterial) => {
     if (isEnableOnlyLotAddition) {
       handleSelectionDelete?.(material.id);
-    } else if (isEBProcedure) {
+    } else if (isEBProcedure && material.parentId) {
        procedureState?.removeEBChildrenItem(material.parentId ?? '', material.id, type, SUB_ITEMS_FIELD);
     } else {
       handleRemove?.(material.id);
