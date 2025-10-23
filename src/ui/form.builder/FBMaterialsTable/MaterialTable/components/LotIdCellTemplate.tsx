@@ -186,7 +186,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{

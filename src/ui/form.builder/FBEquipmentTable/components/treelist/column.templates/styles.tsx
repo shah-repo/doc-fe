@@ -50,6 +50,13 @@ export const styles = makeStyles((theme) => ({
   expired: {
     color: Colors.error,
   },
+  expiredIcon: {
+    marginLeft: theme.spacing(1.25),
+    marginRight: theme.spacing(0.625),
+  },
+  overdueLabel: {
+    textTransform: 'uppercase',
+  },
   cellBorderBottom: {
     borderBottom: `1px solid ${Colors.tableCellBorder} !important`,
     borderLeft: '0 !important',

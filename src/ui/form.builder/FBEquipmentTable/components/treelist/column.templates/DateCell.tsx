@@ -1,6 +1,10 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
+import Text from '../../../../../components/Text';
 import { isDateOverdue } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
@@ -22,6 +26,16 @@ export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
         arrow
       >
         <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{displayValue}</span>
+        {isExpired && (<span>
+          <FontAwesomeIcon
+            size="lg"
+            className={cx(classes.expired, classes.expiredIcon)}
+            icon={ solid('circle-exclamation')}
+          />
+          <Typography component="span" variant="h5" className={cx(classes.expired, classes.overdueLabel)} >
+            <Text translation="common.overdue" />
+          </Typography>
+        </span>)}
       </OverflowTooltip>
     </TreeListCellWrapper>
   );
