@@ -1,5 +1,9 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { isDateOverdue } from '../utils';
@@ -27,6 +31,16 @@ export const EBDateCell: React.FC<CustomTreeListCellProps> = (props) => {
     <TreeListCellWrapper {...props}>
       <OverflowTooltip title={displayValue} placement="top" onClick={() => onClick?.({ dataItem })} interactive arrow>
         <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{displayValue}</span>
+        {isExpired && (<span>
+          <FontAwesomeIcon
+            size="lg"
+            className={cx(classes.expired, classes.expiredIcon)}
+            icon={ solid('circle-exclamation')}
+          />
+          <Typography component="span" variant="h5" className={cx(classes.expired, classes.overdueLabel)} >
+            {translate('common.overdue')}
+          </Typography>
+        </span>)}
       </OverflowTooltip>
     </TreeListCellWrapper>
   );
