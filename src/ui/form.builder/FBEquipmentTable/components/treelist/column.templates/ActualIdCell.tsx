@@ -110,6 +110,10 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   }, [equipmentOptions]);
 
   if (isAddActualIdVisible) {
+    if (isDisabled) {
+      return <TreeListCellWrapper {...props}><></> </TreeListCellWrapper>;
+    }
+
     return (
       <TreeListCellWrapper {...props}>
         <span className={cx(classes.defaultIcon)}>

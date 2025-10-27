@@ -145,6 +145,10 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const isLoading = fetchAvailablePartsAsync.isLoading;
 
   if (isAddLotVisible) {
+    if (isDisabled) {
+      return <TreeListCellWrapper {...props}><></> </TreeListCellWrapper>;
+    }
+
     return (
       <TreeListCellWrapper {...props}>
         <span className={cx(classes.defaultIcon)}>
