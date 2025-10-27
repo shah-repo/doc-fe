@@ -1543,7 +1543,7 @@
   "form.builder.procedure.material.table.add.part": "Add Part",
   "form.builder.procedure.material.table.lot.number.title": "Lot Number",
   "form.builder.procedure.material.table.actual.id.title": "Actual Id",
-  "form.builder.procedure.material.table.quantity.title": "Quantity",
+  "form.builder.procedure.material.table.quantity.title": "Quantity Needed",
   "form.builder.procedure.material.table.unit.title": "Unit",
   "form.builder.procedure.material.table.attachments.title": "Attachments",
   "form.builder.procedure.material.lot.quantity.error.message": "Lot assigned ({lotAssignedQuantity}) doesn't meet the needed quantity ({quantity})",
