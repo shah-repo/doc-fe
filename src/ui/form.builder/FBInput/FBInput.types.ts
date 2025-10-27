@@ -105,6 +105,7 @@ export type FBInputType =
   | 'headquarterAddress'
   | 'shippingItems'
   | 'shippingAddress'
+  | 'salesOrderNumber'
   ;
 
 export type FBInputProps =
