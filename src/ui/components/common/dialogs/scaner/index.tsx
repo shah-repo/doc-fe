@@ -28,6 +28,7 @@ interface Props {
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
   isSerialNumberHidden?: boolean
+  isLHRScan?: boolean
   reloadGrid?: () => void
   addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
@@ -35,7 +36,7 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -63,6 +64,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           key: translate('scan.lot.grid.quantity.needed.message'),
           value: String(selectedPart?.quantityNeeded),
         },
+      );
+    }
+
+    if (!isLHRScan) {
+      values.push(
         {
           key: translate('scan.lot.grid.variance.message'),
           value: selectedPart?.variance ?? '-',

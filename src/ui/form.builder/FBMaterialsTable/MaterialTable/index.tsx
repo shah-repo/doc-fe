@@ -691,6 +691,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}
+          isLHRScan
           onClose={scanDialog.close}
           addScanLotsToPart={addScanLotsToPart}
           selectedPart={scanSelectedPartInfo.current as ScanSelectedPartItem}
