@@ -29,17 +29,20 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const isMaterialOrEquipmentType = [FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
+  const isAttachmentType = type === FBProcedureItemType.attachments;
 
   return (
     <FBProvider {...{ dialogState }}>
       <Box
-        borderTop={1}
-        borderRight={1}
-        borderLeft={1}
-        style={{ borderTopLeftRadius: '4px', borderTopRightRadius: '4px' }}
+        {...(isAttachmentType && {
+          borderTop: 1,
+          borderRight: 1,
+          borderLeft: 1,
+          style: { borderTopLeftRadius: '4px', borderTopRightRadius: '4px' },
+        })}
       >
         <FBDialog />
-        <Box
+        {isAttachmentType && <Box
           bgcolor={Colors.athens_gray}
           fontWeight="fontWeightBold"
           display="flex"
@@ -76,8 +79,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               </FBTooltip>
             </Box>
           )}
-        </Box>
-        {type === FBProcedureItemType.attachments && (
+        </Box>}
+        {!isAttachmentType && (
+          <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+            <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+          </Box>
+        )}
+        {isAttachmentType && (
           <Box data-cy="media-upload-field" mt={2} borderBottom={1}>
             <FBMediaAlbumField
               name={`${name}.attachments`}
@@ -89,7 +97,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             />
           </Box>
         )}
-        {type !== FBProcedureItemType.attachments && !loading && (<>
+        {!isAttachmentType && !loading && (<>
           { !isMaterialOrEquipmentType && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
