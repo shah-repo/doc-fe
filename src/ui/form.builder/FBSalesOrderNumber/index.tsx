@@ -1,38 +1,11 @@
-import { Grid, TextField, TextFieldProps } from '@material-ui/core';
-import { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import React from 'react';
-import { FBInputProps } from '../types/common';
-import useStyles from './styles';
+import FBTextField from '../FBTextField/FBTextField';
 
-type FBTextFieldProps =
-  & FBInputProps
-  & Partial<Omit<RenderInputParams, 'InputProps'>>
-  & Pick<TextFieldProps, 'InputProps'>;
-
-const FBSalesOrderNumber: React.FC<FBTextFieldProps> = ({
-  rows = 1,
-  placeholder,
-  id,
-  disabled,
-  InputLabelProps,
-  InputProps,
-  inputProps,
-  defaultValue,
-  ...props
-}) => {
-  const classes = useStyles();
+const FBSalesOrderNumber: React.FC<any> = (props) => {
   return (
-    <Grid container className={classes.grid}>
-      <Grid item xl="auto">
-      <TextField
-        multiline={Boolean(rows && (rows as number) > 1)}
-        variant="outlined"
-        label=""
-        id="FBTextField-input"
-        {...{ rows, placeholder, InputLabelProps, InputProps, inputProps }}
-      />
-      </Grid>
-    </Grid>
+    <>
+    <FBTextField {...props} />
+    </>
   );
 };
 
