@@ -1539,7 +1539,7 @@
   "form.builder.procedure.equipment.grid.title": "Equipment ID",
   "form.builder.procedure.lhrt.parameter.title": "LHRT Parameter",
   "form.builder.procedure.cal.due.date.title": "Cal Due Date",
-  "form.builder.procedure.material.table.planned.id.title": "Planned Id",
+  "form.builder.procedure.material.table.material.title": "Material",
   "form.builder.procedure.material.table.add.part": "Add Part",
   "form.builder.procedure.material.table.lot.number.title": "Lot Number",
   "form.builder.procedure.material.table.actual.id.title": "Actual Id",

@@ -2,7 +2,6 @@ import React from 'react';
 import { translate } from '../../../../common/intl';
 import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { ActionsCell } from './components/Actions';
-import ActualIdCellTemplate from './components/ActualIdCellTemplate';
 import LotIdCellTemplate from './components/LotIdCellTemplate';
 import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
 import QuantityCell from './components/QuantityCell';
@@ -26,7 +25,7 @@ export const buildSchema = ({
     {
       id: 'plannedId',
       field: 'plannedId',
-      title: translate('form.builder.procedure.material.table.planned.id.title'),
+      title: translate('form.builder.procedure.material.table.material.title'),
       mainOrderIndex: 1,
       cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
       width: 150,
@@ -37,14 +36,6 @@ export const buildSchema = ({
       title: translate('form.builder.procedure.material.table.lot.number.title'),
       cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
       mainOrderIndex: 2,
-      width: 150,
-    },
-    {
-      id: 'actualId',
-      field: 'actualId',
-      title: translate('form.builder.procedure.material.table.actual.id.title'),
-      cell: (props) => <ActualIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
-      mainOrderIndex: 3,
       width: 150,
     },
     {

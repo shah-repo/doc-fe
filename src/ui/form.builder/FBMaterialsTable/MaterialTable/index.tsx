@@ -229,12 +229,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
-          const procedureItem = { ...omit(values, [...LOT_FIELDS_TO_OMIT, 'actualId']) };
+          const procedureItem = { ...omit(values, LOT_FIELDS_TO_OMIT) };
           saveProcedureItem(procedureItem as FBProcedureItemConfig);
           return;
         }
 
-        const omitFields = isEBProcedure ? EB_FIELDS_TO_OMIT : [...FIELDS_TO_OMIT, 'actualId'];
+        const omitFields = isEBProcedure ? EB_FIELDS_TO_OMIT : FIELDS_TO_OMIT;
         const scanLot = omit(values, omitFields);
         if (scanLot[SUB_ITEMS_FIELD]) {
           scanLot[SUB_ITEMS_FIELD] = scanLot[SUB_ITEMS_FIELD]?.map(
@@ -435,7 +435,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     return {
       id: FB.uniqid,
       plannedId: '',
-      actualId: '',
       ...(isMPIProcedure && !isLHRStep && { title: '' }),
       unit: '',
       quantity: undefined,
@@ -504,7 +503,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     return {
       id: FB.uniqid,
       plannedId: '',
-      actualId: '',
       unit: '',
       quantity: undefined,
       isLotAddition: true,
@@ -540,7 +538,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const lotItem = {
         id: selected.refId,
         plannedId: '',
-        actualId: selected.actualId,
         lotId: selected.lotId,
         lotDocId: selected.lotDocId,
         parentPartPlannedId: selected.materialId,

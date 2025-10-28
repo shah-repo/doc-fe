@@ -16,7 +16,6 @@ export interface Material {
   plannedId?: string
   title?: string
   type?: string
-  actualId?: string
   lotId?: string
   lotDocId?: string
   lotNumber?: { [key: string]: string }
