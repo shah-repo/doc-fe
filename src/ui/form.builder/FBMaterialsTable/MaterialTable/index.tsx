@@ -22,6 +22,7 @@ import { ScanSelectedPartItem } from '../../../components/common/dialogs/scaner/
 import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../components/notifications';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
@@ -178,11 +179,24 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     appendItemToStateData(updatedProcedureItem);
   };
 
+  const hasDuplicateLot = (state, values) => {
+    const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
+    if (parentIndex === -1) return false;
+
+    const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+    return subItems?.some((item) => item.lotId === values.lotId && item.id !== values.id);
+  };
+
   const formik = useFormik<Partial<EditableMaterial>>({
     initialValues: {},
     onSubmit: (values) => {
       if (isEnableOnlyLotAddition) {
         if (values[ADD_FIELD]) {
+          if (hasDuplicateLot(state, values)) {
+            toastError(translate('form.builder.lhrs.procedure.select.lot.duplicate.error.message', { lotId: values.selectedLotLabel }));
+            return;
+          }
+
           saveLot?.(values as EditableMaterial);
         } else {
           editLot?.(values as EditableMaterial);
@@ -219,6 +233,11 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
         let payload = state.data[parentIndex];
         if (isEBProcedure) {
+          if (hasDuplicateLot(state, values)) {
+            toastError(translate('form.builder.lhrs.procedure.select.lot.duplicate.error.message', { lotId: values.selectedLotLabel }));
+            return;
+          }
+
           payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         }
 
@@ -294,7 +313,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
           if (parentIndex !== -1) {
             newData[parentIndex][SUB_ITEMS_FIELD] = newData[parentIndex][SUB_ITEMS_FIELD]?.filter(
-              (data) => !data[ADD_FIELD],
+              (data) => (dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]),
             );
           }
         } else {
