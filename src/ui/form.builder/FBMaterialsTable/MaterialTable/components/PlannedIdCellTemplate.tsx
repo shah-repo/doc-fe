@@ -1,6 +1,5 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
 import { createFilterOptions } from '@material-ui/lab/useAutocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -10,12 +9,12 @@ import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import OverflowContent from '../../../../components/OverflowContent';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
-import { checkQuantityMismatchWithTooltip } from './utils';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded, isLHRT } = props;
@@ -27,7 +26,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
-  const shouldShowMismatchError = !dataItem?.isLotAddition && !dataItem?.lotId && dataItem?.isLotAdditionIconsShown === true && !(dataItem?.[MODE_FIELD] || dataItem?.[ADD_FIELD]);
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
@@ -110,7 +108,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const { isMismatch, tooltip } = checkQuantityMismatchWithTooltip(dataItem);
 
   return (
     <TreeListCellWrapper {...props}>
@@ -143,40 +140,28 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
         </span>
       )}
       {!isEditMode && (
-        <span className={classes.cellContent}>
-          {hasChildren && (
-            <span
-              className={cx(
-                classes.defaultIcon,
-                classes.expandCell,
-                { [classes.expand]: hasChildren },
-                { [classes.disabled]: !hasChildren },
-              )}
-            >
-              <FontAwesomeIcon
-                data-cy="minimize-row-button"
-                onClick={hasChildren ? onClick : undefined}
-                size="sm"
-                icon={expanded || !hasChildren ? regular('square-minus') : solid('square-plus')}
-              />
-            </span>
-          )}
-
-          <Tooltip title={displayValue} placement="top" arrow>
-            <span className={classes.cellValue} >
-              {displayValue}
-            </span>
-          </Tooltip>
-
-          {isMismatch && displayValue && shouldShowMismatchError && (
-            <Tooltip title={tooltip} placement="top" arrow>
-              <FontAwesomeIcon
-                className={classes.expiredIcon}
-                icon={solid('circle-exclamation')}
-              />
-            </Tooltip>
-          )}
-        </span>
+        <OverflowContent title={displayValue}>
+          <>
+            {hasChildren && !isEditMode && (
+              <span
+                className={cx(
+                  classes.defaultIcon,
+                  classes.expandCell,
+                  { [classes.expand]: hasChildren },
+                  { [classes.disabled]: !hasChildren },
+                )}
+              >
+                <FontAwesomeIcon
+                  data-cy="minimize-row-button"
+                  onClick={hasChildren ? onClick : undefined}
+                  size="sm"
+                  icon={expanded || !hasChildren ? regular('square-minus') : solid('square-plus')}
+                />
+              </span>
+            )}
+            {displayValue}
+          </>
+        </OverflowContent>
       )}
 
     </TreeListCellWrapper>
