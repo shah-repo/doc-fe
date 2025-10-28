@@ -184,6 +184,7 @@ class FBEditorState {
     supplierReferences: FBEditorLabel,
     shippingCustomer: FBEditorAutocomplete,
     shippingMethod: FBEditorOptionGroup,
+    salesOrderNumber: FBEditorTextField,
   };
 
   public static editorTypeIconMapping = {
