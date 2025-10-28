@@ -1,4 +1,4 @@
-import { cloneDeep, map } from 'lodash';
+import { cloneDeep, map, omit } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef } from 'react';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -100,6 +100,14 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       // i.e. processing completed
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
+    }
+    if(asyncState && asyncState.status === AsyncStatus.Error) {
+      const value = formState.getValues();
+      const previousValue = [
+        ...(formInput?.documentRevisions || []),
+        omit(value, 'attachments'),
+      ];
+      parentFormState?.setFieldValue(name, previousValue, true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asyncState?.status]);
