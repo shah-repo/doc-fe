@@ -401,7 +401,7 @@ export default makeStyles((theme) => ({
     },
   },
   root: {
-    margin: theme.spacing(3, 0),
+    margin: theme.spacing(1, 0),
   },
   borderBottom: {
     borderBottom: `1px solid ${Colors.textGray} !important`,

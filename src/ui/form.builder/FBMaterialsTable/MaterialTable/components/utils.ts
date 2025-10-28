@@ -1,4 +1,3 @@
-import { translate } from '../../../../../common/intl';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD } from '../constants';
 import { EditableMaterial, Material } from '../types';
@@ -34,17 +33,4 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean,
       parentId: item.id,
     })),
   }));
-};
-
-export const checkQuantityMismatchWithTooltip = (item): { isMismatch: boolean, tooltip: string | null } => {
-  const totalAssignedQuantity = item.assignedLots?.reduce((sum, lot) => sum + lot.quantity, 0) ?? 0;
-  const isMismatch = item.quantity > totalAssignedQuantity;
-  const tooltip = isMismatch
-    ? translate('form.builder.procedure.material.lot.quantity.error.message', {
-      lotAssignedQuantity: totalAssignedQuantity,
-      quantity: item.quantity,
-    })
-    : null;
-
-  return { isMismatch, tooltip };
 };

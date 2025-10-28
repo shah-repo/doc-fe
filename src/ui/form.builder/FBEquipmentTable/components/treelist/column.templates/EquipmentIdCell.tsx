@@ -100,7 +100,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     field,
     equipmentOptions,
     addActualId,
-    onScanClick,
     isDisabled,
     isEnableActualIdAddition,
     isEBProcedure,
@@ -111,7 +110,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     : isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
-  const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const isAddActualIdVisible
@@ -129,6 +127,10 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   }, [equipmentOptions]);
 
   if (isAddActualIdVisible) {
+    if (isDisabled) {
+      return <TreeListCellWrapper {...props}><></> </TreeListCellWrapper>;
+    }
+
     return (
       <TreeListCellWrapper {...props}>
         <span className={cx(classes.defaultIcon)}>
@@ -139,18 +141,6 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
                 onClick={() => addActualId?.(dataItem)}
                 icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
-              />
-            </IconButton>
-          </StyleTooltip>
-        </span>
-        <span className={cx(classes.defaultIcon)}>
-          <StyleTooltip title={translate('common.scan')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
-              <FontAwesomeIcon
-                size="sm"
-                className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.(dataItem)}
-                icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
           </StyleTooltip>

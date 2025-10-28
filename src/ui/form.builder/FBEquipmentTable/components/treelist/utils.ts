@@ -74,3 +74,7 @@ export const isDateOverdue = (date?: string) => {
 
   return Date.parse(date) < Date.now();
 };
+
+export const getValidDueDate = (date?: string): string => {
+  return date && date !== 'N/A' ? date : '-';
+};
