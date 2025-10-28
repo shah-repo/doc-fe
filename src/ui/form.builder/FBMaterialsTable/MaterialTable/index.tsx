@@ -317,7 +317,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const deleteItemFromStateData = (scanLot) => {
-    if (isEnableOnlyLotAddition) {
+    if (isEnableOnlyLotAddition || scanLot?.parentId) {
       const parentIndex = state.data?.findIndex((data) => data.id === scanLot.parentId);
       if (parentIndex === -1) {
         return;
@@ -554,19 +554,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       });
 
       if (index !== -1) {
-        const subItems = state.data[index][SUB_ITEMS_FIELD];
-
-        if (subItems) {
-          subItems?.forEach((item) => {
-            const matchedItem = mapByMaterialId[materialId]?.find((entry) => entry.id === item.id);
-            if (matchedItem) {
-              item.quantity = matchedItem.quantity;
-              item.unit = matchedItem.unit;
-            }
-          });
-        } else {
-          state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
-        }
+        state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
 
         updateState({
           ...state,
