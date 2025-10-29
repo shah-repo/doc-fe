@@ -84,6 +84,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
+  const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
   const [state, setState] = React.useState<MaterialItemState>({
     data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
     expanded: [],
@@ -621,6 +622,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanSelectedPartInfo.current = {
       docId: match[1] ?? '',
       partDescription: match[3],
+      unit: dataItem.unit,
       quantityNeeded: dataItem.quantity,
       displayRevision: match[2],
       variance: '',
@@ -650,6 +652,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     isLHRT: isLHRStep && isMPIProcedure,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
+    isLHRProductionBuild,
     onScanClick: openScanDialog,
   });
 

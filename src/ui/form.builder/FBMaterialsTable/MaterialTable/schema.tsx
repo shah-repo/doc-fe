@@ -20,6 +20,7 @@ export const buildSchema = ({
   onDelete,
   isDisabled,
   onScanClick,
+  isLHRProductionBuild,
 }: SchemaOptions): CustomTreeListColumnProps[] => {
   return [
     {
@@ -34,7 +35,7 @@ export const buildSchema = ({
       id: 'lotId',
       field: 'lotId',
       title: translate('form.builder.procedure.material.table.lot.number.title'),
-      cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
+      cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} isLHRProductionBuild={isLHRProductionBuild} />,
       mainOrderIndex: 2,
       width: 150,
     },

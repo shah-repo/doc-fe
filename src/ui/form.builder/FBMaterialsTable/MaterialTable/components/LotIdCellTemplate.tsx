@@ -8,14 +8,18 @@ import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useSt
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { checkIsDocumentLot } from '../../../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
+import { DOCUMENT_REVISION_LOT_STATUS } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
@@ -91,7 +95,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick } = props;
+  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
   const { parentPartPlannedId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
@@ -110,9 +114,33 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const lotDocId = dataItem?.lotDocId ?? value.label ?? '';
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
+  const isValidLOT = (lot) => {
+    const isAcceptedStatus = isLHRProductionBuild
+      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+      : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+
+    const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
+
+    return isAcceptedStatus && !isZeroOnHandQuantity;
+  };
+
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      setLots(data);
+      if (isEBProcedure) {
+        setLots(data);
+        return;
+      }
+
+      const updatedLots = data?.filter((option) => {
+        const groupOptions = option.document.documentType.groupOptions;
+
+        return (
+          groupOptions?.includes(DOC_TYPE_GROUP_OPTION.TABS_PART_LOT)
+          || (isDocumentRevisionReleased(option.status) && checkIsDocumentLot(groupOptions) && isValidLOT(option))
+        );
+      });
+
+      setLots(updatedLots);
     },
   });
 
