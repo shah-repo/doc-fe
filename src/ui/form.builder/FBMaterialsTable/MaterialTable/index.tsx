@@ -622,6 +622,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     scanSelectedPartInfo.current = {
       docId: match[1] ?? '',
       partDescription: match[3],
+      unit: dataItem.unit,
       quantityNeeded: dataItem.quantity,
       displayRevision: match[2],
       variance: '',

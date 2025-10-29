@@ -77,4 +77,5 @@ export interface ScanSelectedPartItem {
   woId?: string
   plannedId?: string
   type?: FBProcedureItemType
+  unit?: string
 }

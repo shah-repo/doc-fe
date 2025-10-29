@@ -112,7 +112,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           onHand: data?.onHand,
           serialNumber: data?.serialNumber,
           quantityAssigned: data?.onHand,
-          unitOfMeasure: data?.lotUsedUnit,
+          unitOfMeasure: isLHRScan ? selectedPart.unit : data?.lotUsedUnit,
         };
       }
 
