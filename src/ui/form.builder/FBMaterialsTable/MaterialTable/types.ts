@@ -89,6 +89,7 @@ export interface SchemaOptions {
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
   isLHRT?: boolean
+  isLHRProductionBuild?: boolean
 }
 
 export interface UnitOption {
@@ -133,6 +134,8 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onClick?: (e: MaterialEditEvent) => void
   onScanClick?: MaterialCallback
   isLHRT?: boolean
+  isLHRProductionBuild?: boolean
+  isEBProcedure?: boolean
 }
 
 export type MaterialOption =

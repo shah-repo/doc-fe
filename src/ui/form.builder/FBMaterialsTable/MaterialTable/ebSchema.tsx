@@ -35,7 +35,7 @@ export const buildEBSchema = ({
       id: 'lotId',
       field: 'lotId',
       title: translate('form.builder.procedure.material.table.lot.number.title'),
-      cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
+      cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} isEBProcedure />,
       mainOrderIndex: 2,
       width: 150,
     },
