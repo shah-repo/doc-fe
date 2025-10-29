@@ -12,6 +12,7 @@ import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audi
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
+import { companySelectors } from '../../state/ducks/company';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
@@ -24,7 +25,7 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
 import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -570,6 +571,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
           const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
           const relatedAcronym = documentType?.documentTypeAcronym ?? '';
+          const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
+          const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
           const auditDocId = audit.docId ?? '';
           const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
@@ -579,11 +582,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             assignedAdded,
             assigneeDeleted,
             status,
-            assignedTo,
+            assignedTo: assignToUser,
             comment,
             attachmentLinks,
           } = JSON.parse(nextVal);
 
+          let assignedTo = assignToUser;
+          if(FB.isUUID(assignToUser ?? '')) {
+            assignedTo = getUserDetails(assignToUser)?.user?.name;
+          }
           if (audit.type.includes('ARRAY_ADDED')) {
             const { instruction, assignedTo } = JSON.parse(nextVal);
 

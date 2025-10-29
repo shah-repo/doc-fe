@@ -8,7 +8,7 @@ const PrimarySupplier = () => {
   return (
     <Box display="flex" justifyContent="center">
       <Tooltip
-        title={translate('form.builder.part.vendors.primary')}
+        title={translate('form.builder.supplier.contacts.grid.heading.primary.contacts')}
         placement="top"
         arrow
       >
