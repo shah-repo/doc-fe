@@ -1531,6 +1531,7 @@
   "form.builder.lhrs.procedure.select.equipment.option": " Rev {revision} - {name}",
   "form.builder.lhrs.procedure.select.equipment.option.cal.due": " Cal Due: {date} ",
   "form.builder.lhrs.procedure.select.equipment.option.pm.due": " PM Due: {date} ",
+  "form.builder.lhrs.procedure.select.lot.duplicate.error.message": "{lotId} already exists. Please select a different lot.",
   "form.builder.procedure.equipment.title": "{title} ",
   "form.builder.mpi.procedure.equipment.title.id": "{id}: {title} ",
   "form.builder.mpi.procedure.equipment.title": "{title}",
