@@ -25,11 +25,10 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean,
 
   return items.map(item => ({
     ...item,
-    plannedId: item.title,
     isLotAdditionIconsShown: true,
     assignedLots: item.assignedLots?.map(lot => ({
       ...lot,
-      parentPartPlannedId: isEBProcedure ? item.title : item.plannedId,
+      parentPartId: item.title,
       parentId: item.id,
     })),
   }));

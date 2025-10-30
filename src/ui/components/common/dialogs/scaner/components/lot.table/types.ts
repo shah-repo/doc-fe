@@ -75,6 +75,7 @@ export interface ScanSelectedPartItem {
   variance?: string
   partRevId?: string
   woId?: string
+  title?: string
   plannedId?: string
   type?: FBProcedureItemType
   unit?: string

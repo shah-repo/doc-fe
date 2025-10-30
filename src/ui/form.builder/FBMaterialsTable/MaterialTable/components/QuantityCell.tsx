@@ -3,7 +3,7 @@ import React from 'react';
 import { MaterialTreelistContext } from '..';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
-import { MAX_DECIMALS } from '../constants';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -39,9 +39,9 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
       </FormikField>
     );
 
-  let displayValue = Number(toFixed(dataItem[field], MAX_DECIMALS));
+  let displayValue = dataItem[field] ? Number(toFixed(dataItem[field], MAX_DECIMALS)) : CELL_EMPTY_VALUE;
 
-  if (dataItem.title) {
+  if (dataItem.title && typeof displayValue === 'number') {
     displayValue = displayValue * lhrsQuantity;
   }
 

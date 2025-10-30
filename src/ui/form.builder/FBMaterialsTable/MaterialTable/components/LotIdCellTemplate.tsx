@@ -31,7 +31,7 @@ interface LotAutocompleteProps {
   value: LotOptions
   setValue: Dispatch<SetStateAction<LotOptions>>
   dataItem: EditableMaterial
-  parentPartPlannedId?: string
+  parentPartId?: string
   lotRevId?: string
   isLoading?: boolean
 }
@@ -63,7 +63,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLot?.precalc?.lot_on_hand_quantity);
     setFieldValue(IS_LOT_ADDITION, true);
-    setFieldValue('parentPartPlannedId', dataItem.parentPartPlannedId);
+    setFieldValue('parentPartId', dataItem.parentPartId);
     setFieldValue('selectedLotLabel', option?.label);
     setFieldValue('parentId', dataItem.parentId);
     setFieldValue('id', dataItem.id);
@@ -96,7 +96,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
-  const { parentPartPlannedId, lotId } = dataItem;
+  const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
@@ -145,12 +145,12 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   });
 
   useEffect(() => {
-    if (isEmpty(parentPartPlannedId)) {
+    if (isEmpty(parentPartId)) {
       return;
     }
 
-    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartPlannedId, fetchAvailablePartsAsync, false);
-  }, [parentPartPlannedId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartId, fetchAvailablePartsAsync, false);
+  }, [parentPartId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
     const value = renderOptions().find((option) => option.value === lotId);
@@ -228,7 +228,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
                 value,
                 setValue,
                 dataItem,
-                parentPartPlannedId,
+                parentPartId,
                 isLoading: fetchAvailablePartsAsync.isLoading,
               }}
             />
@@ -251,7 +251,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
       </span>
       <DocumentRevisionDialog
         dialog={quickViewDialog}
-        {...{ docRevId: lotId, parentRevId: parentPartPlannedId }}
+        {...{ docRevId: lotId, parentRevId: parentPartId }}
       />
     </TreeListCellWrapper>
   );

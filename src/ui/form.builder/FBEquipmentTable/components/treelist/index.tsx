@@ -252,7 +252,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
           if (parentIndex !== -1) {
             newData[parentIndex][subItemsKey] = newData[parentIndex][subItemsKey]?.filter(
-              (data) => !data[ADD_FIELD],
+              (data) => dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD],
             );
           }
         } else {
