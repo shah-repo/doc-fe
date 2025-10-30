@@ -80,7 +80,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       }
       const part = {
         fieldId: name ?? '',
-        forPreselected: { id: values.parentPartPlannedId ?? '' },
+        forPreselected: { id: values.parentPartId ?? '' },
         quantity,
         unit,
         ...(serialNumber && { serialNumber }),

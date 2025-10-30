@@ -183,7 +183,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     const updatedProcedureItem = {
       ...procedureItem,
-      plannedId: procedureItem.title,
+      title: procedureItem.title,
     };
     appendItemToStateData(updatedProcedureItem);
   };
@@ -214,7 +214,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         return;
       }
 
-      if (values[IS_LOT_ADDITION] || values.parentPartPlannedId) {
+      if (values[IS_LOT_ADDITION] || values.parentPartId) {
         const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
@@ -284,7 +284,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const updatedLots = scanLots.map((lot) => {
       return {
         ...lot,
-        parentPartPlannedId: scanSelectedPartInfo.current?.plannedId,
+        parentPartId: scanSelectedPartInfo.current?.title,
       };
     });
 
@@ -317,7 +317,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       if (dataItem?.[ADD_FIELD]) {
         if (dataItem.isLotAddition) {
           const parentIndex = newData.findIndex((data) => {
-            return data.plannedId === dataItem.parentPartPlannedId;
+            return data.title === dataItem.parentPartId;
           });
 
           if (parentIndex !== -1) {
@@ -460,7 +460,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const createPartItem = (): EditableMaterial => {
     return {
       id: FB.uniqid,
-      plannedId: '',
+      title: '',
       ...(isMPIProcedure && !isLHRStep && { title: '' }),
       unit: '',
       quantity: undefined,
@@ -486,7 +486,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation
-      = (isEnableOnlyLotAddition && dataItem.plannedId && (!isActive || isDisabled))
+      = (isEnableOnlyLotAddition && dataItem.title && (!isActive || isDisabled))
       || (!isEnableOnlyLotAddition && isPreview);
     const isEditRestricted
       = dataItem[MODE_FIELD]
@@ -528,7 +528,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const createNewLotItem = () => {
     return {
       id: FB.uniqid,
-      plannedId: '',
+      title: '',
       unit: '',
       quantity: undefined,
       isLotAddition: true,
@@ -563,10 +563,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
       const lotItem = {
         id: selected.refId,
-        plannedId: '',
+        title: '',
         lotId: selected.lotId,
         lotDocId: selected.lotDocId,
-        parentPartPlannedId: selected.materialId,
+        parentPartId: selected.materialId,
         parentId: index !== -1 ? state.data[index].id : '',
         unit: selected.unit,
         quantity: selected.quantity,
@@ -601,7 +601,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     if (state.data.length && index !== -1) {
       const newAllocItem: EditableMaterial = createNewLotItem();
-      newAllocItem.parentPartPlannedId = dataItem.plannedId;
+      newAllocItem.parentPartId = dataItem.title;
       newAllocItem.parentId = dataItem.id;
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
@@ -624,7 +624,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
 
   const openScanDialog = (dataItem: EditableMaterial) => {
-    const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.title);
     const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
 
     scanSelectedPartInfo.current = {
@@ -636,7 +636,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       variance: '',
       partRevId: plannedIdInfo?.value,
       id: dataItem.id,
-      plannedId: dataItem?.plannedId,
+      title: dataItem?.title,
       type: FBProcedureItemType.materials,
     };
     scanDialog.open();

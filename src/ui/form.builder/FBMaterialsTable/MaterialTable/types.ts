@@ -13,7 +13,6 @@ type MaterialCallback = (dataItem: EditableMaterial) => void;
 
 export interface Material {
   id: string
-  plannedId?: string
   title?: string
   type?: string
   lotId?: string
@@ -58,7 +57,7 @@ export interface EditableMaterial extends Material {
   [MODE_FIELD]: boolean
   [ADD_FIELD]: boolean
   isNewAddition?: boolean
-  parentPartPlannedId?: string
+  parentPartId?: string
   parentId?: string
   isLotAdditionIconsShown?: boolean
   serialNumber?: string
