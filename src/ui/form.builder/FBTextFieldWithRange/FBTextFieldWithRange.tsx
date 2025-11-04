@@ -1,78 +1,178 @@
-import { Box } from '@material-ui/core';
-import WarningIcon from '@material-ui/icons/Warning';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Chip, Grid, Tooltip, Zoom } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
-import { FBOutOfRange, FBText, FBTextField, FBTextFieldWithRangeProps } from '..';
-import Colors from '../../layout/theme/utils/colors';
+import { ChipComponentProps, FBInput, FBText, FBTextFieldWithRangeProps } from '..';
+import { translate } from '../../../common/intl';
+import { Autocomplete, FormField, TextField } from '../../components/forms/fields-next';
+import { withThemeNext } from '../../layout/theme-next';
+import { FBFontStyle } from '../styles/FBFont.styles';
+import useStyles from './FBTextFieldWithRange.styles';
+import { useOptions } from './FBTextFieldWithRange.utils';
 import { withFBTextFieldWithRange } from './FBTextFieldWithRange.wrap';
 
-const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> = ({
-  range,
-  pass,
-  aql,
-  criticalToQuality,
-  includeInFaiInspection,
+const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
+  label,
+  tooltip,
+  className,
+  isActive = false,
+  onChange,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <Tooltip title={tooltip} placement="top" arrow>
+      <Chip
+        label={<>
+          <span className={cx(classes.chipIcon, { [classes.chipIconActive]: isActive })}>
+            <Zoom in={isActive}>
+              <FontAwesomeIcon icon={solid('circle-check')} />
+            </Zoom>
+          </span>
+          {label}
+        </>}
+        className={cx(classes.chip, className, { [classes.chipActive]: isActive })}
+        onClick={() => onChange?.(!isActive)}
+      />
+    </Tooltip>
+  );
+});
+
+const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
+  name,
+  placeholder,
+  index = 0,
+  label = '',
+  type = 'textfieldwithrange',
   rules,
+  value,
+  error,
+  helperText,
+  autosave = false,
+  disabled = false,
+  loading = false,
+  isInspected = false,
+  isCriticalToQuality,
+  hasRange = false,
+  hasTolerance = false,
+  hasUnits = false,
+  isPartFaiRequired = false,
+  isPartIqcRequired = false,
+  tolerance,
+  range,
+  onUpdate,
   ...props
-}) => (
-  <Box mb={5} data-cy={`${props.type}-${props.index}`}>
-    {criticalToQuality && (
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="flex-end"
-        mb={-2.5}
-      >
-        <WarningIcon color="error" />
-        <FBText
-          locale="form.builder.critical.to.quality"
-          boxProps={{
-            mt: 0.2,
-            pl: 0.5,
-            color: Colors.error_red,
-            fontWeight: 'bold',
-          }}
-        />
-      </Box>
-    )}
-    <FBTextField
-      { ...props }
-      gutter={false}
-      type="number"
-      { ...{ rules }}
-      InputProps={{
-        endAdornment: <FBOutOfRange {...{ pass }} parentName={props.name} />,
-      }}
-      withState
-    />
-    <Box mt={1} style={{ color: 'gray' }} display="flex">
-      {range && <FBText
-        locale="form.builder.allowed.range"
-        values={{
-          from: range.from || 'N/A',
-          to: range.to || 'N/A',
-          suffix: pass || aql || includeInFaiInspection ? <>,&nbsp;</> : '',
-        }}
-      />}
-      {pass && <FBText
-        locale="form.builder.expected.value"
-        values={{
-          from: pass.from || 'N/A',
-          to: pass.to || 'N/A',
-          suffix: aql || includeInFaiInspection ? <>,&nbsp;</> : '',
-        }}
-      />}
-      {aql && <FBText
-        locale="form.builder.aql.value"
-        values={{
-          value: aql,
-          suffix: includeInFaiInspection ? <>,&nbsp;</> : '',
-        }}
-      />}
-      {includeInFaiInspection && (
-        <FBText locale="form.builder.fai" />
-      )}
-    </Box>
-  </Box>
-);
+}) => {
+  const classes = useStyles();
+  const { units, isLoading } = useOptions();
+
+  const attributeConfig: string[] = [];
+
+  if (hasRange && range?.from !== undefined && range?.to !== undefined) {
+    attributeConfig.push(translate('form.builder.allowed.range', { ...range }));
+  }
+
+  if (hasTolerance && !hasRange && tolerance) {
+    attributeConfig.push(translate('form.builder.allowed.tolerance', { tolerance }));
+  }
+
+  const isRangeDefined = hasRange && (range?.from !== undefined && range?.to !== undefined);
+  const isToleranceDefined = hasTolerance && !hasRange && tolerance !== undefined;
+  const isNumericInput = isRangeDefined || isToleranceDefined;
+
+  return (
+    <FBInput
+      {...props}
+      name={name}
+      type={type}
+      index={index}
+      value={value}
+      autosave={autosave}
+      disabled={disabled}
+    >
+      <div data-cy={`${type}-${index}`}>
+        <Grid container spacing={1}>
+          <Grid item md={hasUnits ? 8 : 12} xs={6}>
+            <FormField
+              loading={isLoading}
+              error={error}
+              helperText={helperText}
+              disabled={disabled}
+              label={
+                <div className={cx(classes.label, { [classes.labelWithAlert]: isCriticalToQuality })}>
+                  <FBText
+                    loading={loading || isLoading}
+                    labelProps={{
+                      ...props.labelProps,
+                      ...FBFontStyle.labelProps,
+                    }}
+                    locale={String(label)}
+                  />
+                  {isInspected && (
+                    <div className={classes.options}>
+                      {isPartFaiRequired && (
+                        <ChipComponent
+                          label={translate('form.builder.fai')}
+                          tooltip={value?.isFaiRequired ? translate('form.builder.fai.required') : translate('form.builder.fai.not.required')}
+                          isActive={value?.isFaiRequired}
+                          className={cx(classes.chip, { [classes.chipActive]: value?.isFaiRequired })}
+                          onChange={(isActive) => onUpdate?.({ isFaiRequired: isActive })}
+                        />
+                      )}
+                      {isPartIqcRequired && (
+                        <ChipComponent
+                          label={translate('form.builder.iqc')}
+                          tooltip={value?.isIqcRequired ? translate('form.builder.iqc.required') : translate('form.builder.iqc.not.required')}
+                          isActive={value?.isIqcRequired}
+                          className={cx(classes.chip, { [classes.chipActive]: value?.isIqcRequired })}
+                          onChange={(isActive) => onUpdate?.({ isIqcRequired: isActive })}
+                        />
+                      )}
+                    </div>
+                  )}
+                  {isCriticalToQuality && (
+                    <span className={classes.qualityAlert}>
+                      <FontAwesomeIcon icon={solid('triangle-exclamation')} />
+                      {translate('form.builder.critical.to.quality')}
+                    </span>
+                  )}
+                </div>
+              }
+            >
+              <TextField
+                defaultValue={value?.value}
+                placeholder={placeholder}
+                inputProps={isNumericInput ? {
+                  type: 'number',
+                  min: range?.from,
+                  max: range?.to,
+                  step: tolerance,
+                } : {}}
+                onBlur={e => onUpdate?.({ value: isNumericInput ? parseFloat(e.target.value) : e.target.value })}
+              />
+            </FormField>
+          </Grid>
+          {hasUnits && (
+            <Grid item md={4} xs={6}>
+              <FormField label="form.builder.unit" loading={isLoading} disabled={disabled}>
+                <Autocomplete
+                  options={units}
+                  value={value?.unit}
+                  onChange={(_, value: string) => onUpdate?.({ unit: value })}
+                />
+              </FormField>
+            </Grid>
+          )}
+        </Grid>
+        <div className={classes.attributes}>
+          <span>
+            {attributeConfig.join(', ')}
+          </span>
+        </div>
+      </div>
+    </FBInput>
+  );
+};
 
 export default withFBTextFieldWithRange(FBTextFieldWithRange);

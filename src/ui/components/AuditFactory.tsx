@@ -5,13 +5,14 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, useDate } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
+import { companySelectors } from '../../state/ducks/company';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
@@ -24,7 +25,7 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
 import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -35,6 +36,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingCustomer from './AuditShippingCustomer';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
@@ -66,6 +68,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+  const { getFormattedDateString, getFormattedStartOfDayDateString } = useDate();
 
   const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
@@ -217,13 +220,33 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
       },
       shippingCustomer () {
-        if (audit.fbSchemaItem) {
-          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
-        }
-        return <AuditAutocomplete audit={audit} />;
+        return <AuditShippingCustomer {...{ audit, dataCy, auditValue }} />;
       },
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
+      },
+      documentRevisions () {
+        const isWhereUsedViewDeleted = (
+          audit.type === 'ARRAY_DELETED'
+          && audit.field.replace(/\.\d+\./, '.') === 'formInput.documentRevisions.whereUsedView'
+          && audit.previousValue
+        );
+        if (isWhereUsedViewDeleted) {
+          try {
+            const data = JSON.parse(audit.previousValue as string);
+            let whereUserValue = '';
+
+            if (Array.isArray(data) && data.length > 0) {
+              whereUserValue = data.map(item => item.name).join(', ');
+            } else {
+              whereUserValue = data.name;
+            }
+            return (<div data-cy={dataCy}>{whereUserValue}</div>);
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
@@ -548,6 +571,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
           const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
           const relatedAcronym = documentType?.documentTypeAcronym ?? '';
+          const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
+          const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
           const auditDocId = audit.docId ?? '';
           const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
@@ -557,11 +582,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             assignedAdded,
             assigneeDeleted,
             status,
-            assignedTo,
+            assignedTo: assignToUser,
             comment,
             attachmentLinks,
           } = JSON.parse(nextVal);
 
+          let assignedTo = assignToUser;
+          if(FB.isUUID(assignToUser ?? '')) {
+            assignedTo = getUserDetails(assignToUser)?.user?.name;
+          }
           if (audit.type.includes('ARRAY_ADDED')) {
             const { instruction, assignedTo } = JSON.parse(nextVal);
 
@@ -818,6 +847,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } catch (err) {
           // do nothing
         }
+        break;
+      case 'formInput.po-items-built-in.dateOfExchangeRate':
+        returnValue = (<div data-cy={dataCy}>{getFormattedStartOfDayDateString(auditValue)}</div>);
         break;
       case 'formInput.po-items-built-in.items.order':
       case 'formInput.po-items-built-in.items.totalAmount':

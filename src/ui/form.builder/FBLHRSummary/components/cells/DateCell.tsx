@@ -4,7 +4,7 @@ import moment from 'moment';
 import React from 'react';
 import {
   MomentFormats,
-  TIME_ZONE,
+  useDate,
 } from '../../../../../common/utils/date';
 import {
   DatePicker,
@@ -26,7 +26,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field];
+  const { timezone } = useDate();
   const isCalPmDueDate = [DATE_TYPE.customCalDueDate, DATE_TYPE.customPmDueDate].includes(field as DATE_TYPE);
+  const isExpiryCreateDate = [DATE_TYPE.customExpiryDate, DATE_TYPE.customRecordCreationDate].includes(field as DATE_TYPE);
 
   if (!isEditMode) {
     let displayValue = value;
@@ -34,6 +36,11 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       displayValue = dataItem.calDueDateText;
     } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
       displayValue = dataItem.pmDueDateText;
+    }
+
+    if((isCalPmDueDate || isExpiryCreateDate) && displayValue) {
+     const momentObject = moment(displayValue, Object.values(MomentFormats));
+      displayValue = momentObject.format(MomentFormats.MonthDateYearTwoDigit);
     }
 
     return (
@@ -53,7 +60,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     fieldName.replace(/^custom/, '').replace(/^[A-Z]/, (char) => char.toLowerCase());
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    const dateInPST = date && moment.tz(moment(date).format(MomentFormats.YearMonthDate), TIME_ZONE).startOf('day');
+    const dateInPST = date && moment.tz(moment(date).format(MomentFormats.YearMonthDate), timezone).startOf('day');
     const dateValue = dateInPST?.utc().format();
     setFieldValue(field, dateValue);
     setFieldValue(removeCustomPrefix(field), dateValue);

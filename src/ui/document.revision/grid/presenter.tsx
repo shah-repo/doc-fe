@@ -5,7 +5,8 @@ import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoPresenterProps } from '../../components/KendoGrid/interfaces';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { SearchContext, TableSearchQueryPayloadType } from '../../components/KeywordSearch/types';
+import SearchBar from '../../components/KeywordSearch';
+import { SearchProvider } from '../../components/KeywordSearch/SearchProvider';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../constants/urls';
 import { documentRevisionQueryStatus } from '../utils/helpers';
 import CreateButton from './CreateButton/presenter';
@@ -23,15 +24,21 @@ export function DocumentListPresenter ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  const [tableSearchQueryPayload, setTableSearchQueryPayload] = useState<TableSearchQueryPayloadType>();
 
   return (
     <Grid container>
-      <SearchContext.Provider value={{ tableSearchQueryPayload, setTableSearchQueryPayload }}>
+      <SearchProvider>
         <Grid item xs={12} className={classes.headerGridItem}>
           <Grid container alignItems="center" justify="space-between">
             <Grid item>
-              <GridTitle translation="navigation.document.list" />
+              <Grid container alignItems="center" spacing={2}>
+                <Grid item>
+                  <GridTitle translation="navigation.document.list" />
+                </Grid>
+                <Grid item xs>
+                  <SearchBar tableName={tableName} />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item>
               <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped} />
@@ -54,7 +61,7 @@ export function DocumentListPresenter ({
             }}
           />
         </Grid>
-      </SearchContext.Provider>
+      </SearchProvider>
     </Grid>
   );
 }

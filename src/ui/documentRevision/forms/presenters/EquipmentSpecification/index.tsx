@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../components/Text';
 import { toastSuccess } from '../../../../components/notifications';
@@ -29,6 +29,7 @@ interface Props {
 const EquipmentSpecification: React.FC<Props> = (props) => {
   const { relatedDocumentRevision } = props;
   const classes = styles();
+  const { getFormattedDateString } = useDate();
 
   const es = relatedDocumentRevision?.formInput?.equipmentSpecification as FormInputEquipmentSpecification;
 

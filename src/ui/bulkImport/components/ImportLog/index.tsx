@@ -2,10 +2,9 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, List, ListItem, Typography } from '@material-ui/core';
 import { startCase, toLower } from 'lodash';
-import moment from 'moment';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import { getBulkImportsGroupByProcessType } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
@@ -13,6 +12,7 @@ import useStyles from './styles';
 
 const ImportLog: React.FC = () => {
   const classes = useStyles();
+  const { getFormattedDateString } = useDate();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcessType);
 
   const renderItem = (text: string, formattedDate: string): JSX.Element => (
@@ -31,7 +31,7 @@ const ImportLog: React.FC = () => {
     const date = new Date(file.createdAt);
 
     // Format the date as MM/DD/YYYY
-    const formattedDate = moment(date).format(MomentFormats.MonthDateYearTwoDigit);
+    const formattedDate = getFormattedDateString(date, MomentFormats.MonthDateYearTwoDigit);
 
     return renderItem(`${file.name}.${file.type}`, formattedDate);
   };
@@ -40,7 +40,7 @@ const ImportLog: React.FC = () => {
     const date = new Date(createdAt);
 
     // Format the date as MM/DD/YYYY
-    const formattedDate = moment(date).format(MomentFormats.MonthDateYearTwoDigit);
+    const formattedDate = getFormattedDateString(date, MomentFormats.MonthDateYearTwoDigit);
 
     return renderItem(s3Link, formattedDate);
   };
