@@ -28,7 +28,7 @@ export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSumma
 export const getExcelData = (
   LHRSummaryItemList: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
-  formatDate: (date: string, format: string) => string,
+  dateFormatter: (date: string, format: string) => string,
 ): Array<ColumnDefinition<EditableLHRSummaryItem>> =>
   LHRSummaryItemList.map(item => {
     const lotStatus = item.lotStatus ? getLotStatusLabel(item.lotStatus as LotStatus) : EMPTY_PLACEHOLDER;
@@ -40,10 +40,10 @@ export const getExcelData = (
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customExpiryDate: item.customExpiryDate && formatDate(item?.customExpiryDate, MomentFormats.MonthDateYearTwoDigit),
-      customCalDueDate: item?.customCalDueDate && formatDate(item?.customCalDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customPmDueDate: item?.customPmDueDate && formatDate(item?.customPmDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customRecordCreationDate: item?.customRecordCreationDate && formatDate(item?.customRecordCreationDate, MomentFormats.MonthDateYearTwoDigit),
+      customExpiryDate: item.customExpiryDate && dateFormatter(item?.customExpiryDate, MomentFormats.MonthDateYearTwoDigit),
+      customCalDueDate: item?.customCalDueDate && dateFormatter(item?.customCalDueDate, MomentFormats.MonthDateYearTwoDigit),
+      customPmDueDate: item?.customPmDueDate && dateFormatter(item?.customPmDueDate, MomentFormats.MonthDateYearTwoDigit),
+      customRecordCreationDate: item?.customRecordCreationDate && dateFormatter(item?.customRecordCreationDate, MomentFormats.MonthDateYearTwoDigit),
       lotStatus,
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
