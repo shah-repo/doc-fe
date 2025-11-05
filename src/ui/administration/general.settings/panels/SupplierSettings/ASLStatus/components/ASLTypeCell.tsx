@@ -41,7 +41,7 @@ const Editor: React.FC<CustomCellProps> = ({
   };
 
   return (
-    <FormikField name={field}>
+    <FormikField name={field} required>
       <Autocomplete
         {...getFieldProps(field)}
         blurOnSelect
