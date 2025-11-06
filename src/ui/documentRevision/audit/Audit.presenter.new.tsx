@@ -375,11 +375,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 fieldType,
                 stepLabel,
               });
-            change = {
-              ...change,
-              nextValue: `${value?.document.docId} - ${value?.name} - rev
-                      ${value?.displayRevision}`,
-            };
           }
           if (last(valueKey) === 'unit' || last(valueKey) === 'quantity') {
             const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
