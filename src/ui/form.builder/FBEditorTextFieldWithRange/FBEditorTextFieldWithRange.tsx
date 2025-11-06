@@ -10,6 +10,8 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
   formState,
   children,
   inputProps,
+  isRangeDisabled,
+  isToleranceDisabled,
   ...props
 }) => {
   const classes = styles();
@@ -41,18 +43,26 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
 
         <Box mb={5}>
           <FBCheckbox
+            label="form.builder.include.units"
+            name="editorConfig.hasUnits"
+            gutter={false}
+            withState
+          />
+          <FBCheckbox
             label="form.builder.range"
             name="editorConfig.hasRange"
-            withState
+            disabled={isRangeDisabled}
             gutter={false}
+            withState
           />
           <FBRange name="editorConfig.range" />
           <FBCheckbox
             label="form.builder.tolerance"
             name="editorConfig.hasTolerance"
             validationAttribute="form.builder.tolerance"
-            withState
+            disabled={isToleranceDisabled}
             gutter={false}
+            withState
           />
           <FBTextField
             name="editorConfig.tolerance"
@@ -82,12 +92,6 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           <FBCheckbox
             label="form.builder.inspection"
             name="editorConfig.isInspected"
-            gutter={false}
-            withState
-          />
-          <FBCheckbox
-            label="form.builder.include.units"
-            name="editorConfig.hasUnits"
             gutter={false}
             withState
           />

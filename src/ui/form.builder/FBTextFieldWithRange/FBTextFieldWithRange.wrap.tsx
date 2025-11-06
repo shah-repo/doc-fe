@@ -4,13 +4,13 @@ import { FB, FBTextFieldWithRangeProps, FBTextFieldWithRangeValue } from '..';
 import { translate } from '../../../common/intl';
 
 const getRules = (from?: number, to?: number): string => {
-  if (from && to) {
+  if (from !== undefined && to !== undefined) {
     return `between:${from},${to}`;
   }
-  if (from && !to) {
+  if (from !== undefined && to === undefined) {
     return `min:${from}`;
   }
-  if (!from && to) {
+  if (from === undefined && to !== undefined) {
     return `max:${to}`;
   }
   return '';
@@ -32,11 +32,8 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       hasRange,
       range,
       hasTolerance,
-      tolerance = 0,
+      tolerance,
     } = editorConfig;
-
-    const from = range?.from ? range.from + tolerance : undefined;
-    const to = range?.to ? range.to - tolerance : undefined;
 
     const { formState } = FB.useStores();
 
@@ -59,7 +56,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
     );
 
-    formState?.setFieldRules(`${name}.value`, getRules(from, to));
+    formState?.setFieldRules(`${name}.value`, getRules(range?.from, range?.to));
     formState?.setValidationAttributeName(`${name}.value`, String(label));
 
     const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
@@ -92,7 +89,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       hasTolerance,
       isPartFaiRequired,
       isPartIqcRequired,
-      range: { from, to },
+      range,
       tolerance,
       onUpdate: updateValue,
     });

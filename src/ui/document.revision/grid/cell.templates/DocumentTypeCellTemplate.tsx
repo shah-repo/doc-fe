@@ -14,8 +14,11 @@ export const DocumentTypeCellTemplate = ({
   className,
   columnIndex,
   cellRowClick,
+  showTooltip,
+  tooltipField = '',
 }: CustomGridCellProps) => {
   const documentType = get(dataItem, field || '');
+  const tooltipContent = get(dataItem, tooltipField || '') ?? removeLastCharacterIfNotAlphaNumeric(documentType);
   if (rowType === 'groupHeader') {
     return null;
   }
@@ -38,7 +41,7 @@ export const DocumentTypeCellTemplate = ({
         alignContent="flex-start"
         justify="flex-start"
       >
-        {documentType && <Tooltip data={removeLastCharacterIfNotAlphaNumeric(documentType)} />}
+        {documentType && <Tooltip data={documentType} {...{ tooltipContent, showTooltip }} /> }
       </Grid>
     </td>
   );
