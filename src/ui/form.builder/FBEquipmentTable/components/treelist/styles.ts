@@ -404,7 +404,7 @@ export default makeStyles((theme) => ({
     },
   },
   root: {
-    margin: theme.spacing(3, 0),
+    margin: theme.spacing(1, 0),
   },
   borderBottom: {
     borderBottom: `1px solid ${OldColors.alice_blue} !important`,
@@ -452,91 +452,6 @@ export default makeStyles((theme) => ({
   },
   errorBg: {
     backgroundColor: `${Colors.errorLightShadow} !important`,
-  },
-  viewIcon: {
-    fill: Colors.textBlack,
-    paddingRight: theme.spacing(1.25),
-    width: 14,
-    height: 14,
-    cursor: 'pointer',
-  },
-  maximizeIconContainer: {
-    marginLeft: theme.spacing(1.25),
-    cursor: 'pointer',
-  },
-  exportExcelIcon: {
-    color: Colors.textBlack,
-    paddingRight: theme.spacing(1.25),
-    width: 14,
-    height: 14,
-    cursor: 'pointer',
-  },
-  loader: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: Colors.white,
-    opacity: 0.7,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 600,
-    zIndex: 1,
-  },
-  node: {
-    outline: 'solid 1px #999',
-    outlineOffset: '3px',
-    '& circle': {
-      fill: '#fff',
-      stroke: 'steelblue',
-      strokeWidth: '3px',
-    },
-  },
-  link: {
-    fill: 'none',
-    stroke: '#777',
-    strokeWidth: '1px',
-  },
-  linkCircle: {
-    fill: '#0075FF',
-    stroke: '#F5F8FF',
-    strokeWidth: '1px',
-  },
-  whereUsedHeadingText: {
-    fontSize: '13px',
-  },
-  whereUsedStatusText: {
-    fontSize: '10px',
-    fill: '#777',
-  },
-  backgroundRect: {
-    fill: '#999',
-  },
-  statusReleased: {
-    fill: Colors.statusReleased,
-  },
-  statusDraft: {
-    fill: Colors.statusDraft,
-  },
-  statusPendingChange: {
-    fill: Colors.statusPendingChange,
-  },
-  disabled: {
-    pointerEvents: 'none',
-  },
-  toolbarContainer: {
-    height: 24,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1.5),
-    top: theme.spacing(1),
-  },
-  customDialogTitle: {
-    minHeight: 20,
-    padding: theme.spacing(0),
   },
   treeList: ({ size }: { size?: Size }) => ({
     width: '100%',

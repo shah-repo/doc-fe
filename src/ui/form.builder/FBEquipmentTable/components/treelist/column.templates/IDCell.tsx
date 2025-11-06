@@ -10,6 +10,7 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
+import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
@@ -148,8 +149,8 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm } = props;
-  const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (!dataItem.actualId && !dataItem?.isActualIdAddition);
+  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm, isEBProcedure } = props;
+  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
   const classes = styles({ hasChildren, isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
   const isLoading = !equipmentOptions.length;

@@ -1,6 +1,6 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { find, flattenDeep, lowerCase, omit } from 'lodash';
-import { ObservableMap, reaction } from 'mobx';
+import { reaction, ObservableMap } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';

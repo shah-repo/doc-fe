@@ -8,14 +8,18 @@ import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useSt
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { checkIsDocumentLot } from '../../../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
+import { DOCUMENT_REVISION_LOT_STATUS } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
@@ -27,7 +31,7 @@ interface LotAutocompleteProps {
   value: LotOptions
   setValue: Dispatch<SetStateAction<LotOptions>>
   dataItem: EditableMaterial
-  parentPartPlannedId?: string
+  parentPartId?: string
   lotRevId?: string
   isLoading?: boolean
 }
@@ -59,7 +63,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLot?.precalc?.lot_on_hand_quantity);
     setFieldValue(IS_LOT_ADDITION, true);
-    setFieldValue('parentPartPlannedId', dataItem.parentPartPlannedId);
+    setFieldValue('parentPartId', dataItem.parentPartId);
+    setFieldValue('selectedLotLabel', option?.label);
     setFieldValue('parentId', dataItem.parentId);
     setFieldValue('id', dataItem.id);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -90,8 +95,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick } = props;
-  const { parentPartPlannedId, lotId } = dataItem;
+  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
@@ -106,22 +111,46 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     && dataItem?.isLotAdditionIconsShown === true
     && !(dataItem?.[MODE_FIELD] || dataItem?.[ADD_FIELD]);
 
-  const lotDocId = dataItem?.lotDocId ?? '';
+  const lotDocId = dataItem?.lotDocId ?? value.label ?? '';
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
+
+  const isValidLOT = (lot) => {
+    const isAcceptedStatus = isLHRProductionBuild
+      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+      : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+
+    const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
+
+    return isAcceptedStatus && !isZeroOnHandQuantity;
+  };
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      setLots(data);
+      if (isEBProcedure) {
+        setLots(data);
+        return;
+      }
+
+      const updatedLots = data?.filter((option) => {
+        const groupOptions = option.document.documentType.groupOptions;
+
+        return (
+          groupOptions?.includes(DOC_TYPE_GROUP_OPTION.TABS_PART_LOT)
+          || (isDocumentRevisionReleased(option.status) && checkIsDocumentLot(groupOptions) && isValidLOT(option))
+        );
+      });
+
+      setLots(updatedLots);
     },
   });
 
   useEffect(() => {
-    if (isEmpty(parentPartPlannedId)) {
+    if (isEmpty(parentPartId)) {
       return;
     }
 
-    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartPlannedId, fetchAvailablePartsAsync, false);
-  }, [parentPartPlannedId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+    fetchAvailablePartsAsync.start(fetchAvailablePartsAction, parentPartId, fetchAvailablePartsAsync, false);
+  }, [parentPartId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
     const value = renderOptions().find((option) => option.value === lotId);
@@ -145,6 +174,10 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const isLoading = fetchAvailablePartsAsync.isLoading;
 
   if (isAddLotVisible) {
+    if (isDisabled) {
+      return <TreeListCellWrapper {...props}><></> </TreeListCellWrapper>;
+    }
+
     return (
       <TreeListCellWrapper {...props}>
         <span className={cx(classes.defaultIcon)}>
@@ -186,7 +219,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{
@@ -195,7 +228,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
                 value,
                 setValue,
                 dataItem,
-                parentPartPlannedId,
+                parentPartId,
                 isLoading: fetchAvailablePartsAsync.isLoading,
               }}
             />
@@ -218,7 +251,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
       </span>
       <DocumentRevisionDialog
         dialog={quickViewDialog}
-        {...{ docRevId: lotId, parentRevId: parentPartPlannedId }}
+        {...{ docRevId: lotId, parentRevId: parentPartId }}
       />
     </TreeListCellWrapper>
   );

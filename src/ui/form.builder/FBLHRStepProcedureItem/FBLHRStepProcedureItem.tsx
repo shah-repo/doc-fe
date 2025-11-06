@@ -32,9 +32,9 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   isPendingChange,
 }) => (
   <FBProvider {...{ dialogState }}>
-    <Box mt={4} borderRadius="3px 3px 4px 4px" boxShadow={`0px 0px 1px 1px ${Colors.gray_goose}`}>
+    <Box mt={4}>
       <FBDialog />
-      <Box
+      {type === FBProcedureItemType.attachments && <Box
         bgcolor={Colors.athens_gray}
         color={Colors.almost_black}
         height="40px"
@@ -53,7 +53,12 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           }}
           locale={FBProcedureItemLocale[type]}
         />
-      </Box>
+      </Box>}
+      {type !== FBProcedureItemType.attachments && (
+        <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+          <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+        </Box>
+      )}
       {!loading && ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (

@@ -64,6 +64,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   const [isHover, setIsHover] = useState(false);
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const { timezone } = useDate();
+  const isAttachmentType = type === FBProcedureItemType.attachments;
   const getDueDate = (date?: string) => {
     if (!date) {
       return;
@@ -75,7 +76,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
-      <Box
+      {isAttachmentType && <Box
         bgcolor={Colors.athens_gray}
         color= {Colors.almost_black}
         fontWeight={600}
@@ -116,8 +117,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </FBTooltip>
           </Box>
         )}
-      </Box>
-      {type === FBProcedureItemType.attachments && (
+      </Box>}
+      {!isAttachmentType && (
+        <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+          <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+        </Box>
+      )}
+      {isAttachmentType && (
         <Box data-cy="mediaUploadField" mt={2}>
           <FBMediaAlbumField
             name={`${name}.attachments`}

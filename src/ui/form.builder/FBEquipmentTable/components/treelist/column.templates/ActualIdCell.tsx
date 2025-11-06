@@ -42,14 +42,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
 
-  useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
-
-    if (value && field) {
-      setValue(value);
-    }
-  }, [equipmentOptions]);
-
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
     field && setFieldValue(field, option?.value);
@@ -94,12 +86,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, equipmentOptions, addActualId, onScanClick, isDisabled, isEnableActualIdAddition } = props;
+  const { hasChildren, dataItem, field, equipmentOptions, addActualId, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
-  const isEditMode = isEditEquipItem(dataItem);
+  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
   const classes = styles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
-  const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const openQuickViewDialog = () => quickViewDialog.open();
@@ -109,7 +100,19 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
 
+  useEffect(() => {
+    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
+
+    if (value && field) {
+      setValue(value);
+    }
+  }, [equipmentOptions]);
+
   if (isAddActualIdVisible) {
+    if (isDisabled) {
+      return <TreeListCellWrapper {...props}><></> </TreeListCellWrapper>;
+    }
+
     return (
       <TreeListCellWrapper {...props}>
         <span className={cx(classes.defaultIcon)}>
@@ -120,18 +123,6 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
                 onClick={() => addActualId?.(dataItem)}
                 icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
-              />
-            </IconButton>
-          </StyleTooltip>
-        </span>
-        <span className={cx(classes.defaultIcon)}>
-          <StyleTooltip title={translate('common.scan')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={addBarCodeRef} data-cy="scan-lot">
-              <FontAwesomeIcon
-                size="sm"
-                className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.(dataItem)}
-                icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
           </StyleTooltip>
@@ -151,7 +142,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{

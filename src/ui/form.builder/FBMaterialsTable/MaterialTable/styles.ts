@@ -58,7 +58,7 @@ export default makeStyles((theme) => ({
       fontSize: 12,
 
       '&.k-grouping-header-flex': {
-        gap: `${theme.spacing(2)}px`,
+        gap: theme.spacing(2),
       },
       '& .k-indicator-container': {
         padding: 0,
@@ -401,10 +401,10 @@ export default makeStyles((theme) => ({
     },
   },
   root: {
-    margin: theme.spacing(3, 0),
+    margin: theme.spacing(1, 0),
   },
   borderBottom: {
-    borderBottom: `1px solid ${Colors.textGray} !important`, // Colors.alice_blue
+    borderBottom: `1px solid ${Colors.textGray} !important`,
     borderLeft: '0 !important',
   },
   toggleExpandCollapse: {
@@ -427,6 +427,9 @@ export default makeStyles((theme) => ({
     outlineOffset: -1,
     '& td': {
       whiteSpace: 'normal !important' as 'normal',
+    },
+    '& td:not(:last-child)': {
+      verticalAlign: 'top !important',
     },
   },
   actionsCell: {
@@ -481,59 +484,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     fontWeight: 600,
     zIndex: 1,
-  },
-  node: {
-    outline: 'solid 1px #999',
-    outlineOffset: '3px',
-    '& circle': {
-      fill: '#fff',
-      stroke: 'steelblue',
-      strokeWidth: '3px',
-    },
-  },
-  link: {
-    fill: 'none',
-    stroke: '#777',
-    strokeWidth: '1px',
-  },
-  linkCircle: {
-    fill: '#0075FF',
-    stroke: '#F5F8FF',
-    strokeWidth: '1px',
-  },
-  whereUsedHeadingText: {
-    fontSize: '13px',
-  },
-  whereUsedStatusText: {
-    fontSize: '10px',
-    fill: '#777',
-  },
-  backgroundRect: {
-    fill: '#999',
-  },
-  statusReleased: {
-    fill: Colors.statusReleased,
-  },
-  statusDraft: {
-    fill: Colors.statusDraft,
-  },
-  statusPendingChange: {
-    fill: Colors.statusPendingChange,
-  },
-  disabled: {
-    pointerEvents: 'none',
-  },
-  toolbarContainer: {
-    height: 24,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1.5),
-    top: theme.spacing(1),
-  },
-  customDialogTitle: {
-    minHeight: 20,
-    padding: theme.spacing(0),
   },
   treeList: {
     width: '100%',

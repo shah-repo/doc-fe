@@ -28,6 +28,7 @@ interface Props {
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
   isSerialNumberHidden?: boolean
+  isLHRScan?: boolean
   reloadGrid?: () => void
   addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
@@ -35,7 +36,7 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -43,6 +44,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   const isEquipmentScan = selectedPart?.type === FBProcedureItemType.equipment;
   const isLotScan = selectedPart?.type === FBProcedureItemType.materials;
   const validateScanLot = useActionCreator(allocationActions.validateScannedLot);
+  const validateEQScan = useActionCreator(allocationActions.validateEQScannedItem);
 
   const keyValues = useCallback(() => {
     const values = [
@@ -62,6 +64,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           key: translate('scan.lot.grid.quantity.needed.message'),
           value: String(selectedPart?.quantityNeeded),
         },
+      );
+    }
+
+    if (!isLHRScan) {
+      values.push(
         {
           key: translate('scan.lot.grid.variance.message'),
           value: selectedPart?.variance ?? '-',
@@ -105,7 +112,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
           onHand: data?.onHand,
           serialNumber: data?.serialNumber,
           quantityAssigned: data?.onHand,
-          unitOfMeasure: data?.lotUsedUnit,
+          unitOfMeasure: isLHRScan ? selectedPart.unit : data?.lotUsedUnit,
         };
       }
 
@@ -187,10 +194,16 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleScan = (data: string) => {
+    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
     const lotRevId = extractRevision(data);
     const isDuplicateScan = scanLots?.some((lot: ScanLot) => lot.lotRevId === lotRevId);
     if (isDuplicateScan) {
       toastError(translate('scan.lot.grid.scan.duplicate.error.message'));
+      return;
+    }
+
+    if (isEquipmentScan) {
+      validateScanLotAsync.start(validateEQScan, extractRevision(data), validateScanLotAsync);
       return;
     }
 
@@ -239,7 +252,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
         </List>
         <Box className={classes.infoContainer}>
           <FontAwesomeIcon className={classes.infoIcon} icon={light('circle-exclamation')} />
-          <Box component="span" ml={1.5}>
+          <Box component="span" className={classes.infoMessage}>
             {translate(isEquipmentScan ? 'scan.lot.grid.scan.eq.info.message' : 'scan.lot.grid.scan.lot.info.message')}
           </Box>
         </Box>

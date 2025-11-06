@@ -1,6 +1,7 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListCellProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { Attachment } from '../../../change.request/form/types';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../FBApprovalMatrixRoles/constants';
 import FBMPIProcedureSelectState from '../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
@@ -12,10 +13,8 @@ type MaterialCallback = (dataItem: EditableMaterial) => void;
 
 export interface Material {
   id: string
-  plannedId?: string
   title?: string
   type?: string
-  actualId?: string
   lotId?: string
   lotDocId?: string
   lotNumber?: { [key: string]: string }
@@ -49,16 +48,20 @@ export interface MaterialTableProps {
   lhrStepIndex?: number
   isMPIProcedure?: boolean
   isPreview?: boolean
+  isEBProcedure?: boolean
+  attachments?: Attachment
 }
 
 export interface EditableMaterial extends Material {
+  attachments?: never[]
   [MODE_FIELD]: boolean
   [ADD_FIELD]: boolean
   isNewAddition?: boolean
-  parentPartPlannedId?: string
+  parentPartId?: string
   parentId?: string
   isLotAdditionIconsShown?: boolean
   serialNumber?: string
+  selectedLotLabel?: string
 }
 
 export interface LotOptions {
@@ -85,6 +88,7 @@ export interface SchemaOptions {
   onPrimaryChange?: (id: string) => void
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
   isLHRT?: boolean
+  isLHRProductionBuild?: boolean
 }
 
 export interface UnitOption {
@@ -129,6 +133,8 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onClick?: (e: MaterialEditEvent) => void
   onScanClick?: MaterialCallback
   isLHRT?: boolean
+  isLHRProductionBuild?: boolean
+  isEBProcedure?: boolean
 }
 
 export type MaterialOption =

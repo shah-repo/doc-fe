@@ -13,7 +13,7 @@ import { FBEquipmentProps } from './interface';
 export const withFBEquipmentTable = <T extends FBEquipmentProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
-  const Comp = ({ name, type, isDisabled, mpiProcedureSelectState, equipsSelected, ...props }: T) => {
+  const Comp = ({ name, type, isDisabled, mpiProcedureSelectState, equipsSelected, isEBProcedure, ...props }: T) => {
     const { mpiProcedureState, workspaceState } = FB.useStores();
     const { id, document } = workspaceState || {};
     const dispatch = useDispatch();
@@ -23,6 +23,10 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
     const [scannedEquipments, setScannedEquipments] = useState<EditableEquipmentItem[]>([]);
 
     useEffect(() => {
+      if (isEBProcedure) {
+        return;
+      }
+
       const disposer = reaction(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
@@ -92,6 +96,7 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
       ...(props as T),
       name,
       type,
+      isEBProcedure,
       isDisabled: isDisabled ?? workspaceState?.isPreview,
       equipsSelected,
       saveActualEquipment,

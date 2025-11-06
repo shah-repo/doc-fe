@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from '..';
 import Colors from '../../layout/theme/utils/colors';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
+import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
 import FBProcedureItemDetails from './FBProcedureItemDetails';
 
@@ -26,16 +28,21 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   locked,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const isMaterialOrEquipmentType = [FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
+  const isAttachmentType = type === FBProcedureItemType.attachments;
+
   return (
     <FBProvider {...{ dialogState }}>
       <Box
-        borderTop={1}
-        borderRight={1}
-        borderLeft={1}
-        style={{ borderTopLeftRadius: '4px', borderTopRightRadius: '4px' }}
+        {...(isAttachmentType && {
+          borderTop: 1,
+          borderRight: 1,
+          borderLeft: 1,
+          style: { borderTopLeftRadius: '4px', borderTopRightRadius: '4px' },
+        })}
       >
         <FBDialog />
-        <Box
+        {isAttachmentType && <Box
           bgcolor={Colors.athens_gray}
           fontWeight="fontWeightBold"
           display="flex"
@@ -52,7 +59,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             }}
             locale={FBProcedureItemLocale[type]}
           />
-          {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
+          {!isPreview && !FBProcedureItemOmitAction.includes(type) && !isMaterialOrEquipmentType && (
             <Box pt={1.8} pr={2}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}>
@@ -72,8 +79,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               </FBTooltip>
             </Box>
           )}
-        </Box>
-        {type === FBProcedureItemType.attachments && (
+        </Box>}
+        {!isAttachmentType && (
+          <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+            <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+          </Box>
+        )}
+        {isAttachmentType && (
           <Box data-cy="media-upload-field" mt={2} borderBottom={1}>
             <FBMediaAlbumField
               name={`${name}.attachments`}
@@ -85,8 +97,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             />
           </Box>
         )}
-        {type !== FBProcedureItemType.attachments && !loading && (
-          <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {!isAttachmentType && !loading && (<>
+          { !isMaterialOrEquipmentType && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
                 border={1}
@@ -146,7 +158,10 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 </Box>
               </Box>
             )}
-          </FBMapWrapper>
+          </FBMapWrapper>}
+          {type === FBProcedureItemType.materials && <MaterialsTable isDisabled={disabled} isActive={!isPreview} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure />}
+          {type === FBProcedureItemType.equipment && <FBEquipmentTable isDisabled={Boolean(disabled)} type={type} items={value} getItem={getItem} handleRemove={handleRemove} isEBProcedure isEnableActualIdAddition />}
+        </>
         )}
       </Box>
     </FBProvider>

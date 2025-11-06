@@ -11,7 +11,8 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, concat, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { SM } from '../../../../App';
@@ -22,6 +23,7 @@ import { ScanSelectedPartItem } from '../../../components/common/dialogs/scaner/
 import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { Button } from '../../../components/forms/fields-next';
 import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../components/notifications';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
@@ -30,12 +32,15 @@ import { prepareData } from './components/utils';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
+  EB_FIELDS_TO_OMIT,
   EXPAND_FIELD,
   FIELDS_TO_OMIT,
   IS_LOT_ADDITION,
+  LHRS_START_QUANTITY_NAME,
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
+import { buildEBSchema } from './ebSchema';
 import { buildLHRTSchema } from './lhrtSchema';
 import { buildMPISchema } from './mpiSchema';
 import { buildSchema } from './schema';
@@ -51,6 +56,12 @@ import {
 } from './types';
 import { useOptions } from './useOptions';
 import { withMaterialsTable } from './wrap';
+
+interface MaterialTreelistContextProps {
+  lhrsQuantity?: number
+}
+
+export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({ lhrsQuantity: 1 });
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
   items,
@@ -71,6 +82,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   partsSelected,
   isMPIProcedure,
   isPreview,
+  isEBProcedure,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -80,8 +92,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { materialSelectOptions } = useOptions();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
+  const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
   const [state, setState] = React.useState<MaterialItemState>({
-    data: prepareData(cloneDeep(items), isDesign),
+    data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
     expanded: [],
     dataState: {
       sort: [],
@@ -91,10 +104,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   });
 
   React.useEffect(() => {
-    if (isMPIProcedure || isLHRStep) {
+    if (isMPIProcedure || isLHRStep || isEBProcedure) {
       setState((prevState) => ({
         ...prevState,
-        data: prepareData(cloneDeep(items), isDesign),
+        data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
         inEdit: [],
       }));
     }
@@ -170,9 +183,17 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     const updatedProcedureItem = {
       ...procedureItem,
-      plannedId: procedureItem.title,
+      title: procedureItem.title,
     };
     appendItemToStateData(updatedProcedureItem);
+  };
+
+  const hasDuplicateLot = (state, values) => {
+    const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
+    if (parentIndex === -1) return false;
+
+    const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+    return subItems?.some((item) => item.lotId === values.lotId && item.id !== values.id);
   };
 
   const formik = useFormik<Partial<EditableMaterial>>({
@@ -180,6 +201,11 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onSubmit: (values) => {
       if (isEnableOnlyLotAddition) {
         if (values[ADD_FIELD]) {
+          if (hasDuplicateLot(state, values)) {
+            toastError(translate('form.builder.lhrs.procedure.select.lot.duplicate.error.message', { lotId: values.selectedLotLabel }));
+            return;
+          }
+
           saveLot?.(values as EditableMaterial);
         } else {
           editLot?.(values as EditableMaterial);
@@ -187,8 +213,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         discardScanLot(values as EditableMaterial);
         return;
       }
-      const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
-      if (values[IS_LOT_ADDITION] || values.parentPartPlannedId) {
+
+      if (values[IS_LOT_ADDITION] || values.parentPartId) {
         const scanLot = omit(values, LOT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
@@ -213,16 +239,31 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             state.data[parentIndex][SUB_ITEMS_FIELD] = [scanLot];
           }
         }
-        procedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
-        mpiProcedureState?.addItem(state.data[parentIndex] as FBProcedureItemConfig, type, allSteps);
+
+        let payload = state.data[parentIndex];
+        if (isEBProcedure) {
+          if (hasDuplicateLot(state, values)) {
+            toastError(translate('form.builder.lhrs.procedure.select.lot.duplicate.error.message', { lotId: values.selectedLotLabel }));
+            return;
+          }
+
+          payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        }
+
+        const allSteps = workspaceState?.schema?.filter((step) => step.type === 'mpiprocedure');
+        procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+        mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
+
         discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
-          const procedureItem = { ...omit(values, [...LOT_FIELDS_TO_OMIT, 'actualId']) };
+          const procedureItem = { ...omit(values, LOT_FIELDS_TO_OMIT) };
           saveProcedureItem(procedureItem as FBProcedureItemConfig);
           return;
         }
-        const scanLot = omit(values, [...FIELDS_TO_OMIT, 'actualId']);
+
+        const omitFields = isEBProcedure ? EB_FIELDS_TO_OMIT : FIELDS_TO_OMIT;
+        const scanLot = omit(values, omitFields);
         if (scanLot[SUB_ITEMS_FIELD]) {
           scanLot[SUB_ITEMS_FIELD] = scanLot[SUB_ITEMS_FIELD]?.map(
             (item) => omit(item, LOT_FIELDS_TO_OMIT) as unknown as FBProcedureItemConfig,
@@ -243,9 +284,28 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const updatedLots = scanLots.map((lot) => {
       return {
         ...lot,
-        parentPartPlannedId: scanSelectedPartInfo.current?.plannedId,
+        parentPartId: scanSelectedPartInfo.current?.title,
       };
     });
+
+    if (isEBProcedure) {
+      const newSubItems = scanLots.map((lot) => ({
+        ...lot,
+        id: FB.uniqid,
+      }));
+
+      const parentItem = state.data[parentIndex];
+      const updatedSubItems = concat(newSubItems, parentItem[SUB_ITEMS_FIELD] ?? []).map((item) =>
+        omit(item, EB_FIELDS_TO_OMIT),
+      );
+      state.data[parentIndex][SUB_ITEMS_FIELD] = updatedSubItems;
+      const payload = omit(parentItem, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+
+      const allSteps = workspaceState?.schema?.filter((step) => step.type === 'mpiprocedure');
+      procedureState?.addItem(payload, type, allSteps);
+      mpiProcedureState?.addItem(payload, type, allSteps);
+      return;
+    }
 
     saveScannedLots?.(updatedLots);
   };
@@ -257,21 +317,19 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       if (dataItem?.[ADD_FIELD]) {
         if (dataItem.isLotAddition) {
           const parentIndex = newData.findIndex((data) => {
-            return data.plannedId === dataItem.parentPartPlannedId;
+            return data.title === dataItem.parentPartId;
           });
 
           if (parentIndex !== -1) {
             newData[parentIndex][SUB_ITEMS_FIELD] = newData[parentIndex][SUB_ITEMS_FIELD]?.filter(
-              (data) => !data[ADD_FIELD],
+              (data) => (dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]),
             );
           }
         } else {
-          const filtered = newData.filter((data) =>
-            dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD],
-          );
+          const filteredItems = newData.filter((data) => (dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]));
           return {
             ...prevState,
-            data: filtered,
+            data: filteredItems,
             inEdit: [],
           };
         }
@@ -287,7 +345,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const deleteItemFromStateData = (scanLot) => {
-    if (isEnableOnlyLotAddition) {
+    if (isEnableOnlyLotAddition || scanLot?.parentId) {
       const parentIndex = state.data?.findIndex((data) => data.id === scanLot.parentId);
       if (parentIndex === -1) {
         return;
@@ -309,6 +367,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const removeScanLot = (material: EditableMaterial) => {
     if (isEnableOnlyLotAddition) {
       handleSelectionDelete?.(material.id);
+    } else if (isEBProcedure && material.parentId) {
+       procedureState?.removeEBChildrenItem(material.parentId ?? '', material.id, type, SUB_ITEMS_FIELD);
     } else {
       handleRemove?.(material.id);
     }
@@ -348,11 +408,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       className: cx(row.props.className, classes.updatingRow),
     });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const handleDataStateChange = (event: TreeListDataStateChangeEvent) => {
@@ -404,8 +460,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const createPartItem = (): EditableMaterial => {
     return {
       id: FB.uniqid,
-      plannedId: '',
-      actualId: '',
+      title: '',
       ...(isMPIProcedure && !isLHRStep && { title: '' }),
       unit: '',
       quantity: undefined,
@@ -430,9 +485,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
-    const defaultValidation = ((isEnableOnlyLotAddition && dataItem.plannedId) && (!isActive || isDisabled)) || (!isEnableOnlyLotAddition && isPreview);
-    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
-    if (isEditRestricted) {
+    const defaultValidation
+      = (isEnableOnlyLotAddition && dataItem.title && (!isActive || isDisabled))
+      || (!isEnableOnlyLotAddition && isPreview);
+    const isEditRestricted
+      = dataItem[MODE_FIELD]
+      || (isLHRStep && isDesign
+        ? !((isActive || isPendingChange) && (dataItem.type || dataItem.paramsId))
+        : defaultValidation);
+
+    if ((isEditRestricted && !isEBProcedure) || (isEBProcedure && isDisabled)) {
       return;
     }
 
@@ -447,7 +509,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
 
     if (isMPIProcedure || isLHRStep) {
-      const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+      const index = state?.data?.findIndex((data) => {
+        return data.id === dataItem.id;
+      });
       if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
         state.data[index] = editItemInfo;
       }
@@ -464,8 +528,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const createNewLotItem = () => {
     return {
       id: FB.uniqid,
-      plannedId: '',
-      actualId: '',
+      title: '',
       unit: '',
       quantity: undefined,
       isLotAddition: true,
@@ -500,11 +563,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
       const lotItem = {
         id: selected.refId,
-        plannedId: '',
-        actualId: selected.actualId,
+        title: '',
         lotId: selected.lotId,
         lotDocId: selected.lotDocId,
-        parentPartPlannedId: selected.materialId,
+        parentPartId: selected.materialId,
         parentId: index !== -1 ? state.data[index].id : '',
         unit: selected.unit,
         quantity: selected.quantity,
@@ -514,33 +576,21 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       return acc;
     }, {});
 
-     Object.keys(mapByMaterialId)?.map(materialId => {
-       const index = items?.findIndex((item) => {
-         return item.title === materialId;
-       });
+    Object.keys(mapByMaterialId)?.map((materialId) => {
+      const index = items?.findIndex((item) => {
+        return item.title === materialId;
+      });
 
-       if (index !== -1) {
-         const subItems = state.data[index][SUB_ITEMS_FIELD];
+      if (index !== -1) {
+        state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
 
-         if (subItems) {
-         subItems?.forEach((item) => {
-           const matchedItem = mapByMaterialId[materialId]?.find((entry) => entry.id === item.id);
-           if (matchedItem) {
-             item.quantity = matchedItem.quantity;
-             item.unit = matchedItem.unit;
-           }
-         });
-         } else {
-           state.data[index][SUB_ITEMS_FIELD] = mapByMaterialId[materialId];
-         }
-
-         updateState({
-           ...state,
-           data: [...state.data],
-           expanded: [state.data[index].id],
-         });
-       }
-     });
+        updateState({
+          ...state,
+          data: [...state.data],
+          expanded: [state.data[index].id],
+        });
+      }
+    });
   }, [partsSelected]);
 
   const addLot = (dataItem: EditableMaterial) => {
@@ -551,7 +601,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     if (state.data.length && index !== -1) {
       const newAllocItem: EditableMaterial = createNewLotItem();
-      newAllocItem.parentPartPlannedId = dataItem.plannedId;
+      newAllocItem.parentPartId = dataItem.title;
       newAllocItem.parentId = dataItem.id;
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
@@ -574,18 +624,19 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const scanSelectedPartInfo = useRef<ScanSelectedPartItem>();
 
   const openScanDialog = (dataItem: EditableMaterial) => {
-    const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.plannedId);
+    const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.title);
     const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
 
     scanSelectedPartInfo.current = {
       docId: match[1] ?? '',
       partDescription: match[3],
+      unit: dataItem.unit,
       quantityNeeded: dataItem.quantity,
       displayRevision: match[2],
       variance: '',
       partRevId: plannedIdInfo?.value,
       id: dataItem.id,
-      plannedId: dataItem?.plannedId,
+      title: dataItem?.title,
       type: FBProcedureItemType.materials,
     };
     scanDialog.open();
@@ -594,8 +645,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const getSchemaBuilder = () => {
     if (isMPIProcedure && !isLHRStep) return buildMPISchema;
     if (isLHRStep) return buildLHRTSchema;
+    if (isEBProcedure) return buildEBSchema;
     return buildSchema;
   };
+
+  const { formState } = FB.useStores();
+  const [lhrsQuantity, setLhrsQuantity] = useState(1);
 
   const schema = getSchemaBuilder()({
     materialSelectOptions,
@@ -604,59 +659,86 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: isDesign || !isEnableOnlyLotAddition,
+    isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
     isLHRT: isLHRStep && isMPIProcedure,
     onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
+    isLHRProductionBuild,
     onScanClick: openScanDialog,
   });
+
+  React.useEffect(() => {
+    const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
+    if (!isNil(formValue)) {
+      setLhrsQuantity(formValue);
+    }
+
+    const dispose = reaction(
+      () => formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
+      () => {
+        const newValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
+        if (!isNil(newValue)) {
+          setLhrsQuantity(newValue);
+        }
+      },
+    );
+
+    return () => dispose();
+  }, [formState]);
 
   const [columns] = React.useState<CustomTreeListColumnProps[]>(schema);
 
   return (
     <Box className={classes.root} data-cy="material-grid">
-      <FormikProvider value={formik}>
-        <Grid item xs={12} ref={treeListRef}>
-          <TreeList
-            style={{
-              overflow: 'auto',
-              maxHeight: size?.height ? `${size?.height}px` : '100px',
-            }}
-            tableProps={{ style: { tableLayout: 'fixed' } }}
-            {...state.dataState}
-            className={cx(classes.treeList, 'containing-box-scrollbar')}
-            data={processData()}
-            dataItemKey={DATA_ITEM_KEY}
-            subItemsField={SUB_ITEMS_FIELD}
-            expandField={EXPAND_FIELD}
-            editField={MODE_FIELD}
-            rowHeight={50}
-            onExpandChange={handleExpandChange}
-            onDataStateChange={handleDataStateChange}
-            onRowClick={editPartItem}
-            rowRender={rowRender}
-            cellRender={cellRender}
-            columns={columns}
-          />
-          {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
-            <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
-              {translate('form.builder.procedure.material.table.add.part')}
-            </Button>
-          )}
-          <DocumentRevisionDialog
-            dialog={quickViewDialog}
-            {...{
-              docRevId: selectedDataItem?.lotNumber?.id,
-            }}
-          />
-        </Grid>
-      </FormikProvider>
+      <MaterialTreelistContext.Provider
+        value={{
+          lhrsQuantity,
+        }}
+      >
+        <FormikProvider value={formik}>
+          <Grid item xs={12} ref={treeListRef}>
+            <TreeList
+              style={{
+                overflow: 'auto',
+                maxHeight: size?.height ? `${size?.height}px` : '100px',
+              }}
+              tableProps={{ style: { tableLayout: 'fixed' } }}
+              {...state.dataState}
+              className={cx(classes.treeList, 'containing-box-scrollbar')}
+              data={processData()}
+              dataItemKey={DATA_ITEM_KEY}
+              subItemsField={SUB_ITEMS_FIELD}
+              expandField={EXPAND_FIELD}
+              editField={MODE_FIELD}
+              rowHeight={50}
+              onExpandChange={handleExpandChange}
+              onDataStateChange={handleDataStateChange}
+              onRowClick={editPartItem}
+              rowRender={rowRender}
+              cellRender={cellRender}
+              columns={columns}
+            />
+            {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
+              <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
+                {translate('form.builder.procedure.material.table.add.part')}
+              </Button>
+            )}
+            <DocumentRevisionDialog
+              dialog={quickViewDialog}
+              {...{
+                docRevId: selectedDataItem?.lotNumber?.id,
+              }}
+            />
+          </Grid>
+        </FormikProvider>
+      </MaterialTreelistContext.Provider>
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}
+          isLHRScan
           onClose={scanDialog.close}
           addScanLotsToPart={addScanLotsToPart}
-          selectedPart ={scanSelectedPartInfo.current as ScanSelectedPartItem}
+          selectedPart={scanSelectedPartInfo.current as ScanSelectedPartItem}
         />
       )}
     </Box>
