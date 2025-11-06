@@ -9,5 +9,4 @@ export const LOT_FIELDS_TO_OMIT = [...FIELDS_TO_OMIT, 'quantityOnHand', 'isLotAd
 export const EB_FIELDS_TO_OMIT = [...FIELDS_TO_OMIT, 'quantityOnHand', 'isLotAdditionIconsShown', 'selectedLotLabel'];
 export const MAX_DECIMALS = 4;
 export const CELL_EMPTY_VALUE = '-';
-export const MIN_SEARCH_TERM_LENGTH = 3;
 export const LHRS_START_QUANTITY_NAME = 'lhrs-start-quantity';
