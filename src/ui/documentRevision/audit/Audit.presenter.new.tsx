@@ -369,7 +369,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // adding more equipment or material to the list
         if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
           if (last(valueKey) === 'title') {
-            const value = documentRevisions.find((e) => e.id === change.nextValue);
             fbLabel = intl.formatMessage({ id: 'form.builder.audit.field.step' },
               {
                 fieldType,
