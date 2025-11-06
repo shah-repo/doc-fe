@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
 import { concat, filter, find, flatten, includes, isEmpty, sortBy, uniqBy } from 'lodash';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -89,7 +90,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const currentUser = useSelector(authSelectors.currentUser);
-  const { getFormattedDateString, getCurrentDate } = useDate();
+  const { timezone } = useDate();
 
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
@@ -440,9 +441,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       ...values,
       formInput: {
         ...values.formInput,
-        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: getFormattedDateString(values.formInput?.effectiveDate) } : {}),
+        ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate: values.formInput?.effectiveDate } : {}),
       },
     };
+
     if (selectedInvalid) {
       asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(updatedValues)), asyncAR);
       return;
@@ -481,7 +483,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         finalizeAction,
         id,
         {
-          effectiveDate: getCurrentDate(),
+          effectiveDate: moment().tz(timezone).toISOString(),
         },
         async,
       );

@@ -24,7 +24,9 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   ...props
 }) => {
   const classes = FBTextFieldStyles();
-  const { timezone, getCurrentDate } = useDate();
+  const { getCurrentDate, formatDisplayDate, timezone } = useDate();
+  const currentDate = getCurrentDate(MomentFormats.YearMonthDateDash);
+  const selectedDate = formatDisplayDate(datePickerState?.date);
 
   return (
     <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
@@ -44,45 +46,39 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             autoOk={true}
             disablePast={disablePastDates}
             label=""
-            value={datePickerState?.date || null}
-            initialFocusedDate={getCurrentDate()}
+            value={datePickerState?.date ? moment.tz(datePickerState.date, timezone) : currentDate}
+            initialFocusedDate={currentDate}
             onChange={(date, value) => onChange?.(date, value)}
-            TextFieldComponent={(props) => {
-              const displayValue = datePickerState?.date
-                ? moment.tz(datePickerState.date, timezone).format(MomentFormats.MonthDateYearTwoDigit)
-                : '';
-
-              return (
-                <TextField
-                  {...props}
-                  disabled={props.disabled}
-                  className={classes.textfield}
-                  inputProps={{ disabled: true }}
-                  value={displayValue}
-                  InputProps={{
-                    ...props.InputProps,
-                    endAdornment: (
-                      <>
-                        <InputAdornment position="end">
-                          {datePickerState?.date && (
-                            <IconButton
-                              onClick={onDatePickerClear}
-                              size="small"
-                              disabled={props.disabled}
-                              data-cy="date-clear"
-                              aria-label="clear date"
-                            >
-                              <FontAwesomeIcon icon={regular('xmark')} />
-                            </IconButton>
-                          )}
-                          {props?.InputProps?.endAdornment}
-                        </InputAdornment>
-                      </>
-                    ),
-                  }}
-                />
-              );
-            }}
+            TextFieldComponent={(props) => (
+              <TextField
+                {...props}
+                disabled={props.disabled}
+                className={classes.textfield}
+                inputProps={{ disabled: true }}
+                value={selectedDate}
+                InputProps={{
+                  ...props.InputProps,
+                  endAdornment: (
+                    <>
+                      <InputAdornment position="end">
+                        {datePickerState?.date && (
+                          <IconButton
+                            onClick={onDatePickerClear}
+                            size="small"
+                            disabled={props.disabled}
+                            data-cy="date-clear"
+                            aria-label="clear date"
+                          >
+                            <FontAwesomeIcon icon={regular('xmark')} />
+                          </IconButton>
+                        )}
+                        {props?.InputProps?.endAdornment}
+                      </InputAdornment>
+                    </>
+                  ),
+                }}
+              />
+            )}
             keyboardIcon={<DatePickerIcon />}
           />
         )}
