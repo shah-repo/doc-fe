@@ -38,7 +38,7 @@ export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
       id: 'displayLabel',
       field: 'displayLabel',
       title: 'administration.general.settings.suppliers.customer.label',
-      template: (props) => <TextCellTemplate {...props} required={true} />,
+      template: (props) => <TextCellTemplate {...props} required />,
     },
     {
       id: 'actions',
