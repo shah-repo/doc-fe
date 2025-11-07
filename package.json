@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "Document Management - Frontend Application",
-  "version": "25.8",
+  "version": "25.9",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",
@@ -73,6 +73,7 @@
     "query-string": "6.9.0",
     "react": "16.12.0",
     "react-archer": "^4.3.0",
+    "react-barcode-reader": "^0.0.2",
     "react-datepicker": "2.10.1",
     "react-dom": "16.12.0",
     "react-draft-wysiwyg": "1.14.4",

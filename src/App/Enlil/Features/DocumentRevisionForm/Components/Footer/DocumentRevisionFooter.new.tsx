@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { DocumentRevisionFooterProps, SMText } from '../../../../..';
-import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { styles } from './DocumentRevisionFooter.new.styles';
 import { withDocumentRevisionFooterWrap } from './DocumentRevisionFooter.wrap';
 
@@ -10,6 +10,8 @@ const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterP
   _documentRevisionFooterState,
 }) => {
   const classes = styles();
+  const { getFormattedDateString } = useDate();
+
   return (
     <Observer>
       {() => (

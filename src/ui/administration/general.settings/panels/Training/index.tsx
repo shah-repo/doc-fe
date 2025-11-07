@@ -4,11 +4,8 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { isProd } from '../../../../../common/utils/env.utils';
-import { authSelectors } from '../../../../../state/ducks/auth';
-import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { Checkbox, FormField, TextField } from '../../../../components/forms/fields-next';
 import CheckboxField from '../../../../components/forms/fields/Checkbox';
@@ -31,41 +28,62 @@ const erroMessage = (customDays: number) => {
   }
 };
 
-const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
-  const classes = useStyle();
+const Training: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
-  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
-  const isCompanyAdmin = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
+  const classes = useStyle();
+
   const checkboxProps: MuiCheckboxProps = {
     color: 'primary',
     className: classes.marginRight,
   };
-  const daysValue = getFieldProps('trainingReminders.customDaysDueOn.days').value;
+  const daysValue = getFieldProps<number>('trainingReminders.customDaysDueOn.days').value;
   const disabledCheckboxProps = { ...checkboxProps, disabled: true };
   const showError = isEmpty(String(daysValue)) || daysValue === 0 || String(daysValue).includes('-');
 
   return (
-    <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
-      {!isProd() && <SettingsPanelSection>
+    <SettingsPanel
+      {...props}
+      title={translate('administration.general.settings.training')}
+    >
+      <SettingsPanelSection>
         <SwitchControl
-          {...getFieldProps('trainingReminders.isEmailSendingEnabled')}
-          checked={values.trainingReminders.isEmailSendingEnabled}
+          {...getFieldProps('isTrainingForApprovedRevisionsEnabled')}
+          checked={values.isTrainingForApprovedRevisionsEnabled}
           label={
             <>
               <div className={classes.title}>
-                {translate('administration.general.settings.training.reminders.email.sending.title')}
+                {translate('administration.general.settings.training.training.approved.revisions')}
               </div>
               <div className={classes.description}>
-                {translate('administration.general.settings.training.reminders.info')}
+                {translate('administration.general.settings.training.training.approved.revisions.info')}
               </div>
             </>
           }
         />
-      </SettingsPanelSection>}
+      </SettingsPanelSection>
+      {!isProd() && (
+        <SettingsPanelSection>
+          <SwitchControl
+            {...getFieldProps('trainingReminders.isEmailSendingEnabled')}
+            checked={values.trainingReminders.isEmailSendingEnabled}
+            label={
+              <>
+                <div className={classes.title}>
+                  {translate('administration.general.settings.training.reminders.email.sending.title')}
+                </div>
+                <div className={classes.description}>
+                  {translate('administration.general.settings.training.reminders.info')}
+                </div>
+              </>
+            }
+          />
+        </SettingsPanelSection>
+      )}
       <Text message="administration.general.settings.training.reminders.sub.title" />
       <Grid
         container
-        className={cx(classes.gridContainer, classes.marginBottom, { [classes.disabledGrid]: !isCompanyAdmin })}
+        className={cx(classes.gridContainer, classes.marginBottom)}
       >
         <Grid item className={classes.gridItem}>
           <CheckboxField
@@ -116,7 +134,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
       <Text message="administration.general.settings.training.reminders.cc.training.notifications" />
       <Grid
         container
-        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}
+        className={classes.gridContainer}
       >
         <Grid item className={classes.gridItem}>
           <CheckboxField
@@ -163,4 +181,4 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
   );
 };
 
-export default TrainingReminders;
+export default Training;

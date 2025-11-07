@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FB } from '..';
 import { SM } from '../../../App';
-import { convertDateTimeToPST, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import FBDatePickerState from './FBDatePicker.state';
@@ -32,6 +32,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const disablePastDates = editorProperties?.includes('disablePastDates') || false;
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
+    const { convertDateTimeToUserTz } = useDate();
 
     const save = debounce((date?: string) => {
       if (!date) { return; }
@@ -67,7 +68,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
         && (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
 
       if (isUnderDefault) {
-        const nowDate = convertDateTimeToPST(
+        const nowDate = convertDateTimeToUserTz(
           moment().format(MomentFormats.MonthDateYearTwoDigit),
           MomentFormats.MonthDateYearTwoDigit,
         );
@@ -98,8 +99,9 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
-      datePickerState?.setValue(value);
-      save(convertDateTimeToPST(value ?? '', MomentFormats.MonthDateYearTwoDigit));
+      const date = convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit);
+      datePickerState?.setValue(date);
+      save(date);
     };
 
     onDatePickerClear = () => {

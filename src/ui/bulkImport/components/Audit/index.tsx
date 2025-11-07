@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../common/utils/date';
 import apiClient from '../../../../state/apiClient';
 import { bkStatusTextMap, BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
@@ -56,6 +56,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [overallLimit, setOverallLimit] = React.useState(0);
   const [dataTotal, setDataTotal] = React.useState(0);
+  const { getFormattedDateString } = useDate();
 
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 

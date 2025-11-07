@@ -3,8 +3,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { ActionCreator } from 'redux';
 import {
-  getFormattedDateString,
   MomentFormats,
+  useDate,
 } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import {
@@ -70,6 +70,7 @@ const LineItemsPresenter: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const { getFormattedDateString, formatDisplayDate } = useDate();
 
   const PendingActions = () => (
     <List dense onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
@@ -88,7 +89,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime,
                   )}
-                  dueOn={getFormattedDateString(
+                  dueOn={formatDisplayDate(
                     pendingAction.dueOn,
                     MomentFormats.ShortBriefDate,
                   )}

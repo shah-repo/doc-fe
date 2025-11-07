@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -40,6 +40,7 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const { initialQuantity, onHandQuantityUnit, predictOnHandQuantity } = useOnHandQuantity();
   const isActive = !disabled;
   const isInEditMode = editedLotTransfer !== undefined;
+  const { getFormattedDateString } = useDate();
 
   const formik = useFormik<DraftLotTransfer>({
     initialValues: {},

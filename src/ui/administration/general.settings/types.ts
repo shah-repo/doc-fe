@@ -19,7 +19,8 @@ export enum GeneralSettingsTabs {
   Locations = 'Locations',
   MaterialFlow = 'Material Flow',
   SystemTransactions = 'System Transactions Setup',
-  TrainingReminders = 'Training Reminders',
+  Training = 'Training',
+  Timezone = 'Timezone',
 }
 
 export interface GeneralSettingsProps {
