@@ -1,6 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
@@ -83,11 +83,13 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
-        renderOption={(option, props) => (
-          <ListItem {...props} className="lot-list-item" disableGutters>
-            <ListItemText primary={option.label} />
-          </ListItem>
-        )}
+        ListboxComponent={({ children, ...otherProps }) => {
+          return (
+            <>
+              <ul {...otherProps}>{children}</ul>
+            </>
+          );
+        }}
         loading={isLoading}
         onChange={handleChange}
       />
