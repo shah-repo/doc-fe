@@ -387,16 +387,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         // editing material or equipment
         if (change.type === 'STRING_EDITED' || change.type === 'NUMBER_EDITED') {
-          let nextMaterial;
           let previousMaterial;
 
           if (last(valueKey) === 'title') {
-            nextMaterial = documentRevisions.find((e) => e.id === change.nextValue);
             previousMaterial = documentRevisions.find((e) => e.id === change.previousValue);
-            change = {
-              ...change,
-              nextValue: `${nextMaterial?.document.docId} - ${nextMaterial?.name} - rev ${nextMaterial?.displayRevision}`,
-            };
             fbLabel = intl.formatMessage({ id: 'form.builder.audit.value' },
               {
                 field: fieldType,
