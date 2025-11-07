@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { MaterialTreelistContext } from '..';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -106,6 +107,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
+  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
 
   const isAddLotVisible = !dataItem?.isLotAddition && !dataItem?.lotId
     && dataItem?.isLotAdditionIconsShown === true
@@ -198,7 +200,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.(dataItem)}
+                onClick={() => onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity })}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
