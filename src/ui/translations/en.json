@@ -2519,6 +2519,7 @@
   "administration.bulk.migration.comparison.grid.cell.notMapped": "NOT MAPPED",
   "administration.bulk.migration.comparison.grid.heading.originalFormInput": "Original Form Input",
   "administration.bulk.migration.comparison.grid.heading.newFormInput": "New Form Input",
+  "administration.bulk.migration.context.error": "useMigrationContext must be used within a MigrationProvider",
   "administration.general.settings.revision.stages.number": "Number of revision stages",
   "administration.general.settings.revision.start.number": "Numeric revision start number",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
