@@ -398,13 +398,12 @@ export const useBulkMigration = () => {
         setTotalCount(totalCount);
 
         const pageRevIds = items.map(item => item[DATA_ITEM_KEY]);
-        if(pageRevIds.length) {
+        if (pageRevIds.length) {
           const pageSelectedItems = selectedItems.filter(item => pageRevIds.includes(item.docRevId));
           setSelected(pageSelectedItems);
         }
       })
       .catch((exception) => {
-        console.log('err', exception);
         catchAxiosException(exception);
       });
   }
