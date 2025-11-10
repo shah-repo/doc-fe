@@ -29,6 +29,7 @@ interface Props {
   selectedPart: ScanSelectedPartItem
   isSerialNumberHidden?: boolean
   isLHRScan?: boolean
+  parentRevId?: string
   reloadGrid?: () => void
   addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
@@ -36,7 +37,7 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan, parentRevId }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -184,7 +185,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
+    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired);
 
     if (hasExpiredLot) {
       expiredDialog.open();
@@ -207,7 +208,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync);
+    validateScanLotAsync.start(validateScanLot, parentRevId, selectedPart.partRevId, lotRevId, validateScanLotAsync);
   };
 
   const handleError = () => {
