@@ -1,4 +1,5 @@
 import React, { ReactNode, useContext, useState } from 'react';
+import { translate } from '../../../common/intl';
 import { SelectedItemDetails } from './interface';
 
 interface BulkMigrationConextType {
@@ -30,7 +31,7 @@ export const BulkMigrationProvider: React.FC<BulkMigrationProviderProps> = ({ ch
 export const useBulkMigrationContext = () => {
   const context = useContext(BulkMigrationContext);
   if (context === undefined) {
-    throw new Error('useMigrationContext must be used within a MigrationProvider');
+    throw new Error(translate('administration.bulk.migration.context.error'));
   }
   return context;
 };
