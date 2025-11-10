@@ -739,6 +739,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           onClose={scanDialog.close}
           addScanLotsToPart={addScanLotsToPart}
           selectedPart={scanSelectedPartInfo.current as ScanSelectedPartItem}
+          parentRevId={workspaceState?.document?.id}
         />
       )}
     </Box>
