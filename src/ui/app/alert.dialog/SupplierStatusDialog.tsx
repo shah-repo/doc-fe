@@ -77,26 +77,31 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               { isError && (
                 <>
                   { isSupplierUndefined ? (
-                      <Typography data-cy="dialog-message" className={classes.contentText}>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.status.error')} />
-                      </Typography>
+                    <Typography data-cy="dialog-message" className={classes.contentText}>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.status.error')} />
+                    </Typography>
                   ) : isPartNotReleased ? (
-                      <>
-                        <Typography data-cy="dialog-message" className={classes.contentText}>
-                          <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
-                          <b> {getConflictingPhases(errorItems)} </b>
-                          <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
-                        </Typography>
-                        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
-                          [{getConflictingParts(errorItems)}]
-                        </Typography>
-                      </>
-                  ) : (
+                    <>
                       <Typography data-cy="dialog-message" className={classes.contentText}>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                        <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
                         <b> {getConflictingPhases(errorItems)} </b>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                        <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
                       </Typography>
+                      <Typography
+                        data-cy="dialog-message"
+                        className={cx(
+                          classes.contentText,
+                          classes.textBold,
+                        )}>
+                          [{getConflictingParts(errorItems)}]
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography data-cy="dialog-message" className={classes.contentText}>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                      <b> {getConflictingPhases(errorItems)} </b>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                    </Typography>
                   )}
                 </>
               )}
@@ -111,20 +116,25 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                   </Typography> }
                   { isPartNotReleased
                     ? <>
-                        <Typography data-cy="dialog-message" className={classes.contentText}>
-                          <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
-                          <b> {getConflictingPhases(warningItems)} </b>
-                          <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
-                        </Typography>
-                        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
-                          [{getConflictingParts(warningItems)}]
-                        </Typography>
-                      </>
-                    : <Typography data-cy="dialog-message" className={classes.contentText}>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                      <Typography data-cy="dialog-message" className={classes.contentText}>
+                        <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
                         <b> {getConflictingPhases(warningItems)} </b>
-                        <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                        <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
                       </Typography>
+                      <Typography
+                        data-cy="dialog-message"
+                        className={cx(
+                          classes.contentText,
+                          classes.textBold,
+                        )}>
+                          [{getConflictingParts(warningItems)}]
+                      </Typography>
+                    </>
+                    : <Typography data-cy="dialog-message" className={classes.contentText}>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.prefix')} />
+                      <b> {getConflictingPhases(warningItems)} </b>
+                      <Text message={translate('purchaseOrder.supplierStatus.dialog.general.suffix')} />
+                    </Typography>
                   }
                 </>
               )}
