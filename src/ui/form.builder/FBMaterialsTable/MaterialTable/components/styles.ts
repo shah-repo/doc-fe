@@ -178,7 +178,6 @@ export const styles = makeStyles((theme) => ({
     fontSize: 16,
     cursor: 'pointer',
     color: Colors.error,
-    marginLeft: theme.spacing(1),
   },
   attachmentNameContainer: {
     display: 'flex',
