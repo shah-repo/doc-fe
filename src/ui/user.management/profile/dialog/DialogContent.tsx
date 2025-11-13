@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { ReactComponent as SlackLogo } from '../../../../assets/images/slack_full_logo.svg';
 import { getTableCriteria } from '../../../../common/utils/selectors';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
-import { authActions, authSelectors } from '../../../../state/ducks/auth';
 import { EmployeeEditRequestBody } from '../../../../state/ducks/auth/types';
 import { companySelectors } from '../../../../state/ducks/company';
 import { tableSearchActions } from '../../../../state/ducks/tableSearch';
@@ -14,9 +13,7 @@ import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/type
 import { AsyncState, AsyncStatus } from '../../../../state/types';
 import IntegrationItem from '../../../administration/general.settings/panels/Integrations/IntegrationItem';
 import Text from '../../../components/Text';
-import TimezoneSelect from '../../../components/TimezoneSelect';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { Translation } from '../../../translations/types';
 import styles from '../../profile/UserProfile.styles';
@@ -91,20 +88,12 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const updateUserTimezone = useActionCreator(authActions.updateUserTimezone);
-  const timezone = useSelector(authSelectors.getUserTimezone);
 
   const TABLE_NAME = 'userManagement';
 
   const [avatarURL, setAvatarURL] = useState<string>('');
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
-
-  const asyncUserTimezone = useAsync();
-
-  const onChange = (value) => {
-    asyncUserTimezone.start(updateUserTimezone, { timezone: value?.value }, asyncUserTimezone);
-  };
 
   // this is a hack for back button to redirect to user management table
   useEffect(() => () => {
@@ -235,18 +224,19 @@ const DialogContent: React.FunctionComponent<Props> = ({
           {email}
         </Typography>
       </Box>
-      {isCurrentUser && <Box display="flex" justifyContent="center">
-        <Button
-          variant="text"
-          color="primary"
-          style={{ width: 'auto' }}
-          onClick={showEdit}
-          id="DialogContent-showEdit"
-        >
-          <Text translation="common.edit" />
-        </Button>
-      </Box>
-      }
+      {isCurrentUser && (
+        <Box display="flex" justifyContent="center">
+          <Button
+            variant="text"
+            color="primary"
+            style={{ width: 'auto' }}
+            onClick={showEdit}
+            id="DialogContent-showEdit"
+          >
+            <Text translation="common.edit" />
+          </Button>
+        </Box>
+      )}
       <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}
@@ -276,12 +266,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <NavigationManagementContainer />
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
-        {isCurrentUser && <Box className={classes.fieldMargin}>
-          <Typography variant="h6" className={classes.title}>
-            <Text message="administration.general.settings.timezone.title" />
-          </Typography>
-          <TimezoneSelect value={timezone} onChange={onChange} />
-        </Box>}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}

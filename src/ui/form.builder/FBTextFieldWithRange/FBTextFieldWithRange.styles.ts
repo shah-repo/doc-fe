@@ -46,10 +46,12 @@ export default makeStyles(theme => ({
   label: {
     display: 'flex',
     alignItems: 'center',
+  },
+  labelWithAlert: {
     justifyContent: 'space-between',
   },
   qualityAlert: {
-    color: Colors.warning,
+    color: Colors.error,
     fontWeight: 500,
     display: 'flex',
     alignItems: 'center',

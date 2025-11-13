@@ -12,6 +12,7 @@ import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audi
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
+import { companySelectors } from '../../state/ducks/company';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
@@ -22,9 +23,9 @@ import { ASLStatus } from '../administration/general.settings/panels/SupplierSet
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
-import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBPurchaseOrderItemType } from '../form.builder';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
+import { FB, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -224,6 +225,29 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
       },
+      documentRevisions () {
+        const isWhereUsedViewDeleted = (
+          audit.type === 'ARRAY_DELETED'
+          && audit.field.replace(/\.\d+\./, '.') === 'formInput.documentRevisions.whereUsedView'
+          && audit.previousValue
+        );
+        if (isWhereUsedViewDeleted) {
+          try {
+            const data = JSON.parse(audit.previousValue as string);
+            let whereUserValue = '';
+
+            if (Array.isArray(data) && data.length > 0) {
+              whereUserValue = data.map(item => item.name).join(', ');
+            } else {
+              whereUserValue = data.name;
+            }
+            return (<div data-cy={dataCy}>{whereUserValue}</div>);
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+      },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();
@@ -377,8 +401,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               />
               <br />
               <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
-              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
-              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments)}</div>
+              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'share.not.selected.watermark.attachment')}</div>
               { includeEffectiveDate && <div data-cy={dataCy}> {translate('share.selected.watermark.attachment.names')}: {watermarkAttachmentsList}</div>
               }
             </>
@@ -547,6 +571,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
           const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
           const relatedAcronym = documentType?.documentTypeAcronym ?? '';
+          const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
+          const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
           const auditDocId = audit.docId ?? '';
           const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
@@ -556,11 +582,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             assignedAdded,
             assigneeDeleted,
             status,
-            assignedTo,
+            assignedTo: assignToUser,
             comment,
             attachmentLinks,
           } = JSON.parse(nextVal);
 
+          let assignedTo = assignToUser;
+          if(FB.isUUID(assignToUser ?? '')) {
+            assignedTo = getUserDetails(assignToUser)?.user?.name;
+          }
           if (audit.type.includes('ARRAY_ADDED')) {
             const { instruction, assignedTo } = JSON.parse(nextVal);
 

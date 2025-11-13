@@ -119,6 +119,10 @@ class FBEditorState {
 
   public static pickCustomHandler: FBInputType[] = ['teststep'];
 
+  private static readonly editorOverrides: Record<string, React.FunctionComponent> = {
+    'checkboxgroup:item-type': FBEditorLabel,
+  };
+
   private static readonly editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
     subsection: FBEditorLabel,
@@ -246,8 +250,11 @@ class FBEditorState {
   ];
 
   public static editor = (editorProps: FBEditorProps): React.ReactElement | undefined => {
-    const { inputProps: { type = '', index = 0 } = {} } = editorProps;
-    const editorControl = FBEditorState.editors[type];
+    const { inputProps: { type = '', index = 0, name } = {} } = editorProps;
+    const overrideKey = `${type}:${name}`;
+    const overrideControl = FBEditorState.editorOverrides[overrideKey];
+    const editorControl = overrideControl || FBEditorState.editors[type];
+
     if (!editorControl) {
       return;
     }

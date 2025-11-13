@@ -22,13 +22,14 @@ interface Props {
   children?: JSX.Element
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
+  parentRevId: string | undefined
   reloadGrid?: () => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart, parentRevId }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -117,12 +118,14 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleScan = (data: string) => {
-    validateScanLotAsync.start(
-      validateScanLot,
-      selectedPart.partRevId,
-      extractRevision(data),
-      validateScanLotAsync,
-    );
+    const lotRevId = extractRevision(data);
+    const isDuplicateScan = scanLots?.some((lot: ScanLot) => lot.lotRevId === lotRevId);
+    if (isDuplicateScan) {
+      toastError(translate('scan.lot.grid.scan.duplicate.error.message'));
+      return;
+    }
+
+    validateScanLotAsync.start(validateScanLot, parentRevId, selectedPart.partRevId, lotRevId, validateScanLotAsync);
   };
 
   const handleError = () => {
