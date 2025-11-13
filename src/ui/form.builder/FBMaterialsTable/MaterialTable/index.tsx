@@ -603,6 +603,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const newAllocItem: EditableMaterial = createNewLotItem();
       newAllocItem.parentPartId = dataItem.title;
       newAllocItem.parentId = dataItem.id;
+      newAllocItem.unit = dataItem.unit;
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
@@ -617,6 +618,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         expanded: [state.data[index].id],
         inEdit: [newAllocItem],
       });
+      formik.setValues(newAllocItem);
     }
   };
 

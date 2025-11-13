@@ -135,6 +135,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   isLHRT?: boolean
   isLHRProductionBuild?: boolean
   isEBProcedure?: boolean
+  isLHRS?: boolean
 }
 
 export type MaterialOption =

@@ -13,7 +13,7 @@ import { CustomTreeListCellProps, EditableMaterial, UnitOption } from '../types'
 import TreeListCellWrapper from './TreeListCellWrapper';
 import { isEditMaterial } from './utils';
 
-const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT }) => {
+const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
 
   const handleChange = (_: ChangeEvent<unknown>, value?: string) => {
@@ -37,7 +37,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT }) => {
   });
 
   const value = values[field] as string;
-  const shouldDisable = isEmpty(units) ? true : !isLHRT && values.LHRTparameter;
+  const shouldDisable = isLHRS ? true : isEmpty(units) ? true : !isLHRT && values.LHRTparameter;
 
   return (
     <FormikField name={field}>
