@@ -10,6 +10,7 @@ import { SamplingPlanType, SamplingPlanValue } from './types';
 const FBSamplingPlan: React.FC<FBInputProps> = ({
   name = '',
   label = '',
+  disabled = false,
   ...props
 }) => {
   const classes = useStyles();
@@ -59,7 +60,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
   }, [value?.aqlLevel]);
 
   return (
-    <FBInput {...props} name={name} label={label} labelProps={FBFontStyle.labelProps} shouldOmitValue>
+    <FBInput {...props} name={name} label={label} labelProps={FBFontStyle.labelProps} shouldOmitValue disabled={disabled}>
       <div className={classes.root}>
         <FBRadioGroup
           options={[
@@ -72,6 +73,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
               value: SamplingPlanType.AQL,
             },
           ]}
+          disabled={disabled}
           value={value?.type ?? SamplingPlanType.ALL}
           onChange={(e) => setValue({ type: e.target.value as SamplingPlanType })}
           gutter={false}
@@ -85,6 +87,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
               value={aqlLevelValue}
               disableClearable
               size="small"
+              disabled={disabled}
             />
           </div>
         )}
