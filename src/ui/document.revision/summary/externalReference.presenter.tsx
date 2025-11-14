@@ -96,7 +96,7 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
           <Text message={label} />
         </Typography>
       </Box>
-      {externalReferences.length && externalReferencesRenderer()}
+      {externalReferencesRenderer()}
       {!externalReferences.length && externalReferencesEmptyRenderer()}
     </Box>
   );
