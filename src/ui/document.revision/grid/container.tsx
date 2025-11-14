@@ -39,9 +39,9 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const history = useHistory();
 
   const docListCategory = useSelector(pageDetailsSelectors.byCategory)?.['Document List'];
-  const columns: Array<TableColumnProps<DocumentRevision>> = docListCategory.columns
-    .filter((c) => c.showOnWeb)
-    .map(
+  const columns: Array<TableColumnProps<DocumentRevision>> = docListCategory?.columns
+    ?.filter((c) => c.showOnWeb)
+    ?.map(
       (column: PageDetailsColumn) => {
         const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria);
         return {
@@ -52,7 +52,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       },
     );
 
-  const kendoColumnDef = columns.map((columnDetails, index) => {
+  const kendoColumnDef = columns?.map((columnDetails, index) => {
     const columnLabel = isTranslation(columnDetails.label)
       ? intl.formatMessage({ id: columnDetails.label })
       : columnDetails.label;
