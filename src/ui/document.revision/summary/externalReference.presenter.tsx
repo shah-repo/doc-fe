@@ -18,10 +18,10 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
   label,
 }) => {
   const classes = styles();
-  const [externalReferencesResponse, setExternalReferencesResponse] = useState<ExternalReferencesResponse>();
+  const [externalReferences, setExternalReferences] = useState<ExternalReference[]>([]);
 
   const externalReferencesRenderer = () =>
-    externalReferencesResponse?.externalReferences.map((externalReference: ExternalReference, index) => (
+    externalReferences.map((externalReference: ExternalReference, index) => (
       <Box component="span" key={externalReference.id} data-cy={label}>
         <Grid
           key={index}
@@ -40,7 +40,20 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
                 className={classes.link}
                 target="_blank"
                 rel="noopener noreferrer">
-                {`${externalReference.resourceType} - ${externalReference.resourceId} - ${externalReference.resourceName}`}
+                  <div className={classes.externalRefDetails}>
+                    <div className={classes.row}>
+                      <span className={classes.title}>Type:</span>
+                      <span className={classes.value}>{((externalReference.externalSystem?.name) ? (externalReference.externalSystem?.name + ' - ') : '') + externalReference.resourceType}</span>
+                    </div>
+                    <div className={classes.row}>
+                      <span className={classes.title}>ID:</span>
+                      <span className={classes.value}>{externalReference.resourceId}</span>
+                    </div>
+                    <div className={classes.row}>
+                      <span className={classes.title}>Name:</span>
+                      <span className={classes.value}>{externalReference.resourceName}</span>
+                    </div>
+                  </div>
               </a>
             </Typography>
           </Grid>
@@ -62,12 +75,13 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
 
   const externalReferencesReqAsync = useAsync<ExternalReferencesResponse>({
     onSuccess: (response?: ExternalReferencesResponse) => {
-      setExternalReferencesResponse(response);
-      console.log('>>>>>>>>>>>>');
-      console.log(externalReferencesResponse);
+      setExternalReferences(response ? response.externalReferences : []);
       toastError(response);
     },
-    onError: () => toastError('Error'),
+    onError: () => {
+      toastError("Couldn't load external references!");
+      setExternalReferences([]);
+    },
   });
 
   useEffect(() => {
@@ -82,8 +96,8 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
           <Text message={label} />
         </Typography>
       </Box>
-      {externalReferencesRenderer()}
-      {!externalReferencesResponse?.externalReferences.length && externalReferencesEmptyRenderer()}
+      {externalReferences.length && externalReferencesRenderer()}
+      {!externalReferences.length && externalReferencesEmptyRenderer()}
     </Box>
   );
 };

@@ -75,4 +75,20 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       visibility: 'hidden',
     },
+    externalRefDetails: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+      rowGap: '4px',
+      columnGap: '5px',
+    },
+    row: {
+      display: 'contents',
+    },
+    title: {
+      fontWeight: 600,
+      whiteSpace: 'nowrap',
+    },
+    value: {
+      wordBreak: 'break-word',
+    },
   }));
