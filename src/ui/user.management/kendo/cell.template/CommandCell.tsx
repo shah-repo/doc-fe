@@ -1,13 +1,9 @@
-import { get, set } from 'lodash';
+import { get } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../common/intl';
-import { userManagementActions } from '../../../../state/ducks/userManagement';
 import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
 import ActionsButtons from '../../../administration/general.settings/components/SettingsTable/components/ActionButtons';
 import { toastError } from '../../../components/notifications';
-import useActionCreator from '../../../hooks/useActionCreator';
-import useAsync from '../../../hooks/useAsync';
-import { enterUserInfo } from '../column.definition';
 import { UserManage } from '../types';
 
 interface CommandCellProps {
@@ -39,36 +35,14 @@ export const CommandCell = ({
 }: CommandCellProps): React.ReactElement | null => {
   const isEditMode = Boolean(dataItem[editField]);
 
-  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-  const asyncName = useAsync<GetEmployeeResponse[]>({
-    onSuccess: (data: GetEmployeeResponse[] = []) => {
-      if (data.length === 0) {
-        set(dataItem, 'id', null);
-        add(dataItem as UserManage);
-        return;
-      }
-      set(dataItem, 'name', data[0].user.name);
-      dataItem.id = data[0].user.id;
-      add(dataItem as UserManage);
-    },
-  });
-
-  const fetchUseInfo = () => {
+  const addEmployee = () => {
     const name = get(dataItem, 'name');
     const email = get(dataItem, 'email');
-    const userName = name || enterUserInfo.name;
-    const userEmail = email || enterUserInfo.email;
-    if (!userEmail || !userName) {
+    if (!email || !name) {
       toastError(translate('user.management.name.email.required'));
       return;
     }
-    if (!name) {
-      set(dataItem, name, userName);
-    }
-    if (!email) {
-      set(dataItem, email, userEmail);
-    }
-    asyncName.start(getEmployeeAction, { email: userEmail }, asyncName);
+    add(dataItem as UserManage);
   };
 
   if (rowType === 'groupHeader') {
@@ -86,7 +60,7 @@ export const CommandCell = ({
       <ActionsButtons
         isEditMode={isEditMode}
         isActive
-        onConfirm={fetchUseInfo}
+        onConfirm={addEmployee}
         onDiscard={() => cancel(dataItem as UserManage)}
         onEdit={() => edit(dataItem as GetEmployeeResponse)}
       />
