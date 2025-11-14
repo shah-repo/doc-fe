@@ -558,7 +558,7 @@ export interface TypeSpecificConfig {
   }
 }
 
-export interface ExternalSystem {
+interface ExternalSystem {
   createdAt: string
   updatedAt: string
   id: string

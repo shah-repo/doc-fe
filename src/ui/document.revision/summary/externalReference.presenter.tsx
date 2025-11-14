@@ -8,7 +8,7 @@ import useAsync from '../../hooks/useAsync';
 import useActionCreator from '../../hooks/useActionCreator';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 
-export interface ExternalReferencesProps {
+interface ExternalReferencesProps {
   selectedDocument?: DocumentRevision
   label: string
 }
