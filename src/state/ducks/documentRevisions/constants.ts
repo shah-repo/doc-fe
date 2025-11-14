@@ -23,6 +23,7 @@ export const DOCUMENT_REVISION_UPGRADE_URL = `${DOCUMENT_REVISION_ROOT_URL}/upgr
 export const DOCUMENT_REVISION_FORMS_URL = `${DOCUMENT_REVISION_ROOT_URL}/forms_group_option`;
 export const DOCUMENT_REVISION_FAI_INSPECTION_URL = `${DOCUMENT_REVISION_ROOT_URL}/fai_inspection`;
 export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/available_parts`;
+export const DOCUMENT_EXTERNAL_REFERENCES_URL = 'document_external_references/document-id';
 
 export const FETCH_BOM_TREE = 'bom/parent_tree';
 export const FETCH_BOM_BRANCH = 'bom/branch/details';

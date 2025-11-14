@@ -25,9 +25,9 @@ import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
-import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, ASL_SUPPLIER_LIST_URL, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SEARCH_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPDATE_ASYNC, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PARTS_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, SUPPLIER_STATUS_URL, UPDATE_BOM_BRANCH } from './constants';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, ASL_SUPPLIER_LIST_URL, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_EXTERNAL_REFERENCES_URL, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SEARCH_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPDATE_ASYNC, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PARTS_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, SUPPLIER_STATUS_URL, UPDATE_BOM_BRANCH } from './constants';
 import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, EntitySearchResults, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, MeqResponse, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentRevisionsListAction, DocumentSetAction, EntitySearchResults, EquipmentStatus, ExportToEmailRequest, ExternalReferencesResponse, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, MeqResponse, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -834,6 +834,15 @@ const fetchReferences = (
   });
 };
 
+const getExternalReferences = (
+  id: string,
+  handlers: Handlers,
+): ApiAction<ExternalReferencesResponse> => apiActionWithCallbacks({
+  url: `${DOCUMENT_EXTERNAL_REFERENCES_URL}/${id}`,
+  method: 'get',
+  handlers,
+});
+
 const fetchReferencesTableData = (
   revId: string,
   ids: string[],
@@ -937,6 +946,7 @@ export default {
   getAllApprovalRequests,
   updateEquipmentStatus,
   fetchReferences,
+  getExternalReferences,
   fetchReferencesTableData,
   fetchASLSuppliersListData,
   restrictedEdit,

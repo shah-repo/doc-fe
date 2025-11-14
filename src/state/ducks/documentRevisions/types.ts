@@ -557,3 +557,28 @@ export interface TypeSpecificConfig {
     value: boolean
   }
 }
+
+export interface ExternalSystem {
+  createdAt: string
+  updatedAt: string
+  id: string
+  name: string
+}
+
+export interface ExternalReference {
+  createdAt: string
+  updatedAt: string
+  id: string
+  resourceType: string
+  resourceId: string
+  resourceName: string
+  resourceUrl: string
+  externalSystem: ExternalSystem
+}
+
+export interface ExternalReferencesResponse {
+  documentId: string
+  documentRevisionId: string
+  realm: string
+  externalReferences: ExternalReference[]
+}
