@@ -276,6 +276,14 @@
     "copyableValue",
     "includeNotes"
   ],
+  "samplingPlan": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue",
+    "includeNotes"
+  ],
   "lhrstep": [
     "reviseDisabled",
     "includeInInspection",
