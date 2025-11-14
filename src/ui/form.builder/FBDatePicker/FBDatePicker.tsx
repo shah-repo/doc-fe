@@ -24,7 +24,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   ...props
 }) => {
   const classes = FBTextFieldStyles();
-  const { getCurrentDate, formatDisplayDate } = useDate();
+  const { getCurrentDate, formatDisplayDate, timezone } = useDate();
   const currentDate = getCurrentDate(MomentFormats.YearMonthDateDash);
   const selectedDate = formatDisplayDate(datePickerState?.date);
 
@@ -46,7 +46,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             autoOk={true}
             disablePast={disablePastDates}
             label=""
-            value={selectedDate || currentDate}
+            value={datePickerState?.date ? moment.tz(datePickerState.date, timezone) : currentDate}
             initialFocusedDate={currentDate}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => (

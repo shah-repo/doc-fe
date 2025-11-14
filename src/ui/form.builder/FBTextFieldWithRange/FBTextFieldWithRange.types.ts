@@ -9,7 +9,7 @@ export interface ChipComponentProps {
 }
 
 export interface FBTextFieldWithRangeValue {
-  value: number
+  value: number | string
   unit: string
   isFaiRequired: boolean
   isIqcRequired: boolean

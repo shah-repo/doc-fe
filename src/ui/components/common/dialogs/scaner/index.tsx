@@ -22,13 +22,14 @@ interface Props {
   children?: JSX.Element
   handler: DialogHandler
   selectedPart: ScanSelectedPartItem
+  parentRevId: string | undefined
   reloadGrid?: () => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart, parentRevId }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -124,7 +125,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync);
+    validateScanLotAsync.start(validateScanLot, parentRevId, selectedPart.partRevId, lotRevId, validateScanLotAsync);
   };
 
   const handleError = () => {
