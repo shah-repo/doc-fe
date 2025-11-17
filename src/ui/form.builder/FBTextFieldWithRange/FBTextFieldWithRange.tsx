@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip, Grid, Tooltip, Zoom } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
-import { ChipComponentProps, FBInput, FBOutOfRange, FBText, FBTextFieldWithRangeProps } from '..';
+import { ChipComponentProps, FBInput, FBText, FBTextFieldWithRangeProps } from '..';
 import { translate } from '../../../common/intl';
 import { Autocomplete, FormField, TextField } from '../../components/forms/fields-next';
 import { withThemeNext } from '../../layout/theme-next';
@@ -11,8 +11,6 @@ import { FBFontStyle } from '../styles/FBFont.styles';
 import useStyles from './FBTextFieldWithRange.styles';
 import { useOptions } from './FBTextFieldWithRange.utils';
 import { withFBTextFieldWithRange } from './FBTextFieldWithRange.wrap';
-
-const naText = translate('common.not.applicable');
 
 const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
   label,
@@ -61,8 +59,8 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
   hasUnits = false,
   isPartFaiRequired = false,
   isPartIqcRequired = false,
-  range,
   tolerance,
+  range,
   onUpdate,
   ...props
 }) => {
@@ -71,21 +69,16 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
 
   const attributeConfig: string[] = [];
 
-  if (hasRange && range) {
-    attributeConfig.push(translate('form.builder.allowed.range', {
-      from: range.from ?? naText,
-      to: range.to ?? naText,
-    }));
+  if (hasRange && range?.from !== undefined && range?.to !== undefined) {
+    attributeConfig.push(translate('form.builder.allowed.range', { ...range }));
   }
 
-  if (hasTolerance && tolerance) {
-    attributeConfig.push(translate('form.builder.allowed.tolerance', {
-      tolerance: tolerance,
-    }));
+  if (hasTolerance && !hasRange && tolerance) {
+    attributeConfig.push(translate('form.builder.allowed.tolerance', { tolerance }));
   }
 
-  const isToleranceDefined = hasTolerance && tolerance !== undefined;
   const isRangeDefined = hasRange && (range?.from !== undefined && range?.to !== undefined);
+  const isToleranceDefined = hasTolerance && !hasRange && tolerance !== undefined;
   const isNumericInput = isRangeDefined || isToleranceDefined;
 
   return (
@@ -150,18 +143,13 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
               <TextField
                 defaultValue={value?.value}
                 placeholder={placeholder}
-                endAdornment={hasRange && (
-                  <span className={classes.outOfRange}>
-                    <FBOutOfRange pass={range} parentName={name} path="value" />
-                  </span>
-                )}
                 inputProps={isNumericInput ? {
                   type: 'number',
                   min: range?.from,
                   max: range?.to,
                   step: tolerance,
                 } : {}}
-                onBlur={e => onUpdate?.({ value: parseFloat(e.target.value) })}
+                onBlur={e => onUpdate?.({ value: isNumericInput ? parseFloat(e.target.value) : e.target.value })}
               />
             </FormField>
           </Grid>

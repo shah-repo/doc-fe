@@ -11,4 +11,6 @@ export interface FBEditorTextFieldWithRangeConfig {
 
 export type FBEditorTextFieldWithRangeProps = FBEditorProps & {
   editorConfig?: FBEditorTextFieldWithRangeConfig
+  isRangeDisabled?: boolean
+  isToleranceDisabled?: boolean
 };

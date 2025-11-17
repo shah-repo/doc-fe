@@ -286,6 +286,7 @@ const LotAllocatedCell: React.FC<CustomTreeListCellProps> = ({
           onClose={scanDialog.close}
           reloadGrid={refreshAndClose}
           selectedPart ={dataItem}
+          parentRevId={parentRevId}
         />
       )}
     </td>

@@ -67,6 +67,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
         'mpiprocedure',
         'eqmaintenance',
         'textfieldwithrange',
+        'samplingPlan',
         'supplier',
       ],
       approvals: [

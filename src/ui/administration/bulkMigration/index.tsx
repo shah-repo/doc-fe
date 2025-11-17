@@ -10,7 +10,8 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { ListType, MigrationStatus, SelectedItemDetails } from './interface';
+import { useBulkMigrationContext } from './BulkMigtationContext';
+import { ListType, MigrationStatus } from './interface';
 import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
@@ -20,7 +21,6 @@ import { getRevById } from './utils';
 
 const BulkMigrationContainer: React.FC = () => {
   const classes = useStyles();
-  const [selectedRows, setSelectedRows] = useState<SelectedItemDetails[]>([]);
   const [isMappingDialogVisible, setIsMappingDialogVisible] = useState<boolean>(false);
 
   const {
@@ -56,6 +56,8 @@ const BulkMigrationContainer: React.FC = () => {
     confirmSubmission,
     handleMigrationConfirmationDialogClose,
   } = useBulkMigration();
+
+  const { selectedItems } = useBulkMigrationContext();
 
   useEffect(() => {
     fetchAllDocumentTypes();
@@ -104,10 +106,6 @@ const BulkMigrationContainer: React.FC = () => {
       }
     }
     return isValidated;
-  };
-
-  const handleSelectedRowsChange = (selected: SelectedItemDetails[]) => {
-    setSelectedRows(selected);
   };
 
   useEffect(() => {
@@ -182,7 +180,7 @@ const BulkMigrationContainer: React.FC = () => {
             )}
           </Grid>
           <Grid item xs={2}>
-            {selectedRows.length > 0 && (
+            {selectedItems.length > 0 && (
               <Button
                 size="small"
                 data-cy="migrate-revisions-btn"
@@ -365,7 +363,7 @@ const BulkMigrationContainer: React.FC = () => {
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
         {scanDetails?.id && !isScanRunning && (
-          <KendoRevsTable {...{ scanId, updateRevsTable, handleSelectedRowsChange }} />
+          <KendoRevsTable {...{ scanId, updateRevsTable }} />
         )}
         {scanDetails?.id && isScanRunning && (
           <Box className={classes.searchIconContainer}>
@@ -387,7 +385,7 @@ const BulkMigrationContainer: React.FC = () => {
         <MigrationConfirmationDialog
           isOpen={isConfirmationDialogVisible}
           handleClose={handleMigrationConfirmationDialogClose}
-          selectedDetails={selectedRows}
+          selectedDetails={selectedItems}
           handleConfirmation={handleMigrationConfirmation}
           toDocumentTypeId={toDocumentTypeId}
           toFormRev={toRev}

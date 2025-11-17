@@ -88,8 +88,8 @@ class FBData {
     return yesNoOptions as FBOption[];
   }
 
-  public static get aqlOptions (): FBOption[] {
-    return aqlOptions as FBOption[];
+  public static get aqlOptions (): Array<FBOption<number>> {
+    return aqlOptions as Array<FBOption<number>>;
   }
 
   public static get eqMaintenanceTypeOptions (): FBOption[] {

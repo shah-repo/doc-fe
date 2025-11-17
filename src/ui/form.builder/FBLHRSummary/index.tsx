@@ -362,7 +362,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers, getFormattedDateString), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
     }
   };
 

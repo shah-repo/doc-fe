@@ -127,12 +127,13 @@ const fetchLatestRevisionDetailsByRevId = (
   });
 
 const validateScannedLot = (
+  parentRevId: string,
   partRevId: string,
   lotRevId: string,
   handlers: Handlers,
 ): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
-    url: `${VALIDATE_SCANNED_LOT}/${partRevId}/lots/${lotRevId}/validate`,
+    url: `${VALIDATE_SCANNED_LOT}/${parentRevId}/parts/${partRevId}/lots/${lotRevId}/validate`,
     method: 'get',
     handlers,
   });

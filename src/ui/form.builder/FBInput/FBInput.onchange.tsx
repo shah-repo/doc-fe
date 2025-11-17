@@ -74,7 +74,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!name) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      if (!shouldOmitSetValue) {
+      if (!shouldOmitSetValue && !props.shouldOmitValue) {
         formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
       }
 
