@@ -1,25 +1,12 @@
-import { Box, IconButton } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import EditIcon from '@material-ui/icons/Edit';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import { isEmpty } from 'lodash';
-import { Observer } from 'mobx-react';
-import moment from 'moment';
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
-  FB,
-  FBButton,
   FBDialog,
-  FBFilesPresenter,
   FBMPIProcedureItemProps,
-  FBMPIProcedureSelectValue,
-  FBMapWrapper,
   FBMediaAlbumField,
-  FBPartItemStatusBg,
-  FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBProcedureItemOmitAction,
   FBProcedureItemType,
@@ -27,11 +14,7 @@ import {
   FBText,
   FBTooltip,
 } from '..';
-import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warning.svg';
-import { translate } from '../../../common/intl';
-import { MomentFormats, useDate } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
-import { FBClasses } from '../defaults/layout';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
@@ -63,16 +46,17 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
-  const { timezone } = useDate();
+  // const { timezone } = useDate();
   const isAttachmentType = type === FBProcedureItemType.attachments;
-  const getDueDate = (date?: string) => {
-    if (!date) {
-      return;
-    }
+  // const getDueDate = (date?: string) => {
+  //   if (!date) {
+  //     return;
+  //   }
 
-    return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.BriefDate);
-  };
+  //   return moment.tz(date, MomentFormats.MonthDateYearTwoDigit, timezone).format(MomentFormats.BriefDate);
+  // };
 
+  console.log('FBMPIProcedureItem render', { type, value, name });
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
@@ -138,7 +122,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       )}
       {type !== FBProcedureItemType.attachments && !loading && (
         <>
-          <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+          {/* <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) =>
               (
                 <Observer>
@@ -364,7 +348,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   }
                 </Observer>
               )}
-          </FBMapWrapper>
+          </FBMapWrapper> */}
           {type === FBProcedureItemType.materials && (
             <MaterialsTable
               name={name}

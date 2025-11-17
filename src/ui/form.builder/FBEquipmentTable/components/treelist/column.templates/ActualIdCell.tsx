@@ -14,6 +14,7 @@ import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableEquipmentItem } from '../../../interface';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
+import { useEquipmentOptions } from '../useOptions';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
@@ -38,9 +39,15 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   dataItem,
   actualId,
   parentPartRevId,
-  equipmentOptions,
+  equipmentOptions: propEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+
+  const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
+  const equipmentSpecId = isEquipmentSpecification ? (dataItem?.parentEquipPlannedId ?? '') : '';
+  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
+
+  const equipmentOptions = isEquipmentSpecification ? equipmentSpcOptions : propEquipmentOptions;
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
