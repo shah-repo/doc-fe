@@ -148,6 +148,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
+      let isEquipmentSpecification = false;
       if (isEnableActualIdAddition && !isEBProcedure) {
         if (values[ADD_FIELD]) {
           saveActualEquipment?.(values as EditableEquipmentItem);
@@ -156,11 +157,19 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         return;
       }
 
+      if (isMPIProcedure) {
+        const selectedEquipInfo = equipmentOptions?.find((option) => option.value === values.title);
+        if (selectedEquipInfo?.label.startsWith('ES-')) {
+          isEquipmentSpecification = true;
+        }
+      }
+
       const { id = '', plannedId = '', title = '', LHRTparameter } = values;
       let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
         type: values.type,
+        isEquipmentSpecification,
       };
 
       if (isLHRStep && lhrStepIndex) {
@@ -201,10 +210,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         }
 
         const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
-      procedureState?.addItem(payload, type, allSteps);
-      mpiProcedureState?.addItem(payload, type, allSteps);
-      discardEquipItem(values as EditableEquipmentItem);
-      return;
+        procedureState?.addItem(payload, type, allSteps);
+        mpiProcedureState?.addItem(payload, type, allSteps);
+        discardEquipItem(values as EditableEquipmentItem);
+        return;
       }
 
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
@@ -325,6 +334,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       calDueDate: '',
       pmDueDate: '',
       isActualIdAddition: true,
+      isEquipmentSpecification: false,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
@@ -340,6 +350,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       const newActualItem: EditableEquipmentItem = createNewLotItem();
       newActualItem.parentEquipPlannedId = dataItem.plannedId;
       newActualItem.parentId = dataItem.id;
+      newActualItem.isEquipmentSpecification = dataItem.isEquipmentSpecification;
       state.data[index][subItemsKey] = state.data[index][subItemsKey]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][subItemsKey])) {

@@ -49,3 +49,38 @@ export const useOptions = () => {
     };
   });
 };
+
+export const useEquipmentOptions = (id: string) => {
+  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
+  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
+
+  useEffect(() => {
+    if (id && optionId) {
+      autocompleteAsyncState.setOptionId(optionId);
+      autocompleteAsyncState.fetchAutocompleteOption(id, optionId);
+    }
+  }, [autocompleteAsyncState, id, optionId]);
+
+  return useObserver(() => {
+    if (!optionId) {
+      return { equipmentSpcOptions: [] };
+    }
+
+    // Check if data is in the API response
+    const apiData = autocompleteAsyncState.autocompleteValueApi.data;
+    let asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
+
+    // If API has returned data but store is empty, process and store it
+    if (apiData && (!asyncData || asyncData.size === 0)) {
+      const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+      FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
+      asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
+    }
+
+    const equipmentSpcOptions = Array.from(asyncData?.values() || []).map(parseEquipmentOption);
+
+    return {
+      equipmentSpcOptions,
+    };
+  });
+};
