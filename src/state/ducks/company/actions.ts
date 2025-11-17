@@ -10,6 +10,7 @@ import {
   LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  SETTINGS_LOGS_URL,
   SUPPLIERS_OPTIONS_URL,
   UPDATE_APPROVAL_ROLES_URL,
   UPDATE_COMPANY_SETTINGS_URL,
@@ -273,6 +274,15 @@ const fetchDocRevOptionsByDocTypeId = (
   });
 };
 
+const fetchSettingsAuditLogs = (
+  handlers: Handlers,
+): ApiAction<LCPDocRevOptions[]> =>
+  apiActionWithCallbacks({
+    url: SETTINGS_LOGS_URL,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   selectCompany,
   getCompanyMine,
@@ -293,4 +303,5 @@ export default {
   updatePremiumFeatureSubscription,
   createApprovalRoles,
   updateApprovalRoles,
+  fetchSettingsAuditLogs,
 };

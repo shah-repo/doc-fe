@@ -1,10 +1,10 @@
 import React from 'react';
 import FBTextField from '../FBTextField/FBTextField';
 
-const FBSalesOrderNumber: React.FC<any> = (props) => {
+const FBSalesOrderNumber: React.FC = (props) => {
   return (
     <>
-    <FBTextField {...props} />
+      <FBTextField {...props} />
     </>
   );
 };
