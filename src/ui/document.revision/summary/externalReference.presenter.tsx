@@ -1,12 +1,14 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Text from '../../components/Text';
-import { styles } from './references.styles';
+import useStyles from './references.styles';
 import { DocumentRevision, ExternalReference, ExternalReferencesResponse } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import useAsync from '../../hooks/useAsync';
 import useActionCreator from '../../hooks/useActionCreator';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { translate } from '../../../common/intl';
+import { withThemeNext } from '../../layout/theme-next';
 
 interface ExternalReferencesProps {
   selectedDocument?: DocumentRevision
@@ -17,12 +19,19 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
   selectedDocument,
   label,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [externalReferences, setExternalReferences] = useState<ExternalReference[]>([]);
+
+  const externalReferenceItem = ({ title, value, classes }) => (
+    <div className={classes.row}>
+      <span className={classes.title}>{title}:</span>
+      <span className={classes.value}>{value}</span>
+    </div>
+  );
 
   const externalReferencesRenderer = () =>
     externalReferences.map((externalReference: ExternalReference, index) => (
-      <Box component="span" key={externalReference.id} data-cy={label}>
+      <Box component="span" key={externalReference.id} data-cy={`external-reference-${index}`} >
         <Grid
           key={index}
           justify="space-between"
@@ -41,18 +50,17 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
                 target="_blank"
                 rel="noopener noreferrer">
                   <div className={classes.externalRefDetails}>
-                    <div className={classes.row}>
-                      <span className={classes.title}>Type:</span>
-                      <span className={classes.value}>{((externalReference.externalSystem?.name) ? (externalReference.externalSystem?.name + ' - ') : '') + externalReference.resourceType}</span>
-                    </div>
-                    <div className={classes.row}>
-                      <span className={classes.title}>ID:</span>
-                      <span className={classes.value}>{externalReference.resourceId}</span>
-                    </div>
-                    <div className={classes.row}>
-                      <span className={classes.title}>Name:</span>
-                      <span className={classes.value}>{externalReference.resourceName}</span>
-                    </div>
+                    {[
+                      {
+                        title: translate('documentRevision.externalReferences.resourceType.title'),
+                        value:
+                          (externalReference.externalSystem?.name
+                            ? externalReference.externalSystem.name + ' - '
+                            : '') + externalReference.resourceType,
+                      },
+                      { title: translate('documentRevision.externalReferences.resourceId.title'), value: externalReference.resourceId },
+                      { title: translate('documentRevision.externalReferences.resourceName.title'), value: externalReference.resourceName },
+                    ].map((item) => externalReferenceItem({ ...item, classes }))}
                   </div>
               </a>
             </Typography>
@@ -62,11 +70,9 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
     ));
 
   const externalReferencesEmptyRenderer = () => (
-    <>
-      <Typography variant="h5" className={classes.noHeader} >
-        <Text message="common.none" />
-      </Typography>
-    </>
+    <Typography variant="h5" className={classes.noHeader} >
+      <Text message="common.none" />
+    </Typography>
   );
 
   const getExternalReferences = useActionCreator(
@@ -79,7 +85,7 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
       toastError(response);
     },
     onError: () => {
-      toastError("Couldn't load external references!");
+      toastError(translate('documentRevision.externalReferences.error'));
       setExternalReferences([]);
     },
   });
@@ -90,7 +96,7 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
   }, []);
 
   return (
-    <Box mb={2.5}>
+    <Box className={classes.externalReferencesBox}>
       <Box>
         <Typography variant="h6" className={classes.header}>
           <Text message={label} />
@@ -102,4 +108,4 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
   );
 };
 
-export default ExternalReferencesPresenter;
+export default withThemeNext(ExternalReferencesPresenter);

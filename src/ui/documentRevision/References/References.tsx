@@ -50,7 +50,7 @@ const References = ({
 
   return (
     <>
-      <Box padding={1.875} width={1} data-cy="generalInfo">
+      <Box className={classes.outerBox} data-cy="generalInfo">
         <Typography className={classes.generalInfo}>
           <Text translation="common.general.info" />
         </Typography>
@@ -125,7 +125,7 @@ const References = ({
           </Box>
         }
       </Box>
-      <Box padding={1.875} width={1} data-cy="externalReferences">
+      <Box className={classes.outerBox} data-cy="external-references">
         <ExternalReferencesPresenter selectedDocument={selectedDocument} label="documentRevision.externalReferences" />
       </Box>
   </>
