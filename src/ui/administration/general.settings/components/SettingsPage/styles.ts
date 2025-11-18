@@ -108,4 +108,88 @@ export default makeStyles<NextTheme>(theme => ({
       display: 'block',
     },
   },
+  drawerAuditLogsPaper: {
+    width: '72vw',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  appBarBox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: theme.spacing(2, 4),
+  },
+  groupBox: {
+    fontSize: 16,
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(2.5),
+    paddingBottom: theme.spacing(1),
+    borderBottom: `1px solid ${Colors.stroke}`,
+    '&:first-child': {
+      marginTop: 0,
+    },
+  },
+  logEntry: {
+    fontSize: 12,
+    marginTop: theme.spacing(4),
+  },
+  logEntryBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    '& > :nth-child(1)': {
+      flex: '0 0 15%',
+      '& > h6': {
+        fontSize: 11,
+      },
+    },
+    '& > :nth-child(2)': {
+      flex: '0 0 60%',
+    },
+    '& > :nth-child(3)': {
+      flex: '0 0 25%',
+      textAlign: 'right',
+      '& > h6': {
+        fontSize: 11,
+      },
+    },
+  },
+  contentBox: {
+    margin: theme.spacing(0, 4),
+  },
+  parentKey: {
+    color: Colors.primaryDark,
+  },
+  changeType: {
+    color: Colors.statusDraft,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
+  deletedChangeType: {
+    color: Colors.statusVoid,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
+  editedChangeType: {
+    color: Colors.statusReview,
+    fontSize: 11,
+    marginLeft: theme.spacing(1),
+  },
+  displayText: {
+    color: Colors.textGray,
+    lineHeight: 1.75,
+  },
+  ownerName: {
+    color: Colors.textBlack,
+  },
+  ownerEmail: {
+    color: Colors.textBlack,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  email: {
+    color: Colors.primaryLight,
+    fontSize: 13,
+  },
 }));
