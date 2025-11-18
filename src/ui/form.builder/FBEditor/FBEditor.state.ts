@@ -120,7 +120,7 @@ class FBEditorState {
   public static pickCustomHandler: FBInputType[] = ['teststep'];
 
   private static readonly editorOverrides: Record<string, React.FunctionComponent> = {
-    'checkboxgroup:item-type': FBEditorLabel,
+    'radiogroup:item-type': FBEditorLabel,
   };
 
   private static readonly editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -170,6 +170,7 @@ class FBEditorState {
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
+    samplingPlan: FBEditorLabel,
     supplier: FBEditorLabel,
     lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
@@ -220,6 +221,7 @@ class FBEditorState {
     mpiprocedure: ProcedureIcon,
     eqmaintenance: EquipmentIcon,
     textfieldwithrange: TextfieldwithrangeIcon,
+    samplingPlan: TextfieldwithrangeIcon,
     supplier: SupplierIcon,
     lhrstep: StepsectionIcon,
     approvals: ApprovalsIcon,

@@ -50,6 +50,7 @@ import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
 import FBReferences from '../FBReferences';
 import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
 import FBSalesOrderNumber from '../FBSalesOrderNumber';
+import FBSamplingPlan from '../FBSamplingPlan';
 import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
@@ -173,6 +174,7 @@ class FBSchemaState {
     shippingCustomer: FBShippingCustomer,
     shippingMethod: FBShippingMethod,
     salesOrderNumber: FBSalesOrderNumber,
+    samplingPlan: FBSamplingPlan,
   };
 
   @observable public schema?: FBSchemaProps[];
