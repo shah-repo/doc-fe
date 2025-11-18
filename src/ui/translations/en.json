@@ -1603,6 +1603,8 @@
   "form.builder.audit.LOT_USAGE.BOOLEAN_NEW": "{label} added",
   "form.builder.audit.LOT_USAGE.BOOLEAN_EDITED": "{label} deleted",
   "form.builder.audit.replacement": "{type} replacement to {value} for step {step}",
+  "form.builder.audit.MATERIAL_REPLACEMENT": "Step {step}: {field} {type} {value}",
+  "form.builder.audit.EQUIPMENT_REPLACEMENT": "Step {step}: {field} {type}",
   "form.builder.owner.input.warning": "There are contributors to the document. Contributors {contributors} should be added as approvers.",
   "form.builder.select": "Select",
   "form.builder.enter": "Enter",

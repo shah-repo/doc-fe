@@ -1,4 +1,4 @@
-import { translate } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import { Audit } from '../../../state/ducks/audit/types';
 import { SHIPPING_ADDRESS_FIELDS } from '../../form.builder/FBShippingInfo/constants';
 
@@ -156,4 +156,64 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): Chan
   }
 
   return { change, fbLabel };
+};
+
+export const getMaterialRelacmentAuditLabel = (
+  field: string, fieldType: string, stepIndex?: number, meta: any = {},
+): string => {
+  const { lotPart, lotDocId, materialId } = meta;
+  let type = '';
+  if (materialId) {
+    if (fieldType === 'BOOLEAN_NEW') {
+      type = (field === 'qunatity') ? 'assinged to' : 'added to';
+    }
+    if (fieldType === 'BOOLEAN_EDITED') {
+      type = 'deleted for';
+    }
+    if (fieldType === 'NUMBER_EDITED') {
+      type = field === 'quantity' ? 'updated' : 'added to';
+    }
+    if (fieldType === 'STRING_EDITED') {
+      type = field === 'unit' ? 'updated' : 'added to';
+    }
+  } else {
+    type = fieldType === 'BOOLEAN_NEW' ? 'added' : 'deleted';
+  }
+
+  let label = '';
+  if (field === 'lot') {
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotPart,
+        field: 'Lot',
+        type,
+      });
+  } else if (field === 'quantity') {
+    const lotDocIdUpdated = fieldType === 'NUMBER_EDITED' ? '' : lotDocId;
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotDocIdUpdated,
+        field: 'Quanity',
+        type,
+      });
+  } else if (field === 'unit') {
+    const lotDocIdUpdated = fieldType === 'STRING_EDITED' ? '' : lotDocId;
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotDocIdUpdated,
+        field: 'Unit',
+        type,
+      });
+  } else if (field === 'actualId') {
+    label = intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT' },
+      {
+        step: stepIndex,
+        field: 'Equipment',
+        type,
+      });
+  }
+  return label;
 };
