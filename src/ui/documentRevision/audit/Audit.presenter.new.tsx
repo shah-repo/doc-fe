@@ -524,7 +524,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       <>
                         <Typography className={classes.auditKey}>
                           <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('lot', change.type, stepIndex, change.reference?.metadata)}
+                            {getMaterialRelacmentAuditLabel('lot', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
                         <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{lotDocId}</div>
@@ -534,7 +534,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       <>
                         <Typography className={classes.auditKey}>
                           <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('quantity', change.type, stepIndex, change.reference?.metadata)}
+                            {getMaterialRelacmentAuditLabel('quantity', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
                         <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{quantity}</div>
@@ -544,7 +544,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       <>
                         <Typography className={classes.auditKey}>
                           <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('unit', change.type, stepIndex, change.reference?.metadata)}
+                            {getMaterialRelacmentAuditLabel('unit', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
                         <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{unit}</div>
@@ -554,7 +554,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 ) : (<>
                   <Typography className={classes.auditKey}>
                     <span data-cy={`change-key-${groupKey}-${key}=${innerKey++}`}>
-                      {getMaterialRelacmentAuditLabel('actualId', change.type, stepIndex, change.reference?.metadata)}
+                      {getMaterialRelacmentAuditLabel('actualId', change.type, change.reference?.metadata, stepIndex)}
                     </span>
                   </Typography>
                   <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{change.reference?.toDocRev?.document.docId}</div>

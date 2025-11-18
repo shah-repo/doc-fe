@@ -11,6 +11,17 @@ interface ChangeFieldType {
   fbLabel: FBLabel
 }
 
+interface SmartReferenceMeta {
+  lotDocId?: string
+  startedBy: string
+  completedBy: string
+  materialId?: string
+  equipmentId?: string
+  quantity?: number
+  unit?: string
+  lotPart?: string
+}
+
 export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType | undefined => {
   const changeField = change.field.split('.');
   const field = changeField.at(-1) ?? '';
@@ -159,22 +170,26 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): Chan
 };
 
 export const getMaterialRelacmentAuditLabel = (
-  field: string, fieldType: string, stepIndex?: number, meta: any = {},
+  field: string, fieldType: string, meta: SmartReferenceMeta|undefined, stepIndex = 1,
 ): string => {
-  const { lotPart, lotDocId, materialId } = meta;
+  const { lotPart, lotDocId, materialId } = meta || {};
   let type = '';
   if (materialId) {
-    if (fieldType === 'BOOLEAN_NEW') {
-      type = (field === 'qunatity') ? 'assinged to' : 'added to';
-    }
-    if (fieldType === 'BOOLEAN_EDITED') {
-      type = 'deleted for';
-    }
-    if (fieldType === 'NUMBER_EDITED') {
-      type = field === 'quantity' ? 'updated' : 'added to';
-    }
-    if (fieldType === 'STRING_EDITED') {
-      type = field === 'unit' ? 'updated' : 'added to';
+    switch (fieldType) {
+      case 'BOOLEAN_NEW':
+        type = (field === 'quantity') ? 'assigned to' : 'added to';
+        break;
+      case 'BOOLEAN_EDITED':
+        type = 'deleted for';
+        break;
+      case 'NUMBER_EDITED':
+        type = field === 'quantity' ? 'updated' : 'added to';
+        break;
+      case 'STRING_EDITED':
+        type = field === 'unit' ? 'updated' : 'added to';
+        break;
+      default:
+        break;
     }
   } else {
     type = fieldType === 'BOOLEAN_NEW' ? 'added' : 'deleted';
