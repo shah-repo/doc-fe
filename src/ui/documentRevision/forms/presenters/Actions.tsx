@@ -35,7 +35,6 @@ import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintL
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB, FBFormState } from '../../../form.builder';
-import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';
@@ -44,6 +43,7 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
+import { FBFormStateContext } from '../../DocumentRevisionUpdate.container.wrap';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentCustomers, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
@@ -185,6 +185,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
   const isCustomers = checkIsDocumentCustomers(documentRevision?.document?.documentType?.groupOptions);
+  const { values: formStateContext } = React.useContext(FBFormStateContext);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -234,10 +235,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 'partType', 'childForRevise']));
         } else {
-          const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue('formInput',
-            omit(formStateContext?._currentValue,
+            omit(formStateContext,
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 'partType', 'childForRevise']));
         }
