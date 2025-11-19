@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, get, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
@@ -651,6 +651,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       id: dataItem.id,
       title: dataItem?.title,
       type: FBProcedureItemType.materials,
+      existingLotIds: dataItem?.[SUB_ITEMS_FIELD]?.map(data => get(data, 'lotId')),
     };
     scanDialog.open();
   };

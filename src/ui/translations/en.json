@@ -1886,6 +1886,7 @@
   "scan.lot.grid.scan.eq.info.message": "Scan an equipment to add below",
   "scan.lot.grid.scan.barcode.error.message": "Barcode not recognized",
   "scan.lot.grid.scan.duplicate.error.message": "Item already scanned. Please scan a different item.",
+  "scan.lot.grid.scan.selected.lot.error.message": "This Lot Rev has already been selected for this part.",
   "scan.lot.grid.empty.lots.message": "No items scanned yet. Please scan lot(s) to proceed.",
   "integrations.title": "Integrations",
   "integrations.not.available": "There are no available integrations",

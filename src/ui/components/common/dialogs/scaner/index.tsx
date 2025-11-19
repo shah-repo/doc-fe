@@ -195,11 +195,14 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleScan = (data: string) => {
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
     const lotRevId = extractRevision(data);
     const isDuplicateScan = scanLots?.some((lot: ScanLot) => lot.lotRevId === lotRevId);
+    const isScanItemAlreadyAdded = lotRevId && selectedPart.existingLotIds?.includes(lotRevId);
     if (isDuplicateScan) {
       toastError(translate('scan.lot.grid.scan.duplicate.error.message'));
+      return;
+    } else if (isScanItemAlreadyAdded) {
+      toastError(translate('scan.lot.grid.scan.selected.lot.error.message'));
       return;
     }
 
