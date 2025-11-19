@@ -12,6 +12,7 @@ import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { OverflowCell } from '../../components/common/kendo.column.templates/OverflowCell';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { TableColumnProps } from '../../components/table/column/types';
 import { ownerFieldsMapping } from '../../documentType/grid/constants';
@@ -30,7 +31,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const history = useHistory();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
-  const arCategory = useSelector(pageDetailsSelectors.byCategory)?.['Change Request'];
+  const arCategory = useSelector(pageDetailsSelectors.byCategory)?.['Approval Request'];
 
   const columns: Array<TableColumnProps<ChangeRequest>> = arCategory.columns
     .filter((c) => c.showOnWeb)
@@ -50,17 +51,21 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       ? intl.formatMessage({ id: columnDetails.label })
       : columnDetails.label;
 
-    return {
+    const columnDef = {
       field: columnDetails.key,
       title: columnLabel,
-      filter: 'text',
       show: true,
       showColumnMenu: true,
       key: { index },
       extraFields: ['id', ...ownerFieldsMapping[columnDetails.key] || []],
-      ...predefinedColumnDetails[columnDetails.key],
+      width: 8,
     };
+
+    return predefinedColumnDetails[columnDetails.key]
+      ? { ...columnDef, ...predefinedColumnDetails[columnDetails.key] }
+      : { ...columnDef, cell: OverflowCell, showTooltip: true, tooltipField: columnDetails.key };
   });
+
   const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);
 
   const setSearchStatus = (
