@@ -81,8 +81,8 @@ export default makeStyles(theme =>
     externalRefDetails: {
       display: 'grid',
       gridTemplateColumns: 'auto 1fr',
-      rowGap: '4px',
-      columnGap: '5px',
+      rowGap: theme.spacing(0.5),
+      columnGap: theme.spacing(0.625),
     },
     row: {
       display: 'contents',
