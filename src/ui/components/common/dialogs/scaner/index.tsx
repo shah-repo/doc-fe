@@ -29,6 +29,11 @@ interface Props {
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
+declare global {
+  interface Window {
+    simulateBarcodeScan: (data: string) => void
+  }
+}
 
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart, parentRevId }) => {
   const classes = useStyles();
@@ -109,7 +114,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
+    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired);
 
     if (hasExpiredLot) {
       expiredDialog.open();
@@ -135,7 +140,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
 
   if (typeof window !== 'undefined' && !Config.isProduction) {
     // Enables test automation to trigger fake barcode and lot-scan events.
-    (window as any).simulateBarcodeScan = handleScan;
+    window.simulateBarcodeScan = handleScan;
   }
 
   return (
