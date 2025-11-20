@@ -29,11 +29,6 @@ interface Props {
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
-declare global {
-  interface Window {
-    simulateBarcodeScan: (data: string) => void
-  }
-}
 
 const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, selectedPart, parentRevId }) => {
   const classes = useStyles();
