@@ -114,7 +114,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired);
+    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
 
     if (hasExpiredLot) {
       expiredDialog.open();
