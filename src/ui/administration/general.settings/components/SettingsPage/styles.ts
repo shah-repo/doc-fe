@@ -164,9 +164,4 @@ export default makeStyles<NextTheme>(theme => ({
     textTransform: 'lowercase',
     marginLeft: theme.spacing(0.25),
   },
-  // title: {
-  //   color: theme.palette.primary.main,
-  //   fontWeight: theme.typography.fontWeightBold,
-  //   marginLeft: theme.spacing(1),
-  // },
 }));
