@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, concat, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, get, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
@@ -295,9 +295,12 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       }));
 
       const parentItem = state.data[parentIndex];
-      const updatedSubItems = concat(newSubItems, parentItem[SUB_ITEMS_FIELD] ?? []).map((item) =>
-        omit(item, EB_FIELDS_TO_OMIT),
-      );
+
+      const updatedSubItems = [
+        ...newSubItems,
+        ...(parentItem[SUB_ITEMS_FIELD] ?? []),
+      ].map((item) => omit(item, [...EB_FIELDS_TO_OMIT, 'title']));
+
       state.data[parentIndex][SUB_ITEMS_FIELD] = updatedSubItems;
       const payload = omit(parentItem, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
 
@@ -526,14 +529,22 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const createNewLotItem = () => {
-    return {
+    const baseItem = {
       id: FB.uniqid,
-      title: '',
       unit: '',
       quantity: undefined,
       isLotAddition: true,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
+    };
+
+    if (isEBProcedure) {
+      return baseItem;
+    }
+
+    return {
+      ...baseItem,
+      title: '',
     };
   };
 
@@ -640,6 +651,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       id: dataItem.id,
       title: dataItem?.title,
       type: FBProcedureItemType.materials,
+      existingLotIds: dataItem?.[SUB_ITEMS_FIELD]?.map(data => get(data, 'lotId')),
     };
     scanDialog.open();
   };

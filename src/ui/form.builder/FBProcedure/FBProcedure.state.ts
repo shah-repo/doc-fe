@@ -1,4 +1,4 @@
-import { filter, flattenDeep, get, omit, unionBy } from 'lodash';
+import { filter, flattenDeep, get, omit } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -50,10 +50,22 @@ class FBProcedureState {
       item = { title: item.title, id: String.fromCharCode(nextId), type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
-    const items = unionBy([item], get(this, `value.${type}`), 'id');
+    const existingItems = get(this, `value.${type}`) || [];
+
+    const index = existingItems.findIndex(i => i.id === item.id);
+
+    let items;
+
+    if (index >= 0) {
+      items = [...existingItems];
+      items[index] = item;
+    } else {
+      items = [...existingItems, item];
+    }
+
     const value = {
       ...this.value,
-      [type]: items.reverse(),
+      [type]: items,
     };
     this.setValue(value);
   };

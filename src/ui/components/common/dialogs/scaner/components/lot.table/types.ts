@@ -79,4 +79,5 @@ export interface ScanSelectedPartItem {
   plannedId?: string
   type?: FBProcedureItemType
   unit?: string
+  existingLotIds?: string[]
 }
