@@ -131,7 +131,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       if (isEBProcedure) {
-        setLots(data);
+        setLots(data.filter(isValidLOT));
         return;
       }
 
