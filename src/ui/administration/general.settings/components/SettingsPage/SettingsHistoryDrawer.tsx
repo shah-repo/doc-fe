@@ -64,6 +64,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
+            data-cy={`audit-log-entry-${groupId}-${sectionName}-main`}
           >
             <Text message={displayEntries[0]} />
           </Typography>
@@ -71,12 +72,15 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
 
         {/* Remaining entries as list */}
         {displayEntries.length > 1 && (
-          <ul className={classes.displayEntryList}>
+          <ul className={classes.displayEntryList}
+            data-cy={`audit-log-entry-${groupId}-${sectionName}-list`}
+          >
             {displayEntries.slice(1).map((entry, index) => (
               <li key={index}>
                 <Typography
                   variant="subtitle2"
                   className={classes.auditValue}
+                  data-cy={`audit-log-entry-${groupId}-${sectionName}-list-item`}
                 >
                   <Text message={entry} />
                 </Typography>
