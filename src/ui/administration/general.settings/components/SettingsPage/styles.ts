@@ -122,7 +122,7 @@ export default makeStyles<NextTheme>(theme => ({
   groupBox: {
     fontSize: 16,
     boxShadow: `inset 0px 1px 0px -1px ${Colors.lightGray3}, inset 0px -1px 0px 0px ${Colors.lightGray3}`,
-    padding: theme.spacing(1.875),
+    padding: theme.spacing(2),
   },
   logEntry: {
     fontSize: 12,
@@ -131,11 +131,10 @@ export default makeStyles<NextTheme>(theme => ({
   auditListItem: {
     margin: 0,
     padding: 0,
-    marginBottom: theme.spacing(1.875),
+    marginBottom: theme.spacing(2),
   },
   auditValue: {
     fontSize: 13,
-    fontFamily: 'Sora',
     wordBreak: 'break-word',
     color: Colors.textBlack,
     lineHeight: 1.5,
