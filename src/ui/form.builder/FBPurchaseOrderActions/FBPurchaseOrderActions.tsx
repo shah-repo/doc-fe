@@ -3,11 +3,11 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import { FBPurchaseOrderActionsProps, FBSubmitButton } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
-import POLineItemAlert from '../../app/alert.dialog/POLineItemAlert';
 import FormattedNumber from '../../components/FormattedNumber';
 import Text from '../../components/Text';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { withFBPurchaseOrderActions } from './FBPurchaseOrderActions.wrap';
+import POLineItemAlert from './POLineItemAlert';
 
 const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProps> = ({
   onAddClick,

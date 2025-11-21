@@ -2,8 +2,8 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
+import OverflowingContent from '../../../commonCells/OveflowContent';
 import { EMPTY_DROPDOWN_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { isEditMode } from '../../utils';
@@ -22,11 +22,8 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <Box onClick={() => onClick?.({ dataItem })}>
-      <OverflowTooltip
+      <OverflowingContent
         title={fieldValue}
-        placement="top"
-        interactive
-        arrow
       >
         {fieldValue && lotDocumentId ? <Link
           to={documentPreviewPath(lotDocRevId, lotDocumentId)}
@@ -35,7 +32,7 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
         >
           {fieldValue}
         </Link> : EMPTY_DROPDOWN_PLACEHOLDER}
-      </OverflowTooltip>
+      </OverflowingContent>
     </Box>
   );
 };
