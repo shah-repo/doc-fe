@@ -109,7 +109,7 @@ export default makeStyles<NextTheme>(theme => ({
     },
   },
   drawerAuditLogsPaper: {
-    width: '72vw',
+    width: '32vw',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -121,75 +121,54 @@ export default makeStyles<NextTheme>(theme => ({
   },
   groupBox: {
     fontSize: 16,
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2.5),
-    paddingBottom: theme.spacing(1),
-    borderBottom: `1px solid ${Colors.stroke}`,
-    '&:first-child': {
-      marginTop: 0,
-    },
+    boxShadow: `inset 0px 1px 0px -1px ${Colors.lightGray3}, inset 0px -1px 0px 0px ${Colors.lightGray3}`,
+    padding: theme.spacing(2),
   },
   logEntry: {
     fontSize: 12,
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
   },
-  logEntryBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    '& > :nth-child(1)': {
-      flex: '0 0 15%',
-      '& > h6': {
-        fontSize: 11,
-      },
-    },
-    '& > :nth-child(2)': {
-      flex: '0 0 60%',
-    },
-    '& > :nth-child(3)': {
-      flex: '0 0 25%',
-      textAlign: 'right',
-      '& > h6': {
-        fontSize: 11,
-      },
-    },
+  auditListItem: {
+    margin: 0,
+    padding: 0,
+    marginBottom: theme.spacing(2),
   },
-  contentBox: {
-    margin: theme.spacing(0, 4),
+  auditValue: {
+    fontSize: 13,
+    wordBreak: 'break-word',
+    color: Colors.textBlack,
+    lineHeight: 1.5,
   },
-  parentKey: {
-    color: Colors.primaryDark,
+  auditKey: {
+    fontSize: 12,
+    color: Colors.textGray,
+    marginBottom: theme.spacing(0.5),
+  },
+  owner: {
+    color: theme.palette.text.primary,
+    fontWeight: 500,
+  },
+  dateContainer: {
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.hint,
+  },
+  revisionContainer: {
+    background: Colors.statusDraftBg,
+    height: theme.spacing(5),
+    paddingTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    borderRadius: theme.spacing(0.4),
   },
   changeType: {
-    color: Colors.statusDraft,
-    fontSize: 11,
-    marginLeft: theme.spacing(1),
+    textTransform: 'lowercase',
+    marginLeft: theme.spacing(0.25),
   },
-  deletedChangeType: {
-    color: Colors.statusVoid,
-    fontSize: 11,
-    marginLeft: theme.spacing(1),
+  fullWidth: {
+    width: '100%',
   },
-  editedChangeType: {
-    color: Colors.statusReview,
-    fontSize: 11,
-    marginLeft: theme.spacing(1),
-  },
-  displayText: {
-    color: Colors.textGray,
-    lineHeight: 1.75,
-  },
-  ownerName: {
-    color: Colors.textBlack,
-  },
-  ownerEmail: {
-    color: Colors.textBlack,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  email: {
-    color: Colors.primaryLight,
-    fontSize: 13,
+  displayEntryList: {
+    paddingLeft: theme.spacing(2.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: 0,
   },
 }));
