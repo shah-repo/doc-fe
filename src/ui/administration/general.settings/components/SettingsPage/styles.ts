@@ -129,19 +129,19 @@ export default makeStyles<NextTheme>(theme => ({
     marginTop: theme.spacing(2),
   },
   auditListItem: {
-    margin: '0px',
-    padding: '0px',
-    marginBottom: '15px',
+    margin: 0,
+    padding: 0,
+    marginBottom: theme.spacing(1.875),
   },
   auditValue: {
-    fontSize: '13px',
+    fontSize: 13,
     fontFamily: 'Sora',
     wordBreak: 'break-word',
     color: Colors.textBlack,
     lineHeight: 1.5,
   },
   auditKey: {
-    fontSize: '12px',
+    fontSize: 12,
     color: Colors.textGray,
     marginBottom: theme.spacing(0.5),
   },
@@ -163,5 +163,13 @@ export default makeStyles<NextTheme>(theme => ({
   changeType: {
     textTransform: 'lowercase',
     marginLeft: theme.spacing(0.25),
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  displayEntryList: {
+    paddingLeft: theme.spacing(2.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: 0,
   },
 }));

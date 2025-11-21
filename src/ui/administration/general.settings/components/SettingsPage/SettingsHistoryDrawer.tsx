@@ -53,26 +53,26 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   const getDisplayText = (
     groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
-    let updateEntries = [displayText];
+    let displayEntries = [displayText];
     if (changeType === AUDIT_CHANGE_TYPE.UPDATED) {
-      updateEntries = displayText.split(' | ');
+      displayEntries = displayText.split(' | ');
     }
 
     return (
       <>
-        {updateEntries.length > 0 && (
+        {displayEntries.length > 0 && (
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
           >
-            <Text message={updateEntries[0]} />
+            <Text message={displayEntries[0]} />
           </Typography>
         )}
 
         {/* Remaining entries as list */}
-        {updateEntries.length > 1 && (
-          <ul style={{ paddingLeft: 20, marginTop: 4, marginBottom: 0 }}>
-            {updateEntries.slice(1).map((entry, index) => (
+        {displayEntries.length > 1 && (
+          <ul className={classes.displayEntryList}>
+            {displayEntries.slice(1).map((entry, index) => (
               <li key={index}>
                 <Typography
                   variant="subtitle2"
@@ -102,7 +102,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
           </Button>
         </Box>
       </AppBar>
-      {loading && <LinearProgress style={{ width: '100%' }} />}
+      {loading && <LinearProgress className={classes.fullWidth} />}
       {Object.keys(auditLogsMap).map(groupId => {
         const groupEntries = auditLogsMap[groupId];
         // For all the entries in a group, the time and user would be the same as the first entry
@@ -126,7 +126,9 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
                 const { parentKeyLabel, changeType, displayText } = companySettingLog;
                 return (
                   <Box key={companySettingLog.id} className={classes.logEntry}>
-                    <Typography variant="subtitle1" className={classes.auditKey}>
+                    <Typography variant="subtitle1" className={classes.auditKey}
+                      data-cy={`change-key-${parentKeyLabel}-${changeType}`}
+                    >
                       {parentKeyLabel} <span className={classes.changeType}>{changeType}</span>
                     </Typography>
                     {
