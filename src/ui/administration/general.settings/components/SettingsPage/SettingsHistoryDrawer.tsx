@@ -1,12 +1,14 @@
-import { AppBar, Box, Drawer, Typography } from '@material-ui/core';
-import Email from '@material-ui/icons/EmailRounded';
+import { AppBar, Box, Drawer, LinearProgress, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { MomentFormats, useDate } from '../../../../../common/utils/date';
+import { MomentFormats } from '../../../../../common/utils/date';
+import { User } from '../../../../../state/ducks/common/types';
 import { companyActions } from '../../../../../state/ducks/company';
+import DateTime from '../../../../components/DateTime';
 import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import UserAvatarListItem from '../../../../documentRevision/Sidebar/common/UserAvatarListItem';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { withThemeNext } from '../../../../layout/theme-next';
@@ -23,8 +25,8 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   onClose,
 }) => {
   const classes = useStyles();
-  const { getFormattedDateString } = useDate();
 
+  const [loading, setLoading] = useState(true);
   const [auditLogsMap, setAuditLogsMap] = useState<{[key: string]: CompanySettingsChangeLog[]}>({});
   const handleAuditLogs = (logs: CompanySettingsChangeLog[] | undefined) => {
     const logsMap: {[key: string]: CompanySettingsChangeLog[]} = {};
@@ -35,6 +37,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       logsMap[log.groupId].push(log);
     });
     setAuditLogsMap(logsMap);
+    setLoading(false);
   };
 
   const fetchSettingsLog = useActionCreator(companyActions.fetchSettingsAuditLogs);
@@ -47,18 +50,46 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     settingsLogsAsync.start(fetchSettingsLog, settingsLogsAsync);
   }, []);
 
-  const getChangeStyle = (changeType: AUDIT_CHANGE_TYPE | undefined) => {
-    if (changeType === AUDIT_CHANGE_TYPE.ADDED) {
-      return classes.changeType;
-    }
-
-    if (changeType === AUDIT_CHANGE_TYPE.DELETED) {
-      return classes.deletedChangeType;
-    }
-
+  const getDisplayText = (
+    groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
+  ) => {
+    let displayEntries = [displayText];
     if (changeType === AUDIT_CHANGE_TYPE.UPDATED) {
-      return classes.editedChangeType;
+      displayEntries = displayText.split(' | ');
     }
+
+    return (
+      <>
+        {displayEntries.length > 0 && (
+          <Typography
+            variant="subtitle2"
+            className={classes.auditValue}
+            data-cy={`audit-log-entry-${groupId}-${sectionName}-main`}
+          >
+            <Text message={displayEntries[0]} />
+          </Typography>
+        )}
+
+        {/* Remaining entries as list */}
+        {displayEntries.length > 1 && (
+          <ul className={classes.displayEntryList}
+            data-cy={`audit-log-entry-${groupId}-${sectionName}-list`}
+          >
+            {displayEntries.slice(1).map((entry, index) => (
+              <li key={index}>
+                <Typography
+                  variant="subtitle2"
+                  className={classes.auditValue}
+                  data-cy={`audit-log-entry-${groupId}-${sectionName}-list-item`}
+                >
+                  <Text message={entry} />
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    );
   };
 
   return (
@@ -75,45 +106,45 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
           </Button>
         </Box>
       </AppBar>
-      <Box className={classes.contentBox}>
-        {Object.keys(auditLogsMap).map(groupId => (
+      {loading && <LinearProgress className={classes.fullWidth} />}
+      {Object.keys(auditLogsMap).map(groupId => {
+        const groupEntries = auditLogsMap[groupId];
+        // For all the entries in a group, the time and user would be the same as the first entry
+        const { updatedAt, ownerName, ownerEmail } = groupEntries[0];
+        const finalOwner = { name: ownerName, email: ownerEmail } as User;
+        return (
           <Box key={groupId} className={classes.groupBox}>
+            <UserAvatarListItem
+              name={<span data-cy={`audit-log-${groupId}`}>{finalOwner?.name}</span>}
+              user={finalOwner}
+              secondaryComponent={
+                <DateTime
+                  data-cy={`audit-time-${groupId}`}
+                  value={updatedAt}
+                  format={MomentFormats.BriefDateTime}
+                />
+              }
+            />
             {
-              auditLogsMap[groupId]?.map(companySettingLog => (
-                <Box key={companySettingLog.id} className={classes.logEntry}>
-                  <Box className={classes.logEntryBox}>
-                    <Box>
-                      <Typography variant="subtitle2">
-                        <Text message={getFormattedDateString(
-                          companySettingLog.updatedAt,
-                          MomentFormats.BriefDateTime,
-                        )} />
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography variant="body1" className={classes.parentKey}>
-                        {companySettingLog.parentKeyLabel} -
-                        <span className={getChangeStyle(companySettingLog.changeType)}>{companySettingLog.changeType}</span>
-                      </Typography>
-                      <Typography variant="subtitle2" className={classes.displayText}>
-                        {companySettingLog.displayText}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle2" className={classes.ownerName}>
-                        {companySettingLog.ownerName}
-                      </Typography>
-                      <Typography variant="subtitle2" className={classes.ownerEmail}>
-                        <Email className={classes.email} /> {companySettingLog.ownerEmail}
-                      </Typography>
-                    </Box>
+              groupEntries.map(companySettingLog => {
+                const { parentKeyLabel, changeType, displayText } = companySettingLog;
+                return (
+                  <Box key={companySettingLog.id} className={classes.logEntry}>
+                    <Typography variant="subtitle1" className={classes.auditKey}
+                      data-cy={`change-key-${parentKeyLabel}-${changeType}`}
+                    >
+                      {parentKeyLabel} <span className={classes.changeType}>{changeType}</span>
+                    </Typography>
+                    {
+                      getDisplayText(groupId, parentKeyLabel, changeType, displayText)
+                    }
                   </Box>
-                </Box>
-              ))
+                );
+              })
             }
           </Box>
-        ))}
-      </Box>
+        );
+      })}
     </Drawer>
   );
 };

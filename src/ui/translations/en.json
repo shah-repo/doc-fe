@@ -2730,7 +2730,7 @@
   "attachment.upload.error.missing.etag": "missing ETag",
   "attachment.upload.error.failed": "Upload failed",
   "attachment.upload.error.cancelled": "Upload cancelled",
-  "settings.audit.logs.drawer.title": "Audit History",
+  "settings.audit.logs.drawer.title": "History",
   "example.prompt.requirements.list": "Based on the provided requirements, generate a test plan to meet applicable standards, such as ISO 10993 or IEC 60601",
   "example.prompt.attachment.attachment": "This is a requirements document. Use the Standard file from <document ID> named <attachment name> and list any gaps between the requirements document and the Standard",
   "example.prompt.compare,document": "Compare this document to its previous revision",
