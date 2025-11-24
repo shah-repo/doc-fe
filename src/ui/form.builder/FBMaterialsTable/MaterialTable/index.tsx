@@ -59,9 +59,10 @@ import { withMaterialsTable } from './wrap';
 
 interface MaterialTreelistContextProps {
   lhrsQuantity?: number
+  addLot?: (dataItem: EditableMaterial) => void
 }
 
-export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({ lhrsQuantity: 1 });
+export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({ lhrsQuantity: 1, addLot: undefined });
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
   items,
@@ -250,11 +251,10 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           payload = omit(payload, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         }
 
+        discardScanLot(values as EditableMaterial);
         const allSteps = workspaceState?.schema?.filter((step) => step.type === 'mpiprocedure');
         procedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
         mpiProcedureState?.addItem(payload as FBProcedureItemConfig, type, allSteps);
-
-        discardScanLot(values as EditableMaterial);
       } else {
         if (isDesign) {
           const procedureItem = { ...omit(values, LOT_FIELDS_TO_OMIT) };
@@ -707,6 +707,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       <MaterialTreelistContext.Provider
         value={{
           lhrsQuantity,
+          addLot,
         }}
       >
         <FormikProvider value={formik}>
