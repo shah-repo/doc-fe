@@ -5,10 +5,10 @@ import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
-import OverflowingContent from '../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { toastError } from '../../../../components/notifications';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -24,7 +24,7 @@ interface Props extends FBFilesPresenterProps {
   fileUploadState: FBFileUploadState
 }
 
-const AttachmentNamePresenter: React.FunctionComponent<Props> = ({
+const AttachmentNamePresenter: React.FC<Props> = ({
   attachments = [],
   boxProps,
   isDisabled,
@@ -68,12 +68,16 @@ const AttachmentNamePresenter: React.FunctionComponent<Props> = ({
           const { name, type, id } = file;
           return (
             <Box key={id} className={classes.attachmentName}>
-              <AttachFile className={classes.attachmentIcon} />
               <Box className={classes.fileRow}>
-                <Box className={classes.fileName} onClick={() => downloadOrViewFile(file)} title={`${name}.${type}`}>
-                  <OverflowingContent>
-                    <span>{`${name}.${type}`}</span>
-                  </OverflowingContent>
+                <AttachFile className={classes.attachmentIcon} />
+                <Box className={classes.fileName} onClick={() => downloadOrViewFile(file)}>
+                  <OverflowTooltip
+                    arrow
+                    placement="top"
+                    title={`${name}.${type}`}
+                  >
+                    {`${name}.${type}`}
+                  </OverflowTooltip>
                 </Box>
                 {!isDisabled && (
                   <FontAwesomeIcon
