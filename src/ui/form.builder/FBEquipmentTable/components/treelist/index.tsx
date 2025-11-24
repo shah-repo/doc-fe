@@ -136,7 +136,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     setState(prevState => ({
       ...prevState,
       data: [...updatedItems],
-      expanded: [...expandedRows],
+      expanded: expandedRows.length ? expandedRows : prevState.expanded,
       inEdit: [],
     }));
   }, [equipsSelected, items]);
@@ -201,15 +201,16 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         }
 
         const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+        discardEquipItem(values as EditableEquipmentItem);
       procedureState?.addItem(payload, type, allSteps);
       mpiProcedureState?.addItem(payload, type, allSteps);
-      discardEquipItem(values as EditableEquipmentItem);
+
       return;
       }
 
+      discardEquipItem(values as EditableEquipmentItem);
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
-      discardEquipItem(values as EditableEquipmentItem);
     },
   });
 
