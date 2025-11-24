@@ -88,6 +88,10 @@ export const styles = makeStyles((theme) => ({
   lotInfoId: {
     marginRight: theme.spacing(1.25),
   },
+  optionListItem: {
+    paddingTop: theme.spacing(0.25),
+    paddingBottom: theme.spacing(0.25),
+  },
   viewIcon: {
     color: Colors.textGray,
   },

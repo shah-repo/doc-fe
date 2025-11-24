@@ -41,6 +41,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   equipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+  const classes = styles();
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
@@ -73,7 +74,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         size="small"
         getOptionLabel={(opt) => opt.label}
         renderOption={(option: EquipAutoCompleteOptions, props) => (
-          <ListItem {...props} className="eq-list-item" disableGutters>
+          <ListItem {...props} className={classes.optionListItem} disableGutters>
             <ListItemText primary={option.label} />
             {option.isExpired && (
               <ListItemIcon>
@@ -160,7 +161,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{
