@@ -124,7 +124,6 @@ const Editor: React.FC<EditorProps> = ({
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
-        disableClearable
         forcePopupIcon
         options={items}
         onInputChange={debounceFunction}

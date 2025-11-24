@@ -98,7 +98,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
@@ -109,7 +109,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
-  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, addLot } = React.useContext(MaterialTreelistContext);
 
   const isAddLotVisible = !dataItem?.isLotAddition && !dataItem?.lotId
     && dataItem?.isLotAdditionIconsShown === true
@@ -131,7 +131,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       if (isEBProcedure) {
-        setLots(data);
+        setLots(data.filter(isValidLOT));
         return;
       }
 
