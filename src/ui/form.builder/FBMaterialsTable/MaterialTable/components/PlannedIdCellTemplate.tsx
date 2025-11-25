@@ -119,6 +119,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 {...getFieldProps(field)}
                 value={inputValue ? { label: inputValue } : value}
                 blurOnSelect
+                forcePopupIcon
                 disableOpenOnFocus={true}
                 freeSolo
                 ListboxComponent={({ children, ...otherProps }) => {
