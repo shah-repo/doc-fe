@@ -205,6 +205,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         let valueKey = last(change.field.split('.'));
         let valueKeyType = '';
         if (valueKey === 'id' && !change.field.includes('attachments')) { return; }
+        if (valueKey === 'assignedEquipments' && change?.previousValue === '[object Object]') { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }
