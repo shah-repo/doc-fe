@@ -10,6 +10,7 @@ import { AttachmentType } from '../../../../../state/ducks/attachments/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { FormHeaderSummaryContext } from '../../../../document.revision/header/SummaryHeader';
+import { attachmentsDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import { documentRevisionStatusContextFromDocList } from '../../../../documentRevision/DocumentRevisionsManager.container';
 import { FormHeaderContext, isOwnerContext } from '../../../../documentRevision/forms/DocumentRevisionForm.container';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInStatus, isDocumentRevisionObsolete } from '../../../../documentRevision/helpers/documentRevisionStatus';
@@ -40,11 +41,14 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
     ? documentRevisionSummary?.id as string
     : undefined;
 
+  const isDisabledInRestrictedEdit = attachmentsDisabledChangeControl(documentRevision);
+
   const requiredStatus = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     documentRevision?.status,
   );
-  const canSetAsPrimary = requiredStatus && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;
+  const canSetAsPrimary = requiredStatus && documentRevision?.document?.canAccess
+    && attachment.lineType !== LINE_TYPES.RED_LINE && !isDisabledInRestrictedEdit;
   const isDocumentPage = Boolean(React.useContext(FormHeaderContext));
   const isNewDocument = isDocumentPage && !documentRevision?.id;
   const showSetAsPrimary = attachment.id !== documentRevision?.primaryAttachment?.id && canSetAsPrimary && !isNewDocument && isDocumentPage;
@@ -74,7 +78,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
           <Text message={translate('attachment.menu.view')} />
         </div>
       )}
-      {isUserDocumentOwner && requiredStatus && (
+      {isUserDocumentOwner && requiredStatus && !isDisabledInRestrictedEdit && (
         <div onClick={onDelete?.(attachment)} data-cy="option-delete">
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
           <Text message={translate('common.delete')} />

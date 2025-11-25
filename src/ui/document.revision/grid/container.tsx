@@ -2,25 +2,32 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { intl } from '../../../common/intl';
 import { getTableCriteria } from '../../../common/utils/selectors';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
-import { CATEGORY, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { CATEGORY, DOC_TYPE_GROUP_OPTION, PageDetailsColumn } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { OverflowCell } from '../../components/common/kendo.column.templates/OverflowCell';
 import { KendoColumn } from '../../components/common/kendo/types';
+import { TableColumnProps } from '../../components/table/column/types';
+import { ownerFieldsMapping } from '../../documentType/grid/constants';
+import { columnSearchConfiguration } from '../../documentType/grid/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { isTranslation } from '../../translations/types';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../utils/helpers';
 import { documentEditPath, documentPreviewPath } from '../utils/paths';
-import gridConfiguration from './column.definition';
+import { predefinedColumnDetails } from './column.definition';
 import { DocumentListPresenter } from './presenter';
 
+const TABLE_NAME = 'documentRevisions';
+
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
-  const TABLE_NAME = 'documentRevisions';
-  const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const notGroupOptions = [
     DOC_TYPE_GROUP_OPTION.RECORD,
@@ -28,9 +35,44 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
     DOC_TYPE_GROUP_OPTION.WORK_ORDER,
   ];
-  const notIncategory = CATEGORY.WORKORDER_CATEGORY;
+  const notInCategory = CATEGORY.WORKORDER_CATEGORY;
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const history = useHistory();
+
+  const docListCategory = useSelector(pageDetailsSelectors.byCategory)?.['Document List'];
+  const columns: Array<TableColumnProps<DocumentRevision>> = docListCategory?.columns
+    ?.filter((c) => c.showOnWeb)
+    ?.map(
+      (column: PageDetailsColumn) => {
+        const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria);
+        return {
+          key: column.valuePath as keyof DocumentRevision,
+          label: column.label,
+          searchOptions,
+        };
+      },
+    );
+
+  const kendoColumnDef = columns?.map((columnDetails, index) => {
+    const columnLabel = isTranslation(columnDetails.label)
+      ? intl.formatMessage({ id: columnDetails.label })
+      : columnDetails.label;
+
+    const columnDef = {
+      field: columnDetails.key,
+      title: columnLabel,
+      show: true,
+      showColumnMenu: true,
+      key: { index },
+      extraFields: ['id', ...ownerFieldsMapping[columnDetails.key] || []],
+      width: 8,
+    };
+
+    return predefinedColumnDetails[columnDetails.key]
+      ? { ...columnDef, ...predefinedColumnDetails[columnDetails.key] }
+      : { ...columnDef, cell: OverflowCell, showTooltip: true, tooltipField: columnDetails.key };
+  });
+  const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);
 
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
   const async = useAsync({
@@ -48,7 +90,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       documentRevisionQueryStatus(),
       notGroupOptions,
       undefined,
-      notIncategory,
+      notInCategory,
     );
 
   useEffect(() => {
@@ -95,7 +137,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       };
       setSearchStatus(
         dataState,
-        gridConfiguration.columns,
+        kendoColumnDef as KendoColumn[],
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,7 +159,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableName={TABLE_NAME}
       tableCriteria={tableCriteria}
       schema={schema}
-      columns={gridConfiguration.columns}
+      columns={kendoColumnDef as KendoColumn[]}
       onRowClick={onRowClick}
       queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
     />

@@ -6,6 +6,7 @@ import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
+import Config from '../../../../../config';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import { FBProcedureItemType } from '../../../../form.builder/FBProcedureItem/FBProcedureItem.types';
@@ -29,6 +30,7 @@ interface Props {
   selectedPart: ScanSelectedPartItem
   isSerialNumberHidden?: boolean
   isLHRScan?: boolean
+  parentRevId?: string
   reloadGrid?: () => void
   addScanLotsToPart?: (item: ScanLot[] | Item[]) => void
   onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
@@ -36,7 +38,7 @@ interface Props {
   onClose?: (event: {}, reason: DialogCloseReason) => void
 }
 
-const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan }) => {
+const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reloadGrid, addScanLotsToPart, selectedPart, isSerialNumberHidden, isLHRScan, parentRevId }) => {
   const classes = useStyles();
   const [scanLots, setScanLots] = useState<ScanLot[]>([]);
   const expiredDialog = useDialog();
@@ -184,7 +186,7 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired === true);
+    const hasExpiredLot = scanLots.some((lot: ScanLot) => lot.isExpired);
 
     if (hasExpiredLot) {
       expiredDialog.open();
@@ -194,11 +196,14 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   };
 
   const handleScan = (data: string) => {
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, extractRevision(data), validateScanLotAsync);
     const lotRevId = extractRevision(data);
     const isDuplicateScan = scanLots?.some((lot: ScanLot) => lot.lotRevId === lotRevId);
+    const isScanItemAlreadyAdded = lotRevId && selectedPart.existingLotIds?.includes(lotRevId);
     if (isDuplicateScan) {
       toastError(translate('scan.lot.grid.scan.duplicate.error.message'));
+      return;
+    } else if (isScanItemAlreadyAdded) {
+      toastError(translate('scan.lot.grid.scan.selected.lot.error.message'));
       return;
     }
 
@@ -207,12 +212,17 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
       return;
     }
 
-    validateScanLotAsync.start(validateScanLot, selectedPart.partRevId, lotRevId, validateScanLotAsync);
+    validateScanLotAsync.start(validateScanLot, parentRevId, selectedPart.partRevId, lotRevId, validateScanLotAsync);
   };
 
   const handleError = () => {
     toastError(translate('scan.lot.grid.scan.barcode.error.message'));
   };
+
+  if (typeof window !== 'undefined' && !Config.isProduction) {
+    // Enables test automation to trigger fake barcode and lot-scan events.
+    window.simulateBarcodeScan = handleScan;
+  }
 
   return (
     <Dialog

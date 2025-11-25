@@ -99,8 +99,9 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
-      datePickerState?.setValue(value);
-      save(convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit));
+      const date = convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit);
+      datePickerState?.setValue(date);
+      save(date);
     };
 
     onDatePickerClear = () => {

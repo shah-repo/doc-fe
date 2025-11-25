@@ -51,7 +51,7 @@ export const buildSchema = ({
       id: 'unit',
       field: 'unit',
       title: translate('form.builder.procedure.material.table.unit.title'),
-      cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} />,
+      cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} isLHRS />,
       mainOrderIndex: 5,
       width: 150,
     },

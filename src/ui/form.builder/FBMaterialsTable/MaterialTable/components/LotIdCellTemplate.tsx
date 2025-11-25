@@ -1,10 +1,11 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { MaterialTreelistContext } from '..';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -82,11 +83,13 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
-        renderOption={(option, props) => (
-          <ListItem {...props} className="lot-list-item" disableGutters>
-            <ListItemText primary={option.label} />
-          </ListItem>
-        )}
+        ListboxComponent={({ children, ...otherProps }) => {
+          return (
+            <>
+              <ul {...otherProps}>{children}</ul>
+            </>
+          );
+        }}
         loading={isLoading}
         onChange={handleChange}
       />
@@ -95,7 +98,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, addLot, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ hasChildren, isEditMode });
@@ -106,6 +109,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
+  const { lhrsQuantity = 1, addLot } = React.useContext(MaterialTreelistContext);
 
   const isAddLotVisible = !dataItem?.isLotAddition && !dataItem?.lotId
     && dataItem?.isLotAdditionIconsShown === true
@@ -127,7 +131,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       if (isEBProcedure) {
-        setLots(data);
+        setLots(data.filter(isValidLOT));
         return;
       }
 
@@ -198,7 +202,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.(dataItem)}
+                onClick={() => onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity })}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>

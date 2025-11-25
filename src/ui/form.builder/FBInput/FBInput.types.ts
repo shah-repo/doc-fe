@@ -68,6 +68,7 @@ export type FBInputType =
   | 'ebpart'
   | 'eqmaintenance'
   | 'textfieldwithrange'
+  | 'samplingPlan'
   | 'range'
   | 'passpercentage'
   | 'supplier'
@@ -106,6 +107,7 @@ export type FBInputType =
   | 'headquarterAddress'
   | 'shippingItems'
   | 'shippingAddress'
+  | 'salesOrderNumber'
   ;
 
 export type FBInputProps =
@@ -208,6 +210,8 @@ export type FBInputProps =
      * value but we need to omit it from form values.
      */
     omitFormValue?: boolean
+
+    shouldOmitValue?: boolean
     /**
      * @cfg {Bool} Item is deleted. It will not be visible but will remain in scheme.
      */
@@ -290,6 +294,7 @@ export const FBAutosave: FBInputType[] = [
   'supplierSupportingDocs',
   'supplierReferences',
   'textfieldwithrange',
+  'samplingPlan',
 ];
 
 export const SectionTypeField: FBInputType[] = [

@@ -46,20 +46,18 @@ export default function ActionButtons (props: MaterialCellActionsProps<EditableM
           placement="top"
           arrow
         >
-          <div>
-            <IconButton
-              kind="action"
-              size="small"
-              onClick={() => onDelete(dataItem)}
-              ref={deleteRef}
-              data-cy="action-delete"
-              disabled={isDeleteDisabled}
-            >
-              <FontAwesomeIcon
-                className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
-                icon={isHovered ? solid('trash-can') : regular('trash-can')} />
-            </IconButton>
-          </div>
+          <IconButton
+            kind="action"
+            size="small"
+            onClick={() => onDelete(dataItem)}
+            ref={deleteRef}
+            data-cy="action-delete"
+            disabled={isDeleteDisabled}
+          >
+            <FontAwesomeIcon
+              className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
+              icon={isHovered ? solid('trash-can') : regular('trash-can')} />
+          </IconButton>
         </Tooltip>
       )}
       {onDiscard && <Tooltip

@@ -153,6 +153,7 @@ export const styles = makeStyles((theme) => ({
     alignItems: 'center',
     gap: theme.spacing(1),
     marginBottom: theme.spacing(1),
+    width: '100%',
 
     '& svg': {
       fontSize: 16,
@@ -163,27 +164,33 @@ export const styles = makeStyles((theme) => ({
     alignItems: 'center',
     gap: theme.spacing(1),
     flex: 1,
+    minWidth: 0,
   },
   fileName: {
+    display: 'flex',
+    alignItems: 'center',
     flex: 1,
-    fontSize: 14,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
     minWidth: 0,
+    fontSize: 14,
     color: Colors.primary,
     cursor: 'pointer',
+
+    '& > div': {
+      flex: 1,
+      minWidth: 0,
+      display: 'block',
+    },
   },
   deleteIcon: {
     fontSize: 16,
     cursor: 'pointer',
     color: Colors.error,
-    marginLeft: theme.spacing(1),
   },
   attachmentNameContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '100%',
+    gap: theme.spacing(1),
   },
 }));

@@ -49,3 +49,23 @@ export interface HeaderLastSavedProps {
   loading?: boolean
   updateInterval?: number
 }
+
+export enum AUDIT_CHANGE_TYPE {
+  DELETED = 'DELETED',
+  ADDED = 'ADDED',
+  UPDATED = 'UPDATED',
+}
+
+export interface CompanySettingsChangeLog {
+  id: string
+  companyId: string
+  ownerName: string
+  ownerEmail: string
+  parentKey: string
+  parentKeyLabel: string
+  fieldChanged: string
+  changeType?: AUDIT_CHANGE_TYPE
+  displayText: string
+  updatedAt: string
+  groupId: string
+}
