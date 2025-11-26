@@ -40,6 +40,7 @@ import {
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
+import { useOptions } from './hooks/useOptions';
 import { buildEBSchema } from './schemas/ebSchema';
 import { buildLHRTSchema } from './schemas/lhrtSchema';
 import { buildMPISchema } from './schemas/mpiSchema';
@@ -54,7 +55,6 @@ import {
   MaterialItemState,
   MaterialTableProps,
 } from './types';
-import { useOptions } from './useOptions';
 import { withMaterialsTable } from './wrap';
 
 interface MaterialTreelistContextProps {

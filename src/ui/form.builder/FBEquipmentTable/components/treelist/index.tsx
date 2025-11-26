@@ -44,6 +44,7 @@ import {
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
+import { useOptions } from './hooks/useOptions';
 import {
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
@@ -55,7 +56,6 @@ import { TreeListLHRTSchema } from './schemas/lhrtSchema';
 import { TreeListMPISchema } from './schemas/mpiSchema';
 import { TreeListSchema } from './schemas/schema';
 import useStyles from './styles';
-import { useOptions } from './useOptions';
 import { getMapSelectedByParentEquipId, prepareData } from './utils';
 import { withFBEquipmentTable } from './wrap';
 
