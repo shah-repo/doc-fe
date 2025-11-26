@@ -509,7 +509,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[subItemsKey]),
+        [classes.whiteBg]: isEmpty(item[subItemsKey]),
         [classes.grayBg]: !isEmpty(item[subItemsKey]),
         [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
       }),

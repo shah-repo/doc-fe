@@ -215,7 +215,7 @@ export default makeStyles((theme) => ({
 
       '&:last-child': {
         borderBottomLeftRadius: theme.shape.borderRadius,
-        borderBottomRightRadius: `${theme.shape.borderRadius}px`,
+        borderBottomRightRadius: theme.shape.borderRadius,
       },
     },
     '.k-textbox': {
@@ -444,7 +444,7 @@ export default makeStyles((theme) => ({
   popperHolder: {
     height: '100%',
   },
-  WhiteBg: {
+  whiteBg: {
     backgroundColor: Colors.white,
   },
   grayBg: {

@@ -19,55 +19,53 @@ export const buildMPISchema = ({
   onDelete,
   isDisabled,
   onScanClick,
-}: SchemaOptions): CustomTreeListColumnProps[] => {
-  return [
-    {
-      id: 'title',
-      field: 'title',
-      title: translate('form.builder.procedure.material.title'),
-      mainOrderIndex: 1,
-      cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
-      width: 150,
-    },
-    {
-      id: 'LHRTparameter',
-      field: 'LHRTparameter',
-      title: translate('form.builder.procedure.lhrt.parameter.title'),
-      cell: (props) => <LHRTParameterCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
-      mainOrderIndex: 2,
-      width: 150,
-    },
-    {
-      id: 'quantity',
-      field: 'quantity',
-      title: translate('form.builder.procedure.material.table.quantity.title'),
-      cell: (props) => <QuantityCell {...props} onClick={onRowClick} />,
-      mainOrderIndex: 4,
-      width: 150,
-    },
-    {
-      id: 'unit',
-      field: 'unit',
-      title: translate('form.builder.procedure.material.table.unit.title'),
-      cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} />,
-      mainOrderIndex: 5,
-      width: 150,
-    },
-    {
-      id: 'actions',
-      locked: false,
-      cell: (props) => (
-        <td className={actionsClass}>
-          <ActionsCell
-            {...props}
-            onConfirm={onConfirm}
-            onDiscard={onDiscard}
-            onDelete={onDelete}
-            rootClassName={popperHolder}
-          />
-        </td>
-      ),
-      width: 0,
-    },
-  ];
-};
+}: SchemaOptions): CustomTreeListColumnProps[] => [
+  {
+    id: 'title',
+    field: 'title',
+    title: translate('form.builder.procedure.material.title'),
+    mainOrderIndex: 1,
+    cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
+    width: 150,
+  },
+  {
+    id: 'LHRTparameter',
+    field: 'LHRTparameter',
+    title: translate('form.builder.procedure.lhrt.parameter.title'),
+    cell: (props) => <LHRTParameterCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
+    mainOrderIndex: 2,
+    width: 150,
+  },
+  {
+    id: 'quantity',
+    field: 'quantity',
+    title: translate('form.builder.procedure.material.table.quantity.title'),
+    cell: (props) => <QuantityCell {...props} onClick={onRowClick} />,
+    mainOrderIndex: 4,
+    width: 150,
+  },
+  {
+    id: 'unit',
+    field: 'unit',
+    title: translate('form.builder.procedure.material.table.unit.title'),
+    cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} />,
+    mainOrderIndex: 5,
+    width: 150,
+  },
+  {
+    id: 'actions',
+    locked: false,
+    cell: (props) => (
+      <td className={actionsClass}>
+        <ActionsCell
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+          rootClassName={popperHolder}
+        />
+      </td>
+    ),
+    width: 0,
+  },
+];

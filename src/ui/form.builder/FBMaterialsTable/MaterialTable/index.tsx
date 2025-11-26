@@ -158,7 +158,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         return;
       }
       if (schemaItem) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         workspaceState!.schema![lhrStepIndex] = {
           ...schemaItem,
           editorConfig: {
@@ -390,7 +389,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.whiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
       }),
