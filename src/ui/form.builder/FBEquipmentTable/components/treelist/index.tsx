@@ -33,7 +33,7 @@ import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../../helpers';
-import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../interface';
+import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../types';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,

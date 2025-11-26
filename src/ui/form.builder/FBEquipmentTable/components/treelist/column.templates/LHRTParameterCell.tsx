@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, memo } from 'react';
 import { Checkbox } from '../../../../../components/forms/fields-next';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { isEditEquipItem } from '../utils';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';

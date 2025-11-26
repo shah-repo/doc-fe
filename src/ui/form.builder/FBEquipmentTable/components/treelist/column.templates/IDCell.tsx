@@ -8,7 +8,7 @@ import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { FB } from '../../../../helpers';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';

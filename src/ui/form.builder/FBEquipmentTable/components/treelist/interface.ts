@@ -3,7 +3,7 @@ import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-rea
 import FBMPIProcedureSelectState from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
 import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
-import { EditableEquipmentItem, EquipmentItem } from '../../interface';
+import { EditableEquipmentItem, EquipmentItem } from '../../types';
 
 export interface FBEquipmentProps {
   name?: string

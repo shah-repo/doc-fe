@@ -1,7 +1,7 @@
 import { TreeListCellProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 
 export interface customEQOptionType extends OptionType{
   complianceDueDate: string

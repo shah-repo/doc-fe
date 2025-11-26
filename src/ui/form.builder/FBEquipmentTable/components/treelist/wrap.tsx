@@ -7,7 +7,7 @@ import { FB, FBMPIProcedureSelectState, FBMPIProcedureSelectValue } from '../../
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../../state/ducks/documentRevisions/types';
-import { EditableEquipmentItem } from '../../interface';
+import { EditableEquipmentItem } from '../../types';
 import { FBEquipmentProps } from './interface';
 
 export const withFBEquipmentTable = <T extends FBEquipmentProps>(
@@ -27,7 +27,7 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
         return;
       }
 
-      const disposer = reaction(
+      return reaction(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
@@ -61,9 +61,6 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
           }
         },
       );
-
-      return disposer;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scannedEquipments]);
 
     function saveActualEquipment (values: EditableEquipmentItem) {

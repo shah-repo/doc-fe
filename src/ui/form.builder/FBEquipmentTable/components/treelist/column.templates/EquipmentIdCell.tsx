@@ -12,7 +12,7 @@ import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/Sty
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';

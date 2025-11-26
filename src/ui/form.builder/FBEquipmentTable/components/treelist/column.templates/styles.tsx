@@ -30,7 +30,7 @@ export const styles = makeStyles((theme) => ({
     maxWidth: 300,
     fontWeight: props?.hasChildren ? 600 : 400,
     fontSize: 14,
-    lineHeight: '16.64px',
+    lineHeight: 1.2,
   }),
   idCellEditWrapper: {
     display: 'flex',

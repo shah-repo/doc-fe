@@ -90,11 +90,10 @@ class FBProcedureState {
       };
     });
 
-    const value = {
+    this.setValue({
       ...this.value,
       [type]: updatedItems,
-    };
-    this.setValue(value);
+    });
   };
 
   @action public setValue = (value?: FBProcedureValue) => {
