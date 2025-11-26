@@ -40,10 +40,10 @@ import {
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
-import { buildEBSchema } from './ebSchema';
-import { buildLHRTSchema } from './lhrtSchema';
-import { buildMPISchema } from './mpiSchema';
-import { buildSchema } from './schema';
+import { buildEBSchema } from './schemas/ebSchema';
+import { buildLHRTSchema } from './schemas/lhrtSchema';
+import { buildMPISchema } from './schemas/mpiSchema';
+import { buildSchema } from './schemas/schema';
 import useStyles from './styles';
 import {
   CustomTreeListExpandChangeEvent,

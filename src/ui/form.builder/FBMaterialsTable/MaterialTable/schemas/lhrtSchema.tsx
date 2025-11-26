@@ -1,11 +1,11 @@
 import React from 'react';
-import { translate } from '../../../../common/intl';
-import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
-import { ActionsCell } from './components/Actions';
-import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
-import QuantityCell from './components/QuantityCell';
-import UnitsCellTemplate from './components/UnitsCellTemplate';
-import { SchemaOptions } from './types';
+import { translate } from '../../../../../common/intl';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
+import { ActionsCell } from '../components/Actions';
+import PlannedIdCellTemplate from '../components/PlannedIdCellTemplate';
+import QuantityCell from '../components/QuantityCell';
+import UnitsCellTemplate from '../components/UnitsCellTemplate';
+import { SchemaOptions } from '../types';
 
 export const buildLHRTSchema = ({
   materialSelectOptions,

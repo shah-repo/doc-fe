@@ -1,15 +1,16 @@
 import React from 'react';
-import { translate } from '../../../../common/intl';
-import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
-import { ActionsCell } from './components/Actions';
-import LHRTParameterCellTemplate from './components/LHRTParameterCellTemplate';
-import PlannedIdCellTemplate from './components/PlannedIdCellTemplate';
-import QuantityCell from './components/QuantityCell';
-import UnitsCellTemplate from './components/UnitsCellTemplate';
-import { SchemaOptions } from './types';
+import { translate } from '../../../../../common/intl';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
+import { ActionsCell } from '../components/Actions';
+import LotIdCellTemplate from '../components/LotIdCellTemplate';
+import PlannedIdCellTemplate from '../components/PlannedIdCellTemplate';
+import QuantityCell from '../components/QuantityCell';
+import UnitsCellTemplate from '../components/UnitsCellTemplate';
+import { SchemaOptions } from '../types';
 
-export const buildMPISchema = ({
+export const buildSchema = ({
   materialSelectOptions,
+  units,
   onRowClick,
   addLot,
   actionsClass,
@@ -19,20 +20,21 @@ export const buildMPISchema = ({
   onDelete,
   isDisabled,
   onScanClick,
+  isLHRProductionBuild,
 }: SchemaOptions): CustomTreeListColumnProps[] => [
   {
     id: 'title',
     field: 'title',
-    title: translate('form.builder.procedure.material.title'),
+    title: translate('form.builder.procedure.material.table.material.title'),
     mainOrderIndex: 1,
     cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
     width: 150,
   },
   {
-    id: 'LHRTparameter',
-    field: 'LHRTparameter',
-    title: translate('form.builder.procedure.lhrt.parameter.title'),
-    cell: (props) => <LHRTParameterCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
+    id: 'lotId',
+    field: 'lotId',
+    title: translate('form.builder.procedure.material.table.lot.number.title'),
+    cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} isLHRProductionBuild={isLHRProductionBuild} />,
     mainOrderIndex: 2,
     width: 150,
   },
@@ -48,7 +50,7 @@ export const buildMPISchema = ({
     id: 'unit',
     field: 'unit',
     title: translate('form.builder.procedure.material.table.unit.title'),
-    cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} />,
+    cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} isLHRS />,
     mainOrderIndex: 5,
     width: 150,
   },
