@@ -22,12 +22,9 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
 }) => useObserver(() => {
   const procedureState = FB.useRef(FBProcedureState);
   let valueKey = last(audit.field.split('.')) ?? '';
-  if (audit.id === '4e0156b0-82f9-4eff-a23f-2eefa8b7f478') {
-    console.log('last valueKey', valueKey);
-  }
+
   if (valueKey === 'title') {
     valueKey = audit.field.split('.')[2].split('[')[0] ?? '';
-    // console.log('valueKey title = ', valueKey);
   }
   if (audit.field.includes('attachments')) {
     valueKey = 'attachments';
