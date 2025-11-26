@@ -13,30 +13,28 @@ export const TreeListLHRTSchema = ({
   onConfirm,
   equipmentOptions,
   parentRevId,
-}): CustomTreeListColumnProps[] => {
-  return [
-    {
-      id: 'title',
-      field: 'title',
-      title: translate('form.builder.procedure.equipment.grid.title'),
-      mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
-      width: 150,
-    },
-    {
-      id: 'actions',
-      locked: false,
-      cell: (props) => (
-        <td className={actionsClass}>
-          <ActionsCell
-            {...props}
-            onConfirm={onConfirm}
-            onDiscard={onDiscard}
-            rootClassName={popperHolder}
-          />
-        </td>
-      ),
-      width: 0,
-    },
-  ];
-};
+}): CustomTreeListColumnProps[] => [
+  {
+    id: 'title',
+    field: 'title',
+    title: translate('form.builder.procedure.equipment.grid.title'),
+    mainOrderIndex: 1,
+    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+    width: 150,
+  },
+  {
+    id: 'actions',
+    locked: false,
+    cell: (props) => (
+      <td className={actionsClass}>
+        <ActionsCell
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          rootClassName={popperHolder}
+        />
+      </td>
+    ),
+    width: 0,
+  },
+];

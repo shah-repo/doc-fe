@@ -15,12 +15,18 @@ const LHRTParameterCell: React.ComponentType<CustomTreeListCellProps> = (props) 
     setFieldValue(field, !!checked);
   };
 
+  const checkboxProps = {
+    checked: isEditMode ? values[field] : dataItem[field],
+    disabled: !isEditMode,
+    ...(isEditMode && {
+      ...getFieldProps(field),
+      onChange: handleExpiredLotChange,
+    }),
+  };
+
   return (
     <TreeListCellWrapper {...props}>
-      {isEditMode && (
-        <Checkbox checked={values[field]} {...getFieldProps(field)} onChange={handleExpiredLotChange} />
-      )}
-      {!isEditMode && <Checkbox checked={dataItem[field]} disabled={true} />}
+      <Checkbox {...checkboxProps} />
     </TreeListCellWrapper>
   );
 };

@@ -226,9 +226,8 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         if (!lhrStepIndex) {
           return;
         }
-        if (schemaItem) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          workspaceState!.schema![lhrStepIndex] = {
+        if (schemaItem && workspaceState?.schema && workspaceState.schema[lhrStepIndex]) {
+          workspaceState.schema[lhrStepIndex] = {
             ...schemaItem,
             editorConfig: {
               ...schemaItem?.editorConfig,

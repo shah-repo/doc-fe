@@ -157,8 +157,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       if (!lhrStepIndex) {
         return;
       }
-      if (schemaItem) {
-        workspaceState!.schema![lhrStepIndex] = {
+      if (schemaItem && workspaceState?.schema && workspaceState.schema[lhrStepIndex]) {
+        workspaceState.schema[lhrStepIndex] = {
           ...schemaItem,
           editorConfig: {
             ...schemaItem?.editorConfig,

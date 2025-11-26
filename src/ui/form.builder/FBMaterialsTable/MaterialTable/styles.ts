@@ -9,7 +9,7 @@ const baseInputStyles = (theme: Theme) => ({
   background: 'none',
   backgroundColor: Colors.white,
   borderRadius: theme.shape.borderRadius / 2,
-  border: `1px solid ${Colors.tableCellBorder}`,
+  border: `1px solid ${Colors.tableStroke}`,
 
   '&::selection': {
     backgroundColor: 'highlight !important',
@@ -36,7 +36,7 @@ export default makeStyles((theme) => ({
   '@global': {
     '.k-grid': {
       borderRadius: theme.shape.borderRadius,
-      border: `1px solid ${Colors.tableCellBorder}`,
+      border: `1px solid ${Colors.tableStroke}`,
       color: Colors.textBlack,
     },
     '.k-grid-toolbar': {

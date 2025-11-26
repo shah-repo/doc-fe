@@ -58,7 +58,7 @@ export const styles = makeStyles((theme) => ({
     textTransform: 'uppercase',
   },
   cellBorderBottom: {
-    borderBottom: `1px solid ${Colors.tableCellBorder} !important`,
+    borderBottom: `1px solid ${Colors.tableStroke} !important`,
     borderLeft: '0 !important',
   },
   nameCell: (props) => ({

@@ -18,7 +18,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onScanClick?: EquipmentCallback
   deleteLot?: EquipmentCallback
   deletePart?: EquipmentCallback
-  onClick?: (e) => void
+  onClick?: (event: { dataItem: EditableEquipmentItem }) => void
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
   isMPIForm?: boolean
