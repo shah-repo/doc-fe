@@ -44,7 +44,7 @@ import {
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
-import { useOptions } from './hooks/useOptions';
+import { useFetchData } from './hooks/useFetchData';
 import {
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
@@ -86,7 +86,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
-  const { equipmentOptions } = useOptions();
+  const { equipmentOptions } = useFetchData();
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),

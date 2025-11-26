@@ -1,9 +1,9 @@
 import { Theme } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export const BASE_COLOR = Colors.primaryBg;
+const BASE_COLOR = Colors.primaryBg;
 
-export const baseInputStyles = (theme: Theme) => ({
+const baseInputStyles = (theme: Theme) => ({
   width: '100%',
   height: 30,
   background: 'none',

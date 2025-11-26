@@ -7,7 +7,7 @@ import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutoco
 import { FB } from '../../../helpers';
 import { MaterialOption } from '../types';
 
-export const useOptions = () => {
+export const useFetchData = () => {
   const materialState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.materials,
   });

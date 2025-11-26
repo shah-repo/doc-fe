@@ -40,7 +40,7 @@ import {
   LOT_FIELDS_TO_OMIT,
   SUB_ITEMS_FIELD,
 } from './constants';
-import { useOptions } from './hooks/useOptions';
+import { useFetchData } from './hooks/useFetchData';
 import { buildEBSchema } from './schemas/ebSchema';
 import { buildLHRTSchema } from './schemas/lhrtSchema';
 import { buildMPISchema } from './schemas/mpiSchema';
@@ -90,7 +90,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { procedureState, mpiProcedureState, lhrStepState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
-  const { materialSelectOptions } = useOptions();
+  const { materialSelectOptions } = useFetchData();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;

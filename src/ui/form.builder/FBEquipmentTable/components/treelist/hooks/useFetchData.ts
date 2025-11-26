@@ -26,7 +26,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   };
 };
 
-export const useOptions = () => {
+export const useFetchData = () => {
   const optionId = FBAutocompleteAsyncOption.equipment;
   const equipAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId,
