@@ -51,7 +51,6 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
   };
 
   const renderEquipmentValue = (value?: string) => {
-    console.log('renderEquipmentValue', value);
     const result = procedureState.getItem(value ?? '', FBProcedureItemType.equipment);
     if (!result) {
       return <div data-cy={dataCy}>{getAuditDefaultValue(value)}</div>;
@@ -131,7 +130,6 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     },
     assignedEquipments () {
       if (audit.type === 'ARRAY_DELETED') {
-        console.log('audit equp delete', auditValue, 'whole', audit);
         try {
           const data = JSON.parse(auditValue as string);
           if (data && data.equipmentId) {
