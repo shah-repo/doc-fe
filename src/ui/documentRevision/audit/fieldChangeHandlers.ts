@@ -177,22 +177,22 @@ export const getMaterialRelacmentAuditLabel = (
   if (materialId) {
     switch (fieldType) {
       case 'BOOLEAN_NEW':
-        type = (field === 'quantity') ? 'assigned to' : 'added to';
+        type = (field === 'quantity') ? getMaterialRelacmentAuditField('assigned to') : getMaterialRelacmentAuditField('added to');
         break;
       case 'BOOLEAN_EDITED':
         type = 'deleted for';
         break;
       case 'NUMBER_EDITED':
-        type = field === 'quantity' ? 'updated' : 'added to';
+        type = field === 'quantity' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
         break;
       case 'STRING_EDITED':
-        type = field === 'unit' ? 'updated' : 'added to';
+        type = field === 'unit' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
         break;
       default:
         break;
     }
   } else {
-    type = fieldType === 'BOOLEAN_NEW' ? 'added' : 'deleted';
+    type = fieldType === 'BOOLEAN_NEW' ? getMaterialRelacmentAuditField('added') : getMaterialRelacmentAuditField('deleted');
   }
 
   let label = '';
@@ -231,4 +231,11 @@ export const getMaterialRelacmentAuditLabel = (
       });
   }
   return label;
+};
+
+const getMaterialRelacmentAuditField = (type: string): string => {
+  return intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT.field' },
+    {
+      type,
+    });
 };
