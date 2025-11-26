@@ -1,5 +1,6 @@
 import { Box, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import cx from 'classnames';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FBDialog, FBMapWrapper, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType, FBText } from '..';
@@ -31,15 +32,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
       <Box mt={4}>
         <FBDialog />
         {type === FBProcedureItemType.attachments && (
-          <Box
-            bgcolor={Colors.athens_gray}
-            color={Colors.almost_black}
-            height="40px"
-            fontSize="12px"
-            boxShadow={`inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`}
-            fontWeight="600"
-            display="flex"
-          >
+          <Box className={classes.attachmentsHeader}>
             <FBText
               {...{ loading }}
               boxProps={{
@@ -53,7 +46,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           </Box>
         )}
         {type !== FBProcedureItemType.attachments && (
-          <Box className={classes.textContainer}>
+          <Box className={classes.titleText}>
             <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
           </Box>
         )}
@@ -61,21 +54,13 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
             {(item: FBProcedureItemConfig, index) => (
               <Box
-                border={1}
-                borderLeft={0}
-                borderRight={0}
-                borderTop={0}
                 borderColor={item.type ? Colors.medium_red : Colors.gray_goose}
                 key={`fb-procedure-item-${type}-${index}`}
-                lineHeight="18px"
-                className={FBClasses.hoverVisibility}
+                className={cx(FBClasses.hoverVisibility, classes.attachmentsRow)}
               >
                 <Box
-                  display="flex"
                   bgcolor={item.type ? Colors.light_red : Colors.white}
-                  alignItems="center"
-                  p={1.5}
-                  minHeight={42}
+                  className={cx(FBClasses.hoverVisibility, classes.attachmentsCell)}
                 >
                   <Box flexGrow={1}>
                     <FBText
