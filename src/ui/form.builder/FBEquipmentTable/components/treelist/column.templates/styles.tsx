@@ -26,12 +26,17 @@ export const styles = makeStyles((theme) => ({
   deleteIcon: {
     color: Colors.error,
   },
-  titleInfoCell: (props) => ({
+  titleInfoCell: {
     maxWidth: 300,
-    fontWeight: props?.hasChildren ? 600 : 400,
     fontSize: 14,
     lineHeight: 1.2,
-  }),
+  },
+  boldText: {
+    fontWeight: 600,
+  },
+  normalText: {
+    fontWeight: 400,
+  },
   idCellEditWrapper: {
     display: 'flex',
     alignItems: 'center',

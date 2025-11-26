@@ -101,7 +101,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, isDisabled, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = styles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
@@ -223,7 +223,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode, [classes.boldText]: hasChildren, [classes.normalText]: !hasChildren })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{

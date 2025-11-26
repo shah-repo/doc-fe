@@ -20,7 +20,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded, isLHRT } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
   const isUpdateAction = dataItem[MODE_FIELD];
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = styles({ isEditMode });
   const { getFieldProps, setFieldValue, values, errors } = useFormikContext<EditableMaterial>();
   const isFreeSolo = !isLHRT && values?.LHRTparameter;
   const [inputValue, setInputValue] = useState('');
@@ -147,8 +147,12 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 className={cx(
                   classes.defaultIcon,
                   classes.expandCell,
-                  { [classes.expand]: hasChildren },
-                  { [classes.disabled]: !hasChildren },
+                  {
+                    [classes.expand]: hasChildren,
+                    [classes.disabled]: !hasChildren,
+                    [classes.boldText]: hasChildren,
+                    [classes.normalText]: !hasChildren,
+                  },
                 )}
               >
                 <FontAwesomeIcon
@@ -159,7 +163,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 />
               </span>
             )}
-            {displayValue}
+            <span className={cx(hasChildren ? classes.boldText : classes.normalText)}>{displayValue}</span>
           </>
         </OverflowContent>
       )}

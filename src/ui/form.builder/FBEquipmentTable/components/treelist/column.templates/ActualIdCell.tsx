@@ -89,7 +89,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, equipmentOptions, addActualId, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = styles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
@@ -141,7 +141,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
+      <span className={cx(classes.lotNameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
         <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete

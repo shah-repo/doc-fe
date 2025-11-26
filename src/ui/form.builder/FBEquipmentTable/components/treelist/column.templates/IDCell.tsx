@@ -150,7 +150,7 @@ const Editor: React.FC<EditorProps> = ({
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm, isEBProcedure } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = styles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
   const isLoading = !equipmentOptions.length;
 
@@ -190,7 +190,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
             }
           />
         </span>}
-      <span className={cx(classes.nameCell, classes.titleInfoCell)}>
+      <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
           <Editor
             {...{
