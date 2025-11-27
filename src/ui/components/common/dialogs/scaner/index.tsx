@@ -6,6 +6,7 @@ import React, { memo, useCallback, useState } from 'react';
 import BarcodeReader from 'react-barcode-reader';
 import { translate } from '../../../../../common/intl';
 import { convertHtmlEntities } from '../../../../../common/utils/helpers';
+import Config from '../../../../../config';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -131,6 +132,11 @@ const ScanCaptureDialog: React.FC<Props> = ({ handler, onCancel, onClose, reload
   const handleError = () => {
     toastError(translate('scan.lot.grid.scan.barcode.error.message'));
   };
+
+  if (typeof window !== 'undefined' && !Config.isProduction) {
+    // Enables test automation to trigger fake barcode and lot-scan events.
+    window.simulateBarcodeScan = handleScan;
+  }
 
   return (
     <Dialog
