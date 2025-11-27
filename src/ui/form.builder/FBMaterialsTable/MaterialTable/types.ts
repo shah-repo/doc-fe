@@ -86,7 +86,6 @@ export interface SchemaOptions {
   onScanClick?: MaterialCallback
   onRowClick?: (event: MaterialEditEvent) => void
   onPrimaryChange?: (id: string) => void
-  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
   isLHRT?: boolean
   isLHRProductionBuild?: boolean
 }

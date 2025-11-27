@@ -8,7 +8,7 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DOC_TYPE_GROUP } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../../state/ducks/documentRevisions/types';
 import { EditableEquipmentItem } from '../../types';
-import { FBEquipmentProps } from './interface';
+import { FBEquipmentProps } from './types';
 
 export const withFBEquipmentTable = <T extends FBEquipmentProps>(
   Component: React.FC<T>,
