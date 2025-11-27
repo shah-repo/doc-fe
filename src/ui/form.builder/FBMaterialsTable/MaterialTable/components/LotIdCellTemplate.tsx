@@ -11,14 +11,12 @@ import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import DocumentRevisionDialog from '../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { checkIsDocumentLot } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
 import { DOCUMENT_REVISION_LOT_STATUS } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
@@ -105,11 +103,9 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
-  const quickViewDialog = useDialog();
-  const openQuickViewDialog = () => quickViewDialog.open();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
-  const { lhrsQuantity = 1, addLot } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, addLot, openQuickView } = React.useContext(MaterialTreelistContext);
 
   const isAddLotVisible = !dataItem?.isLotAddition && !dataItem?.lotId
     && dataItem?.isLotAdditionIconsShown === true
@@ -223,7 +219,13 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={cx({ [classes.lotInfoId]: !isEditMode, [classes.boldText]: hasChildren, [classes.normalText]: !hasChildren })}>
+        <span
+          className={cx({
+            [classes.lotInfoId]: !isEditMode,
+            [classes.boldText]: hasChildren,
+            [classes.normalText]: !hasChildren,
+          })}
+        >
           {isEditMode ? (
             <LotAutocomplete
               {...{
@@ -242,21 +244,22 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
         </span>
         {!isEditMode && value.label && (
           <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
-            <IconButton kind="simple" size="small" ref={viewLotRef} data-cy="view-lot-button">
+            <IconButton
+              kind="simple"
+              size="small"
+              ref={viewLotRef}
+              data-cy="view-lot-button"
+              onClick={(event) => openQuickView?.(event, dataItem)}
+            >
               <FontAwesomeIcon
                 size="sm"
                 className={classes.viewIcon}
                 icon={isViewLotHovered ? solid('eye') : light('eye')}
-                onClick={openQuickViewDialog}
               />
             </IconButton>
           </StyleTooltip>
         )}
       </span>
-      <DocumentRevisionDialog
-        dialog={quickViewDialog}
-        {...{ docRevId: lotId, parentRevId: parentPartId }}
-      />
     </TreeListCellWrapper>
   );
 };

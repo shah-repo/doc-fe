@@ -10,6 +10,7 @@ import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItem
 import Colors from '../../layout/theme/utils/colors';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
+import useStyles from './FBProcedureItem.styles';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
 import FBProcedureItemDetails from './FBProcedureItemDetails';
 
@@ -30,24 +31,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   const [isHover, setIsHover] = useState(false);
   const isMaterialOrEquipmentType = [FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const isAttachmentType = type === FBProcedureItemType.attachments;
+  const classes = useStyles();
 
   return (
     <FBProvider {...{ dialogState }}>
-      <Box
-        {...(isAttachmentType && {
-          borderTop: 1,
-          borderRight: 1,
-          borderLeft: 1,
-          style: { borderTopLeftRadius: '4px', borderTopRightRadius: '4px' },
-        })}
-      >
+      <Box className={isAttachmentType ? classes.attachmentBox : ''}>
         <FBDialog />
-        {isAttachmentType && <Box
-          bgcolor={Colors.athens_gray}
-          fontWeight="fontWeightBold"
-          display="flex"
-          borderBottom={1}
-        >
+        {isAttachmentType && <Box className={classes.headerBox}>
           <FBText
             {...{ loading }}
             boxProps={{

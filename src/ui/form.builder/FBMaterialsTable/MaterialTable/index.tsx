@@ -60,6 +60,7 @@ import { withMaterialsTable } from './wrap';
 interface MaterialTreelistContextProps {
   lhrsQuantity?: number
   addLot?: (dataItem: EditableMaterial) => void
+  openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
@@ -495,7 +496,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     addLot: addLot,
     isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
     isLHRT: isLHRStep && isMPIProcedure,
-    onOpenQuickView: openQuickView,
     onConfirm: formik.submitForm,
     isLHRProductionBuild,
     onScanClick: openScanDialog,
@@ -528,6 +528,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         value={{
           lhrsQuantity,
           addLot,
+          openQuickView,
         }}
       >
         <FormikProvider value={formik}>
@@ -561,7 +562,8 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
             <DocumentRevisionDialog
               dialog={quickViewDialog}
               {...{
-                docRevId: selectedDataItem?.lotNumber?.id,
+                docRevId: selectedDataItem?.lotId,
+                parentRevId: selectedDataItem?.parentPartId,
               }}
             />
           </Grid>

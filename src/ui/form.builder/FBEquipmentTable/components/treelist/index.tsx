@@ -40,16 +40,16 @@ import {
 } from './constants';
 import { useEquipmentActions } from './hooks/useEquipmentActions';
 import { useFetchData } from './hooks/useFetchData';
-import {
-  CustomTreeListRowProps,
-  EquipmentItemState,
-  FBEquipmentProps,
-} from './interface';
 import { TreeListEBSchema } from './schemas/ebSchema';
 import { TreeListLHRTSchema } from './schemas/lhrtSchema';
 import { TreeListMPISchema } from './schemas/mpiSchema';
 import { TreeListSchema } from './schemas/schema';
 import useStyles from './styles';
+import {
+  CustomTreeListRowProps,
+  EquipmentItemState,
+  FBEquipmentProps,
+} from './types';
 import { getMapSelectedByParentEquipId, prepareData } from './utils';
 import { withFBEquipmentTable } from './wrap';
 

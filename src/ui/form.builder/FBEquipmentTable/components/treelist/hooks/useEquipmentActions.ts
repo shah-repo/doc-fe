@@ -4,7 +4,7 @@ import { isNil, keyBy, uniq } from 'lodash';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../../types';
 import { ADD_FIELD, EB_SUB_ITEMS_FIELD, EXPAND_FIELD, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
-import { CustomTreeListExpandChangeEvent } from '../interface';
+import { CustomTreeListExpandChangeEvent } from '../types';
 
 export function useEquipmentActions (state, setState, formik, flags, externalHandlers) {
   const {

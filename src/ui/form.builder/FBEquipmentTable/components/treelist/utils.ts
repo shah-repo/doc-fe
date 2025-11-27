@@ -2,7 +2,7 @@ import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIPr
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EditableEquipmentItem, EquipmentItem } from '../../types';
 import { ADD_FIELD, EB_SUB_ITEMS_FIELD, MODE_FIELD } from './constants';
-import { MapSelectedByParentEquipId } from './interface';
+import { MapSelectedByParentEquipId } from './types';
 
 export const isAddEquipItem = (dataItem: EditableEquipmentItem): boolean => {
   return dataItem[ADD_FIELD] ?? false;
