@@ -31,6 +31,8 @@ import { ReactComponent as WarningIcon } from '../../../assets/images/icon_warni
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
+import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
+import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -55,9 +57,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   defaultValue,
   redlineActive,
   isReleased,
+  isDesign,
+  isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const { timezone } = useDate();
+  const isAttachmentType = type === FBProcedureItemType.attachments;
   const getDueDate = (date?: string) => {
     if (!date) {
       return;
@@ -69,7 +75,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
-      <Box
+      {isAttachmentType && <Box
         bgcolor={Colors.athens_gray}
         color= {Colors.almost_black}
         fontWeight={600}
@@ -90,7 +96,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           }}
           locale={FBProcedureItemLocale[type]}
         />
-        {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
+        {!isPreview && isUnrelatedToMaterialAndEquipment && !FBProcedureItemOmitAction.includes(type) && (
           <Box pt={1.6} pr={2}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
@@ -110,8 +116,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             </FBTooltip>
           </Box>
         )}
-      </Box>
-      {type === FBProcedureItemType.attachments && (
+      </Box>}
+      {!isAttachmentType && (
+        <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+          <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+        </Box>
+      )}
+      {isAttachmentType && (
         <Box data-cy="mediaUploadField" mt={2}>
           <FBMediaAlbumField
             name={`${name}.attachments`}
@@ -124,8 +135,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           />
         </Box>
       )}
-      {type !== FBProcedureItemType.attachments && !loading && (
-        <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+      {!isAttachmentType && !loading && (<>
+        {isUnrelatedToMaterialAndEquipment && <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (
             <Box
               borderLeft={0}
@@ -327,7 +338,39 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               </Box>
             </Box>
           )}
-        </FBMapWrapper>
+        </FBMapWrapper>}
+        {type === FBProcedureItemType.materials && (
+          <MaterialsTable
+            name={name}
+            isEnableOnlyLotAddition={isSelectVisible && !redlineActive}
+            isActive={!isPreview}
+            type={type}
+            isDisabled={disabled}
+            isDesign={isDesign}
+            items={value}
+            getItem={getItem}
+            handleRemove={handleRemove}
+            handleSelectionDelete={handleSelectionDelete}
+            isMPIProcedure={isDocumentMPI}
+            isPreview={isPreview}
+          />
+        )}
+        {type === FBProcedureItemType.equipment && (
+          <FBEquipmentTable
+            name={name}
+            isDisabled={Boolean(disabled)}
+            type={type}
+            items={value}
+            getItem={getItem}
+            handleRemove={handleRemove}
+            handleSelectionDelete={handleSelectionDelete}
+            isDesign={isDesign}
+            isPreview={isPreview}
+            isMPIProcedure={isDocumentMPI}
+            isEnableActualIdAddition={isSelectVisible && !redlineActive}
+          />
+        )}
+      </>
       )}
     </FBProvider>
   );
