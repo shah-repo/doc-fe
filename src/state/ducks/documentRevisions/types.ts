@@ -579,6 +579,6 @@ export interface ExternalReference {
 export interface ExternalReferencesResponse {
   documentId: string
   documentRevisionId: string
-  realm: string
+  companyId: string
   externalReferences: ExternalReference[]
 }
