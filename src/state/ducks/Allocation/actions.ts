@@ -4,7 +4,7 @@ import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, VALIDATE_EQ_SCAN, VALIDATE_SCANNED_LOT } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL, SCANNED_EQUIPMENT_URL, SCANNED_LOT_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -133,7 +133,7 @@ const validateScannedLot = (
   handlers: Handlers,
 ): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
-    url: `${VALIDATE_SCANNED_LOT}/${parentRevId}/parts/${partRevId}/lots/${lotRevId}/validate`,
+    url: `${SCANNED_LOT_URL}/${parentRevId}/parts/${partRevId}/lots/${lotRevId}/validate`,
     method: 'get',
     handlers,
   });
@@ -143,7 +143,7 @@ const validateEQScannedItem = (
   handlers: Handlers,
 ): ApiAction<ValidateLot> =>
   apiActionWithCallbacks({
-    url: `${VALIDATE_EQ_SCAN}/${equipmentRevId}/validate`,
+    url: `${SCANNED_EQUIPMENT_URL}/${equipmentRevId}/validate`,
     method: 'get',
     handlers,
   });

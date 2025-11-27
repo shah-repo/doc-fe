@@ -1,12 +1,8 @@
 import {
   Grid,
 } from '@material-ui/core';
-import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy, TreeList,
+  TreeList,
   TreeListCellProps,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
@@ -16,10 +12,8 @@ import {
   cloneDeep,
   concat,
   isEmpty,
-  isNil,
-  keyBy,
   omit,
-  replace, uniq,
+  replace,
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
@@ -33,7 +27,7 @@ import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../../helpers';
-import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../types';
+import { EditableEquipmentItem } from '../../types';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
@@ -44,9 +38,9 @@ import {
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
+import { useEquipmentActions } from './hooks/useEquipmentActions';
 import { useFetchData } from './hooks/useFetchData';
 import {
-  CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   EquipmentItemState,
   FBEquipmentProps,
@@ -202,10 +196,9 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
         const payload = omit(state.data[parentIndex], EB_PARENT_FIELDS_TO_OMIT) as FBProcedureItemConfig;
         discardEquipItem(values as EditableEquipmentItem);
-      procedureState?.addItem(payload, type, allSteps);
-      mpiProcedureState?.addItem(payload, type, allSteps);
-
-      return;
+        procedureState?.addItem(payload, type, allSteps);
+        mpiProcedureState?.addItem(payload, type, allSteps);
+        return;
       }
 
       discardEquipItem(values as EditableEquipmentItem);
@@ -214,148 +207,39 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     },
   });
 
-  const updateLHRTEquipmentItem = (item) => {
-    const procedureItem = {
-      id: item.id,
-      title: item.title,
-      paramsId: item.paramsId,
-    };
-
-    const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
-        lhrStepState?.editItem(procedureItem, type);
-        if (!lhrStepIndex) {
-          return;
-        }
-        if (schemaItem && workspaceState?.schema && workspaceState.schema[lhrStepIndex]) {
-          workspaceState.schema[lhrStepIndex] = {
-            ...schemaItem,
-            editorConfig: {
-              ...schemaItem?.editorConfig,
-              parameters: {
-                ...keyBy(lhrStepState?.editedParameters, 'paramsId'),
-              },
-            },
-          };
-        }
-        workspaceState?.saveDocRev();
-  };
-
-  const discardEquipItem = (dataItem?: EditableEquipmentItem) => {
-    setState((prevState) => {
-      const newData = [...prevState.data];
-
-      if (dataItem?.[ADD_FIELD]) {
-        if (dataItem.isActualIdAddition) {
-          const parentIndex = newData.findIndex((data) => {
-            return data.plannedId === dataItem.parentEquipPlannedId;
-          });
-
-          if (parentIndex !== -1) {
-            newData[parentIndex][subItemsKey] = newData[parentIndex][subItemsKey]?.filter(
-              (data) => dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD],
-            );
-          }
-        } else {
-          const filtered = newData.filter((data) => (dataItem.id ? dataItem.id !== data.id : !data[ADD_FIELD]));
-
-          return {
-            ...prevState,
-            data: filtered,
-            inEdit: [],
-          };
-        }
-      }
-
-      return {
-        ...prevState,
-        data: [...newData],
-        inEdit: [],
-      };
-    });
-
-    formik?.resetForm();
-  };
-
-  const deleteItemFromStateData = (dataItem) => {
-    if (isEnableActualIdAddition) {
-      const parentIndex = state.data?.findIndex((data) => data.id === dataItem.parentId);
-      if (parentIndex === -1) {
-        return;
-      }
-      const subItems = state.data[parentIndex][subItemsKey];
-      state.data[parentIndex][subItemsKey] = subItems?.filter((item) => item.id !== dataItem.id);
-    } else {
-      state.data = state.data.filter((item) => item.id !== dataItem.id);
-    }
-
-    setState((prevState) => ({
-      ...prevState,
-      inEdit: [],
-      data: [...state.data],
-    }));
-    formik.resetForm();
-  };
-
-  const removeEquipItem = (dataItem: EditableEquipmentItem) => {
-    if (isEnableActualIdAddition && !isEBProcedure) {
-      handleSelectionDelete?.(dataItem.id);
-    } else if (isEBProcedure && dataItem.equipmentId) {
-      procedureState?.removeEBChildrenItem(dataItem.parentId ?? '', dataItem.id, type, subItemsKey);
-    } else {
-      handleRemove?.(dataItem.id ?? '');
-    }
-    deleteItemFromStateData(dataItem);
-  };
-
-  const ignorePreviouslyAddedItems = (data: EditableEquipmentItem[]) => {
-    return data?.filter((data) => {
-      const isEquipmentItemAddExist = !data[ADD_FIELD];
-      if (data[subItemsKey]) {
-        data[subItemsKey] = data[subItemsKey]?.filter((lot) => !lot[ADD_FIELD]);
-      }
-      return isEquipmentItemAddExist;
-    });
-  };
-
-  const createNewLotItem = () => {
-    return {
-      id: FB.uniqid,
-      plannedId: '',
-      actualId: '',
-      calDueDate: '',
-      pmDueDate: '',
-      isActualIdAddition: true,
-      [MODE_FIELD]: true,
-      [ADD_FIELD]: true,
-    };
-  };
-
-  const addActualId = (dataItem: EditableEquipmentItem) => {
-    const index = state?.data?.findIndex((data) => {
-      return data.id === dataItem.id;
-    });
-    state.data = ignorePreviouslyAddedItems(state.data);
-
-    if (state.data.length && index !== -1) {
-      const newActualItem: EditableEquipmentItem = createNewLotItem();
-      newActualItem.parentEquipPlannedId = dataItem.plannedId;
-      newActualItem.parentId = dataItem.id;
-      state.data[index][subItemsKey] = state.data[index][subItemsKey]?.filter((data) => !data[ADD_FIELD]);
-
-      if (isNil(state.data[index][subItemsKey])) {
-        state.data[index][subItemsKey] = [];
-      }
-
-      state.data[index][subItemsKey]?.unshift(newActualItem);
-
-      setState(prevState => ({
-        ...prevState,
-        data: [...state.data],
-        expanded: [state.data[index].id],
-        inEdit: [newActualItem],
-      }));
-    }
-  };
+  const {
+    discardEquipItem,
+    editEquipmentItem,
+    addEquipItem,
+    onExpandChange,
+    addActualId,
+    removeEquipItem,
+    processData,
+    updateLHRTEquipmentItem,
+  } = useEquipmentActions(
+    state,
+    setState,
+    formik,
+    {
+      isEnableActualIdAddition,
+      isEBProcedure,
+      isDesign,
+      isPreview,
+      isLHRStep,
+      isMPIProcedure,
+      isDisabled,
+      type,
+      isPendingChange,
+      lhrStepIndex,
+    },
+    {
+      handleSelectionDelete,
+      handleRemove,
+      procedureState,
+      workspaceState,
+      lhrStepState,
+    },
+  );
 
   const openScanDialog = (dataItem: EditableEquipmentItem) => {
     const plannedIdInfo = equipmentOptions?.find((option) => option.value === dataItem.title);
@@ -399,108 +283,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
 
   const [columns, setColumns]
     = useState<CustomTreeListColumnProps[]>(schema);
-
-  const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
-    const expanded = event.value
-      ? state.expanded.filter((id) => id !== event.dataItem.id)
-      : uniq([...state.expanded, event.dataItem.id]);
-
-    setState(prevState => ({
-      ...prevState,
-      expanded,
-    }));
-  };
-
-  const addExpandField = (dataTree: EquipmentItem[]) => {
-    const { expanded, inEdit } = state;
-    return mapTree(dataTree, subItemsKey, (item) =>
-      extendDataItem(item, subItemsKey, {
-        [EXPAND_FIELD]: expanded.includes(item.id),
-        [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
-      }),
-    );
-  };
-
-  const processData = () => {
-    const { data, dataState } = state;
-    if (!dataState) {
-      state.dataState = {
-        sort: [],
-        filter: [],
-      };
-      return [];
-    }
-
-    const filter = [...(dataState.filter as FilterDescriptor[])];
-    const filteredData
-      = dataState.filter && filterBy(data, filter, subItemsKey);
-    const sortedData
-      = dataState.sort
-      && filteredData
-      && orderBy(filteredData, dataState?.sort, subItemsKey);
-
-    return addExpandField(sortedData as EquipmentItem[]);
-  };
-
-  const createEquipItem = () => {
-    return {
-      id: FB.uniqid,
-      plannedId: '',
-      actualId: '',
-      calDueDate: '',
-      pmDueDate: '',
-      actualItems: [],
-      [MODE_FIELD]: true,
-      [ADD_FIELD]: true,
-    };
-  };
-
-  const addEquipItem = () => {
-    const newEquipItem = createEquipItem();
-    const isAddEquipmentItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
-    if (isAddEquipmentItemExists === -1) {
-      state.data.push(newEquipItem);
-      setState(prevState => ({
-        ...prevState,
-        data: [...state.data],
-        inEdit: [newEquipItem],
-      }));
-      formik.setValues(newEquipItem);
-    }
-  };
-
-  const editEquipmentItem = ({ dataItem, level }: EquipmentItemEditEvent) => {
-    const defaultValidation = ((isEnableActualIdAddition && dataItem.plannedId) && (!isPreview || isDisabled)) || (!isEnableActualIdAddition && isPreview);
-    const isEditRestricted = dataItem[MODE_FIELD] || (isLHRStep && isDesign ? !((isPreview || isPendingChange) && (dataItem.type || dataItem.paramsId)) : defaultValidation);
-
-    if ((isEditRestricted && !isEBProcedure) || (isEBProcedure && isDisabled)) {
-      return;
-    }
-
-    if ((isMPIProcedure && !isLHRStep) && isDisabled && !isPreview) {
-      return;
-    }
-
-    if (isLHRStep && isDesign && !dataItem.paramsId) {
-      dataItem.paramsId = dataItem?.id;
-    }
-
-    const editItemInfo = extendDataItem(dataItem, subItemsKey);
-
-    if (isMPIProcedure || isLHRStep || isEBProcedure) {
-      const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
-      if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
-        state.data[index] = editItemInfo;
-      }
-    }
-
-    setState(state => ({
-      ...state,
-      data: [...state.data],
-      inEdit: [editItemInfo],
-    }));
-    formik.setValues(editItemInfo);
-  };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableEquipmentItem;
