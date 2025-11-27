@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBMPIProcedureSelectState, FBMPIProcedureSelectValue } from '../..';
+import { FB, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, ProcedureItemType } from '../..';
 import { intl } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -85,7 +85,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
         unit,
         ...(serialNumber && { serialNumber }),
         usedOverride: { id: values.lotId },
-        type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
+        type: type.toUpperCase() as ProcedureItemType,
       };
       mpiProcedureSelectState?.useOverride(id, part);
     }
@@ -108,7 +108,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       const part = {
         quantity,
         unit,
-        type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
+        type: type.toUpperCase() as ProcedureItemType,
       };
       mpiProcedureSelectState?.editOverride(id, refId, part);
     }
