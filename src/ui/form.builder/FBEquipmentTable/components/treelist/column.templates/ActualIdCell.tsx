@@ -14,7 +14,7 @@ import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
-import { useEquipmentOptions } from '../useOptions';
+import { useEquipmentOptions } from '../hooks/useFetchData';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
