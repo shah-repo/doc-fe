@@ -135,6 +135,7 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
       calDueDate: '',
       pmDueDate: '',
       isActualIdAddition: true,
+      isEquipmentSpecification: false,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
@@ -150,6 +151,7 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
       const newActualItem: EditableEquipmentItem = createNewLotItem();
       newActualItem.parentEquipPlannedId = dataItem.plannedId;
       newActualItem.parentId = dataItem.id;
+      newActualItem.isEquipmentSpecification = dataItem.isEquipmentSpecification;
       state.data[index][subItemsKey] = state.data[index][subItemsKey]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][subItemsKey])) {
