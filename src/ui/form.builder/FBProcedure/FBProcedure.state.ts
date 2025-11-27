@@ -50,7 +50,7 @@ class FBProcedureState {
       item = { title: item.title, id: String.fromCharCode(nextId), type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
-    const existingItems = get(this, `value.${type}`) || [];
+    const existingItems = get(this, `value.${type}`, []);
 
     const items = existingItems.reduce((acc, curr) => {
       if (curr.id === item.id) {
@@ -78,7 +78,7 @@ class FBProcedureState {
   };
 
   @action public removeEBChildrenItem = (parentId: string, id: string, type: FBProcedureItemType, subItemsKey: string) => {
-    const items = get(this, `value.${type}`) || [];
+    const items = get(this, `value.${type}`, []);
     const updatedItems = items.map((item) => {
       if (item.id !== parentId) return item;
 
