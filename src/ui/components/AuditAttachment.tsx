@@ -36,7 +36,6 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
         auditValue.push(auditValue);
       }
     }
-
     attachmentState.getFiles(auditValue);
   }, []);
 
