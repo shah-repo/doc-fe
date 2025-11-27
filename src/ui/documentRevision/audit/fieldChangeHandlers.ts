@@ -233,7 +233,7 @@ export const getMaterialRelacmentAuditLabel = (
   return label;
 };
 
-const getMaterialRelacmentAuditField = (type: string): string => {
+export const getMaterialRelacmentAuditField = (type: string): string => {
   return intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT.field' },
     {
       type,
