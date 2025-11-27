@@ -11,7 +11,7 @@ export enum FBLHRBuildOptions {
   'R&D' = 'R&D',
   Production = 'Production',
   Clinical = 'Clinical',
-  'V&V' = 'V&V',
+  'Verification & Validation' = 'Verification & Validation',
 }
 
 export interface EditableLHRBuild extends LHRBuild, EditableItem {
