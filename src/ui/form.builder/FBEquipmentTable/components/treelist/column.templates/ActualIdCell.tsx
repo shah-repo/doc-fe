@@ -12,7 +12,7 @@ import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/Sty
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { useEquipmentOptions } from '../useOptions';
 import { isEditEquipItem } from '../utils';
@@ -96,7 +96,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, equipmentOptions, addActualId, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = styles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
@@ -148,7 +148,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
+      <span className={cx(classes.lotNameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
         <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete

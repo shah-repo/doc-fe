@@ -1,21 +1,16 @@
 import { Box, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import cx from 'classnames';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import {
-  FBDialog,
-  FBMapWrapper,
-  FBProcedureItemConfig,
-  FBProcedureItemLocale,
-  FBProcedureItemType,
-  FBText,
-} from '..';
+import { FBDialog, FBMapWrapper, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType, FBText } from '..';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import Colors from '../../layout/theme/utils/colors';
 import { FBClasses } from '../defaults/layout';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import FBProvider from '../FBProvider/FBProvider';
+import useStyles from './FBLHRStepProcedureItem.styles';
 import { FBLHRStepProcedureItemProps } from './FBLHRStepProcedureItem.types';
 import { withFBLHRStepProcedureItem } from './FBLHRStepProcedureItem.wrap';
 
@@ -30,125 +25,114 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   value = [],
   lhrStepIndex,
   isPendingChange,
-}) => (
-  <FBProvider {...{ dialogState }}>
-    <Box mt={4}>
-      <FBDialog />
-      {type === FBProcedureItemType.attachments && <Box
-        bgcolor={Colors.athens_gray}
-        color={Colors.almost_black}
-        height="40px"
-        fontSize="12px"
-        boxShadow={`inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`}
-        fontWeight="600"
-        display="flex"
-      >
-        <FBText
-          {...{ loading }}
-          boxProps={{
-            flexGrow: 1,
-            display: 'flex',
-            py: 1.7,
-            pl: 2,
-          }}
-          locale={FBProcedureItemLocale[type]}
-        />
-      </Box>}
-      {type !== FBProcedureItemType.attachments && (
-        <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
-          <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
-        </Box>
-      )}
-      {!loading && ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && (
-        <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
-          {(item: FBProcedureItemConfig, index) => (
-            <Box
-              border={1}
-              borderLeft={0}
-              borderRight={0}
-              borderTop={0}
-              borderColor={item.type ? Colors.medium_red : Colors.gray_goose}
-              key={`fb-procedure-item-${type}-${index}`}
-              lineHeight="18px"
-              className={FBClasses.hoverVisibility}
-            >
+}) => {
+  const classes = useStyles({});
+  return (
+    <FBProvider {...{ dialogState }}>
+      <Box mt={4}>
+        <FBDialog />
+        {type === FBProcedureItemType.attachments && (
+          <Box className={classes.attachmentsHeader}>
+            <FBText
+              {...{ loading }}
+              boxProps={{
+                flexGrow: 1,
+                display: 'flex',
+                py: 1.7,
+                pl: 2,
+              }}
+              locale={FBProcedureItemLocale[type]}
+            />
+          </Box>
+        )}
+        {type !== FBProcedureItemType.attachments && (
+          <Box className={classes.titleText}>
+            <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
+          </Box>
+        )}
+        {!loading && ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type) && (
+          <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+            {(item: FBProcedureItemConfig, index) => (
               <Box
-                display="flex"
-                bgcolor={item.type ? Colors.light_red : Colors.white}
-                alignItems="center"
-                p={1.5}
-                minHeight={42}
+                borderColor={item.type ? Colors.medium_red : Colors.gray_goose}
+                key={`fb-procedure-item-${type}-${index}`}
+                className={cx(FBClasses.hoverVisibility, classes.attachmentsRow)}
               >
-                <Box flexGrow={1}>
-                  <FBText
-                    locale={
-                      item.type
-                        ? `form.builder.mpi.procedure.${type}.title.id`
-                        : `form.builder.mpi.procedure.${type}.title`
-                    }
-                    values={
-                      item.type
-                        ? {
-                          id: item.id,
-                          title: getItem?.(item.title),
-                          quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
-                          unit: item.unit,
-                        }
-                        : {
-                          title: getItem?.(item.title),
-                          quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
-                          unit: item.unit,
-                        }
-                    }
-                    boxProps={{
-                      color: Colors.almost_black,
-                      flexGrow: 1,
-                    }}
-                  />
+                <Box
+                  bgcolor={item.type ? Colors.light_red : Colors.white}
+                  className={cx(FBClasses.hoverVisibility, classes.attachmentsCell)}
+                >
+                  <Box flexGrow={1}>
+                    <FBText
+                      locale={
+                        item.type
+                          ? `form.builder.mpi.procedure.${type}.title.id`
+                          : `form.builder.mpi.procedure.${type}.title`
+                      }
+                      values={
+                        item.type
+                          ? {
+                            id: item.id,
+                            title: getItem?.(item.title),
+                            quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
+                            unit: item.unit,
+                          }
+                          : {
+                            title: getItem?.(item.title),
+                            quantity: item.quantity ? toFixed(item.quantity * multiplier) : 'form.builder.none',
+                            unit: item.unit,
+                          }
+                      }
+                      boxProps={{
+                        color: Colors.almost_black,
+                        flexGrow: 1,
+                      }}
+                    />
+                  </Box>
+                  {(!isPreview || isPendingChange) && (item.type || item.paramsId) && (
+                    <>
+                      <Box>
+                        <IconButton color="inherit" size="small" onClick={() => onClick?.(item)}>
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    </>
+                  )}
                 </Box>
-                {(!isPreview || isPendingChange) && (item.type || item.paramsId) && (
-                  <>
-                    <Box>
-                      <IconButton color="inherit" size="small" onClick={() => onClick?.(item)}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </>
-                )}
               </Box>
-            </Box>
-          )}
-        </FBMapWrapper>
-      )}
-      {!loading && type === FBProcedureItemType.materials && (
-        <MaterialsTable
-          isActive={!isPreview}
-          isPendingChange={isPendingChange}
-          type={type}
-          items={value}
-          getItem={getItem}
-          isDesign={true}
-          isLHRStep={true}
-          lhrStepIndex={lhrStepIndex}
-          isMPIProcedure={true}
-        />
-      )}
-      {!loading && type === FBProcedureItemType.equipment && (
-        <FBEquipmentTable
-          isPendingChange={isPendingChange}
-          isPreview={isPreview}
-          isDisabled={!isPreview || isPendingChange}
-          type={type}
-          items={value}
-          getItem={getItem}
-          isDesign={true}
-          isLHRStep={true}
-          lhrStepIndex={lhrStepIndex}
-          isMPIProcedure={true}
-        />
-      )}
-    </Box>
-  </FBProvider>
-);
+            )}
+          </FBMapWrapper>
+        )}
+        {!loading && type === FBProcedureItemType.materials && (
+          <MaterialsTable
+            isActive={!isPreview}
+            isPendingChange={isPendingChange}
+            type={type}
+            items={value}
+            getItem={getItem}
+            isDesign={true}
+            isLHRStep={true}
+            lhrStepIndex={lhrStepIndex}
+            isMPIProcedure={true}
+          />
+        )}
+        {!loading && type === FBProcedureItemType.equipment && (
+          <FBEquipmentTable
+            isPendingChange={isPendingChange}
+            isPreview={isPreview}
+            isDisabled={!isPreview || isPendingChange}
+            type={type}
+            items={value}
+            getItem={getItem}
+            isDesign={true}
+            isLHRStep={true}
+            lhrStepIndex={lhrStepIndex}
+            isMPIProcedure={true}
+          />
+        )}
+      </Box>
+    </FBProvider>
+  );
+};
 
 export default withFBLHRStepProcedureItem(FBLHRStepProcedureItem);

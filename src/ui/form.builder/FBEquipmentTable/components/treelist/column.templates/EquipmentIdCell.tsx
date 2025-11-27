@@ -12,7 +12,7 @@ import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/Sty
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
@@ -41,6 +41,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   equipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+  const classes = styles();
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
@@ -73,7 +74,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         size="small"
         getOptionLabel={(opt) => opt.label}
         renderOption={(option: EquipAutoCompleteOptions, props) => (
-          <ListItem {...props} className="eq-list-item" disableGutters>
+          <ListItem {...props} className={classes.optionListItem} disableGutters>
             <ListItemText primary={option.label} />
             {option.isExpired && (
               <ListItemIcon>
@@ -159,8 +160,8 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
-        <span className={classes.lotInfoId}>
+      <span className={cx(classes.lotNameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
+        <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
           {isEditMode ? (
             <LotAutocomplete
               {...{

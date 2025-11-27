@@ -27,12 +27,17 @@ export const styles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  titleInfoCell: (props) => ({
+  titleInfoCell: {
     maxWidth: 300,
-    fontWeight: props?.hasChildren ? 600 : 400,
     fontSize: 14,
-    lineHeight: '16.64px',
-  }),
+    lineHeight: 1.2,
+  },
+  boldText: {
+    fontWeight: 600,
+  },
+  normalText: {
+    fontWeight: 400,
+  },
   idCellEditWrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -49,7 +54,7 @@ export const styles = makeStyles((theme) => ({
     pointerEvents: 'none',
   },
   cellBorderBottom: {
-    borderBottom: `1px solid ${Colors.tableCellBorder} !important`,
+    borderBottom: `1px solid ${Colors.tableStroke} !important`,
     borderLeft: '0 !important',
   },
   nameCell: (props) => ({

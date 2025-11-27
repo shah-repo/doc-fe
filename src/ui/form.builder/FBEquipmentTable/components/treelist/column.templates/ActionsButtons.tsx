@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { MODE_FIELD } from '../constants';
 import { isAddEquipItem, isEditEquipItem } from '../utils';
 import { styles } from './styles';

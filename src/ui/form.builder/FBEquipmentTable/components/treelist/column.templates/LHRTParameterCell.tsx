@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, memo } from 'react';
 import { Checkbox } from '../../../../../components/forms/fields-next';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import { isEditEquipItem } from '../utils';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
@@ -15,12 +15,18 @@ const LHRTParameterCell: React.ComponentType<CustomTreeListCellProps> = (props) 
     setFieldValue(field, !!checked);
   };
 
+  const checkboxProps = {
+    checked: isEditMode ? values[field] : dataItem[field],
+    disabled: !isEditMode,
+    ...(isEditMode && {
+      ...getFieldProps(field),
+      onChange: handleExpiredLotChange,
+    }),
+  };
+
   return (
     <TreeListCellWrapper {...props}>
-      {isEditMode && (
-        <Checkbox checked={values[field]} {...getFieldProps(field)} onChange={handleExpiredLotChange} />
-      )}
-      {!isEditMode && <Checkbox checked={dataItem[field]} disabled={true} />}
+      <Checkbox {...checkboxProps} />
     </TreeListCellWrapper>
   );
 };

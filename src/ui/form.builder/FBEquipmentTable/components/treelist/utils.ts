@@ -1,6 +1,6 @@
 import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
-import { EditableEquipmentItem, EquipmentItem } from '../../interface';
+import { EditableEquipmentItem, EquipmentItem } from '../../types';
 import { ADD_FIELD, EB_SUB_ITEMS_FIELD, MODE_FIELD } from './constants';
 import { MapSelectedByParentEquipId } from './interface';
 

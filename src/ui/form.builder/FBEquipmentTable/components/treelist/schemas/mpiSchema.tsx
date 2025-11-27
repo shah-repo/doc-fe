@@ -14,40 +14,38 @@ export const TreeListMPISchema = ({
   equipmentOptions,
   isMPIForm,
   parentRevId,
-}) => {
-  return [
-    {
-      id: 'title',
-      field: 'title',
-      title: translate('form.builder.procedure.equipment.grid.title'),
-      mainOrderIndex: 1,
-      cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} isMPIForm={isMPIForm} />,
-      width: 150,
-    },
-    {
-      id: 'LHRTparameter',
-      field: 'LHRTparameter',
-      title: translate('form.builder.procedure.lhrt.parameter.title'),
-      cell: (props) => <LHRTParameterCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
-      mainOrderIndex: 2,
-      width: 150,
-    },
-    {
-      id: 'actions',
-      locked: false,
-      cell: (props) => (
-        <td className={actionsClass}>
-          <ActionsCell
-            {...props}
-            onConfirm={onConfirm}
-            onDiscard={onDiscard}
-            onDelete={onDelete}
-            onRestore={undefined}
-            rootClassName={popperHolder}
-          />
-        </td>
-      ),
-      width: 0,
-    },
-  ];
-};
+}) => [
+  {
+    id: 'title',
+    field: 'title',
+    title: translate('form.builder.procedure.equipment.grid.title'),
+    mainOrderIndex: 1,
+    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} isMPIForm={isMPIForm} />,
+    width: 150,
+  },
+  {
+    id: 'LHRTparameter',
+    field: 'LHRTparameter',
+    title: translate('form.builder.procedure.lhrt.parameter.title'),
+    cell: (props) => <LHRTParameterCell {...props} addLot={null} parentRevId={parentRevId} deleteLot={null} />,
+    mainOrderIndex: 2,
+    width: 150,
+  },
+  {
+    id: 'actions',
+    locked: false,
+    cell: (props) => (
+      <td className={actionsClass}>
+        <ActionsCell
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+          onRestore={undefined}
+          rootClassName={popperHolder}
+        />
+      </td>
+    ),
+    width: 0,
+  },
+];

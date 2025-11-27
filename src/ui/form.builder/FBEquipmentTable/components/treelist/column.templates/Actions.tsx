@@ -1,7 +1,7 @@
 import { makeStyles, Popper } from '@material-ui/core';
 import PopperJs from 'popper.js';
 import React, { useEffect, useRef, useState } from 'react';
-import { EditableEquipmentItem } from '../../../interface';
+import { EditableEquipmentItem } from '../../../types';
 import ActionButtons from './ActionsButtons';
 import { EquipmentItemActionsProps } from './types';
 
