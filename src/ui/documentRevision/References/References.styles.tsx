@@ -15,6 +15,10 @@ export const styles = makeStyles((theme: Theme) =>
         },
       },
     },
+    outerBox: {
+      padding: theme.spacing(1.875),
+      width: '100%',
+    },
     generalInfo: {
       fontWeight: 600,
       fontSize: '14px',
