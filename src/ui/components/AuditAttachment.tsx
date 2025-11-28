@@ -36,15 +36,6 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
         auditValue.push(auditValue);
       }
     }
-
-    const containsObjectString = (value) =>
-      (Array.isArray(value) && value.some((v) => typeof v === 'string' && v.includes('[object Object]')))
-      || (typeof value === 'string' && value.includes('[object Object]'));
-
-    if (containsObjectString(auditValue)) {
-      return;
-    }
-
     attachmentState.getFiles(auditValue);
   }, []);
 

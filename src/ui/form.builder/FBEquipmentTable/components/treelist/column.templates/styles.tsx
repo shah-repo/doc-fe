@@ -102,7 +102,7 @@ export const styles = makeStyles((theme) => ({
   },
   link: {
     color: `${Colors.primary} !important`,
-    cursor: 'Pointer',
+    cursor: 'pointer',
     textDecoration: 'initial !important',
     '&:hover': {
       textDecoration: 'underline !important',
@@ -114,7 +114,7 @@ export const styles = makeStyles((theme) => ({
   Cell: {
     fontWeight: 400,
     fontSize: 14,
-    lineHeight: '17.64px',
+    ineHeight: 1.25,
   },
   iconGroup: {
     display: 'flex',

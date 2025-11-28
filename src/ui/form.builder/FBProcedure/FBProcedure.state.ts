@@ -50,22 +50,20 @@ class FBProcedureState {
       item = { title: item.title, id: String.fromCharCode(nextId), type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
-    const existingItems = get(this, `value.${type}`) || [];
+    const existingItems = get(this, `value.${type}`, []);
 
-    const index = existingItems.findIndex(i => i.id === item.id);
+    const items = existingItems.reduce((acc, curr) => {
+      if (curr.id === item.id) {
+        return [...acc, item];
+      }
+      return [...acc, curr];
+    }, []);
 
-    let items;
-
-    if (index >= 0) {
-      items = [...existingItems];
-      items[index] = item;
-    } else {
-      items = [...existingItems, item];
-    }
+    const isItemExists = existingItems.some(i => i.id === item.id);
 
     const value = {
       ...this.value,
-      [type]: items,
+      [type]: isItemExists ? items : [...items, item],
     };
     this.setValue(value);
   };
@@ -80,7 +78,7 @@ class FBProcedureState {
   };
 
   @action public removeEBChildrenItem = (parentId: string, id: string, type: FBProcedureItemType, subItemsKey: string) => {
-    const items = get(this, `value.${type}`) || [];
+    const items = get(this, `value.${type}`, []);
     const updatedItems = items.map((item) => {
       if (item.id !== parentId) return item;
 

@@ -2,6 +2,7 @@ import { useFormikContext } from 'formik';
 import React from 'react';
 import { MaterialTreelistContext } from '..';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import { requiredNumber, validator } from '../../../../components/forms/fields/validators';
 import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
@@ -27,7 +28,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   const getFieldInfo = () =>
     field && (
-      <FormikField name={field}>
+      <FormikField name={field} validate={validator(requiredNumber)}>
         <TextField
           {...getFieldProps(field)}
           type="number"

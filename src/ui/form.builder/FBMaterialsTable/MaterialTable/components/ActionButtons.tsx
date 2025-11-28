@@ -2,6 +2,8 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { useCallback } from 'react';
 import { translate } from '../../../../../common/intl';
 import { IconButton } from '../../../../components/forms/fields-next';
@@ -22,6 +24,8 @@ export default function ActionButtons (props: MaterialCellActionsProps<EditableM
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
+  const { errors } = useFormikContext<EditableMaterial>();
+  const isSubmitDisabled = !isEmpty(errors);
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
@@ -84,6 +88,7 @@ export default function ActionButtons (props: MaterialCellActionsProps<EditableM
           kind="action"
           size="small"
           onClick={onConfirm}
+          disabled={isSubmitDisabled}
         >
           <FontAwesomeIcon icon={regular('check')} />
         </IconButton>

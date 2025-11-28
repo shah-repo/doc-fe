@@ -36,8 +36,10 @@ export interface FBMPIProcedureSelectValue {
   actualId?: string
 }
 
+export type ProcedureItemType = 'MATERIAL' | 'EQUIPMENT';
+
 export interface FBMPIProcedureSelectEditRequestBody {
-  type: FBProcedureItemType | 'MATERIAL' | 'EQUIPMENT'
+  type: ProcedureItemType
   quantity?: number
   unit?: string
 }

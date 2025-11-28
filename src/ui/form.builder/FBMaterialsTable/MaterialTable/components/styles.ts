@@ -89,7 +89,7 @@ export const styles = makeStyles((theme) => ({
   },
   link: {
     color: `${Colors.primary} !important`,
-    cursor: 'Pointer',
+    cursor: 'pointer',
     textDecoration: 'initial !important',
     '&:hover': {
       textDecoration: 'underline !important',
@@ -101,7 +101,7 @@ export const styles = makeStyles((theme) => ({
   Cell: {
     fontWeight: 400,
     fontSize: 14,
-    lineHeight: '17.64px',
+    lineHeight: 1.25,
   },
   employeeResponseFields: {
     marginBottom: theme.spacing(1.25),
