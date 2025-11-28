@@ -123,7 +123,12 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date} | undefined) => {
       setData(data?.records ?? []);
-      setOrigionalData(data?.records ?? []);
+      setOrigionalData(
+        data?.records?.map((item) => ({
+          ...item,
+          lotDocId: item.lotDocId ?? EMPTY_DROPDOWN_PLACEHOLDER,
+        })) ?? [],
+      );
       setLastRefreshedAt(data?.lastRefreshedAt);
     },
     onError: toastError,
