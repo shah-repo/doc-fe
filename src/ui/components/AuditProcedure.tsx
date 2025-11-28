@@ -22,12 +22,41 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
 }) => useObserver(() => {
   const procedureState = FB.useRef(FBProcedureState);
   let valueKey = last(audit.field.split('.')) ?? '';
+
   if (valueKey === 'title') {
     valueKey = audit.field.split('.')[2].split('[')[0] ?? '';
   }
   if (audit.field.includes('attachments')) {
     valueKey = 'attachments';
   }
+
+  const renderLotValue = (value?: string) => {
+    const result = procedureState.getLot(value ?? '');
+    if (!result) {
+      return <div data-cy={dataCy}>{getAuditDefaultValue(value)}</div>;
+    }
+    return renderWithLoader(result);
+  };
+
+  const renderPartValue = (value?: string) => {
+    const result = procedureState.getItem(value ?? '', FBProcedureItemType.materials);
+    return renderWithLoader(result ?? '');
+  };
+
+  const renderWithLoader = (value: string) => {
+    if (FB.isUUID(value)) {
+      return <CircularProgress size={12} />;
+    }
+    return <div data-cy={dataCy}>{value}</div>;
+  };
+
+  const renderEquipmentValue = (value?: string) => {
+    const result = procedureState.getItem(value ?? '', FBProcedureItemType.equipment);
+    if (!result) {
+      return <div data-cy={dataCy}>{getAuditDefaultValue(value)}</div>;
+    }
+    return renderWithLoader(result);
+  };
 
   const el = {
     description () {
@@ -43,11 +72,22 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     materials () {
-      auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
-      if (FB.isUUID(auditValue ?? '')) {
-        return <CircularProgress size={12} />;
+      if (audit.type === 'ARRAY_DELETED') {
+        try {
+          const data = JSON.parse(auditValue as string);
+          if (data && data.plannedId) {
+            return renderPartValue(data.plannedId);
+          }
+        } catch (err) {
+          return getAuditDefaultValue(auditValue);
+        }
+      } else {
+        auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
+        if (FB.isUUID(auditValue ?? '')) {
+          return <CircularProgress size={12} />;
+        }
+        return (<div data-cy={dataCy}>{auditValue}</div>);
       }
-      return (<div data-cy={dataCy}>{auditValue}</div>);
     },
     equipment () {
       auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.equipment);
@@ -56,8 +96,49 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
+    equipmentId () {
+      return renderEquipmentValue(auditValue);
+    },
     attachments () {
       return <AuditAttachment {...{ audit }} />;
+    },
+    plannedId () {
+      return renderPartValue(auditValue);
+    },
+    actualId () {
+      if (!FB.isUUID(auditValue ?? '')) {
+        return getAuditDefaultValue(auditValue);
+      } else {
+        auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
+        return (<div data-cy={dataCy}>{auditValue}</div>);
+      }
+    },
+    lotId () {
+      return renderLotValue(auditValue);
+    },
+    assignedLots () {
+      if (audit.type === 'ARRAY_DELETED') {
+        try {
+          const data = JSON.parse(auditValue as string);
+          if (data && data.lotId) {
+            return renderLotValue(data.lotId);
+          }
+        } catch (err) {
+          return getAuditDefaultValue(auditValue);
+        }
+      }
+    },
+    assignedEquipments () {
+      if (audit.type === 'ARRAY_DELETED') {
+        try {
+          const data = JSON.parse(auditValue as string);
+          if (data && data.equipmentId) {
+            return renderEquipmentValue(data.equipmentId);
+          }
+        } catch (err) {
+          return getAuditDefaultValue(auditValue);
+        }
+      }
     },
     default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
   };

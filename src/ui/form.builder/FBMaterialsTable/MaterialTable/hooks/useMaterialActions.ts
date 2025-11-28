@@ -79,7 +79,6 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
       unit: '',
       quantity: undefined,
       isLotAddition: false,
-      LHRTparameter: true,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };

@@ -30,7 +30,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getMaterialRelacmentAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -201,9 +201,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // PROCEDURE
       if (fbType === 'procedure') {
+        const isAssignedLots = change.field.includes('assignedLots');
         let valueKey = last(change.field.split('.'));
         let valueKeyType = '';
         if (valueKey === 'id' && !change.field.includes('attachments')) { return; }
+        if (valueKey === 'assignedEquipments' && change?.previousValue === '[object Object]') { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }
@@ -217,13 +220,25 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
         let keyLabel = '';
+        let keyLabelType = '';
         if (isTranslation(`form.builder.${valueKeyType}`)) {
-          keyLabel = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
+          keyLabelType = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
         }
         if (isTranslation(`form.builder.${valueKey}`)) {
-          keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
+          keyLabel = intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
-        fbLabel = `${stepLabel} ${keyLabel}`;
+
+        if (isAssignedLots) {
+          fbLabel = intl.formatMessage({
+            id: 'form.builder.assigned.lots.label',
+          }, {
+            stepLabel,
+            keyLabelType,
+            keyLabel,
+          });
+        } else {
+          fbLabel = `${stepLabel} ${keyLabelType} ${keyLabel}`;
+        }
       }
       // LHRSTEP
       if (fbType === 'lhrstep') {
@@ -490,33 +505,66 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
             return;
           }
-          if (change.type === 'BOOLEAN_NEW' || change.type === 'BOOLEAN_EDITED') {
+          if (['BOOLEAN_NEW', 'BOOLEAN_EDITED', 'NUMBER_EDITED', 'STRING_EDITED'].includes(change.type)) {
             const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
             const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata || {};
-            const value = documentRevisions.find((e) => {
-              if (change.reference?.metadata.materialId) {
-                return e.id === change.reference?.metadata?.materialId;
-              }
-              return e.id === change.reference?.metadata?.equipmentId;
-            },
+            let innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={
+                  index === array.length - 1
+                    ? classes.noPaddingMargin
+                    : classes.auditListItem
+                }
+              >
+                {materialId ? (
+                  <>
+                    {lotDocId && lotPart && (
+                      <>
+                        <Typography className={classes.auditKey}>
+                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
+                            {getMaterialRelacmentAuditLabel('lot', change.type, change.reference?.metadata, stepIndex)}
+                          </span>
+                        </Typography>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{lotDocId}</div>
+                      </>
+                    )}
+                    {quantity && (
+                      <>
+                        <Typography className={classes.auditKey}>
+                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
+                            {getMaterialRelacmentAuditLabel('quantity', change.type, change.reference?.metadata, stepIndex)}
+                          </span>
+                        </Typography>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{quantity}</div>
+                      </>
+                    )}
+                    {unit && (
+                      <>
+                        <Typography className={classes.auditKey}>
+                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
+                            {getMaterialRelacmentAuditLabel('unit', change.type, change.reference?.metadata, stepIndex)}
+                          </span>
+                        </Typography>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{unit}</div>
+                      </>
+                    )}
+                  </>
+                ) : (<>
+                  <Typography className={classes.auditKey}>
+                    <span data-cy={`change-key-${groupKey}-${key}=${innerKey++}`}>
+                      {getMaterialRelacmentAuditLabel('actualId', change.type, change.reference?.metadata, stepIndex)}
+                    </span>
+                  </Typography>
+                  <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{change.reference?.toDocRev?.document.docId}</div>
+                </>
+                )}
+              </Box>,
             );
-            const nextValue = materialId ? `${lotDocId} | ${lotPart} | ${quantity} ${unit}`
-              : `${change.reference?.toDocRev?.document.docId}`;
-            change = {
-              ...change,
-              field: 'smartRefs',
-              type: `${change.reference?.type}.${change.type}` as unknown as Audit['type'],
-              nextValue,
-            };
-            fbLabel = intl.formatMessage({ id: 'form.builder.audit.replacement' },
-              {
-                type: (change.type === 'LOT_USAGE.BOOLEAN_NEW' as unknown as Audit['type']
-                  || change.type === 'LOT_USAGE.BOOLEAN_EDITED' as unknown as Audit['type'])
-                  ? intl.formatMessage({ id: 'form.builder.materials|s' })
-                  : intl.formatMessage({ id: 'form.builder.equipment|s' }),
-                value: value?.document.docId,
-                step: stepIndex,
-              });
+            return;
           }
         }
 
