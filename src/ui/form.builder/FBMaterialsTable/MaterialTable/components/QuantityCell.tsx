@@ -28,7 +28,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   const getFieldInfo = () =>
     field && (
-      <FormikField name={field} validate={validator(requiredNumber)}>
+      <FormikField name={field} {...(!shouldDisable && { validate: validator(requiredNumber) })}>
         <TextField
           {...getFieldProps(field)}
           type="number"
