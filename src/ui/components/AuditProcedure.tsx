@@ -21,8 +21,8 @@ type Props = OwnProps;
 
 interface AuditItem {
   key: string
-  current: any
-  previous: any
+  current?: string|number|null
+  previous?: string|number|null
 }
 
 interface IMaterial {
@@ -76,11 +76,11 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     const fbLabel = getUdatedMaterailProcedureAuditLabel(field, number, isNested);
 
     const { key, current, previous }: AuditItem = field;
-    let value = !current && previous ? previous : current;
-    if (key === 'title' && current) {
-      value = renderPartValue(current);
+    let value: number | string | null | undefined | ReactNode = !current && previous ? previous : current;
+    if (key === 'title') {
+      value = renderPartValue(current as string);
     } else if (key === 'lotId') {
-      value = renderLotValue(current);
+      value = renderLotValue(current as string);
     }
 
     return (
@@ -134,7 +134,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     return `${fbLabel} ${action}`;
   };
 
-  if (audit.type === 'OBJECT_EDITED') {
+  if (audit.type === 'OBJECT_EDITED' && audit.field.includes('materials')) {
     const auditValueToUse = auditValue ?? '{}';
     const { title, unit, quantity, assignedLots }
       = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as IMaterial : auditValueToUse;
