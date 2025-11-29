@@ -17,11 +17,13 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
         }
 
         _tabsState?.setActiveTabId(tabs[0].tabId);
-        if(location?.state?.toTabId) {
-          setTimeout(() => {
-            handleChange?.({} as React.SyntheticEvent, location?.state?.toTabId);
-            history.replace(location.pathname, {});
+        if (location?.state?.toTabId) {
+          const timer = setTimeout(() => {
+          handleChange?.({} as React.SyntheticEvent, location?.state?.toTabId);
+          history.replace(location.pathname, {});
           }, 100);
+
+          return () => clearTimeout(timer);
         }
       },
       [_tabsState, tabs],

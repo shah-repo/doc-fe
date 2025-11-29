@@ -3,6 +3,7 @@ import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
 import { CheckCircle, RemoveCircle } from '@material-ui/icons';
+import cx from 'classnames';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { isEmpty } from 'lodash';
 import React from 'react';
@@ -136,10 +137,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           className={classes.panelSummary}
           expandIcon={expand ? <ExpandMoreIcon /> : <CollapseMoreIcon />}
         >
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
-            <Box display="flex" alignItems="center" flexGrow={1}>
+          <Box className={classes.labelBoxContainer}>
+            <Box className={classes.labelBox}>
               <Box mr={2} ml={1}>
-                <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
+                <Typography variant="h6" className={expand ? classes.expand : classes.black}>
                   <FBText locale={stepLabel} />
                 </Typography>
               </Box>
@@ -149,20 +150,16 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <CheckCircle
                       style={{
                         color: getStatusColor(),
-                        fontSize: 17,
                       }}
-                      className="fontSizeSmall"
+                      className={cx('fontSizeSmall', classes.statusSize)}
                     />
                   )}
                   {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
                   {!stepLHRs && renderRemoveCircle()}
                 </Box>
                 <Box
-                  fontWeight={700}
-                  fontSize={12}
-                  color={Colors.almost_black}
+                  className={classes.lhrsStatusBox}
                   component="span"
-                  mr={0.75}
                 >
                   {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}} />)}
                 </Box>
@@ -190,21 +187,12 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
                 onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
                 {...{ loading }}
-                className={classes.button}
-                style={
-                  isDisabled ? {
-                    background: Colors.whitest_grey,
-                  }
-                    : stepLHRs
-                      ? {
-                        background: Colors.light_blue,
-                        color: Colors.navy,
-                      }
-                      : {
-                        background: Colors.navy,
-                        color: Colors.white,
-                      }
-                }
+                className={cx(
+                  classes.button,
+                  isDisabled && classes.disabled,
+                  !isDisabled && stepLHRs && classes.stepLHR,
+                  !isDisabled && !stepLHRs && classes.normal,
+                  )}
               />
             </Box>
           </Box>
@@ -300,7 +288,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>)}
           {/* Start and End Date Pickers */}
           <Box display="flex" mb={2}>
-            <Box mr={2} width="50%">
+            <Box className={classes.lhrsStartDateBox}>
               <FBDatePicker
                 name={startDateFieldName || 'lhrs-start-date'}
                 label="Start Date"

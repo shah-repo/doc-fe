@@ -304,11 +304,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       ownerOfCompleteMPIAction,
       materials,
       index,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       equipment,
       isDocumentLHRT,
       stepIndex,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       lhrBuildTypeExist,
       startDateFieldName,
       endDateFieldName,

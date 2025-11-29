@@ -3,6 +3,7 @@ import React from 'react';
 import useStyles from './FBFieldOutputWrapper.styles';
 import { FBFieldOutputWrapperProps } from './FBFieldOutputWrapper.types';
 import { withFBFieldOutputWrapper } from './FBFieldOutputWrapper.wrap';
+import cx from 'classnames';
 
 const FBFieldOutputWrapper: React.FunctionComponent<FBFieldOutputWrapperProps> = ({
   mt,
@@ -14,7 +15,7 @@ const FBFieldOutputWrapper: React.FunctionComponent<FBFieldOutputWrapperProps> =
   const inlineStyle = ['lhrs-start-quantity', 'lhrs-accepted-quantity', 'lhrs-rejected-quantity'].includes(name ?? '');
 
   return (
-    <Box className={`${classes.root} ${inlineStyle ? classes.inlineStyle : ''}`} >
+    <Box className={cx(classes.root, { [classes.inlineStyle]: inlineStyle })} >
       {children}
     </Box>
   );

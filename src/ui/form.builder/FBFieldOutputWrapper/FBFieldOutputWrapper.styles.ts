@@ -14,7 +14,7 @@ export default makeStyles((theme: Theme) =>
     inlineStyle: {
       display: 'inline-block',
       width: 'calc(33.333% - 12px)',
-      marginRight: '12px',
+      marginRight: theme.spacing(1.5),
     },
   }),
 );

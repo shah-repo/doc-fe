@@ -166,11 +166,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if(approval.status === 'APPROVED' && document?.document.documentType.documentTypeName === 'LHR Step') {
+      if(approval.status === ApprovalStatus.Approved && document?.document.documentType.documentTypeName === 'LHR Step') {
         const values = generateLHRsDocs(_documentRevisionFormState?.documentRevision);
         history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''), { toTabId: 'details' });
       }
-      if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
+      if (approval.status === ApprovalStatus.Rejected || approval.status === ApprovalStatus.Approved) {
         window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);

@@ -7,6 +7,16 @@ import { CustomTemplateProps } from '../types';
 import { translate } from '../../../../../../common/intl';
 import { EditableLHRBuild, FBLHRBuildOptions } from '../../../panels/LHRBuild/types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
+import { createStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    tooltip: {
+      verticalAlign: 'middle',
+    },
+  }),
+);
 
 function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const { dataItem, field } = props;
@@ -38,9 +48,9 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
 export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Element => {
   const { dataItem } = props;
   const mode = get(dataItem, MODE_FIELD);
-  const canBeModified = mode === Mode.edit || mode === Mode.add;
+  const canBeModified = [Mode.edit, Mode.add].includes(mode);
   const defaultValue = dataItem.internalType;
-
+  const classes = useStyles();
   if (canBeModified) {
     return <Editor {...props} />;
   }
@@ -50,7 +60,7 @@ export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Elemen
       title={defaultValue}
       placement="top"
       arrow
-      style={{ verticalAlign: 'middle' }}
+      className={classes.tooltip}
     >
       {defaultValue}
     </OverflowTooltip>

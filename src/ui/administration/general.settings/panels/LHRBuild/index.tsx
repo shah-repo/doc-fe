@@ -67,10 +67,8 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLHRBuildActiveState = (LHRBuild: EditableLHRBuild, state: boolean) => {
-    const updatedLHRBuilds = LHRBuilds
-      ?.map(it => it.id === LHRBuild.id ? { ...it, isActive: state } : it)
-      ?? [];
-      updateLHRBuilds(updatedLHRBuilds);
+    const updatedLHRBuilds = LHRBuilds?.map(it => it.id === LHRBuild.id ? { ...it, isActive: state } : it) ?? [];
+    updateLHRBuilds(updatedLHRBuilds);
   };
 
   useEffect(() => {

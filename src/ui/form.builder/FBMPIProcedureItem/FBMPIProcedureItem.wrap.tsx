@@ -12,6 +12,8 @@ import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { checkIsDocumentForm, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 
+const lhrsAcceptedQuantity = 'lhrs-accepted-quantity';
+
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -93,10 +95,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     }, []);
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState('lhrs-accepted-quantity')?.value,
+        () => formState?.getInputState(lhrsAcceptedQuantity)?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue('lhrs-accepted-quantity'));
+          const formValue = cloneDeep(formState?.getFieldValue(lhrsAcceptedQuantity));
           setLhrsAcceptedQty(formValue);
         },
       );
@@ -104,7 +106,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     }, []);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue('lhrs-accepted-quantity'));
+      const formValue = cloneDeep(formState?.getFieldValue(lhrsAcceptedQuantity));
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsAcceptedQty]);
