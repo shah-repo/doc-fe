@@ -1,7 +1,7 @@
 import { find, get, isUndefined, keyBy, map, omit } from 'lodash';
 import { action, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from '..';
-import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { Document, DocumentRevision, DocumentRevisionEditRequestBody } from '../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
@@ -11,7 +11,7 @@ class FBLHRStepState {
   // MARK: @api
   public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
   public getDocumentApi = new FBRequest<Document, null>(FBEndpoint.Document);
-  public updateLHRStepApi = new FBRequest<DocumentRevision, any>(FBEndpoint.DocumentRevisionPatch);
+  public updateLHRStepApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>(FBEndpoint.DocumentRevisionPatch);
   public materialsApi = new FBAutocompleteAsyncState({ optionId: this.materialsId });
   public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
   // MARK @config
