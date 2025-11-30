@@ -1,11 +1,11 @@
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FB, FBData, FBInput, FBInputProps, FBRadioGroup } from '..';
 import { translate } from '../../../common/intl';
 import { Autocomplete } from '../../components/forms/fields-next';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import useStyles from './styles';
-import { SamplingPlanType, SamplingPlanValue } from './types';
+import { SamplingPlanAqlLevelOption, SamplingPlanType, SamplingPlanValue } from './types';
 
 const FBSamplingPlan: React.FC<FBInputProps> = ({
   name = '',
@@ -17,21 +17,8 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
   const { formState } = FB.useStores();
 
   const value = useObserver<SamplingPlanValue | undefined>(
-    () => formState?.newValues.get(name) ?? formState?.getFieldValue(name),
+    () => (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as SamplingPlanValue | undefined,
   );
-
-  const { aqlOptions, defaultAqlLevel } = useMemo(() => {
-    return {
-      aqlOptions: FBData.aqlOptions,
-      defaultAqlLevel: FBData.aqlOptions[FBData.aqlOptions.length - 1].value,
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!value) {
-      setValue({ type: SamplingPlanType.ALL });
-    }
-  }, [value]);
 
   const setValue = ({ type, aqlLevel }: SamplingPlanValue) => {
     switch (type) {
@@ -43,24 +30,39 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
       case SamplingPlanType.AQL:
         formState?.setFieldValue(name, {
           type,
-          aqlLevel: aqlLevel ?? defaultAqlLevel,
+          aqlLevel,
         });
         break;
       default:
+        formState?.omitFieldValue(name);
         break;
     }
     formState?.validate();
     formState?.setFieldAutosave(name);
   };
 
-  const aqlLevelValue = useMemo(() => {
-    return value?.aqlLevel
-      ? aqlOptions.find(option => option.value === value.aqlLevel)
-      : defaultAqlLevel;
-  }, [value?.aqlLevel]);
+  const aqlLevelValue = useMemo(
+    () => FBData.aqlOptions.find(option => option.value === value?.aqlLevel),
+    [value?.aqlLevel],
+  );
+
+  const updateAqlLevel = (e: unknown, aqlLevel: SamplingPlanAqlLevelOption | null) => {
+    setValue({ type: SamplingPlanType.AQL, aqlLevel: aqlLevel?.value });
+  };
 
   return (
-    <FBInput {...props} name={name} label={label} labelProps={FBFontStyle.labelProps} shouldOmitValue disabled={disabled}>
+    <FBInput
+      {...props}
+      name={name}
+      label={label}
+      labelProps={FBFontStyle.labelProps}
+      disabled={disabled}
+      shouldOmitValue
+      rules={{
+        type: 'required',
+        aqlValue: 'required_if:sampling-plan.type,aql|numeric',
+      }}
+    >
       <div className={classes.root}>
         <FBRadioGroup
           options={[
@@ -74,18 +76,17 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
             },
           ]}
           disabled={disabled}
-          value={value?.type ?? SamplingPlanType.ALL}
+          value={value?.type}
           onChange={(e) => setValue({ type: e.target.value as SamplingPlanType })}
           gutter={false}
         />
         {value?.type === SamplingPlanType.AQL && (
           <div className={classes.aqlLevel}>
             <Autocomplete
-              options={aqlOptions}
-              getOptionLabel={option => option.text}
-              onChange={(e, { value: aqlLevel }) => setValue({ type: SamplingPlanType.AQL, aqlLevel })}
+              options={FBData.aqlOptions}
+              getOptionLabel={(option: SamplingPlanAqlLevelOption) => option.text}
+              onChange={updateAqlLevel}
               value={aqlLevelValue}
-              disableClearable
               size="small"
               disabled={disabled}
             />
