@@ -66,8 +66,10 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   });
   const { setValues, submitForm } = formik;
 
-  const changeLHRBuildActiveState = (LHRBuild: EditableLHRBuild, state: boolean) => {
-    const updatedLHRBuilds = LHRBuilds?.map(it => it.id === LHRBuild.id ? { ...it, isActive: state } : it) ?? [];
+  const changeLHRBuildActiveState = (lhrBuild: EditableLHRBuild, isActive: boolean): void => {
+    const updatedLHRBuilds = LHRBuilds?.map((item) =>
+      item.id === lhrBuild.id ? { ...item, isActive } : item,
+    ) ?? [];
     updateLHRBuilds(updatedLHRBuilds);
   };
 
@@ -101,7 +103,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLHRBuilds, editedLHRBuild]
       : mappedLHRBuilds;
 
-  const dataCyGenerator = (LHRBuild: EditableLHRBuild) => ({
+  const getRowAttributes = (LHRBuild: EditableLHRBuild) => ({
     'data-cy': `row-${kebabCase(LHRBuild.internalType)}`,
   });
 
@@ -127,7 +129,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           schema={schema}
           addButtonLabel={translate('common.add.new')}
           onAdd={addLHRBuild}
-          getRowProperties={dataCyGenerator}
+          getRowProperties={getRowAttributes}
         />
       </FormikProvider>
     </SettingsPanel>

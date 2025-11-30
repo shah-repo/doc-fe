@@ -3,8 +3,8 @@ import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
 import { CheckCircle, RemoveCircle } from '@material-ui/icons';
-import cx from 'classnames';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -192,7 +192,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                   isDisabled && classes.disabled,
                   !isDisabled && stepLHRs && classes.stepLHR,
                   !isDisabled && !stepLHRs && classes.normal,
-                  )}
+                )}
               />
             </Box>
           </Box>
@@ -287,16 +287,16 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Grid>
             </Box>)}
           {/* Start and End Date Pickers */}
-          <Box display="flex" mb={2}>
+          <Box className={classes.lhrsDateBox}>
             <Box className={classes.lhrsStartDateBox}>
               <FBDatePicker
-                name={startDateFieldName || 'lhrs-start-date'}
+                name={startDateFieldName}
                 label="Start Date"
               />
             </Box>
-            <Box width="50%">
+            <Box className={classes.lhrsEndDateBox}>
               <FBDatePicker
-                name={endDateFieldName || 'lhrs-end-date'}
+                name={endDateFieldName}
                 label="End Date"
               />
             </Box>

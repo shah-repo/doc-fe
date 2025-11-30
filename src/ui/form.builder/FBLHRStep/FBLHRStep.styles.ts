@@ -74,6 +74,10 @@ export const FBLHRStepStyles = makeStyles(() =>
       marginRight: 2,
       width: '50%',
     },
+    lhrsDateBox: {
+      marginBottom: 2,
+      width: '50%',
+    },
     disabled: {
       background: Colors.whitest_grey,
     },
@@ -110,6 +114,9 @@ export const FBLHRStepStyles = makeStyles(() =>
       display: 'flex',
       alignItems: 'center',
       flexGrow: 1,
+    },
+    lhrsEndDateBox: {
+      width: '50%',
     },
   }),
 );

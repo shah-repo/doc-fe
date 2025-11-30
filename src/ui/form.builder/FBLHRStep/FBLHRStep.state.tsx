@@ -123,8 +123,7 @@ class FBLHRStepState {
       if (apiPromise && typeof apiPromise.then === 'function') {
         apiPromise.then(() => {
           this.pendingDateUpdate = false;
-        }).catch((error) => {
-          console.error('Failed to update LHR step dates:', error);
+        }).catch(() => {
           this.pendingDateUpdate = false;
         });
       } else {

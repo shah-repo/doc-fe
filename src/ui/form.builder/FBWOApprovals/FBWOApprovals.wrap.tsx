@@ -92,6 +92,10 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
+    const shouldSkipDefaultOwner = (): boolean => {
+      return Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date');
+    };
+
     React.useEffect(() => {
       const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(name, fieldValue, false);
@@ -102,7 +106,7 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
         && document && !document?.formTemplate
         && !activeApprovals?.length) {
         if (authUser.employeeId) {
-          if (Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date')) {
+          if (shouldSkipDefaultOwner()) {
             // Don't add default owner for LHR step fields - user will be added when they complete entries
             return;
           }
@@ -241,8 +245,7 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
 
       if (authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate) {
-        if (Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date')) {
-          // Don't add default owner for LHR step fields - user will be added when they complete entries
+        if (shouldSkipDefaultOwner()) {
           return;
         }
         disabledOptions = [authUser?.employeeId];
