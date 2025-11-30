@@ -200,6 +200,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
       // PROCEDURE
+      let isProcedureMaterilEdit = false;
       if (fbType === 'procedure') {
         const isAssignedLots = change.field.includes('assignedLots');
         let valueKey = last(change.field.split('.'));
@@ -238,6 +239,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           });
         } else {
           fbLabel = `${stepLabel} ${keyLabelType} ${keyLabel}`;
+        }
+
+        if (change.type === 'OBJECT_EDITED') {
+          fbLabel = '';
+          isProcedureMaterilEdit = true;
         }
       }
       // LHRSTEP
@@ -650,7 +656,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   </span>
                 </Typography>
               )}
-              {(isFBField || isSmartRef) && !isCustomBooleanField && (
+              {(isFBField || isSmartRef) && !isCustomBooleanField && !isProcedureMaterilEdit && (
                 <Typography
                   className={classes.auditKey}
                 >
