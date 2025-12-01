@@ -63,13 +63,17 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
     let displayEntries = [displayText];
-    if (changeType === AUDIT_CHANGE_TYPE.UPDATED) {
+    if (changeType === AUDIT_CHANGE_TYPE.UPDATED || changeType === AUDIT_CHANGE_TYPE.ADDED) {
       displayEntries = displayText.split(' | ');
     }
 
+    const showHeaderEntry = (changeType === AUDIT_CHANGE_TYPE.ADDED && displayEntries.length === 1)
+      || changeType !== AUDIT_CHANGE_TYPE.ADDED;
+    const listEntriesSpliceValue = changeType === AUDIT_CHANGE_TYPE.ADDED ? 0 : 1;
+
     return (
       <>
-        {displayEntries.length > 0 && (
+        {showHeaderEntry && (
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
@@ -84,7 +88,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
           <ul className={classes.displayEntryList}
             data-cy={`audit-log-entry-${groupId}-${sectionName}-list`}
           >
-            {displayEntries.slice(1).map((entry, index) => (
+            {displayEntries.slice(listEntriesSpliceValue).map((entry, index) => (
               <li key={index}>
                 <Typography
                   variant="subtitle2"
