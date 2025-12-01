@@ -198,4 +198,14 @@ export const styles = makeStyles((theme) => ({
     width: '100%',
     gap: theme.spacing(1),
   },
+  materialCellWrap: {
+    display: 'flex',
+    '& div': {
+      width: '90%',
+    },
+  },
+  quantityShortInfoIcon: {
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.625),
+  },
 }));

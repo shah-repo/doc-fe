@@ -28,7 +28,7 @@ import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../helpers';
-import { prepareData } from './components/utils';
+import { isPartHasInsufficientQty, prepareData } from './components/utils';
 import {
   ADD_FIELD,
   DATA_ITEM_KEY,
@@ -312,12 +312,14 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableMaterial;
+    const isEditMode = (item[MODE_FIELD] || item[ADD_FIELD]);
+    const { isInsufficientQty } = (!isEditMode && !isEmpty(item[SUB_ITEMS_FIELD])) ? isPartHasInsufficientQty(item, lhrsQuantity) : { isInsufficientQty: false };
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.whiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.errorBg]: !isEmpty(item.type) && isLHRStep && isDesign,
+        [classes.errorBg]: (!isEmpty(item.type) && isLHRStep && isDesign) || isInsufficientQty,
       }),
     };
 
@@ -553,6 +555,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
               rowRender={rowRender}
               cellRender={cellRender}
               columns={columns}
+              resizable
             />
             {isActive && !isDisabled && !isLHRStep && (isDesign || !isEnableOnlyLotAddition) && (
               <Button kind="add" fullWidth attached onClick={addPartItem} data-cy="add-material">
