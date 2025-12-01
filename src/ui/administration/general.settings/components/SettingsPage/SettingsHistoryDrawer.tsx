@@ -4,6 +4,7 @@ import { translate } from '../../../../../common/intl';
 import { MomentFormats } from '../../../../../common/utils/date';
 import { User } from '../../../../../state/ducks/common/types';
 import { companyActions } from '../../../../../state/ducks/company';
+import { Employee } from '../../../../../state/ducks/company/types';
 import DateTime from '../../../../components/DateTime';
 import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
@@ -19,6 +20,10 @@ interface SettingsHistoryDrawerProps {
   isOpen: boolean
   onClose: () => void
 }
+export interface AuditLogsResponse {
+  logs: CompanySettingsChangeLog[]
+  ownerMap: {[key: string]: Employee}
+}
 
 const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   isOpen,
@@ -28,8 +33,11 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
 
   const [loading, setLoading] = useState(true);
   const [auditLogsMap, setAuditLogsMap] = useState<{[key: string]: CompanySettingsChangeLog[]}>({});
-  const handleAuditLogs = (logs: CompanySettingsChangeLog[] | undefined) => {
+  const [ownerMap, setOwnerMap] = useState<{[key: string]: Employee}>({});
+
+  const handleAuditLogs = (resp: AuditLogsResponse | undefined) => {
     const logsMap: {[key: string]: CompanySettingsChangeLog[]} = {};
+    const { logs, ownerMap = {} } = resp ?? {};
     logs?.forEach(log => {
       if (!logsMap[log.groupId]) {
         logsMap[log.groupId] = [];
@@ -37,11 +45,12 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       logsMap[log.groupId].push(log);
     });
     setAuditLogsMap(logsMap);
+    setOwnerMap(ownerMap);
     setLoading(false);
   };
 
   const fetchSettingsLog = useActionCreator(companyActions.fetchSettingsAuditLogs);
-  const settingsLogsAsync = useAsync<CompanySettingsChangeLog[]>({
+  const settingsLogsAsync = useAsync<AuditLogsResponse>({
     onSuccess: handleAuditLogs,
     onError: toastError,
   });
@@ -110,8 +119,8 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       {Object.keys(auditLogsMap).map(groupId => {
         const groupEntries = auditLogsMap[groupId];
         // For all the entries in a group, the time and user would be the same as the first entry
-        const { updatedAt, ownerName, ownerEmail } = groupEntries[0];
-        const finalOwner = { name: ownerName, email: ownerEmail } as User;
+        const { updatedAt, ownerName, ownerEmail, ownerId } = groupEntries[0];
+        const finalOwner = ownerMap[ownerId]?.user ?? { name: ownerName, email: ownerEmail } as User;
         return (
           <Box key={groupId} className={classes.groupBox}>
             <UserAvatarListItem
