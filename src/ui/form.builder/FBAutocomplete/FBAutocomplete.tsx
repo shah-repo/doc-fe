@@ -13,9 +13,6 @@ import ListBoxComponent from '../../components/common/autocomplete/ListBoxCompon
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { withFBAutocomplete } from './FBAutocomplete.wrap';
 import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from './StyledAutoComplete';
-import { SMText } from '../../../App';
-import Dialog from '../../components/dialogs';
-import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -157,26 +154,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             <Text message="form.builder.scan.qr" />
           </Typography>
         </Box>
-      )}
-      {isTypeLhrBuild && (
-        <Dialog
-          hideCloseButton
-          title="form.builder.build.title"
-          open={lhrBuildDialog?.isOpen ?? false}
-          onCancel={() => onDialogActionClick?.('cancel')}
-          onConfirm={() => onDialogActionClick?.('confirm')}
-          cancelLabel="form.builder.cancel"
-          confirmLabel="form.builder.lhr.build.switch"
-        > <SMText
-            label={{
-            locale: 'form.builder.build.production.msg',
-            values: {
-              prod: (defaultValue as LHRBuild).displayLabel,
-              rd: selectedLhrBuild?.displayLabel ?? '',
-              },
-            }}
-          />
-        </Dialog>
       )}
       <Observer>{() =>
         <FBInput
