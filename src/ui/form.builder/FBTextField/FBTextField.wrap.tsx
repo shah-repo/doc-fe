@@ -149,7 +149,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     ), []);
 
     if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-      error = isLhrError(name, value, formState);
+      error = isLhrError(name, Number(value), formState);
       helperText = error
         ? translate('lhr.materials.total.cannot.exceed.start.quantity')
         : '';

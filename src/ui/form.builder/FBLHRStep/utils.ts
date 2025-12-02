@@ -3,9 +3,9 @@ import { FBFormState } from '..';
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 
 const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
-export const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
-export const LHRS_START_QUANTITY = 'lhrs-start-quantity';
-export const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
+const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
+const LHRS_START_QUANTITY = 'lhrs-start-quantity';
+const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
 
 export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   const allReferences = concat(
@@ -37,7 +37,7 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
 export function isLhrQuantityValid (
   name: string,
   value: number,
-  formState: FBFormState,
+  formState?: FBFormState,
 ) {
   const startQuantity = formState?.getFieldValue(LHRS_START_QUANTITY);
   const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
@@ -52,7 +52,7 @@ export function isLhrQuantityValid (
   return true;
 }
 
-export const isLhrError = (name: string, value: number, formState: FBFormState) => {
+export const isLhrError = (name: string, value: number, formState?: FBFormState) => {
   const start = formState?.getFieldValue(LHRS_START_QUANTITY);
   const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
   const rejected = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) || 0;
