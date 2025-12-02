@@ -441,7 +441,7 @@ export default makeStyles((theme) => ({
   popperHolder: {
     height: '100%',
   },
-  WhiteBg: {
+  whiteBg: {
     backgroundColor: Colors.white,
   },
   grayBg: {

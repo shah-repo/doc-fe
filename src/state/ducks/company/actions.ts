@@ -1,6 +1,7 @@
 import { omit } from 'lodash';
 import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
+import { AuditLogsResponse } from '../../../ui/administration/general.settings/components/SettingsPage/SettingsHistoryDrawer';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
@@ -276,7 +277,7 @@ const fetchDocRevOptionsByDocTypeId = (
 
 const fetchSettingsAuditLogs = (
   handlers: Handlers,
-): ApiAction<LCPDocRevOptions[]> =>
+): ApiAction<AuditLogsResponse> =>
   apiActionWithCallbacks({
     url: SETTINGS_LOGS_URL,
     method: 'get',

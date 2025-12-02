@@ -19,4 +19,5 @@ export type FBMPIProcedureItemProps =
   isDocumentMPI?: boolean
   fieldType?: FBInputType
   isReleased?: boolean
+  isDesign?: boolean
 };

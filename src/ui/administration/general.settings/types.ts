@@ -58,6 +58,7 @@ export enum AUDIT_CHANGE_TYPE {
 export interface CompanySettingsChangeLog {
   id: string
   companyId: string
+  ownerId: string
   ownerName: string
   ownerEmail: string
   parentKey: string
