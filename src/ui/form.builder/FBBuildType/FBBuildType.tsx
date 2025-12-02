@@ -21,10 +21,6 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   const [options, setOptions] = React.useState<LHRBuild[]>([]);
   const lhrBuildDialog = useDialog();
   const { formState, workspaceState } = FB.useStores();
-  const isTypeLhrBuild = name === 'lhr-build-type';
-  if (!isTypeLhrBuild) {
-    return null;
-  }
 
   const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.buildType,
