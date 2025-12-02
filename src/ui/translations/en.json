@@ -870,7 +870,6 @@
   "documentRevision.form.references": "References",
   "documentRevision.form.release.date": "Release Date",
   "documentRevision.externalReferences.resourceType.title": "Type",
-  "documentRevision.externalReferences.resourceId.title": "ID",
   "documentRevision.externalReferences.resourceName.title": "Name",
   "documentRevision.externalReferences": "External References",
   "documentRevision.externalReferences.error": "Couldn't load external references!",
