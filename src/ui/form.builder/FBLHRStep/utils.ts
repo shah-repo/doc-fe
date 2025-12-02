@@ -29,3 +29,37 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
     { docRevId, documentId }
   );
 };
+
+export function isLhrQuantityValid (
+  name: string,
+  value: number,
+  formState: any,
+) {
+  const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
+  const accepted = formState?.getFieldValue('lhrs-accepted-quantity') || 0;
+  const rejected = formState?.getFieldValue('lhrs-rejected-quantity') || 0;
+
+  if (
+    (name === 'lhrs-accepted-quantity' && startQuantity < value + rejected)
+    || (name === 'lhrs-rejected-quantity' && startQuantity < accepted + value)
+  ) {
+    return false;
+  }
+  return true;
+}
+
+export const isLhrError = (name, value, formState) => {
+  const start = formState?.getFieldValue('lhrs-start-quantity');
+  const accepted = formState?.getFieldValue('lhrs-accepted-quantity') || 0;
+  const rejected = formState?.getFieldValue('lhrs-rejected-quantity') || 0;
+
+  if (name === 'lhrs-accepted-quantity') {
+    return start < Number(value) + rejected;
+  }
+
+  if (name === 'lhrs-rejected-quantity') {
+    return start < accepted + Number(value);
+  }
+
+  return false;
+};
