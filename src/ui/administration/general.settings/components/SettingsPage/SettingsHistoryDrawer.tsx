@@ -20,9 +20,12 @@ interface SettingsHistoryDrawerProps {
   isOpen: boolean
   onClose: () => void
 }
+
+interface OwnerMap { [key: string]: Employee }
+
 export interface AuditLogsResponse {
   logs: CompanySettingsChangeLog[]
-  ownerMap: {[key: string]: Employee}
+  ownerMap: OwnerMap
 }
 
 const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
@@ -33,11 +36,11 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
 
   const [loading, setLoading] = useState(true);
   const [auditLogsMap, setAuditLogsMap] = useState<{[key: string]: CompanySettingsChangeLog[]}>({});
-  const [ownerMap, setOwnerMap] = useState<{[key: string]: Employee}>({});
+  const [ownerMap, setOwnerMap] = useState<OwnerMap>({});
 
-  const handleAuditLogs = (resp: AuditLogsResponse | undefined) => {
+  const handleAuditLogs = (response?: AuditLogsResponse) => {
     const logsMap: {[key: string]: CompanySettingsChangeLog[]} = {};
-    const { logs, ownerMap = {} } = resp ?? {};
+    const { logs, ownerMap = {} } = response ?? {};
     logs?.forEach(log => {
       if (!logsMap[log.groupId]) {
         logsMap[log.groupId] = [];
