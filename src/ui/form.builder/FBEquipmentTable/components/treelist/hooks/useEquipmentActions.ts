@@ -88,11 +88,11 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
 
   const deleteItemFromStateData = (dataItem: EditableEquipmentItem) => {
     if (isEnableActualIdAddition) {
-      const parentIndex = state.data?.findIndex((data) => data.id === dataItem.parentId);
-      if (parentIndex !== -1) {
-        state.data[parentIndex][subItemsKey] = state.data[parentIndex][subItemsKey]?.filter((item) => item.id !== dataItem.id);
+      const parent = state.data?.find((data: EquipmentItem) => data.id === dataItem.parentId);
+      if (parent) {
+        parent[subItemsKey] = parent[subItemsKey]?.filter((item) => item.id !== dataItem.id);
       } else if (dataItem.id && isEBProcedure) {
-        state.data = state.data.filter((item) => item.id !== dataItem.id);
+        state.data = state.data.filter((item: EquipmentItem) => item.id !== dataItem.id);
       }
     } else {
       state.data = state.data.filter((item) => item.id !== dataItem.id);
