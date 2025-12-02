@@ -43,18 +43,18 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
 
-  const onChange = (event, inputValue) => {
+  const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
     const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id) as LHRBuild;
-    const selectedLhrBuild = options?.filter(value => value.displayLabel === inputValue);
-    if (!isEmpty(selectedLhrBuild) && selectedLhrBuild[0].internalType !== FBLHRBuildOptions.Production && lhrBuildType.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
-      setSelectedValue(selectedLhrBuild[0]);
+    const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
+    if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+      setSelectedValue(selectedLhrBuild);
       lhrBuildDialog.open();
     } else if (!isNull(event)) {
-      formState?.setFieldValue(name, selectedLhrBuild[0].id);
+      formState?.setFieldValue(name, selectedLhrBuild?.id);
       formState?.setFieldAutosave(name);
       formState?.getInputState(name ?? '')?.setRender();
-      setDefaultValue(selectedLhrBuild[0]);
-      setPrevValue(selectedLhrBuild[0]);
+      setDefaultValue(selectedLhrBuild);
+      setPrevValue(selectedLhrBuild);
       workspaceState?.saveDocRev(formState?.getValues());
     }
   };
