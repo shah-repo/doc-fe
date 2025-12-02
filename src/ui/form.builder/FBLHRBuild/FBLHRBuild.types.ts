@@ -19,4 +19,6 @@ export interface FBLHRBuildConstructor {
 export enum FBLHRBuildOptions {
   'R&D' = 'R&D',
   Production = 'Production',
+  Clinical = 'Clinical',
+  'Verification & Validation' = 'Verification & Validation',
 }

@@ -1,5 +1,5 @@
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { debounce, filter, find, get, includes, isEmpty, isNull, isObject, isString, isUndefined, map } from 'lodash';
+import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions, FBLHRBuildOptions } from '..';
@@ -182,19 +182,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const onFilterInputChange = (event, inputValue) => {
       if (isUndefined(options)) {
         return setModifiedOptions([]);
-      }
-      if(isTypeLhrBuild) {
-        const lhrBuildType = defaultValue as LHRBuild;
-        const selectedLhrBuild = (options as LHRBuild[])?.filter(value => value.displayLabel === inputValue);
-        if (!isEmpty(selectedLhrBuild) && selectedLhrBuild[0].internalType !== FBLHRBuildOptions.Production && lhrBuildType.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
-          setSelectedValue(selectedLhrBuild[0]);
-          lhrBuildDialog.open();
-        } else if(!isNull(event)) {
-          formState?.setFieldValue(name, selectedLhrBuild[0].id);
-          formState?.setFieldAutosave(name);
-          formState?.getInputState(name)?.setRender();
-        }
-        return;
       }
       if (inputValue && inputValue.length > 2) {
         const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || '';
