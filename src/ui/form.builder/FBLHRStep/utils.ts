@@ -1,7 +1,11 @@
 import { concat, uniqBy } from 'lodash';
+import { FBFormState } from '..';
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 
 const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
+export const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
+export const LHRS_START_QUANTITY = 'lhrs-start-quantity';
+export const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
 
 export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   const allReferences = concat(
@@ -33,31 +37,31 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
 export function isLhrQuantityValid (
   name: string,
   value: number,
-  formState: any,
+  formState: FBFormState,
 ) {
-  const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
-  const accepted = formState?.getFieldValue('lhrs-accepted-quantity') || 0;
-  const rejected = formState?.getFieldValue('lhrs-rejected-quantity') || 0;
+  const startQuantity = formState?.getFieldValue(LHRS_START_QUANTITY);
+  const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
+  const rejected = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) || 0;
 
   if (
-    (name === 'lhrs-accepted-quantity' && startQuantity < value + rejected)
-    || (name === 'lhrs-rejected-quantity' && startQuantity < accepted + value)
+    (name === LHRS_ACCEPTED_QUANTITY && startQuantity < value + rejected)
+    || (name === LHRS_REJECTED_QUANTITY && startQuantity < accepted + value)
   ) {
     return false;
   }
   return true;
 }
 
-export const isLhrError = (name, value, formState) => {
-  const start = formState?.getFieldValue('lhrs-start-quantity');
-  const accepted = formState?.getFieldValue('lhrs-accepted-quantity') || 0;
-  const rejected = formState?.getFieldValue('lhrs-rejected-quantity') || 0;
+export const isLhrError = (name: string, value: number, formState: FBFormState) => {
+  const start = formState?.getFieldValue(LHRS_START_QUANTITY);
+  const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
+  const rejected = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) || 0;
 
-  if (name === 'lhrs-accepted-quantity') {
+  if (name === LHRS_ACCEPTED_QUANTITY) {
     return start < Number(value) + rejected;
   }
 
-  if (name === 'lhrs-rejected-quantity') {
+  if (name === LHRS_REJECTED_QUANTITY) {
     return start < accepted + Number(value);
   }
 
