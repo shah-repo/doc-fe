@@ -90,8 +90,7 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
     if (isEnableActualIdAddition) {
       const parentIndex = state.data?.findIndex((data) => data.id === dataItem.parentId);
       if (parentIndex !== -1) {
-        const subItems = state.data[parentIndex][subItemsKey];
-        state.data[parentIndex][subItemsKey] = subItems?.filter((item) => item.id !== dataItem.id);
+        state.data[parentIndex][subItemsKey] = state.data[parentIndex][subItemsKey]?.filter((item) => item.id !== dataItem.id);
       } else if (dataItem.id && isEBProcedure) {
         state.data = state.data.filter((item) => item.id !== dataItem.id);
       }
