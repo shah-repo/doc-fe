@@ -63,13 +63,13 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
     let displayEntries = [displayText];
-    if (changeType === AUDIT_CHANGE_TYPE.UPDATED || changeType === AUDIT_CHANGE_TYPE.ADDED) {
+    if (changeType && [AUDIT_CHANGE_TYPE.UPDATED, AUDIT_CHANGE_TYPE.ADDED].includes(changeType)) {
       displayEntries = displayText.split(' | ');
     }
 
-    const showHeaderEntry = (changeType === AUDIT_CHANGE_TYPE.ADDED && displayEntries.length === 1)
-      || changeType !== AUDIT_CHANGE_TYPE.ADDED;
-    const listEntriesSpliceValue = changeType === AUDIT_CHANGE_TYPE.ADDED ? 0 : 1;
+    const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
+    const showHeaderEntry = (isChangeTypeAdded && displayEntries.length === 1) || !isChangeTypeAdded;
+    const listEntriesSpliceValue = isChangeTypeAdded ? 0 : 1;
 
     return (
       <>
