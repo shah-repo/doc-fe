@@ -1,6 +1,6 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { find, flattenDeep, lowerCase, omit } from 'lodash';
-import { reaction, ObservableMap } from 'mobx';
+import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
@@ -9,6 +9,7 @@ import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '..
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -55,8 +56,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === 'LHRT-';
 
-    const startDateFieldName = 'lhrs-start-date';
-    const endDateFieldName = 'lhrs-end-date';
+    const startDateFieldName = LHRS_START_DATE;
+    const endDateFieldName = LHRS_END_DATE;
 
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
@@ -200,8 +201,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
             if (!stepLHRs || !lhrStepState) { return; }
 
             // Check if there are actual changes before updating
-            const currentStartDate = stepLHRs.formInput?.['lhrs-start-date'] as string | undefined;
-            const currentEndDate = stepLHRs.formInput?.['lhrs-end-date'] as string | undefined;
+            const currentStartDate = stepLHRs.formInput?.[LHRS_START_DATE] as string | undefined;
+            const currentEndDate = stepLHRs.formInput?.[LHRS_END_DATE] as string | undefined;
 
             // Convert form dates to ISO format for comparison
             const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
