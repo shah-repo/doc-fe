@@ -2,6 +2,7 @@ import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { ChangeEvent, memo, useEffect } from 'react';
+import { MaterialTreelistContext } from '..';
 import OverflowContent from '../../../../components/OverflowContent';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
@@ -15,6 +16,7 @@ import { isEditMaterial } from './utils';
 
 const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
+  const { isRedlineActive } = React.useContext(MaterialTreelistContext);
 
   const handleChange = (_: ChangeEvent<unknown>, value?: string) => {
     setFieldValue(field, value);
@@ -37,7 +39,11 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS 
   });
 
   const value = values[field] as string;
-  const shouldDisable = isLHRS ? true : isEmpty(units) ? true : !isLHRT && values.LHRTparameter;
+  const shouldDisable = isLHRS
+    ? isRedlineActive
+      ? Boolean(values.parentId)
+      : true
+    : isEmpty(units) || (!isLHRT && values.LHRTparameter);
 
   return (
     <FormikField name={field}>

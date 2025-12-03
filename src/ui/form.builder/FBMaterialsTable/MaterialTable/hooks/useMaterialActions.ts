@@ -16,6 +16,7 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
     type,
     isActive,
     isPendingChange,
+    isRedlineActive,
   } = flags;
 
   const { handleSelectionDelete, handleRemove, procedureState } = externalHandlers;
@@ -114,6 +115,10 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
     }
 
     if (isMPIProcedure && isDisabled && !isPreview) {
+      return;
+    }
+
+    if (isRedlineActive && dataItem.parentId && !isEBProcedure) {
       return;
     }
 
