@@ -4,12 +4,14 @@ import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
 import { CheckCircle, RemoveCircle } from '@material-ui/icons';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from '..';
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBLHRStepProps, FBProvider, FBText } from '..';
 import { ReactComponent as CollapseMoreIcon } from '../../../assets/images/CollapseMoreIcon.svg';
 import { ReactComponent as ExpandMoreIcon } from '../../../assets/images/ExpandMoreIcon.svg';
+import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
@@ -23,6 +25,7 @@ import { FBProcedureItemType } from '../FBProcedureItem/FBProcedureItem.types';
 import { FBLHRStepStyles } from './FBLHRStep.styles';
 import { withFBLHRStep } from './FBLHRStep.wrap';
 import OperatorsList from './components/OperatorsList';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from './utils';
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -48,6 +51,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   gutter,
   autosave,
   lhrBuildTypeExist,
+  startDateFieldName,
+  endDateFieldName,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -59,7 +64,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
-  const stepApproverList = stepLHRs?.formInput?.['fb-approvals-approvals-built-in']?.map((id) => ({
+  const stepApproverList = stepLHRs?.formInput?.woApprovals?.map((id) => ({
     stepId: id,
     user: getUserDetails(id)?.user,
   }));
@@ -134,52 +139,65 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           className={classes.panelSummary}
           expandIcon={expand ? <ExpandMoreIcon /> : <CollapseMoreIcon />}
         >
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <Box mr={2} ml={1}>
-              <Typography variant="h6" style={{ color: expand ? Colors.navy : Colors.almost_black }}>
-                <FBText locale={stepLabel} />
-              </Typography>
-            </Box>
-            <Box display="flex" alignItems="flex-start" fontSize={12}>
-              <Box mr={1} display="flex" alignItems="center">
-                {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
-                  <CheckCircle
-                    style={{
-                      color: getStatusColor(),
-                      fontSize: 17,
-                    }}
-                    className="fontSizeSmall"
-                  />
-                )}
-                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
-                {!stepLHRs && renderRemoveCircle()}
+          <Box className={classes.labelBoxContainer}>
+            <Box className={classes.labelBox}>
+              <Box mr={2} ml={1}>
+                <Typography variant="h6" className={expand ? classes.expand : classes.black}>
+                  <FBText locale={stepLabel} />
+                </Typography>
               </Box>
-              <Box
-                fontWeight={700}
-                fontSize={12}
-                color={Colors.almost_black}
-                component="span"
-                mr={0.75}
-              >
-                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}} />)}
-              </Box>
-              {stepLHRs
+              <Box display="flex" alignItems="flex-start" fontSize={12}>
+                <Box mr={1} display="flex" alignItems="center">
+                  {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
+                    <CheckCircle
+                      style={{
+                        color: getStatusColor(),
+                      }}
+                      className={cx('fontSizeSmall', classes.statusSize)}
+                    />
+                  )}
+                  {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
+                  {!stepLHRs && renderRemoveCircle()}
+                </Box>
+                <Box
+                  className={classes.lhrsStatusBox}
+                  component="span"
+                >
+                  {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}} />)}
+                </Box>
+                {stepLHRs
                 && (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status))
                 && (<Box component="span" data-cy={`lhr-step-timestamp-${stepIndex}`}>
                   <Box component="span" marginRight={0.75}>&bull;</Box>
                   {isDocumentRevisionReleased(stepLHRs.status)
                     ? getFormattedDateString(
-                      stepLHRs?.releasedAt,
-                      MomentFormats.DateTime,
+                    stepLHRs?.releasedAt,
+                    MomentFormats.DateTime,
                     )
                     : getFormattedDateString(
-                      stepLHRs?.createdAt,
-                      MomentFormats.DateTime,
+                    stepLHRs?.createdAt,
+                    MomentFormats.DateTime,
                     )}
                 </Box>)}
+              </Box>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <FBButton
+                disabled={isDisabled}
+                label={
+                  stepLHRs ? 'form.builder.view.step' : 'form.builder.start.step'
+                }
+                onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
+                {...{ loading }}
+                className={cx(
+                  classes.button,
+                  isDisabled && classes.disabled,
+                  !isDisabled && stepLHRs && classes.stepLHR,
+                  !isDisabled && !stepLHRs && classes.normal,
+                )}
+              />
             </Box>
           </Box>
-          <Box flexGrow={1} />
           {stepLHRs?.redline && (
             <Box pr={2}>
               <BorderColorIcon className={classes.borderColorIcon} />
@@ -223,29 +241,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               />
             </Box>
-            <FBButton
-              disabled={isDisabled}
-              label={
-                stepLHRs ? 'form.builder.view.step' : 'form.builder.start.step'
-              }
-              onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
-              {...{ loading }}
-              className={classes.button}
-              style={
-                isDisabled ? {
-                  background: Colors.whitest_grey,
-                }
-                  : stepLHRs
-                    ? {
-                      background: Colors.light_blue,
-                      color: Colors.navy,
-                    }
-                    : {
-                      background: Colors.navy,
-                      color: Colors.white,
-                    }
-              }
-            />
           </Box>
 
           {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
@@ -272,7 +267,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.start.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-start-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_START_QUANTITY])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -280,7 +275,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.accepted.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-accepted-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_ACCEPTED_QUANTITY])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -288,11 +283,26 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.rejected.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-rejected-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_REJECTED_QUANTITY])}
                   </Typography>
                 </Grid>
               </Grid>
             </Box>)}
+          {/* Start and End Date Pickers */}
+          <Box className={classes.lhrsDateBox}>
+            <Box className={classes.lhrsStartDateBox}>
+              <FBDatePicker
+                name={startDateFieldName}
+                label={translate('lhr.summary.grid.heading.start.date')}
+              />
+            </Box>
+            <Box className={classes.lhrsEndDateBox}>
+              <FBDatePicker
+                name={endDateFieldName}
+                label={translate('lhr.summary.grid.heading.end.date')}
+              />
+            </Box>
+          </Box>
           <Box>
             {!isDocumentLHRT && (
               <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>

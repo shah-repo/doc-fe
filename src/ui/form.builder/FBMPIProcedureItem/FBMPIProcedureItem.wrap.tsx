@@ -11,6 +11,7 @@ import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '..
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { checkIsDocumentForm, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -42,6 +43,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     // MARK: @config
     const dispatch = useDispatch();
     const [lhrsQuantity, setLhrsQuantity] = useState(1);
+    const [lhrsAcceptedQty, setLhrsAcceptedQty] = useState(NaN);
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document, id } = workspaceState || {};
     const { version, status } = document || {};
@@ -81,18 +83,35 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState('lhrs-start-quantity')?.value,
+        () => formState?.getInputState(LHRS_START_QUANTITY)?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+          const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY));
           setLhrsQuantity(formValue);
+        },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    React.useEffect(() => {
+      reaction(
+        () => formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
+          setLhrsAcceptedQty(formValue);
         },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+      const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
+      formValue && setLhrsQuantity(formValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lhrsAcceptedQty]);
+
+    React.useEffect(() => {
+      const formValue = formState?.getFieldValue(LHRS_START_QUANTITY);
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsQuantity]);
@@ -204,6 +223,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
+      const minimumQty = item.quantity ? toFixed(item.quantity * lhrsAcceptedQty) || toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
 
       if (isDocumentMPI) {
         return item.type
@@ -212,8 +232,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       }
 
       return usedItem
-        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit }
-        : { title: getItem?.(item.title), quantity, unit };
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit, minimumQty }
+        : { title: getItem?.(item.title), quantity, unit, minimumQty };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);

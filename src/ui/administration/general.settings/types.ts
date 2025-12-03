@@ -21,6 +21,7 @@ export enum GeneralSettingsTabs {
   SystemTransactions = 'System Transactions Setup',
   Training = 'Training',
   Timezone = 'Timezone',
+  LHRBuild = 'LHR Build',
 }
 
 export interface GeneralSettingsProps {

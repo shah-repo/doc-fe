@@ -5,10 +5,11 @@ import { useIntl } from 'react-intl';
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from '..';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal, toFixedDecimals } from '../../dashboard.new/line.items/common/Utils';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import { FBFieldName } from '../helpers/FBFieldName';
 
-const QUANTITY_FIELDS = ['lhrs-start-quantity', 'lhrs-accepted-quantity', 'lhrs-rejected-quantity'];
+const QUANTITY_FIELDS = [LHRS_START_QUANTITY, LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY];
 const WO_PART_QUANTITY = 'wo_part_quantity';
 const DECIMAL_TOAST_TIMEOUT = 2000;
 const showDecimalToastError = throttle((name, intl) => {
@@ -72,6 +73,9 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     function setValue (formValue: any, state = false, shouldOmitSetValue = false) {
       if (!name) { return; }
+      if(name === 'lhr-build-type') {
+        return;
+      }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       if (!shouldOmitSetValue && !props.shouldOmitValue) {

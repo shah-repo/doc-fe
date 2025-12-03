@@ -3,11 +3,13 @@ import { reaction } from 'mobx';
 import React, { FocusEventHandler, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBTextFieldProps } from '..';
+import { translate } from '../../../common/intl';
 import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
 import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
+import { isLhrInvalid, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -21,6 +23,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     disabled,
     name = '',
     value,
+    error,
+    helperText,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -87,6 +91,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
+      if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+        if (isLhrInvalid(name, Number(value), formState)) {
+          return;
+        }
+      }
       if (!name) {
         return;
       }
@@ -125,7 +134,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         return;
       }
 
-      const isLhrStartField = name.includes('lhrs-start-quantity');
+      const isLhrStartField = name.includes(LHRS_START_QUANTITY);
       if (!workspaceState?.autosave && isLhrStartField) {
         workspaceState?.saveDocRev(formState?.getValues(), true);
       }
@@ -139,6 +148,13 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+      error = isLhrInvalid(name, Number(value), formState);
+      helperText = error
+        ? translate('lhr.materials.total.cannot.exceed.start.quantity')
+        : '';
+    }
+
     return Component({
       ...(props as T),
       onFocus,
@@ -151,6 +167,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       rows,
       mode,
       value,
+      error,
+      helperText,
     });
   };
   return (props: T) => Comp(props);

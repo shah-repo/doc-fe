@@ -16,6 +16,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBStore from '../FBStore/FBStore';
 import { FBWOApprovalsProps, FBWOApprovalsStatusEndpoint } from './FBWOApprovals.types';
+import { LHRS_START_DATE } from '../FBLHRStep/utils';
 
 export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -92,22 +93,33 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
+    const shouldSkipDefaultOwner = (): boolean => {
+      return Object.keys(formState?.oldValues ?? {}).includes(LHRS_START_DATE);
+    };
+
     React.useEffect(() => {
       const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(name, fieldValue, false);
 
       const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      // Auto-add current user as approver for LHR steps if not already added
       if (authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate
         && !activeApprovals?.length) {
-        // Add Default owner as approver on Work order case
-        addApprover([authUser?.employeeId]);
-        formState?.setFieldValue(name, [authUser?.employeeId], false);
+        if (authUser.employeeId) {
+          if (shouldSkipDefaultOwner()) {
+            // Don't add default owner for LHR step fields - user will be added when they complete entries
+            return;
+          }
+          addApprover([authUser.employeeId]);
+          formState?.setFieldValue(name, [authUser.employeeId], false);
+        }
       }
 
       formState?.inputState.get(name)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const completeWO = useActionCreator(taskActions.completeWO);
 
     const closeWOAsync = useAsync({
@@ -234,6 +246,9 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
 
       if (authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate) {
+        if (shouldSkipDefaultOwner()) {
+          return;
+        }
         disabledOptions = [authUser?.employeeId];
         disableChipDelete = true;
       }
