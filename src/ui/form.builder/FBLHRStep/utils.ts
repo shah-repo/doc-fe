@@ -34,35 +34,21 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   );
 };
 
-export function isLhrQuantityValid (
+export const isLhrInvalid = (
   name: string,
   value: number,
   formState?: FBFormState,
-) {
-  const startQuantity = formState?.getFieldValue(LHRS_START_QUANTITY);
-  const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
-  const rejected = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) || 0;
-
-  if (
-    (name === LHRS_ACCEPTED_QUANTITY && startQuantity < value + rejected)
-    || (name === LHRS_REJECTED_QUANTITY && startQuantity < accepted + value)
-  ) {
-    return false;
-  }
-  return true;
-}
-
-export const isLhrError = (name: string, value: number, formState?: FBFormState) => {
-  const start = formState?.getFieldValue(LHRS_START_QUANTITY);
-  const accepted = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) || 0;
-  const rejected = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) || 0;
+): boolean => {
+  const start = formState?.getFieldValue(LHRS_START_QUANTITY) as number | undefined;
+  const accepted = (formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) as number) || 0;
+  const rejected = (formState?.getFieldValue(LHRS_REJECTED_QUANTITY) as number) || 0;
 
   if (name === LHRS_ACCEPTED_QUANTITY) {
-    return start < Number(value) + rejected;
+    return (start ?? 0) < value + rejected;
   }
 
   if (name === LHRS_REJECTED_QUANTITY) {
-    return start < accepted + Number(value);
+    return (start ?? 0) < accepted + value;
   }
 
   return false;

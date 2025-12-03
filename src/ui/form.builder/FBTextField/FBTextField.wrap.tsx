@@ -9,7 +9,7 @@ import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/docum
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
-import { isLhrError, isLhrQuantityValid } from '../FBLHRStep/utils';
+import { isLhrInvalid } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -92,7 +92,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         return;
       }
       if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-        if (!isLhrQuantityValid(name, Number(value), formState)) {
+        if (isLhrInvalid(name, Number(value), formState)) {
           return;
         }
       }
@@ -149,7 +149,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     ), []);
 
     if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-      error = isLhrError(name, Number(value), formState);
+      error = isLhrInvalid(name, Number(value), formState);
       helperText = error
         ? translate('lhr.materials.total.cannot.exceed.start.quantity')
         : '';
