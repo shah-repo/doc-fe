@@ -52,10 +52,12 @@ import { withFBEquipmentTable } from './wrap';
 
 interface EquipmentTreelistContextProps {
   isRedlineActive?: boolean
+  isEnableActualIdAddition?: boolean
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
   isRedlineActive: false,
+  isEnableActualIdAddition: false,
 });
 
 const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
@@ -384,7 +386,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive }}>
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition }}>
           <FormikProvider value={formik}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>

@@ -87,8 +87,9 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, addActualId, isEnableActualIdAddition, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, addActualId, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
+  const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
   const classes = styles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
@@ -100,7 +101,6 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
       = dataItem?.isActualIdAddition || dataItem?.actualId || !isEnableActualIdAddition ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
-  const { isRedlineActive } = React.useContext(EquipmentTreelistContext);
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
