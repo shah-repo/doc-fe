@@ -34,7 +34,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     const dispose = reaction(
       (): LHRBuild[] => {
         const map = FBAutocompleteAsyncStore.data.get(
-          FBAutocompleteAsyncOption.buildType
+          FBAutocompleteAsyncOption.buildType,
         );
         return map ? Array.from(map.values()) : [];
       },
@@ -45,7 +45,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
         setPrevValue(value);
         setDefaultValue(value);
       },
-      { fireImmediately: true }
+      { fireImmediately: true },
     );
     return dispose;
   }, [name, formState]);
