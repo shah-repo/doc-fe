@@ -535,7 +535,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                             {getMaterialRelacmentAuditLabel('lot', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{lotDocId}</div>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{lotDocId}</div>
                       </>
                     )}
                     {quantity && (
@@ -545,7 +545,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                             {getMaterialRelacmentAuditLabel('quantity', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{quantity}</div>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{quantity}</div>
                       </>
                     )}
                     {unit && (
@@ -555,7 +555,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                             {getMaterialRelacmentAuditLabel('unit', change.type, change.reference?.metadata, stepIndex)}
                           </span>
                         </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{unit}</div>
+                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{unit}</div>
                       </>
                     )}
                   </>
@@ -565,7 +565,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       {getMaterialRelacmentAuditLabel('actualId', change.type, change.reference?.metadata, stepIndex)}
                     </span>
                   </Typography>
-                  <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`}>{change.reference?.toDocRev?.document.docId}</div>
+                  <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{change.reference?.toDocRev?.document.docId}</div>
                 </>
                 )}
               </Box>,
