@@ -9,6 +9,7 @@ import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/docum
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
+import { isLhrInvalid } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -90,10 +91,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
-      if(workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-        const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
-        if((name === 'lhrs-accepted-quantity' && startQuantity < Number(value) + formState?.getFieldValue('lhrs-rejected-quantity'))
-          || (name === 'lhrs-rejected-quantity' && startQuantity < formState?.getFieldValue('lhrs-accepted-quantity') + Number(value))) {
+      if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+        if (isLhrInvalid(name, Number(value), formState)) {
           return;
         }
       }
@@ -149,15 +148,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    if(workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-      const startQuantity = formState?.getFieldValue('lhrs-start-quantity');
-      if(name === 'lhrs-accepted-quantity') {
-        error = startQuantity < Number(value) + formState?.getFieldValue('lhrs-rejected-quantity');
-        helperText = error ? translate('lhr.materials.total.cannot.exceed.start.quantity') : '';
-      } else if(name === 'lhrs-rejected-quantity') {
-        error = startQuantity < formState?.getFieldValue('lhrs-accepted-quantity') + Number(value);
-        helperText = error ? translate('lhr.materials.total.cannot.exceed.start.quantity') : '';
-      }
+    if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+      error = isLhrInvalid(name, Number(value), formState);
+      helperText = error
+        ? translate('lhr.materials.total.cannot.exceed.start.quantity')
+        : '';
     }
 
     return Component({

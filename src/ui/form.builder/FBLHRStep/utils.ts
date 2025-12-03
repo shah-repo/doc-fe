@@ -1,7 +1,11 @@
 import { concat, uniqBy } from 'lodash';
+import { FBFormState } from '..';
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 
 const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
+const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
+const LHRS_START_QUANTITY = 'lhrs-start-quantity';
+const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
 
 export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   const allReferences = concat(
@@ -28,4 +32,24 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   return (
     { docRevId, documentId }
   );
+};
+
+export const isLhrInvalid = (
+  name: string,
+  value: number,
+  formState?: FBFormState,
+): boolean => {
+  const start = formState?.getFieldValue(LHRS_START_QUANTITY) as number | undefined;
+  const accepted = (formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) as number) || 0;
+  const rejected = (formState?.getFieldValue(LHRS_REJECTED_QUANTITY) as number) || 0;
+
+  if (name === LHRS_ACCEPTED_QUANTITY) {
+    return (start ?? 0) < value + rejected;
+  }
+
+  if (name === LHRS_REJECTED_QUANTITY) {
+    return (start ?? 0) < accepted + value;
+  }
+
+  return false;
 };
