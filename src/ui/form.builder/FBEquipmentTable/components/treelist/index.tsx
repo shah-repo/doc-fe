@@ -1,10 +1,5 @@
-import {
-  Grid,
-} from '@material-ui/core';
-import {
-  TreeList,
-  TreeListCellProps,
-} from '@progress/kendo-react-treelist';
+import { Grid } from '@material-ui/core';
+import { TreeList, TreeListCellProps } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -17,8 +12,10 @@ import {
 } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { companySelectors } from '../../../../../state/ducks/company';
 import ScanCaptureDialog from '../../../../components/common/dialogs/scaner';
 import { ScanSelectedPartItem } from '../../../../components/common/dialogs/scaner/components/lot.table/types';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
@@ -53,6 +50,14 @@ import {
 import { getMapSelectedByParentEquipId, prepareData } from './utils';
 import { withFBEquipmentTable } from './wrap';
 
+interface EquipmentTreelistContextProps {
+  isRedlineActive?: boolean
+}
+
+export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
+  isRedlineActive: false,
+});
+
 const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   items,
   type,
@@ -81,6 +86,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
   const { equipmentOptions } = useFetchData();
+  const isRedlineActive = useSelector(companySelectors.getRedlineActive);
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -231,6 +237,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       type,
       isPendingChange,
       lhrStepIndex,
+      isRedlineActive,
     },
     {
       handleSelectionDelete,
@@ -377,36 +384,38 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <FormikProvider value={formik}>
-          <Grid container>
-            <Grid item xs={12} ref={treeListRef}>
-              <TreeList
-                style={{
-                  overflow: 'auto',
-                  maxHeight: size?.height ? `${size?.height}px` : '100px',
-                }}
-                {...state.dataState}
-                tableProps={{ style: { tableLayout: 'fixed' } }}
-                rowHeight={TREELIST_CONFIG.rowHeight}
-                scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
-                editField={MODE_FIELD}
-                expandField={EXPAND_FIELD}
-                dataItemKey={DATA_ITEM_KEY}
-                subItemsField={subItemsKey}
-                className={cx(classes.treeList, 'containing-box-scrollbar')}
-                onExpandChange={onExpandChange}
-                rowRender={rowRender}
-                data={processData()}
-                columns={getColumns()}
-                onRowClick={editEquipmentItem}
-                resizable={TREELIST_CONFIG.resizable}
-                reorderable={TREELIST_CONFIG.reorderable}
-                sortable={TREELIST_CONFIG.sortable}
-                cellRender={cellRender}
-              />
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive }}>
+          <FormikProvider value={formik}>
+            <Grid container>
+              <Grid item xs={12} ref={treeListRef}>
+                <TreeList
+                  style={{
+                    overflow: 'auto',
+                    maxHeight: size?.height ? `${size?.height}px` : '100px',
+                  }}
+                  {...state.dataState}
+                  tableProps={{ style: { tableLayout: 'fixed' } }}
+                  rowHeight={TREELIST_CONFIG.rowHeight}
+                  scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
+                  editField={MODE_FIELD}
+                  expandField={EXPAND_FIELD}
+                  dataItemKey={DATA_ITEM_KEY}
+                  subItemsField={subItemsKey}
+                  className={cx(classes.treeList, 'containing-box-scrollbar')}
+                  onExpandChange={onExpandChange}
+                  rowRender={rowRender}
+                  data={processData()}
+                  columns={getColumns()}
+                  onRowClick={editEquipmentItem}
+                  resizable={TREELIST_CONFIG.resizable}
+                  reorderable={TREELIST_CONFIG.reorderable}
+                  sortable={TREELIST_CONFIG.sortable}
+                  cellRender={cellRender}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </FormikProvider>
+          </FormikProvider>
+        </EquipmentTreelistContext.Provider>
       </Grid>
       <Grid item>
         {!isDisabled && (

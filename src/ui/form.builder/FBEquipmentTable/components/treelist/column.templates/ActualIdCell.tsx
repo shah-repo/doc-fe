@@ -4,6 +4,7 @@ import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@materia
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
@@ -86,7 +87,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, equipmentOptions, addActualId, isDisabled, isEnableActualIdAddition, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, addActualId, isEnableActualIdAddition, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
   const classes = styles({ isEditMode });
@@ -99,6 +100,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
       = dataItem?.isActualIdAddition || dataItem?.actualId || !isEnableActualIdAddition ? false : !(dataItem[MODE_FIELD] || dataItem[ADD_FIELD]);
   const actualEquipDocId = dataItem?.actualEquipDocId ?? '';
   const isLoading = !equipmentOptions.length;
+  const { isRedlineActive } = React.useContext(EquipmentTreelistContext);
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
@@ -143,7 +145,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
         <span className={cx({ [classes.lotInfoId]: !isEditMode })}>
-          {isEditMode ? (
+          {isEditMode && !isRedlineActive ? (
             <LotAutocomplete
               {...{
                 field,

@@ -18,6 +18,7 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
     type,
     isPendingChange,
     lhrStepIndex,
+    isRedlineActive,
   } = flags;
 
   const { handleSelectionDelete, handleRemove, procedureState, workspaceState, lhrStepState } = externalHandlers;
@@ -247,6 +248,10 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
     }
 
     if (isMPIProcedure && !isLHRStep && isDisabled && !isPreview) {
+      return;
+    }
+
+    if (isRedlineActive && dataItem.parentId && !isEBProcedure) {
       return;
     }
 
