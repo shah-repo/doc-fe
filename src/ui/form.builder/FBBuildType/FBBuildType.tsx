@@ -1,13 +1,13 @@
+import { isEmpty, isNull, isUndefined } from 'lodash';
+import { reaction } from 'mobx';
 import React from 'react';
-import { FBLHRBuildOptions, FB, FBAutocompleteAsyncOption, FBInput, FBAutocompleteAsyncState, FBWorkspaceModeOptions, FBAutocompleteAsyncProps } from '..';
-import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBInput, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { SMText } from '../../../App';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import Dialog from '../../components/dialogs';
-import { SMText } from '../../../App';
-import { isEmpty, isNull, isUndefined } from 'lodash';
-import useDialog from '../../hooks/useDialog';
 import { Autocomplete } from '../../components/forms/fields-next';
-import { reaction } from 'mobx';
+import useDialog from '../../hooks/useDialog';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBFontStyle } from '../styles/FBFont.styles';
 
 const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
@@ -30,18 +30,25 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     buildsAsync.load();
   }, [buildsAsync]);
 
-  React.useEffect(() => reaction(
-    () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.buildType),
-    () => {
-      const data = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.buildType) as Map<string, LHRBuild>;
-      const options = data ? Array.from(data.values()) : [];
-      setOptions(options);
-      const value = options.find(opt => opt.id === formState?.getFieldValue(name));
-      setPrevValue(value);
-      setDefaultValue(value);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), []);
+  React.useEffect(() => {
+    const dispose = reaction(
+      (): LHRBuild[] => {
+        const map = FBAutocompleteAsyncStore.data.get(
+          FBAutocompleteAsyncOption.buildType
+        );
+        return map ? Array.from(map.values()) : [];
+      },
+      (options) => {
+        setOptions(options);
+        const selectedId = formState?.getFieldValue(name);
+        const value = options.find((opt) => opt.id === selectedId);
+        setPrevValue(value);
+        setDefaultValue(value);
+      },
+      { fireImmediately: true }
+    );
+    return dispose;
+  }, [name, formState]);
 
   const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
     const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id) as LHRBuild;
@@ -80,7 +87,6 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     setRefresh((x) => !x);
   };
   const isDisabled = (defaultValue && defaultValue.displayLabel !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
-
   return (
     <>
       <FBInput
