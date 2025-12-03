@@ -48,9 +48,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   autoCompleteClasses,
   onBlur,
   isTypeLhrBuild = false,
-  selectedLhrBuild,
-  lhrBuildDialog,
-  onDialogActionClick,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();

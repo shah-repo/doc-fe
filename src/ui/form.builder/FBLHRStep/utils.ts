@@ -3,9 +3,11 @@ import { FBFormState } from '..';
 import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 
 const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
-const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
-const LHRS_START_QUANTITY = 'lhrs-start-quantity';
-const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
+export const LHRS_ACCEPTED_QUANTITY = 'lhrs-accepted-quantity';
+export const LHRS_START_QUANTITY = 'lhrs-start-quantity';
+export const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
+export const LHRS_START_DATE = 'lhrs-start-date';
+export const LHRS_END_DATE = 'lhrs-end-date';
 
 export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   const allReferences = concat(

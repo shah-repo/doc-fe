@@ -2,7 +2,7 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions, FBLHRBuildOptions } from '..';
+import { FB, FBAutocompleteProps, FBLHRBuildOptions, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -10,7 +10,6 @@ import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
-import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { isTranslation } from '../../translations/types';
 
@@ -58,8 +57,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
     const isTypeLhrBuild = name === 'lhr-build-type';
-    const lhrBuildDialog = useDialog();
-    const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled
       = PO_REQUESTOR_COMPONENT_NAME === name
@@ -149,13 +146,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     groupByKey && (groupBy = (option) => option[groupByKey]);
 
-    disabledOptions && (getOptionDisabled = (option) =>
-      includes(disabledOptions, option.id)
-    );
+    disabledOptions
+      && (getOptionDisabled = (option) => includes(disabledOptions, option.id));
 
-    if(isTypeLhrBuild && !isEmpty(defaultValue)) {
-      const lhrBuildType = defaultValue as LHRBuild;
-      disabled = !isEmpty(lhrBuildType.internalType) && lhrBuildType?.internalType !== FBLHRBuildOptions.Production;
+    if (isTypeLhrBuild && defaultValue) {
+      const { internalType } = defaultValue as LHRBuild;
+      disabled = !!(internalType && internalType !== FBLHRBuildOptions.Production);
     }
 
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -193,15 +189,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       }
     };
 
-    const onDialogActionClick = (action: 'cancel' | 'confirm') => {
-      if (action === 'confirm') {
-        formState?.setFieldValue(name, selectedValue?.id);
-        formState?.setFieldAutosave(name);
-      }
-      formState?.getInputState(name)?.setRender();
-      setSelectedValue(undefined);
-      lhrBuildDialog.close();
-    };
     debounceFilterInput = debounce(onFilterInputChange, 1000);
 
     if (isUndefined(defaultValue)) {
@@ -236,9 +223,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       type: schemaItem?.type,
       onBlur: handleBlur,
       isTypeLhrBuild,
-      selectedLhrBuild: selectedValue,
-      lhrBuildDialog,
-      onDialogActionClick,
     });
   };
 

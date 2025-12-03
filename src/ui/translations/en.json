@@ -2392,6 +2392,8 @@
   "lhr.summary.grid.heading.comments": "Comments",
   "lhr.summary.grid.heading.entered.by": "Entered By",
   "lhr.summary.grid.heading.date": "Date",
+  "lhr.summary.grid.heading.start.date": "Start Date",
+  "lhr.summary.grid.heading.end.date": "End Date",
   "lhr.summary.table.empty.records": "No records available",
   "lhr.summary.placeholder.select.enter": "Select or Enter",
   "lhr.summary.placeholder.enter": "Enter",

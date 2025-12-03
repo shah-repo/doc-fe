@@ -9,7 +9,7 @@ import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/docum
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
-import { isLhrInvalid } from '../FBLHRStep/utils';
+import { isLhrInvalid, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -134,7 +134,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         return;
       }
 
-      const isLhrStartField = name.includes('lhrs-start-quantity');
+      const isLhrStartField = name.includes(LHRS_START_QUANTITY);
       if (!workspaceState?.autosave && isLhrStartField) {
         workspaceState?.saveDocRev(formState?.getValues(), true);
       }

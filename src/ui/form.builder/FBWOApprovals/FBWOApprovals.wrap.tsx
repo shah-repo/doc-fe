@@ -16,6 +16,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBStore from '../FBStore/FBStore';
 import { FBWOApprovalsProps, FBWOApprovalsStatusEndpoint } from './FBWOApprovals.types';
+import { LHRS_START_DATE } from '../FBLHRStep/utils';
 
 export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -93,7 +94,7 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
     }
 
     const shouldSkipDefaultOwner = (): boolean => {
-      return Object.keys(formState?.oldValues ?? {}).includes('lhrs-start-date');
+      return Object.keys(formState?.oldValues ?? {}).includes(LHRS_START_DATE);
     };
 
     React.useEffect(() => {

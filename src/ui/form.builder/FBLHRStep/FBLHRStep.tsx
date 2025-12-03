@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBLHRStepProps, FBProvider, FBText } from '..';
 import { ReactComponent as CollapseMoreIcon } from '../../../assets/images/CollapseMoreIcon.svg';
 import { ReactComponent as ExpandMoreIcon } from '../../../assets/images/ExpandMoreIcon.svg';
+import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
@@ -24,6 +25,7 @@ import { FBProcedureItemType } from '../FBProcedureItem/FBProcedureItem.types';
 import { FBLHRStepStyles } from './FBLHRStep.styles';
 import { withFBLHRStep } from './FBLHRStep.wrap';
 import OperatorsList from './components/OperatorsList';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from './utils';
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -265,7 +267,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.start.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-start-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_START_QUANTITY])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -273,7 +275,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.accepted.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-accepted-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_ACCEPTED_QUANTITY])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -281,7 +283,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.rejected.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
-                    {toFixed(stepLHRs?.formInput?.['lhrs-rejected-quantity'])}
+                    {toFixed(stepLHRs?.formInput?.[LHRS_REJECTED_QUANTITY])}
                   </Typography>
                 </Grid>
               </Grid>
@@ -291,13 +293,13 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             <Box className={classes.lhrsStartDateBox}>
               <FBDatePicker
                 name={startDateFieldName}
-                label="Start Date"
+                label={translate('lhr.summary.grid.heading.start.date')}
               />
             </Box>
             <Box className={classes.lhrsEndDateBox}>
               <FBDatePicker
                 name={endDateFieldName}
-                label="End Date"
+                label={translate('lhr.summary.grid.heading.end.date')}
               />
             </Box>
           </Box>
