@@ -8,6 +8,6 @@ export default makeStyles(theme => createStyles({
     gap: theme.spacing(1, 1),
   },
   aqlLevel: {
-    minWidth: 100,
+    minWidth: 120,
   },
 }));
