@@ -64,12 +64,14 @@ interface MaterialTreelistContextProps {
   addLot?: (dataItem: EditableMaterial) => void
   openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
   isRedlineActive?: boolean
+  isDisabled?: boolean
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
   lhrsQuantity: 1,
   addLot: undefined,
   isRedlineActive: false,
+  isDisabled: false,
 });
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
@@ -502,7 +504,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
     isLHRT: isLHRStep && isMPIProcedure,
     onConfirm: formik.submitForm,
     isLHRProductionBuild,
@@ -538,6 +539,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           addLot,
           openQuickView,
           isRedlineActive,
+          isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
         }}
       >
         <FormikProvider value={formik}>

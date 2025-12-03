@@ -19,7 +19,6 @@ export const buildEBSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
-  isDisabled,
   onScanClick,
 }: SchemaOptions): CustomTreeListColumnProps[] => [
   {
@@ -34,7 +33,7 @@ export const buildEBSchema = ({
     id: 'lotId',
     field: 'lotId',
     title: translate('form.builder.procedure.material.table.lot.number.title'),
-    cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} isEBProcedure />,
+    cell: (props) => <LotIdCellTemplate {...props} addLot={addLot} onClick={onRowClick} onScanClick={onScanClick} isEBProcedure />,
     mainOrderIndex: 2,
     width: 160,
   },
