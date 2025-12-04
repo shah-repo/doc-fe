@@ -44,11 +44,11 @@ export const isLhrInvalid = (
   const rejected = (formState?.getFieldValue(LHRS_REJECTED_QUANTITY) as number) || 0;
 
   if (name === LHRS_ACCEPTED_QUANTITY) {
-    return (start ?? 0) < value + rejected;
+    return (start ?? 0) !== value + rejected;
   }
 
   if (name === LHRS_REJECTED_QUANTITY) {
-    return (start ?? 0) < accepted + value;
+    return (start ?? 0) !== accepted + value;
   }
 
   return false;
