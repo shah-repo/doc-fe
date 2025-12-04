@@ -53,7 +53,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
     const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id) as LHRBuild;
     const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
-    if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+    if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
       setSelectedValue(selectedLhrBuild);
       lhrBuildDialog.open();
     } else if (!isNull(event)) {
