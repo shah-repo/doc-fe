@@ -72,8 +72,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
       formState?.setFieldAutosave(name);
       setDefaultValue(selectedValue);
       workspaceState?.saveDocRev(formState?.getValues());
-    }
-    else {
+    } else {
       setDefaultValue(prevValue);
       forceRerender();
     }
@@ -103,6 +102,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
           disableClearable
           options={options}
           onInputChange={onChange}
+          onChange={onChange}
           value={defaultValue ?? null}
           getOptionLabel={option => option.displayLabel}
         />
