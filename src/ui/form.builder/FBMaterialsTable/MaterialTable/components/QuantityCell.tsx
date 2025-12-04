@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MaterialTreelistContext } from '..';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../../components/forms/fields/validators';
@@ -13,7 +13,8 @@ import { isEditMaterial } from './utils';
 const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { dataItem, field = '', hasChildren, isLHRT } = props;
   const classes = styles({ hasChildren });
-  const { getFieldProps, setFieldValue, values } = useFormikContext<EditableMaterial>();
+  const { getFieldProps, setFieldValue, values, errors, setErrors, setTouched, touched }
+    = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
   const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
 
@@ -28,7 +29,11 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   const getFieldInfo = () =>
     field && (
-      <FormikField name={field} {...(!shouldDisable && { validate: validator(requiredNumber) })}>
+      <FormikField
+        name={field}
+        validate={!shouldDisable ? validator(requiredNumber) : undefined}
+        error={!shouldDisable && field ? Boolean(errors[field]) : undefined}
+      >
         <TextField
           {...getFieldProps(field)}
           type="number"
@@ -46,8 +51,21 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
     displayValue = displayValue * lhrsQuantity;
   }
 
+  useEffect(() => {
+    if (shouldDisable && errors[field]) {
+      setErrors({
+        ...errors,
+        [field]: undefined,
+      });
+      setTouched({
+        ...touched,
+        [field]: false,
+      });
+    }
+  }, [shouldDisable]);
+
   return (
-    <TreeListCellWrapper {...props}>
+    <TreeListCellWrapper {...props} key={String(shouldDisable)}>
       {isEditMode && getFieldInfo()}
       {!isEditMode && <span className={classes.Cell}>{displayValue}</span>}
     </TreeListCellWrapper>
