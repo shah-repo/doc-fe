@@ -92,7 +92,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         return;
       }
       if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-        if (isLhrInvalid(name, Number(value ?? 0), formState)) {
+        if (isLhrInvalid(name, value, formState)) {
           return;
         }
       }
@@ -149,7 +149,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     ), []);
 
     if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
-      error = isLhrInvalid(name, Number(value ?? 0), formState);
+      error = isLhrInvalid(name, value, formState);
       helperText = error
         ? translate('lhr.materials.total.cannot.exceed.start.quantity')
         : '';
