@@ -14,9 +14,9 @@ import { taskActions } from '../../../state/ducks/tasks';
 import { store } from '../../../state/store';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_DATE } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import { FBWOApprovalsProps, FBWOApprovalsStatusEndpoint } from './FBWOApprovals.types';
-import { LHRS_START_DATE } from '../FBLHRStep/utils';
 
 export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -178,6 +178,24 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    React.useEffect(() => {
+      const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
+      formState?.setFieldValue(name, fieldValue, false);
+      reaction(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        () => [
+          formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
+        ],
+        () => {
+          if (!woApprovalsState?.getApprovals?.some((a) => a.approver?.id === authUser.employeeId)) {
+            formState?.setFieldValue(name, [authUser.employeeId], false);
+          }
+        },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function addApprover (ids?: string[]) {
       if (!id) { return; }
