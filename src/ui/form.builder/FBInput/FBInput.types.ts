@@ -163,6 +163,7 @@ export type FBInputProps =
      * @cfg {Bool} Whether the field can be deleted in the form.
      */
     deleteInFormDisabled?: boolean
+    editInFormDisabled?: boolean
     instructionsDocument?: string
     reviseDisabled?: boolean
     outputDisabled?: boolean

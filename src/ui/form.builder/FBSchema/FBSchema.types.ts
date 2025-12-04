@@ -52,6 +52,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | 'tabId'
 | 'referenceDataType'
 | 'fieldNames'
+| 'editInFormDisabled'
 > & {
   validators?: Dictionary<any>
   tabId?: string

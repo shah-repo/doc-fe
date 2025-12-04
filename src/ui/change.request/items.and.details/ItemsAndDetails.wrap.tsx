@@ -101,11 +101,13 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
-    if(asyncState && asyncState.status === AsyncStatus.Error) {
+    if (asyncState && asyncState.status === AsyncStatus.Error) {
       const value = formState.getValues();
+      const newEntry = omit(value, 'attachments');
+
       const previousValue = [
         ...(formInput?.documentRevisions || []),
-        omit(value, 'attachments'),
+        ...(Object.keys(newEntry).length ? [newEntry] : []),
       ];
       parentFormState?.setFieldValue(name, previousValue, true);
     }

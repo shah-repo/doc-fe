@@ -11,8 +11,7 @@ import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '..
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { checkIsDocumentForm, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
-
-const lhrsAcceptedQuantity = 'lhrs-accepted-quantity';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -84,10 +83,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState('lhrs-start-quantity')?.value,
+        () => formState?.getInputState(LHRS_START_QUANTITY)?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+          const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY));
           setLhrsQuantity(formValue);
         },
       );
@@ -95,10 +94,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     }, []);
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState(lhrsAcceptedQuantity)?.value,
+        () => formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue(lhrsAcceptedQuantity));
+          const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
           setLhrsAcceptedQty(formValue);
         },
       );
@@ -106,13 +105,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     }, []);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue(lhrsAcceptedQuantity));
+      const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsAcceptedQty]);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+      const formValue = formState?.getFieldValue(LHRS_START_QUANTITY);
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsQuantity]);

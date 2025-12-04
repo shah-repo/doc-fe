@@ -58,7 +58,6 @@ const ExternalReferencesPresenter: React.FunctionComponent<ExternalReferencesPro
                             ? externalReference.externalSystem.name + ' - '
                             : '') + externalReference.resourceType,
                       },
-                      { title: translate('documentRevision.externalReferences.resourceId.title'), value: externalReference.resourceId },
                       { title: translate('documentRevision.externalReferences.resourceName.title'), value: externalReference.resourceName },
                     ].map((item) => externalReferenceItem({ ...item, classes }))}
                   </div>

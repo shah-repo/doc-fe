@@ -4,6 +4,7 @@ import { translate } from '../../../../../common/intl';
 import { MomentFormats } from '../../../../../common/utils/date';
 import { User } from '../../../../../state/ducks/common/types';
 import { companyActions } from '../../../../../state/ducks/company';
+import { Employee } from '../../../../../state/ducks/company/types';
 import DateTime from '../../../../components/DateTime';
 import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
@@ -20,6 +21,13 @@ interface SettingsHistoryDrawerProps {
   onClose: () => void
 }
 
+interface OwnerMap { [key: string]: Employee }
+
+export interface AuditLogsResponse {
+  logs: CompanySettingsChangeLog[]
+  ownerMap: OwnerMap
+}
+
 const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   isOpen,
   onClose,
@@ -28,8 +36,11 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
 
   const [loading, setLoading] = useState(true);
   const [auditLogsMap, setAuditLogsMap] = useState<{[key: string]: CompanySettingsChangeLog[]}>({});
-  const handleAuditLogs = (logs: CompanySettingsChangeLog[] | undefined) => {
+  const [ownerMap, setOwnerMap] = useState<OwnerMap>({});
+
+  const handleAuditLogs = (response?: AuditLogsResponse) => {
     const logsMap: {[key: string]: CompanySettingsChangeLog[]} = {};
+    const { logs, ownerMap = {} } = response ?? {};
     logs?.forEach(log => {
       if (!logsMap[log.groupId]) {
         logsMap[log.groupId] = [];
@@ -37,11 +48,12 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       logsMap[log.groupId].push(log);
     });
     setAuditLogsMap(logsMap);
+    setOwnerMap(ownerMap);
     setLoading(false);
   };
 
   const fetchSettingsLog = useActionCreator(companyActions.fetchSettingsAuditLogs);
-  const settingsLogsAsync = useAsync<CompanySettingsChangeLog[]>({
+  const settingsLogsAsync = useAsync<AuditLogsResponse>({
     onSuccess: handleAuditLogs,
     onError: toastError,
   });
@@ -54,13 +66,17 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
     let displayEntries = [displayText];
-    if (changeType === AUDIT_CHANGE_TYPE.UPDATED) {
+    if (changeType && [AUDIT_CHANGE_TYPE.UPDATED, AUDIT_CHANGE_TYPE.ADDED].includes(changeType)) {
       displayEntries = displayText.split(' | ');
     }
 
+    const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
+    const showHeaderEntry = (isChangeTypeAdded && displayEntries.length === 1) || !isChangeTypeAdded;
+    const listEntriesSpliceValue = isChangeTypeAdded ? 0 : 1;
+
     return (
       <>
-        {displayEntries.length > 0 && (
+        {showHeaderEntry && (
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
@@ -75,7 +91,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
           <ul className={classes.displayEntryList}
             data-cy={`audit-log-entry-${groupId}-${sectionName}-list`}
           >
-            {displayEntries.slice(1).map((entry, index) => (
+            {displayEntries.slice(listEntriesSpliceValue).map((entry, index) => (
               <li key={index}>
                 <Typography
                   variant="subtitle2"
@@ -110,8 +126,8 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       {Object.keys(auditLogsMap).map(groupId => {
         const groupEntries = auditLogsMap[groupId];
         // For all the entries in a group, the time and user would be the same as the first entry
-        const { updatedAt, ownerName, ownerEmail } = groupEntries[0];
-        const finalOwner = { name: ownerName, email: ownerEmail } as User;
+        const { updatedAt, ownerName, ownerEmail, ownerId } = groupEntries[0];
+        const finalOwner = ownerMap[ownerId]?.user ?? { name: ownerName, email: ownerEmail } as User;
         return (
           <Box key={groupId} className={classes.groupBox}>
             <UserAvatarListItem

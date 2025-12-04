@@ -1,20 +1,24 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
 import { createFilterOptions } from '@material-ui/lab/useAutocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import { MaterialTreelistContext } from '..';
 import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
+import { Colors } from '../../../../layout/theme-next';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
 import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
+import { isPartHasInsufficientQty } from './utils';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded, isLHRT } = props;
@@ -26,6 +30,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
+  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
+  const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
@@ -141,8 +147,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
         </span>
       )}
       {!isEditMode && (
-        <OverflowContent title={displayValue}>
-          <>
+        <div className={classes.materialCellWrap}>
+          <OverflowContent title={displayValue}>
             {hasChildren && !isEditMode && (
               <span
                 className={cx(
@@ -164,9 +170,28 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                 />
               </span>
             )}
-            <span className={cx(hasChildren ? classes.boldText : classes.normalText)}>{displayValue}</span>
-          </>
-        </OverflowContent>
+            {displayValue}
+          </OverflowContent>
+          {hasChildren && isInsufficientQty && (
+            <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
+              <Tooltip
+                arrow
+                title={translate('form.builder.procedure.material.table.part.quantity.short.info.msg',
+                  {
+                    assignedLot: totalAssignedQty ?? '',
+                    lotQuantityNeeded: quantityNeeded ?? '',
+                  })}
+                placement="top-start"
+              >
+                <FontAwesomeIcon
+                  data-cy="new-revision-available"
+                  color={Colors.error}
+                  icon={solid('circle-exclamation')}
+                />
+              </Tooltip>
+            </span>
+          )}
+        </div>
       )}
 
     </TreeListCellWrapper>

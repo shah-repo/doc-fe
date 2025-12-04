@@ -28,6 +28,7 @@ import { DocumentRevisionFormValues } from './forms/types';
 import { checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
 import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
+import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
 
 interface Props {
   documentId?: string
@@ -125,11 +126,11 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     }
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, 'lhrs-start-date')) {
-        delete values['lhrs-start-date'];
+      if (has(values, LHRS_START_DATE)) {
+        delete values[LHRS_START_DATE];
       }
-      if (has(values, 'lhrs-end-date')) {
-        delete values['lhrs-end-date'];
+      if (has(values, LHRS_END_DATE)) {
+        delete values[LHRS_END_DATE];
       }
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);

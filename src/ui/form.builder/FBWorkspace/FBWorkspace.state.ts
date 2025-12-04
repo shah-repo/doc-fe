@@ -14,6 +14,7 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBI
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
+import { LHRS_END_DATE, LHRS_START_DATE } from '../FBLHRStep/utils';
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
@@ -200,11 +201,11 @@ class FBWorkspaceState extends FBSchemaState {
     this.loading = true;
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, 'lhrs-start-date')) {
-        delete values['lhrs-start-date'];
+      if (has(values, LHRS_START_DATE)) {
+        delete values[LHRS_START_DATE];
       }
-      if (has(values, 'lhrs-end-date')) {
-        delete values['lhrs-end-date'];
+      if (has(values, LHRS_END_DATE)) {
+        delete values[LHRS_END_DATE];
       }
     }
 

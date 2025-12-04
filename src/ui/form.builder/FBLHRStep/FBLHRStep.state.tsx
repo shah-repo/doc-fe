@@ -94,8 +94,8 @@ class FBLHRStepState {
 
     const updatedFormInput = {
       ...this.stepLHRs.formInput,
-      ...(startDate !== undefined && { 'lhrs-start-date': startDate }),
-      ...(endDate !== undefined && { 'lhrs-end-date': endDate }),
+      ...(startDate !== undefined && { LHRS_START_DATE: startDate }),
+      ...(endDate !== undefined && { LHRS_END_DATE: endDate }),
     };
 
     // Update local state immediately
