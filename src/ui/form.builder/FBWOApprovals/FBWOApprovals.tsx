@@ -131,9 +131,9 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
                     >
                       {(approval, index: number) => {
                         const isUserNeedToApprove
-                          = documentStatus && [DocumentRevisionStatus.InReview, DocumentRevisionStatus.Draft].includes(documentStatus)
+                          = documentStatus && [DocumentRevisionStatus.InReview].includes(documentStatus)
                           && approval.approver?.user.id === currentUser
-                          && [FBInlineApprovalStatusIdent.PENDING, FBInlineApprovalStatusIdent.DRAFT].includes(approval.status);
+                          && [FBInlineApprovalStatusIdent.PENDING].includes(approval.status);
 
                         return (
                           <ListItem
