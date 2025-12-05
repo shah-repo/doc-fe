@@ -443,6 +443,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               stepLabel,
             });
         }
+        if (last(valueKey) === 'paramsId') {
+          fbLabel = `${intl.formatMessage({ id: 'form.builder.step.paramsId' })} for ${stepLabel}`;
+        }
+        if (last(valueKey) === 'LHRTparameter' && ['BOOLEAN_NEW', 'BOOLEAN_NEW_EDITED'].includes(change.type)) {
+          fbLabel = `${intl.formatMessage({ id: 'form.builder.step.LHRTparameter' })} for ${stepLabel}`;
+          console.log('audit.id', change.id, 'fbLabel', fbLabel);
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
+        }
       }
 
       if (fbType === 'supplierContacts') {
