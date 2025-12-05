@@ -65,6 +65,7 @@ interface MaterialTreelistContextProps {
   openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
   isRedlineActive?: boolean
   isDisabled?: boolean
+  isEBProcedure?: boolean
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
@@ -72,6 +73,7 @@ export const MaterialTreelistContext = React.createContext<MaterialTreelistConte
   addLot: undefined,
   isRedlineActive: false,
   isDisabled: false,
+  isEBProcedure: false,
 });
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
@@ -326,7 +328,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.whiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.errorBg]: (!isEmpty(item.type) && isLHRStep && isDesign) || isInsufficientQty,
+        [classes.errorBg]: (!isEmpty(item.type) && isLHRStep && isDesign) || (isInsufficientQty && !isEBProcedure),
       }),
     };
 
@@ -540,6 +542,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           openQuickView,
           isRedlineActive,
           isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
+          isEBProcedure,
         }}
       >
         <FormikProvider value={formik}>
