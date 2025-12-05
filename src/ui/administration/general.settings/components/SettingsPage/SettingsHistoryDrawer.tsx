@@ -23,8 +23,8 @@ interface SettingsHistoryDrawerProps {
 
 interface OwnerMap { [key: string]: Employee }
 
-const UIKey = 'readFromUi_';
-const materialFlowAclParentKey = 'materialFlowAcl';
+const UI_READ_KEY = 'readFromUi_';
+const MATERIAL_FLOW_ACL_PARENT_KEY = 'materialFlowAcl';
 
 export interface AuditLogsResponse {
   logs: CompanySettingsChangeLog[]
@@ -73,12 +73,12 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
       displayEntries = displayText.split(' | ');
     }
 
-    const showHeaderEntry = shouldDisplayHeader(changeType, displayEntries.length, parentKey);
-    const listEntriesSpliceValue = showHeaderEntry ? 1 : 0;
+    const shouldShowHeaderEntry = shouldDisplayHeader(changeType, displayEntries.length, parentKey);
+    const listEntriesSpliceValue = shouldShowHeaderEntry ? 1 : 0;
 
     return (
       <>
-        {showHeaderEntry && (
+        {shouldShowHeaderEntry && (
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
@@ -111,29 +111,29 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   };
 
   const shouldDisplayHeader = (changeType, entryCount, parentKey): boolean => {
-    let showHeaderEntry = true;
+    let shouldShowHeaderEntry = true;
 
     const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
     const isChangeTypeUpdated = changeType === AUDIT_CHANGE_TYPE.UPDATED;
 
     if (isChangeTypeAdded) {
-      showHeaderEntry = entryCount === 1;
+      shouldShowHeaderEntry = entryCount === 1;
     } else if (isChangeTypeUpdated) {
-      showHeaderEntry = parentKey !== materialFlowAclParentKey;
+      shouldShowHeaderEntry = parentKey !== MATERIAL_FLOW_ACL_PARENT_KEY;
     } else {
-      showHeaderEntry = true;
+      shouldShowHeaderEntry = true;
     }
 
-    return showHeaderEntry;
+    return shouldShowHeaderEntry;
   };
 
   const getTranslatedLabelText = (text: string) => {
     return text
       .split(/\s+/)
       .map((word) => {
-        if (!word.includes(UIKey)) return word;
+        if (!word.includes(UI_READ_KEY)) return word;
 
-        const uiTranslationText = word.slice(UIKey.length);
+        const uiTranslationText = word.slice(UI_READ_KEY.length);
         return translate(uiTranslationText);
       })
       .join(' ');
@@ -175,13 +175,13 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
             {
               groupEntries.map(companySettingLog => {
                 const { parentKeyLabel, changeType, displayText, parentKey } = companySettingLog;
-                const parentKeyLabelToUse = getTranslatedLabelText(parentKeyLabel);
+                const translatedParentKeyLabel = getTranslatedLabelText(parentKeyLabel);
                 return (
                   <Box key={companySettingLog.id} className={classes.logEntry}>
                     <Typography variant="subtitle1" className={classes.auditKey}
                       data-cy={`change-key-${parentKey}-${changeType}`}
                     >
-                      {parentKeyLabelToUse} <span className={classes.changeType}>{changeType}</span>
+                      {translatedParentKeyLabel} <span className={classes.changeType}>{changeType}</span>
                     </Typography>
                     {
                       getDisplayText(groupId, parentKey, changeType, displayText)
