@@ -47,9 +47,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   customStyles,
   autoCompleteClasses,
   onBlur,
+  isTypeLhrBuild = false,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();
+  disableClearable = isTypeLhrBuild || disableClearable;
   const renderRefreshButton = (refresh, disabled) => (
     <Box ml={-4} display="flex" alignItems="center">
       <IconButton size="small" onClick={refresh} {...{ disabled }}>

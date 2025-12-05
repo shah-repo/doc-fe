@@ -11,7 +11,7 @@ export const withFBFieldOutputWrapper = <T extends FBFieldOutputWrapperProps>(
     position,
     ...props
   }: T) => {
-    const { type } = inputProps || {};
+    const { type, name } = inputProps || {};
 
     const isSection = type === 'section' || type === 'subsection';
     const isBlock = type && BlockTypeField.includes(type);
@@ -23,6 +23,7 @@ export const withFBFieldOutputWrapper = <T extends FBFieldOutputWrapperProps>(
       ...(props as T),
       mt,
       mb,
+      name,
     }));
   };
 

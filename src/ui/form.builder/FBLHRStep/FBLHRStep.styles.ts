@@ -70,5 +70,53 @@ export const FBLHRStepStyles = makeStyles(() =>
     borderColorIcon: {
       color: Colors.red,
     },
+    lhrsStartDateBox: {
+      marginRight: 2,
+      width: '50%',
+    },
+    lhrsDateBox: {
+      marginBottom: 2,
+      width: '50%',
+    },
+    disabled: {
+      background: Colors.whitest_grey,
+    },
+    stepLHR: {
+      background: Colors.light_blue,
+      color: Colors.navy,
+    },
+    normal: {
+      background: Colors.navy,
+      color: Colors.white,
+    },
+    lhrsStatusBox: {
+      fontWeight: 700,
+      fontSize: 12,
+      color: Colors.almost_black,
+      marginRight: 0.75,
+    },
+    statusSize: {
+      fontSize: 17,
+    },
+    expand: {
+      color: Colors.navy,
+    },
+    black: {
+      color: Colors.almost_black,
+    },
+    labelBoxContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+    labelBox: {
+      display: 'flex',
+      alignItems: 'center',
+      flexGrow: 1,
+    },
+    lhrsEndDateBox: {
+      width: '50%',
+    },
   }),
 );

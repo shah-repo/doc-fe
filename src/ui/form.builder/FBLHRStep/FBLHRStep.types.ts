@@ -24,6 +24,8 @@ export type FBLHRStepProps =
   equipment: any
   isDocumentLHRT: boolean
   lhrBuildTypeExist: string
+  startDateFieldName?: string
+  endDateFieldName?: string
 };
 
 export interface StartMpiBody {

@@ -142,6 +142,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const formik = useFormik<Partial<EditableEquipmentItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableEquipmentItem>) => {
+      let isEquipmentSpecification = false;
       if (isEnableActualIdAddition && !isEBProcedure) {
         if (values[ADD_FIELD]) {
           saveActualEquipment?.(values as EditableEquipmentItem);
@@ -150,11 +151,19 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         return;
       }
 
+      if (isMPIProcedure) {
+        const selectedEquipInfo = equipmentOptions?.find((option) => option.value === values.title);
+        if (selectedEquipInfo?.label.startsWith('ES-')) {
+          isEquipmentSpecification = true;
+        }
+      }
+
       const { id = '', plannedId = '', title = '', LHRTparameter } = values;
       let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
         type: values.type,
+        isEquipmentSpecification,
       };
 
       if (isLHRStep && lhrStepIndex) {

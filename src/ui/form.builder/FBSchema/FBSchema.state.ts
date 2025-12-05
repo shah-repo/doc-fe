@@ -8,6 +8,7 @@ import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatri
 import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
+import FBBuildType from '../FBBuildType/FBBuildType';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
@@ -100,6 +101,7 @@ class FBSchemaState {
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
     checkboxgroupasync: FBSupplierCheckboxGroupAsync,
+    lhrBuildTypeSelection: FBBuildType,
     autocomplete: FBAutocompleteAsync,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
@@ -140,6 +142,7 @@ class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     woApprovals: FBWOApprovals,
+    lhrStepApprovals: FBWOApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,

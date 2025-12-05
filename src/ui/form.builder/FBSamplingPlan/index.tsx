@@ -58,10 +58,6 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
       labelProps={FBFontStyle.labelProps}
       disabled={disabled}
       shouldOmitValue
-      rules={{
-        type: 'required',
-        aqlValue: 'required_if:sampling-plan.type,aql|numeric',
-      }}
     >
       <div className={classes.root}>
         <FBRadioGroup

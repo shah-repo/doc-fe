@@ -165,6 +165,7 @@ class FBEditorState {
     task: FBEditorLabel,
     approvals: FBEditorApprovals,
     woApprovals: FBEditorApprovals,
+    lhrStepApprovals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     mpiprocedure: FBEditorEmpty,
     parts: FBEditorEmpty,

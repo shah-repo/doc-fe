@@ -4,6 +4,7 @@ import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
+import LHRBuildSettingsPanel from './panels/LHRBuild';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
@@ -53,6 +54,11 @@ export const panels = [
     key: GeneralSettingsTabs.Locations,
     title: 'administration.general.settings.locations.tab',
     component: CompanyLocationSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.LHRBuild,
+    title: 'administration.general.settings.lhr.build.menu.tab',
+    component: LHRBuildSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.MaterialFlow,

@@ -1,12 +1,14 @@
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { SM, SMTabsProps } from '../../..';
 
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
   const Comp = (props: T) => {
     const { tabs, onChange } = props;
     const { _tabsState } = SM.useStores();
-
+    const location = useLocation();
+    const history = useHistory();
     // Set initial tab id.
     useEffect(
       () => {
@@ -15,6 +17,14 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
         }
 
         _tabsState?.setActiveTabId(tabs[0].tabId);
+        if (location?.state?.toTabId) {
+          const timer = setTimeout(() => {
+          handleChange?.({} as React.SyntheticEvent, location?.state?.toTabId);
+          history.replace(location.pathname, {});
+          }, 100);
+
+          return () => clearTimeout(timer);
+        }
       },
       [_tabsState, tabs],
     );
