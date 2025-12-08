@@ -26,6 +26,7 @@ import FBInlineApproval from '../FBInlineApproval/FBInlineApproval';
 import FBInstructionsDocument from '../FBInstructionsDocument/FBInstructionsDocument';
 import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
 import FBLHRStep from '../FBLHRStep/FBLHRStep';
+import FBLHRStepApprovals from '../FBLHRStepApprovals/FBLHRStepApprovals';
 import FBLotOnHandQuantityField from '../FBLotOnHandQuantityField/FBLotOnHandQuantityField';
 import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
 import FBLotTransfers from '../FBLotTransfers';
@@ -142,7 +143,7 @@ class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     woApprovals: FBWOApprovals,
-    lhrStepApprovals: FBWOApprovals,
+    lhrStepApprovals: FBLHRStepApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
