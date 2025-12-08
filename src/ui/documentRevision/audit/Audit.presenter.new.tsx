@@ -369,6 +369,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const isAttachment = !isEmpty(change.field.match(/attachments/g));
         const fieldType = isMaterial ? intl.formatMessage({ id: 'form.builder.materials|s' })
           : intl.formatMessage({ id: 'form.builder.equipment|s' });
+        const field = last(valueKey);
         // skip audit values
         if (
           (last(valueKey) === 'id'
@@ -444,12 +445,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             });
         }
 
-        if (last(valueKey) === 'paramsId') {
+        if (field === 'paramsId') {
           fbLabel = `${intl.formatMessage({ id: 'form.builder.step.paramsId' })} for ${stepLabel}`;
         }
-        if (last(valueKey) === 'LHRTparameter' && ['BOOLEAN_NEW', 'BOOLEAN_NEW_EDITED'].includes(change.type)) {
+        if (field === 'LHRTparameter' && ['BOOLEAN_NEW', 'BOOLEAN_NEW_EDITED'].includes(change.type)) {
           fbLabel = `${intl.formatMessage({ id: 'form.builder.step.LHRTparameter' })} for ${stepLabel}`;
-          console.log('audit.id', change.id, 'fbLabel', fbLabel);
           change = {
             ...change,
             updatedField: CUSTOM_BOOLEAN_FIELD,
