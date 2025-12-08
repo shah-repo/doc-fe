@@ -65,7 +65,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   }, [shouldDisable]);
 
   return (
-    <TreeListCellWrapper {...props} key={String(shouldDisable)}>
+    <TreeListCellWrapper {...props} key={`${field}-${shouldDisable}`}>
       {isEditMode && getFieldInfo()}
       {!isEditMode && <span className={classes.Cell}>{displayValue}</span>}
     </TreeListCellWrapper>
