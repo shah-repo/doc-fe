@@ -74,11 +74,11 @@ export const useEquipmentOptions = (id: string, isEquipmentSpecification: boolea
     // If API has returned data but store is empty, process and store it
     if (apiData && preparedData.length > 0) {
       // Validate that we have data before storing
-      const existingData = asyncData?.size ?? 0;
-      const isDataMissing = existingData === 0;
-      const isDataStale = existingData !== preparedData.length;
+      const dataSize = asyncData?.size ?? 0;
+      const isDataEmpty = dataSize === 0;
+      const hasDataMismatch = dataSize !== preparedData.length;
 
-      if (isDataMissing || isDataStale) {
+      if (isDataEmpty || hasDataMismatch) {
         FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
         asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
       }
