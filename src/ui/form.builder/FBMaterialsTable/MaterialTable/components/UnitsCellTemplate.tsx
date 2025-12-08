@@ -37,7 +37,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS 
   });
 
   const value = values[field] as string;
-  const shouldDisable = isLHRS ? true : isEmpty(units) ? true : !isLHRT && values.LHRTparameter;
+  const shouldDisable = isLHRS ? !isEmpty(value) : isEmpty(units) ? true : !isLHRT && values.LHRTparameter;
 
   return (
     <FormikField name={field}>
