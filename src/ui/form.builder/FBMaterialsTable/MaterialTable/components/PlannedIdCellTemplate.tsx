@@ -114,7 +114,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const partNumber = fieldValue.split(' ')[0] ?? '';
+  const partNumber = fieldValue?.split(' ')?.[0] ?? '';
 
   return (
     <TreeListCellWrapper {...props}>
