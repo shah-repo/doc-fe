@@ -1333,7 +1333,7 @@
   "form.builder.add.step": "Add Step",
   "form.builder.clone.step": "Clone",
   "form.builder.step.description": "Step Description",
-  "form.builder.step.paramsId": "Step Param Id",
+  "form.builder.step.paramsId": "Step Parameter",
   "form.builder.step.LHRTparameter": "Step LHRT Parameter",
   "form.builder.buttons": "Buttons",
   "form.builder.checkpoint": "Checkpoint",

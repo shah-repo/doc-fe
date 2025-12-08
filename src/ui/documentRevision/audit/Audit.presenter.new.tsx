@@ -443,6 +443,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               stepLabel,
             });
         }
+
         if (last(valueKey) === 'paramsId') {
           fbLabel = `${intl.formatMessage({ id: 'form.builder.step.paramsId' })} for ${stepLabel}`;
         }
