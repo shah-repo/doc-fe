@@ -26,7 +26,7 @@ import { MomentFormats, useDate } from '../../../common/utils/date';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import { getInitalsFromName } from '../../components/icons/avatar/helpers';
-import CompletedBlock from '../FBWOApprovals/CompletedBlock';
+import CompletedBlock from './CompletedBlock';
 import useStyles from './FBLHRStepApprovals.styles';
 import { FBLHRStepApprovalsProps } from './FBLHRStepApprovals.types';
 import { withFBLHRStepApprovals } from './FBLHRStepApprovals.wrap';

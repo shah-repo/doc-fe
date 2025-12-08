@@ -22,7 +22,6 @@ import {
   FBDialogState,
   FBInlineApprovalBody,
   FBRequiredApprover,
-  FBWOApprovalsState,
 } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
@@ -42,6 +41,7 @@ import {
   LHRS_START_DATE,
 } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
+import FBLHRStepApprovalsState from './FBLHRStepApprovals.state';
 import {
   FBLHRStepApprovalsProps,
   FBLHRStepApprovalsStatusEndpoint,
@@ -111,7 +111,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
     }
-    const woApprovalsState = FB.useRef(FBWOApprovalsState, {
+    const woApprovalsState = FB.useRef(FBLHRStepApprovalsState, {
       id: outputId,
       approvals: docApprovals,
       isOwner,

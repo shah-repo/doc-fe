@@ -1,5 +1,5 @@
-import { filter, isEmpty, map } from "lodash";
-import { action, computed, observable, set } from "mobx";
+import { filter, isEmpty, map } from 'lodash';
+import { action, computed, observable, set } from 'mobx';
 import {
   FBApprovalsConstructor,
   FBInlineApprovalBody,
@@ -7,32 +7,32 @@ import {
   FBInlineApprovalTransitionBody,
   FBJoinedEmployee,
   FBRequiredApprover,
-} from "..";
-import { Approval } from "../../../state/ducks/common/types";
-import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBRequest from "../FBApi/FBApi.request";
+} from '..';
+import { Approval } from '../../../state/ducks/common/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBLHRStepApprovalsState extends FBRequest<
-  Approval,
-  { "ids[]": string[] } | Approval
+Approval,
+{ 'ids[]': string[] } | Approval
 > {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
   private readonly isOwner?: boolean;
 
   public approvalApi = new FBRequest<
-    FBInlineApprovalBody,
-    Partial<FBInlineApprovalBody>
+  FBInlineApprovalBody,
+  Partial<FBInlineApprovalBody>
   >(FBEndpoint.Approvals);
 
   public transitionApi = new FBRequest<
-    FBInlineApprovalBody,
-    FBInlineApprovalTransitionBody | null
+  FBInlineApprovalBody,
+  FBInlineApprovalTransitionBody | null
   >(FBEndpoint.ApprovalsTransition);
 
-  public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
+  public constructor ({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
-    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
     if (!id) {
       return;
@@ -41,14 +41,14 @@ class FBLHRStepApprovalsState extends FBRequest<
   }
 
   // MARK: @computed
-  @computed public get getApprovals(): FBInlineApprovalBody[] {
+  @computed public get getApprovals (): FBInlineApprovalBody[] {
     const filtered = filter(
       this.approvals,
-      (a) => a.status !== "ABANDONED" && a.type === "MASTER"
+      (a) => a.status !== 'ABANDONED' && a.type === 'MASTER',
     );
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
-      canRequest: this.isOwner && a.status === "DRAFT",
+      canRequest: this.isOwner && a.status === 'DRAFT',
     }));
   }
 
@@ -58,11 +58,11 @@ class FBLHRStepApprovalsState extends FBRequest<
       return;
     }
     this.setUrl(FBEndpoint.RequiredApprovers);
-    this.setBody({ "ids[]": documentRevisions });
+    this.setBody({ 'ids[]': documentRevisions });
     this.fetch();
   };
 
-  public onSuccess() {
+  public onSuccess () {
     this.setGroups(this.data);
     super.onSuccess();
   }
@@ -71,24 +71,24 @@ class FBLHRStepApprovalsState extends FBRequest<
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
-        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
       };
       return group;
     }, {});
   };
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
-    set(this, "approvals", approvals);
+    set(this, 'approvals', approvals);
 
   public addApproval = (
     approval: Partial<FBInlineApprovalBody>,
-    callback?: () => any
+    callback?: () => any,
   ) => {
     this.approvalApi.set(
       {
         url: FBEndpoint.Approvals,
         body: approval,
-        method: "post",
+        method: 'post',
       },
       (data, error) => {
         if (error) {
@@ -98,7 +98,7 @@ class FBLHRStepApprovalsState extends FBRequest<
           this.approvalApi.onSuccess();
           callback?.();
         }
-      }
+      },
     );
   };
 
@@ -106,7 +106,7 @@ class FBLHRStepApprovalsState extends FBRequest<
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    callback?: () => void,
   ) => {
     if (!id) {
       return;
@@ -116,7 +116,7 @@ class FBLHRStepApprovalsState extends FBRequest<
         url: FBEndpoint.ApprovalsTransition,
         urlValues: { id, transition },
         body,
-        method: "post",
+        method: 'post',
       },
       (data, error) => {
         if (error) {
@@ -125,7 +125,7 @@ class FBLHRStepApprovalsState extends FBRequest<
         this.transitionApi.data = data;
         this.transitionApi.onSuccess();
         callback?.();
-      }
+      },
     );
   };
 }
