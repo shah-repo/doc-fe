@@ -18,13 +18,11 @@ import {
   FBInlineApprovalStatusIdent,
   FBInput,
   FBMapWrapper,
-  FBProvider, FBSection,
+  FBProvider,
+  FBSection,
 } from '..';
 import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
-import {
-  MomentFormats,
-  useDate,
-} from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import { getInitalsFromName } from '../../components/icons/avatar/helpers';
@@ -81,7 +79,8 @@ const FBLHRStepApprovals: React.FunctionComponent<FBLHRStepApprovalsProps> = ({
       <FBDialog />
       <FBInput {...props} {...{ name, autosave }} type="approvals">
         <FBSection name={name} {...{ label }} />
-        {((documentStatus !== DocumentRevisionStatus.Released && isRecord) || !isRecord) && (
+        {((documentStatus !== DocumentRevisionStatus.Released && isRecord)
+          || !isRecord) && (
           <FBAutocompleteAsync
             placeholder="form.builder.start.typing.list"
             label="form.builder.wo.users"
@@ -131,9 +130,16 @@ const FBLHRStepApprovals: React.FunctionComponent<FBLHRStepApprovalsProps> = ({
                     >
                       {(approval, index: number) => {
                         const isUserNeedToApprove
-                          = documentStatus && [DocumentRevisionStatus.InReview, DocumentRevisionStatus.Draft].includes(documentStatus)
+                          = documentStatus
+                          && [
+                            DocumentRevisionStatus.InReview,
+                            DocumentRevisionStatus.Draft,
+                          ].includes(documentStatus)
                           && approval.approver?.user.id === currentUser
-                          && [FBInlineApprovalStatusIdent.PENDING, FBInlineApprovalStatusIdent.DRAFT].includes(approval.status);
+                          && [
+                            FBInlineApprovalStatusIdent.PENDING,
+                            FBInlineApprovalStatusIdent.DRAFT,
+                          ].includes(approval.status);
 
                         return (
                           <ListItem

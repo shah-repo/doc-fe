@@ -1,4 +1,12 @@
-import { FBApprovalsState, FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInputProps, FBRequiredApprover } from '..';
+import {
+  FBApprovalsState,
+  FBAutocompleteAsyncProps,
+  FBDialogState,
+  FBFormState,
+  FBInlineApprovalBody,
+  FBInputProps,
+  FBRequiredApprover,
+} from '..';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export enum FBLHRStepApprovalsStatusEndpoint {
@@ -8,14 +16,19 @@ export enum FBLHRStepApprovalsStatusEndpoint {
   ABANDON = 'abandon',
 }
 
-export type FBLHRStepApprovalsProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
-& FBAutocompleteAsyncProps
-& {
+export type FBLHRStepApprovalsProps = Pick<
+FBInputProps,
+'name' | 'label' | 'disabled' | 'value'
+> &
+FBAutocompleteAsyncProps & {
   onApproveClick?: (approvalId: string) => void
   approvals?: FBInlineApprovalBody[]
   approvalsState?: FBApprovalsState
-  approvalTransition: (transition: FBLHRStepApprovalsStatusEndpoint, approvalId?: string, password?: string) => void
+  approvalTransition: (
+    transition: FBLHRStepApprovalsStatusEndpoint,
+    approvalId?: string,
+    password?: string
+  ) => void
   docId?: string
   documentStatus?: DocumentRevisionStatus
   formState?: FBFormState

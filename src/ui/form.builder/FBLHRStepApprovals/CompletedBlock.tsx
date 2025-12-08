@@ -24,9 +24,12 @@ const CompletedBlock: React.FC<{
         className={classes.stateListItem}
         onClick={toggleOpened}
       >
-        <FontAwesomeIcon className={classNames(classes.icon, {
-          [classes.rotateIcon]: isOpened,
-        })} icon={solid('circle-chevron-right')} />
+        <FontAwesomeIcon
+          className={classNames(classes.icon, {
+            [classes.rotateIcon]: isOpened,
+          })}
+          icon={solid('circle-chevron-right')}
+        />
         <ListItemText>
           <Box display="flex" alignItems="center">
             <Box

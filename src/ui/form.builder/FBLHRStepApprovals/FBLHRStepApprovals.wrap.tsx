@@ -1,22 +1,51 @@
 import { Box } from '@material-ui/core';
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from 'lodash';
+import {
+  compact,
+  difference,
+  filter,
+  find,
+  findIndex,
+  get,
+  isEmpty,
+  isUndefined,
+  map,
+  unionBy,
+  uniq,
+} from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover, FBWOApprovalsState } from '..';
+import {
+  FB,
+  FBApprover,
+  FBDialogState,
+  FBInlineApprovalBody,
+  FBRequiredApprover,
+  FBWOApprovalsState,
+} from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
+import {
+  ApprovalStatus,
+  DocumentStatus,
+} from '../../../state/ducks/documents/types';
 import { taskActions } from '../../../state/ducks/tasks';
 import { store } from '../../../state/store';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_DATE } from '../FBLHRStep/utils';
+import {
+  LHRS_ACCEPTED_QUANTITY,
+  LHRS_REJECTED_QUANTITY,
+  LHRS_START_DATE,
+} from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
-import { FBLHRStepApprovalsProps, FBLHRStepApprovalsStatusEndpoint } from './FBLHRStepApprovals.types';
+import {
+  FBLHRStepApprovalsProps,
+  FBLHRStepApprovalsStatusEndpoint,
+} from './FBLHRStepApprovals.types';
 
 export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -45,27 +74,31 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       document,
       id,
       isOutput,
-      externalState: { company: { companyMine: { employees = [] } = {} } = {} } = {},
+      externalState: {
+        company: { companyMine: { employees = [] } = {} } = {},
+      } = {},
     } = workspaceState || {};
-    const {
-      inputOwners = [],
-    } = document || {};
+    const { inputOwners = [] } = document || {};
     const ownerIds = uniq(Object.values(inputOwners as unknown as string));
 
-    owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => ({
-      name: `${owner?.user?.name} (${owner?.user?.email})`,
-      id: owner.id,
-    }));
+    owners = employees
+      .filter((e) => ownerIds.includes(e.id))
+      .map((owner) => ({
+        name: `${owner?.user?.name} (${owner?.user?.email})`,
+        id: owner.id,
+      }));
 
-    const {
-      owner: { user: { id: userId = '' } = {} } = {},
-    } = document || {};
+    const { owner: { user: { id: userId = '' } = {} } = {} } = document || {};
 
     disabled = disabled || isUndefined(id) || loading;
 
-    if (!document?.formTemplate && [DocumentRevisionStatus.Approved, DocumentRevisionStatus.InReview].includes(
-      documentStatus as DocumentRevisionStatus,
-    )) {
+    if (
+      !document?.formTemplate
+      && [
+        DocumentRevisionStatus.Approved,
+        DocumentRevisionStatus.InReview,
+      ].includes(documentStatus as DocumentRevisionStatus)
+    ) {
       disabled = true;
     }
 
@@ -78,18 +111,28 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
     }
-    const woApprovalsState = FB.useRef(
-      FBWOApprovalsState,
-      { id: outputId, approvals: docApprovals, isOwner },
-    );
+    const woApprovalsState = FB.useRef(FBWOApprovalsState, {
+      id: outputId,
+      approvals: docApprovals,
+      isOwner,
+    });
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBLHRStepApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
-      if (!approvalId) { return; }
+    approvalTransition = (
+      transition: FBLHRStepApprovalsStatusEndpoint,
+      approvalId?: string,
+      password?: string,
+    ) => {
+      if (!approvalId) {
+        return;
+      }
       woApprovalsState?.applyTransition(transition, approvalId, { password });
     };
 
-    function includesApprover (group: FBRequiredApprover, approver: string): boolean {
+    function includesApprover (
+      group: FBRequiredApprover,
+      approver: string,
+    ): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
@@ -101,11 +144,18 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(name, fieldValue, false);
 
-      const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      const activeApprovals = filter(
+        docApprovals,
+        (a) => a.status !== 'ABANDONED',
+      );
       // Auto-add current user as approver for LHR steps if not already added
-      if (authUser && document?.status === DocumentRevisionStatus.Draft
-        && document && !document?.formTemplate
-        && !activeApprovals?.length) {
+      if (
+        authUser
+        && document?.status === DocumentRevisionStatus.Draft
+        && document
+        && !document?.formTemplate
+        && !activeApprovals?.length
+      ) {
         if (authUser.employeeId) {
           if (shouldSkipDefaultOwner()) {
             // Don't add default owner for LHR step fields - user will be added when they complete entries
@@ -117,14 +167,15 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       }
 
       formState?.inputState.get(name)?.setRender();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const completeWO = useActionCreator(taskActions.completeWO);
 
     const closeWOAsync = useAsync({
       onSuccess: () => {
-        workspaceState?.document?.id && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
+        workspaceState?.document?.id
+          && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
       },
     });
 
@@ -133,51 +184,72 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     };
 
     // On add approver
-    React.useEffect(() => reaction(
-      () => woApprovalsState?.approvalApi.data,
-      (data) => {
-        if (!data) { return; }
-        document?.approvals?.push(data as Approval);
-        FBStore.selectedApprover.push(data as Approval);
-        concatApprovals(data);
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    React.useEffect(
+      () =>
+        reaction(
+          () => woApprovalsState?.approvalApi.data,
+          (data) => {
+            if (!data) {
+              return;
+            }
+            document?.approvals?.push(data as Approval);
+            FBStore.selectedApprover.push(data as Approval);
+            concatApprovals(data);
+          },
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        ),
+      [],
+    );
 
     // On transition
-    React.useEffect(() => reaction(
-      () => woApprovalsState?.transitionApi.data,
-      (data) => {
-        concatApprovals(data);
-        if (data?.status === DocumentStatus.Draft) {
-          window.location.reload();
-        }
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    React.useEffect(
+      () =>
+        reaction(
+          () => woApprovalsState?.transitionApi.data,
+          (data) => {
+            concatApprovals(data);
+            if (data?.status === DocumentStatus.Draft) {
+              window.location.reload();
+            }
+          },
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        ),
+      [],
+    );
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
-      if (!approval) { return; }
+      if (!approval) {
+        return;
+      }
       if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
         window.location.reload();
       } else {
-        const stateApprovals = filter(woApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-        woApprovalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
+        const stateApprovals = filter(
+          woApprovalsState?.approvals,
+          (a) => a.approver?.id !== approval.approver?.id,
+        );
+        woApprovalsState?.setApprovals(
+          unionBy(stateApprovals, [approval], 'id'),
+        );
       }
     }
 
-    React.useEffect(() => reaction(
-      () => formState?.newValues.get(name),
-      (fieldValue: string[]) => {
-        if (workspaceState?.isPreview) {
-          return;
-        }
-        const formValue: string[] = get(formState?.oldValues, name);
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    React.useEffect(
+      () =>
+        reaction(
+          () => formState?.newValues.get(name),
+          (fieldValue: string[]) => {
+            if (workspaceState?.isPreview) {
+              return;
+            }
+            const formValue: string[] = get(formState?.oldValues, name);
+            addApprover(difference(fieldValue, formValue));
+            removeApprover(difference(formValue, fieldValue));
+          },
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        ),
+      [],
+    );
 
     React.useEffect(() => {
       const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
@@ -189,65 +261,104 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
         ],
         () => {
-          if (!woApprovalsState?.getApprovals?.some((a) => a.approver?.id === authUser.employeeId)) {
+          if (
+            !woApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
             formState?.setFieldValue(name, [authUser.employeeId], false);
           }
         },
       );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function addApprover (ids?: string[]) {
-      if (!id) { return; }
-      map(ids, (approver) => woApprovalsState?.addApproval({
-        assigned: { id: approver },
-        type: 'MASTER',
-        fieldId: name,
-        partOf: { id },
-      }, () => {
-        const { id } = workspaceState || {};
-        if (!id) { return; }
-        dispatch(documentRevisionsActions.loadAudit(id));
-        if (!workspaceState?.autosave) { return; }
-        workspaceState?.saveDocRev(formState?.getValues());
-      }));
+      if (!id) {
+        return;
+      }
+      map(ids, (approver) =>
+        woApprovalsState?.addApproval(
+          {
+            assigned: { id: approver },
+            type: 'MASTER',
+            fieldId: name,
+            partOf: { id },
+          },
+          () => {
+            const { id } = workspaceState || {};
+            if (!id) {
+              return;
+            }
+            dispatch(documentRevisionsActions.loadAudit(id));
+            if (!workspaceState?.autosave) {
+              return;
+            }
+            workspaceState?.saveDocRev(formState?.getValues());
+          },
+        ),
+      );
     }
 
     function removeApprover (ids?: string[]) {
-      if (!ids) { return; }
+      if (!ids) {
+        return;
+      }
       map(ids, (approver) => {
-        const deletedApproverIndex = findIndex(document?.approvals, (a) =>
-          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
-        const approval = find(woApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
+        const deletedApproverIndex = findIndex(
+          document?.approvals,
+          (a) =>
+            a.approverId === approver
+            && a.status === (ChangeRequestStatus.Draft as string),
+        );
+        const approval = find(
+          woApprovalsState?.getApprovals,
+          (a) => a.approver?.id === approver,
+        );
         document?.approvals?.splice(deletedApproverIndex, 1);
-        const SelApprover = findIndex(FBStore.selectedApprover, (a) =>
-          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
+        const SelApprover = findIndex(
+          FBStore.selectedApprover,
+          (a) =>
+            a.approverId === approver
+            && a.status === (ChangeRequestStatus.Draft as string),
+        );
         FBStore.selectedApprover?.splice(SelApprover, 1);
 
         if (document?.approvals?.[deletedApproverIndex]) {
-          document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
+          document.approvals[deletedApproverIndex].status
+            = ApprovalStatus.Abandoned;
         }
-        woApprovalsState?.applyTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
-          const id = workspaceState?.id;
-          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
-          if (!workspaceState?.autosave) { return; }
-          workspaceState?.saveDocRev(formState?.getValues());
-        });
+        woApprovalsState?.applyTransition(
+          'abandon',
+          (approval as FBInlineApprovalBody)?.id,
+          undefined,
+          () => {
+            const id = workspaceState?.id;
+            if (id) {
+              dispatch(documentRevisionsActions.loadAudit(id));
+            }
+            if (!workspaceState?.autosave) {
+              return;
+            }
+            workspaceState?.saveDocRev(formState?.getValues());
+          },
+        );
       });
     }
 
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
-      const requiredGroups: string []
-        = compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
+      const requiredGroups: string[] = compact(
+        map(groups, (group) =>
+          includesApprover(group, option.id) ? group.name : '',
+        ),
+      );
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
           <Box fontWeight="fontWeightMedium">{option.user?.name}</Box>
           &nbsp;({option.user?.email})
           {!isEmpty(requiredGroups) && (
-            <Box>
-              &nbsp;{`- ${requiredGroups.join(', ')}`}
-            </Box>
+            <Box>&nbsp;{`- ${requiredGroups.join(', ')}`}</Box>
           )}
         </Box>
       );
@@ -256,14 +367,17 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     useObserver(() => {
       groups = woApprovalsState?.groups;
       approvals = woApprovalsState?.getApprovals;
-      loading = (
-        woApprovalsState.loading
+      loading
+        = woApprovalsState.loading
         || woApprovalsState?.approvalApi.loading
-        || woApprovalsState?.transitionApi.loading
-      );
+        || woApprovalsState?.transitionApi.loading;
 
-      if (authUser && document?.status === DocumentRevisionStatus.Draft
-        && document && !document?.formTemplate) {
+      if (
+        authUser
+        && document?.status === DocumentRevisionStatus.Draft
+        && document
+        && !document?.formTemplate
+      ) {
         if (shouldSkipDefaultOwner()) {
           return;
         }
