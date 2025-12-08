@@ -42,7 +42,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS 
   const shouldDisable = isLHRS
     ? isRedlineActive
       ? Boolean(values.parentId)
-      : true
+      : !isEmpty(value)
     : isEmpty(units) || (!isLHRT && values.LHRTparameter);
 
   return (

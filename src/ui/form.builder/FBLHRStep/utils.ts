@@ -38,19 +38,20 @@ export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
 
 export const isLhrInvalid = (
   name: string,
-  value: number,
+  value: unknown,
   formState?: FBFormState,
 ): boolean => {
   const start = formState?.getFieldValue(LHRS_START_QUANTITY) as number | undefined;
   const accepted = (formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) as number) || 0;
   const rejected = (formState?.getFieldValue(LHRS_REJECTED_QUANTITY) as number) || 0;
+  const inputValue = Number(value ?? 0);
 
   if (name === LHRS_ACCEPTED_QUANTITY) {
-    return (start ?? 0) < value + rejected;
+    return (start ?? 0) !== inputValue + rejected;
   }
 
   if (name === LHRS_REJECTED_QUANTITY) {
-    return (start ?? 0) < accepted + value;
+    return (start ?? 0) !== accepted + inputValue;
   }
 
   return false;
