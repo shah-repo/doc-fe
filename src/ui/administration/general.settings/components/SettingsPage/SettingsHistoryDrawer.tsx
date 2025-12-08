@@ -23,6 +23,9 @@ interface SettingsHistoryDrawerProps {
 
 interface OwnerMap { [key: string]: Employee }
 
+const UI_READ_KEY = 'readFromUi_';
+const MATERIAL_FLOW_ACL_PARENT_KEY = 'materialFlowAcl';
+
 export interface AuditLogsResponse {
   logs: CompanySettingsChangeLog[]
   ownerMap: OwnerMap
@@ -63,42 +66,41 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
   }, []);
 
   const getDisplayText = (
-    groupId: string, sectionName: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
+    groupId: string, parentKey: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
     let displayEntries = [displayText];
     if (changeType && [AUDIT_CHANGE_TYPE.UPDATED, AUDIT_CHANGE_TYPE.ADDED].includes(changeType)) {
       displayEntries = displayText.split(' | ');
     }
 
-    const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
-    const showHeaderEntry = (isChangeTypeAdded && displayEntries.length === 1) || !isChangeTypeAdded;
-    const listEntriesSpliceValue = isChangeTypeAdded ? 0 : 1;
+    const shouldShowHeaderEntry = shouldDisplayHeader(changeType, displayEntries.length, parentKey);
+    const listEntriesSpliceValue = shouldShowHeaderEntry ? 1 : 0;
 
     return (
       <>
-        {showHeaderEntry && (
+        {shouldShowHeaderEntry && (
           <Typography
             variant="subtitle2"
             className={classes.auditValue}
-            data-cy={`audit-log-entry-${groupId}-${sectionName}-main`}
+            data-cy={`audit-log-entry-${groupId}-${parentKey}-main`}
           >
-            <Text message={displayEntries[0]} />
+            <Text message={getTranslatedLabelText(displayEntries[0])} />
           </Typography>
         )}
 
         {/* Remaining entries as list */}
         {displayEntries.length > 1 && (
           <ul className={classes.displayEntryList}
-            data-cy={`audit-log-entry-${groupId}-${sectionName}-list`}
+            data-cy={`audit-log-entry-${groupId}-${parentKey}-list`}
           >
             {displayEntries.slice(listEntriesSpliceValue).map((entry, index) => (
               <li key={index}>
                 <Typography
                   variant="subtitle2"
                   className={classes.auditValue}
-                  data-cy={`audit-log-entry-${groupId}-${sectionName}-list-item`}
+                  data-cy={`audit-log-entry-${groupId}-${parentKey}-list-item`}
                 >
-                  <Text message={entry} />
+                  <Text message={getTranslatedLabelText(entry)} />
                 </Typography>
               </li>
             ))}
@@ -106,6 +108,35 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
         )}
       </>
     );
+  };
+
+  const shouldDisplayHeader = (changeType, entryCount, parentKey): boolean => {
+    let shouldShowHeaderEntry = true;
+
+    const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
+    const isChangeTypeUpdated = changeType === AUDIT_CHANGE_TYPE.UPDATED;
+
+    if (isChangeTypeAdded) {
+      shouldShowHeaderEntry = entryCount === 1;
+    } else if (isChangeTypeUpdated) {
+      shouldShowHeaderEntry = parentKey !== MATERIAL_FLOW_ACL_PARENT_KEY;
+    } else {
+      shouldShowHeaderEntry = true;
+    }
+
+    return shouldShowHeaderEntry;
+  };
+
+  const getTranslatedLabelText = (text: string) => {
+    return text
+      .split(/\s+/)
+      .map((word) => {
+        if (!word.includes(UI_READ_KEY)) return word;
+
+        const uiTranslationText = word.slice(UI_READ_KEY.length);
+        return translate(uiTranslationText);
+      })
+      .join(' ');
   };
 
   return (
@@ -143,16 +174,17 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
             />
             {
               groupEntries.map(companySettingLog => {
-                const { parentKeyLabel, changeType, displayText } = companySettingLog;
+                const { parentKeyLabel, changeType, displayText, parentKey } = companySettingLog;
+                const translatedParentKeyLabel = getTranslatedLabelText(parentKeyLabel);
                 return (
                   <Box key={companySettingLog.id} className={classes.logEntry}>
                     <Typography variant="subtitle1" className={classes.auditKey}
-                      data-cy={`change-key-${parentKeyLabel}-${changeType}`}
+                      data-cy={`change-key-${parentKey}-${changeType}`}
                     >
-                      {parentKeyLabel} <span className={classes.changeType}>{changeType}</span>
+                      {translatedParentKeyLabel} <span className={classes.changeType}>{changeType}</span>
                     </Typography>
                     {
-                      getDisplayText(groupId, parentKeyLabel, changeType, displayText)
+                      getDisplayText(groupId, parentKey, changeType, displayText)
                     }
                   </Box>
                 );
