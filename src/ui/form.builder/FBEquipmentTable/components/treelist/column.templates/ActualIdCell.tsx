@@ -44,10 +44,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
 
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
-  const equipmentSpecId = isEquipmentSpecification ? (dataItem?.parentEquipPlannedId ?? '') : '';
-  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
-
-  const equipmentOptions = isEquipmentSpecification ? equipmentSpcOptions : propEquipmentOptions;
+  const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
+  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId, isEquipmentSpecification);
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
@@ -65,7 +63,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         {...getFieldProps(field)}
         value={value}
         disabled={!!actualId}
-        options={equipmentOptions}
+        options={equipmentSpcOptions}
         blurOnSelect
         disableOpenOnFocus
         placeholder={translate('common.select')}

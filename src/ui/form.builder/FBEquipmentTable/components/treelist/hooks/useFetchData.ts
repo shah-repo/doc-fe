@@ -50,8 +50,8 @@ export const useFetchData = () => {
   });
 };
 
-export const useEquipmentOptions = (id: string) => {
-  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
+export const useEquipmentOptions = (id: string, isEquipmentSpecification: boolean) => {
+  const optionId = isEquipmentSpecification ? FBAutocompleteAsyncOption.equipmentSpecifications : FBAutocompleteAsyncOption.equipment;
   const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
 
   useEffect(() => {
@@ -69,10 +69,10 @@ export const useEquipmentOptions = (id: string) => {
     // Check if data is in the API response
     const apiData = autocompleteAsyncState.autocompleteValueApi.data;
     let asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
+    const preparedData = Array.isArray(apiData) ? apiData : [apiData];
 
     // If API has returned data but store is empty, process and store it
-    if (apiData && (!asyncData || asyncData.size === 0)) {
-      const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+    if (apiData && preparedData.length !== asyncData.size) {
       FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
       asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
     }
