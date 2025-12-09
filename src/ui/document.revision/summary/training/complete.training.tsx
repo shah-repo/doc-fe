@@ -63,7 +63,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box mt={5} ml={2}>
+    <Box mt={5}>
       <Typography style={AutoCompleteStyles.labelFont}>
         <Text translation="training.acknowledge.completion.link" />
       </Typography>
