@@ -10,15 +10,16 @@ import { GroupTag } from '../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestEditRequestBody } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
+import { FBFormStateContext } from '../../app/Layout';
 import styles from '../../common/style/styles';
 import { FormContext } from '../../components/forms/FormContext';
 import { compareValuesToSubmit } from '../../components/forms/helpers';
-import { FBFormStateContext } from '../../documentRevision/DocumentRevisionUpdate.container.wrap';
 import { FB, FBBookmarkState, FBFormState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 import useGetHasTag from '../../hooks/useGetHasTag';
+import { withChangeRequestContainerWrap } from '../ChangeRequest.container.wrap';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../form/transform';
 import { ChangeRequestFormValues } from '../form/types';
 import { canEditChangeRequest } from '../helpers';
@@ -148,4 +149,4 @@ const Container: React.FunctionComponent<Props> = ({
 };
 
 Container.displayName = 'ChangeRequestSummaryContainer';
-export default withSMForm(Container);
+export default withChangeRequestContainerWrap(withSMForm(Container));

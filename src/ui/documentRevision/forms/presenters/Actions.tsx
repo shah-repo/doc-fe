@@ -20,6 +20,7 @@ import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, Revisio
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
+import { FBFormStateContext } from '../../../app/Layout';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
@@ -43,7 +44,6 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { FBFormStateContext } from '../../DocumentRevisionUpdate.container.wrap';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentCustomers, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';

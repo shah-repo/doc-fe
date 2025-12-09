@@ -17,6 +17,7 @@ import { compareValuesToSubmit } from '../components/forms/helpers';
 import { toastError } from '../components/notifications';
 import { FB, FBFormState, FBProvider, FBWorkspaceState } from '../form.builder';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import { withChangeRequestContainerWrap } from './ChangeRequest.container.wrap';
 import { useRestrictedEditUpdates } from './FBMaterialDisposition/components/FBTasksListTable/useRestrictedEditUpdates';
 import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
@@ -39,7 +40,7 @@ interface OwnProps {
   isEditing?: boolean
 }
 
-type ChangeRequestUpdateContainerProps = OwnProps & DispatchProps & StateProps;
+export type ChangeRequestUpdateContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -178,11 +179,11 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+export default withChangeRequestContainerWrap(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: changeRequestsActions.save,
     loadAudit: changeRequestsActions.loadAudit,
     setAutosave: companyActions.setAutosaveConfig,
   },
-)(ChangeRequestUpdateContainer);
+)(ChangeRequestUpdateContainer));

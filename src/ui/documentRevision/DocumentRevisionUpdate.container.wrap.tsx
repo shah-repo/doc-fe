@@ -1,13 +1,7 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
+import { FBFormStateContext } from '../app/Layout';
 import { FBFormState } from '../form.builder';
 import { DocumentRevisionUpdateContainerProps } from './DocumentRevisionUpdate.container';
-
-interface FBFormStateContextProps {
-  values: FBFormState['values']
-  setValues: Dispatch<SetStateAction<FBFormState['values']>>
-}
-
-export const FBFormStateContext = React.createContext<FBFormStateContextProps>({} as FBFormStateContextProps);
 
 export const withDocumentRevisionUpdateContainerWrap = <T extends DocumentRevisionUpdateContainerProps>(
   Component: React.FunctionComponent<T>,

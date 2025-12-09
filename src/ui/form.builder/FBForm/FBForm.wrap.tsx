@@ -2,7 +2,7 @@ import { has } from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { FB, FBFormProps, FBFormState } from '..';
 import { SM } from '../../../App';
-import { FBFormStateContext } from '../../documentRevision/DocumentRevisionUpdate.container.wrap';
+import { FBFormStateContext } from '../../app/Layout';
 import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBForm = <T extends FBFormProps>(
