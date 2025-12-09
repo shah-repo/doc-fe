@@ -1,5 +1,4 @@
 import { Box, Grid } from '@material-ui/core';
-import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
   extendDataItem,
   filterBy,
@@ -15,8 +14,10 @@ import { cloneDeep, get, isEmpty, isNil, keyBy, omit, replace, uniq } from 'loda
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../../App';
 import { translate } from '../../../../common/intl';
+import { companySelectors } from '../../../../state/ducks/company';
 import DocumentRevisionDialog from '../../../components/common/dialogs/DocumentRevisionDialog';
 import ScanCaptureDialog from '../../../components/common/dialogs/scaner';
 import { ScanSelectedPartItem } from '../../../components/common/dialogs/scaner/components/lot.table/types';
@@ -56,16 +57,23 @@ import {
   MaterialTableProps,
 } from './types';
 import { withMaterialsTable } from './wrap';
+import { FilterDescriptor } from '@progress/kendo-data-query';
 
 interface MaterialTreelistContextProps {
   lhrsQuantity?: number
   addLot?: (dataItem: EditableMaterial) => void
   openQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableMaterial) => void
+  isRedlineActive?: boolean
+  isDisabled?: boolean
+  isEBProcedure?: boolean
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
   lhrsQuantity: 1,
   addLot: undefined,
+  isRedlineActive: false,
+  isDisabled: false,
+  isEBProcedure: false,
 });
 
 const MaterialsTable: React.FC<MaterialTableProps> = ({
@@ -107,6 +115,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     },
     inEdit: [],
   });
+  const isRedlineActive = useSelector(companySelectors.getRedlineActive);
 
   React.useEffect(() => {
     if (isMPIProcedure || isLHRStep || isEBProcedure) {
@@ -319,7 +328,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.whiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.errorBg]: (!isEmpty(item.type) && isLHRStep && isDesign) || isInsufficientQty,
+        [classes.errorBg]: (!isEmpty(item.type) && isLHRStep && isDesign) || (isInsufficientQty && !isEBProcedure),
       }),
     };
 
@@ -438,7 +447,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const openScanDialog = (dataItem: EditableMaterial) => {
     const plannedIdInfo = materialSelectOptions?.find((option) => option.value === dataItem.title);
-    const match = plannedIdInfo?.label?.match(/^(.+?) Rev (.+?) - (.+)$/) ?? ['', '', ''];
+    const match = /^(.+?) Rev (.+?) - (.+)$/.exec(plannedIdInfo?.label ?? '') ?? ['', '', ''];
 
     scanSelectedPartInfo.current = {
       docId: match[1] ?? '',
@@ -481,6 +490,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         type,
         isActive,
         isPendingChange,
+        isRedlineActive,
       },
       {
         handleSelectionDelete,
@@ -496,7 +506,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onDiscard: discardScanLot,
     onDelete: removeScanLot,
     addLot: addLot,
-    isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
     isLHRT: isLHRStep && isMPIProcedure,
     onConfirm: formik.submitForm,
     isLHRProductionBuild,
@@ -531,6 +540,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           lhrsQuantity,
           addLot,
           openQuickView,
+          isRedlineActive,
+          isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
+          isEBProcedure,
         }}
       >
         <FormikProvider value={formik}>

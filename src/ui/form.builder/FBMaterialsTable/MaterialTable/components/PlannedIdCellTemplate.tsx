@@ -30,7 +30,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
-  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
 
   const onClick = (ev) => {
@@ -173,7 +173,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
             )}
             {displayValue}
           </OverflowContent>
-          {hasChildren && isInsufficientQty && (
+          {hasChildren && isInsufficientQty && !isEBProcedure && (
             <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
               <Tooltip
                 arrow

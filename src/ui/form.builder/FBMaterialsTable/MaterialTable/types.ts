@@ -75,7 +75,6 @@ export interface SchemaOptions {
   materialSelectOptions: OptionType[]
   units?: string[]
   parts?: MaterialOption[]
-  isDisabled?: boolean
   onConfirm: () => void
   onDiscard: () => void
   actionsClass: string

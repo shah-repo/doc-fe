@@ -11,14 +11,11 @@ import { SchemaOptions } from '../types';
 export const buildMPISchema = ({
   materialSelectOptions,
   onRowClick,
-  addLot,
   actionsClass,
   popperHolder,
   onConfirm,
   onDiscard,
   onDelete,
-  isDisabled,
-  onScanClick,
 }: SchemaOptions): CustomTreeListColumnProps[] => [
   {
     id: 'title',
@@ -32,7 +29,7 @@ export const buildMPISchema = ({
     id: 'LHRTparameter',
     field: 'LHRTparameter',
     title: translate('form.builder.procedure.lhrt.parameter.title'),
-    cell: (props) => <LHRTParameterCellTemplate {...props} addLot={addLot} isDisabled={isDisabled} onClick={onRowClick} onScanClick={onScanClick} />,
+    cell: (props) => <LHRTParameterCellTemplate {...props} onClick={onRowClick} />,
     mainOrderIndex: 2,
     width: 150,
   },
