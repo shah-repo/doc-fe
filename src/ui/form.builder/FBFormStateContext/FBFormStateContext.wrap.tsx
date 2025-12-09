@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FBFormStateContext } from '../app/Layout';
-import { FBFormState } from '../form.builder';
-import { DocumentRevisionUpdateContainerProps } from './DocumentRevisionUpdate.container';
+import FBFormState from '../FBForm/FBForm.state';
+import { FBFormStateContextProps, FBFormStateContextWrapperProps } from './FBFormStateContext.types';
 
-export const withDocumentRevisionUpdateContainerWrap = <T extends DocumentRevisionUpdateContainerProps>(
+export const FBFormStateContext = React.createContext<FBFormStateContextProps>({} as FBFormStateContextProps);
+
+export const withFBFormStateContextWrap = <T extends Partial<FBFormStateContextWrapperProps>>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
@@ -20,6 +21,6 @@ export const withDocumentRevisionUpdateContainerWrap = <T extends DocumentRevisi
     );
   };
 
-  Comp.displayName = 'withDocumentRevisionUpdateContainerWrap';
+  Comp.displayName = 'withFBFormStateContextWrap';
   return (props: T) => Comp(props);
 };

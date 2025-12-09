@@ -20,7 +20,6 @@ import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, Revisio
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
-import { FBFormStateContext } from '../../../app/Layout';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
@@ -36,6 +35,7 @@ import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintL
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB, FBFormState } from '../../../form.builder';
+import { FBFormStateContext } from '../../../form.builder/FBFormStateContext/FBFormStateContext.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';

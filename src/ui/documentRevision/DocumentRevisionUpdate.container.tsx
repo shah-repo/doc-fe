@@ -10,20 +10,19 @@ import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
-import { FBFormStateContext } from '../app/Layout';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { toastError } from '../components/notifications';
 import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
+import { FBFormStateContext, withFBFormStateContextWrap } from '../form.builder/FBFormStateContext/FBFormStateContext.wrap';
 import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import useGetHasTag from '../hooks/useGetHasTag';
 import { isOperator } from './DocumentRevisionDisplay.container';
-import { withDocumentRevisionUpdateContainerWrap } from './DocumentRevisionUpdate.container.wrap';
 import DocumentRevisionForm from './forms/DocumentRevisionForm.container';
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from './forms/transform';
 import { DocumentRevisionFormValues } from './forms/types';
@@ -248,4 +247,4 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionU
   );
 };
 
-export default withDocumentRevisionUpdateContainerWrap(DocumentRevisionUpdateContainer);
+export default withFBFormStateContextWrap(DocumentRevisionUpdateContainer);

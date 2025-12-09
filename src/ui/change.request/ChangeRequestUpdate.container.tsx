@@ -16,8 +16,8 @@ import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { toastError } from '../components/notifications';
 import { FB, FBFormState, FBProvider, FBWorkspaceState } from '../form.builder';
+import { withFBFormStateContextWrap } from '../form.builder/FBFormStateContext/FBFormStateContext.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
-import { withChangeRequestContainerWrap } from './ChangeRequest.container.wrap';
 import { useRestrictedEditUpdates } from './FBMaterialDisposition/components/FBTasksListTable/useRestrictedEditUpdates';
 import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
@@ -179,7 +179,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   );
 };
 
-export default withChangeRequestContainerWrap(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+export default withFBFormStateContextWrap(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: changeRequestsActions.save,

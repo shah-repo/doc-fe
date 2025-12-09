@@ -1,7 +1,7 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
@@ -53,7 +53,6 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
-import { FBFormState } from '../form.builder';
 import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
@@ -67,13 +66,6 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
-
-export interface FBFormStateContextProps {
-  values: FBFormState['values']
-  setValues: Dispatch<SetStateAction<FBFormState['values']>>
-}
-
-export const FBFormStateContext = React.createContext<FBFormStateContextProps>({} as FBFormStateContextProps);
 
 const Layout: React.FC = () => {
   const isMobileView = isMobile();

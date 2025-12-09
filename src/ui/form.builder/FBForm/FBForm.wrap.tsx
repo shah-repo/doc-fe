@@ -2,8 +2,8 @@ import { has } from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { FB, FBFormProps, FBFormState } from '..';
 import { SM } from '../../../App';
-import { FBFormStateContext } from '../../app/Layout';
 import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
+import { FBFormStateContext } from '../FBFormStateContext/FBFormStateContext.wrap';
 
 export const withFBForm = <T extends FBFormProps>(
   Component: React.FunctionComponent<T>,
