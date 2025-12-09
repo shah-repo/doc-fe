@@ -6,6 +6,7 @@ import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
+import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
 
 class FBLHRStepState {
   // MARK: @api
@@ -94,8 +95,8 @@ class FBLHRStepState {
 
     const updatedFormInput = {
       ...this.stepLHRs.formInput,
-      ...(startDate !== undefined && { LHRS_START_DATE: startDate }),
-      ...(endDate !== undefined && { LHRS_END_DATE: endDate }),
+      ...(startDate !== undefined && { [LHRS_START_DATE]: startDate }),
+      ...(endDate !== undefined && { [LHRS_END_DATE]: endDate }),
     };
 
     // Update local state immediately
