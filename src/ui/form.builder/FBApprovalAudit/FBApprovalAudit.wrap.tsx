@@ -292,7 +292,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
       // TODO: refacoring & sync approveAt with createdAt
       let startDate = last(approvals)?.timestamp || (new Date()).toISOString();
-      const index = approvals.length - (releasedAt ? 2 : 1);
+      const index = approvals?.length - (releasedAt ? 2 : 1);
       if (moment(startDate).subtract(1, 'seconds').isAfter(moment(createdAt)) && approvals[index]) {
         startDate = approvals[index].timestamp;
       }
