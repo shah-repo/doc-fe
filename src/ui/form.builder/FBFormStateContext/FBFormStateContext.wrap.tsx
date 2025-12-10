@@ -6,7 +6,7 @@ export const FBFormStateContext = React.createContext<FBFormStateContextProps>({
 
 export const withFBFormStateContextWrap = <T extends Record<string, any>>(
   Component: React.FunctionComponent<T>,
-): React.ReactNode => {
+) => {
   const Comp = ({
     ...props
   }: T) => {
