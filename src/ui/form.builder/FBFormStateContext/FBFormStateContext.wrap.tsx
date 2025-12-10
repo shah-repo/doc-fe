@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import FBFormState from '../FBForm/FBForm.state';
-import { FBFormStateContextProps, FBFormStateContextWrapperProps } from './FBFormStateContext.types';
+import { FBFormStateContextProps } from './FBFormStateContext.types';
 
 export const FBFormStateContext = React.createContext<FBFormStateContextProps>({} as FBFormStateContextProps);
 
-export const withFBFormStateContextWrap = <T extends Partial<FBFormStateContextWrapperProps>>(
+export const withFBFormStateContextWrap = <T extends Record<string, any>>(
   Component: React.FunctionComponent<T>,
-) => {
+): React.ReactNode => {
   const Comp = ({
     ...props
   }: T) => {

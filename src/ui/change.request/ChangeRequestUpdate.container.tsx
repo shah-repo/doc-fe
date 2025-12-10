@@ -40,7 +40,7 @@ interface OwnProps {
   isEditing?: boolean
 }
 
-export type ChangeRequestUpdateContainerProps = OwnProps & DispatchProps & StateProps;
+type ChangeRequestUpdateContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -179,7 +179,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   );
 };
 
-export default withFBFormStateContextWrap(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+export default withFBFormStateContextWrap<ChangeRequestUpdateContainerProps>(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: changeRequestsActions.save,

@@ -148,4 +148,4 @@ const Container: React.FunctionComponent<Props> = ({
 };
 
 Container.displayName = 'ChangeRequestSummaryContainer';
-export default withFBFormStateContextWrap(withSMForm(Container));
+export default withFBFormStateContextWrap<Props>(withSMForm(Container));

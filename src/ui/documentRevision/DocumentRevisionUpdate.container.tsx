@@ -30,7 +30,7 @@ import { checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDoc
 import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
 
-export interface DocumentRevisionUpdateContainerProps {
+interface DocumentRevisionUpdateContainerProps {
   documentId?: string
   documentRevision: DocumentRevision
   onDirtyFlagChange?: (dirty: boolean) => void
@@ -247,4 +247,4 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionU
   );
 };
 
-export default withFBFormStateContextWrap(DocumentRevisionUpdateContainer);
+export default withFBFormStateContextWrap<DocumentRevisionUpdateContainerProps>(DocumentRevisionUpdateContainer);
