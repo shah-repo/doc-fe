@@ -17,13 +17,13 @@ const AuditLhrBuildTypeSection: React.FC<Props> = ({
   auditValue,
 }) => {
   const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { });
-  const [value, setValue] = React.useState(auditValue);
+  const [buildType, setBuildType] = React.useState(auditValue);
   React.useEffect(() => {
     if (!FBAutocompleteAsyncStore.getValue<LHRBuild>(FBAutocompleteAsyncOption.buildType, auditValue)) {
       autocompleteAsyncState.fetchAutocompleteOption(auditValue as string, FBAutocompleteAsyncOption.buildType);
     } else {
       const data = FBAutocompleteAsyncStore.getValue<LHRBuild>(FBAutocompleteAsyncOption.buildType, auditValue);
-      setValue(`${data?.displayLabel}`);
+      setBuildType(`${data?.displayLabel}`);
     }
   }, [auditValue]);
 
@@ -32,16 +32,12 @@ const AuditLhrBuildTypeSection: React.FC<Props> = ({
       () => autocompleteAsyncState?.autocompleteValueApi.data,
       (data) => {
         const build = data as LHRBuild | undefined;
-        setValue(String(build?.displayLabel ?? ''));
+        setBuildType(String(build?.displayLabel ?? ''));
       },
     );
   }, []);
 
-  return (
-    <div data-cy={dataCy}>
-      {value}
-    </div>
-  );
+  return <div data-cy={dataCy}>{buildType}</div>;
 };
 
 export default AuditLhrBuildTypeSection;
