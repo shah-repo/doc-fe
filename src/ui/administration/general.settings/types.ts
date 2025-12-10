@@ -37,6 +37,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   isOutOfSync?: boolean
   onToggle: () => void
   onAddNew?: () => void
+  onManageItems?: () => void
 }
 
 export interface SwitchControlProps extends SwitchProps {
