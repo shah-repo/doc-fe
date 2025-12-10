@@ -179,7 +179,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   );
 };
 
-export default withFBFormStateContextWrap<ChangeRequestUpdateContainerProps>(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+export default withFBFormStateContextWrap(connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: changeRequestsActions.save,
