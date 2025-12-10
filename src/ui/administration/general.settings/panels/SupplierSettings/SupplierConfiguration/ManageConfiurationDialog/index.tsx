@@ -9,7 +9,7 @@ import { DialogHandler } from '../../../../../../hooks/useDialog';
 import SupplierLabelsGrid from '../SupplierLabelGrid';
 import useStyles from './styles';
 
-export enum SupplierConfigTabValues {
+enum SupplierConfigTabValues {
   SupplierType = 'supplier-type',
   SupplierCapabilities = 'supplier-capabilities',
   SupplierServices = 'supplier-services',
