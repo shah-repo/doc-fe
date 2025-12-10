@@ -33,6 +33,7 @@ import AuditAutocomplete from './AuditAutocomplete';
 import AuditCheckboxGroupAsync from './AuditCheckboxGroupAsync';
 import AuditCycleCount from './AuditCycleCount';
 import AuditDownloadS3link from './AuditDownloadS3link';
+import AuditLhrBuildTypeSection from './AuditLhrBuildTypeSection';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
@@ -224,6 +225,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       workOrderLhrTable () {
         return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
+      },
+      lhrBuildTypeSelection () {
+        return <AuditLhrBuildTypeSection {...{ audit, dataCy, auditValue }} />;
       },
       documentRevisions () {
         const isWhereUsedViewDeleted = (
