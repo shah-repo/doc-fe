@@ -1,6 +1,6 @@
 import { Box, Divider } from '@material-ui/core';
 import cx from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { Dialog } from '../../../../../../components/dialogs';
 import StyledTab from '../../../../../../dashboard.new/tabs/common/StyledTab';
@@ -15,18 +15,18 @@ export enum SupplierConfigTabValues {
   SupplierServices = 'supplier-services',
 }
 
-interface Props {
+interface ManageConfigurationDialogProps {
   dialog: DialogHandler
 }
 
-const ManageConfigurationDialog: React.FunctionComponent<Props> = ({
+const ManageConfigurationDialog: React.FunctionComponent<ManageConfigurationDialogProps> = ({
   dialog,
 }) => {
   const classes = useStyles();
-  const [value, setValue] = useState<SupplierConfigTabValues>(SupplierConfigTabValues.SupplierType);
+  const [selectedTab, setSelectedTab] = useState<SupplierConfigTabValues>(SupplierConfigTabValues.SupplierType);
 
   const handleChange = useCallback(
-    (event: any, newValue: SupplierConfigTabValues) => setValue(newValue),
+    (event: ChangeEvent<{}>, newValue: SupplierConfigTabValues) => setSelectedTab(newValue),
     [],
   );
 
@@ -43,7 +43,7 @@ const ManageConfigurationDialog: React.FunctionComponent<Props> = ({
     >
       <Box className={classes.root}>
         <StyledTabs
-          value={value}
+          value={selectedTab}
           onChange={handleChange}
           aria-label="supplier configuration tabs"
         >
@@ -67,12 +67,12 @@ const ManageConfigurationDialog: React.FunctionComponent<Props> = ({
         <Box className={cx(classes.tabs, 'containing-box-scrollbar')}>
           <div
             role="tabpanel"
-            id={`scrollable-auto-tabpanel-${value}`}
-            aria-labelledby={`scrollable-auto-tab-${value}`}
+            id={`scrollable-auto-tabpanel-${selectedTab}`}
+            aria-labelledby={`scrollable-auto-tab-${selectedTab}`}
           >
-            {value === SupplierConfigTabValues.SupplierType && <SupplierLabelsGrid name="supplierTypes" />}
-            {value === SupplierConfigTabValues.SupplierCapabilities && <SupplierLabelsGrid name="supplierCapabilities" />}
-            {value === SupplierConfigTabValues.SupplierServices && <SupplierLabelsGrid name="supplierServices" />}
+            {selectedTab === SupplierConfigTabValues.SupplierType && <SupplierLabelsGrid name="supplierTypes" />}
+            {selectedTab === SupplierConfigTabValues.SupplierCapabilities && <SupplierLabelsGrid name="supplierCapabilities" />}
+            {selectedTab === SupplierConfigTabValues.SupplierServices && <SupplierLabelsGrid name="supplierServices" />}
           </div>
         </Box>
       </Box>
