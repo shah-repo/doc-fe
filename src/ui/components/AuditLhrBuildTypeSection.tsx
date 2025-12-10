@@ -23,7 +23,7 @@ const AuditLhrBuildTypeSection: React.FC<Props> = ({
       autocompleteAsyncState.fetchAutocompleteOption(auditValue as string, FBAutocompleteAsyncOption.buildType);
     } else {
       const data = FBAutocompleteAsyncStore.getValue<LHRBuild>(FBAutocompleteAsyncOption.buildType, auditValue);
-      setValue(`${data?.internalType}`);
+      setValue(`${data?.displayLabel}`);
     }
   }, [auditValue]);
 
@@ -32,7 +32,7 @@ const AuditLhrBuildTypeSection: React.FC<Props> = ({
       () => autocompleteAsyncState?.autocompleteValueApi.data,
       (data) => {
         const build = data as LHRBuild | undefined;
-        setValue(String(build?.internalType ?? ''));
+        setValue(String(build?.displayLabel ?? ''));
       },
     );
   }, []);
