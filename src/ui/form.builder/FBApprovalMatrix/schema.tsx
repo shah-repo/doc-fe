@@ -14,7 +14,7 @@ import { createOption } from './components/Grid';
 import InputCellTemplate from './components/InputCellTemplate';
 import InputFilter from './components/InputFilter';
 import StatusCellTemplate from './components/StatusCellTemplate';
-import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL } from './constants';
+import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL, NUMBERING_STYLE_OPTIONS } from './constants';
 import { FBApprovalMatrixRoleTitles } from './types';
 
 interface Options {
@@ -54,6 +54,23 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         createOption(false, translate('common.inactive')),
       ]}
       defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
+
+  const NumberingStyleFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      disabled={withoutStatus}
+      data={NUMBERING_STYLE_OPTIONS}
+      defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
+
+  const NumberingStyleTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <DropdownCellTemplate
+      {...props}
+      data={NUMBERING_STYLE_OPTIONS}
+      defaultItem={NUMBERING_STYLE_OPTIONS[0]}
     />
   );
 
@@ -134,6 +151,16 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       locked: true,
       required: true,
       width: 140,
+    },
+    {
+      id: 'numberingStyle',
+      title: 'form.builder.am.numberingStyle',
+      field: 'docType.numberingStyle',
+      filterable: true,
+      editable: true,
+      filterCell: NumberingStyleFilter,
+      template: NumberingStyleTemplate,
+      width: 150,
     },
     {
       id: 'training',
