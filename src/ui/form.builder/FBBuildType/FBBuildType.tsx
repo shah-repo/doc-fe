@@ -85,7 +85,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   const forceRerender = () => {
     setRefresh((x) => !x);
   };
-  const isDisabled = (defaultValue && defaultValue.displayLabel !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
+  const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
   const showError = !isDisabled && isUndefined(defaultValue);
   return (
     <>
