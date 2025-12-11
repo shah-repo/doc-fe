@@ -1,6 +1,6 @@
 import { Formik, FormikProps } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { SMFormHOCProps } from '../../../App';
@@ -14,7 +14,7 @@ import styles from '../../common/style/styles';
 import { FormContext } from '../../components/forms/FormContext';
 import { compareValuesToSubmit } from '../../components/forms/helpers';
 import { FB, FBBookmarkState, FBFormState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
-import { FBFormStateContext } from '../../form.builder/FBForm/FBForm.wrap';
+import { FBFormStateContext, withFBFormStateContextWrap } from '../../form.builder/FBFormStateContext/FBFormStateContext.wrap';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
@@ -68,6 +68,7 @@ const Container: React.FunctionComponent<Props> = ({
   const schema = changeRequest.formDocument?.formTemplate?.schema ?? [];
 
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
+  const { values: updatedValues } = useContext(FBFormStateContext);
 
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest(changeRequest, currentEmployeeId)) {
@@ -75,8 +76,6 @@ const Container: React.FunctionComponent<Props> = ({
   }
 
   const onSubmit = (values: ChangeRequestFormValues) => {
-    const formStateContext = FBFormStateContext as any;
-    const updatedValues = formStateContext?._currentValue;
     const dataToSubmit = compareValuesToSubmit(
       {
         ...initialValues,
@@ -149,4 +148,4 @@ const Container: React.FunctionComponent<Props> = ({
 };
 
 Container.displayName = 'ChangeRequestSummaryContainer';
-export default withSMForm(Container);
+export default withFBFormStateContextWrap<Props>(withSMForm(Container));
