@@ -242,6 +242,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
             if (workspaceState?.isPreview) {
               return;
             }
+            if (!fieldValue) {
+              return;
+            }
             const formValue: string[] = get(formState?.oldValues, name);
             addApprover(difference(fieldValue, formValue));
             removeApprover(difference(formValue, fieldValue));

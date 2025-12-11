@@ -32,7 +32,7 @@ export const withFBForm = <T extends FBFormProps>(
     const isReceivableType
         = checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
     if (!(isReceivableType && has(initialValues, 'po-items-built-in'))) {
-      setValues(formState?.getValues());
+      setValues?.(formState?.values || {});
     }
 
     formState.setIncludeLocking(includeLocking);
