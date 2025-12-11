@@ -1,5 +1,3 @@
-import { Grid } from '@material-ui/core';
-import { GridToolbar } from '@progress/kendo-react-grid';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
@@ -13,8 +11,6 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../../../components/KendoDataGrid/constants';
-import Text from '../../../../../../components/Text';
-import { Translation } from '../../../../../../translations/types';
 import SettingsTable from '../../../../components/SettingsTable';
 import { buildSchema } from './schema';
 import useStyle from './styles';
@@ -25,10 +21,9 @@ import {
 
 interface SupplierLabelsGridProps {
   name: string
-  title: Translation
 }
 
-const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) => {
+const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name }) => {
   const classes = useStyle();
   const isActive = useSelector(
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
@@ -155,16 +150,7 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name, title }) 
         addButtonLabel={translate('common.add.new')}
         onAdd={addSupplierLabel}
         getRowProperties={dataCyGenerator}
-        isFilterable
-      >
-        <GridToolbar>
-          <Grid container>
-            <Grid item>
-              <Text translation={title} />
-            </Grid>
-          </Grid>
-        </GridToolbar>
-      </SettingsTable>
+      />
     </FormikProvider>
   );
 };
