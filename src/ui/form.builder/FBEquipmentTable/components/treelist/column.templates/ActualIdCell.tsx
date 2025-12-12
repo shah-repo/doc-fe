@@ -32,6 +32,7 @@ interface LotAutocompleteProps {
   actualId?: string
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  isEBProcedure?: boolean
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
