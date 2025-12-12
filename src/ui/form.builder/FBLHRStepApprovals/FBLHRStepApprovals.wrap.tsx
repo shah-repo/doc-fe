@@ -239,10 +239,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         reaction(
           () => formState?.newValues.get(name),
           (fieldValue: string[]) => {
-            if (workspaceState?.isPreview) {
-              return;
-            }
-            if (!fieldValue) {
+            if (workspaceState?.isPreview || !fieldValue) {
               return;
             }
             const formValue: string[] = get(formState?.oldValues, name);
