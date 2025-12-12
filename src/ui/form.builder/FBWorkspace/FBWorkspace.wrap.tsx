@@ -57,6 +57,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       });
     }
 
+    useEffect(
+      () => reaction(
+        () => workspaceState?.loadBuildTypeOptionsApi.data,
+        (buildTypeOptions) => workspaceState?.setBuildTypeOptions(buildTypeOptions),
+      ), []);
+
     useObserver(() => {
       if (!isEmpty(workspaceState?.schema) && isEmpty(workspaceState?.document?.schema)) {
         schema = workspaceState?.schema;
