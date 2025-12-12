@@ -1,6 +1,6 @@
 import { FormikHelpers } from 'formik';
 import { debounce, get, has, isEmpty, map, pick, set } from 'lodash';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DocumentRevisionSummary, SM } from '../../App';
 import { saveDocumentRevision } from '../../App/Shifamed/Utils/API';
@@ -16,8 +16,7 @@ import { toastError } from '../components/notifications';
 import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
-import { FBFormStateContext, withFBFormStateContextWrap } from '../form.builder/FBFormStateContext/FBFormStateContext.wrap';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
+import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -29,8 +28,9 @@ import { DocumentRevisionFormValues } from './forms/types';
 import { checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
 import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
+import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
 
-interface DocumentRevisionUpdateContainerProps {
+interface Props {
   documentId?: string
   documentRevision: DocumentRevision
   onDirtyFlagChange?: (dirty: boolean) => void
@@ -42,7 +42,7 @@ interface DocumentRevisionUpdateContainerProps {
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
 
-const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionUpdateContainerProps> = ({
+const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentRevision,
   onDirtyFlagChange,
   documentId,
@@ -114,16 +114,15 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionU
       .catch(toastError);
   };
 
-  const { values: formValues } = useContext(FBFormStateContext);
-
   const onSubmit = (
     values: DocumentRevisionFormValues,
     helpers: FormikHelpers<DocumentRevisionFormValues>,
     cleanInitialValues?: DocumentRevisionFormValues,
   ) => {
     // Hack to take updated formInput
-    if (!isEmpty(formValues) && values.formInput) {
-      set(values, 'formInput', formValues);
+    const formStateContext = FBFormStateContext as any;
+    if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
+      set(values, 'formInput', formStateContext?._currentValue);
     }
 
     if (values && has(values, 'lhrstep-built-in')) {
@@ -185,10 +184,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionU
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
       const hasReceivableKeyExists = Object.keys(
-        formValues,
+        formStateContext?._currentValue,
       )?.some((key) => key.includes('receivable'));
       if (hasReceivableKeyExists) {
-        set(dataToSubmit, 'formInput', formValues);
+        set(dataToSubmit, 'formInput', formStateContext?._currentValue);
       }
     }
 
@@ -247,4 +246,4 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionU
   );
 };
 
-export default withFBFormStateContextWrap<DocumentRevisionUpdateContainerProps>(DocumentRevisionUpdateContainer);
+export default DocumentRevisionUpdateContainer;
