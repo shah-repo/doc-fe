@@ -152,12 +152,9 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       const sections = filter(schemaDiff, (schemaItem) =>
         schemaItem.type && FBSectionTypes.includes(schemaItem.type));
       bookmarkState?.removeBookmarks(map(sections, 'name'));
+      workspaceState?.initSchema(schema);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [schema, workspaceState]);
-
-    React.useEffect(() => {
-      workspaceState?.initSchema(schema);
-    }, [schema]);
 
     React.useEffect(() => {
       if (!workspaceState) { return; }
