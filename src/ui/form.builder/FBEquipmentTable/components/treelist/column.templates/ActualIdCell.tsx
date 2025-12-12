@@ -90,17 +90,18 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           return (shouldEnforceEqProdConfig && isOverdue) || !isActive;
         }}
         renderOption={(option: customEQOptionType, props) => (
-          <ListItem {...props} className="lot-list-item" disableGutters>
+          <ListItem {...props} disableGutters className={classes.listItemOption}>
             <ListItemText
+              className={classes.listItemOption}
               primary={option.label}
               secondary={
-                <div className={classes.expired}>
+                <div className={classes.dateInfo}>
                   {option.calDueDate && (
-                    <span>Cal Due: {option.calDueDate}</span>
+                    <span>{translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', { date: option.calDueDate })}</span>
                   )}
                   {option.calDueDate && option.pmDueDate && '  |  '}
                   {option.pmDueDate && (
-                    <span>PM Due: {option.pmDueDate}</span>
+                    <span>{translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', { date: option.pmDueDate })}</span>
                   )}
                 </div>
               }

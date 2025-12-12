@@ -52,6 +52,13 @@ export const styles = makeStyles((theme) => ({
     color: `${Colors.gray} !important`,
     pointerEvents: 'none',
   },
+  listItemOption: {
+    padding: 0,
+    margin: 0,
+  },
+  dateInfo: {
+    color: Colors.error,
+  },
   expired: {
     color: Colors.error,
   },
