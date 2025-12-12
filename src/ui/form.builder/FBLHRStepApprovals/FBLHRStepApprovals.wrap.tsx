@@ -239,12 +239,14 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         reaction(
           () => formState?.newValues.get(name),
           (fieldValue: string[]) => {
-            if (workspaceState?.isPreview || !fieldValue) {
+            if (workspaceState?.isPreview || fieldValue.length === 0) {
               return;
             }
             const formValue: string[] = get(formState?.oldValues, name);
-            addApprover(difference(fieldValue, formValue));
-            removeApprover(difference(formValue, fieldValue));
+            if (formValue.length > 0) {
+              addApprover(difference(fieldValue, formValue));
+              removeApprover(difference(formValue, fieldValue));
+            }
           },
           // eslint-disable-next-line react-hooks/exhaustive-deps
         ),
