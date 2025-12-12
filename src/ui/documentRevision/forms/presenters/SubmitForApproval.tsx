@@ -73,12 +73,16 @@ export const SubmitForApproval: React.FC<Props> = ({
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step.mpi.step' : 'record.submit.for.approval';
-  const hasPendingApprovals = documentRevision?.approvals?.some(
+  const hasPendingApprovals = (documentRevision?.approvals?.filter(
     (approval: Approval) =>
       [ApprovalStatus.Draft, ApprovalStatus.Pending].includes(approval.status),
-  );
+  ).length ?? 0) > 0;
 
-  const isDisabledApproval = isTypeMpiOutput && hasPendingApprovals;
+  const isApproverAdded = (documentRevision?.approvals?.filter(
+    (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
+  ).length ?? 0) === 0;
+
+  const isDisabledApproval = isTypeMpiOutput && (isApproverAdded || hasPendingApprovals);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
