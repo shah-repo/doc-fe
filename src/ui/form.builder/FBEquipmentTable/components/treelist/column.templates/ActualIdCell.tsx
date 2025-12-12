@@ -19,7 +19,7 @@ import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { useEquipmentOptions } from '../hooks/useFetchData';
 import { isEditEquipItem } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { customEQOptionType, CustomTreeListCellProps } from './types';
 
@@ -47,10 +47,10 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   equipmentOptions: propEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
-  const classes = styles();
+  const classes = useStyles();
   const { getFormattedDateString } = useDate();
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
-  const shouldEnforceEqProdConfig = (isLHRProductionBuild && isEqProdConfigEnforced) ?? false;
+  const shouldEnforceEqProdConfig = isLHRProductionBuild && isEqProdConfigEnforced;
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId, isEquipmentSpecification);
@@ -131,7 +131,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
-  const classes = styles({ isEditMode });
+  const classes = useStyles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();

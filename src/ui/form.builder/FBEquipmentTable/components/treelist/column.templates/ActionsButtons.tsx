@@ -9,7 +9,7 @@ import useHover from '../../../../../hooks/useHover';
 import { EditableEquipmentItem } from '../../../types';
 import { MODE_FIELD } from '../constants';
 import { isAddEquipItem, isEditEquipItem } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import { EquipmentItemActionsProps } from './types';
 
 export default function ActionButtons (props: EquipmentItemActionsProps<EditableEquipmentItem>): React.ReactElement | null {
@@ -23,7 +23,7 @@ export default function ActionButtons (props: EquipmentItemActionsProps<Editable
     isEnableActualIdAddition,
     isEBProcedure,
   } = props;
-  const classes = styles();
+  const classes = useStyles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
 
   const ref = useCallback((node: HTMLDivElement | null) => {

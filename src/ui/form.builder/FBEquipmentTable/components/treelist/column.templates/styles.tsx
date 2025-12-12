@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../layout/theme-next';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   actions: {
     gap: theme.spacing(1.25, 1.25),
     display: 'flex',

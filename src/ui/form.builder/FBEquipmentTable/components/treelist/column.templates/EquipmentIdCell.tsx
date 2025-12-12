@@ -15,7 +15,7 @@ import { Colors } from '../../../../../layout/theme-next';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps, EquipAutoCompleteOptions } from './types';
 
@@ -41,7 +41,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   equipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
-  const classes = styles();
+  const classes = useStyles();
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
@@ -109,7 +109,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const isEditMode = isEBProcedure
     ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId)
     : isEditEquipItem(dataItem);
-  const classes = styles({ hasChildren, isEditMode });
+  const classes = useStyles({ hasChildren, isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const quickViewDialog = useDialog();
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
