@@ -13,5 +13,5 @@ export const TREELIST_CONFIG = {
   rowHeight: 50,
 };
 export const MIN_SEARCH_TERM_LENGTH = 3;
-export const EB_FIELDS_TO_OMIT = [MODE_FIELD, ADD_FIELD, EXPAND_FIELD, 'parentEquipPlannedId', 'parentId'];
+export const EB_FIELDS_TO_OMIT = [MODE_FIELD, ADD_FIELD, EXPAND_FIELD, 'parentEquipPlannedId', 'parentId', 'isEquipmentSpecification'];
 export const EB_PARENT_FIELDS_TO_OMIT = [MODE_FIELD, ADD_FIELD, EXPAND_FIELD, SUB_ITEMS_FIELD, 'parentEquipPlannedId', 'parentId', 'actualId', 'plannedId', 'calDueDate', 'pmDueDate'];

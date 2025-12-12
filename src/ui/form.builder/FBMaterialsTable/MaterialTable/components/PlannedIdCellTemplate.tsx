@@ -26,12 +26,12 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const isUpdateAction = dataItem[MODE_FIELD];
   const classes = styles({ isEditMode });
   const { getFieldProps, setFieldValue, values, errors } = useFormikContext<EditableMaterial>();
-  const isFreeSolo = !isLHRT && values?.LHRTparameter;
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
   const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
+  const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
@@ -61,6 +61,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     if (isLHRT) {
       setFieldValue(field, inputValue);
       setInputValue('');
+      return;
+    }
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
       return;
     }
 

@@ -23,6 +23,7 @@ interface EditorProps {
   isLoading?: boolean
   equipmentOptions: OptionType[]
   isMPIForm?: boolean
+  isEBProcedure?: boolean
 }
 
 const Editor: React.FC<EditorProps> = ({
@@ -33,12 +34,13 @@ const Editor: React.FC<EditorProps> = ({
   dataItem,
   equipmentOptions,
   isMPIForm,
+  isEBProcedure,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
-  const isFreeSolo = values?.LHRTparameter;
+  const isFreeSolo = values?.LHRTparameter || isEBProcedure;
 
   useEffect(() => {
     const fieldValue = dataItem[field ?? ''];
@@ -69,6 +71,11 @@ const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     const title = cloneDeep(values?.title);
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
+      return;
+    }
 
     if (!isUpdateAction || FB.isUUID(title ?? '')) {
       return;
@@ -201,6 +208,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
               isLoading,
               equipmentOptions,
               isMPIForm,
+              isEBProcedure,
             }}
           />
         </div>}
