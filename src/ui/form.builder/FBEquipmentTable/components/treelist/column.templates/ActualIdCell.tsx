@@ -87,6 +87,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const { pmDueDate, calDueDate, status } = option ?? {};
           const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
           const isActive = isEqActive(status as EquipmentStatus);
+
           return (shouldEnforceEqProdConfig && isOverdue) || !isActive;
         }}
         renderOption={(option: customEQOptionType, props) => (
@@ -97,11 +98,19 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
               secondary={
                 <div className={classes.dateInfo}>
                   {option.calDueDate && (
-                    <span>{translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', { date: option.calDueDate })}</span>
+                    <span>
+                      {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
+                        date: option.calDueDate,
+                      })}
+                    </span>
                   )}
                   {option.calDueDate && option.pmDueDate && '  |  '}
                   {option.pmDueDate && (
-                    <span>{translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', { date: option.pmDueDate })}</span>
+                    <span>
+                      {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
+                        date: option.pmDueDate,
+                      })}
+                    </span>
                   )}
                 </div>
               }
