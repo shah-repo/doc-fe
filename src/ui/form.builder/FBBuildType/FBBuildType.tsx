@@ -93,6 +93,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
         {...props}
         {...{ defaultValue, showErrorMsg: isUndefined(defaultValue) }}
         type="autocomplete"
+        name={name}
         disabled={isDisabled}
         labelProps={FBFontStyle.labelProps}
       >
@@ -104,6 +105,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
           options={options}
           onInputChange={onChange}
           onChange={onChange}
+          data-cy={`${name}-field`}
           value={defaultValue ?? null}
           getOptionLabel={option => option.displayLabel}
         />
