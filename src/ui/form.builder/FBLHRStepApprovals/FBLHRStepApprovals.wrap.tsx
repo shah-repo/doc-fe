@@ -243,10 +243,8 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               return;
             }
             const formValue: string[] = get(formState?.oldValues, name);
-            if (formValue.length > 0) {
-              addApprover(difference(fieldValue, formValue));
-              removeApprover(difference(formValue, fieldValue));
-            }
+            addApprover(difference(fieldValue, formValue));
+            removeApprover(difference(formValue, fieldValue));
           },
           // eslint-disable-next-line react-hooks/exhaustive-deps
         ),
