@@ -1,25 +1,27 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import moment, { MomentInput } from 'moment';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
+import { useDate } from '../../../../../../common/utils/date';
+import { ACTIVE_EQUIPMENT_STATUSES, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
-import { Colors } from '../../../../../layout/theme-next';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { useEquipmentOptions } from '../hooks/useFetchData';
 import { isEditEquipItem } from '../utils';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
-import { CustomTreeListCellProps, EquipAutoCompleteOptions } from './types';
+import { customEQOptionType, CustomTreeListCellProps } from './types';
 
 interface LotAutocompleteProps {
   field?: string
@@ -43,10 +45,21 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   equipmentOptions: propEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
-
+  const classes = styles();
+  const { getFormattedDateString } = useDate();
+  const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
+  const shouldEnforceEqProdConfig = (isLHRProductionBuild && isEqProdConfigEnforced) ?? false;
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId, isEquipmentSpecification);
+  const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
+  const isDateOverdue = (date: MomentInput): boolean => {
+    if (!date) {
+      return false;
+    }
+    const currentDate = getFormattedDateString(Date.now());
+    return moment(currentDate).isAfter(date);
+  };
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
@@ -70,18 +83,28 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
-        renderOption={(option: EquipAutoCompleteOptions, props) => (
+        getOptionDisabled={(option: customEQOptionType) => {
+          const { pmDueDate, calDueDate, status } = option ?? {};
+          const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
+          const isActive = isEqActive(status as EquipmentStatus);
+          return (shouldEnforceEqProdConfig && isOverdue) || !isActive;
+        }}
+        renderOption={(option: customEQOptionType, props) => (
           <ListItem {...props} className="lot-list-item" disableGutters>
-            <ListItemText primary={option.label} />
-            {option.isExpired && (
-              <ListItemIcon>
-                <StyleTooltip
-                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
-                >
-                  <FontAwesomeIcon icon={regular('circle-exclamation')} color={Colors.error} size="sm" />
-                </StyleTooltip>
-              </ListItemIcon>
-            )}
+            <ListItemText
+              primary={option.label}
+              secondary={
+                <div className={classes.expired}>
+                  {option.calDueDate && (
+                    <span>Cal Due: {option.calDueDate}</span>
+                  )}
+                  {option.calDueDate && option.pmDueDate && '  |  '}
+                  {option.pmDueDate && (
+                    <span>PM Due: {option.pmDueDate}</span>
+                  )}
+                </div>
+              }
+            />
           </ListItem>
         )}
         loading={isLoading}
