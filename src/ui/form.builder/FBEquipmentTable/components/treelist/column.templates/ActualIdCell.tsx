@@ -42,6 +42,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   dataItem,
   actualId,
   parentPartRevId,
+  isEBProcedure,
   equipmentOptions: propEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
@@ -88,7 +89,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
           const isActive = isEqActive(status as EquipmentStatus);
 
-          return (shouldEnforceEqProdConfig && isOverdue) || !isActive;
+          return !isEBProcedure && ((shouldEnforceEqProdConfig && isOverdue) || !isActive);
         }}
         renderOption={(option: customEQOptionType, props) => (
           <ListItem {...props} disableGutters className={classes.listItemOption}>
@@ -193,6 +194,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 actualId,
                 isLoading,
                 equipmentOptions,
+                isEBProcedure,
               }}
             />
           ) : (
