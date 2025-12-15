@@ -11,7 +11,7 @@ import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
@@ -150,7 +150,7 @@ const Editor: React.FC<EditorProps> = ({
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm, isEBProcedure } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
-  const classes = styles({ isEditMode });
+  const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
   const isLoading = !equipmentOptions.length;
 

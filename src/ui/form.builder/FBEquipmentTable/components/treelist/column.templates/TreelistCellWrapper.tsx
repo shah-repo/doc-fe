@@ -1,7 +1,7 @@
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import React from 'react';
-import { styles } from './styles';
+import useStyles from './styles';
 import { CustomTreeListCellProps } from './types';
 
 const TreeListCellWrapper: React.FC<CustomTreeListCellProps & { children: React.ReactNode }> = ({
@@ -18,7 +18,7 @@ const TreeListCellWrapper: React.FC<CustomTreeListCellProps & { children: React.
   id,
   onClick,
 }) => {
-  const classes = styles({ hasChildren });
+  const classes = useStyles({ hasChildren });
   const handleClick = () => {
     onClick?.({ dataItem });
   };
