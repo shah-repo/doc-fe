@@ -53,6 +53,8 @@ import { withFBEquipmentTable } from './wrap';
 interface EquipmentTreelistContextProps {
   isRedlineActive?: boolean
   isEnableActualIdAddition?: boolean
+  isEqProdConfigEnforced?: boolean
+  isLHRProductionBuild?: boolean
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
@@ -83,6 +85,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const treeListRef = useRef(null);
   const scanDialog = useDialog();
+  const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
   const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -236,6 +239,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     removeEquipItem,
     processData,
     updateLHRTEquipmentItem,
+    isEqProdConfigEnforced,
   } = useEquipmentActions(
     state,
     setState,
@@ -398,7 +402,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition }}>
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced }}>
           <FormikProvider value={formik}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>
