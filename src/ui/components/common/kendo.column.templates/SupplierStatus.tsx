@@ -26,9 +26,9 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   const docTypeTableContext = useContext(DocTypeTableContext);
   const handleOnClick = () => cellRowClick?.({ dataItem });
   const defaultValue = get(dataItem, field, '');
-  const statusData = docTypeTableContext?.aslStatuses?.find((data) => data.id === defaultValue);
-  const statusClassLabel = statusData?.internalType;
-  const label = statusData?.displayLabel ?? defaultValue;
+  const { internalType: statusClassLabel = defaultValue, displayLabel: label = defaultValue }
+    = docTypeTableContext?.aslStatuses?.find((status) => status.id === defaultValue || status.displayLabel === defaultValue) ?? {};
+
   const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   if (docTypeTableContext?.isLoading) {
