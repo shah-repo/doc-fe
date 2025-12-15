@@ -171,8 +171,11 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         id,
         title: isDesign ? title : plannedId,
         type: values.type,
-        isEquipmentSpecification,
       };
+
+      if (!isEBProcedure) {
+        newEquipItem.isEquipmentSpecification = isEquipmentSpecification;
+      }
 
       if (isLHRStep && lhrStepIndex) {
         updateLHRTEquipmentItem(values);
