@@ -17,6 +17,7 @@ export const SUPPLIER_FIELDS = {
 export interface OptionType {
   id: string
   text: string
+  isActive?: boolean
 }
 
 export interface SupplierConfig {

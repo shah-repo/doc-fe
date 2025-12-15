@@ -1,7 +1,10 @@
 import { Box, Divider } from '@material-ui/core';
 import cx from 'classnames';
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { translate } from '../../../../../../../common/intl';
+import { companySelectors } from '../../../../../../../state/ducks/company';
+import { AsyncStatus } from '../../../../../../../state/types';
 import { Dialog } from '../../../../../../components/dialogs';
 import StyledTab from '../../../../../../dashboard.new/tabs/common/StyledTab';
 import StyledTabs from '../../../../../../dashboard.new/tabs/common/StyledTabs';
@@ -24,6 +27,8 @@ const ManageConfigurationDialog: React.FunctionComponent<ManageConfigurationDial
 }) => {
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState<SupplierConfigTabValues>(SupplierConfigTabValues.SupplierType);
+  const asyncState = useSelector(companySelectors.getGeneralSettingsAsyncState);
+  const isLoading = asyncState.status === AsyncStatus.Active;
 
   const handleChange = useCallback(
     (event: ChangeEvent<{}>, newValue: SupplierConfigTabValues) => setSelectedTab(newValue),
@@ -40,6 +45,7 @@ const ManageConfigurationDialog: React.FunctionComponent<ManageConfigurationDial
       onClose={dialog.close}
       maxWidth="sm"
       PaperProps={{ id: 'manageConfigurationDialog', className: classes.paper }}
+      loading={isLoading}
     >
       <Box className={classes.root}>
         <StyledTabs

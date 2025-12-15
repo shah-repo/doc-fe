@@ -1,11 +1,12 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { getHasPermission } from '../../../../../../../common/utils/selectors';
 import { Permission } from '../../../../../../../state/ducks/auth/types';
+import { companyActions } from '../../../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import {
   Mode,
@@ -44,9 +45,12 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name }) => {
   const updateSupplierLabel = (
     labels: SupplierLabel[],
   ) => {
-    setLabels(labels);
     setFieldValue(name, labels);
+    dispatch(companyActions.updateGeneralSettings({ ...formValues, [name]: labels }));
+    setLabels(labels);
   };
+
+  const dispatch = useDispatch();
 
   const formik = useFormik<EditableSupplierLabel | Record<string, never>>({
     initialValues: {},
@@ -70,6 +74,7 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name }) => {
         );
 
       setFieldValue(name, updatedSupplierLabels);
+      dispatch(companyActions.updateGeneralSettings({ ...formValues, [name]: updatedSupplierLabels }));
       discardLabel();
     },
   });
