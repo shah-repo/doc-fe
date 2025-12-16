@@ -23,6 +23,7 @@ import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
+import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -256,7 +257,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             fbLabel = `${fbLabel} ${translate('form.builder.samplingPlan.type')}`;
             change = {
               ...change,
-              nextValue: change.nextValue === 'ALL' ? '100%' : 'AQL',
+              nextValue: change.nextValue === SamplingPlanType.ALL ? '100%' : change.nextValue,
             };
             break;
           case 'aqlLevel':

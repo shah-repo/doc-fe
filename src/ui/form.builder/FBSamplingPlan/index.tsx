@@ -1,6 +1,6 @@
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
-import { FB, FBData, FBInput, FBInputProps, FBRadioGroup } from '..';
+import { FB, FBData, FBInput, FBInputProps, FBRadioGroup, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { Autocomplete } from '../../components/forms/fields-next';
 import { FBFontStyle } from '../styles/FBFont.styles';
@@ -18,7 +18,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
-  const isFormMode = useObserver(() => formState?.workspaceMode === 'design' || formState?.workspaceMode === 'formPreview');
+  const isFormMode = useObserver(() => formState?.workspaceMode === FBWorkspaceModeOptions.DESIGN || formState?.workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW);
   const hasIcqField = useObserver(() => workspaceState?.schema?.some(
     (item) => item.name === IQC_REQUIRED_KEY && !item.deleted,
   ));
