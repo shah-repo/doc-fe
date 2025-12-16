@@ -1106,6 +1106,8 @@
   "form.builder.select.line.to.receive.against": "Select line to receive against",
   "form.builder.textfieldwithrange": "Attribute field",
   "form.builder.samplingPlan": "Sampling Plan",
+  "form.builder.samplingPlan.type": "Type",
+  "form.builder.samplingPlan.aqlLevel": "AQL Level",
   "form.builder.supplier": "Supplier",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
