@@ -90,7 +90,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
           onChange={(e) => setValue({ type: e.target.value as SamplingPlanType })}
           gutter={false}
         />
-        {value?.type === SamplingPlanType.AQL && (
+        {(value?.type === SamplingPlanType.AQL || isFormMode) && (
           <div className={classes.aqlLevel}>
             <Autocomplete
               options={FBData.aqlOptions}
