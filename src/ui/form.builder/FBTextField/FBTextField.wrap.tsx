@@ -7,6 +7,7 @@ import { translate } from '../../../common/intl';
 import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
 import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { useFormContext } from '../../components/forms/FormContext';
+import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
 import { isLhrInvalid, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
@@ -91,7 +92,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
-      if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+      if (workspaceState?.document?.document.documentType.group === DocTypeGroups.PI_INSTANCE) {
         if (isLhrInvalid(name, value, formState)) {
           return;
         }
@@ -148,7 +149,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    if (workspaceState?.document?.document.documentType.documentTypeName === 'LHR Step') {
+    if (workspaceState?.document?.document.documentType.group === DocTypeGroups.PI_INSTANCE) {
       error = isLhrInvalid(name, value, formState);
       helperText = error
         ? translate('lhr.materials.total.cannot.exceed.start.quantity')
