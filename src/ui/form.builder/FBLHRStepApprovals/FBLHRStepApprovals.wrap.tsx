@@ -33,12 +33,14 @@ import {
 } from '../../../state/ducks/documents/types';
 import { taskActions } from '../../../state/ducks/tasks';
 import { store } from '../../../state/store';
+import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
   LHRS_START_DATE,
+  LHRS_START_QUANTITY,
 } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import FBLHRStepApprovalsState from './FBLHRStepApprovals.state';
@@ -180,6 +182,15 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     });
 
     onApproveClick = (approvalId: string) => {
+      if (
+        !formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value
+        || !formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value
+      ) {
+        toastError(
+          'Error: Please fill in Accepted and Rejected quantity before approving.',
+        );
+        return;
+      }
       closeWOAsync.start(completeWO, approvalId, closeWOAsync);
     };
 
@@ -259,6 +270,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         () => [
           formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
           formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_START_QUANTITY)?.value,
         ],
         () => {
           if (

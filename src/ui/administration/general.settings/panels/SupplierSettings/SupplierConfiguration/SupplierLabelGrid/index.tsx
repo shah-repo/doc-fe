@@ -44,8 +44,8 @@ const SupplierLabelsGrid: React.FC<SupplierLabelsGridProps> = ({ name }) => {
   const updateSupplierLabel = (
     labels: SupplierLabel[],
   ) => {
-    setLabels(labels);
     setFieldValue(name, labels);
+    setLabels(labels);
   };
 
   const formik = useFormik<EditableSupplierLabel | Record<string, never>>({

@@ -8,15 +8,10 @@ export interface EditableSupplierConfig extends SupplierConfig, EditableItem {
   capabilities_edit?: string
 }
 
-export const SUPPLIER_FIELDS = {
-  capabilities: 'capabilities',
-  services: 'services',
-  type: 'type',
-};
-
 export interface OptionType {
   id: string
   text: string
+  isActive?: boolean
 }
 
 export interface SupplierConfig {
