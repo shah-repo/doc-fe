@@ -7,6 +7,9 @@ import { FBFontStyle } from '../styles/FBFont.styles';
 import useStyles from './styles';
 import { SamplingPlanAqlLevelOption, SamplingPlanType, SamplingPlanValue } from './types';
 
+const YES_VALUE = translate('form.builder.yes');
+const IQC_REQUIRED_KEY = 'iqc-required';
+
 const FBSamplingPlan: React.FC<FBInputProps> = ({
   name = '',
   label = '',
@@ -14,10 +17,17 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { formState } = FB.useStores();
+  const { formState, workspaceState } = FB.useStores();
+  const isFormMode = useObserver(() => formState?.workspaceMode === 'design' || formState?.workspaceMode === 'formPreview');
+  const hasIcqField = useObserver(() => workspaceState?.schema?.some(
+    (item) => item.name === IQC_REQUIRED_KEY && !item.deleted,
+  ));
 
-  const value = useObserver<SamplingPlanValue | undefined>(
-    () => (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as SamplingPlanValue | undefined,
+  const [value, isIqcRequired] = useObserver<[SamplingPlanValue | undefined, boolean]>(
+    () => [
+      (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as SamplingPlanValue | undefined,
+      (formState?.newValues.get(IQC_REQUIRED_KEY) ?? formState?.getFieldValue(IQC_REQUIRED_KEY)) === YES_VALUE,
+    ],
   );
 
   const setValue = ({ type, aqlLevel }: SamplingPlanValue) => {
@@ -49,6 +59,10 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
   const updateAqlLevel = (e: unknown, aqlLevel: SamplingPlanAqlLevelOption | null) => {
     setValue({ type: SamplingPlanType.AQL, aqlLevel: aqlLevel?.value });
   };
+
+  if (!isIqcRequired && !isFormMode && hasIcqField) {
+    return null;
+  }
 
   return (
     <FBInput
