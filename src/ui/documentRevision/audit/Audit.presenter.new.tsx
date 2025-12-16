@@ -23,6 +23,7 @@ import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
+import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -199,6 +200,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
       }
+
       // PROCEDURE
       let isProcedureMaterilEdit = false;
       if (fbType === 'procedure') {
@@ -246,6 +248,35 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           isProcedureMaterilEdit = true;
         }
       }
+
+      // SAMPLING PLAN
+      if (fbType === 'samplingPlan') {
+        const fieldParts = change.field.split('.');
+        switch (fieldParts.at(-1)) {
+          case 'type':
+            fbLabel = `${fbLabel} ${translate('form.builder.samplingPlan.type')}`;
+            change = {
+              ...change,
+              nextValue: change.nextValue === SamplingPlanType.ALL ? '100%' : change.nextValue,
+            };
+            break;
+          case 'aqlLevel':
+            fbLabel = `${fbLabel} ${translate('form.builder.samplingPlan.aqlLevel')}`;
+            change = {
+              ...change,
+              nextValue: (() => {
+                const value = Number(change.nextValue);
+                if (isNaN(value)) {
+                  return change.nextValue;
+                }
+                const decimalPart = value.toString().split('.')[1];
+                return decimalPart?.length > 2 ? change.nextValue : value.toFixed(2);
+              })(),
+            };
+            break;
+        }
+      }
+
       // LHRSTEP
       if (fbType === 'lhrstep') {
         const valueKey = change.field.split('.')[1].split('-');
