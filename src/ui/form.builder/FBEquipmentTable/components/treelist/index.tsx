@@ -442,7 +442,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
             attached
             kind="add"
             className={classes.bottomAddButtom}
-            data-cy="fb-control-btn"
+            data-cy="add-equipment"
             onClick={addEquipItem}
           >
             {translate('form.builder.add.item')}

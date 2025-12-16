@@ -1,7 +1,11 @@
 import { Box, Divider } from '@material-ui/core';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { translate } from '../../../../../../../common/intl';
+import { companyActions } from '../../../../../../../state/ducks/company';
+import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import { Dialog } from '../../../../../../components/dialogs';
 import StyledTab from '../../../../../../dashboard.new/tabs/common/StyledTab';
 import StyledTabs from '../../../../../../dashboard.new/tabs/common/StyledTabs';
@@ -24,6 +28,8 @@ const ManageConfigurationDialog: React.FunctionComponent<ManageConfigurationDial
 }) => {
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState<SupplierConfigTabValues>(SupplierConfigTabValues.SupplierType);
+  const dispatch = useDispatch();
+  const { values: formValues } = useFormikContext<GeneralSettings>();
 
   const handleChange = useCallback(
     (event: ChangeEvent<{}>, newValue: SupplierConfigTabValues) => setSelectedTab(newValue),
@@ -34,12 +40,19 @@ const ManageConfigurationDialog: React.FunctionComponent<ManageConfigurationDial
     return null;
   }
 
+  const onDialogClose = () => {
+    dispatch(companyActions.updateGeneralSettings({ ...formValues }));
+    dialog.close();
+  };
+
   return (
     <Dialog open={dialog.isOpen}
       title="common.manage.configuration.items"
-      onClose={dialog.close}
+      onClose={onDialogClose}
       maxWidth="sm"
       PaperProps={{ id: 'manageConfigurationDialog', className: classes.paper }}
+      disableBackdropClick
+      disableEscapeKeyDown
     >
       <Box className={classes.root}>
         <StyledTabs
