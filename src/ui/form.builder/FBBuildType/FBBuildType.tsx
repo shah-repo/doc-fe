@@ -1,4 +1,3 @@
-import { makeStyles, createStyles } from '@material-ui/core';
 import { isEmpty, isNull, isUndefined } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
@@ -8,17 +7,8 @@ import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
-import { Colors } from '../../layout/theme-next';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBFontStyle } from '../styles/FBFont.styles';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    autoComplete: ({
-      borderColor: `${Colors.stroke} !important`,
-    }),
-  }),
-);
 
 const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   optionId,
@@ -31,7 +21,6 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   const [options, setOptions] = React.useState<LHRBuild[]>([]);
   const lhrBuildDialog = useDialog();
   const { formState, workspaceState } = FB.useStores();
-  const classes = useStyles();
 
   const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
     optionId: FBAutocompleteAsyncOption.buildType,
@@ -97,7 +86,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     setRefresh((x) => !x);
   };
   const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
-  const showError = !isDisabled && isUndefined(defaultValue);
+
   return (
     <>
       <FBInput
@@ -109,9 +98,8 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
         labelProps={FBFontStyle.labelProps}
       >
         <Autocomplete
-          inputProps={{ className: classes.autoComplete }}
           key={refresh ? 'enable' : 'disable'}
-          error={showError}
+          error={false}
           blurOnSelect
           disableClearable
           options={options}
