@@ -14,6 +14,7 @@ import { isEditEquipItem } from '../utils';
 import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
+import OverflowContent from '../../../../../components/OverflowContent';
 
 interface EditorProps {
   field?: string
@@ -171,41 +172,43 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      {hasChildren && !isEditMode
-        && <span
-          className={cx(
-            classes.defaultIcon,
-            { [classes.expand]: hasChildren },
-            { [classes.disabled]: !hasChildren },
-          )}
-        >
-          <FontAwesomeIcon
-            data-cy="minimize-row-button"
-            onClick={hasChildren ? onClick : undefined}
-            size="sm"
-            icon={
-              expanded || !hasChildren
-                ? regular('square-minus')
-                : solid('square-plus')
-            }
-          />
-        </span>}
-      <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
-        {isEditMode && <div className={classes.idCellEditWrapper}>
-          <Editor
-            {...{
-              field,
-              value,
-              setValue,
-              dataItem,
-              isLoading,
-              equipmentOptions,
-              isMPIForm,
-            }}
-          />
-        </div>}
-        {!isEditMode && displayValue}
-      </span>
+      <OverflowContent title={displayValue}>
+        {hasChildren && !isEditMode
+          && <span
+            className={cx(
+              classes.defaultIcon,
+              { [classes.expand]: hasChildren },
+              { [classes.disabled]: !hasChildren },
+            )}
+          >
+            <FontAwesomeIcon
+              data-cy="minimize-row-button"
+              onClick={hasChildren ? onClick : undefined}
+              size="sm"
+              icon={
+                expanded || !hasChildren
+                  ? regular('square-minus')
+                  : solid('square-plus')
+              }
+            />
+          </span>}
+        <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
+          {isEditMode && <div className={classes.idCellEditWrapper}>
+            <Editor
+              {...{
+                field,
+                value,
+                setValue,
+                dataItem,
+                isLoading,
+                equipmentOptions,
+                isMPIForm,
+              }}
+            />
+          </div>}
+          {!isEditMode && displayValue}
+        </span>
+      </OverflowContent>
     </TreeListCellWrapper>
   );
 };
