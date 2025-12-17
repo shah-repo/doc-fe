@@ -27,7 +27,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   });
 
   React.useEffect(() => {
-    buildsAsync.load();
+    buildsAsync.load(true);
   }, [buildsAsync]);
 
   React.useEffect(() => {
@@ -51,7 +51,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   }, [name, formState]);
 
   const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
-    const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id) as LHRBuild;
+    const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
     const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
     if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
       setSelectedValue(selectedLhrBuild);
@@ -122,7 +122,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
           label={{
             locale: 'form.builder.build.production.msg',
             values: {
-              prod: (defaultValue as LHRBuild)?.displayLabel,
+              prod: (defaultValue)?.displayLabel ?? '',
               rd: selectedValue?.displayLabel ?? '',
             },
           }}
