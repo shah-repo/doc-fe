@@ -86,7 +86,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
     setRefresh((x) => !x);
   };
   const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
-  const showError = !isDisabled && isUndefined(defaultValue);
+
   return (
     <>
       <FBInput
@@ -99,7 +99,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
       >
         <Autocomplete
           key={refresh ? 'enable' : 'disable'}
-          error={showError}
+          error={false}
           blurOnSelect
           disableClearable
           options={options}
