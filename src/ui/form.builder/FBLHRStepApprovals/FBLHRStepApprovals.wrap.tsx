@@ -173,12 +173,16 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const completeWO = useActionCreator(taskActions.completeWO);
 
+    const pendingWO = useActionCreator(taskActions.pendingWO);
+
     const closeWOAsync = useAsync({
       onSuccess: () => {
         workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
       },
     });
+
+    const pendingWOTriggeredRef = React.useRef(false);
 
     onApproveClick = (approvalId: string) => {
       if (
@@ -194,38 +198,36 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     };
 
     // On add approver
-    React.useEffect(
-      () =>
-        reaction(
-          () => woApprovalsState?.approvalApi.data,
-          (data) => {
-            if (!data) {
-              return;
-            }
-            document?.approvals?.push(data as Approval);
-            FBStore.selectedApprover.push(data as Approval);
-            concatApprovals(data);
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => woApprovalsState?.approvalApi.data,
+        (data) => {
+          if (!data) {
+            return;
+          }
+          document?.approvals?.push(data as Approval);
+          FBStore.selectedApprover.push(data as Approval);
+          concatApprovals(data);
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // On transition
-    React.useEffect(
-      () =>
-        reaction(
-          () => woApprovalsState?.transitionApi.data,
-          (data) => {
-            concatApprovals(data);
-            if (data?.status === DocumentStatus.Draft) {
-              window.location.reload();
-            }
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => woApprovalsState?.transitionApi.data,
+        (data) => {
+          concatApprovals(data);
+          if (data?.status === DocumentStatus.Draft) {
+            window.location.reload();
+          }
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) {
@@ -244,25 +246,24 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       }
     }
 
-    React.useEffect(
-      () =>
-        reaction(
-          () => formState?.newValues.get(name),
-          (fieldValue: string[]) => {
-            if (workspaceState?.isPreview || !fieldValue) {
-              return;
-            }
-            const formValue: string[] = get(formState?.oldValues, name);
-            addApprover(difference(fieldValue, formValue));
-            removeApprover(difference(formValue, fieldValue));
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => formState?.newValues.get(name),
+        (fieldValue: string[]) => {
+          if (workspaceState?.isPreview || !fieldValue) {
+            return;
+          }
+          const formValue: string[] = get(formState?.oldValues, name);
+          addApprover(difference(fieldValue, formValue));
+          removeApprover(difference(formValue, fieldValue));
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
-      reaction(
+      const dispose = reaction(
         () => ({
           smartReferencesTo: workspaceState?.smartReferencesTo,
           formInput: workspaceState?.formInput,
@@ -275,8 +276,18 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           ) {
             formState?.setFieldValue(name, [authUser.employeeId], false);
           }
+
+          const currentUserApproval = woApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === 'APPROVED',
+          );
+
+          if (currentUserApproval && !pendingWOTriggeredRef.current) {
+            pendingWOTriggeredRef.current = true;
+            closeWOAsync.start(pendingWO, currentUserApproval.id, closeWOAsync);
+          }
         },
       );
+      return () => dispose();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

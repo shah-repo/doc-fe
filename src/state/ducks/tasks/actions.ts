@@ -86,6 +86,16 @@ const completeWO = (
     handlers,
   });
 
+const pendingWO = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${APPROVALS_BASE_URL}/${woId}/pending`,
+    method: 'post',
+    handlers,
+  });
+
 export default {
   fetchTasksList,
   fetchTask,
@@ -96,4 +106,5 @@ export default {
   deleteTask,
   closeWO,
   completeWO,
+  pendingWO,
 };
