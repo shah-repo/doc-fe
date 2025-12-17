@@ -122,7 +122,7 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
           label={{
             locale: 'form.builder.build.production.msg',
             values: {
-              prod: (defaultValue)?.displayLabel ?? '',
+              prod: defaultValue?.displayLabel ?? '',
               rd: selectedValue?.displayLabel ?? '',
             },
           }}
