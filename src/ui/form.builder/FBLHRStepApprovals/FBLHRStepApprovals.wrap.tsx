@@ -40,7 +40,6 @@ import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
   LHRS_START_DATE,
-  LHRS_START_QUANTITY,
 } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import FBLHRStepApprovalsState from './FBLHRStepApprovals.state';
@@ -263,16 +262,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     );
 
     React.useEffect(() => {
-      const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
-      formState?.setFieldValue(name, fieldValue, false);
       reaction(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        () => [
-          formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
-          formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
-          formState?.getInputState(LHRS_START_QUANTITY)?.value,
-        ],
-        () => {
+        () => ({
+          smartReferencesTo: workspaceState?.smartReferencesTo,
+          formInput: workspaceState?.formInput,
+        }),
+        (data: any) => {
           if (
             !woApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
