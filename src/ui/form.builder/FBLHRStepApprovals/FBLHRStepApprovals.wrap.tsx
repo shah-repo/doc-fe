@@ -173,7 +173,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const completeWO = useActionCreator(taskActions.completeWO);
 
-    const pendingWO = useActionCreator(taskActions.pendingWO);
+    const pendingApproval = useActionCreator(taskActions.pendingApproval);
 
     const closeWOAsync = useAsync({
       onSuccess: () => {
@@ -268,7 +268,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           smartReferencesTo: workspaceState?.smartReferencesTo,
           formInput: workspaceState?.formInput,
         }),
-        (data: any) => {
+        () => {
           if (
             !woApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
@@ -278,12 +278,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           }
 
           const currentUserApproval = woApprovalsState?.getApprovals?.find(
-            (a) => a.approver?.id === authUser.employeeId && a.status === 'APPROVED',
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
           );
 
           if (currentUserApproval && !pendingWOTriggeredRef.current) {
             pendingWOTriggeredRef.current = true;
-            closeWOAsync.start(pendingWO, currentUserApproval.id, closeWOAsync);
+            closeWOAsync.start(pendingApproval, currentUserApproval.id, closeWOAsync);
           }
         },
       );

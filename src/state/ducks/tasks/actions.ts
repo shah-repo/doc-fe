@@ -86,7 +86,7 @@ const completeWO = (
     handlers,
   });
 
-const pendingWO = (
+const pendingApproval = (
   woId: string,
   handlers: Handlers,
 ): ApiAction =>
@@ -106,5 +106,5 @@ export default {
   deleteTask,
   closeWO,
   completeWO,
-  pendingWO,
+  pendingApproval,
 };
