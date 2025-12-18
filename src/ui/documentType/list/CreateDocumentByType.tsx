@@ -11,7 +11,7 @@ import { MomentFormats, useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP_OPTION, DocumentType, DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DOCUMENT_NUMBERING_STYLE, DocumentType, DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
@@ -142,9 +142,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const exportDialog = useDialog();
 
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
-  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIdsWithNumberingStyle);
 
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
+  const numberingStyle = useSelector(documentTypeSelectors.getDocumentTypeNumberingStye);
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -189,7 +190,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         formDialog.open();
         return;
       }
-      if (formIds.length === 1) {
+      if (formIds.length === 1 && (!numberingStyle || numberingStyle !== DOCUMENT_NUMBERING_STYLE.CUSTOMER)) {
         handleCreateDocument(formIds[0] as DocumentRevision);
         resetStates();
         return;
@@ -282,6 +283,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       handleSelection={handleDocTypeSelection}
       handleTemplateSelection={handleFormSelection}
       formIds={forms}
+      numberingStyle={numberingStyle}
       areFormIdsLoading={idAsync.isLoading || categoryAsync.isLoading}
       {...{
         documentTypes,

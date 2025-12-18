@@ -3,11 +3,12 @@ import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
 import { FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import FormWrapper from '../../components/forms/FormWrapper';
 import AutocompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
+import DocIdInputNew from '../../documentRevision/forms/presenters/DocIdInput.new';
 import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -17,6 +18,7 @@ import { styles } from './FormListDialog/FormListDialog.styles';
 interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[]
   formIds: DocumentTypeByIdForm[]
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
   areFormIdsLoading?: boolean
   dialog: DialogHandler
   handleSelection: (id: string) => void
@@ -29,6 +31,7 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
+  numberingStyle,
   areFormIdsLoading = false,
   documentTypes,
   handleSelection,
@@ -43,6 +46,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   const classes = styles();
 
   const [parts, setParts] = useState<DocumentRevision[]>([]);
+  const [selectedDocumentType, setSelectedDocumentType] = useState<DocumentType>();
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
@@ -54,6 +58,12 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       setParts(data);
     },
   });
+
+  useEffect(() => {
+    if (activeDocTypes?.length === 1) {
+      setSelectedDocumentType(activeDocTypes[0]);
+    }
+  }, [activeDocTypes]);
 
   useEffect(() => {
     if (!isLHR) {
@@ -107,6 +117,11 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       || documentTypes.length === 0
       || (documentTypes.length === 1 && (!formIds || formIds?.length === 0));
 
+  const onDocumentTypeSelected = (value) => {
+    setSelectedDocumentType(activeDocTypes.find(docType => docType.id === value));
+    handleSelection(value);
+  };
+
   return (
     <>
       {dialog.isOpen
@@ -153,7 +168,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     label: docType.documentTypeName,
                     value: docType.id,
                   }))}
-                  onClick={(option) => handleSelection(option.value)}
+                  onClick={(option) => onDocumentTypeSelected(option.value)}
                   label={isRecord ? 'record.select.type' : 'supplier.select.type' }
                   data-cy={isRecord ? 'record.select.type' : 'supplier.select.type' }
                 />
@@ -167,6 +182,16 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     onClick={(option) => handleTemplateSelection?.(option.value)}
                     label={isRecord ? 'record.select.template' : 'supplier.select.form'}
                     data-cy={isRecord ? 'record.select.template' : 'supplier.select.form'}
+                  />
+                )}
+                {numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER && selectedDocumentType && (
+                  <DocIdInputNew
+                    documentTypeId={selectedDocumentType.id}
+                    documentAcronym={selectedDocumentType.documentTypeAcronym}
+                    isDisabled={false}
+                    docId=""
+                    numberingStyle={numberingStyle}
+                    isShownOnDialog={true}
                   />
                 )}
                 <Button
