@@ -47,5 +47,5 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 
   const totalAssignedQty = subItems.reduce((sum, lot) => sum + (lot.quantity ?? 0), 0);
 
-  return { isInsufficientQty: totalAssignedQty < quantityNeeded, totalAssignedQty, quantityNeeded };
+  return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
