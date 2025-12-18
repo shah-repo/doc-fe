@@ -16,11 +16,11 @@ const AuditLhrBuildTypeSection: React.FC<Props> = ({
   dataCy,
   auditValue,
 }) => {
-  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { });
+  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId: FBAutocompleteAsyncOption.buildType });
   const [buildType, setBuildType] = React.useState(auditValue);
   React.useEffect(() => {
     if (!FBAutocompleteAsyncStore.getValue<LHRBuild>(FBAutocompleteAsyncOption.buildType, auditValue)) {
-      autocompleteAsyncState.fetchAutocompleteOption(auditValue as string, FBAutocompleteAsyncOption.buildType);
+      autocompleteAsyncState.load();
     } else {
       const data = FBAutocompleteAsyncStore.getValue<LHRBuild>(FBAutocompleteAsyncOption.buildType, auditValue);
       setBuildType(`${data?.displayLabel}`);
