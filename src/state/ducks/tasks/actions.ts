@@ -87,11 +87,11 @@ const completeWO = (
   });
 
 const pendingApproval = (
-  woId: string,
+  approvalId: string,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${APPROVALS_BASE_URL}/${woId}/pending`,
+    url: `${APPROVALS_BASE_URL}/${approvalId}/pending`,
     method: 'post',
     handlers,
   });
