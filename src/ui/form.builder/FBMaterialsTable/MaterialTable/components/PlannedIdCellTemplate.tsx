@@ -114,7 +114,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const partNumber = fieldValue?.split(' ')?.[0] ?? '';
 
   return (
     <TreeListCellWrapper {...props}>
@@ -181,7 +180,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                   {
                     assignedLot: totalAssignedQty ?? '',
                     lotQuantityNeeded: quantityNeeded ?? '',
-                    partNumber: partNumber,
                   })}
                 placement="top-start"
               >

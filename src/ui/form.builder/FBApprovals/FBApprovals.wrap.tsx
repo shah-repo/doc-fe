@@ -14,6 +14,7 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/do
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
+import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { checkIsDocumentReceivable, checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
@@ -166,7 +167,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (approval.status === ApprovalStatus.Approved && document?.document.documentType.documentTypeName === 'LHR Step') {
+      if (approval.status === ApprovalStatus.Approved
+        && (document?.document.documentType.documentTypeName === 'LHR Step' || document?.document.documentType.group === DocTypeGroups.PI_INSTANCE)) {
         const values = generateLHRsDocs(_documentRevisionFormState?.documentRevision);
         history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''), { toTabId: 'details' });
       }
