@@ -84,8 +84,8 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = {
         ...omit(values, [MODE_FIELD, ...EDIT_FIELDS]),
-        capabilities: values.capabilities_edit?.length ? values.capabilities_edit : [],
-        services: values.services_edit?.length ? values.services_edit : [],
+        capabilities: values.capabilities_edit,
+        services: values.services_edit,
       };
       const updatedSupplierConfig = isAddition
         ? [...(supplierConfiguration ?? []), updatedValues]
@@ -126,8 +126,8 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       supplierTypeId: '',
       services: [],
       [MODE_FIELD]: Mode.add,
-      services_edit: '',
-      capabilities_edit: '',
+      services_edit: [],
+      capabilities_edit: [],
     });
   };
 
