@@ -274,7 +274,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            formState?.setFieldValue(name, [authUser.employeeId], false);
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
           }
 
           const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
