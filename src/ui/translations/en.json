@@ -1898,7 +1898,7 @@
   "scan.lot.grid.item.id.message": "Item ID",
   "scan.lot.grid.part.description.message": "Item Title",
   "scan.lot.grid.eq.description.message": "Equipment Description",
-  "scan.lot.grid.quantity.needed.message": "Qty Needed",
+  "scan.lot.grid.quantity.needed.message": "Quantity",
   "scan.lot.grid.variance.message": "Variance",
   "scan.lot.grid.quantity.max.error.message": "Quantity assigned should not be greater than on hand quantity {max}",
   "scan.lot.grid.quantity.min.error.message": "Quantity assigned should not be greater than 0",
