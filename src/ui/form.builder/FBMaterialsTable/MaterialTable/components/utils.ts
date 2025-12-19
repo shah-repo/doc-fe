@@ -49,3 +49,35 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
+
+export const isMpiOutputInsufficientQty = (
+  neededQuantity?: any[][],
+  usedQuantity?: any[],
+  startQuantity?: number,
+): boolean => {
+  const flatNeeded = (neededQuantity ?? []).flat();
+
+  const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item.title;
+      acc[key] = (acc[key] ?? 0) + (item.quantity ?? 0) * (startQuantity ?? 0);
+      return acc;
+    },
+    {},
+  );
+
+  const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item.materialId;
+      acc[key]
+        = (acc[key] ?? 0)
+        + ((item.quantity ?? 0));
+      return acc;
+    },
+    {},
+  );
+  console.log({ neededByMaterial, usedByMaterial });
+  return Object.keys(neededByMaterial).some(materialId => {
+    return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
+  });
+};

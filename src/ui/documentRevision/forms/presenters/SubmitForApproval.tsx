@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -22,6 +22,8 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
+import { LHRS_START_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -101,8 +103,56 @@ export const SubmitForApproval: React.FC<Props> = ({
     (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
   );
 
+  const [isInsufficientQty, setIsInsufficientQty] = useState(false);
+
+  const metadataDependency = useMemo(
+    () =>
+      documentRevision?.document?.smartReferencesTo
+        ?.map(
+          (item) =>
+            `${item.metadata?.materialId ?? ''}:${
+              item.metadata?.quantity ?? ''
+            }`,
+        )
+        .sort()
+        .join('|'),
+    [documentRevision?.document?.smartReferencesTo],
+  );
+
+  useEffect(() => {
+    if (!isTypeMpiOutput) {
+      setIsInsufficientQty(false);
+      return;
+    }
+    const LHRsStartQuantity
+      = documentRevision?.formInput?.[LHRS_START_QUANTITY];
+    const neededQuantity
+      = documentRevision?.formDocument?.formTemplate?.schema
+        ?.filter((item) => item.type === 'mpiprocedure')
+        .map((item) => item.editorConfig.materials) ?? [];
+
+    const usedQuantity
+      = documentRevision?.document?.smartReferencesTo
+        ?.filter((item) => item.metadata?.quantity != null)
+        .map((item) => item.metadata) ?? [];
+
+    const result = isMpiOutputInsufficientQty(
+      neededQuantity,
+      usedQuantity,
+      LHRsStartQuantity,
+    );
+    setIsInsufficientQty(result);
+  }, [
+    documentRevision?.document?.smartReferencesTo,
+    documentRevision?.formDocument?.formTemplate?.schema,
+    isTypeMpiOutput,
+    metadataDependency,
+    documentRevision?.formInput,
+  ]);
+
   const isDisabledApproval
-    = isTypeMpiOutput && (isApproverAdded || hasPendingApprovals);
+    = isTypeMpiOutput
+    && (isInsufficientQty || isApproverAdded || hasPendingApprovals);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
