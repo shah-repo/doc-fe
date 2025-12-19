@@ -1,4 +1,5 @@
 import { Box, Grid } from '@material-ui/core';
+import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
   extendDataItem,
   filterBy,
@@ -57,7 +58,6 @@ import {
   MaterialTableProps,
 } from './types';
 import { withMaterialsTable } from './wrap';
-import { FilterDescriptor } from '@progress/kendo-data-query';
 
 interface MaterialTreelistContextProps {
   lhrsQuantity?: number
@@ -216,16 +216,23 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
         if (parentIndex !== -1) {
-          const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+          let subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
 
           if (Array.isArray(subItems)) {
             const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
 
             if (existingSubIndex !== -1) {
-              subItems[existingSubIndex] = {
-                ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
-                ...scanLot,
-              };
+              const shouldMoveToEnd = isEBProcedure && subItems[existingSubIndex][ADD_FIELD];
+
+              if (shouldMoveToEnd) {
+                subItems = subItems.filter((item) => item.id !== values.id);
+                subItems.push(scanLot);
+              } else {
+                subItems[existingSubIndex] = {
+                  ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
+                  ...scanLot,
+                };
+              }
             } else {
               subItems.push(scanLot);
             }
