@@ -28,7 +28,7 @@ class FBWorkspaceState extends FBSchemaState {
   public externalState?: FBWorkspaceExternalState;
   public isPreview?: boolean;
   public isPreviewPanelVisible?: boolean;
-  @observable public document?: DocumentRevision;
+  public document?: DocumentRevision;
   @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
