@@ -290,13 +290,13 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>)}
           {/* Start and End Date Pickers */}
           <Box className={classes.lhrsDateBox}>
-            <Box className={classes.lhrsStartDateBox}>
+            <Box className={classes.lhrsDateWidthBox}>
               <FBDatePicker
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
               />
             </Box>
-            <Box className={classes.lhrsEndDateBox}>
+            <Box className={classes.lhrsDateWidthBox}>
               <FBDatePicker
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}

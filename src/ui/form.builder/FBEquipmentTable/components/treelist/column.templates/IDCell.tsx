@@ -7,11 +7,12 @@ import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import OverflowContent from '../../../../../components/OverflowContent';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
@@ -157,7 +158,7 @@ const Editor: React.FC<EditorProps> = ({
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm, isEBProcedure } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
-  const classes = styles({ isEditMode });
+  const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
   const isLoading = !equipmentOptions.length;
 
@@ -178,42 +179,44 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      {hasChildren && !isEditMode
-        && <span
-          className={cx(
-            classes.defaultIcon,
-            { [classes.expand]: hasChildren },
-            { [classes.disabled]: !hasChildren },
-          )}
-        >
-          <FontAwesomeIcon
-            data-cy="minimize-row-button"
-            onClick={hasChildren ? onClick : undefined}
-            size="sm"
-            icon={
-              expanded || !hasChildren
-                ? regular('square-minus')
-                : solid('square-plus')
-            }
-          />
-        </span>}
-      <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
-        {isEditMode && <div className={classes.idCellEditWrapper}>
-          <Editor
-            {...{
-              field,
-              value,
-              setValue,
-              dataItem,
-              isLoading,
-              equipmentOptions,
-              isMPIForm,
-              isEBProcedure,
-            }}
-          />
-        </div>}
-        {!isEditMode && displayValue}
-      </span>
+      <OverflowContent title={displayValue}>
+        {hasChildren && !isEditMode
+          && <span
+            className={cx(
+              classes.defaultIcon,
+              { [classes.expand]: hasChildren },
+              { [classes.disabled]: !hasChildren },
+            )}
+          >
+            <FontAwesomeIcon
+              data-cy="minimize-row-button"
+              onClick={hasChildren ? onClick : undefined}
+              size="sm"
+              icon={
+                expanded || !hasChildren
+                  ? regular('square-minus')
+                  : solid('square-plus')
+              }
+            />
+          </span>}
+        <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
+          {isEditMode && <div className={classes.idCellEditWrapper}>
+            <Editor
+              {...{
+                field,
+                value,
+                setValue,
+                dataItem,
+                isLoading,
+                equipmentOptions,
+                isMPIForm,
+                isEBProcedure,
+              }}
+            />
+          </div>}
+          {!isEditMode && displayValue}
+        </span>
+      </OverflowContent>
     </TreeListCellWrapper>
   );
 };

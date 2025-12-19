@@ -17,6 +17,12 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
         }
 
         _tabsState?.setActiveTabId(tabs[0].tabId);
+      },
+      [_tabsState, tabs],
+    );
+
+    useEffect(
+      () => {
         if (location?.state?.toTabId) {
           const timer = setTimeout(() => {
           handleChange?.({} as React.SyntheticEvent, location?.state?.toTabId);
@@ -26,7 +32,7 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
           return () => clearTimeout(timer);
         }
       },
-      [_tabsState, tabs],
+      [],
     );
 
     const handleChange: SMTabsProps['onChange'] = useCallback(

@@ -6,7 +6,7 @@ import React from 'react';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import Text from '../../../../../components/Text';
 import { getValidDueDate, isDateOverdue } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,7 +14,7 @@ export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, hasChildren, onClick } = props;
   const isExpired = dataItem[field] ? isDateOverdue(dataItem[field]) : false;
   const updatedDate = getValidDueDate(dataItem[field]);
-  const classes = styles({ hasChildren });
+  const classes = useStyles({ hasChildren });
 
   return (
     <TreeListCellWrapper {...props}>

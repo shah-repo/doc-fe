@@ -72,6 +72,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     setSelected,
   } = useBulkMigration();
   const { selectedItems, setSelectedItems } = useBulkMigrationContext();
+  const selectedItemsLength = selectedItems.length;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
@@ -307,7 +308,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
           <Grid
             container
             justify="space-between"
-            className={cx({ [classes.revsTableSelectedHighlight]: selected.length > 0 })}
+            className={cx({ [classes.revsTableSelectedHighlight]: selectedItemsLength > 0 })}
           >
             <Grid item className={classes.revsTableRefreshBox}>
               <Typography variant="h4" id="tableTitle" className={classes.revsTableRefreshText} component="div">
@@ -328,9 +329,9 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
                   }
                 />
               </Typography>
-              {selected.length > 0 && (
+              {selectedItemsLength > 0 && (
                 <Typography color="inherit" variant="subtitle1" component="div" className={classes.revsTableSelected}>
-                  {translate('administration.bulk.migration.supplier.rev.selected', { length: selected.length })}
+                  {translate('administration.bulk.migration.supplier.rev.selected', { length: selectedItemsLength })}
                 </Typography>
               )}
             </Grid>
