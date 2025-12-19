@@ -48,7 +48,7 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
         return;
       }
       const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
-      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.filter((item) => item.id !== scanLot.id);
+      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems?.filter((item) => item.id !== scanLot.id);
     } else {
       state.data = state.data.filter((item) => item.id !== scanLot.id);
     }
