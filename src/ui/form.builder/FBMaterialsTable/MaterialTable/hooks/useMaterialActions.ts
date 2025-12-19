@@ -186,25 +186,26 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
     state.data = ignorePreviouslyAddedItems(state.data);
 
     if (state.data.length && index !== -1) {
-      const newAllocItem: EditableMaterial = createNewLotItem();
-      newAllocItem.parentPartId = dataItem.title;
-      newAllocItem.parentId = dataItem.id;
-      newAllocItem.unit = dataItem.unit;
+      const lotItem: EditableMaterial = createNewLotItem();
+      lotItem.parentPartId = dataItem.title;
+      lotItem.parentId = dataItem.id;
+      lotItem.unit = dataItem.unit;
+      lotItem.childrenLotIds = state.data[index][SUB_ITEMS_FIELD]?.map(data => data.lotId) ?? [];
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
         state.data[index][SUB_ITEMS_FIELD] = [];
       }
 
-      state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+      state.data[index][SUB_ITEMS_FIELD]?.unshift(lotItem);
 
       updateState({
         ...state,
         data: [...state.data],
         expanded: [state.data[index].id],
-        inEdit: [newAllocItem],
+        inEdit: [lotItem],
       });
-      formik.setValues(newAllocItem);
+      formik.setValues(lotItem);
     }
   };
 
