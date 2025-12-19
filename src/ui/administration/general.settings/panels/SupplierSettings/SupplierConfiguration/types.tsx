@@ -4,8 +4,8 @@ import {
 } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 export interface EditableSupplierConfig extends SupplierConfig, EditableItem {
-  services_edit?: string
-  capabilities_edit?: string
+  services_edit?: OptionType[]
+  capabilities_edit?: OptionType[]
 }
 
 export interface OptionType {

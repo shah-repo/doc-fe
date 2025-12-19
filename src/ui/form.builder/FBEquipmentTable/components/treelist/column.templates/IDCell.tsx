@@ -7,6 +7,7 @@ import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import OverflowContent from '../../../../../components/OverflowContent';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
@@ -23,6 +24,7 @@ interface EditorProps {
   isLoading?: boolean
   equipmentOptions: OptionType[]
   isMPIForm?: boolean
+  isEBProcedure?: boolean
 }
 
 const Editor: React.FC<EditorProps> = ({
@@ -33,12 +35,13 @@ const Editor: React.FC<EditorProps> = ({
   dataItem,
   equipmentOptions,
   isMPIForm,
+  isEBProcedure,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
-  const isFreeSolo = values?.LHRTparameter;
+  const isFreeSolo = values?.LHRTparameter || isEBProcedure;
 
   useEffect(() => {
     const fieldValue = dataItem[field ?? ''];
@@ -69,6 +72,11 @@ const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     const title = cloneDeep(values?.title);
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
+      return;
+    }
 
     if (!isUpdateAction || FB.isUUID(title ?? '')) {
       return;
@@ -171,41 +179,44 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
 
   return (
     <TreeListCellWrapper {...props}>
-      {hasChildren && !isEditMode
-        && <span
-          className={cx(
-            classes.defaultIcon,
-            { [classes.expand]: hasChildren },
-            { [classes.disabled]: !hasChildren },
-          )}
-        >
-          <FontAwesomeIcon
-            data-cy="minimize-row-button"
-            onClick={hasChildren ? onClick : undefined}
-            size="sm"
-            icon={
-              expanded || !hasChildren
-                ? regular('square-minus')
-                : solid('square-plus')
-            }
-          />
-        </span>}
-      <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
-        {isEditMode && <div className={classes.idCellEditWrapper}>
-          <Editor
-            {...{
-              field,
-              value,
-              setValue,
-              dataItem,
-              isLoading,
-              equipmentOptions,
-              isMPIForm,
-            }}
-          />
-        </div>}
-        {!isEditMode && displayValue}
-      </span>
+      <OverflowContent title={displayValue}>
+        {hasChildren && !isEditMode
+          && <span
+            className={cx(
+              classes.defaultIcon,
+              { [classes.expand]: hasChildren },
+              { [classes.disabled]: !hasChildren },
+            )}
+          >
+            <FontAwesomeIcon
+              data-cy="minimize-row-button"
+              onClick={hasChildren ? onClick : undefined}
+              size="sm"
+              icon={
+                expanded || !hasChildren
+                  ? regular('square-minus')
+                  : solid('square-plus')
+              }
+            />
+          </span>}
+        <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
+          {isEditMode && <div className={classes.idCellEditWrapper}>
+            <Editor
+              {...{
+                field,
+                value,
+                setValue,
+                dataItem,
+                isLoading,
+                equipmentOptions,
+                isMPIForm,
+                isEBProcedure,
+              }}
+            />
+          </div>}
+          {!isEditMode && displayValue}
+        </span>
+      </OverflowContent>
     </TreeListCellWrapper>
   );
 };

@@ -112,7 +112,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
     }
-    const woApprovalsState = FB.useRef(FBLHRStepApprovalsState, {
+    const lhrApprovalsState = FB.useRef(FBLHRStepApprovalsState, {
       id: outputId,
       approvals: docApprovals,
       isOwner,
@@ -127,7 +127,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       if (!approvalId) {
         return;
       }
-      woApprovalsState?.applyTransition(transition, approvalId, { password });
+      lhrApprovalsState?.applyTransition(transition, approvalId, { password });
     };
 
     function includesApprover (
@@ -142,7 +142,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     };
 
     React.useEffect(() => {
-      const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
+      const fieldValue = map(lhrApprovalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(name, fieldValue, false);
 
       const activeApprovals = filter(
@@ -173,12 +173,16 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const completeWO = useActionCreator(taskActions.completeWO);
 
-    const closeWOAsync = useAsync({
+    const pendingApproval = useActionCreator(taskActions.pendingApproval);
+
+    const closeLHRSAsync = useAsync({
       onSuccess: () => {
         workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
       },
     });
+
+    const pendingLHRSTriggeredRef = React.useRef(false);
 
     onApproveClick = (approvalId: string) => {
       if (
@@ -190,42 +194,40 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         );
         return;
       }
-      closeWOAsync.start(completeWO, approvalId, closeWOAsync);
+      closeLHRSAsync.start(completeWO, approvalId, closeLHRSAsync);
     };
 
     // On add approver
-    React.useEffect(
-      () =>
-        reaction(
-          () => woApprovalsState?.approvalApi.data,
-          (data) => {
-            if (!data) {
-              return;
-            }
-            document?.approvals?.push(data as Approval);
-            FBStore.selectedApprover.push(data as Approval);
-            concatApprovals(data);
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => lhrApprovalsState?.approvalApi.data,
+        (data) => {
+          if (!data) {
+            return;
+          }
+          document?.approvals?.push(data as Approval);
+          FBStore.selectedApprover.push(data as Approval);
+          concatApprovals(data);
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // On transition
-    React.useEffect(
-      () =>
-        reaction(
-          () => woApprovalsState?.transitionApi.data,
-          (data) => {
-            concatApprovals(data);
-            if (data?.status === DocumentStatus.Draft) {
-              window.location.reload();
-            }
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => lhrApprovalsState?.transitionApi.data,
+        (data) => {
+          concatApprovals(data);
+          if (data?.status === DocumentStatus.Draft) {
+            window.location.reload();
+          }
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) {
@@ -235,48 +237,57 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         window.location.reload();
       } else {
         const stateApprovals = filter(
-          woApprovalsState?.approvals,
+          lhrApprovalsState?.approvals,
           (a) => a.approver?.id !== approval.approver?.id,
         );
-        woApprovalsState?.setApprovals(
+        lhrApprovalsState?.setApprovals(
           unionBy(stateApprovals, [approval], 'id'),
         );
       }
     }
 
-    React.useEffect(
-      () =>
-        reaction(
-          () => formState?.newValues.get(name),
-          (fieldValue: string[]) => {
-            if (workspaceState?.isPreview || !fieldValue) {
-              return;
-            }
-            const formValue: string[] = get(formState?.oldValues, name);
-            addApprover(difference(fieldValue, formValue));
-            removeApprover(difference(formValue, fieldValue));
-          },
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ),
-      [],
-    );
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => formState?.newValues.get(name),
+        (fieldValue: string[]) => {
+          if (workspaceState?.isPreview || !fieldValue) {
+            return;
+          }
+          const formValue: string[] = get(formState?.oldValues, name);
+          addApprover(difference(fieldValue, formValue));
+          removeApprover(difference(formValue, fieldValue));
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
-      reaction(
+      const dispose = reaction(
         () => ({
           smartReferencesTo: workspaceState?.smartReferencesTo,
           formInput: workspaceState?.formInput,
         }),
-        (data: any) => {
+        () => {
           if (
-            !woApprovalsState?.getApprovals?.some(
+            !lhrApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            formState?.setFieldValue(name, [authUser.employeeId], false);
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
           }
         },
       );
+      return () => dispose();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -285,7 +296,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         return;
       }
       map(ids, (approver) =>
-        woApprovalsState?.addApproval(
+        lhrApprovalsState?.addApproval(
           {
             assigned: { id: approver },
             type: 'MASTER',
@@ -319,7 +330,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
             && a.status === (ChangeRequestStatus.Draft as string),
         );
         const approval = find(
-          woApprovalsState?.getApprovals,
+          lhrApprovalsState?.getApprovals,
           (a) => a.approver?.id === approver,
         );
         document?.approvals?.splice(deletedApproverIndex, 1);
@@ -335,7 +346,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           document.approvals[deletedApproverIndex].status
             = ApprovalStatus.Abandoned;
         }
-        woApprovalsState?.applyTransition(
+        lhrApprovalsState?.applyTransition(
           'abandon',
           (approval as FBInlineApprovalBody)?.id,
           undefined,
@@ -372,12 +383,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     };
 
     useObserver(() => {
-      groups = woApprovalsState?.groups;
-      approvals = woApprovalsState?.getApprovals;
+      groups = lhrApprovalsState?.groups;
+      approvals = lhrApprovalsState?.getApprovals;
       loading
-        = woApprovalsState.loading
-        || woApprovalsState?.approvalApi.loading
-        || woApprovalsState?.transitionApi.loading;
+        = lhrApprovalsState.loading
+        || lhrApprovalsState?.approvalApi.loading
+        || lhrApprovalsState?.transitionApi.loading;
 
       if (
         authUser

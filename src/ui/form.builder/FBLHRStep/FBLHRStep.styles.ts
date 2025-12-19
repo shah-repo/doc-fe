@@ -70,13 +70,13 @@ export const FBLHRStepStyles = makeStyles(() =>
     borderColorIcon: {
       color: Colors.red,
     },
-    lhrsStartDateBox: {
-      marginRight: 2,
-      width: '50%',
+    lhrsDateWidthBox: {
+      width: '40%',
     },
     lhrsDateBox: {
+      display: 'flex',
       marginBottom: 2,
-      width: '50%',
+      justifyContent: 'space-between',
     },
     disabled: {
       background: Colors.whitest_grey,
@@ -114,9 +114,6 @@ export const FBLHRStepStyles = makeStyles(() =>
       display: 'flex',
       alignItems: 'center',
       flexGrow: 1,
-    },
-    lhrsEndDateBox: {
-      width: '50%',
     },
   }),
 );

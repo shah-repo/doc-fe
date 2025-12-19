@@ -1565,7 +1565,7 @@
   "form.builder.procedure.material.table.quantity.title": "Quantity Needed",
   "form.builder.procedure.material.table.unit.title": "Unit",
   "form.builder.procedure.material.table.attachments.title": "Attachments",
-  "form.builder.procedure.material.table.part.quantity.short.info.msg": "Lots assigned ({assignedLot}) does not meet the quantity needed ({lotQuantityNeeded}) for the Part {partNumber}",
+  "form.builder.procedure.material.table.part.quantity.short.info.msg": "Lot assigned ({assignedLot}) doesn't meet the quantity needed ({lotQuantityNeeded})",
   "form.builder.mpi.part.selection.materials": "{docId} | {lotPart}.{lotPartRevision} | {quantity} {unit}",
   "form.builder.mpi.part.selection.equipment": "{docId}",
   "form.builder.action.mode": "{mode} {title}",

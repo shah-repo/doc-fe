@@ -126,8 +126,8 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       supplierTypeId: '',
       services: [],
       [MODE_FIELD]: Mode.add,
-      services_edit: '',
-      capabilities_edit: '',
+      services_edit: [],
+      capabilities_edit: [],
     });
   };
 

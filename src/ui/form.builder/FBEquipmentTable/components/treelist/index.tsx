@@ -224,6 +224,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         return;
       }
 
+      if (isEBProcedure) {
+        newEquipItem = omit(newEquipItem, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+      }
+
       discardEquipItem(values as EditableEquipmentItem);
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
