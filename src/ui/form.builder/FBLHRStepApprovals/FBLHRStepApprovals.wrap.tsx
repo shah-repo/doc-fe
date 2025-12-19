@@ -173,16 +173,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const completeWO = useActionCreator(taskActions.completeWO);
 
-    const pendingApproval = useActionCreator(taskActions.pendingApproval);
-
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
         workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
       },
     });
-
-    const pendingLHRSTriggeredRef = React.useRef(false);
 
     onApproveClick = (approvalId: string) => {
       if (
@@ -256,35 +252,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           const formValue: string[] = get(formState?.oldValues, name);
           addApprover(difference(fieldValue, formValue));
           removeApprover(difference(formValue, fieldValue));
-        },
-      );
-      return () => dispose();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    React.useEffect(() => {
-      const dispose = reaction(
-        () => ({
-          smartReferencesTo: workspaceState?.smartReferencesTo,
-          formInput: workspaceState?.formInput,
-        }),
-        () => {
-          if (
-            !lhrApprovalsState?.getApprovals?.some(
-              (a) => a.approver?.id === authUser.employeeId,
-            )
-          ) {
-            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
-          }
-
-          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
-            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
-          );
-
-          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
-            pendingLHRSTriggeredRef.current = true;
-            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
-          }
         },
       );
       return () => dispose();
