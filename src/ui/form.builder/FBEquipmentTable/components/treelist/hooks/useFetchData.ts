@@ -21,7 +21,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
     calDueDate: calibrationData.complianceDueDate,
     pmDueDate: preventiveMaintenanceData.complianceDueDate,
-    status: calibrationData?.status,
+    status: equipment?.eqStatus,
     value: equipment.id,
   };
 };

@@ -90,7 +90,15 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
           const isActive = isEqActive(status as EquipmentStatus);
 
-          return !isEBProcedure && ((shouldEnforceEqProdConfig && isOverdue) || !isActive);
+          if (isEBProcedure) {
+            return false;
+          }
+
+          if (shouldEnforceEqProdConfig && isOverdue) {
+            return true;
+          }
+
+          return !isActive;
         }}
         renderOption={(option: customEQOptionType, props) => (
           <ListItem {...props} disableGutters className={classes.listItemOption}>
