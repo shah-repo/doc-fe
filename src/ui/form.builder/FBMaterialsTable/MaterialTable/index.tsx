@@ -28,6 +28,7 @@ import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../components/notifications';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
+import { LHRS_ACCEPTED_QUANTITY } from '../../FBLHRStep/utils';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../helpers';
 import { isPartHasInsufficientQty, prepareData } from './components/utils';
@@ -521,16 +522,18 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   React.useEffect(() => {
     const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
-    if (!isNil(formValue)) {
-      setLhrsQuantity(formValue);
+    const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
+    if (!isNil(formValue) || !isNil(acceptedQuantity)) {
+      setLhrsQuantity(acceptedQuantity > 0 ? acceptedQuantity : formValue);
     }
 
     const dispose = reaction(
-      () => formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
-      () => {
-        const newValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
-        if (!isNil(newValue)) {
-          setLhrsQuantity(newValue);
+      () => ({
+        start: formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
+        accepted: formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+      }), ({ start, accepted }) => {
+        if (!isNil(start) || !isNil(accepted)) {
+          setLhrsQuantity(accepted > 0 ? accepted : start);
         }
       },
     );
