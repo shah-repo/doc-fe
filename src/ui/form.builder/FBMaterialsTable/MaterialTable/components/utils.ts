@@ -69,15 +69,13 @@ export const isMpiOutputInsufficientQty = (
   const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
     (acc, item) => {
       const key = item.materialId;
-      acc[key]
-        = (acc[key] ?? 0)
-        + ((item.quantity ?? 0));
+      acc[key] = (acc[key] ?? 0) + (item.quantity ?? 0);
       return acc;
     },
     {},
   );
-  console.log({ neededByMaterial, usedByMaterial });
-  return Object.keys(neededByMaterial).some(materialId => {
+
+  return Object.keys(neededByMaterial).some((materialId) => {
     return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
   });
 };
