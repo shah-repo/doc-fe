@@ -1,9 +1,8 @@
 import { InputAdornment } from '@material-ui/core';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { documentsSelectors } from '../../../../state/ducks/documents';
-import { DocumentProposedIdSetAction } from '../../../../state/ducks/documents/types';
 import { AsyncStatus } from '../../../../state/types';
 import InputField from '../../../components/forms/fields/Input';
 import { toastError } from '../../../components/notifications';
@@ -19,31 +18,35 @@ interface Props {
   documentTypeId?: string
   numberingStyle?: DOCUMENT_NUMBERING_STYLE
   isShownOnDialog?: boolean
-  setDocId?: ((docId: string) => DocumentProposedIdSetAction) | undefined
+  handleDocIdUpdated?: (docId: string) => void
 }
 
 const DocIdInputNew: React.FunctionComponent<Props> = ({
   documentTypeId = '',
   isDisabled,
-  docId,
+  docId = '',
   documentAcronym,
   numberingStyle,
   isShownOnDialog = false,
-  setDocId,
+  handleDocIdUpdated,
 }) => {
   const classes = styles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
-  React.useEffect(() => {
+
+  const [docIdEntered, setDocIdEntered] = useState<string>(docId);
+  useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
       toastError(loadProposedDocIdState.message);
     }
   }, [loadProposedDocIdState]);
   const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
+
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    setDocIdEntered(value);
 
-    if (setDocId) {
-      setDocId(value);
+    if (handleDocIdUpdated) {
+      handleDocIdUpdated(value);
     }
   };
 
@@ -58,7 +61,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
         label={label}
         inputProps={{
           id: 'document.docId',
-          value: docId,
+          value: docIdEntered,
           disabled: isDisabled,
           onChange: handleDocIdChange,
           startAdornment: <InputAdornment position="start">{documentAcronym}</InputAdornment>,

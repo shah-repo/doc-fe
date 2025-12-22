@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { Formik, FormikProps } from 'formik';
 import { get, isEmpty, isNull } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
@@ -53,14 +53,16 @@ interface Props {
   tableName?: string
 }
 
-type DocCreator = (form: DocumentRevision) => void;
+type DocCreator = (form: DocumentRevision, docId?: string) => void;
 
 export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const getDocTypeGroups = useDocTypeGroups();
   const history = useHistory();
   const { _documentRevisionFormState } = SM.useStores();
-  const [form, setForm] = useState<DocumentRevision>();
+
+  const formRef = useRef<DocumentRevision | null>(null);
+
   const fetchDocIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const fetchDocIdAsync = useAsync<DocumentProposedId>({
     onSuccess: (data) => {
@@ -70,6 +72,7 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
       toastError(error);
     },
   });
+
   const createDocAction = useActionCreator(documentRevisionsActions.create);
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
@@ -86,8 +89,14 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
   });
 
   const createDoc = (docId: string) => {
-    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
-    const outputDocumentType = (form?.formTemplate?.outputDocumentTypes[0] ?? {}) as DocumentType;
+    const currentForm = formRef.current;
+
+    if (!currentForm) {
+      return;
+    }
+
+    const formValues = toDocumentRevisionFormValuesForOutput(currentForm, selectedDocumentType);
+    const outputDocumentType = (currentForm?.formTemplate?.outputDocumentTypes[0] ?? {}) as DocumentType;
     formValues.securityGroups = getDocTypeGroups(outputDocumentType);
 
     const data = toNewVersionRequestBody(formValues);
@@ -99,25 +108,33 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
 
     createDocAsync.start(createDocAction, data, createDocAsync);
   };
-  const redirect = (selectedForm = form) => {
+
+  const redirect = (selectedForm = formRef.current) => {
     history.push({
       pathname: '/document_revision/create',
       state: selectedForm,
     });
   };
 
-  return (selectedForm: DocumentRevision) => {
+  return (selectedForm: DocumentRevision, docId?) => {
     const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
+    formRef.current = selectedForm;
+
+    if (docId) {
+      createDoc(docId);
+      return;
+    }
+
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
-      setForm(selectedForm);
       return;
     }
+
     if (outputDocumentTypes.length === 1) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
-      setForm(selectedForm);
       return;
     }
+
     redirect(selectedForm);
   };
 };
@@ -145,7 +162,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIdsWithNumberingStyle);
 
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
+
   const numberingStyle = useSelector(documentTypeSelectors.getDocumentTypeNumberingStye);
+  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -154,6 +174,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
 
   const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState('');
+  const [selectedForm, setSelectedForm] = useState<DocumentTypeByIdForm | undefined>();
+
   const selectedTypeLabel = useMemo(() => {
     return documentTypes.find((type) => type.id === selectedDocumentTypeId)?.documentTypeName ?? '';
   }, [documentTypes, selectedDocumentTypeId]);
@@ -190,7 +212,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         formDialog.open();
         return;
       }
-      if (formIds.length === 1 && (!numberingStyle || numberingStyle !== DOCUMENT_NUMBERING_STYLE.CUSTOMER)) {
+      if (formIds.length === 1 && !isCustomerTypeNumbering) {
         handleCreateDocument(formIds[0] as DocumentRevision);
         resetStates();
         return;
@@ -249,7 +271,20 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       return;
     }
     const selectedForm = formIds.find((form) => form.id === docRevId);
-    handleCreateDocument(selectedForm as DocumentRevision);
+    if (!isCustomerTypeNumbering) {
+      handleCreateDocument(selectedForm as DocumentRevision);
+      resetStates();
+    } else {
+      setSelectedForm(selectedForm);
+    }
+  };
+
+  const handleUserSubmit = (docId: string) => {
+    if (!selectedForm) {
+      return;
+    }
+
+    handleCreateDocument(selectedForm as DocumentRevision, docId);
     resetStates();
   };
 
@@ -282,6 +317,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       dialog={multipleFormDialog}
       handleSelection={handleDocTypeSelection}
       handleTemplateSelection={handleFormSelection}
+      handleUserSubmit={handleUserSubmit}
       formIds={forms}
       numberingStyle={numberingStyle}
       areFormIdsLoading={idAsync.isLoading || categoryAsync.isLoading}

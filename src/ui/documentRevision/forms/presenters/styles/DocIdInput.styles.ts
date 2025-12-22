@@ -10,6 +10,10 @@ export const styles = makeStyles((theme) => ({
       padding: 10,
       fontSize: 14,
     },
+    '& .MuiInputAdornment-positionStart': {
+      marginLeft: 8,
+      marginRight: -8,
+    },
   },
   renderHtmlRoot: {
     marginBottom: theme.spacing(-2.5),
