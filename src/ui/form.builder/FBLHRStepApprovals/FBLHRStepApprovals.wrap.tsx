@@ -171,6 +171,24 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => workspaceState?.approvals,
+        (data) => {
+          if (!data) {
+            return;
+          }
+          const activeApprovals = filter(
+            workspaceState?.approvals,
+            (a) => a.status !== 'ABANDONED',
+          );
+          lhrApprovalsState?.setApprovals(activeApprovals);
+          formState?.inputState.get(name)?.setRender();
+        },
+      );
+      return () => dispose();
+    }, []);
+
     const completeWO = useActionCreator(taskActions.completeWO);
 
     const closeLHRSAsync = useAsync({
