@@ -8,7 +8,6 @@ import qs from 'query-string';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
-import { v4 as generateUuid } from 'uuid';
 import { translate } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
@@ -468,7 +467,6 @@ export function KendoPanel ({
   const addNew = () => {
     setSearchStatus(true);
     const newDataItem = {
-      id: generateUuid(),
       inEdit: true,
       isNewRecord: true,
       active: true,

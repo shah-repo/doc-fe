@@ -1,8 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
+export default makeStyles(theme =>
+  ({
     chip: {
       borderRadius: '4px',
       display: 'flex',
@@ -74,5 +74,24 @@ export const styles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       visibility: 'hidden',
+    },
+    externalReferencesBox: {
+      marginBottom: theme.spacing(2.5),
+    },
+    externalRefDetails: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+      rowGap: theme.spacing(0.5),
+      columnGap: theme.spacing(0.625),
+    },
+    row: {
+      display: 'contents',
+    },
+    title: {
+      fontWeight: 600,
+      whiteSpace: 'nowrap',
+    },
+    value: {
+      wordBreak: 'break-word',
     },
   }));

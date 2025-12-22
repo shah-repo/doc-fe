@@ -1,6 +1,6 @@
-export interface FBOption {
+export interface FBOption<T = string> {
   text: string
-  value: string
+  value: T
   disabled?: boolean
 }
 

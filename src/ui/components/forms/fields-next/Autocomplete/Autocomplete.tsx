@@ -89,7 +89,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
 
   const isSmall = size === 'small';
   const hasClearIcon = !props.disableClearable;
-  const inputPlaceholder = shouldAlwaysShowPlaceholder || !props.value ? placeholder : undefined;
+  const isEmptyValue = !props.value || (Array.isArray(props.value) && props.value.length === 0);
+  const inputPlaceholder = shouldAlwaysShowPlaceholder || isEmptyValue ? placeholder : undefined;
 
   // TODO this is workaround for incorrect filtering, remove after upgrading MUI
   const internalFilterOptions = useMemo(() => getOptionLabel ? createFilterOptions({

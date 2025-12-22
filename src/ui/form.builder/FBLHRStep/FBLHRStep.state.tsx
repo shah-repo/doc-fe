@@ -1,16 +1,18 @@
 import { find, get, isUndefined, keyBy, map, omit } from 'lodash';
 import { action, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from '..';
-import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { Document, DocumentRevision, DocumentRevisionEditRequestBody } from '../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
+import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
 
 class FBLHRStepState {
   // MARK: @api
   public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
   public getDocumentApi = new FBRequest<Document, null>(FBEndpoint.Document);
+  public updateLHRStepApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>(FBEndpoint.DocumentRevisionPatch);
   public materialsApi = new FBAutocompleteAsyncState({ optionId: this.materialsId });
   public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
   // MARK @config
@@ -19,6 +21,8 @@ class FBLHRStepState {
   @observable public equipment: any;
   @observable public editedParameters: any;
   @observable public approvals: any;
+  private dateUpdateTimeout?: NodeJS.Timeout;
+  private pendingDateUpdate = false;
 
   public constructor (lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
@@ -76,12 +80,75 @@ class FBLHRStepState {
 
   public setLHRs = (lhrs) => set(this, 'stepLHRs', lhrs);
 
+  public updateLHRStepDates = (startDate?: string, endDate?: string): void => {
+    if (!this.stepLHRs) { return; }
+
+    // Clear existing timeout to debounce multiple rapid calls
+    if (this.dateUpdateTimeout) {
+      clearTimeout(this.dateUpdateTimeout);
+    }
+
+    // If there's already a pending update, don't trigger another one
+    if (this.pendingDateUpdate) {
+      return;
+    }
+
+    const updatedFormInput = {
+      ...this.stepLHRs.formInput,
+      ...(startDate !== undefined && { [LHRS_START_DATE]: startDate }),
+      ...(endDate !== undefined && { [LHRS_END_DATE]: endDate }),
+    };
+
+    // Update local state immediately
+    this.setLHRs({
+      ...this.stepLHRs,
+      formInput: updatedFormInput,
+    });
+
+    // Debounce the API call
+    this.dateUpdateTimeout = setTimeout(() => {
+      if (this.pendingDateUpdate || !this.stepLHRs) { return; }
+
+      this.pendingDateUpdate = true;
+
+      const apiPromise = this.updateLHRStepApi.set({
+        url: FBEndpoint.DocumentRevisionPatch,
+        urlValues: { id: this.stepLHRs.id },
+        method: 'patch',
+        body: {
+          formInput: updatedFormInput,
+        },
+      });
+
+      // Handle the promise if it exists
+      if (apiPromise && typeof apiPromise.then === 'function') {
+        apiPromise.then(() => {
+          this.pendingDateUpdate = false;
+        }).catch(() => {
+          this.pendingDateUpdate = false;
+        });
+      } else {
+        // If it's not a promise, just reset the flag
+        this.pendingDateUpdate = false;
+      }
+    }, 300); // 300ms debounce
+  };
+
+  public cleanup = (): void => {
+    if (this.dateUpdateTimeout) {
+      clearTimeout(this.dateUpdateTimeout);
+      this.dateUpdateTimeout = undefined;
+    }
+    this.pendingDateUpdate = false;
+  };
+
   public setMaterials = (materials) => set(this, 'materials', materials);
   public setEquipment = (equipment) => set(this, 'equipment', equipment);
   public setEditedParameters = (editedParameters) => set(this, 'editedParameters', editedParameters);
 
-  public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number) => {
+  public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number): void => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.startMpiApi.set({
       url: FBEndpoint.StartMpi,
       method: 'post',

@@ -15,15 +15,15 @@ import {
 import { toastError } from '../../../../../components/notifications';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { EDIT_FIELDS } from './constants';
+import ManageConfigurationDialog from './ManageConfiurationDialog';
 import { buildSchema } from './schema';
 import {
   EditableSupplierConfig,
-  OptionType,
-  SUPPLIER_FIELDS,
   SupplierConfig,
 } from './types';
 
@@ -31,17 +31,12 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(
     getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
   );
-  const fetchSupplierConfig = useActionCreator(
-    companyActions.fetchSupplierConfigs,
-  );
   const { values: formValues } = useFormikContext<GeneralSettings>();
   const [supplierConfiguration, setSupplierConfiguration]
     = React.useState<SupplierConfig[]>();
-  const [capabilities, setCapabilities] = React.useState<OptionType[]>();
-  const [services, setServices] = React.useState<OptionType[]>();
-  const [types, setTypes] = React.useState<OptionType[]>();
   const [editedSupplierConfiguration, setEditedSupplierConfiguration]
     = React.useState<EditableSupplierConfig>();
+  const manageConfigDialog = useDialog();
 
   const discardSupplierConfiguration = () =>
     setEditedSupplierConfiguration(undefined);
@@ -50,45 +45,12 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     companyActions.updateGeneralSettings,
   );
 
-  const capabilitiesAsync = useAsync<OptionType[]>({
-    onSuccess: setCapabilities,
-    onError: toastError,
-  });
-
-  const supplierServicesAsync = useAsync<OptionType[]>({
-    onSuccess: setServices,
-    onError: toastError,
-  });
-
-  const supplierTypesAsync = useAsync<OptionType[]>({
-    onSuccess: setTypes,
-    onError: toastError,
-  });
-
   const async = useAsync({
     onError: (error) => {
       setSupplierConfiguration(supplierConfiguration);
       toastError(error);
     },
   });
-
-  useEffect(() => {
-    capabilitiesAsync.start(
-      fetchSupplierConfig,
-      SUPPLIER_FIELDS.capabilities,
-      capabilitiesAsync,
-    );
-    supplierServicesAsync.start(
-      fetchSupplierConfig,
-      SUPPLIER_FIELDS.services,
-      supplierServicesAsync,
-    );
-    supplierTypesAsync.start(
-      fetchSupplierConfig,
-      SUPPLIER_FIELDS.type,
-      supplierTypesAsync,
-    );
-  }, []);
 
   useEffect(() => {
     setSupplierConfiguration(formValues?.supplierConfig);
@@ -164,9 +126,13 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       supplierTypeId: '',
       services: [],
       [MODE_FIELD]: Mode.add,
-      services_edit: '',
-      capabilities_edit: '',
+      services_edit: [],
+      capabilities_edit: [],
     });
+  };
+
+  const manageConfiguration = () => {
+    manageConfigDialog.open();
   };
 
   const mappedLocations
@@ -217,9 +183,9 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     onActiveStateChange: isActive ? changeLocationActiveState : undefined,
     onDiscard: discardSupplierConfiguration,
     onDelete: isActive ? deleteSupplierConfiguration : undefined,
-    capabilities,
-    services,
-    types,
+    capabilities: formValues.supplierCapabilities,
+    services: formValues.supplierServices,
+    types: formValues.supplierTypes,
     onConfirm: submitForm,
   });
 
@@ -239,7 +205,9 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       {...props}
       title={translate(props.title)}
       onAddNew={isActive ? addSupplierConfig : undefined}
+      onManageItems={manageConfiguration}
     >
+      <ManageConfigurationDialog dialog={manageConfigDialog} />
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}

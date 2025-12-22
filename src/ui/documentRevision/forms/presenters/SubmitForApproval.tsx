@@ -1,23 +1,36 @@
 import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { translate } from '../../../../common/intl';
+import { Approval, ApprovalStatus } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus, ErrorCodes, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+  ErrorCodes,
+  RevisionChangeType,
+} from '../../../../state/ducks/documentRevisions/types';
+import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
+import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
+import {
+  checkIsDocumentEquipment,
+  checkIsDocumentLHR,
+  checkIsDocumentMPIOutput,
+} from '../../helpers/checkDocumentGroup';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -40,7 +53,7 @@ export interface ApprovalFailureResponse {
   msgs: string[]
   isWarning: boolean
   isError: boolean
-  itemsAsOfferingNotApproved: Array<{docId: string, displayRevision: string}>
+  itemsAsOfferingNotApproved: Array<{ docId: string, displayRevision: string }>
   isSupplierUndefined?: boolean
   errorItems: ApprovalItem[]
   warningItems: ApprovalItem[]
@@ -59,14 +72,37 @@ export const SubmitForApproval: React.FC<Props> = ({
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
+  const history = useHistory();
   const dialog = useDialog();
   const supplierStatusDialog = useDialog();
-  const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const isEquipment = checkIsDocumentEquipment(currentDocumentType?.groupOptions);
-  const isObsolete = isEquipment ? false : revisionChangeType === RevisionChangeType.Obsolete;
-  const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
+  const applyTransition = useActionCreator(
+    documentRevisionsActions.applyTransition,
+  );
+  const closeWorkOrder = useActionCreator(taskActions.closeWO);
+  const isEquipment = checkIsDocumentEquipment(
+    currentDocumentType?.groupOptions,
+  );
+  const isObsolete = isEquipment
+    ? false
+    : revisionChangeType === RevisionChangeType.Obsolete;
+  const isTypeMpiOutput = checkIsDocumentMPIOutput(
+    currentDocumentType?.groupOptions,
+  );
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
-  let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
+  let label = isTypeMpiOutput
+    ? 'record.complete.step.mpi.step'
+    : 'record.submit.for.approval';
+  const hasPendingApprovals = documentRevision?.approvals?.some(
+    (approval: Approval) =>
+      [ApprovalStatus.Draft, ApprovalStatus.Pending].includes(approval.status),
+  );
+
+  const isApproverAdded = !documentRevision?.approvals?.some(
+    (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
+  );
+
+  const isDisabledApproval
+    = isTypeMpiOutput && (isApproverAdded || hasPendingApprovals);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
@@ -78,7 +114,10 @@ export const SubmitForApproval: React.FC<Props> = ({
     onError: (error) => {
       try {
         const parsedError = JSON.parse(error as string);
-        if (parsedError.status === ErrorCodes.PRECONDITION_FAILED && parsedError.response) {
+        if (
+          parsedError.status === ErrorCodes.PRECONDITION_FAILED
+          && parsedError.response
+        ) {
           setErrorResponse(parsedError.response as ApprovalFailureResponse);
           supplierStatusDialog.open();
         } else {
@@ -99,19 +138,35 @@ export const SubmitForApproval: React.FC<Props> = ({
       releaseRecord();
     },
   });
+  const closeWOAsync = useAsync({
+    onSuccess: () => {
+      dispatch(documentRevisionsActions.load(docRevId));
+      const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
+        documentId:
+          documentRevision.smartReferencesTo?.[0]?.toDocRev?.documentId ?? '',
+        documentRevisionId:
+          documentRevision.smartReferencesTo?.[0]?.toDocRevId ?? '',
+      });
+      history.push(documentVersionUrl, { toTabId: 'details' });
+    },
+  });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (!hasBuildType && isLhrDoc) {
       toastError(translate('form.builder.lhr.build.type.error.message'));
       return;
     }
-    releaseAsync.start(
-      applyTransition,
-      docRevId,
-      ignoreWarning ?? false,
-      'in_review',
-      releaseAsync,
-    );
+    if (isTypeMpiOutput) {
+      releaseAsync.start(closeWorkOrder, docRevId, closeWOAsync);
+    } else {
+      releaseAsync.start(
+        applyTransition,
+        docRevId,
+        ignoreWarning ?? false,
+        'in_review',
+        releaseAsync,
+      );
+    }
   };
 
   if (!docRevId || status !== DocumentRevisionStatus.Draft) {
@@ -121,21 +176,26 @@ export const SubmitForApproval: React.FC<Props> = ({
   return (
     <>
       {isNewLayout ? (
-        renderAsButton ? <StyledButton
-          color="primary"
-          onClick={isObsolete ? dialog.open : releaseRecord}
-          id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
-        >
-          <Text message={isObsolete ? 'common.void' : label} />
-        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
-          <StyledMenuListItemText
+        renderAsButton ? (
+          <StyledButton
+            color="primary"
+            disabled={isDisabledApproval}
             onClick={isObsolete ? dialog.open : releaseRecord}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
-            primary={<Text message={isObsolete ? 'common.void' : label} />}
-          />
-        </StyledMenuListItem>
+          >
+            <Text message={isObsolete ? 'common.void' : label} />
+          </StyledButton>
+        ) : (
+          <StyledMenuListItem button alignItems="flex-start">
+            <StyledMenuListItemText
+              onClick={isObsolete ? dialog.open : releaseRecord}
+              id="ApproveAndRelease-button"
+              data-cy="ApproveAndRelease-button"
+              primary={<Text message={isObsolete ? 'common.void' : label} />}
+            />
+          </StyledMenuListItem>
+        )
       ) : (
         <Button
           color="secondary"
@@ -159,7 +219,8 @@ export const SubmitForApproval: React.FC<Props> = ({
         <SupplierStatusDialog
           dialog={supplierStatusDialog}
           data={errorResponse}
-          confirmAction={(e) => releaseRecord(e, true)} />
+          confirmAction={(e) => releaseRecord(e, true)}
+        />
       )}
     </>
   );

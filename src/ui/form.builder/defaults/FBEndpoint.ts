@@ -52,6 +52,7 @@ export enum FBEndpoint {
   FetchAutocompleteValue = '/autocomplete_options/${id}/${optionId}',
   UseOverride = '/lhr/lhrs/${id}/use_override',
   RemoveOverride = '/lhr/lhrs/${id}/remove_override/${refId}',
+  EditOverride = '/lhr/lhrs/${id}/reference/${refId}/edit_override',
   Notes = '/notes',
   DocumentRevisionPatch = '/document_revisions/${id}',
   ChangeRequestPatch = '/change_requests/${id}',

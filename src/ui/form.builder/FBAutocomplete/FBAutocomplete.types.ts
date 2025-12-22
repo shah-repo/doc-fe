@@ -33,4 +33,5 @@ export type FBAutocompleteProps =
     */
    disableBackspace?: boolean
    disableChipDelete?: boolean
+   isTypeLhrBuild?: boolean
  };

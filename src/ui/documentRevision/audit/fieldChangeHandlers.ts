@@ -1,4 +1,4 @@
-import { translate } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import { Audit } from '../../../state/ducks/audit/types';
 import { SHIPPING_ADDRESS_FIELDS } from '../../form.builder/FBShippingInfo/constants';
 
@@ -9,6 +9,17 @@ export const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 interface ChangeFieldType {
   change: Audit
   fbLabel: FBLabel
+}
+
+interface SmartReferenceMeta {
+  lotDocId?: string
+  startedBy: string
+  completedBy: string
+  materialId?: string
+  equipmentId?: string
+  quantity?: number
+  unit?: string
+  lotPart?: string
 }
 
 export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType | undefined => {
@@ -156,4 +167,75 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): Chan
   }
 
   return { change, fbLabel };
+};
+
+export const getMaterialRelacmentAuditLabel = (
+  field: string, fieldType: string, meta: SmartReferenceMeta|undefined, stepIndex = 1,
+): string => {
+  const { lotPart, lotDocId, materialId } = meta || {};
+  let type = '';
+  if (materialId) {
+    switch (fieldType) {
+      case 'BOOLEAN_NEW':
+        type = (field === 'quantity') ? getMaterialRelacmentAuditField('assigned to') : getMaterialRelacmentAuditField('added to');
+        break;
+      case 'BOOLEAN_EDITED':
+        type = 'deleted for';
+        break;
+      case 'NUMBER_EDITED':
+        type = field === 'quantity' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
+        break;
+      case 'STRING_EDITED':
+        type = field === 'unit' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
+        break;
+      default:
+        break;
+    }
+  } else {
+    type = fieldType === 'BOOLEAN_NEW' ? getMaterialRelacmentAuditField('added') : getMaterialRelacmentAuditField('deleted');
+  }
+
+  let label = '';
+  if (field === 'lot') {
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotPart,
+        field: 'Lot',
+        type,
+      });
+  } else if (field === 'quantity') {
+    const lotDocIdUpdated = fieldType === 'NUMBER_EDITED' ? '' : lotDocId;
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotDocIdUpdated,
+        field: 'Quanity',
+        type,
+      });
+  } else if (field === 'unit') {
+    const lotDocIdUpdated = fieldType === 'STRING_EDITED' ? '' : lotDocId;
+    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+      {
+        step: stepIndex,
+        value: lotDocIdUpdated,
+        field: 'Unit',
+        type,
+      });
+  } else if (field === 'actualId') {
+    label = intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT' },
+      {
+        step: stepIndex,
+        field: 'Equipment',
+        type,
+      });
+  }
+  return label;
+};
+
+export const getMaterialRelacmentAuditField = (type: string): string => {
+  return intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT.field' },
+    {
+      type,
+    });
 };

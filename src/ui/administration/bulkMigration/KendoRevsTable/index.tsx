@@ -28,6 +28,7 @@ import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { Colors } from '../../../layout/theme-next';
+import { useBulkMigrationContext } from '../BulkMigtationContext';
 import { MigrationStatus, SelectedItemDetails, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
 import {
@@ -47,13 +48,11 @@ const idGetter = getter(DATA_ITEM_KEY);
 interface KendoRevsTableProps {
   scanId: string
   updateRevsTable: number
-  handleSelectedRowsChange: (selected: SelectedItemDetails[]) => void
 }
 
 const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
   scanId,
   updateRevsTable,
-  handleSelectedRowsChange,
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{ [key: string]: string }>({});
@@ -72,6 +71,9 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     selected,
     setSelected,
   } = useBulkMigration();
+  const { selectedItems, setSelectedItems } = useBulkMigrationContext();
+  const selectedItemsLength = selectedItems.length;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -94,10 +96,6 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     );
   }, []);
 
-  useEffect(() => {
-    handleSelectedRowsChange(selected);
-  }, [selected.length]);
-
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelectedDetails: SelectedItemDetails[] = data.map((n) => ({
@@ -105,15 +103,35 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
         action: n.proposedAction,
       }));
       setSelected(newSelectedDetails);
-      const newSelectedRows = data.reduce<{ [id: string]: boolean }>(
-        (selectedRows, item) => ({ ...selectedRows, [idGetter(item)]: true }),
-        {},
+      setSelectedRows((prevSelectedRows = {}) => {
+        const newSelectedRows = data.reduce<{ [id: string]: boolean }>(
+          (rows, item) => ({ ...rows, [idGetter(item)]: true }),
+          {},
+        );
+        return { ...prevSelectedRows, ...newSelectedRows };
+      });
+
+      // global state update - add current page all item
+      const existingRevIds = new Set(selectedItems.map(item => item.docRevId));
+      const uniqueNewItems = newSelectedDetails.filter(
+        item => !existingRevIds.has(item.docRevId),
       );
-      setSelectedRows(newSelectedRows);
+      setSelectedItems((prev) => [...prev, ...uniqueNewItems]);
       return;
     }
     setSelected([]);
-    setSelectedRows(undefined);
+    setSelectedRows((prevSelectedRows = {}) => {
+      const currentPageKeys = data.map(item => idGetter(item));
+      const newSelectedRows = { ...prevSelectedRows };
+      currentPageKeys.forEach(key => delete newSelectedRows[key]);
+      return newSelectedRows;
+    });
+
+    // global state update - remove current page all item
+    const revIds = new Set(data.map(item => item.docRevId));
+    setSelectedItems((prev) =>
+      prev.filter(item => !revIds.has(item.docRevId)),
+    );
   };
 
   useEffect(() => {
@@ -196,6 +214,19 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
       return selectedDetails;
     }, []);
     setSelected(newSelectedDetails);
+
+    // global state update - current page selected/disselected item
+    const isSelected = newSelectedState[dataItem.docRevId];
+    const itemDetails = { docRevId: dataItem.docRevId, action: dataItem.proposedAction };
+    let updatedSelectedItems;
+
+    if (isSelected) {
+      const exists = selectedItems.some(item => item.docRevId === itemDetails.docRevId);
+      updatedSelectedItems = exists ? selectedItems : [...selectedItems, itemDetails];
+    } else {
+      updatedSelectedItems = selectedItems.filter(item => item.docRevId !== itemDetails.docRevId);
+    }
+    setSelectedItems(updatedSelectedItems);
   };
 
   const getRowColor = (row: SupplierScanResultRevision) => {
@@ -277,7 +308,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
           <Grid
             container
             justify="space-between"
-            className={cx({ [classes.revsTableSelectedHighlight]: selected.length > 0 })}
+            className={cx({ [classes.revsTableSelectedHighlight]: selectedItemsLength > 0 })}
           >
             <Grid item className={classes.revsTableRefreshBox}>
               <Typography variant="h4" id="tableTitle" className={classes.revsTableRefreshText} component="div">
@@ -298,9 +329,9 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
                   }
                 />
               </Typography>
-              {selected.length > 0 && (
+              {selectedItemsLength > 0 && (
                 <Typography color="inherit" variant="subtitle1" component="div" className={classes.revsTableSelected}>
-                  {translate('administration.bulk.migration.supplier.rev.selected', { length: selected.length })}
+                  {translate('administration.bulk.migration.supplier.rev.selected', { length: selectedItemsLength })}
                 </Typography>
               )}
             </Grid>
