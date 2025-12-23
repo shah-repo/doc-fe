@@ -240,7 +240,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue('formInput',
-            omit(formStateContext?._currentValue,
+            omit(get(formStateContext?._currentValue, documentRevision.id),
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 'partType', 'childForRevise']));
         }
