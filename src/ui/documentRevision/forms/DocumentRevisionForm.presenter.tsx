@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { authSelectors } from '../../../state/ducks/auth';
-import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -26,6 +26,7 @@ import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDoc
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
+import DocIdInputNew from './presenters/DocIdInput.new';
 import DocumentSecurity from './presenters/DocumentSecurity';
 import DocumentTypeSelect from './presenters/DocumentTypeSelect';
 import EquipmentSpecification from './presenters/EquipmentSpecification';
@@ -146,6 +147,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
+  const isInternalTypeNumbering = documentRevision.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
   useEffect(() => {
     if (!redlineActive) {
       return;
@@ -261,16 +264,31 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>}
           {isDocIdVisible && <Grid item xs={6}>
-            <DocIdInput
-              document={values.document}
-              {...{
-                isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
-                documentTypesById,
-                setDocId,
-                documentTypeId,
-                type,
-              }}
-            />
+            {
+              isInternalTypeNumbering
+                && <DocIdInput
+                  document={values.document}
+                  {...{
+                    isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
+                    documentTypesById,
+                    setDocId,
+                    documentTypeId,
+                    type,
+                  }}
+                />
+            }
+            {
+              !isInternalTypeNumbering
+                && <DocIdInputNew
+                  documentTypeId={documentTypeById.id}
+                  documentAcronym={documentTypeById.documentTypeAcronym}
+                  isDisabled={false}
+                  docId={initialValues.document?.docId}
+                  numberingStyle={documentRevision.numberingStyle}
+                  isShownOnDialog={true}
+                  handleDocIdUpdated={() => ({})}
+                />
+            }
           </Grid>}
           {enableRevision && <Grid item xs={6}>
             {/* hack for rerender revision stage */}

@@ -1,5 +1,5 @@
 import { get, isEmpty, maxBy, pick } from 'lodash';
-import { DocumentType, DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from '../../../state/ducks/documentRevisions/types';
 import FBDRStore from '../../form.builder/stores/ui/FBDRStore';
 import { DEFAULT_INITIAL_VALUES } from '../DocumentRevisionCreate.container';
@@ -229,3 +229,9 @@ export const toDocumentRevisionFormValuesForOutput = (
 };
 
 export const getActiveDocumentTypes = (documentTypes: DocumentType[]) => documentTypes.filter((type) => type.active);
+
+export const stripDocIdOfAcronym = (initialDocId: string, acronym: string): string => {
+  const escapedPrefix = acronym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`^${escapedPrefix}`);
+  return initialDocId?.replace(regex, '');
+};
