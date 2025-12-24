@@ -57,3 +57,17 @@ export const isLhrInvalid = (
 
   return false;
 };
+
+export const calculateRejectedQuantity = (
+  formState?: FBFormState,
+): number => {
+  const start = Number(
+    formState?.getFieldValue(LHRS_START_QUANTITY) ?? 0,
+  );
+
+  const accepted = Number(
+    formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY) ?? 0,
+  );
+
+  return Math.max(0, start - accepted);
+};
