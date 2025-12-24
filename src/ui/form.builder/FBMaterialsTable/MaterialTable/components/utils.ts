@@ -4,11 +4,22 @@ import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constan
 import { EditableMaterial, Material } from '../types';
 
 interface SchemaEquipment {
-  title: string
+  title?: string
 }
 
 interface EquipmentMetadata {
   equipmentId?: string
+}
+
+export interface NeededMaterial {
+  materialId?: string
+  quantity?: number
+  title?: string
+}
+
+export interface UsedMaterial {
+  materialId?: string
+  quantity?: number
 }
 
 export const isAddMaterial = (dataItem: EditableMaterial): boolean => {
@@ -59,15 +70,18 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 };
 
 export const isMpiOutputInsufficientQty = (
-  neededQuantity?: any[][],
-  usedQuantity?: any[],
+  neededQuantity?: NeededMaterial[][],
+  usedQuantity?: UsedMaterial[],
   startQuantity?: number,
 ): boolean => {
-  const flatNeeded = (neededQuantity ?? []).flat();
+  const flatNeeded: NeededMaterial[] = (neededQuantity ?? []).flat();
 
   const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
     (acc, item) => {
       const key = item?.title;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
       acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0) * (startQuantity ?? 0);
       return acc;
     },
@@ -77,6 +91,9 @@ export const isMpiOutputInsufficientQty = (
   const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
     (acc, item) => {
       const key = item?.materialId;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
       acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0);
       return acc;
     },
