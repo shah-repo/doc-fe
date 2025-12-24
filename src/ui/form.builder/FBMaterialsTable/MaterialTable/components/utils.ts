@@ -11,13 +11,13 @@ interface EquipmentMetadata {
   equipmentId?: string
 }
 
-export interface NeededMaterial {
+interface NeededMaterial {
   materialId?: string
   quantity?: number
   title?: string
 }
 
-export interface UsedMaterial {
+interface UsedMaterial {
   materialId?: string
   quantity?: number
 }
