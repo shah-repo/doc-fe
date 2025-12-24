@@ -3,6 +3,14 @@ import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.
 import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
 import { EditableMaterial, Material } from '../types';
 
+interface SchemaEquipment {
+  title: string
+}
+
+interface EquipmentMetadata {
+  equipmentId?: string
+}
+
 export const isAddMaterial = (dataItem: EditableMaterial): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
@@ -59,8 +67,8 @@ export const isMpiOutputInsufficientQty = (
 
   const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
     (acc, item) => {
-      const key = item.title;
-      acc[key] = (acc[key] ?? 0) + (item.quantity ?? 0) * (startQuantity ?? 0);
+      const key = item?.title;
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0) * (startQuantity ?? 0);
       return acc;
     },
     {},
@@ -68,8 +76,8 @@ export const isMpiOutputInsufficientQty = (
 
   const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
     (acc, item) => {
-      const key = item.materialId;
-      acc[key] = (acc[key] ?? 0) + (item.quantity ?? 0);
+      const key = item?.materialId;
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0);
       return acc;
     },
     {},
@@ -79,3 +87,27 @@ export const isMpiOutputInsufficientQty = (
     return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
   });
 };
+
+export function areRequiredEquipmentsSelected (
+  equipmentsFromSchema: SchemaEquipment[][],
+  equipmentsFromMetadata: EquipmentMetadata[],
+): boolean {
+  if (!equipmentsFromSchema.length) {
+    return true;
+  }
+
+  const requiredEquipmentIds = equipmentsFromSchema
+    .flat()
+    .map((equipment) => equipment?.title)
+    .filter(Boolean);
+
+  if (!requiredEquipmentIds.length) {
+    return true;
+  }
+
+  const selectedEquipmentIds = new Set(
+    equipmentsFromMetadata.map((item) => item?.equipmentId).filter(Boolean),
+  );
+
+  return requiredEquipmentIds.every((id) => selectedEquipmentIds.has(id));
+}
