@@ -7,7 +7,7 @@ import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
@@ -58,11 +58,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   public get buildTypeOptionId (): string {
     return FBAutocompleteAsyncOption.buildType;
-  }
-
-  @computed
-  public get smartReferencesTo (): SmartReference[] | undefined {
-    return this.document?.smartReferencesTo;
   }
 
   public get auth (): FBWorkspaceExternalState['auth'] | undefined {
