@@ -186,6 +186,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           );
           lhrApprovalsState?.setApprovals(activeApprovals);
           formState?.inputState.get(name)?.setRender();
+          formState?.setFieldValue(name, activeApprovals.map(a => a.approver.id), false);
         },
       );
       return () => dispose();
@@ -272,7 +273,10 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
-          addApprover(difference(fieldValue, formValue));
+          const newApprovers = difference(fieldValue, formValue);
+          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
+          const newApproversToAdd = newApprovers.filter((approver) => !existingApprovers.includes(approver));
+          addApprover(newApproversToAdd);
           removeApprover(difference(formValue, fieldValue));
         },
       );
