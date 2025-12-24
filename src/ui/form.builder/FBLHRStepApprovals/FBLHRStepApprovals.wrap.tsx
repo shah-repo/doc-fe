@@ -40,6 +40,8 @@ import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
   LHRS_START_DATE,
+  LHRS_START_QUANTITY,
+  MPI_PROCEDURE_BUILT_IN_ATTACHMENTS,
 } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import FBLHRStepApprovalsState from './FBLHRStepApprovals.state';
@@ -190,6 +192,8 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     }, []);
 
     const completeWO = useActionCreator(taskActions.completeWO);
+    const pendingApproval = useActionCreator(taskActions.pendingApproval);
+    const pendingLHRSTriggeredRef = React.useRef(false);
 
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
@@ -270,6 +274,38 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           const formValue: string[] = get(formState?.oldValues, name);
           addApprover(difference(fieldValue, formValue));
           removeApprover(difference(formValue, fieldValue));
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      const dispose = reaction(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        () => [
+          formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_START_QUANTITY)?.value,
+          formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
+        ],
+        () => {
+          if (
+            !lhrApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
+          }
         },
       );
       return () => dispose();
