@@ -10,7 +10,7 @@ import { useFormContext } from '../../components/forms/FormContext';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
-import { isLhrInvalid, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
+import { calculateRejectedQuantity, isLhrInvalid, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -53,6 +53,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)
     );
+
+    if (name === LHRS_REJECTED_QUANTITY) {
+      disabled = true;
+      value = calculateRejectedQuantity(formState);
+    }
 
     isTranslation(placeholder) && (placeholder = intl.formatMessage({ id: placeholder }));
     onFocus = () => {
