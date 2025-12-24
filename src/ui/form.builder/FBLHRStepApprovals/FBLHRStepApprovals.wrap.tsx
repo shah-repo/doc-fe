@@ -186,7 +186,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           );
           lhrApprovalsState?.setApprovals(activeApprovals);
           formState?.inputState.get(name)?.setRender();
-          formState?.setFieldValue(name, activeApprovals.map(a => a.approver.id), true);
+          formState?.setFieldValue(name, activeApprovals.map(a => a.approver.id), false);
         },
       );
       return () => dispose();
