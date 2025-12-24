@@ -147,7 +147,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
-  const isInternalTypeNumbering = documentRevision.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+  const isInternalTypeNumbering = documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+  const documentId = documentRevision?.documentId;
 
   useEffect(() => {
     if (!redlineActive) {
@@ -283,10 +284,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   documentTypeId={documentTypeById.id}
                   documentAcronym={documentTypeById.documentTypeAcronym}
                   isDisabled={false}
+                  documentId={documentId}
                   docId={initialValues.document?.docId}
                   numberingStyle={documentRevision.numberingStyle}
-                  isShownOnDialog={true}
-                  handleDocIdUpdated={() => ({})}
+                  isShownOnDialog={false}
                 />
             }
           </Grid>}

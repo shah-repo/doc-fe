@@ -90,3 +90,7 @@ export interface DocumentTransitionResponse {
 export interface AccessRequestBody {
   employee: DocumentTransitionResponse
 }
+
+export interface DocIdRequestBody {
+  docId: string
+}

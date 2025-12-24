@@ -37,12 +37,12 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
         required={false}
         inputProps={{ 'data-lpignore': lpignore, 'data-cy': dataCy, className: inputProps?.className }}
         {...fieldProps.field}
-        {...inputProps}
         onBlur={(evt) => {
           fieldProps.field.onBlur(evt);
           inputProps?.onBlur?.(evt);
           submitForm();
         }}
+        {...inputProps}
         className={inputStyleProps}
       />
     </Field>

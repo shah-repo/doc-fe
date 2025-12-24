@@ -142,6 +142,7 @@ DocumentRevisionFormContainerProps
         // after groupOptions have been loaded the initial values are updated and the docId is removed
         docId,
       },
+      docId,
       retrain,
       renderHTML,
       securityGroups,

@@ -2,13 +2,16 @@ import { InputAdornment } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { documentsSelectors } from '../../../../state/ducks/documents';
+import { documentsActions, documentsSelectors } from '../../../../state/ducks/documents';
+import { DocIdRequestBody } from '../../../../state/ducks/documents/types';
 import { AsyncStatus } from '../../../../state/types';
 import InputField from '../../../components/forms/fields/Input';
 import { toastError } from '../../../components/notifications';
 import { styles as AutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocId } from '../../../hooks/docCustomization/useCustomization';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 import { styles } from './styles/DocIdInput.styles';
 
 interface Props {
@@ -18,6 +21,7 @@ interface Props {
   documentTypeId?: string
   numberingStyle?: DOCUMENT_NUMBERING_STYLE
   isShownOnDialog?: boolean
+  documentId?: string
   handleDocIdUpdated?: (docId: string) => void
 }
 
@@ -28,18 +32,28 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   documentAcronym,
   numberingStyle,
   isShownOnDialog = false,
+  documentId,
   handleDocIdUpdated,
 }) => {
   const classes = styles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
 
   const [docIdEntered, setDocIdEntered] = useState<string>(docId);
+  const [isRequestInProgress, setIsRequestInProgress] = useState<boolean>(false);
+
   useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
       toastError(loadProposedDocIdState.message);
     }
   }, [loadProposedDocIdState]);
   const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
+
+  const sendDocIdUpdateRequestAction = useActionCreator(documentsActions.sendDocIdUpdateRequest);
+  const sendDocIdUpdateRequestAsync = useAsync({
+    onSuccess: () => {
+      setIsRequestInProgress(false);
+    },
+  });
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -50,27 +64,50 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     }
   };
 
+  const handleDocIdBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    if (!isShownOnDialog) {
+      // Make a call to update the docId on the document
+      const body: DocIdRequestBody = {
+        docId: `${documentAcronym}${value}`,
+      };
+      setIsRequestInProgress(true);
+      sendDocIdUpdateRequestAsync.start(
+        sendDocIdUpdateRequestAction,
+        documentId,
+        body,
+        sendDocIdUpdateRequestAsync,
+      );
+    }
+  };
+
   if (!isVisible && !isShownOnDialog) {
     return null;
   }
 
+  const inputProps = {
+    id: 'document.docId',
+    disabled: isDisabled,
+    startAdornment: <InputAdornment position="start">{documentAcronym}</InputAdornment>,
+    value: docIdEntered,
+    onChange: handleDocIdChange,
+    onBlur: handleDocIdBlur,
+  };
+
   return (
-    <CustomLabelTooltip {...{ tooltipConfig }}>
-      <InputField
-        name="document.docId"
-        label={label}
-        inputProps={{
-          id: 'document.docId',
-          value: docIdEntered,
-          disabled: isDisabled,
-          onChange: handleDocIdChange,
-          startAdornment: <InputAdornment position="start">{documentAcronym}</InputAdornment>,
-        }}
-        validate={validators}
-        inputStyleProps={classes.input}
-        labelProps={AutoCompleteStyles.labelStyle}
-      />
-    </CustomLabelTooltip>
+    <>
+      {isRequestInProgress && <span>Updating DocId</span>}
+      <CustomLabelTooltip {...{ tooltipConfig }}>
+        <InputField
+          name="document.docId"
+          label={label}
+          inputProps={inputProps}
+          validate={validators}
+          inputStyleProps={classes.input}
+          labelProps={AutoCompleteStyles.labelStyle}
+        />
+      </CustomLabelTooltip>
+    </>
   );
 };
 
