@@ -18,6 +18,7 @@ export const TreeListSchema = ({
   onScanClick,
   isEnableActualIdAddition,
   isEBProcedure,
+  onRowClick,
 }) => [
   {
     field: 'plannedId',
@@ -26,7 +27,7 @@ export const TreeListSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} />,
     sortable: false,
   },
   {

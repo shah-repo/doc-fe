@@ -518,6 +518,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onConfirm: formik.submitForm,
     isLHRProductionBuild,
     onScanClick: openScanDialog,
+    onRowClick: editPartItem,
   });
 
   React.useEffect(() => {
