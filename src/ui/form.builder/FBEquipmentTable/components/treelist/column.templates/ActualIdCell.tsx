@@ -53,7 +53,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const shouldEnforceEqProdConfig = isLHRProductionBuild && isEqProdConfigEnforced;
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
-  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId, isEquipmentSpecification);
+  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
+  const filteredEquipmentOptions = propEquipmentOptions.filter((option) => {
+    return option.value === equipmentSpecId;
+  });
+  const equipmentOptions = isEquipmentSpecification ? equipmentSpcOptions : filteredEquipmentOptions;
   const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
   const isDateOverdue = (date: MomentInput): boolean => {
     if (!date) {
@@ -79,7 +83,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         {...getFieldProps(field)}
         value={value}
         disabled={!!actualId}
-        options={equipmentSpcOptions}
+        options={equipmentOptions}
         blurOnSelect
         disableOpenOnFocus
         placeholder={translate('common.select')}
