@@ -581,7 +581,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                         <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{lotDocId}</div>
                       </>
                     )}
-                    {quantity && (
+                    {(quantity ?? null) !== null && (
                       <>
                         <Typography className={classes.auditKey}>
                           <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
