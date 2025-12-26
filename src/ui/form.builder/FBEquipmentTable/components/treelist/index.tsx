@@ -308,6 +308,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     isDisabled,
     isEnableActualIdAddition,
     isEBProcedure,
+    onRowClick: editEquipmentItem,
   });
 
   const [columns, setColumns]
