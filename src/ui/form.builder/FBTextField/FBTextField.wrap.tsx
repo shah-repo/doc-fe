@@ -10,7 +10,7 @@ import { useFormContext } from '../../components/forms/FormContext';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
-import { calculateRejectedQuantity, isLhrInvalid, LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
+import { isLhrInvalid, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FC<T>,
@@ -53,30 +53,6 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)
     );
-
-    if (name === LHRS_REJECTED_QUANTITY) {
-      disabled = true;
-      const initial = calculateRejectedQuantity(formState);
-      value = formState?.getFieldValue(LHRS_REJECTED_QUANTITY) ?? initial;
-      formState?.setFieldValue(LHRS_REJECTED_QUANTITY, initial, false);
-    }
-
-    useEffect(() => {
-      if (name !== LHRS_REJECTED_QUANTITY || !formState) return;
-
-      const disposer = reaction(
-        () => ({
-          start: formState.getFieldValue(LHRS_START_QUANTITY),
-          accepted: formState.getFieldValue(LHRS_ACCEPTED_QUANTITY),
-        }),
-        () => {
-          const rejected = calculateRejectedQuantity(formState);
-          formState.setFieldValue(LHRS_REJECTED_QUANTITY, rejected, true);
-        },
-      );
-
-      return () => disposer();
-    }, [name, formState]);
 
     isTranslation(placeholder) && (placeholder = intl.formatMessage({ id: placeholder }));
     onFocus = () => {
