@@ -204,9 +204,10 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     });
 
     onApproveClick = (approvalId: string) => {
+      const acceptedQty = formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value;
+      const rejectedQty = formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value;
       if (
-        !formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value
-        || !formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value
+        Number.isNaN(acceptedQty) || Number.isNaN(rejectedQty)
       ) {
         toastError(
           'Error: Please fill in Accepted and Rejected quantity before approving.',
