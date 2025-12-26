@@ -37,7 +37,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
       </FormikField>
     );
 
-  let displayValue = (dataItem[field] ?? null) !== null ? Number(toFixed(dataItem[field], MAX_DECIMALS)) : CELL_EMPTY_VALUE;
+  let displayValue = dataItem[field] ? Number(toFixed(dataItem[field], MAX_DECIMALS)) : CELL_EMPTY_VALUE;
 
   if (dataItem.title && typeof displayValue === 'number') {
     displayValue = displayValue * lhrsQuantity;
