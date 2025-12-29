@@ -1508,7 +1508,7 @@
   "form.builder.materials": "Materials",
   "form.builder.materials|s": "Material",
   "form.builder.eqmaintenance": "Equipment",
-  "form.builder.serialNumber": "Serial Number",
+  "form.builder.serialNumber": "Serial(s)",
   "form.builder.actualId": "Actual Id",
   "form.builder.assigned.lots.label": "{stepLabel} {keyLabelType} Lot {keyLabel}",
   "form.builder.preventative.maintenance": "Preventative Maintenance",

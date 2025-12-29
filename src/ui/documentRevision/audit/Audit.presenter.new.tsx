@@ -231,7 +231,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           keyLabel = intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
 
-        if (isAssignedLots) {
+        if (isAssignedLots && valueKey !== 'serialNumber') {
           fbLabel = intl.formatMessage({
             id: 'form.builder.assigned.lots.label',
           }, {
