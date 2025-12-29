@@ -317,6 +317,35 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => ({
+          length: workspaceState?.schema?.length,
+          items: workspaceState?.schema?.map(item => ({ ...item })),
+        }),
+        () => {
+          if (
+            !lhrApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
+          }
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     function addApprover (ids?: string[]) {
       if (!id) {
         return;
