@@ -72,8 +72,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     owners,
     ...props
   }: T) => {
-    const { workspaceState, formState, schemaState } = FB.useStores();
-    console.log('Rendering FBLHRStepApprovals.wrap with workspaceState:', schemaState);
+    const { workspaceState, formState } = FB.useStores();
     const {
       document,
       id,
