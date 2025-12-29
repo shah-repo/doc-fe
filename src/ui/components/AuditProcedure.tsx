@@ -120,7 +120,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       : '';
     const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
 
-    if (isNested) {
+    if (isNested && key !== 'serialNumber') {
       fbLabel = intl.formatMessage({
         id: 'form.builder.assigned.lots.label',
       }, {
