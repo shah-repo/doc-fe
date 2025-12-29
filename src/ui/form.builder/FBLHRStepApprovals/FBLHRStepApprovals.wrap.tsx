@@ -40,6 +40,8 @@ import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
   LHRS_START_DATE,
+  LHRS_START_QUANTITY,
+  MPI_PROCEDURE_BUILT_IN_ATTACHMENTS,
 } from '../FBLHRStep/utils';
 import FBStore from '../FBStore/FBStore';
 import FBLHRStepApprovalsState from './FBLHRStepApprovals.state';
@@ -171,7 +173,28 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => workspaceState?.approvals,
+        (data) => {
+          if (!data) {
+            return;
+          }
+          const activeApprovals = filter(
+            workspaceState?.approvals,
+            (a) => a.status !== 'ABANDONED',
+          );
+          lhrApprovalsState?.setApprovals(activeApprovals);
+          formState?.inputState.get(name)?.setRender();
+          formState?.setFieldValue(name, activeApprovals.map(a => a.approver.id), false);
+        },
+      );
+      return () => dispose();
+    }, []);
+
     const completeWO = useActionCreator(taskActions.completeWO);
+    const pendingApproval = useActionCreator(taskActions.pendingApproval);
+    const pendingLHRSTriggeredRef = React.useRef(false);
 
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
@@ -181,9 +204,10 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     });
 
     onApproveClick = (approvalId: string) => {
+      const acceptedQty = formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value;
+      const rejectedQty = formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value;
       if (
-        !formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value
-        || !formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value
+        Number.isNaN(acceptedQty) || Number.isNaN(rejectedQty)
       ) {
         toastError(
           'Error: Please fill in Accepted and Rejected quantity before approving.',
@@ -250,8 +274,43 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
-          addApprover(difference(fieldValue, formValue));
+          const newApprovers = difference(fieldValue, formValue);
+          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
+          const newApproversToAdd = newApprovers.filter((approver) => !existingApprovers.includes(approver));
+          addApprover(newApproversToAdd);
           removeApprover(difference(formValue, fieldValue));
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      const dispose = reaction(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        () => [
+          formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
+          formState?.getInputState(LHRS_START_QUANTITY)?.value,
+          formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
+        ],
+        () => {
+          if (
+            !lhrApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
+          }
         },
       );
       return () => dispose();

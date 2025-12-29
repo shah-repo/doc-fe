@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps } from '..';
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, LHR_WORK_ORDER } from '..';
 import useHover from '../../hooks/useHover';
 import useStyles from './FBFieldWrapper.styles';
 import { withFBFieldWrapper } from './FBFieldWrapper.wrap';
@@ -20,15 +20,16 @@ const FBFieldWrapper: React.FC<FBFieldWrapperProps> = ({
   const classes = useStyles();
   const [ref, isHovered] = useHover<HTMLDivElement>();
   const { index = 0, name = '' } = inputProps;
+  const isWorkOrder = name === LHR_WORK_ORDER;
 
   return (
     <Box
-      {...{ ref: canUseTools ? ref : null }}
+      {...{ ref: canUseTools && !isWorkOrder ? ref : null }}
       className={cx(`fb-field-wrapper-${name}`, classes.root)}
       mt={mt}
       mb={mb}
     >
-      {canUseTools && (
+      {(canUseTools && !isWorkOrder) && (
         <Box
           className={classes.tools}
           hidden={!isHovered && !isDragging}
