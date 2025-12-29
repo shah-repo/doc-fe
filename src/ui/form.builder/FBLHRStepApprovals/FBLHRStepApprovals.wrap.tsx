@@ -72,7 +72,8 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     owners,
     ...props
   }: T) => {
-    const { workspaceState, formState } = FB.useStores();
+    const { workspaceState, formState, schemaState } = FB.useStores();
+    console.log('Rendering FBLHRStepApprovals.wrap with workspaceState:', schemaState);
     const {
       document,
       id,
@@ -294,6 +295,35 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(LHRS_START_QUANTITY)?.value,
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
         ],
+        () => {
+          if (
+            !lhrApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
+          }
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => ({
+          length: workspaceState?.schema?.length,
+          items: workspaceState?.schema?.map(item => ({ ...item })),
+        }),
         () => {
           if (
             !lhrApprovalsState?.getApprovals?.some(
