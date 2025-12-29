@@ -147,7 +147,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
-  const isInternalTypeNumbering = documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+  const isInternalTypeNumbering = !documentRevision?.numberingStyle
+    || documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
   const documentId = documentRevision?.documentId;
 
   useEffect(() => {

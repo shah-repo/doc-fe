@@ -113,7 +113,8 @@ DocumentRevisionFormContainerProps
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   document = document || ({} as Document);
 
-  const isInternalTypeNumbering = documentRevision.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+  const isInternalTypeNumbering = !documentRevision?.numberingStyle
+    || documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;

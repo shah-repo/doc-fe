@@ -53,6 +53,10 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       setIsRequestInProgress(false);
     },
+    onError: (message: string | undefined) => {
+      setIsRequestInProgress(false);
+      toastError(message);
+    },
   });
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
