@@ -26,6 +26,7 @@ import {
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import {
   ApprovalStatus,
@@ -270,7 +271,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       const dispose = reaction(
         () => formState?.newValues.get(name),
         (fieldValue: string[]) => {
-          if (workspaceState?.isPreview || !fieldValue) {
+          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI) {
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
