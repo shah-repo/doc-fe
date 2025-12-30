@@ -7,7 +7,7 @@ export interface customEQOptionType extends OptionType{
   complianceDueDate: string
   calDueDate?: string
   pmDueDate?: string
-  status: string
+  status?: string
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
   isDisabled?: boolean
@@ -51,4 +51,4 @@ export interface EquipAutoCompleteOptions {
 type EquipmentCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput' | 'eqStatus'>;

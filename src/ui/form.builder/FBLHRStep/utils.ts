@@ -8,6 +8,7 @@ export const LHRS_START_QUANTITY = 'lhrs-start-quantity';
 export const LHRS_REJECTED_QUANTITY = 'lhrs-rejected-quantity';
 export const LHRS_START_DATE = 'lhrs-start-date';
 export const LHRS_END_DATE = 'lhrs-end-date';
+export const MPI_PROCEDURE_BUILT_IN_ATTACHMENTS = 'mpi-procedure-built-in.attachments';
 
 export const generateLHRsDocs = (documentRevision?: DocumentRevision) => {
   const allReferences = concat(

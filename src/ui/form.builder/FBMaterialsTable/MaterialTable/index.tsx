@@ -1,4 +1,5 @@
 import { Box, Grid } from '@material-ui/core';
+import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
   extendDataItem,
   filterBy,
@@ -27,6 +28,7 @@ import { MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../components/notifications';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
+import { LHRS_ACCEPTED_QUANTITY } from '../../FBLHRStep/utils';
 import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureItem/FBProcedureItem.types';
 import { FB } from '../../helpers';
 import { isPartHasInsufficientQty, prepareData } from './components/utils';
@@ -57,8 +59,6 @@ import {
   MaterialTableProps,
 } from './types';
 import { withMaterialsTable } from './wrap';
-import { FilterDescriptor } from '@progress/kendo-data-query';
-import { LHRS_ACCEPTED_QUANTITY } from '../../FBLHRStep/utils';
 
 interface MaterialTreelistContextProps {
   lhrsQuantity?: number
@@ -217,16 +217,23 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         const parentIndex = state.data?.findIndex((data) => data.id === values.parentId);
 
         if (parentIndex !== -1) {
-          const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
+          let subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
 
           if (Array.isArray(subItems)) {
             const existingSubIndex = subItems.findIndex((item) => item.id === values.id);
 
             if (existingSubIndex !== -1) {
-              subItems[existingSubIndex] = {
-                ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
-                ...scanLot,
-              };
+              const shouldMoveToEnd = isEBProcedure && subItems[existingSubIndex][ADD_FIELD];
+
+              if (shouldMoveToEnd) {
+                subItems = subItems.filter((item) => item.id !== values.id);
+                subItems.push(scanLot);
+              } else {
+                subItems[existingSubIndex] = {
+                  ...omit(subItems[existingSubIndex], LOT_FIELDS_TO_OMIT),
+                  ...scanLot,
+                };
+              }
             } else {
               subItems.push(scanLot);
             }
@@ -511,6 +518,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     onConfirm: formik.submitForm,
     isLHRProductionBuild,
     onScanClick: openScanDialog,
+    onRowClick: editPartItem,
   });
 
   React.useEffect(() => {

@@ -92,11 +92,6 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         ev.target.focus();
         return;
       }
-      if (workspaceState?.document?.document.documentType.group === DocTypeGroups.PI_INSTANCE) {
-        if (isLhrInvalid(name, value, formState)) {
-          return;
-        }
-      }
       if (!name) {
         return;
       }

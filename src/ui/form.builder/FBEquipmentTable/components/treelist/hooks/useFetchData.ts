@@ -21,7 +21,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
     calDueDate: calibrationData.complianceDueDate,
     pmDueDate: preventiveMaintenanceData.complianceDueDate,
-    status: calibrationData?.status,
+    status: equipment?.eqStatus,
     value: equipment.id,
   };
 };
@@ -50,8 +50,8 @@ export const useFetchData = () => {
   });
 };
 
-export const useEquipmentOptions = (id: string, isEquipmentSpecification: boolean) => {
-  const optionId = isEquipmentSpecification ? FBAutocompleteAsyncOption.equipmentSpecifications : FBAutocompleteAsyncOption.equipment;
+export const useEquipmentOptions = (id: string) => {
+  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
   const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
 
   useEffect(() => {

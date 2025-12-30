@@ -115,13 +115,18 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const isValidLOT = (lot) => {
-    const isAcceptedStatus = isLHRProductionBuild
-      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
-      : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+    let isAcceptedStatus = false;
+    if (isEBProcedure) {
+      isAcceptedStatus = true; // No constraints on Lot Status
+    } else {
+      isAcceptedStatus = isLHRProductionBuild
+        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+        : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+    }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity;
+    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({

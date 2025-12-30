@@ -1,6 +1,7 @@
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import React from 'react';
+import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps } from '../types';
 import { styles } from './styles';
 
@@ -19,7 +20,13 @@ const TreeListCellWrapper: React.FC<CustomTreeListCellProps & { children: React.
   onClick,
 }) => {
   const classes = styles({ hasChildren });
-  const handleClick = () => {
+  const handleClick = (event) => {
+    if (dataItem[ADD_FIELD] || dataItem[MODE_FIELD]) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     onClick?.({ dataItem });
   };
   const navigationAttributes = useTableKeyboardNavigation(id);
