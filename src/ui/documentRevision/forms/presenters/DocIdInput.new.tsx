@@ -1,4 +1,5 @@
 import { InputAdornment } from '@material-ui/core';
+import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -22,6 +23,7 @@ interface Props {
   numberingStyle?: DOCUMENT_NUMBERING_STYLE
   isShownOnDialog?: boolean
   documentId?: string
+  helpText?: string
   handleDocIdUpdated?: (docId: string) => void
 }
 
@@ -33,10 +35,13 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   numberingStyle,
   isShownOnDialog = false,
   documentId,
+  helpText,
   handleDocIdUpdated,
 }) => {
   const classes = styles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
+
+  const formik = useFormikContext();
 
   const [docIdEntered, setDocIdEntered] = useState<string>(docId);
   const [isRequestInProgress, setIsRequestInProgress] = useState<boolean>(false);
@@ -72,16 +77,20 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     const value = event.target.value;
     if (!isShownOnDialog) {
       // Make a call to update the docId on the document
-      const body: DocIdRequestBody = {
-        docId: `${documentAcronym}${value}`,
-      };
-      setIsRequestInProgress(true);
-      sendDocIdUpdateRequestAsync.start(
-        sendDocIdUpdateRequestAction,
-        documentId,
-        body,
-        sendDocIdUpdateRequestAsync,
-      );
+      if (documentId) {
+        const body: DocIdRequestBody = {
+          docId: `${documentAcronym}${value}`,
+        };
+        setIsRequestInProgress(true);
+        sendDocIdUpdateRequestAsync.start(
+          sendDocIdUpdateRequestAction,
+          documentId,
+          body,
+          sendDocIdUpdateRequestAsync,
+        );
+      } else {
+        formik.setFieldValue('document.docId', `${documentAcronym}${value}`);
+      }
     }
   };
 
@@ -109,6 +118,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
           validate={validators}
           inputStyleProps={classes.input}
           labelProps={AutoCompleteStyles.labelStyle}
+          helpText={helpText}
         />
       </CustomLabelTooltip>
     </>

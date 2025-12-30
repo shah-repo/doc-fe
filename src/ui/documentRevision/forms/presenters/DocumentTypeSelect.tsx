@@ -6,6 +6,7 @@ import { authSelectors } from '../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, FBOutputDocumentType } from '../../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../../state/ducks/documents';
+import { DocumentProposedId } from '../../../../state/ducks/documents/types';
 import SelectField, { SelectOption } from '../../../components/forms/fields/Select';
 import { FBEditorPropertiesType, FBSchemaProps } from '../../../form.builder';
 import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
@@ -44,9 +45,10 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const formik = useFormikContext();
   const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
-  const asyncDocumentProposedId = useAsync({
-    onSuccess: () => {
+  const asyncDocumentProposedId = useAsync<DocumentProposedId>({
+    onSuccess: (documentProposedId) => {
       _documentRevisionFormState?.setCreateDocumentDisabled(false);
+      _documentRevisionFormState?.setNumberingStyle(documentProposedId?.numberingStyle);
     },
 
   });

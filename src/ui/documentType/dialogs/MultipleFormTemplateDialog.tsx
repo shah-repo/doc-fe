@@ -204,10 +204,8 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                       numberingStyle={numberingStyle}
                       isShownOnDialog={true}
                       handleDocIdUpdated={handleDocIdUpdated}
+                      helpText={translate('document.revision.user.numbering.help')}
                     />
-                    <Typography variant="caption" className={classes.docIdHelpText}>
-                      {translate('document.revision.user.numbering.help')}
-                    </Typography>
                   </>
                 )}
                 <DialogActions>

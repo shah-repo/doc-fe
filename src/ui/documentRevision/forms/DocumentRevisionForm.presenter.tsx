@@ -6,6 +6,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
+import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
 import { DOCUMENT_NUMBERING_STYLE, DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
@@ -37,6 +38,7 @@ import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
+import { stripDocIdOfAcronym } from './transform';
 import { DocumentRevisionFormValues } from './types';
 
 interface Props extends FormikProps<DocumentRevisionFormValues> {
@@ -147,9 +149,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
-  const isInternalTypeNumbering = !documentRevision?.numberingStyle
-    || documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+  const numberingStyle = documentRevision?.numberingStyle ?? _documentRevisionFormState?.numberingStyle;
+
+  const isNumberingStyleDifferentFromInternal = numberingStyle !== DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
   const documentId = documentRevision?.documentId;
+  const docIdEditEnabled = !documentRevision || (isDocRevStatusDraft && documentRevision?.version === 1);
+
+  const initialDocId = initialValues.document?.docId !== ''
+    ? initialValues.document?.docId : stripDocIdOfAcronym(values.document?.docId, documentTypeById?.documentTypeAcronym);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -267,7 +275,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>}
           {isDocIdVisible && <Grid item xs={6}>
             {
-              isInternalTypeNumbering
+              !isNumberingStyleDifferentFromInternal
                 && <DocIdInput
                   document={values.document}
                   {...{
@@ -280,15 +288,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 />
             }
             {
-              !isInternalTypeNumbering
+              isNumberingStyleDifferentFromInternal && documentTypeById
                 && <DocIdInputNew
                   documentTypeId={documentTypeById.id}
                   documentAcronym={documentTypeById.documentTypeAcronym}
-                  isDisabled={false}
+                  isDisabled={!docIdEditEnabled}
                   documentId={documentId}
-                  docId={initialValues.document?.docId}
-                  numberingStyle={documentRevision.numberingStyle}
+                  docId={initialDocId}
+                  numberingStyle={numberingStyle}
                   isShownOnDialog={false}
+                  helpText={translate('document.revision.user.numbering.help')}
                 />
             }
           </Grid>}

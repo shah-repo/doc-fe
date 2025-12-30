@@ -230,7 +230,10 @@ export const toDocumentRevisionFormValuesForOutput = (
 
 export const getActiveDocumentTypes = (documentTypes: DocumentType[]) => documentTypes.filter((type) => type.active);
 
-export const stripDocIdOfAcronym = (initialDocId: string, acronym: string): string => {
+export const stripDocIdOfAcronym = (initialDocId: string | undefined, acronym: string): string => {
+  if (!initialDocId) {
+    return '';
+  }
   const escapedPrefix = acronym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`^${escapedPrefix}`);
   return initialDocId?.replace(regex, '');
