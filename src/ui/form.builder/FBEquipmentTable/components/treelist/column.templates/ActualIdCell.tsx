@@ -50,7 +50,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const classes = useStyles();
   const { getFormattedDateString } = useDate();
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
-  const shouldEnforceEqProdConfig = isLHRProductionBuild && isEqProdConfigEnforced;
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
@@ -98,11 +97,13 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
             return false;
           }
 
-          if (shouldEnforceEqProdConfig && isOverdue) {
-            return true;
+          if (isEqProdConfigEnforced) {
+            if (isLHRProductionBuild && isOverdue) {
+              return true;
+            } else return !isActive;
           }
 
-          return !isActive;
+          return false;
         }}
         renderOption={(option: customEQOptionType, props) => (
           <ListItem {...props} disableGutters className={classes.listItemOption}>
