@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, get, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, get, isEmpty, isNil, keyBy, map, omit, replace, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
@@ -67,6 +67,7 @@ interface MaterialTreelistContextProps {
   isRedlineActive?: boolean
   isDisabled?: boolean
   isEBProcedure?: boolean
+  disabledOptions?: string[]
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
@@ -117,6 +118,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     inEdit: [],
   });
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+  const disabledOptions = map(items, 'title');
 
   React.useEffect(() => {
     if (isMPIProcedure || isLHRStep || isEBProcedure) {
@@ -554,6 +556,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           isRedlineActive,
           isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
           isEBProcedure,
+          disabledOptions,
         }}
       >
         <FormikProvider value={formik}>

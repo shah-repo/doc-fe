@@ -7,6 +7,7 @@ import {
   cloneDeep,
   concat,
   isEmpty,
+  map,
   omit,
   replace,
 } from 'lodash';
@@ -55,6 +56,7 @@ interface EquipmentTreelistContextProps {
   isEnableActualIdAddition?: boolean
   isEqProdConfigEnforced?: boolean
   isLHRProductionBuild?: boolean
+  disabledOptions?: string[]
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
@@ -92,6 +94,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const classes = useStyles({ size });
   const { equipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+  const disabledOptions = map(items, 'title');
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -407,7 +410,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced }}>
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions }}>
           <FormikProvider value={formik}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>

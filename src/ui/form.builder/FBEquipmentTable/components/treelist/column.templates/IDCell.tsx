@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, debounce } from 'lodash';
 import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState } from 'react';
+import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
@@ -39,6 +40,7 @@ const Editor: React.FC<EditorProps> = ({
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const { disabledOptions } = React.useContext(EquipmentTreelistContext);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
   const isFreeSolo = values?.LHRTparameter || isEBProcedure;
@@ -144,6 +146,9 @@ const Editor: React.FC<EditorProps> = ({
             </ul>
           </>);
         }}
+        getOptionDisabled={(option) =>
+          (isEBProcedure && disabledOptions?.includes(option.value)) ?? false
+        }
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
         freeSolo
