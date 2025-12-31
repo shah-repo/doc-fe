@@ -199,6 +199,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
+        pendingLHRSTriggeredRef.current = false;
         workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
       },
