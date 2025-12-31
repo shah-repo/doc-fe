@@ -191,7 +191,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => addLot?.(dataItem)}
+                onClick={(event) => { event.stopPropagation(); addLot?.(dataItem); }}
                 icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
               />
             </IconButton>
@@ -203,7 +203,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity })}
+                onClick={(event) => { event.stopPropagation(); onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity }); }}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>
