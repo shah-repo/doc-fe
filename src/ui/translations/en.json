@@ -2413,6 +2413,7 @@
   "lhr.equipment.grid.heading.actual.id": "Actual ID",
   "lhr.equipment.grid.heading.cal.due.date": "Cal Due Date",
   "lhr.equipment.grid.heading.pm.due.date": "PM Due Date",
+  "lhr.equipment.grid.heading.eq.status": "Status",
   "shipping.withdraw.alert": "Are you sure you want to withdraw this Shipping?",
   "controlConfig.editPart.button.text": "Restricted Edit",
   "print.label.dialog.field.quantity.units": "Quantity Units",

@@ -31,6 +31,7 @@ export const getMapSelectedByParentEquipId = (equipsSelected: Array<Partial<FBMP
       parentId: index !== -1 ? items[index].id : '',
       pmDueDate: selected.pmDueDate,
       calDueDate: selected.calDueDate,
+      eqStatus: selected.eqStatus,
       [MODE_FIELD]: false,
     };
     acc[equipmentId].push(actualEquipItem);

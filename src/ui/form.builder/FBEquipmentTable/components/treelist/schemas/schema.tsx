@@ -3,6 +3,7 @@ import { translate } from '../../../../../../common/intl';
 import { ActionsCell } from '../column.templates/Actions';
 import ActualIdCell from '../column.templates/ActualIdCell';
 import { DateCell } from '../column.templates/DateCell';
+import { EQStatus } from '../column.templates/EQStatus';
 import IDCell from '../column.templates/IDCell';
 
 export const TreeListSchema = ({
@@ -37,6 +38,14 @@ export const TreeListSchema = ({
     width: 150,
     mainOrderIndex: 2,
     cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+  },
+  {
+    field: 'eqStatus',
+    locked: false,
+    title: translate('lhr.equipment.grid.heading.eq.status'),
+    width: 150,
+    mainOrderIndex: 3,
+    cell: (props) => <EQStatus {...props} />,
   },
   {
     field: 'calDueDate',
