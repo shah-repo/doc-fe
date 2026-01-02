@@ -72,7 +72,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   };
 
   useEffect(() => {
-    const equipmentId = cloneDeep(values?.[field]);
+    const equipmentId = cloneDeep(values?.[field]) ?? dataItem[field ?? ''];
 
     if (isEBProcedure && inputValue) {
       setFieldValue(field, inputValue);
@@ -82,6 +82,10 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
       setFieldValue('id', dataItem.id);
       setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
       return;
+    }
+
+    if (isUpdateAction && !values?.[field] && equipmentId) {
+      setFieldValue(field, equipmentId);
     }
 
     if (!isUpdateAction || FB.isUUID(equipmentId ?? '')) {
