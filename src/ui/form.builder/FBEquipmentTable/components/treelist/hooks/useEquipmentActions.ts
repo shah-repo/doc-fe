@@ -1,6 +1,7 @@
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { extendDataItem, filterBy, mapTree, orderBy } from '@progress/kendo-react-treelist';
 import { isNil, keyBy, uniq } from 'lodash';
+import { useEffect, useRef } from 'react';
 import { SmartReferenceType } from '../../../../../../state/ducks/documentRevisions/types';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../../types';
@@ -23,6 +24,11 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
   } = flags;
 
   const { handleSelectionDelete, handleRemove, procedureState, workspaceState, lhrStepState } = externalHandlers;
+
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
   const { document } = workspaceState || {};
@@ -146,6 +152,19 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
     };
   };
 
+  const isAddItemsExists = (data): boolean => {
+    const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
+    return (
+      data?.some((item) => {
+        if (item[ADD_FIELD]) {
+          return true;
+        }
+
+        return item[subItemsKey]?.some((lot) => lot[ADD_FIELD]) ?? false;
+      }) ?? false
+    );
+  };
+
   const addActualId = (dataItem: EditableEquipmentItem) => {
     const index = state?.data?.findIndex((data) => {
       return data.id === dataItem.id;
@@ -263,6 +282,12 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
 
     if (isLHRStep && isDesign && !dataItem.paramsId) {
       dataItem.paramsId = dataItem?.id;
+    }
+
+    const isAddMaterialExists = isAddItemsExists(stateRef.current.data);
+
+    if (isAddMaterialExists) {
+      return;
     }
 
     const editItemInfo = extendDataItem(dataItem, subItemsKey);

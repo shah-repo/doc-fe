@@ -33,8 +33,9 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
   const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
-  const onClick = (ev) => {
-    onExpandChange(ev, dataItem, level);
+  const onClick = (event) => {
+    event?.stopPropagation();
+    onExpandChange(event, dataItem, level);
   };
 
   useEffect(() => {

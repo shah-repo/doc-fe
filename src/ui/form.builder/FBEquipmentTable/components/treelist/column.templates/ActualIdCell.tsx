@@ -7,7 +7,7 @@ import moment, { MomentInput } from 'moment';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
-import { useDate } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { ACTIVE_EQUIPMENT_STATUSES, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
@@ -115,7 +115,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.calDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
-                        date: option.calDueDate,
+                        date: getFormattedDateString(option.calDueDate, MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -123,7 +123,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.pmDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
-                        date: option.pmDueDate,
+                        date: getFormattedDateString(option.pmDueDate, MomentFormats.BriefDate),
                       })}
                     </span>
                   )}

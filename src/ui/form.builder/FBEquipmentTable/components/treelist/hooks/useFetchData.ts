@@ -9,7 +9,12 @@ import { customEQOptionType, EquipOption } from '../column.templates/types';
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-  const preventiveMaintenanceKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
+  const preventiveMaintenanceKey = Object.keys(equipment.formInput ?? {}).find((key) =>
+    [
+      'section-iii-preventative-maintenance',
+      'section-iii-preventive-maintenance',
+    ].some((prefix) => key.startsWith(prefix)),
+  );
   const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
   const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
   return {
