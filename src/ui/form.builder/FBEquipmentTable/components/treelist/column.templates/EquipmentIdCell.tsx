@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { cloneDeep, debounce } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -12,8 +13,9 @@ import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/Sty
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { Colors } from '../../../../../layout/theme-next';
+import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../types';
-import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
+import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
@@ -27,6 +29,7 @@ interface LotAutocompleteProps {
   parentPartRevId?: string
   actualId?: string
   isLoading?: boolean
+  isEBProcedure?: boolean
   equipmentOptions: OptionType[]
 }
 
@@ -37,11 +40,16 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   isLoading,
   dataItem,
   actualId,
+  isEBProcedure,
   parentPartRevId,
   equipmentOptions,
 }) => {
-  const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
+  const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
+  const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const [inputValue, setInputValue] = React.useState<string>();
+  const isUpdateAction = dataItem[MODE_FIELD];
+  const isFreeSolo = isEBProcedure;
 
   useEffect(() => {
     const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
@@ -49,10 +57,12 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     if (value && field) {
       setValue(value);
     }
+    setItems(equipmentOptions);
   }, [equipmentOptions]);
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
+    setInputValue(undefined);
     field && setFieldValue(field, option?.value);
     setFieldValue(IS_ACTUAL_ID_ADDITION, true);
     setFieldValue('parentEquipPlannedId', dataItem?.parentEquipPlannedId);
@@ -61,14 +71,72 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
+  useEffect(() => {
+    const equipmentId = cloneDeep(values?.[field]) ?? dataItem[field ?? ''];
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
+      setFieldValue(IS_ACTUAL_ID_ADDITION, true);
+      setFieldValue('parentEquipPlannedId', dataItem?.parentEquipPlannedId);
+      setFieldValue('parentId', dataItem?.parentId);
+      setFieldValue('id', dataItem.id);
+      setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+      return;
+    }
+
+    if (isUpdateAction && !values?.[field] && equipmentId) {
+      setFieldValue(field, equipmentId);
+    }
+
+    if (!isUpdateAction || FB.isUUID(equipmentId ?? '')) {
+      return;
+    }
+
+    if (!isFreeSolo && !equipmentId) {
+      setItems(equipmentOptions ?? []);
+    }
+  }, [values]);
+
+  const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    if (reason !== 'input') {
+      return;
+    }
+
+    if (!isFreeSolo) {
+      setInputValue(inputVal);
+      setFieldValue(field, '');
+      return;
+    }
+
+    setFieldValue(field, inputVal);
+    setInputValue(inputVal);
+    setValue({ label: inputVal, value: inputVal });
+
+    if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
+      const filteredOptions = equipmentOptions?.filter((option) =>
+        option.label.toLowerCase().includes(inputVal?.toLowerCase()),
+      );
+      setItems(filteredOptions);
+    } else if (!inputVal) {
+      setItems(equipmentOptions ?? []);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
+
   return (
     <FormikField name={field} required error={Boolean(errors[field])}>
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
         disabled={!!actualId}
-        options={equipmentOptions}
+        options={items}
         blurOnSelect
+        freeSolo={isFreeSolo}
+        onInputChange={debounceFunction}
         disableOpenOnFocus
         placeholder={translate('common.select')}
         size="small"
@@ -171,6 +239,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 dataItem,
                 actualId,
                 isLoading,
+                isEBProcedure,
                 equipmentOptions,
               }}
             />
