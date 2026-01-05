@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { ChangeEvent, memo, useEffect } from 'react';
 import { MaterialTreelistContext } from '..';
@@ -64,7 +64,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS 
 const UnitsCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem } = props;
   const isEditMode = isEditMaterial(dataItem);
-  const displayValue = get(dataItem, field, CELL_EMPTY_VALUE) as string;
+  const displayValue = isEmpty(dataItem[field]) ? CELL_EMPTY_VALUE : dataItem[field];
 
   return (
     <TreeListCellWrapper {...props}>
