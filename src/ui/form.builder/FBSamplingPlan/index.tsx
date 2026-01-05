@@ -1,11 +1,14 @@
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
-import { FB, FBData, FBInput, FBInputProps, FBRadioGroup } from '..';
+import { FB, FBData, FBInput, FBInputProps, FBRadioGroup, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { Autocomplete } from '../../components/forms/fields-next';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import useStyles from './styles';
 import { SamplingPlanAqlLevelOption, SamplingPlanType, SamplingPlanValue } from './types';
+
+const YES_VALUE = translate('form.builder.yes');
+const IQC_REQUIRED_KEY = 'iqc-required';
 
 const FBSamplingPlan: React.FC<FBInputProps> = ({
   name = '',
@@ -14,10 +17,17 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { formState } = FB.useStores();
+  const { formState, workspaceState } = FB.useStores();
+  const isFormMode = useObserver(() => formState?.workspaceMode === FBWorkspaceModeOptions.DESIGN || formState?.workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW);
+  const hasIcqField = useObserver(() => workspaceState?.schema?.some(
+    (item) => item.name === IQC_REQUIRED_KEY && !item.deleted,
+  ));
 
-  const value = useObserver<SamplingPlanValue | undefined>(
-    () => (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as SamplingPlanValue | undefined,
+  const [value, isIqcRequired] = useObserver<[SamplingPlanValue | undefined, boolean]>(
+    () => [
+      (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as SamplingPlanValue | undefined,
+      (formState?.newValues.get(IQC_REQUIRED_KEY) ?? formState?.getFieldValue(IQC_REQUIRED_KEY)) === YES_VALUE,
+    ],
   );
 
   const setValue = ({ type, aqlLevel }: SamplingPlanValue) => {
@@ -50,6 +60,10 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
     setValue({ type: SamplingPlanType.AQL, aqlLevel: aqlLevel?.value });
   };
 
+  if (!isIqcRequired && !isFormMode && hasIcqField) {
+    return null;
+  }
+
   return (
     <FBInput
       {...props}
@@ -76,7 +90,7 @@ const FBSamplingPlan: React.FC<FBInputProps> = ({
           onChange={(e) => setValue({ type: e.target.value as SamplingPlanType })}
           gutter={false}
         />
-        {value?.type === SamplingPlanType.AQL && (
+        {(value?.type === SamplingPlanType.AQL || isFormMode) && (
           <div className={classes.aqlLevel}>
             <Autocomplete
               options={FBData.aqlOptions}

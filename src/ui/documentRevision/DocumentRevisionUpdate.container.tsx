@@ -17,6 +17,7 @@ import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
+import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -28,7 +29,6 @@ import { DocumentRevisionFormValues } from './forms/types';
 import { checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
 import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
 
 interface Props {
   documentId?: string
@@ -121,8 +121,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   ) => {
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
-    if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
-      set(values, 'formInput', formStateContext?._currentValue);
+    const formValues = get(formStateContext?._currentValue, documentRevision.id);
+    if (!isEmpty(formValues) && values.formInput) {
+      set(values, 'formInput', formValues);
     }
 
     if (values && has(values, 'lhrstep-built-in')) {
@@ -184,10 +185,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
       const hasReceivableKeyExists = Object.keys(
-        formStateContext?._currentValue,
+        formValues,
       )?.some((key) => key.includes('receivable'));
       if (hasReceivableKeyExists) {
-        set(dataToSubmit, 'formInput', formStateContext?._currentValue);
+        set(dataToSubmit, 'formInput', formValues);
       }
     }
 

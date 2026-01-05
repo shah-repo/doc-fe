@@ -13,17 +13,10 @@ import { isEditMaterial } from './utils';
 const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { dataItem, field = '', hasChildren, isLHRT } = props;
   const classes = styles({ hasChildren });
-  const { getFieldProps, setFieldValue, values, errors, setErrors, setTouched, touched }
+  const { getFieldProps, values, errors, setErrors, setTouched, touched }
     = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
-  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
-
-  const onQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = event.target.value;
-    if (!isNaN(Number(val)) && Number(val) >= 0 && field) {
-      setFieldValue(field, Number(val));
-    }
-  };
+  const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
 
   const shouldDisable = !isLHRT && values?.LHRTparameter;
 
@@ -31,13 +24,12 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
     field && (
       <FormikField
         name={field}
-        validate={!shouldDisable ? validator(requiredNumber) : undefined}
+        validate={!shouldDisable && !isEBProcedure ? validator(requiredNumber) : undefined}
         error={!shouldDisable && field ? Boolean(errors[field]) : undefined}
       >
         <TextField
           {...getFieldProps(field)}
           type="number"
-          onChange={onQuantityChange}
           inputProps={{ min: 0 }}
           disabled={shouldDisable}
           size="small"
@@ -52,7 +44,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   }
 
   useEffect(() => {
-    if (shouldDisable && errors[field]) {
+    if (shouldDisable && errors[field] && !isEBProcedure) {
       setErrors({
         ...errors,
         [field]: undefined,

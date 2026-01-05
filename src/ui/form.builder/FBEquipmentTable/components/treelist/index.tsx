@@ -7,6 +7,7 @@ import {
   cloneDeep,
   concat,
   isEmpty,
+  map,
   omit,
   replace,
 } from 'lodash';
@@ -53,6 +54,9 @@ import { withFBEquipmentTable } from './wrap';
 interface EquipmentTreelistContextProps {
   isRedlineActive?: boolean
   isEnableActualIdAddition?: boolean
+  isEqProdConfigEnforced?: boolean
+  isLHRProductionBuild?: boolean
+  disabledOptions?: string[]
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
@@ -83,12 +87,14 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { procedureState, mpiProcedureState, workspaceState, lhrStepState } = FB.useStores();
   const treeListRef = useRef(null);
   const scanDialog = useDialog();
+  const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
   const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
   const { equipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+  const disabledOptions = map(items, 'title');
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -171,8 +177,11 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         id,
         title: isDesign ? title : plannedId,
         type: values.type,
-        isEquipmentSpecification,
       };
+
+      if (!isEBProcedure) {
+        newEquipItem.isEquipmentSpecification = isEquipmentSpecification;
+      }
 
       if (isLHRStep && lhrStepIndex) {
         updateLHRTEquipmentItem(values);
@@ -218,6 +227,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         return;
       }
 
+      if (isEBProcedure) {
+        newEquipItem = omit(newEquipItem, EB_FIELDS_TO_OMIT) as FBProcedureItemConfig;
+      }
+
       discardEquipItem(values as EditableEquipmentItem);
       procedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
       mpiProcedureState?.addItem(newEquipItem as FBProcedureItemConfig, type, allSteps);
@@ -233,6 +246,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     removeEquipItem,
     processData,
     updateLHRTEquipmentItem,
+    isEqProdConfigEnforced,
   } = useEquipmentActions(
     state,
     setState,
@@ -297,6 +311,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     isDisabled,
     isEnableActualIdAddition,
     isEBProcedure,
+    onRowClick: editEquipmentItem,
   });
 
   const [columns, setColumns]
@@ -395,7 +410,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition }}>
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions }}>
           <FormikProvider value={formik}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>
@@ -435,7 +450,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
             attached
             kind="add"
             className={classes.bottomAddButtom}
-            data-cy="fb-control-btn"
+            data-cy="add-equipment"
             onClick={addEquipItem}
           >
             {translate('form.builder.add.item')}

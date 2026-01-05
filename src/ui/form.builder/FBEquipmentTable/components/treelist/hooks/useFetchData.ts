@@ -9,7 +9,12 @@ import { customEQOptionType, EquipOption } from '../column.templates/types';
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-  const preventiveMaintenanceKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
+  const preventiveMaintenanceKey = Object.keys(equipment.formInput ?? {}).find((key) =>
+    [
+      'section-iii-preventative-maintenance',
+      'section-iii-preventive-maintenance',
+    ].some((prefix) => key.startsWith(prefix)),
+  );
   const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
   const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
   return {
@@ -21,7 +26,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
     calDueDate: calibrationData.complianceDueDate,
     pmDueDate: preventiveMaintenanceData.complianceDueDate,
-    status: calibrationData?.status,
+    status: equipment?.eqStatus,
     value: equipment.id,
   };
 };
@@ -50,8 +55,8 @@ export const useFetchData = () => {
   });
 };
 
-export const useEquipmentOptions = (id: string, isEquipmentSpecification: boolean) => {
-  const optionId = isEquipmentSpecification ? FBAutocompleteAsyncOption.equipmentSpecifications : FBAutocompleteAsyncOption.equipment;
+export const useEquipmentOptions = (id: string) => {
+  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
   const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
 
   useEffect(() => {

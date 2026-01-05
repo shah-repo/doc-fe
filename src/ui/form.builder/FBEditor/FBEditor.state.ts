@@ -85,6 +85,7 @@ class FBEditorState {
     'procedure',
     'mpiprocedure',
     'eqmaintenance',
+    'samplingPlan',
   ];
 
   public static pickDefaultValue: FBInputType[] = [

@@ -26,15 +26,16 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const isUpdateAction = dataItem[MODE_FIELD];
   const classes = styles({ isEditMode });
   const { getFieldProps, setFieldValue, values, errors } = useFormikContext<EditableMaterial>();
-  const isFreeSolo = !isLHRT && values?.LHRTparameter;
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
-  const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, isEBProcedure, disabledOptions } = React.useContext(MaterialTreelistContext);
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
+  const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
-  const onClick = (ev) => {
-    onExpandChange(ev, dataItem, level);
+  const onClick = (event) => {
+    event?.stopPropagation();
+    onExpandChange(event, dataItem, level);
   };
 
   useEffect(() => {
@@ -61,6 +62,11 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
     if (isLHRT) {
       setFieldValue(field, inputValue);
       setInputValue('');
+      return;
+    }
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
       return;
     }
 
@@ -114,7 +120,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
   const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
-  const partNumber = fieldValue?.split(' ')?.[0] ?? '';
 
   return (
     <TreeListCellWrapper {...props}>
@@ -136,6 +141,9 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                     </>
                   );
                 }}
+                getOptionDisabled={(option) =>
+                  (isEBProcedure && disabledOptions?.includes(option.value)) ?? false
+                }
                 options={modifiedOptions}
                 placeholder={translate('common.select')}
                 getOptionLabel={(option: OptionType) => option.label}
@@ -181,7 +189,6 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                   {
                     assignedLot: totalAssignedQty ?? '',
                     lotQuantityNeeded: quantityNeeded ?? '',
-                    partNumber: partNumber,
                   })}
                 placement="top-start"
               >

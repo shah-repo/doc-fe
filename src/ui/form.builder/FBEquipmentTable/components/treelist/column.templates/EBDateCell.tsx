@@ -7,7 +7,7 @@ import { translate } from '../../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { isDateOverdue } from '../utils';
-import { styles } from './styles';
+import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { CustomTreeListCellProps } from './types';
 
@@ -15,7 +15,7 @@ export const EBDateCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, hasChildren, onClick, equipmentOptions } = props;
   const [displayValue, setDisplayValue] = useState<string>();
   const isExpired = displayValue ? isDateOverdue(displayValue) : false;
-  const classes = styles({ hasChildren });
+  const classes = useStyles({ hasChildren });
   const { getFormattedDateString } = useDate();
 
   const getFormattedDate = (date) => {

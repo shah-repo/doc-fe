@@ -33,7 +33,9 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+  @observable.shallow
   public buildTypeOptions: LHRBuild[] = [];
+
   public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
@@ -113,7 +115,33 @@ class FBWorkspaceState extends FBSchemaState {
   public get isLHRProductionBuild (): boolean {
     const ProductionId = this.buildTypeOptions.find(data => data.internalType === FBLHRBuildOptions.Production)?.id;
     return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === ProductionId;
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === (ProductionId ?? FBLHRBuildOptions.Production);
+  }
+
+  public get isLHRRelevantBuilds (): boolean {
+    if (this.buildTypeOptions.length === 0) {
+      return false;
+    }
+
+    const buildTypes = this.buildTypeOptions;
+    const selectedBuildTypeId
+    = this.document?.smartReferencesTo
+      ?.find(ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)
+      ?.toDocRev?.formInput?.['lhr-build-type'];
+
+    if (!buildTypes.length || !selectedBuildTypeId) {
+      return false;
+    }
+
+    const selectedBuildType = buildTypes.find(
+      option => option.id === selectedBuildTypeId,
+    );
+
+    return [
+      FBLHRBuildOptions.Production,
+      FBLHRBuildOptions.Clinical,
+      FBLHRBuildOptions['Verification & Validation'],
+    ].includes(selectedBuildType?.internalType as FBLHRBuildOptions);
   }
 
   public get isChangeRequest (): boolean {

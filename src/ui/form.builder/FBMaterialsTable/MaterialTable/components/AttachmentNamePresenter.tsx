@@ -65,12 +65,17 @@ const AttachmentNamePresenter: React.FC<Props> = ({
     <Box {...boxProps} className={classes.attachmentNameContainer}>
       <FBMapWrapper<FBAttachment[]> collection={attachments}>
         {(file: FBAttachment) => {
-          const { name, type, id } = file;
+          const { name = '', type = '', id } = file;
           return (
             <Box key={id} className={classes.attachmentName}>
               <Box className={classes.fileRow}>
                 <AttachFile className={classes.attachmentIcon} />
-                <Box className={classes.fileName} onClick={() => downloadOrViewFile(file)}>
+                <Box className={classes.fileName}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    downloadOrViewFile(file);
+                  }}
+                >
                   <OverflowTooltip
                     arrow
                     placement="top"

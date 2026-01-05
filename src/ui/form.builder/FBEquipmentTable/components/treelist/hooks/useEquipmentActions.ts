@@ -1,6 +1,8 @@
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { extendDataItem, filterBy, mapTree, orderBy } from '@progress/kendo-react-treelist';
 import { isNil, keyBy, uniq } from 'lodash';
+import { useEffect, useRef } from 'react';
+import { SmartReferenceType } from '../../../../../../state/ducks/documentRevisions/types';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem, EquipmentItem, EquipmentItemEditEvent } from '../../../types';
 import { ADD_FIELD, EB_SUB_ITEMS_FIELD, EXPAND_FIELD, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
@@ -23,7 +25,15 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
 
   const { handleSelectionDelete, handleRemove, procedureState, workspaceState, lhrStepState } = externalHandlers;
 
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
+  const { document } = workspaceState || {};
+  const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
+  const isEqProdConfigEnforced = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
 
   const updateLHRTEquipmentItem = (item: Partial<EditableEquipmentItem>) => {
     const procedureItem = {
@@ -140,6 +150,19 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
+  };
+
+  const isAddItemsExists = (data): boolean => {
+    const subItemsKey = isEBProcedure ? EB_SUB_ITEMS_FIELD : SUB_ITEMS_FIELD;
+    return (
+      data?.some((item) => {
+        if (item[ADD_FIELD]) {
+          return true;
+        }
+
+        return item[subItemsKey]?.some((lot) => lot[ADD_FIELD]) ?? false;
+      }) ?? false
+    );
   };
 
   const addActualId = (dataItem: EditableEquipmentItem) => {
@@ -261,6 +284,12 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
       dataItem.paramsId = dataItem?.id;
     }
 
+    const isAddMaterialExists = isAddItemsExists(stateRef.current.data);
+
+    if (isAddMaterialExists) {
+      return;
+    }
+
     const editItemInfo = extendDataItem(dataItem, subItemsKey);
 
     if (isMPIProcedure || isLHRStep || isEBProcedure) {
@@ -289,5 +318,6 @@ export function useEquipmentActions (state, setState, formik, flags, externalHan
     removeEquipItem,
     processData,
     updateLHRTEquipmentItem,
+    isEqProdConfigEnforced,
   };
 }

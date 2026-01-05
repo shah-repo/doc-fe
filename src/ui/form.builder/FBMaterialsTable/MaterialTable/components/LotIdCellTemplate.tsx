@@ -115,13 +115,18 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const isValidLOT = (lot) => {
-    const isAcceptedStatus = isLHRProductionBuild
-      ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
-      : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+    let isAcceptedStatus = false;
+    if (isEBProcedure) {
+      isAcceptedStatus = true; // No constraints on Lot Status
+    } else {
+      isAcceptedStatus = isLHRProductionBuild
+        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+        : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+    }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity;
+    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({
@@ -186,7 +191,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => addLot?.(dataItem)}
+                onClick={(event) => { event.stopPropagation(); addLot?.(dataItem); }}
                 icon={isAddLotHovered ? solid('circle-plus') : regular('circle-plus')}
               />
             </IconButton>
@@ -198,7 +203,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               <FontAwesomeIcon
                 size="sm"
                 className={cx(classes.addChildLotIcon, classes.scanIcon, { [classes.disabled]: isDisabled })}
-                onClick={() => onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity })}
+                onClick={(event) => { event.stopPropagation(); onScanClick?.({ ...dataItem, quantity: dataItem.quantity ? dataItem.quantity * lhrsQuantity : dataItem.quantity }); }}
                 icon={isAddBarCodeRef ? solid('barcode-read') : regular('barcode-read')}
               />
             </IconButton>

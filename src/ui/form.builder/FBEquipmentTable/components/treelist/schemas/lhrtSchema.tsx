@@ -13,13 +13,14 @@ export const TreeListLHRTSchema = ({
   onConfirm,
   equipmentOptions,
   parentRevId,
+  onRowClick,
 }): CustomTreeListColumnProps[] => [
   {
     id: 'title',
     field: 'title',
     title: translate('form.builder.procedure.equipment.grid.title'),
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} />,
     width: 150,
   },
   {

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../layout/theme-next';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   actions: {
     gap: theme.spacing(1.25, 1.25),
     display: 'flex',
@@ -51,6 +51,13 @@ export const styles = makeStyles((theme) => ({
   disabled: {
     color: `${Colors.gray} !important`,
     pointerEvents: 'none',
+  },
+  listItemOption: {
+    padding: 0,
+    margin: 0,
+  },
+  dateInfo: {
+    color: Colors.error,
   },
   expired: {
     color: Colors.error,

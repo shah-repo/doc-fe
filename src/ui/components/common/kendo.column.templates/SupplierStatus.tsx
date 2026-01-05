@@ -26,9 +26,10 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   const docTypeTableContext = useContext(DocTypeTableContext);
   const handleOnClick = () => cellRowClick?.({ dataItem });
   const defaultValue = get(dataItem, field, '');
-  const statusData = docTypeTableContext?.aslStatuses?.find((data) => data.id === defaultValue);
-  const statusClassLabel = statusData?.internalType;
-  const label = statusData?.displayLabel ?? defaultValue;
+  const { internalType, displayLabel } = docTypeTableContext?.aslStatuses?.find(({ id, displayLabel }) =>
+    [id, displayLabel].includes(defaultValue),
+  ) ?? { internalType: defaultValue, displayLabelL: defaultValue };
+
   const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   if (docTypeTableContext?.isLoading) {
@@ -49,9 +50,9 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
         justify="flex-start"
         alignItems="center"
         container
-        data-cy={`supplier-status-button-${label}`}
+        data-cy={`supplier-status-button-${displayLabel}`}
       >
-        {label && <>
+        {displayLabel && <>
           {!isHovered
             ? <span ref={elementRef}>
               <Chip
@@ -59,21 +60,21 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
                 className={cx(
                   statusClasses.chip,
                   classes.aslChipTextOverflow,
-                  statusClasses[ASL_STATUS_CLASS_MAPPING[statusClassLabel ?? '']],
+                  statusClasses[ASL_STATUS_CLASS_MAPPING[internalType ?? '']],
                 )}
-                label={label}
+                label={displayLabel}
               />
             </span>
             : <Suspense fallback={<div>{translate('common.loading')}</div>}>
-              <LazyOverflowTooltip arrow placement="top" title={label}>
+              <LazyOverflowTooltip arrow placement="top" title={displayLabel}>
                 <Chip
                   size="small"
                   className={cx(
                     statusClasses.chip,
                     classes.aslChipTextOverflow,
-                    statusClasses[ASL_STATUS_CLASS_MAPPING[statusClassLabel ?? '']],
+                    statusClasses[ASL_STATUS_CLASS_MAPPING[internalType ?? '']],
                   )}
-                  label={label}
+                  label={displayLabel}
                 />
               </LazyOverflowTooltip>
             </Suspense>}

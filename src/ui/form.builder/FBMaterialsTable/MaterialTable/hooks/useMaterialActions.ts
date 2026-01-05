@@ -1,5 +1,6 @@
 import { extendDataItem } from '@progress/kendo-react-treelist';
 import { isNil } from 'lodash';
+import { useEffect, useRef } from 'react';
 import { FB } from '../../../helpers';
 import { ADD_FIELD, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
 import { EditableMaterial, Material, MaterialEditEvent } from '../types';
@@ -20,6 +21,11 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
   } = flags;
 
   const { handleSelectionDelete, handleRemove, procedureState } = externalHandlers;
+
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   const appendItemToStateData = (scanLot) => {
     const existingIndex = state.data.findIndex((item) => item.id === scanLot.id);
@@ -48,7 +54,7 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
         return;
       }
       const subItems = state.data[parentIndex][SUB_ITEMS_FIELD];
-      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems.filter((item) => item.id !== scanLot.id);
+      state.data[parentIndex][SUB_ITEMS_FIELD] = subItems?.filter((item) => item.id !== scanLot.id);
     } else {
       state.data = state.data.filter((item) => item.id !== scanLot.id);
     }
@@ -100,6 +106,16 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
     }
   };
 
+  const isAddItemsExists = (data: Material[]): boolean => {
+    return data?.some(item => {
+      if (item[ADD_FIELD]) {
+        return true;
+      }
+
+      return item[SUB_ITEMS_FIELD]?.some(lot => lot[ADD_FIELD]) ?? false;
+    }) ?? false;
+  };
+
   const editPartItem = ({ dataItem }: MaterialEditEvent) => {
     const defaultValidation
       = (isEnableOnlyLotAddition && dataItem.title && (!isActive || isDisabled))
@@ -124,6 +140,12 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
 
     if (isLHRStep && isDesign && !dataItem.paramsId) {
       dataItem.paramsId = dataItem?.id;
+    }
+
+    const isAddMaterialExists = isAddItemsExists(stateRef.current.data);
+
+    if (isAddMaterialExists) {
+      return;
     }
 
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
@@ -171,11 +193,11 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
 
   const ignorePreviouslyAddedItems = (data: Material[]) => {
     return data?.filter((data) => {
-      const isAlocationItemAddExist = !data[ADD_FIELD];
+      const isAddItemExist = !data[ADD_FIELD];
       if (data[SUB_ITEMS_FIELD]) {
         data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
       }
-      return isAlocationItemAddExist;
+      return isAddItemExist;
     });
   };
 
@@ -186,25 +208,26 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
     state.data = ignorePreviouslyAddedItems(state.data);
 
     if (state.data.length && index !== -1) {
-      const newAllocItem: EditableMaterial = createNewLotItem();
-      newAllocItem.parentPartId = dataItem.title;
-      newAllocItem.parentId = dataItem.id;
-      newAllocItem.unit = dataItem.unit;
+      const lotItem: EditableMaterial = createNewLotItem();
+      lotItem.parentPartId = dataItem.title;
+      lotItem.parentId = dataItem.id;
+      lotItem.unit = dataItem.unit;
+      lotItem.childrenLotIds = state.data[index][SUB_ITEMS_FIELD]?.map(data => data.lotId) ?? [];
       state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter((data) => !data[ADD_FIELD]);
 
       if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
         state.data[index][SUB_ITEMS_FIELD] = [];
       }
 
-      state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+      state.data[index][SUB_ITEMS_FIELD]?.unshift(lotItem);
 
       updateState({
         ...state,
         data: [...state.data],
         expanded: [state.data[index].id],
-        inEdit: [newAllocItem],
+        inEdit: [lotItem],
       });
-      formik.setValues(newAllocItem);
+      formik.setValues(lotItem);
     }
   };
 
