@@ -138,7 +138,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
 }
 
 export type MaterialOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'| 'status'>;
 
 export interface MaterialCellActionsProps<EditableMaterial> {
   dataItem: EditableMaterial
