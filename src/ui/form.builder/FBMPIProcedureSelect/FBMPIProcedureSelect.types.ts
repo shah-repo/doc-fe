@@ -34,6 +34,7 @@ export interface FBMPIProcedureSelectValue {
   pmDueDate?: string
   calDueDate?: string
   actualId?: string
+  eqStatus?: string
 }
 
 export type ProcedureItemType = 'MATERIAL' | 'EQUIPMENT';
