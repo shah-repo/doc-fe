@@ -70,7 +70,6 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownCellTemplate
       {...props}
       data={NUMBERING_STYLE_OPTIONS}
-      defaultItem={NUMBERING_STYLE_OPTIONS[0]}
     />
   );
 

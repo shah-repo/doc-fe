@@ -212,10 +212,13 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         formDialog.open();
         return;
       }
-      if (formIds.length === 1 && !isCustomerTypeNumbering) {
-        handleCreateDocument(formIds[0] as DocumentRevision);
-        resetStates();
-        return;
+      if (formIds.length === 1) {
+        setSelectedForm(formIds[0]);
+        if (!isCustomerTypeNumbering) {
+          handleCreateDocument(formIds[0] as DocumentRevision);
+          resetStates();
+          return;
+        }
       }
       if (isEmpty(formIds)) {
         setErrorMessage('missing.form.error');
