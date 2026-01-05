@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -22,6 +22,8 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
+import { LHRS_ACCEPTED_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { areRequiredEquipmentsSelected, isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -101,8 +103,87 @@ export const SubmitForApproval: React.FC<Props> = ({
     (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
   );
 
+  const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
+  const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
+    = useState(false);
+
+  const {
+    equipmentsFromSchema,
+    neededMaterials,
+    equipmentsFromMetadata,
+    materialsFromMetadata,
+  } = useMemo(() => {
+    const schema = documentRevision?.formDocument?.formTemplate?.schema ?? [];
+
+    const smartRefs = documentRevision?.document?.smartReferencesTo ?? [];
+
+    const mpiProcedureSchema = schema.filter(
+      (item) => item.type === 'mpiprocedure',
+    );
+
+    return {
+      equipmentsFromSchema: mpiProcedureSchema.map(
+        (item) => item.editorConfig?.equipment ?? [],
+      ),
+
+      neededMaterials: mpiProcedureSchema.map(
+        (item) => item.editorConfig?.materials ?? [],
+      ),
+
+      equipmentsFromMetadata: smartRefs
+        .filter((ref) => ref.metadata?.equipmentId)
+        .map((ref) => ref.metadata),
+      materialsFromMetadata: smartRefs
+        .filter((ref) => ref.metadata?.materialId != null && ref?.active)
+        .map((ref) => ({
+          materialId: ref.metadata.materialId,
+          quantity: ref.metadata.quantity,
+        })),
+    };
+  }, [
+    documentRevision?.formDocument?.formTemplate?.schema,
+    documentRevision?.document?.smartReferencesTo,
+  ]);
+
+  useEffect(() => {
+    if (!isTypeMpiOutput) {
+      setAreAllEquipmentsSelected(true);
+      setHasInsufficientQty(false);
+      return;
+    }
+
+    const lhrsStartQuantity
+      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
+
+    setAreAllEquipmentsSelected(
+      areRequiredEquipmentsSelected(
+        equipmentsFromSchema,
+        equipmentsFromMetadata,
+      ),
+    );
+
+    setHasInsufficientQty(
+      isMpiOutputInsufficientQty(
+        neededMaterials,
+        materialsFromMetadata,
+        lhrsStartQuantity,
+      ),
+    );
+  }, [
+    isTypeMpiOutput,
+    equipmentsFromSchema,
+    equipmentsFromMetadata,
+    neededMaterials,
+    materialsFromMetadata,
+    documentRevision?.formInput,
+  ]);
+
   const isDisabledApproval
-    = isTypeMpiOutput && (isApproverAdded || hasPendingApprovals);
+    = isTypeMpiOutput
+    && (hasInsufficientQty
+      || isApproverAdded
+      || hasPendingApprovals
+      || !areAllEquipmentsSelected);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 

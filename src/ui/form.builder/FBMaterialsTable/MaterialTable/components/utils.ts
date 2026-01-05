@@ -3,6 +3,25 @@ import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.
 import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
 import { EditableMaterial, Material } from '../types';
 
+interface SchemaEquipment {
+  title?: string
+}
+
+interface EquipmentMetadata {
+  equipmentId?: string
+}
+
+interface NeededMaterial {
+  materialId?: string
+  quantity?: number
+  title?: string
+}
+
+interface UsedMaterial {
+  materialId?: string
+  quantity?: number
+}
+
 export const isAddMaterial = (dataItem: EditableMaterial): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
@@ -49,3 +68,63 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
+
+export const isMpiOutputInsufficientQty = (
+  neededQuantity?: NeededMaterial[][],
+  usedQuantity?: UsedMaterial[],
+  startQuantity?: number,
+): boolean => {
+  const flatNeeded: NeededMaterial[] = (neededQuantity ?? []).flat();
+
+  const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item?.title;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0) * (startQuantity ?? 0);
+      return acc;
+    },
+    {},
+  );
+
+  const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item?.materialId;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0);
+      return acc;
+    },
+    {},
+  );
+
+  return Object.keys(neededByMaterial).some((materialId) => {
+    return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
+  });
+};
+
+export function areRequiredEquipmentsSelected (
+  equipmentsFromSchema: SchemaEquipment[][],
+  equipmentsFromMetadata: EquipmentMetadata[],
+): boolean {
+  if (!equipmentsFromSchema.length) {
+    return true;
+  }
+
+  const requiredEquipmentIds = equipmentsFromSchema
+    .flat()
+    .map((equipment) => equipment?.title)
+    .filter(Boolean);
+
+  if (!requiredEquipmentIds.length) {
+    return true;
+  }
+
+  const selectedEquipmentIds = new Set(
+    equipmentsFromMetadata.map((item) => item?.equipmentId).filter(Boolean),
+  );
+
+  return requiredEquipmentIds.every((id) => selectedEquipmentIds.has(id));
+}
