@@ -145,36 +145,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     };
 
     React.useEffect(() => {
-      const fieldValue = map(lhrApprovalsState?.getApprovals, 'approver.id');
-      formState?.setFieldValue(name, fieldValue, false);
-
-      const activeApprovals = filter(
-        docApprovals,
-        (a) => a.status !== 'ABANDONED',
-      );
-      // Auto-add current user as approver for LHR steps if not already added
-      if (
-        authUser
-        && document?.status === DocumentRevisionStatus.Draft
-        && document
-        && !document?.formTemplate
-        && !activeApprovals?.length
-      ) {
-        if (authUser.employeeId) {
-          if (shouldSkipDefaultOwner()) {
-            // Don't add default owner for LHR step fields - user will be added when they complete entries
-            return;
-          }
-          addApprover([authUser.employeeId]);
-          formState?.setFieldValue(name, [authUser.employeeId], false);
-        }
-      }
-
-      formState?.inputState.get(name)?.setRender();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    React.useEffect(() => {
       const dispose = reaction(
         () => workspaceState?.approvals,
         (data) => {
