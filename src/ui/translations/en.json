@@ -1629,6 +1629,7 @@
   "form.builder.audit.LOT_USAGE.BOOLEAN_NEW": "{label} added",
   "form.builder.audit.LOT_USAGE.BOOLEAN_EDITED": "{label} deleted",
   "form.builder.audit.replacement": "{type} replacement to {value} for step {step}",
+  "form.builder.audit.MATERIAL_UPDATE": "{field} {type}",
   "form.builder.audit.MATERIAL_REPLACEMENT": "Step {step}: {field} {type} {value}",
   "form.builder.audit.EQUIPMENT_REPLACEMENT": "Step {step}: {field} {type}",
   "form.builder.audit.EQUIPMENT_REPLACEMENT.field": "{type}",
