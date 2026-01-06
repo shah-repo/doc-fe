@@ -184,8 +184,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
           if (!canAddFBFields) { return; }
           if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
           saveSchemaTimer = setTimeout(() => {
-            workspaceState?.saveDocRev();
+            workspaceState?.saveDocRev(
+              workspaceState?.shouldPersistFormDataWithSchema ? formState?.getValues() : undefined,
+            );
             saveSchemaTimer = undefined;
+            workspaceState?.setShouldPersistFormDataWithSchema(false);
           }, 250);
         },
       );

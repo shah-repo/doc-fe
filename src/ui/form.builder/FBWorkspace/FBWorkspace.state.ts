@@ -46,6 +46,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public hiddenFieldsByRules = new Set<string>();
 
   public omitAutosave = false;
+  public shouldPersistFormDataWithSchema?: boolean;
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
@@ -221,6 +222,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setDirty = (isDirty: boolean) => {
     set(this, 'isDirty', isDirty);
+  };
+
+  @action public setShouldPersistFormDataWithSchema = (flag: boolean) => {
+    set(this, 'shouldPersistFormDataWithSchema', flag);
   };
 
   @action public setFormInputSync = (name: string, value: any) => {
