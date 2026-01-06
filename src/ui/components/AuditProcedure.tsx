@@ -6,7 +6,7 @@ import { intl } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import { styles } from '../documentRevision/audit/Audit.presenter.styles.new';
-import { getMaterialRelacmentAuditField } from '../documentRevision/audit/fieldChangeHandlers';
+import { getMaterialReplacementAuditField } from '../documentRevision/audit/fieldChangeHandlers';
 import { FB, FBProcedureItemType, FBProcedureState } from '../form.builder';
 import { isTranslation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -67,13 +67,13 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     return renderWithLoader(result);
   };
 
-  const renderUpdatedMaterailProcedureAudit = (
+  const renderUpdatedMaterialProcedureAudit = (
     field: AuditItem,
     number: number,
     innerKey: number,
     isNested = false,
   ): ReactNode => {
-    const fbLabel = getUdatedMaterailProcedureAuditLabel(field, number, isNested);
+    const fbLabel = getUpdatedMaterialProcedureAuditLabel(field, number, isNested);
 
     const { key, current, previous }: AuditItem = field;
     let value: number | string | null | undefined | ReactNode = !current && previous ? previous : current;
@@ -97,18 +97,18 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     );
   };
 
-  const getUdatedMaterailProcedureAuditLabel = (
+  const getUpdatedMaterialProcedureAuditLabel = (
     { key, current, previous }: AuditItem,
     number: number,
     isNested: boolean,
   ): string|null => {
-    let action = getMaterialRelacmentAuditField('added');
+    let action = getMaterialReplacementAuditField('added');
     if (current && !previous) {
-      action = getMaterialRelacmentAuditField('added');
+      action = getMaterialReplacementAuditField('added');
     } else if (current !== previous && current && previous) {
-      action = getMaterialRelacmentAuditField('updated');
+      action = getMaterialReplacementAuditField('updated');
     } else if (!current && previous) {
-      action = getMaterialRelacmentAuditField('deleted');
+      action = getMaterialReplacementAuditField('deleted');
     } else if (!current && !previous) {
       return null;
     }
@@ -165,11 +165,11 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     const number = audit?.fbSchemaItem?.stepIndex ?? 1;
     if (assignedLots) {
       fieldsToRender = nestedFieldsToCompare.map((field) =>
-        renderUpdatedMaterailProcedureAudit(field, number, innerKey++, true),
+        renderUpdatedMaterialProcedureAudit(field, number, innerKey++, true),
       );
     } else {
       fieldsToRender = fieldsToCompare.map((field) =>
-        renderUpdatedMaterailProcedureAudit(field, number, innerKey++),
+        renderUpdatedMaterialProcedureAudit(field, number, innerKey++),
       );
     }
     return (

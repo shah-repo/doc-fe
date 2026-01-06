@@ -31,7 +31,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, getMaterialRelacmentAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -554,67 +554,100 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
             return;
           }
-          if (['BOOLEAN_NEW', 'BOOLEAN_EDITED', 'NUMBER_EDITED', 'STRING_EDITED'].includes(change.type)) {
-            const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
-            const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata || {};
-            let innerKey = 0;
+
+          const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
+          if (change.type === 'BOOLEAN_NEW') {
+            const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
             singleFields.push(
               <Box
                 mb={1}
                 key={`${change.groupId}-${index}`}
                 data-cy="no-padding-margin"
-                className={
-                  index === array.length - 1
-                    ? classes.noPaddingMargin
-                    : classes.auditListItem
-                }
+                className={classes.auditListItem}
               >
                 {materialId ? (
                   <>
-                    {lotDocId && lotPart && (
-                      <>
-                        <Typography className={classes.auditKey}>
-                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('lot', change.type, change.reference?.metadata, stepIndex)}
-                          </span>
-                        </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{lotDocId}</div>
-                      </>
-                    )}
-                    {quantity && (
-                      <>
-                        <Typography className={classes.auditKey}>
-                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('quantity', change.type, change.reference?.metadata, stepIndex)}
-                          </span>
-                        </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{quantity}</div>
-                      </>
-                    )}
-                    {unit && (
-                      <>
-                        <Typography className={classes.auditKey}>
-                          <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
-                            {getMaterialRelacmentAuditLabel('unit', change.type, change.reference?.metadata, stepIndex)}
-                          </span>
-                        </Typography>
-                        <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{unit}</div>
-                      </>
-                    )}
+                    {lotDocId && lotPart
+                      && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                    }
+                    {quantity
+                      && renderSmartRefsAuditRows('quantity', quantity, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                    {unit
+                      && renderSmartRefsAuditRows('unit', unit, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
                   </>
-                ) : (<>
-                  <Typography className={classes.auditKey}>
-                    <span data-cy={`change-key-${groupKey}-${key}=${innerKey++}`}>
-                      {getMaterialRelacmentAuditLabel('actualId', change.type, change.reference?.metadata, stepIndex)}
-                    </span>
-                  </Typography>
-                  <div data-cy={`change-key-${groupKey}-${key}-${innerKey}`} className={classes.auditValue}>{change.reference?.toDocRev?.document.docId}</div>
-                </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, false)
                 )}
               </Box>,
             );
             return;
           }
+
+          if (['NUMBER_EDITED', 'STRING_EDITED'].includes(change.type)) {
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={classes.auditListItem}
+              >
+                {materialId ? (
+                  <>
+                    {lotDocId && lotPart
+                      && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                    }
+                    {change.field.endsWith('metadata.quantity')
+                      && renderSmartRefsAuditRows('quantity', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                    {change.field.endsWith('metadata.unit')
+                      && renderSmartRefsAuditRows('unit', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                  </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                )}
+              </Box>,
+            );
+            return;
+          }
+
+          if (change.type === 'BOOLEAN_EDITED') {
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const { active } = change.reference ?? {};
+            const innerKey = 0;
+
+            if (!active) {
+              // Material was removed
+              singleFields.push(
+                <Box
+                  mb={1}
+                  key={`${change.groupId}-${index}`}
+                  data-cy="no-padding-margin"
+                  className={
+                    index === array.length - 1
+                      ? classes.noPaddingMargin
+                      : classes.auditListItem
+                  }
+                >
+                  {materialId ? (
+                    <>
+                      {lotDocId && lotPart
+                        && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                      }
+                    </>
+                  ) : (renderSmartRefsAuditRows(
+                    'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                  )}
+                </Box>,
+              );
+            }
+          }
+          return;
         }
 
         if (change.field.includes(PO_ITEMS_COMPONENT_NAME)) {
@@ -883,6 +916,41 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   } catch (error) {
     return '';
   }
+};
+
+const renderSmartRefsAuditRows = (
+  labelKey: string,
+  value: React.ReactNode,
+  groupKey: number | undefined,
+  key: number,
+  innerKey: number,
+  change: Audit,
+  stepIndex: number | undefined,
+  classes: Record<string, any>,
+  withTopSpace = false,
+) => {
+  return (
+    <>
+      <Typography
+        className={withTopSpace ? classes.auditKeyWithTopSpace : classes.auditKey}
+      >
+        <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
+          {getMaterialReplacementAuditLabel(
+            labelKey,
+            change.type,
+            change.reference?.metadata,
+            stepIndex,
+          )}
+        </span>
+      </Typography>
+      <div
+        data-cy={`change-key-${groupKey}-${key}-${innerKey}`}
+        className={classes.auditValue}
+      >
+        {value}
+      </div>
+    </>
+  );
 };
 
 export default AuditPresenter;
