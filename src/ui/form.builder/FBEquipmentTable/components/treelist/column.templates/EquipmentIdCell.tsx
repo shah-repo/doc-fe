@@ -188,7 +188,8 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
   const isLoading = !equipmentOptions.length;
 
   useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
+    const defaultValue = dataItem[field ?? ''];
+    const value = equipmentOptions.find((option) => option.value === defaultValue) ?? { label: defaultValue, value: defaultValue };
 
     if (value && field) {
       setValue(value);
