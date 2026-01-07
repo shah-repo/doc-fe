@@ -17,7 +17,7 @@ export const useFetchData = ({ isEBProcedure }) => {
     materialState.load();
   }, [materialState]);
 
-  const allowedStatuses = isEBProcedure
+  const editAllowedStatuses = isEBProcedure
     ? [DocumentRevisionStatus.Released, DocumentRevisionStatus.Draft]
     : [DocumentRevisionStatus.Released];
 
@@ -27,19 +27,34 @@ export const useFetchData = ({ isEBProcedure }) => {
     MaterialOption
     >;
 
-    const materialSelectOptions = materialMap
-      ? Array.from(materialMap.values()).filter(data => allowedStatuses.includes(data.status)).map((material) => ({
-        label: translate('common.select.revision', {
-          docId: material.document.docId,
-          displayRevision: material?.displayRevision,
-          name: material?.name,
-        }),
-        value: material.id,
-      }))
-      : [];
+    if (!materialMap) {
+      return {
+        materialSelectOptions: [],
+        allowedEditOptions: [],
+      };
+    }
+
+    const materials = Array.from(materialMap.values());
+
+    const filterByAllowedStatus = (materials: MaterialOption[], allowedStatuses: DocumentRevisionStatus[]) => {
+      return materials.filter((material) => allowedStatuses.includes(material.status));
+    };
+
+    const mapToAutocompleteOption = (material: MaterialOption) => ({
+      label: translate('common.select.revision', {
+        docId: material.document.docId,
+        displayRevision: material.displayRevision,
+        name: material.name,
+      }),
+      value: material.id,
+    });
+
+    const allowedEditOptions = filterByAllowedStatus(materials, editAllowedStatuses).map(mapToAutocompleteOption);
+    const materialSelectOptions = materials.map(mapToAutocompleteOption);
 
     return {
       materialSelectOptions,
+      allowedEditOptions,
     };
   });
 };
