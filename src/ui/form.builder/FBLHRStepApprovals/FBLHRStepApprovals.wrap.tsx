@@ -416,19 +416,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         = lhrApprovalsState.loading
         || lhrApprovalsState?.approvalApi.loading
         || lhrApprovalsState?.transitionApi.loading;
-
-      if (
-        authUser
-        && document?.status === DocumentRevisionStatus.Draft
-        && document
-        && !document?.formTemplate
-      ) {
-        if (shouldSkipDefaultOwner()) {
-          return;
-        }
-        disabledOptions = [authUser?.employeeId];
-        disableChipDelete = true;
-      }
     });
     documentStatus = document?.status;
 
