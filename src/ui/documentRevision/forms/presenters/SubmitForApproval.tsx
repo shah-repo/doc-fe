@@ -124,14 +124,14 @@ export const SubmitForApproval: React.FC<Props> = ({
     return {
       equipmentsFromSchema: mpiProcedureSchema.map(
         (item) => item.editorConfig?.equipment ?? [],
-      ),
+      ).filter((eqArray) => eqArray?.LHRTparameter === true),
 
       neededMaterials: mpiProcedureSchema.map(
         (item) => item.editorConfig?.materials ?? [],
       ),
 
       equipmentsFromMetadata: smartRefs
-        .filter((ref) => ref.metadata?.equipmentId)
+        .filter((ref) => ref.metadata?.equipmentId && ref?.active)
         .map((ref) => ref.metadata),
       materialsFromMetadata: smartRefs
         .filter((ref) => ref.metadata?.materialId != null && ref?.active)
@@ -176,14 +176,13 @@ export const SubmitForApproval: React.FC<Props> = ({
     neededMaterials,
     materialsFromMetadata,
     documentRevision?.formInput,
+    documentRevision?.document?.smartReferencesTo,
   ]);
 
   const isDisabledApproval
     = isTypeMpiOutput
-    && (hasInsufficientQty
-      || isApproverAdded
-      || hasPendingApprovals
-      || !areAllEquipmentsSelected);
+    && (isApproverAdded
+      || hasPendingApprovals);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
@@ -233,6 +232,16 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
+    if (hasInsufficientQty) {
+      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message'));
+      return;
+    }
+
+    if (!areAllEquipmentsSelected) {
+      toastError(translate('form.builder.lhrs.equipment.selection.error.message'));
+      return;
+    }
+
     if (!hasBuildType && isLhrDoc) {
       toastError(translate('form.builder.lhr.build.type.error.message'));
       return;
