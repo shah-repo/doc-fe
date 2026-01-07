@@ -104,7 +104,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { procedureState, mpiProcedureState, lhrStepState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
-  const { materialSelectOptions } = useFetchData({ isEBProcedure });
+  const { materialSelectOptions, allowedEditOptions } = useFetchData({ isEBProcedure });
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
@@ -511,6 +511,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const schema = getSchemaBuilder()({
     materialSelectOptions,
+    allowedEditOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     onDiscard: discardScanLot,
