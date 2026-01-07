@@ -40,7 +40,6 @@ import useAsync from '../../hooks/useAsync';
 import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
-  LHRS_START_DATE,
   LHRS_START_QUANTITY,
   MPI_PROCEDURE_BUILT_IN_ATTACHMENTS,
 } from '../FBLHRStep/utils';
@@ -139,10 +138,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     ): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
-
-    const shouldSkipDefaultOwner = (): boolean => {
-      return Object.keys(formState?.oldValues ?? {}).includes(LHRS_START_DATE);
-    };
 
     React.useEffect(() => {
       const dispose = reaction(
