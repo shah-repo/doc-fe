@@ -96,15 +96,17 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     disabled = disabled || isUndefined(id) || loading;
 
-    if (
-      !document?.formTemplate
+    React.useEffect(() => {
+      if (
+        !document?.formTemplate
       && [
         DocumentRevisionStatus.Approved,
         DocumentRevisionStatus.InReview,
       ].includes(documentStatus as DocumentRevisionStatus)
-    ) {
-      disabled = true;
-    }
+      ) {
+        disabled = true;
+      }
+    }, [document?.formTemplate, documentStatus]);
 
     const dispatch = useDispatch();
     const authUser = store.getState().auth.user;

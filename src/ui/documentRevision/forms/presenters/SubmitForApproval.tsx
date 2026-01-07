@@ -124,7 +124,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     return {
       equipmentsFromSchema: mpiProcedureSchema.map(
         (item) => item.editorConfig?.equipment ?? [],
-      ).filter((eqArray) => eqArray?.LHRTparameter === true),
+      ).filter((eqArray) => (eqArray as { LHRTparameter?: boolean })?.LHRTparameter !== true),
 
       neededMaterials: mpiProcedureSchema.map(
         (item) => item.editorConfig?.materials ?? [],
