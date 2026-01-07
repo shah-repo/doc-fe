@@ -308,7 +308,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
             (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
           );
 
-          if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current && document?.status !== DocumentRevisionStatus.Released) {
             pendingLHRSTriggeredRef.current = true;
             closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
           }
