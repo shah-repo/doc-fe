@@ -119,7 +119,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         option.label.toLowerCase().includes(inputVal?.toLowerCase()),
       );
       setItems(filteredOptions);
-    } else if (!inputVal) {
+    } else if (!inputVal || inputVal?.length < MIN_SEARCH_TERM_LENGTH) {
       setItems(allowedEditEqOptions ?? []);
     }
   };
