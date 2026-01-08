@@ -31,6 +31,7 @@ interface LotAutocompleteProps {
   isLoading?: boolean
   isEBProcedure?: boolean
   equipmentOptions: OptionType[]
+  allowedEditEqOptions: OptionType[]
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -43,6 +44,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   isEBProcedure,
   parentPartRevId,
   equipmentOptions,
+  allowedEditEqOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
@@ -57,8 +59,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     if (value && field) {
       setValue(value);
     }
-    setItems(equipmentOptions);
-  }, [equipmentOptions]);
+    setItems(allowedEditEqOptions);
+  }, [equipmentOptions, allowedEditEqOptions]);
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
@@ -93,7 +95,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     }
 
     if (!isFreeSolo && !equipmentId) {
-      setItems(equipmentOptions ?? []);
+      setItems(allowedEditEqOptions ?? []);
     }
   }, [values]);
 
@@ -113,12 +115,12 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     setValue({ label: inputVal, value: inputVal });
 
     if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
-      const filteredOptions = equipmentOptions?.filter((option) =>
+      const filteredOptions = allowedEditEqOptions?.filter((option) =>
         option.label.toLowerCase().includes(inputVal?.toLowerCase()),
       );
       setItems(filteredOptions);
     } else if (!inputVal) {
-      setItems(equipmentOptions ?? []);
+      setItems(allowedEditEqOptions ?? []);
     }
   };
 
@@ -168,6 +170,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     dataItem,
     field,
     equipmentOptions,
+    allowedEditEqOptions,
     addActualId,
     isDisabled,
     isEnableActualIdAddition,
@@ -242,6 +245,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 isLoading,
                 isEBProcedure,
                 equipmentOptions,
+                allowedEditEqOptions,
               }}
             />
           ) : (

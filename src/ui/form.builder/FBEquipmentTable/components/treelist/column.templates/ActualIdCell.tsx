@@ -32,6 +32,7 @@ interface LotAutocompleteProps {
   actualId?: string
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  allowedEditEqOptions: OptionType[]
   isEBProcedure?: boolean
 }
 
@@ -44,7 +45,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   actualId,
   parentPartRevId,
   isEBProcedure,
-  equipmentOptions: propEquipmentOptions,
+  allowedEditEqOptions: propEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
@@ -52,11 +53,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
   const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
-  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
+  const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const filteredEquipmentOptions = propEquipmentOptions.filter((option) => {
     return option.value === equipmentSpecId;
   });
-  const equipmentOptions = isEquipmentSpecification ? equipmentSpcOptions : filteredEquipmentOptions;
+  const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : filteredEquipmentOptions;
   const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
   const isDateOverdue = (date: MomentInput): boolean => {
     if (!date) {
@@ -140,7 +141,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, addActualId, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions, addActualId, isEBProcedure } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
@@ -208,6 +209,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 actualId,
                 isLoading,
                 equipmentOptions,
+                allowedEditEqOptions,
                 isEBProcedure,
               }}
             />

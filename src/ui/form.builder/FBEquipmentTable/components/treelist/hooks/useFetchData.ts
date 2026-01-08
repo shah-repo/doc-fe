@@ -1,6 +1,7 @@
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncState from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
@@ -31,6 +32,11 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
   };
 };
 
+const restrictedStatuses = [DocumentRevisionStatus.Canceled];
+const filterByRestrictedStatus = (equipments: EquipOption[]) => {
+  return equipments.filter((material) => !restrictedStatuses.includes(material.status));
+};
+
 export const useFetchData = () => {
   const optionId = FBAutocompleteAsyncOption.equipment;
   const equipAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -47,10 +53,13 @@ export const useFetchData = () => {
     EquipOption
     >;
 
-    const equipmentOptions = Array.from(asyncData?.values() || []).map(parseEquipmentOption);
+    const equipments = Array.from(asyncData?.values() ?? []) ?? [];
+    const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
+    const equipmentOptions = equipments.map(parseEquipmentOption);
 
     return {
       equipmentOptions,
+      allowedEditEqOptions,
     };
   });
 };
@@ -68,7 +77,10 @@ export const useEquipmentOptions = (id: string) => {
 
   return useObserver(() => {
     if (!optionId) {
-      return { equipmentSpcOptions: [] };
+      return {
+        equipmentSpcOptions: [],
+        allowedEditEqSpecOptions: [],
+      };
     }
 
     // Check if data is in the API response
@@ -88,11 +100,13 @@ export const useEquipmentOptions = (id: string) => {
         asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
       }
     }
-
-    const equipmentSpcOptions = Array.from(asyncData?.values() ?? []).map(parseEquipmentOption);
+    const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
+    const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
+    const allowedEditEqSpecOptions = filterByRestrictedStatus(equipmentSpecs).map(parseEquipmentOption);
 
     return {
       equipmentSpcOptions,
+      allowedEditEqSpecOptions,
     };
   });
 };
