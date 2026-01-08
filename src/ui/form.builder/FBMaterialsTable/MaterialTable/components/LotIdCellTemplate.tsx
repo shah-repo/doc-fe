@@ -10,7 +10,7 @@ import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { checkIsDocumentLot } from '../../../../documentRevision/helpers/checkDocumentGroup';
@@ -47,8 +47,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { getFormattedDateString } = useDate();
   const options = useMemo(
     () =>
-      lots.map((lot) => ({
-        label: lot.document.docId,
+      lots.filter((lot) => lot?.status === DocumentRevisionStatus.Released).map((lot) => ({
+        label: translate('common.select.revision', { docId: lot?.document.docId, displayRevision: lot?.displayRevision, name: lot?.name }),
         value: lot.id,
         expiryDate: lot.isExpired ? getFormattedDateString(lot.expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
         isExpired: lot.isExpired,
@@ -167,9 +167,9 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
   const renderOptions = useCallback(() => {
     return lots.map((lot) => {
-      const { id, document, documentId } = lot;
+      const { id, document, documentId, displayRevision, name } = lot;
       return {
-        label: document.docId,
+        label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
         value: id,
         documentId: documentId,
       };
