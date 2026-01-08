@@ -18,7 +18,7 @@ import useHover from '../../../../../hooks/useHover';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { useEquipmentOptions } from '../hooks/useFetchData';
-import { isEditEquipItem } from '../utils';
+import { isEditEquipItem, isEquipmentSpecificationType } from '../utils';
 import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { customEQOptionType, CustomTreeListCellProps } from './types';
@@ -50,8 +50,8 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const classes = useStyles();
   const { getFormattedDateString } = useDate();
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
-  const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
+  const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
   const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
   const filteredEquipmentOptions = propEquipmentOptions.filter((option) => {
     return option.value === equipmentSpecId;

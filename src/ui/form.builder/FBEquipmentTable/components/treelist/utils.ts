@@ -79,3 +79,13 @@ export const isDateOverdue = (date?: string) => {
 export const getValidDueDate = (date?: string): string => {
   return date && date !== 'N/A' ? date : '-';
 };
+
+export const isEquipmentSpecificationType = (equipmentOptions, id: string): boolean => {
+  const selectedEquipInfo = equipmentOptions?.find(
+    (option) => option.value === id,
+  );
+  if (selectedEquipInfo?.label.startsWith('ES-')) {
+    return true;
+  }
+  return false;
+};

@@ -113,7 +113,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     equipmentsFromMetadata,
     materialsFromMetadata,
   } = useMemo(() => {
-    const schema = documentRevision?.formDocument?.formTemplate?.schema ?? [];
+    const schema = documentRevision?.schema ?? documentRevision?.formDocument?.formTemplate?.schema ?? [];
 
     const smartRefs = documentRevision?.document?.smartReferencesTo ?? [];
 
@@ -124,7 +124,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     return {
       equipmentsFromSchema: mpiProcedureSchema.map(
         (item) => item.editorConfig?.equipment ?? [],
-      ).filter((eqArray) => (eqArray as { LHRTparameter?: boolean })?.LHRTparameter !== true),
+      ),
 
       neededMaterials: mpiProcedureSchema.map(
         (item) => item.editorConfig?.materials ?? [],
