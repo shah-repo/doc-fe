@@ -11,7 +11,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
   item, isFirst, isDesignMode, isAutosaveEnabled,
 }) => {
   const { name = '' } = item;
-  const inlineStyle = [LHRS_START_QUANTITY, LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY].includes(name ?? '');
+  const shouldApplyInlineStyle = [LHRS_START_QUANTITY, LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY].includes(name ?? '');
   const classes = useStyles();
 
   const {
@@ -29,7 +29,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
   return (
     <div
       ref={setNodeRef}
-      className={cx({ 'fb-sortable-ghost': isDragging }, { [classes.inlineStyle]: inlineStyle })}
+      className={cx({ 'fb-sortable-ghost': isDragging }, { [classes.inlineStyle]: shouldApplyInlineStyle })}
       style={style}
       data-cy="sortable-item"
     >
