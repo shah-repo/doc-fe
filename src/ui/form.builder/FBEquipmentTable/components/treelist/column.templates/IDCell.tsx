@@ -91,6 +91,7 @@ const Editor: React.FC<EditorProps> = ({
 
   const handleChange = (_: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
+    setInputValue(undefined);
     field && setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
