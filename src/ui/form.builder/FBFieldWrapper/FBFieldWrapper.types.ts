@@ -14,5 +14,3 @@ export type FBFieldWrapperProps =
     isMarkDownVisible?: boolean
     toggleItemMarkdown?: () => void
   };
-
-export const LHR_WORK_ORDER = 'lhr-work-order';
