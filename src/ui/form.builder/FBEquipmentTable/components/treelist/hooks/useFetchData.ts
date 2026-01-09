@@ -9,24 +9,15 @@ import { FB } from '../../../../helpers';
 import { customEQOptionType, EquipOption } from '../column.templates/types';
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
-  const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-  const preventiveMaintenanceKey = Object.keys(equipment.formInput ?? {}).find((key) =>
-    [
-      'section-iii-preventative-maintenance',
-      'section-iii-preventive-maintenance',
-    ].some((prefix) => key.startsWith(prefix)),
-  );
-  const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
-  const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
   return {
     label: translate('common.select.revision', {
       docId: equipment.document.docId,
       displayRevision: equipment?.displayRevision,
       name: equipment?.name,
     }),
-    complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
-    calDueDate: calibrationData.complianceDueDate,
-    pmDueDate: preventiveMaintenanceData.complianceDueDate,
+    complianceDueDate: equipment?.precalc?.cali_due_date ?? equipment?.precalc?.pm_due_date ?? '',
+    calDueDate: equipment?.precalc?.cali_due_date,
+    pmDueDate: equipment?.precalc?.pm_due_date,
     status: equipment?.eqStatus,
     value: equipment.id,
   };
