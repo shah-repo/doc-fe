@@ -156,7 +156,6 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       try {
         parsedValue = JSON.parse(auditValueToUse.trim()) as IMaterial;
       } catch (e) {
-        console.error('Failed to parse audit JSON:', e);
         parsedValue = auditValueToUse;
       }
     } else {
