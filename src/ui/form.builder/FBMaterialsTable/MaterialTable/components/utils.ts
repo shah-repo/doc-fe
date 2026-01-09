@@ -105,7 +105,7 @@ export const isMpiOutputInsufficientQty = (
   });
 };
 
-export interface EquipmentSelectionResult {
+interface EquipmentSelectionResult {
   isSelected: boolean
   unselectedEquipment: string[]
 }
