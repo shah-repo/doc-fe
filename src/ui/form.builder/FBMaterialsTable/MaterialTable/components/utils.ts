@@ -105,26 +105,36 @@ export const isMpiOutputInsufficientQty = (
   });
 };
 
+export interface EquipmentSelectionResult {
+  isSelected: boolean
+  unselectedEquipment: string[]
+}
+
 export function areRequiredEquipmentsSelected (
   equipmentsFromSchema: SchemaEquipment[][],
   equipmentsFromMetadata: EquipmentMetadata[],
-): boolean {
+): EquipmentSelectionResult {
   if (!equipmentsFromSchema.length) {
-    return true;
+    return { isSelected: true, unselectedEquipment: [] };
   }
 
   const requiredEquipmentIds = equipmentsFromSchema
     .flat()
     .map((equipment) => equipment?.title)
-    .filter(Boolean);
+    .filter((id): id is string => Boolean(id));
 
   if (!requiredEquipmentIds.length) {
-    return true;
+    return { isSelected: true, unselectedEquipment: [] };
   }
 
   const selectedEquipmentIds = new Set(
     equipmentsFromMetadata.map((item) => item?.equipmentId).filter(Boolean),
   );
 
-  return requiredEquipmentIds.every((id) => selectedEquipmentIds.has(id));
+  const unselectedEquipment = requiredEquipmentIds.filter((id) => !selectedEquipmentIds.has(id));
+
+  return {
+    isSelected: unselectedEquipment.length === 0,
+    unselectedEquipment,
+  };
 }

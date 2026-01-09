@@ -1495,7 +1495,7 @@
   "form.builder.lhrt.error.message": "Please choose the Part.",
   "form.builder.lhr.build.type.error.message": "The Build Type is a required field",
   "form.builder.lhrs.insufficient.quantity.error.message": "Insufficient quantity for Material",
-  "form.builder.lhrs.equipment.selection.error.message": "No Equipment has been selected",
+  "form.builder.lhrs.equipment.selection.error.message": "No equipment was selected for {equipmentId}",
   "form.builder.scheduled.part": "Scheduled Part",
   "form.builder.part.lot": "Part Lot",
   "form.builder.select.existing.part": "Select a part",

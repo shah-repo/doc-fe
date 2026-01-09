@@ -105,7 +105,8 @@ export const SubmitForApproval: React.FC<Props> = ({
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
   const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
-    = useState(false);
+    = useState(true);
+  const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
 
   const {
     equipmentsFromSchema,
@@ -148,6 +149,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   useEffect(() => {
     if (!isTypeMpiOutput) {
       setAreAllEquipmentsSelected(true);
+      setUnselectedEquipment([]);
       setHasInsufficientQty(false);
       return;
     }
@@ -155,12 +157,13 @@ export const SubmitForApproval: React.FC<Props> = ({
     const lhrsStartQuantity
       = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
 
-    setAreAllEquipmentsSelected(
-      areRequiredEquipmentsSelected(
-        equipmentsFromSchema,
-        equipmentsFromMetadata,
-      ),
+    const equipmentSelectionResult = areRequiredEquipmentsSelected(
+      equipmentsFromSchema,
+      equipmentsFromMetadata,
     );
+
+    setAreAllEquipmentsSelected(equipmentSelectionResult.isSelected);
+    setUnselectedEquipment(equipmentSelectionResult.unselectedEquipment);
 
     setHasInsufficientQty(
       isMpiOutputInsufficientQty(
@@ -238,7 +241,10 @@ export const SubmitForApproval: React.FC<Props> = ({
     }
 
     if (!areAllEquipmentsSelected) {
-      toastError(translate('form.builder.lhrs.equipment.selection.error.message'));
+      const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
+      const equipmentId = unselectedEquipment[0];
+      const equipmentRef = usedDocInLHRS?.[equipmentId];
+      toastError(translate('form.builder.lhrs.equipment.selection.error.message', { equipmentId: equipmentRef?.docId }));
       return;
     }
 
