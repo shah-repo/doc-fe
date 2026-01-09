@@ -218,6 +218,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         } else if (valueKey !== 'equipment' && change.field.includes('equipment')) {
           valueKeyType = 'equipment';
         }
+
+        if (change.type === 'STRING_EDITED' && valueKeyType === 'materials' && change.field.includes('attachments') && valueKey === 'id') {
+          return;
+        }
         if (change.field.includes('attachments')) {
           valueKey = 'attachments';
         }
