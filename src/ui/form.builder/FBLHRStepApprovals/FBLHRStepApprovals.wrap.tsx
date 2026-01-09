@@ -40,7 +40,6 @@ import useAsync from '../../hooks/useAsync';
 import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
-  LHRS_START_DATE,
   LHRS_START_QUANTITY,
   MPI_PROCEDURE_BUILT_IN_ATTACHMENTS,
 } from '../FBLHRStep/utils';
@@ -141,10 +140,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     ): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
-
-    const shouldSkipDefaultOwner = (): boolean => {
-      return Object.keys(formState?.oldValues ?? {}).includes(LHRS_START_DATE);
-    };
 
     React.useEffect(() => {
       const dispose = reaction(
@@ -418,19 +413,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         = lhrApprovalsState.loading
         || lhrApprovalsState?.approvalApi.loading
         || lhrApprovalsState?.transitionApi.loading;
-
-      if (
-        authUser
-        && document?.status === DocumentRevisionStatus.Draft
-        && document
-        && !document?.formTemplate
-      ) {
-        if (shouldSkipDefaultOwner()) {
-          return;
-        }
-        disabledOptions = [authUser?.employeeId];
-        disableChipDelete = true;
-      }
     });
     documentStatus = document?.status;
 
