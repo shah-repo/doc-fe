@@ -8,18 +8,26 @@ import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAut
 import { FB } from '../../../../helpers';
 import { customEQOptionType, EquipOption } from '../column.templates/types';
 
+const isValidDate = (date?: string): boolean => Boolean(date && !Number.isNaN(Date.parse(date)));
+
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
+  const { id, name, eqStatus, displayRevision, document, precalc } = equipment;
+  const caliDueDate = precalc?.cali_due_date;
+  const pmDueDate = precalc?.pm_due_date;
+  const validCalDate = isValidDate(caliDueDate) ? caliDueDate : '';
+  const validPmDate = isValidDate(pmDueDate) ? pmDueDate : '';
+
   return {
     label: translate('common.select.revision', {
-      docId: equipment.document.docId,
-      displayRevision: equipment?.displayRevision,
-      name: equipment?.name,
+      docId: document?.docId,
+      displayRevision,
+      name,
     }),
-    complianceDueDate: equipment?.precalc?.cali_due_date ?? equipment?.precalc?.pm_due_date ?? '',
-    calDueDate: equipment?.precalc?.cali_due_date,
-    pmDueDate: equipment?.precalc?.pm_due_date,
-    status: equipment?.eqStatus,
-    value: equipment.id,
+    complianceDueDate: validCalDate ?? validPmDate ?? '',
+    calDueDate: validCalDate,
+    pmDueDate: validPmDate,
+    status: eqStatus,
+    value: id,
   };
 };
 
