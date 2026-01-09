@@ -104,6 +104,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   );
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
+  const [insufficientMaterials, setInsufficientMaterials] = useState<string[]>([]);
   const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
     = useState(true);
   const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
@@ -116,7 +117,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   } = useMemo(() => {
     const schema = documentRevision?.schema ?? documentRevision?.formDocument?.formTemplate?.schema ?? [];
 
-    const smartRefs = documentRevision?.document?.smartReferencesTo ?? [];
+    const smartRefs = documentRevision?.smartReferencesTo ?? [];
 
     const mpiProcedureSchema = schema.filter(
       (item) => item.type === 'mpiprocedure',
@@ -143,7 +144,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     };
   }, [
     documentRevision?.formDocument?.formTemplate?.schema,
-    documentRevision?.document?.smartReferencesTo,
+    documentRevision?.smartReferencesTo,
   ]);
 
   useEffect(() => {
@@ -151,6 +152,7 @@ export const SubmitForApproval: React.FC<Props> = ({
       setAreAllEquipmentsSelected(true);
       setUnselectedEquipment([]);
       setHasInsufficientQty(false);
+      setInsufficientMaterials([]);
       return;
     }
 
@@ -165,13 +167,14 @@ export const SubmitForApproval: React.FC<Props> = ({
     setAreAllEquipmentsSelected(equipmentSelectionResult.isSelected);
     setUnselectedEquipment(equipmentSelectionResult.unselectedEquipment);
 
-    setHasInsufficientQty(
-      isMpiOutputInsufficientQty(
-        neededMaterials,
-        materialsFromMetadata,
-        lhrsStartQuantity,
-      ),
+    const materialQtyResult = isMpiOutputInsufficientQty(
+      neededMaterials,
+      materialsFromMetadata,
+      lhrsStartQuantity,
     );
+
+    setHasInsufficientQty(materialQtyResult.hasInsufficientQty);
+    setInsufficientMaterials(materialQtyResult.insufficientMaterials);
   }, [
     isTypeMpiOutput,
     equipmentsFromSchema,
@@ -236,7 +239,13 @@ export const SubmitForApproval: React.FC<Props> = ({
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (hasInsufficientQty) {
-      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message'));
+      console.log('Insufficient Materials:', insufficientMaterials, insufficientMaterials.length);
+      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, materialId) => {
+        const lotDocIds = documentRevision?.usedDocumentsInLHRS?.[materialId]?.docId;
+        const docIdArray = Array.isArray(lotDocIds) ? lotDocIds : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
+        return [...acc, ...docIdArray];
+      }, []);
+      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message', { lots: lotsDocIds.join(', ') }));
       return;
     }
 
