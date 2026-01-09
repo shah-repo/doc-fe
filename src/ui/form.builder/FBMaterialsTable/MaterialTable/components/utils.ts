@@ -69,11 +69,18 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
 
+interface MaterialInsufficientQtyResult {
+  hasInsufficientQty: boolean
+  insufficientMaterials: string[]
+  neededByMaterial?: Record<string, number>
+  usedByMaterial?: Record<string, number>
+}
+
 export const isMpiOutputInsufficientQty = (
   neededQuantity?: NeededMaterial[][],
   usedQuantity?: UsedMaterial[],
   startQuantity?: number,
-): boolean => {
+): MaterialInsufficientQtyResult => {
   const flatNeeded: NeededMaterial[] = (neededQuantity ?? []).flat();
 
   const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
@@ -100,9 +107,16 @@ export const isMpiOutputInsufficientQty = (
     {},
   );
 
-  return Object.keys(neededByMaterial).some((materialId) => {
+  const insufficientMaterials = Object.keys(neededByMaterial).filter((materialId) => {
     return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
   });
+
+  return {
+    hasInsufficientQty: insufficientMaterials.length > 0,
+    insufficientMaterials,
+    neededByMaterial,
+    usedByMaterial,
+  };
 };
 
 interface EquipmentSelectionResult {
