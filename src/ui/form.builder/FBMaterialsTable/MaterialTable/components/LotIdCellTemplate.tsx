@@ -167,9 +167,9 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
   const renderOptions = useCallback(() => {
     return lots.map((lot) => {
-      const { id, document, documentId, displayRevision, name } = lot;
+      const { id, document, documentId } = lot;
       return {
-        label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
+        label: document.docId,
         value: id,
         documentId: documentId,
       };
