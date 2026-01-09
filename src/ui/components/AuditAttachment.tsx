@@ -32,7 +32,7 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
     } catch {
       if (isString(auditValue)) {
         auditValue = [auditValue];
-      } else {
+      } else if (!Array.isArray(auditValue)) {
         auditValue.push(auditValue);
       }
     }

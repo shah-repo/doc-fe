@@ -21,8 +21,12 @@ type Props = OwnProps;
 
 interface AuditItem {
   key: string
-  current?: string|number|null
-  previous?: string|number|null
+  current?: string|number|null|Attachment[]
+  previous?: string|number|null|Attachment[]
+}
+
+interface Attachment {
+  id: string
 }
 
 interface IMaterial {
@@ -30,6 +34,7 @@ interface IMaterial {
   quantity: number
   unit?: string|null
   assignedLots: IAssignLot[]
+  attachments: Attachment[]
 }
 
 interface IAssignLot {
@@ -81,6 +86,16 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       value = renderPartValue(current as string);
     } else if (key === 'lotId') {
       value = renderLotValue(current as string);
+    } else if (key === 'attachments') {
+      const getAttachmentIds = (data) => Array.isArray(data) ? data.map((item) => item?.id) : data?.id;
+
+      const isRemoval = Array.isArray(previous) && previous?.length && !current;
+      const auditAttachment = {
+        ...audit,
+        previousValue: isRemoval ? getAttachmentIds(previous) : 'undefined',
+        nextValue: !isRemoval ? getAttachmentIds(current) : 'undefined',
+      };
+      value = <AuditAttachment audit={auditAttachment} />;
     }
 
     return (
@@ -136,18 +151,29 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
 
   if (audit.type === 'OBJECT_EDITED' && audit.field.includes('materials')) {
     const auditValueToUse = auditValue ?? '{}';
-    const { title, unit, quantity, assignedLots }
-      = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as IMaterial : auditValueToUse;
+    let parsedValue;
+    if (typeof auditValueToUse === 'string') {
+      try {
+        parsedValue = JSON.parse(auditValueToUse.trim()) as IMaterial;
+      } catch (e) {
+        parsedValue = auditValueToUse;
+      }
+    } else {
+      parsedValue = auditValueToUse;
+    }
+
+    const { title, unit, quantity, assignedLots, attachments } = parsedValue;
 
     const previousValueToUse = audit.previousValue ?? '{}';
     const {
-      title: prevTitle, unit: prevUnit, quantity: prevQuantity, assignedLots: prevAssignedLots,
+      title: prevTitle, unit: prevUnit, quantity: prevQuantity, assignedLots: prevAssignedLots, attachments: prevAttachments,
     } = (typeof previousValueToUse === 'string' ? JSON.parse(previousValueToUse) : previousValueToUse) as IMaterial;
 
     const fieldsToCompare = [
       { key: 'title', current: title, previous: prevTitle },
       { key: 'quantity', current: quantity, previous: prevQuantity },
       { key: 'unit', current: unit, previous: prevUnit },
+      { key: 'attachments', current: attachments, previous: prevAttachments },
     ];
 
     const assignedLotCurrent = assignedLots?.[0];
