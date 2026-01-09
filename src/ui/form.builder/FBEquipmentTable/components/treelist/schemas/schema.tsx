@@ -9,6 +9,7 @@ import IDCell from '../column.templates/IDCell';
 export const TreeListSchema = ({
   actionsClass,
   equipmentOptions,
+  allowedEditEqOptions,
   popperHolder,
   getItem,
   addActualId,
@@ -28,7 +29,7 @@ export const TreeListSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} />,
     sortable: false,
   },
   {
@@ -37,7 +38,7 @@ export const TreeListSchema = ({
     title: translate('lhr.equipment.grid.heading.actual.id'),
     width: 150,
     mainOrderIndex: 2,
-    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
   },
   {
     field: 'eqStatus',

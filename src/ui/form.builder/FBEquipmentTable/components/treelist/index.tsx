@@ -92,7 +92,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
-  const { equipmentOptions } = useFetchData();
+  const { equipmentOptions, allowedEditEqOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
   const disabledOptions = map(items, 'title');
 
@@ -304,6 +304,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     getItem,
     addActualId: addActualId,
     equipmentOptions,
+    allowedEditEqOptions,
     onDiscard: discardEquipItem,
     onDelete: removeEquipItem,
     onConfirm: formik.submitForm,
