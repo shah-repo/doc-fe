@@ -8,27 +8,26 @@ import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAut
 import { FB } from '../../../../helpers';
 import { customEQOptionType, EquipOption } from '../column.templates/types';
 
+const isValidDate = (date?: string): boolean => Boolean(date && !Number.isNaN(Date.parse(date)));
+
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
-  const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-  const preventiveMaintenanceKey = Object.keys(equipment.formInput ?? {}).find((key) =>
-    [
-      'section-iii-preventative-maintenance',
-      'section-iii-preventive-maintenance',
-    ].some((prefix) => key.startsWith(prefix)),
-  );
-  const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
-  const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
+  const { id, name, eqStatus, displayRevision, document, precalc } = equipment;
+  const caliDueDate = precalc?.cali_due_date;
+  const pmDueDate = precalc?.pm_due_date;
+  const validCalDate = isValidDate(caliDueDate) ? caliDueDate : '';
+  const validPmDate = isValidDate(pmDueDate) ? pmDueDate : '';
+
   return {
     label: translate('common.select.revision', {
-      docId: equipment.document.docId,
-      displayRevision: equipment?.displayRevision,
-      name: equipment?.name,
+      docId: document?.docId,
+      displayRevision,
+      name,
     }),
-    complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
-    calDueDate: calibrationData.complianceDueDate,
-    pmDueDate: preventiveMaintenanceData.complianceDueDate,
-    status: equipment?.eqStatus,
-    value: equipment.id,
+    complianceDueDate: validCalDate ?? validPmDate ?? '',
+    calDueDate: validCalDate,
+    pmDueDate: validPmDate,
+    status: eqStatus,
+    value: id,
   };
 };
 

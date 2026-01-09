@@ -52,4 +52,4 @@ export interface EquipAutoCompleteOptions {
 type EquipmentCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput' | 'eqStatus' | 'status'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput' | 'eqStatus' | 'status' | 'precalc'>;
