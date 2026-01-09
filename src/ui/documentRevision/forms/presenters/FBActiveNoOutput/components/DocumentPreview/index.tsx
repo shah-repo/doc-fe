@@ -1,9 +1,10 @@
 import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { cloneDeep, filter, get, includes, map, size } from 'lodash';
+import { cloneDeep, debounce, filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from '../../../../../../../App';
 import FBTrainingInfoContainer from '../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
 import { withSMForm } from '../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc';
@@ -210,6 +211,16 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleResize: AutoSizerProps['onResize'] = useCallback(
+    debounce(
+      (size) => {
+          _tabsState?.setContentSize(size);
+      },
+      400,
+    ),
+    [_tabsState],
+  );
+
   return (
     <Observer>
       {() => (
@@ -241,112 +252,116 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                   const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                   return (
-                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent} pr={0.75}>
-                      {tabType === TabTypeOptions.MIXED && <>
-                        {!formPreview && <DocumentRevisionFormPresenter
-                          {...formik}
-                          isPreview={true}
-                          redlineActive={false}
-                          releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                          documentRevision={documentRevision}
-                          proposedDocId={docRevId}
-                          documentTypesById={documentTypesById}
-                          canChangeOwnerShip={false}
-                          resetForm={emptyFunction}
-                          {...{
-                            type,
-                            showAdministrativeAndVoidChange,
-                            isOutput,
-                            email,
-                            isOwner,
-                            mode,
-                          }}
-                        />}
-                        {(isPart || isPartForm) && formPreview && (
-                          <Grid item xs={12}>
-                            <LifecyclePhaseSelect
-                              docTypeId={docTypeId}
-                              lifecyclePhaseId={
-                                  documentRevision?.lifecyclePhaseId
-                              }
-                              isDisabled={isPartForm}
-                            />
-                          </Grid>
-                        )}
-                        {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
-                          <Grid item xs={12}>
-                            <RelatedPartsWrapper
-                              viewOnly={true}
+                    <AutoSizer onResize={handleResize} disableHeight>
+                      {({ width }) => (
+                        <SMBox key={tabInfo.tabId} style={{ width }} className={classes.previewTabContent} pr={0.75}>
+                          {tabType === TabTypeOptions.MIXED && <>
+                            {!formPreview && <DocumentRevisionFormPresenter
+                              {...formik}
+                              isPreview={true}
+                              redlineActive={false}
+                              releasedDocRev={_documentRevisionFormState?.releasedDocRev}
                               documentRevision={documentRevision}
-                              relatedPartsStatus= {documentRevision?.relatedPartsStatus}
-                            />
-                          </Grid>
-                        )}
-                        {documentRevision && showTabContent
+                              proposedDocId={docRevId}
+                              documentTypesById={documentTypesById}
+                              canChangeOwnerShip={false}
+                              resetForm={emptyFunction}
+                              {...{
+                                type,
+                                showAdministrativeAndVoidChange,
+                                isOutput,
+                                email,
+                                isOwner,
+                                mode,
+                              }}
+                            />}
+                            {(isPart || isPartForm) && formPreview && (
+                              <Grid item xs={12}>
+                                <LifecyclePhaseSelect
+                                  docTypeId={docTypeId}
+                                  lifecyclePhaseId={
+                                  documentRevision?.lifecyclePhaseId
+                                  }
+                                  isDisabled={isPartForm}
+                                />
+                              </Grid>
+                            )}
+                            {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
+                              <Grid item xs={12}>
+                                <RelatedPartsWrapper
+                                  viewOnly={true}
+                                  documentRevision={documentRevision}
+                                  relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+                                />
+                              </Grid>
+                            )}
+                            {documentRevision && showTabContent
                         && <FBSchema
                           {...{ schema }}
                           schemaState={previewWorkspaceState}
                           workspaceMode={mode}
                         />
-                        }
-                        {formPreview && isRelatedEquipmentsShowing && (
-                          <Grid item xs={12}>
-                            <RelatedEquipments parentDocumentRevision={documentRevision} />
-                          </Grid>
-                        )}
-                      </>}
-                      {tabType === TabTypeOptions.DYNAMIC && showTabContent
+                            }
+                            {formPreview && isRelatedEquipmentsShowing && (
+                              <Grid item xs={12}>
+                                <RelatedEquipments parentDocumentRevision={documentRevision} />
+                              </Grid>
+                            )}
+                          </>}
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
-                        <>
-                          {tabInfo.tabId === 'lineitems' && (
-                            <AttachmentsField
-                              isDisabled={isDisabledInput}
-                              isNewVersion={false}
-                              docRevId={docRevId || ''}
-                              containsRedline={false}
-                              docRevStatus={documentRevision?.status}
+                            <>
+                              {tabInfo.tabId === 'lineitems' && (
+                                <AttachmentsField
+                                  isDisabled={isDisabledInput}
+                                  isNewVersion={false}
+                                  docRevId={docRevId || ''}
+                                  containsRedline={false}
+                                  docRevStatus={documentRevision?.status}
+                                  documentRevision={documentRevision}
+                                  documentTypeId={docTypeId || ''}
+                                  labeld="Supporting Documents"
+                                />
+                              )}
+                              <FBSchema
+                                {...{ schema }}
+                                schemaState={previewWorkspaceState}
+                                workspaceMode={mode}
+                              />
+                            </>
+                          )}
+                          {tabType === TabTypeOptions.TABS_MEQ && (
+                            <FBMaterialEqInfoContainer
                               documentRevision={documentRevision}
-                              documentTypeId={docTypeId || ''}
-                              labeld="Supporting Documents"
+                              inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                             />
                           )}
-                          <FBSchema
-                            {...{ schema }}
-                            schemaState={previewWorkspaceState}
-                            workspaceMode={mode}
-                          />
-                        </>
-                      )}
-                      {tabType === TabTypeOptions.TABS_MEQ && (
-                        <FBMaterialEqInfoContainer
-                          documentRevision={documentRevision}
-                          inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
-                        />
-                      )}
-                      {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
-                        <FBTrainingInfoContainer
-                          documentRevisionId={documentRevision?.id}
-                          docRevStatus={documentRevision?.status}
-                        />
-                      )}
-                      {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
-                        <FBLHRSummary isShowOnly={false} isDisabled={true} />
-                      )}
-                      {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                        <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />
-                      )}
-                      {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                        <FBBOM documentRevision={documentRevision}
-                          isDisabled={true} isShowOnly={true} isWO={isWO} />
-                      )}
-                      {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                          {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
+                            <FBTrainingInfoContainer
+                              documentRevisionId={documentRevision?.id}
+                              docRevStatus={documentRevision?.status}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                            <FBLHRSummary isShowOnly={false} isDisabled={true} />
+                          )}
+                          {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                            <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />
+                          )}
+                          {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                            <FBBOM documentRevision={documentRevision}
+                              isDisabled={true} isShowOnly={true} isWO={isWO} />
+                          )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                         && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION) && (
-                        <>
-                          <FBMaterialDisposition isShowOnly />
-                          <FBSchema {...{ schema }} schemaState={previewWorkspaceState} workspaceMode={mode} />
-                        </>
+                            <>
+                              <FBMaterialDisposition isShowOnly />
+                              <FBSchema {...{ schema }} schemaState={previewWorkspaceState} workspaceMode={mode} />
+                            </>
+                          )}
+                        </SMBox>
                       )}
-                    </SMBox>
+                    </AutoSizer>
                   );
                 })}
               </SMTabs>
