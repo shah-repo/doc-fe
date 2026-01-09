@@ -39,7 +39,8 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
         return map ? Array.from(map.values()) : [];
       },
       (options) => {
-        setOptions(options);
+        const activeOptions = options.filter(item => item.isActive);
+        setOptions(activeOptions);
         const selectedId = formState?.getFieldValue(name);
         const value = options.find((opt) => opt.id === selectedId);
         setPrevValue(value);
