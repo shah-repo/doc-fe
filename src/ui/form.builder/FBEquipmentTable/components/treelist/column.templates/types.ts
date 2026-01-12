@@ -43,13 +43,6 @@ export interface EquipmentItemActionsProps<T> {
   onReorder?: () => void
 }
 
-export interface EquipAutoCompleteOptions {
-  label: string
-  value: string
-  isExpired?: boolean
-  expiryDate?: string
-}
-
 type EquipmentCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
