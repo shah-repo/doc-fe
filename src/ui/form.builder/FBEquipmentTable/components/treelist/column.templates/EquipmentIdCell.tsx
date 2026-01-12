@@ -1,25 +1,25 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, debounce } from 'lodash';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
-import { Colors } from '../../../../../layout/theme-next';
 import { FB } from '../../../../helpers';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { isEditEquipItem } from '../utils';
 import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
-import { CustomTreeListCellProps, EquipAutoCompleteOptions } from './types';
+import { customEQOptionType, CustomTreeListCellProps } from './types';
 
 interface LotAutocompleteProps {
   field?: string
@@ -51,6 +51,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
+  const { getFormattedDateString } = useDate();
   const isFreeSolo = isEBProcedure;
 
   useEffect(() => {
@@ -143,18 +144,32 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
-        renderOption={(option: EquipAutoCompleteOptions, props) => (
-          <ListItem {...props} className={classes.optionListItem} disableGutters>
-            <ListItemText primary={option.label} />
-            {option.isExpired && (
-              <ListItemIcon>
-                <StyleTooltip
-                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
-                >
-                  <FontAwesomeIcon icon={regular('circle-exclamation')} color={Colors.error} size="sm" />
-                </StyleTooltip>
-              </ListItemIcon>
-            )}
+        forcePopupIcon
+        renderOption={(option: customEQOptionType, props) => (
+          <ListItem {...props} disableGutters className={classes.listItemOption}>
+            <ListItemText
+              className={classes.listItemOption}
+              primary={option.label}
+              secondary={
+                <div className={classes.dateInfo}>
+                  {option.calDueDate && (
+                    <span>
+                      {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
+                        date: getFormattedDateString(option.calDueDate, MomentFormats.BriefDate),
+                      })}
+                    </span>
+                  )}
+                  {option.calDueDate && option.pmDueDate && '  |  '}
+                  {option.pmDueDate && (
+                    <span>
+                      {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
+                        date: getFormattedDateString(option.pmDueDate, MomentFormats.BriefDate),
+                      })}
+                    </span>
+                  )}
+                </div>
+              }
+            />
           </ListItem>
         )}
         loading={isLoading}

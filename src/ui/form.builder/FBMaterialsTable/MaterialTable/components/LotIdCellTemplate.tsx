@@ -47,12 +47,15 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { getFormattedDateString } = useDate();
   const options = useMemo(
     () =>
-      lots.map((lot) => ({
-        label: lot.document.docId,
-        value: lot.id,
-        expiryDate: lot.isExpired ? getFormattedDateString(lot.expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
-        isExpired: lot.isExpired,
-      })),
+      lots.map((lot) => {
+        const { id, isExpired, expiryDate, document, displayRevision, name } = lot;
+        return {
+          label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
+          value: id,
+          expiryDate: isExpired ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
+          isExpired: isExpired,
+        };
+      }),
     [lots],
   );
 
