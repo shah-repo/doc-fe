@@ -555,13 +555,36 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split('.').includes('smartRefs')) {
+          const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
           if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
+            const { materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={classes.auditListItem}
+              >
+                {materialId ? (
+                  <>
+                    {change.field.endsWith('metadata.quantity')
+                      && renderSmartRefsAuditRows('quantity', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                    {change.field.endsWith('metadata.unit')
+                      && renderSmartRefsAuditRows('unit', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                  </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                )}
+              </Box>,
+            );
             return;
           }
 
-          const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
           if (change.type === 'BOOLEAN_NEW') {
-            const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
             const innerKey = 0;
             singleFields.push(
               <Box
@@ -574,12 +597,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   <>
                     {lotDocId && lotPart
                       && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
-                    }
-                    {quantity
-                      && renderSmartRefsAuditRows('quantity', quantity, groupKey, key, innerKey, change, stepIndex, classes, true)
-                    }
-                    {unit
-                      && renderSmartRefsAuditRows('unit', unit, groupKey, key, innerKey, change, stepIndex, classes, true)
                     }
                   </>
                 ) : (renderSmartRefsAuditRows(
