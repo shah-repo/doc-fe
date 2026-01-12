@@ -21,6 +21,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onClick?: (event: { dataItem: EditableEquipmentItem }) => void
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
+  releasedEquipmentOptions?: customEQOptionType[]
   allowedEditEqOptions: customEQOptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
