@@ -34,6 +34,7 @@ interface LotAutocompleteProps {
   equipmentOptions: OptionType[]
   allowedEditEqOptions: OptionType[]
   isEBProcedure?: boolean
+  releasedEquipmentOptions?: OptionType[]
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -46,6 +47,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   parentPartRevId,
   isEBProcedure,
   allowedEditEqOptions: propEquipmentOptions,
+  releasedEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
@@ -54,7 +56,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
-  const filteredEquipmentOptions = propEquipmentOptions.filter((option) => {
+  const filteredEquipmentOptions = releasedEquipmentOptions?.filter((option) => {
     return option.value === equipmentSpecId;
   });
   const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : filteredEquipmentOptions;
@@ -141,7 +143,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions, addActualId, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions, addActualId, isEBProcedure, releasedEquipmentOptions } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
@@ -209,6 +211,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 actualId,
                 isLoading,
                 equipmentOptions,
+                releasedEquipmentOptions: releasedEquipmentOptions || [],
                 allowedEditEqOptions,
                 isEBProcedure,
               }}
