@@ -122,6 +122,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       isOwner,
     });
     dialogState = FB.useRef(FBDialogState);
+    const isOperator = document?.document.operators?.some(
+      (op) => op.id === authUser.employeeId,
+    );
 
     approvalTransition = (
       transition: FBLHRStepApprovalsStatusEndpoint,
@@ -293,6 +296,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           items: workspaceState?.schema?.map(item => ({ ...item })),
         }),
         () => {
+          if (!isOperator || !isOwner) {
+            return;
+          }
           if (
             !lhrApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
