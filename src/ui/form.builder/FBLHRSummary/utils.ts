@@ -89,10 +89,10 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.DateTimeComplete),
-      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.DateTimeComplete),
-      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.DateTimeComplete),
-      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.DateTimeComplete),
+      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.DateTimeCompleteTwoDigit),
+      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.DateTimeCompleteTwoDigit),
+      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.DateTimeCompleteTwoDigit),
+      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.DateTimeCompleteTwoDigit),
       customEnteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
