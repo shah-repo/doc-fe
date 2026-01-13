@@ -33,6 +33,14 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
         const { stepId, user } = operator;
         const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
+        if (statusInfo?.status === FBInlineApprovalStatusIdent.DRAFT) {
+          statusInfo.status = FBInlineApprovalStatusIdent.PENDING;
+        }
+
+        if (statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED) {
+          statusInfo.status = FBInlineApprovalStatusIdent.COMPLETED;
+        }
+
         return (
           <ListItem key={user?.id} className={classes.listItem} disableGutters>
             <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
