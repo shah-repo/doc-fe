@@ -251,9 +251,14 @@ export const SubmitForApproval: React.FC<Props> = ({
     }
 
     if (hasInsufficientQty) {
-      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, materialId) => {
-        const lotDocIds = documentRevision?.usedDocumentsInLHRS?.[materialId]?.docId;
-        const docIdArray = Array.isArray(lotDocIds) ? lotDocIds : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
+      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, lotIds) => {
+        const lotDocIds = documentRevision?.smartReferencesTo?.filter((ref) => {
+          return ref.metadata?.materialId === lotIds && ref?.active;
+        },
+        )?.map((ref) => ref.metadata?.lotDocId).flat();
+        const docIdArray = Array.isArray(lotDocIds)
+          ? lotDocIds.filter((id): id is string => typeof id === 'string')
+          : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
         return [...acc, ...docIdArray];
       }, []);
       toastError(translate('form.builder.lhrs.insufficient.quantity.error.message', { lots: lotsDocIds.join(', ') }));
