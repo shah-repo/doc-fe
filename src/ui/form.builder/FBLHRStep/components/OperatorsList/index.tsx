@@ -1,4 +1,13 @@
-import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Badge,
+  Box,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@material-ui/core';
 import { capitalize, find } from 'lodash';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -17,6 +26,13 @@ interface OperatorsListProps {
   stepIndex?: number
 }
 
+const statusMap: Partial<
+Record<FBInlineApprovalStatusIdent, FBInlineApprovalStatusIdent>
+> = {
+  [FBInlineApprovalStatusIdent.DRAFT]: FBInlineApprovalStatusIdent.PENDING,
+  [FBInlineApprovalStatusIdent.APPROVED]: FBInlineApprovalStatusIdent.COMPLETED,
+};
+
 const OperatorsList: React.FC<OperatorsListProps> = (props) => {
   const { getFormattedDateString } = useDate();
   const { operators, stepLHRs, lhrStepState, stepIndex } = props;
@@ -24,7 +40,12 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
 
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
-    return find(approvers, (o) => o.approverId === operatorId && o.status !== FBInlineApprovalStatusIdent.ABANDONED);
+    return find(
+      approvers,
+      (o) =>
+        o.approverId === operatorId
+        && o.status !== FBInlineApprovalStatusIdent.ABANDONED,
+    );
   };
 
   return (
@@ -33,12 +54,8 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
         const { stepId, user } = operator;
         const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
-        if (statusInfo?.status === FBInlineApprovalStatusIdent.DRAFT) {
-          statusInfo.status = FBInlineApprovalStatusIdent.PENDING;
-        }
-
-        if (statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED) {
-          statusInfo.status = FBInlineApprovalStatusIdent.COMPLETED;
+        if (statusInfo?.status && statusMap[statusInfo.status]) {
+          statusInfo.status = statusMap[statusInfo.status];
         }
 
         return (
@@ -51,7 +68,10 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                   horizontal: 'right',
                 }}
                 badgeContent={
-                  statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
+                  statusInfo?.status
+                    === FBInlineApprovalStatusIdent.APPROVED && (
+                    <OperatorApprovedIcon />
+                  )
                 }
               >
                 <Avatar
@@ -67,7 +87,10 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
             <ListItemText
               className={classes.listItemText}
               primary={
-                <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                <div
+                  className={classes.operatorTitle}
+                  data-cy={`operator-name-${stepIndex}-${index}`}
+                >
                   {user?.name}
                 </div>
               }
@@ -83,8 +106,13 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                   </Typography>
                   {statusInfo?.reviewedAt && (
                     <>
-                      <Box component="span" marginLeft={1} marginRight={1}>&bull;</Box>
-                      {getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)}
+                      <Box component="span" marginLeft={1} marginRight={1}>
+                        &bull;
+                      </Box>
+                      {getFormattedDateString(
+                        statusInfo?.reviewedAt,
+                        MomentFormats.DateTime,
+                      )}
                     </>
                   )}
                 </div>
