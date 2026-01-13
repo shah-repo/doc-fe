@@ -1496,6 +1496,7 @@
   "form.builder.lhr.build.type.error.message": "The Build Type is a required field",
   "form.builder.lhrs.insufficient.quantity.error.message": "Following lots have quantity that does not match with Required Quantity : {lots} Please review.",
   "form.builder.lhrs.equipment.selection.error.message": "No equipment was selected for {equipmentId}",
+  "form.builder.lhrs.insufficient.accepted.rejected.error.message": "Accepted and/or Rejected quantities are required",
   "form.builder.scheduled.part": "Scheduled Part",
   "form.builder.part.lot": "Part Lot",
   "form.builder.select.existing.part": "Select a part",
