@@ -1,10 +1,12 @@
 import { Formik, FormikProps } from 'formik';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
+import moment from 'moment';
 import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { FBDocumentRevisionProps } from '../../../state/ducks/documentRevisions/types';
@@ -49,6 +51,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
+  const { formState } = FB.useStores();
 
   const calcInitialValues = useMemo(() => {
     const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
@@ -85,6 +88,43 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
     : chosenForm?.formTemplate?.schema;
 
   _formState?.setMode(FBWorkspaceModeOptions.FORM);
+
+  const hasInitializedDefaults = React.useRef(false);
+  const { convertDateTimeToUserTz } = useDate();
+
+  useEffect(() => {
+    if (hasInitializedDefaults.current || isEmpty(changeRequest?.formDocument?.id)) return;
+
+    const schemaItems = changeRequest?.formDocument?.formTemplate?.schema ?? [];
+    if (!schemaItems.length) return;
+
+    const datePickerItems = schemaItems.filter(
+      ({ type, editorProperties }) => type === 'datepicker' && editorProperties?.includes('defaultCurrentDate'),
+    );
+
+    if (!datePickerItems.length) return;
+
+    const updates: Record<string, string> = {};
+
+    datePickerItems.forEach(({ name = '' }) => {
+      const currentValue = initialValues.formInput?.[name];
+
+      if (!currentValue) {
+        updates[name] = convertDateTimeToUserTz(
+          moment().format(MomentFormats.MonthDateYearTwoDigit),
+          MomentFormats.MonthDateYearTwoDigit,
+        );
+      }
+    });
+    if (!isEmpty(updates)) {
+      formState?.setValues({
+        ...formState?.getValues(),
+        ...updates,
+      });
+    }
+
+    hasInitializedDefaults.current = true;
+  }, []);
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <ChangeRequestForm
