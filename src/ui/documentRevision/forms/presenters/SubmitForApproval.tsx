@@ -22,7 +22,7 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
-import { LHRS_ACCEPTED_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
 import { areRequiredEquipmentsSelected, isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -108,6 +108,16 @@ export const SubmitForApproval: React.FC<Props> = ({
   const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
     = useState(true);
   const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
+  const lhrsAcceptedQuantity
+      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
+
+  const lhrsRejectedQuantity
+      = documentRevision?.formInput?.[LHRS_REJECTED_QUANTITY];
+
+  const isAcceptedRejectedQtyValid
+      = typeof lhrsAcceptedQuantity === 'number'
+        && typeof lhrsRejectedQuantity === 'number'
+        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) >= 0;
 
   const {
     equipmentsFromSchema,
@@ -156,9 +166,6 @@ export const SubmitForApproval: React.FC<Props> = ({
       return;
     }
 
-    const lhrsStartQuantity
-      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
-
     const equipmentSelectionResult = areRequiredEquipmentsSelected(
       equipmentsFromSchema,
       equipmentsFromMetadata,
@@ -170,7 +177,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     const materialQtyResult = isMpiOutputInsufficientQty(
       neededMaterials,
       materialsFromMetadata,
-      lhrsStartQuantity,
+      lhrsAcceptedQuantity,
     );
 
     setHasInsufficientQty(materialQtyResult.hasInsufficientQty);
@@ -238,8 +245,12 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
+    if (!isAcceptedRejectedQtyValid) {
+      toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
+      return;
+    }
+
     if (hasInsufficientQty) {
-      console.log('Insufficient Materials:', insufficientMaterials, insufficientMaterials.length);
       const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, materialId) => {
         const lotDocIds = documentRevision?.usedDocumentsInLHRS?.[materialId]?.docId;
         const docIdArray = Array.isArray(lotDocIds) ? lotDocIds : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
