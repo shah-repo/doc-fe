@@ -22,7 +22,7 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
-import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
 import { areRequiredEquipmentsSelected, isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -114,10 +114,12 @@ export const SubmitForApproval: React.FC<Props> = ({
   const lhrsRejectedQuantity
       = documentRevision?.formInput?.[LHRS_REJECTED_QUANTITY];
 
+  const lhrsStartQuantity = documentRevision?.formInput?.[LHRS_START_QUANTITY];
+
   const isAcceptedRejectedQtyValid
       = typeof lhrsAcceptedQuantity === 'number'
         && typeof lhrsRejectedQuantity === 'number'
-        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) >= 0;
+        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) === lhrsStartQuantity;
 
   const {
     equipmentsFromSchema,
