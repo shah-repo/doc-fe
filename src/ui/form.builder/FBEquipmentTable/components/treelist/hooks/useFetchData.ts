@@ -59,6 +59,7 @@ export const useFetchData = () => {
       DocumentRevisionStatus.Draft,
       DocumentRevisionStatus.Obsolete,
       DocumentRevisionStatus.Voided,
+      DocumentRevisionStatus.Canceled,
     ];
     const releasedEquipments = equipments.filter((equ) => !excludedStatuses.includes(equ.status));
     const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
