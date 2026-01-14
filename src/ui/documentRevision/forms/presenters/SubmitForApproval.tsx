@@ -247,12 +247,12 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (!isAcceptedRejectedQtyValid) {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
 
-    if (hasInsufficientQty) {
+    if (hasInsufficientQty && isTypeMpiOutput) {
       const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, lotIds) => {
         const lotDocIds = documentRevision?.smartReferencesTo?.filter((ref) => {
           return ref.metadata?.materialId === lotIds && ref?.active;
@@ -267,7 +267,7 @@ export const SubmitForApproval: React.FC<Props> = ({
       return;
     }
 
-    if (!areAllEquipmentsSelected) {
+    if (!areAllEquipmentsSelected && isTypeMpiOutput) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];
