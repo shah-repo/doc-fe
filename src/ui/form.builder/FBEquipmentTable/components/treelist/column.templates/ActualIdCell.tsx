@@ -51,7 +51,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
@@ -118,7 +118,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.calDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
-                        date: getFormattedDateString(option.calDueDate, MomentFormats.BriefDate),
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.calDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -126,7 +126,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.pmDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
-                        date: getFormattedDateString(option.pmDueDate, MomentFormats.BriefDate),
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.pmDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
