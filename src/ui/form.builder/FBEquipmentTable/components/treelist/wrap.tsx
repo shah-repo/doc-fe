@@ -43,6 +43,7 @@ export const withFBEquipmentTable = <T extends FBEquipmentProps>(
                 refId: ref?.id,
                 pmDueDate: ref?.toDocRev?.precalc?.pm_due_date,
                 calDueDate: ref?.toDocRev?.precalc?.cali_due_date,
+                eqStatus: ref?.toDocRev?.eqStatus,
                 overrideDocId: ref?.toDocRev?.document.docId,
                 lotPartRevision: ref?.toDocRev?.precalc?.lot_part_revision,
                 actualId: ref?.toDocRev?.id,

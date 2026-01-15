@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, debounce } from 'lodash';
 import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState } from 'react';
+import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
@@ -23,6 +24,7 @@ interface EditorProps {
   dataItem: EditableEquipmentItem
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  allowedEditEqOptions: OptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
 }
@@ -34,11 +36,13 @@ const Editor: React.FC<EditorProps> = ({
   isLoading,
   dataItem,
   equipmentOptions,
+  allowedEditEqOptions,
   isMPIForm,
   isEBProcedure,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const { disabledOptions } = React.useContext(EquipmentTreelistContext);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
   const isFreeSolo = values?.LHRTparameter || isEBProcedure;
@@ -53,8 +57,8 @@ const Editor: React.FC<EditorProps> = ({
     } else if (fieldValue) {
       setValue({ label: fieldValue, value: fieldValue });
     }
-    setItems(equipmentOptions);
-  }, [equipmentOptions]);
+    setItems(allowedEditEqOptions);
+  }, [equipmentOptions, allowedEditEqOptions]);
 
   useEffect(() => {
     if (!isMPIForm) {
@@ -83,12 +87,13 @@ const Editor: React.FC<EditorProps> = ({
     }
 
     if (!isFreeSolo && !title) {
-      setItems(equipmentOptions ?? []);
+      setItems(allowedEditEqOptions ?? []);
     }
   }, [values]);
 
   const handleChange = (_: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
+    setInputValue(undefined);
     field && setFieldValue(field, option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
@@ -109,12 +114,12 @@ const Editor: React.FC<EditorProps> = ({
     setValue({ label: inputVal, value: inputVal });
 
     if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
-      const filteredOptions = equipmentOptions?.filter((option) =>
+      const filteredOptions = allowedEditEqOptions?.filter((option) =>
         option.label.toLowerCase().includes(inputVal?.toLowerCase()),
       );
       setItems(filteredOptions);
-    } else if (!inputVal) {
-      setItems(equipmentOptions ?? []);
+    } else if (!inputVal || inputVal?.length < MIN_SEARCH_TERM_LENGTH) {
+      setItems(allowedEditEqOptions ?? []);
     }
   };
 
@@ -144,6 +149,9 @@ const Editor: React.FC<EditorProps> = ({
             </ul>
           </>);
         }}
+        getOptionDisabled={(option) =>
+          (isEBProcedure && disabledOptions?.includes(option.value)) ?? false
+        }
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
         freeSolo
@@ -156,7 +164,7 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, isMPIForm, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, allowedEditEqOptions, isMPIForm, isEBProcedure } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
   const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
@@ -209,6 +217,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
                 dataItem,
                 isLoading,
                 equipmentOptions,
+                allowedEditEqOptions,
                 isMPIForm,
                 isEBProcedure,
               }}

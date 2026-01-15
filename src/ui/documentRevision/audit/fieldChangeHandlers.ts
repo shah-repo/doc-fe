@@ -169,30 +169,30 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): Chan
   return { change, fbLabel };
 };
 
-export const getMaterialRelacmentAuditLabel = (
+export const getMaterialReplacementAuditLabel = (
   field: string, fieldType: string, meta: SmartReferenceMeta|undefined, stepIndex = 1,
 ): string => {
-  const { lotPart, lotDocId, materialId } = meta || {};
+  const { lotPart, lotDocId, materialId } = meta ?? {};
   let type = '';
   if (materialId) {
     switch (fieldType) {
       case 'BOOLEAN_NEW':
-        type = (field === 'quantity') ? getMaterialRelacmentAuditField('assigned to') : getMaterialRelacmentAuditField('added to');
+        type = (['quantity', 'unit'].includes(field)) ? getMaterialReplacementAuditField('assigned to') : getMaterialReplacementAuditField('added to');
         break;
       case 'BOOLEAN_EDITED':
         type = 'deleted for';
         break;
       case 'NUMBER_EDITED':
-        type = field === 'quantity' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
+        type = field === 'quantity' ? getMaterialReplacementAuditField('updated') : getMaterialReplacementAuditField('updated on');
         break;
       case 'STRING_EDITED':
-        type = field === 'unit' ? getMaterialRelacmentAuditField('updated') : getMaterialRelacmentAuditField('added to');
+        type = field === 'unit' ? getMaterialReplacementAuditField('updated') : getMaterialReplacementAuditField('updated on');
         break;
       default:
         break;
     }
   } else {
-    type = fieldType === 'BOOLEAN_NEW' ? getMaterialRelacmentAuditField('added') : getMaterialRelacmentAuditField('deleted');
+    type = fieldType === 'BOOLEAN_NEW' ? getMaterialReplacementAuditField('added') : getMaterialReplacementAuditField('deleted');
   }
 
   let label = '';
@@ -205,22 +205,22 @@ export const getMaterialRelacmentAuditLabel = (
         type,
       });
   } else if (field === 'quantity') {
-    const lotDocIdUpdated = fieldType === 'NUMBER_EDITED' ? '' : lotDocId;
-    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+    const messageId = fieldType === 'NUMBER_EDITED' ? 'form.builder.audit.MATERIAL_UPDATE' : 'form.builder.audit.MATERIAL_REPLACEMENT';
+    label = intl.formatMessage({ id: messageId },
       {
         step: stepIndex,
-        value: lotDocIdUpdated,
-        field: 'Quanity',
+        field: 'Quantity',
         type,
+        value: lotDocId,
       });
   } else if (field === 'unit') {
-    const lotDocIdUpdated = fieldType === 'STRING_EDITED' ? '' : lotDocId;
-    label = intl.formatMessage({ id: 'form.builder.audit.MATERIAL_REPLACEMENT' },
+    const messageId = fieldType === 'STRING_EDITED' ? 'form.builder.audit.MATERIAL_UPDATE' : 'form.builder.audit.MATERIAL_REPLACEMENT';
+    label = intl.formatMessage({ id: messageId },
       {
         step: stepIndex,
-        value: lotDocIdUpdated,
         field: 'Unit',
         type,
+        value: lotDocId,
       });
   } else if (field === 'actualId') {
     label = intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT' },
@@ -233,7 +233,7 @@ export const getMaterialRelacmentAuditLabel = (
   return label;
 };
 
-export const getMaterialRelacmentAuditField = (type: string): string => {
+export const getMaterialReplacementAuditField = (type: string): string => {
   return intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT.field' },
     {
       type,

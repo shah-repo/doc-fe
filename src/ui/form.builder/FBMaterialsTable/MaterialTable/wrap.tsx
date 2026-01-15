@@ -82,7 +82,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
         fieldId: name ?? '',
         forPreselected: { id: values.parentPartId ?? '' },
         quantity,
-        unit,
+        unit: unit ?? '',
         ...(serialNumber && { serialNumber }),
         usedOverride: { id: values.lotId },
         type: type.toUpperCase() as ProcedureItemType,
@@ -107,7 +107,7 @@ export const withMaterialsTable = <T extends MaterialTableProps>(
       }
       const part = {
         quantity,
-        unit,
+        unit: unit ?? '',
         type: type.toUpperCase() as ProcedureItemType,
       };
       mpiProcedureSelectState?.editOverride(id, refId, part);

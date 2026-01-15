@@ -21,6 +21,8 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   onClick?: (event: { dataItem: EditableEquipmentItem }) => void
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
+  releasedEquipmentOptions?: customEQOptionType[]
+  allowedEditEqOptions: customEQOptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
 }
@@ -41,14 +43,7 @@ export interface EquipmentItemActionsProps<T> {
   onReorder?: () => void
 }
 
-export interface EquipAutoCompleteOptions {
-  label: string
-  value: string
-  isExpired?: boolean
-  expiryDate?: string
-}
-
 type EquipmentCallback = (dataItem: EditableEquipmentItem) => void;
 
 export type EquipOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput' | 'eqStatus'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document' | 'formInput' | 'eqStatus' | 'status' | 'precalc'>;

@@ -8,6 +8,7 @@ import IDCell from '../column.templates/IDCell';
 export const TreeListEBSchema = ({
   actionsClass,
   equipmentOptions,
+  allowedEditEqOptions,
   popperHolder,
   getItem,
   addActualId,
@@ -27,7 +28,7 @@ export const TreeListEBSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} isEBProcedure={isEBProcedure} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} isEBProcedure={isEBProcedure} />,
     sortable: false,
   },
   {
@@ -36,7 +37,7 @@ export const TreeListEBSchema = ({
     title: translate('lhr.equipment.grid.heading.actual.id'),
     width: 350,
     mainOrderIndex: 2,
-    cell: (props) => <EquipmentIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} isDisabled={isDisabled} />,
+    cell: (props) => <EquipmentIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} isDisabled={isDisabled} />,
   },
   {
     field: 'calDueDate',

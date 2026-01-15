@@ -7,7 +7,7 @@ import moment, { MomentInput } from 'moment';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
-import { useDate } from '../../../../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { ACTIVE_EQUIPMENT_STATUSES, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
@@ -18,7 +18,7 @@ import useHover from '../../../../../hooks/useHover';
 import { EditableEquipmentItem } from '../../../types';
 import { ADD_FIELD, IS_ACTUAL_ID_ADDITION, MODE_FIELD } from '../constants';
 import { useEquipmentOptions } from '../hooks/useFetchData';
-import { isEditEquipItem } from '../utils';
+import { isEditEquipItem, isEquipmentSpecificationType } from '../utils';
 import useStyles from './styles';
 import TreeListCellWrapper from './TreelistCellWrapper';
 import { customEQOptionType, CustomTreeListCellProps } from './types';
@@ -32,7 +32,9 @@ interface LotAutocompleteProps {
   actualId?: string
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  allowedEditEqOptions: OptionType[]
   isEBProcedure?: boolean
+  releasedEquipmentOptions?: OptionType[]
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -44,20 +46,20 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   actualId,
   parentPartRevId,
   isEBProcedure,
-  equipmentOptions: propEquipmentOptions,
+  allowedEditEqOptions: propEquipmentOptions,
+  releasedEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
   const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
-  const shouldEnforceEqProdConfig = isLHRProductionBuild && isEqProdConfigEnforced;
-  const isEquipmentSpecification = Boolean(dataItem?.isEquipmentSpecification);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
-  const { equipmentSpcOptions } = useEquipmentOptions(equipmentSpecId);
-  const filteredEquipmentOptions = propEquipmentOptions.filter((option) => {
+  const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
+  const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
+  const filteredEquipmentOptions = releasedEquipmentOptions?.filter((option) => {
     return option.value === equipmentSpecId;
   });
-  const equipmentOptions = isEquipmentSpecification ? equipmentSpcOptions : filteredEquipmentOptions;
+  const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : filteredEquipmentOptions;
   const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
   const isDateOverdue = (date: MomentInput): boolean => {
     if (!date) {
@@ -98,11 +100,13 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
             return false;
           }
 
-          if (shouldEnforceEqProdConfig && isOverdue) {
-            return true;
+          if (isEqProdConfigEnforced) {
+            if (isLHRProductionBuild && isOverdue) {
+              return true;
+            } else return !isActive;
           }
 
-          return !isActive;
+          return false;
         }}
         renderOption={(option: customEQOptionType, props) => (
           <ListItem {...props} disableGutters className={classes.listItemOption}>
@@ -114,7 +118,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.calDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
-                        date: option.calDueDate,
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.calDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -122,7 +126,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.pmDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
-                        date: option.pmDueDate,
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.pmDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -139,7 +143,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, addActualId, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions, addActualId, isEBProcedure, releasedEquipmentOptions } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
@@ -207,6 +211,8 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 actualId,
                 isLoading,
                 equipmentOptions,
+                releasedEquipmentOptions: releasedEquipmentOptions || [],
+                allowedEditEqOptions,
                 isEBProcedure,
               }}
             />

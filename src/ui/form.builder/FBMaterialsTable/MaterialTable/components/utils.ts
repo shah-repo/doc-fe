@@ -3,6 +3,25 @@ import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.
 import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
 import { EditableMaterial, Material } from '../types';
 
+interface SchemaEquipment {
+  title?: string
+}
+
+interface EquipmentMetadata {
+  equipmentId?: string
+}
+
+interface NeededMaterial {
+  materialId?: string
+  quantity?: number
+  title?: string
+}
+
+interface UsedMaterial {
+  materialId?: string
+  quantity?: number
+}
+
 export const isAddMaterial = (dataItem: EditableMaterial): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
@@ -49,3 +68,87 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
+
+interface MaterialInsufficientQtyResult {
+  hasInsufficientQty: boolean
+  insufficientMaterials: string[]
+  neededByMaterial?: Record<string, number>
+  usedByMaterial?: Record<string, number>
+}
+
+export const isMpiOutputInsufficientQty = (
+  neededQuantity?: NeededMaterial[][],
+  usedQuantity?: UsedMaterial[],
+  startQuantity?: number,
+): MaterialInsufficientQtyResult => {
+  const flatNeeded: NeededMaterial[] = (neededQuantity ?? []).flat();
+
+  const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item?.title;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0) * (startQuantity ?? 0);
+      return acc;
+    },
+    {},
+  );
+
+  const usedByMaterial = (usedQuantity ?? []).reduce<Record<string, number>>(
+    (acc, item) => {
+      const key = item?.materialId;
+      if (!key || item.quantity == null) {
+        return acc;
+      }
+      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0);
+      return acc;
+    },
+    {},
+  );
+
+  const insufficientMaterials = Object.keys(neededByMaterial).filter((materialId) => {
+    return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
+  });
+
+  return {
+    hasInsufficientQty: insufficientMaterials.length > 0,
+    insufficientMaterials,
+    neededByMaterial,
+    usedByMaterial,
+  };
+};
+
+interface EquipmentSelectionResult {
+  isSelected: boolean
+  unselectedEquipment: string[]
+}
+
+export function areRequiredEquipmentsSelected (
+  equipmentsFromSchema: SchemaEquipment[][],
+  equipmentsFromMetadata: EquipmentMetadata[],
+): EquipmentSelectionResult {
+  if (!equipmentsFromSchema.length) {
+    return { isSelected: true, unselectedEquipment: [] };
+  }
+
+  const requiredEquipmentIds = equipmentsFromSchema
+    .flat()
+    .map((equipment) => equipment?.title)
+    .filter((id): id is string => Boolean(id));
+
+  if (!requiredEquipmentIds.length) {
+    return { isSelected: true, unselectedEquipment: [] };
+  }
+
+  const selectedEquipmentIds = new Set(
+    equipmentsFromMetadata.map((item) => item?.equipmentId).filter(Boolean),
+  );
+
+  const unselectedEquipment = requiredEquipmentIds.filter((id) => !selectedEquipmentIds.has(id));
+
+  return {
+    isSelected: unselectedEquipment.length === 0,
+    unselectedEquipment,
+  };
+}

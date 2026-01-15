@@ -9,6 +9,7 @@ import { SchemaOptions } from '../types';
 
 export const buildLHRTSchema = ({
   materialSelectOptions,
+  allowedEditOptions,
   onRowClick,
   actionsClass,
   popperHolder,
@@ -21,7 +22,7 @@ export const buildLHRTSchema = ({
     field: 'title',
     title: translate('form.builder.procedure.material.title'),
     mainOrderIndex: 1,
-    cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} isLHRT={isLHRT} />,
+    cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} allowedEditOptions={allowedEditOptions} onClick={onRowClick} isLHRT={isLHRT} />,
     width: 150,
   },
   {

@@ -1,29 +1,39 @@
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncState from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../../../helpers';
 import { customEQOptionType, EquipOption } from '../column.templates/types';
 
+const isValidDate = (date?: string): boolean => Boolean(date && !Number.isNaN(Date.parse(date)));
+
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
-  const calibrationKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-ii-calibration'));
-  const preventiveMaintenanceKey = Object.keys(equipment.formInput || {}).find((key) => key.startsWith('section-iii-preventative-maintenance'));
-  const calibrationData = calibrationKey ? equipment.formInput?.[calibrationKey] : {};
-  const preventiveMaintenanceData = preventiveMaintenanceKey ? equipment?.formInput?.[preventiveMaintenanceKey] : {};
+  const { id, name, eqStatus, displayRevision, document, precalc } = equipment;
+  const caliDueDate = precalc?.cali_due_date;
+  const pmDueDate = precalc?.pm_due_date;
+  const validCalDate = isValidDate(caliDueDate) ? caliDueDate : '';
+  const validPmDate = isValidDate(pmDueDate) ? pmDueDate : '';
+
   return {
     label: translate('common.select.revision', {
-      docId: equipment.document.docId,
-      displayRevision: equipment?.displayRevision,
-      name: equipment?.name,
+      docId: document?.docId,
+      displayRevision,
+      name,
     }),
-    complianceDueDate: calibrationData?.complianceDueDate ?? preventiveMaintenanceData.complianceDueDate,
-    calDueDate: calibrationData.complianceDueDate,
-    pmDueDate: preventiveMaintenanceData.complianceDueDate,
-    status: equipment?.eqStatus,
-    value: equipment.id,
+    complianceDueDate: validCalDate ?? validPmDate ?? '',
+    calDueDate: validCalDate,
+    pmDueDate: validPmDate,
+    status: eqStatus,
+    value: id,
   };
+};
+
+const restrictedStatuses = [DocumentRevisionStatus.Canceled];
+const filterByRestrictedStatus = (equipments: EquipOption[]) => {
+  return equipments.filter((material) => !restrictedStatuses.includes(material.status));
 };
 
 export const useFetchData = () => {
@@ -42,10 +52,22 @@ export const useFetchData = () => {
     EquipOption
     >;
 
-    const equipmentOptions = Array.from(asyncData?.values() || []).map(parseEquipmentOption);
+    const equipments = Array.from(asyncData?.values() ?? []) ?? [];
+    const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
+    const equipmentOptions = equipments.map(parseEquipmentOption);
+    const excludedStatuses = [
+      DocumentRevisionStatus.Draft,
+      DocumentRevisionStatus.Obsolete,
+      DocumentRevisionStatus.Voided,
+      DocumentRevisionStatus.Canceled,
+    ];
+    const releasedEquipments = equipments.filter((equ) => !excludedStatuses.includes(equ.status));
+    const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
 
     return {
       equipmentOptions,
+      allowedEditEqOptions,
+      releasedEquipmentOptions,
     };
   });
 };
@@ -63,7 +85,10 @@ export const useEquipmentOptions = (id: string) => {
 
   return useObserver(() => {
     if (!optionId) {
-      return { equipmentSpcOptions: [] };
+      return {
+        equipmentSpcOptions: [],
+        allowedEditEqSpecOptions: [],
+      };
     }
 
     // Check if data is in the API response
@@ -83,11 +108,13 @@ export const useEquipmentOptions = (id: string) => {
         asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
       }
     }
-
-    const equipmentSpcOptions = Array.from(asyncData?.values() ?? []).map(parseEquipmentOption);
+    const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
+    const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
+    const allowedEditEqSpecOptions = filterByRestrictedStatus(equipmentSpecs).map(parseEquipmentOption);
 
     return {
       equipmentSpcOptions,
+      allowedEditEqSpecOptions,
     };
   });
 };

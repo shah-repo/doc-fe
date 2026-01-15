@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -15,6 +15,7 @@ import {
   DocumentRevisionStatus,
   ErrorCodes,
   RevisionChangeType,
+  SmartReferenceType,
 } from '../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
@@ -22,6 +23,8 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { areRequiredEquipmentsSelected, isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -101,8 +104,101 @@ export const SubmitForApproval: React.FC<Props> = ({
     (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
   );
 
+  const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
+  const [insufficientMaterials, setInsufficientMaterials] = useState<string[]>([]);
+  const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
+    = useState(true);
+  const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
+  const lhrsAcceptedQuantity
+      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
+
+  const lhrsRejectedQuantity
+      = documentRevision?.formInput?.[LHRS_REJECTED_QUANTITY];
+
+  const lhrsStartQuantity = documentRevision?.formInput?.[LHRS_START_QUANTITY];
+
+  const isAcceptedRejectedQtyValid
+      = typeof lhrsAcceptedQuantity === 'number'
+        && typeof lhrsRejectedQuantity === 'number'
+        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) === lhrsStartQuantity;
+
+  const {
+    equipmentsFromSchema,
+    neededMaterials,
+    equipmentsFromMetadata,
+    materialsFromMetadata,
+  } = useMemo(() => {
+    const schema = documentRevision?.schema ?? documentRevision?.formDocument?.formTemplate?.schema ?? [];
+
+    const smartRefs = documentRevision?.smartReferencesTo ?? [];
+
+    const mpiProcedureSchema = schema.filter(
+      (item) => item.type === 'mpiprocedure',
+    );
+
+    return {
+      equipmentsFromSchema: mpiProcedureSchema.map(
+        (item) => item.editorConfig?.equipment ?? [],
+      ),
+
+      neededMaterials: mpiProcedureSchema.map(
+        (item) => item.editorConfig?.materials ?? [],
+      ),
+
+      equipmentsFromMetadata: smartRefs
+        .filter((ref) => ref.metadata?.equipmentId && ref?.active)
+        .map((ref) => ref.metadata),
+      materialsFromMetadata: smartRefs
+        .filter((ref) => ref.metadata?.materialId != null && ref?.active)
+        .map((ref) => ({
+          materialId: ref.metadata.materialId,
+          quantity: ref.metadata.quantity,
+        })),
+    };
+  }, [
+    documentRevision?.formDocument?.formTemplate?.schema,
+    documentRevision?.smartReferencesTo,
+  ]);
+
+  useEffect(() => {
+    if (!isTypeMpiOutput) {
+      setAreAllEquipmentsSelected(true);
+      setUnselectedEquipment([]);
+      setHasInsufficientQty(false);
+      setInsufficientMaterials([]);
+      return;
+    }
+
+    const equipmentSelectionResult = areRequiredEquipmentsSelected(
+      equipmentsFromSchema,
+      equipmentsFromMetadata,
+    );
+
+    setAreAllEquipmentsSelected(equipmentSelectionResult.isSelected);
+    setUnselectedEquipment(equipmentSelectionResult.unselectedEquipment);
+
+    const materialQtyResult = isMpiOutputInsufficientQty(
+      neededMaterials,
+      materialsFromMetadata,
+      lhrsAcceptedQuantity,
+    );
+
+    setHasInsufficientQty(materialQtyResult.hasInsufficientQty);
+    setInsufficientMaterials(materialQtyResult.insufficientMaterials);
+  }, [
+    isTypeMpiOutput,
+    equipmentsFromSchema,
+    equipmentsFromMetadata,
+    neededMaterials,
+    materialsFromMetadata,
+    documentRevision?.formInput,
+    documentRevision?.document?.smartReferencesTo,
+  ]);
+
   const isDisabledApproval
-    = isTypeMpiOutput && (isApproverAdded || hasPendingApprovals);
+    = isTypeMpiOutput
+    && (isApproverAdded
+      || hasPendingApprovals);
 
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
 
@@ -141,17 +237,48 @@ export const SubmitForApproval: React.FC<Props> = ({
   const closeWOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.load(docRevId));
+      const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
+        return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
+      })?.toDocRev;
       const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
         documentId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRev?.documentId ?? '',
+          lhrDocRevision?.documentId ?? '',
         documentRevisionId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRevId ?? '',
+          lhrDocRevision?.id ?? '',
       });
       history.push(documentVersionUrl, { toTabId: 'details' });
     },
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
+      toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
+      return;
+    }
+
+    if (hasInsufficientQty && isTypeMpiOutput) {
+      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, lotIds) => {
+        const lotDocIds = documentRevision?.smartReferencesTo?.filter((ref) => {
+          return ref.metadata?.materialId === lotIds && ref?.active;
+        },
+        )?.map((ref) => ref.metadata?.lotDocId).flat();
+        const docIdArray = Array.isArray(lotDocIds)
+          ? lotDocIds.filter((id): id is string => typeof id === 'string')
+          : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
+        return [...acc, ...docIdArray];
+      }, []);
+      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message', { lots: lotsDocIds.join(', ') }));
+      return;
+    }
+
+    if (!areAllEquipmentsSelected && isTypeMpiOutput) {
+      const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
+      const equipmentId = unselectedEquipment[0];
+      const equipmentRef = usedDocInLHRS?.[equipmentId];
+      toastError(translate('form.builder.lhrs.equipment.selection.error.message', { equipmentId: equipmentRef?.docId }));
+      return;
+    }
+
     if (!hasBuildType && isLhrDoc) {
       toastError(translate('form.builder.lhr.build.type.error.message'));
       return;

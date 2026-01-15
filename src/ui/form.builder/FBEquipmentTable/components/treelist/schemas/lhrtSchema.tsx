@@ -12,6 +12,7 @@ export const TreeListLHRTSchema = ({
   onDelete,
   onConfirm,
   equipmentOptions,
+  allowedEditEqOptions,
   parentRevId,
   onRowClick,
 }): CustomTreeListColumnProps[] => [
@@ -20,7 +21,7 @@ export const TreeListLHRTSchema = ({
     field: 'title',
     title: translate('form.builder.procedure.equipment.grid.title'),
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} />,
     width: 150,
   },
   {

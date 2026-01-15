@@ -1,7 +1,7 @@
 import { isEmpty, map } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB, FBFilesPresenterProps, FBFilesPresenterState } from '../../..';
+import { FB, FBAttachment, FBFilesPresenterProps, FBFilesPresenterState } from '../../..';
 
 export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
   Component: React.FunctionComponent<T>,
@@ -24,7 +24,7 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
 
     useObserver(() => {
       if (!isEmpty(files)) {
-        attachments = filesPresenterState?.filesApi.data ?? [];
+        attachments = filesPresenterState?.filesApi.data ?? files as FBAttachment[];
       }
     });
 

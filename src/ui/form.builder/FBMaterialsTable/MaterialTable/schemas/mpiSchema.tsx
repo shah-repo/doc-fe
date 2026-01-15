@@ -10,6 +10,7 @@ import { SchemaOptions } from '../types';
 
 export const buildMPISchema = ({
   materialSelectOptions,
+  allowedEditOptions,
   onRowClick,
   actionsClass,
   popperHolder,
@@ -22,7 +23,7 @@ export const buildMPISchema = ({
     field: 'title',
     title: translate('form.builder.procedure.material.title'),
     mainOrderIndex: 1,
-    cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} onClick={onRowClick} />,
+    cell: (props) => <PlannedIdCellTemplate {...props} materialSelectOptions={materialSelectOptions} allowedEditOptions={allowedEditOptions} onClick={onRowClick} />,
     width: 150,
   },
   {
