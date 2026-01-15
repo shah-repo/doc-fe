@@ -242,7 +242,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       const dispose = reaction(
         () => formState?.newValues.get(name),
         (fieldValue: string[]) => {
-          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI) {
+          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI || workspaceState?.document?.status !== DocumentRevisionStatus.Draft) {
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
