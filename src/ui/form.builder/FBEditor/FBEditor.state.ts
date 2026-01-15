@@ -63,7 +63,6 @@ class FBEditorState {
     'hyperlink',
     'action',
     'paragraph',
-    'quantity',
     'timer',
     'purchaseorder',
     'instructionsmediaupload',
@@ -89,7 +88,6 @@ class FBEditorState {
   ];
 
   public static pickDefaultValue: FBInputType[] = [
-    'quantity',
     'timer',
     'stepsection',
     'teststep',
