@@ -52,9 +52,10 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean,
 
 interface QuantityNeededCheck {isInsufficientQty: boolean, totalAssignedQty: number, quantityNeeded: number}
 
-export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number): QuantityNeededCheck => {
+export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number, acceptedQuantity: number): QuantityNeededCheck => {
   const subItems = dataItem?.[SUB_ITEMS_FIELD] ?? [];
   const quantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * lhrsQuantity : 0;
+  const acceptedQuantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * acceptedQuantity : 0;
 
   if (subItems.length === 1 && subItems[0]?.isNew) {
     return {
@@ -66,7 +67,7 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
 
   const totalAssignedQty = subItems.reduce((sum, lot) => sum + (lot.quantity ?? 0), 0);
 
-  return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
+  return { isInsufficientQty: !(totalAssignedQty <= quantityNeeded && totalAssignedQty >= acceptedQuantityNeeded), totalAssignedQty, quantityNeeded };
 };
 
 interface MaterialInsufficientQtyResult {

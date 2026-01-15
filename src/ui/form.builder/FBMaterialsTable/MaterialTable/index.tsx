@@ -332,7 +332,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableMaterial;
     const isEditMode = (item[MODE_FIELD] || item[ADD_FIELD]);
-    const { isInsufficientQty } = (!isEditMode && !isEmpty(item[SUB_ITEMS_FIELD])) ? isPartHasInsufficientQty(item, lhrsQuantity) : { isInsufficientQty: false };
+    const { isInsufficientQty } = (!isEditMode && !isEmpty(item[SUB_ITEMS_FIELD])) ? isPartHasInsufficientQty(item, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false };
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -483,6 +483,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const { formState } = FB.useStores();
+  const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
   const [lhrsQuantity, setLhrsQuantity] = useState(1);
   const { appendItemToStateData, removeScanLot, addPartItem, editPartItem, discardScanLot, addLot }
     = useMaterialActions(
@@ -526,18 +527,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   React.useEffect(() => {
     const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
-    const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
-    if (!isNil(formValue) || !isNil(acceptedQuantity)) {
-      setLhrsQuantity(acceptedQuantity > 0 ? acceptedQuantity : formValue);
+    if (!isNil(formValue)) {
+      setLhrsQuantity(formValue);
     }
 
     const dispose = reaction(
-      () => ({
-        start: formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
-        accepted: formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
-      }), ({ start, accepted }) => {
-        if (!isNil(start) || !isNil(accepted)) {
-          setLhrsQuantity(accepted > 0 ? accepted : start);
+      () => formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
+      () => {
+        const newValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
+        if (!isNil(newValue)) {
+          setLhrsQuantity(newValue);
         }
       },
     );
