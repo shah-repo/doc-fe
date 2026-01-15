@@ -67,6 +67,7 @@ interface MaterialTreelistContextProps {
   isRedlineActive?: boolean
   isDisabled?: boolean
   isEBProcedure?: boolean
+  isMPIProcedure?: boolean
   disabledOptions?: string[]
 }
 
@@ -558,6 +559,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
           isEBProcedure,
           disabledOptions,
+          isMPIProcedure,
         }}
       >
         <FormikProvider value={formik}>
