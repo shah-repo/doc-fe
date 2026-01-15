@@ -483,7 +483,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const { formState } = FB.useStores();
-  const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
+  const acceptedQuantity = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
   const [lhrsQuantity, setLhrsQuantity] = useState(1);
   const { appendItemToStateData, removeScanLot, addPartItem, editPartItem, discardScanLot, addLot }
     = useMaterialActions(

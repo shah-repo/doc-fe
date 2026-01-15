@@ -32,7 +32,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(allowedEditOptions ?? []);
   const { lhrsQuantity = 1, isEBProcedure, disabledOptions } = React.useContext(MaterialTreelistContext);
   const { formState } = FB.useStores();
-  const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
+  const acceptedQuantity = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
   const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
