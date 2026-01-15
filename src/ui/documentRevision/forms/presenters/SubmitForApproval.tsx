@@ -15,6 +15,7 @@ import {
   DocumentRevisionStatus,
   ErrorCodes,
   RevisionChangeType,
+  SmartReferenceType,
 } from '../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
@@ -236,11 +237,14 @@ export const SubmitForApproval: React.FC<Props> = ({
   const closeWOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.load(docRevId));
+      const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
+        return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
+      })?.toDocRev;
       const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
         documentId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRev?.documentId ?? '',
+          lhrDocRevision?.documentId ?? '',
         documentRevisionId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRevId ?? '',
+          lhrDocRevision?.id ?? '',
       });
       history.push(documentVersionUrl, { toTabId: 'details' });
     },
