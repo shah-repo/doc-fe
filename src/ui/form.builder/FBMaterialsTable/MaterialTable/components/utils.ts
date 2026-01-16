@@ -69,27 +69,39 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
 
+type MaterialLimit = 'over-limit' | 'under-limit';
 interface MaterialInsufficientQtyResult {
   hasInsufficientQty: boolean
   insufficientMaterials: string[]
-  neededByMaterial?: Record<string, number>
+  insufficientMaterialsWithErrors?: Record<string, MaterialLimit>
+  neededByMaterial?: Record<string, { startQty: number, acceptedQty: number }>
   usedByMaterial?: Record<string, number>
+}
+
+enum MaterialLimitType {
+  OVER_LIMIT = 'over-limit',
+  UNDER_LIMIT = 'under-limit',
 }
 
 export const isMpiOutputInsufficientQty = (
   neededQuantity?: NeededMaterial[][],
   usedQuantity?: UsedMaterial[],
   startQuantity?: number,
+  acceptedQuantity?: number,
 ): MaterialInsufficientQtyResult => {
   const flatNeeded: NeededMaterial[] = (neededQuantity ?? []).flat();
 
-  const neededByMaterial = flatNeeded.reduce<Record<string, number>>(
+  const neededByMaterial = flatNeeded.reduce<Record<string, { startQty: number, acceptedQty: number }>>(
     (acc, item) => {
       const key = item?.title;
       if (!key || item.quantity == null) {
         return acc;
       }
-      acc[key] = (acc[key] ?? 0) + (item?.quantity ?? 0) * (startQuantity ?? 0);
+      const qty = item?.quantity ?? 0;
+      acc[key] = {
+        startQty: (acc[key]?.startQty ?? 0) + qty * (startQuantity ?? 0),
+        acceptedQty: (acc[key]?.acceptedQty ?? 0) + qty * (acceptedQuantity ?? 0),
+      };
       return acc;
     },
     {},
@@ -107,13 +119,25 @@ export const isMpiOutputInsufficientQty = (
     {},
   );
 
-  const insufficientMaterials = Object.keys(neededByMaterial).filter((materialId) => {
-    return (usedByMaterial[materialId] ?? 0) !== neededByMaterial[materialId];
+  const insufficientMaterialsWithErrors: Record<string, MaterialLimit> = {};
+
+  Object.keys(neededByMaterial).forEach((materialId) => {
+    const usedQty = usedByMaterial[materialId] ?? 0;
+    const { startQty, acceptedQty } = neededByMaterial[materialId];
+
+    if (usedQty > startQty) {
+      insufficientMaterialsWithErrors[materialId] = MaterialLimitType.OVER_LIMIT;
+    } else if (usedQty < acceptedQty) {
+      insufficientMaterialsWithErrors[materialId] = MaterialLimitType.UNDER_LIMIT;
+    }
   });
+
+  const insufficientMaterials = Object.keys(insufficientMaterialsWithErrors);
 
   return {
     hasInsufficientQty: insufficientMaterials.length > 0,
     insufficientMaterials,
+    insufficientMaterialsWithErrors,
     neededByMaterial,
     usedByMaterial,
   };
