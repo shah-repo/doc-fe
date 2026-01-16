@@ -52,7 +52,7 @@ export const prepareData = (items?: FBProcedureItemConfig[], isDesign?: boolean,
 
 interface QuantityNeededCheck {isInsufficientQty: boolean, totalAssignedQty: number, quantityNeeded: number}
 
-export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number, acceptedQuantity: number): QuantityNeededCheck => {
+export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number, acceptedQuantity: number | undefined): QuantityNeededCheck => {
   const subItems = dataItem?.[SUB_ITEMS_FIELD] ?? [];
   const quantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * lhrsQuantity : 0;
   const acceptedQuantityNeeded = dataItem?.quantity && acceptedQuantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * acceptedQuantity : 0;
