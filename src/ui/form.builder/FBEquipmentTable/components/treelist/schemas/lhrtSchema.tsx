@@ -22,7 +22,7 @@ export const TreeListLHRTSchema = ({
     field: 'title',
     title: translate('form.builder.procedure.equipment.grid.title'),
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} releasedEquipmentOptions={releasedEquipmentOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} releasedEquipmentOptions={releasedEquipmentOptions} />,
     width: 150,
   },
   {
