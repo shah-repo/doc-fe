@@ -210,6 +210,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (valueKey === 'id' && !change.field.includes('attachments')) { return; }
         if (valueKey === 'assignedEquipments' && change?.previousValue === '[object Object]') { return; }
 
+        const assignLotPattern = /^formInput\.[^.]+\.materials\.\d+\.assignedLots$/;
+        if (change.type === 'ARRAY_DELETED' && assignLotPattern.test(change.field)) { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }
@@ -248,6 +251,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         if (change.type === 'OBJECT_EDITED') {
+          fbLabel = '';
+          isProcedureMaterilEdit = true;
+        }
+
+        if (change.type === 'OBJECT_DELETED' && assignLotPattern.test(change.field)) {
           fbLabel = '';
           isProcedureMaterilEdit = true;
         }
