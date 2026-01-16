@@ -106,6 +106,7 @@ export const SubmitForApproval: React.FC<Props> = ({
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
   const [insufficientMaterials, setInsufficientMaterials] = useState<string[]>([]);
+  const [usedByMaterial, setUsedByMaterial] = useState<Record<string, number>>();
   const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
     = useState(true);
   const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
@@ -180,11 +181,13 @@ export const SubmitForApproval: React.FC<Props> = ({
     const materialQtyResult = isMpiOutputInsufficientQty(
       neededMaterials,
       materialsFromMetadata,
+      lhrsStartQuantity,
       lhrsAcceptedQuantity,
     );
 
     setHasInsufficientQty(materialQtyResult.hasInsufficientQty);
     setInsufficientMaterials(materialQtyResult.insufficientMaterials);
+    setUsedByMaterial(materialQtyResult.usedByMaterial);
   }, [
     isTypeMpiOutput,
     equipmentsFromSchema,
@@ -253,22 +256,31 @@ export const SubmitForApproval: React.FC<Props> = ({
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
-      return;
     }
 
     if (hasInsufficientQty && isTypeMpiOutput) {
-      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, lotIds) => {
-        const lotDocIds = documentRevision?.smartReferencesTo?.filter((ref) => {
-          return ref.metadata?.materialId === lotIds && ref?.active;
+      const errorsByType = insufficientMaterials.reduce<{ noLotsAdded: string[], wrongSum: string[] }>(
+        (acc, materialId) => {
+          const lotQty = usedByMaterial?.[materialId] ?? 0;
+          if (lotQty === 0) {
+            acc.noLotsAdded.push(materialId);
+          } else {
+            acc.wrongSum.push(materialId);
+          }
+          return acc;
         },
-        )?.map((ref) => ref.metadata?.lotDocId).flat();
-        const docIdArray = Array.isArray(lotDocIds)
-          ? lotDocIds.filter((id): id is string => typeof id === 'string')
-          : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
-        return [...acc, ...docIdArray];
-      }, []);
-      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message', { lots: lotsDocIds.join(', ') }));
-      return;
+        { noLotsAdded: [], wrongSum: [] },
+      );
+
+      if (errorsByType.noLotsAdded.length > 0) {
+        toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
+        return;
+      }
+
+      if (errorsByType.wrongSum.length > 0) {
+        toastError(translate('form.builder.lhrs.lots.required.error.message'));
+        return;
+      }
     }
 
     if (!areAllEquipmentsSelected && isTypeMpiOutput) {
