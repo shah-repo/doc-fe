@@ -15,6 +15,7 @@ import {
   DocumentRevisionStatus,
   ErrorCodes,
   RevisionChangeType,
+  SmartReferenceType,
 } from '../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
@@ -22,7 +23,7 @@ import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
 import { DOCUMENT_REVISION_VERSION_URL } from '../../../constants/urls';
-import { LHRS_ACCEPTED_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY, LHRS_START_QUANTITY } from '../../../form.builder/FBLHRStep/utils';
 import { areRequiredEquipmentsSelected, isMpiOutputInsufficientQty } from '../../../form.builder/FBMaterialsTable/MaterialTable/components/utils';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -105,9 +106,22 @@ export const SubmitForApproval: React.FC<Props> = ({
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
   const [insufficientMaterials, setInsufficientMaterials] = useState<string[]>([]);
+  const [usedByMaterial, setUsedByMaterial] = useState<Record<string, number>>();
   const [areAllEquipmentsSelected, setAreAllEquipmentsSelected]
     = useState(true);
   const [unselectedEquipment, setUnselectedEquipment] = useState<string[]>([]);
+  const lhrsAcceptedQuantity
+      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
+
+  const lhrsRejectedQuantity
+      = documentRevision?.formInput?.[LHRS_REJECTED_QUANTITY];
+
+  const lhrsStartQuantity = documentRevision?.formInput?.[LHRS_START_QUANTITY];
+
+  const isAcceptedRejectedQtyValid
+      = typeof lhrsAcceptedQuantity === 'number'
+        && typeof lhrsRejectedQuantity === 'number'
+        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) === lhrsStartQuantity;
 
   const {
     equipmentsFromSchema,
@@ -156,9 +170,6 @@ export const SubmitForApproval: React.FC<Props> = ({
       return;
     }
 
-    const lhrsStartQuantity
-      = documentRevision?.formInput?.[LHRS_ACCEPTED_QUANTITY];
-
     const equipmentSelectionResult = areRequiredEquipmentsSelected(
       equipmentsFromSchema,
       equipmentsFromMetadata,
@@ -171,10 +182,12 @@ export const SubmitForApproval: React.FC<Props> = ({
       neededMaterials,
       materialsFromMetadata,
       lhrsStartQuantity,
+      lhrsAcceptedQuantity,
     );
 
     setHasInsufficientQty(materialQtyResult.hasInsufficientQty);
     setInsufficientMaterials(materialQtyResult.insufficientMaterials);
+    setUsedByMaterial(materialQtyResult.usedByMaterial);
   }, [
     isTypeMpiOutput,
     equipmentsFromSchema,
@@ -227,29 +240,50 @@ export const SubmitForApproval: React.FC<Props> = ({
   const closeWOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.load(docRevId));
+      const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
+        return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
+      })?.toDocRev;
       const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
         documentId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRev?.documentId ?? '',
+          lhrDocRevision?.documentId ?? '',
         documentRevisionId:
-          documentRevision.smartReferencesTo?.[0]?.toDocRevId ?? '',
+          lhrDocRevision?.id ?? '',
       });
       history.push(documentVersionUrl, { toTabId: 'details' });
     },
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (hasInsufficientQty) {
-      console.log('Insufficient Materials:', insufficientMaterials, insufficientMaterials.length);
-      const lotsDocIds = insufficientMaterials.reduce<string[]>((acc, materialId) => {
-        const lotDocIds = documentRevision?.usedDocumentsInLHRS?.[materialId]?.docId;
-        const docIdArray = Array.isArray(lotDocIds) ? lotDocIds : (typeof lotDocIds === 'string' ? [lotDocIds] : []);
-        return [...acc, ...docIdArray];
-      }, []);
-      toastError(translate('form.builder.lhrs.insufficient.quantity.error.message', { lots: lotsDocIds.join(', ') }));
-      return;
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
+      toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
     }
 
-    if (!areAllEquipmentsSelected) {
+    if (hasInsufficientQty && isTypeMpiOutput) {
+      const errorsByType = insufficientMaterials.reduce<{ noLotsAdded: string[], wrongSum: string[] }>(
+        (acc, materialId) => {
+          const lotQty = usedByMaterial?.[materialId] ?? 0;
+          if (lotQty === 0) {
+            acc.noLotsAdded.push(materialId);
+          } else {
+            acc.wrongSum.push(materialId);
+          }
+          return acc;
+        },
+        { noLotsAdded: [], wrongSum: [] },
+      );
+
+      if (errorsByType.noLotsAdded.length > 0) {
+        toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
+        return;
+      }
+
+      if (errorsByType.wrongSum.length > 0) {
+        toastError(translate('form.builder.lhrs.lots.required.error.message'));
+        return;
+      }
+    }
+
+    if (!areAllEquipmentsSelected && isTypeMpiOutput) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];
