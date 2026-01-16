@@ -185,7 +185,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     dataItem,
     field,
     equipmentOptions,
-    allowedEditEqOptions,
+    allowedEditEqOptions = [],
     addActualId,
     isDisabled,
     isEnableActualIdAddition,
