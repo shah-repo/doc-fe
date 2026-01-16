@@ -29,8 +29,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(allowedEditOptions ?? []);
-  const { lhrsQuantity = 1, isEBProcedure, disabledOptions, isMPIProcedure } = React.useContext(MaterialTreelistContext);
-  const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
+  const { lhrsQuantity = 1, isEBProcedure, disabledOptions, isMPIProcedure, acceptedQuantity } = React.useContext(MaterialTreelistContext);
+  const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
   const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
   const onClick = (event) => {
