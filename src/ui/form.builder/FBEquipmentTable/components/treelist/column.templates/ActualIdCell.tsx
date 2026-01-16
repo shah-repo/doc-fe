@@ -143,7 +143,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions, addActualId, isEBProcedure, releasedEquipmentOptions } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions = [], addActualId, isEBProcedure, releasedEquipmentOptions } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
