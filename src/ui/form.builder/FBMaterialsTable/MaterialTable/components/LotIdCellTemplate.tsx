@@ -4,7 +4,8 @@ import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { reaction } from 'mobx';
+import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MaterialTreelistContext } from '..';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
@@ -18,7 +19,11 @@ import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useHover from '../../../../hooks/useHover';
+import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
+import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { DOCUMENT_REVISION_LOT_STATUS } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
+import FB from '../../../helpers/FB';
 import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
@@ -34,6 +39,93 @@ interface LotAutocompleteProps {
   lotRevId?: string
   isLoading?: boolean
 }
+
+const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
+  const classes = styles({ isEditMode: false });
+  const { dataItem } = props;
+  const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
+  const { openQuickView } = useContext(MaterialTreelistContext);
+  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(
+    FBAutocompleteAsyncState,
+    {},
+  );
+
+  const lotId = useMemo(
+    () => dataItem?.lotId ?? '',
+    [dataItem?.lotId],
+  );
+
+  const storedLot = useMemo(() => {
+    if (!lotId) return null;
+
+    return FBAutocompleteAsyncStore.getValue<DocumentRevision>(
+      FBAutocompleteAsyncOption.ebLots,
+      lotId,
+    );
+  }, [lotId]);
+
+  const [lotDocId, setLotDocId] = useState('');
+
+  useEffect(() => {
+    if (!lotId || storedLot) return;
+
+    autocompleteAsyncState.fetchAutocompleteOption(
+      lotId,
+      FBAutocompleteAsyncOption.ebLots,
+    );
+  }, [lotId, storedLot, autocompleteAsyncState]);
+
+  useEffect(() => {
+    if (!storedLot) return;
+
+    setLotDocId(storedLot.document.docId);
+  }, [storedLot]);
+
+  useEffect(
+    () =>
+      reaction(
+        () => autocompleteAsyncState?.autocompleteValueApi?.data,
+        (data) => {
+          if (!data) return;
+
+          setLotDocId(data.document.docId);
+        },
+      ),
+    [],
+  );
+
+  return (
+    <TreeListCellWrapper {...props}>
+      <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
+        <span className={cx(classes.lotInfoId, classes.normalText)} data-cy={`lot-${lotDocId}`}>
+          {lotDocId}
+        </span>
+
+        {lotDocId && (
+          <StyleTooltip
+            title={translate('relatedParts.created.modal.quick.view')}
+            placement="top"
+            arrow
+          >
+            <IconButton
+              kind="simple"
+              size="small"
+              ref={viewLotRef}
+              data-cy="view-lot-button"
+              onClick={(event) => openQuickView?.(event, dataItem)}
+            >
+              <FontAwesomeIcon
+                size="sm"
+                className={classes.viewIcon}
+                icon={isViewLotHovered ? solid('eye') : light('eye')}
+              />
+            </IconButton>
+          </StyleTooltip>
+        )}
+      </span>
+    </TreeListCellWrapper>
+  );
+};
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   field = '',
@@ -105,16 +197,14 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const classes = styles({ isEditMode });
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
-  const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const [value, setValue] = useState<LotOptions>({ label: '', value: '', documentId: '' });
-  const { lhrsQuantity = 1, addLot, openQuickView, isDisabled } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, addLot, isDisabled } = React.useContext(MaterialTreelistContext);
 
   const isAddLotVisible = !dataItem?.isLotAddition && !dataItem?.lotId
     && dataItem?.isLotAdditionIconsShown
     && !(dataItem?.[MODE_FIELD] || dataItem?.[ADD_FIELD]);
 
-  const lotDocId = dataItem?.lotDocId ?? value.label ?? '';
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const isValidLOT = (lot) => {
@@ -153,7 +243,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   });
 
   useEffect(() => {
-    if (isEmpty(parentPartId)) {
+    if (isEmpty(parentPartId) || !isEditMode) {
       return;
     }
 
@@ -224,6 +314,10 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     );
   }
 
+  if (!isEditMode) {
+    return <LotPreviewCell {...props} />;
+  }
+
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
@@ -234,39 +328,19 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
             [classes.normalText]: !hasChildren,
           })}
         >
-          {isEditMode ? (
-            <LotAutocomplete
-              {...{
-                field,
-                lots,
-                value,
-                setValue,
-                dataItem,
-                parentPartId,
-                isLoading: fetchAvailablePartsAsync.isLoading,
-              }}
-            />
-          ) : (
-            lotDocId
-          )}
+          {isEditMode && <LotAutocomplete
+            {...{
+              field,
+              lots,
+              value,
+              setValue,
+              dataItem,
+              parentPartId,
+              isLoading: fetchAvailablePartsAsync.isLoading,
+            }}
+          />
+          }
         </span>
-        {!isEditMode && value.label && (
-          <StyleTooltip title={translate('relatedParts.created.modal.quick.view')} placement="top" arrow>
-            <IconButton
-              kind="simple"
-              size="small"
-              ref={viewLotRef}
-              data-cy="view-lot-button"
-              onClick={(event) => openQuickView?.(event, dataItem)}
-            >
-              <FontAwesomeIcon
-                size="sm"
-                className={classes.viewIcon}
-                icon={isViewLotHovered ? solid('eye') : light('eye')}
-              />
-            </IconButton>
-          </StyleTooltip>
-        )}
       </span>
     </TreeListCellWrapper>
   );
