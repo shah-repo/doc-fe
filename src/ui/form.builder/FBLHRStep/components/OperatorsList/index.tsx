@@ -30,7 +30,6 @@ const statusMap: Partial<
 Record<FBInlineApprovalStatusIdent, FBInlineApprovalStatusIdent>
 > = {
   [FBInlineApprovalStatusIdent.DRAFT]: FBInlineApprovalStatusIdent.PENDING,
-  [FBInlineApprovalStatusIdent.APPROVED]: FBInlineApprovalStatusIdent.COMPLETED,
 };
 
 const OperatorsList: React.FC<OperatorsListProps> = (props) => {

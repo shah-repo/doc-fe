@@ -32,7 +32,7 @@ export type FBInlineApprovalOptions = FBEmployee & {
 };
 
 type FBInlineApprovalType = 'MASTER' | 'SECTION';
-type FBInlineApprovalStatus = 'DRAFT' | 'PENDING' | 'ABANDONED' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
+type FBInlineApprovalStatus = 'DRAFT' | 'PENDING' | 'ABANDONED' | 'APPROVED' | 'REJECTED';
 export type FBInlineApprovalTransition = 'abandon' | 'pending' | 'approve' | 'reject' | 'pending_by_field';
 
 export enum FBInlineApprovalStatusIdent {
@@ -41,7 +41,6 @@ export enum FBInlineApprovalStatusIdent {
   ABANDONED = 'ABANDONED',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
-  COMPLETED = 'COMPLETED',
 }
 
 export type FBInlineApprovalBody =
