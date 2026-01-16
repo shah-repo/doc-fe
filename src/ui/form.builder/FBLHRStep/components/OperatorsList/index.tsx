@@ -26,12 +26,6 @@ interface OperatorsListProps {
   stepIndex?: number
 }
 
-const statusMap: Partial<
-Record<FBInlineApprovalStatusIdent, FBInlineApprovalStatusIdent>
-> = {
-  [FBInlineApprovalStatusIdent.DRAFT]: FBInlineApprovalStatusIdent.PENDING,
-};
-
 const OperatorsList: React.FC<OperatorsListProps> = (props) => {
   const { getFormattedDateString } = useDate();
   const { operators, stepLHRs, lhrStepState, stepIndex } = props;
