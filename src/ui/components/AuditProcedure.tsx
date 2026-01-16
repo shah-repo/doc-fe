@@ -78,15 +78,16 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     number: number,
     innerKey: number,
     isNested = false,
+    isDelete = false,
   ): ReactNode => {
     const fbLabel = getUpdatedMaterialProcedureAuditLabel(field, number, isNested);
 
     const { key, current, previous }: AuditItem = field;
     let value: number | string | null | undefined | ReactNode = !current && previous ? previous : current;
     if (key === 'title' || key === 'parentTitle') {
-      value = renderPartValue(current as string);
+      value = renderPartValue((isDelete ? previous : current) as string);
     } else if (key === 'lotId') {
-      value = renderLotValue(current as string);
+      value = renderLotValue((isDelete ? previous : current) as string);
     } else if (key === 'attachments') {
       const currentItems = Array.isArray(current) ? current : [];
       const previousItems = Array.isArray(previous) ? previous : [];
@@ -167,6 +168,31 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     return `${fbLabel} ${action}`;
   };
 
+  if (audit.type === 'OBJECT_DELETED') {
+    const auditValueToUse = auditValue ?? '{}';
+    let parsedValue;
+    if (typeof auditValueToUse === 'string') {
+      try {
+        parsedValue = JSON.parse(auditValueToUse.trim()) as IAssignLot;
+      } catch (e) {
+        parsedValue = auditValueToUse;
+      }
+    }
+    const nestedFieldsToCompare = [
+      { key: 'lotId', current: undefined, previous: parsedValue?.lotId },
+      { key: 'parentTitle', current: undefined, previous: parsedValue?.parentTitle },
+    ];
+    let innerKey = 0;
+    const number = audit?.fbSchemaItem?.stepIndex ?? 1;
+    const fieldsToRender = nestedFieldsToCompare.map((field) =>
+      renderUpdatedMaterialProcedureAudit(field, number, innerKey++, true, true),
+    );
+    return (
+      <>
+        {fieldsToRender}
+      </>
+    );
+  }
   if (audit.type === 'OBJECT_EDITED' && audit.field.includes('materials')) {
     const auditValueToUse = auditValue ?? '{}';
     let parsedValue;
