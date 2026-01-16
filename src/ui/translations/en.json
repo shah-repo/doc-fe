@@ -2774,5 +2774,8 @@
   "example.prompt.part.impacted": "Which Parts will get impacted if <supplier_name> supplier is disqualified?",
   "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision",
   "lhr.materials.quantity.mismatch.error": "Lots assigned ({assignedQty}) does not meet the quantity needed ({neededQty}) for the {part}",
-  "lhr.materials.total.cannot.exceed.start.quantity": "The sum of accepted & rejected quantity must equal the start quantity"
+  "lhr.materials.total.cannot.exceed.start.quantity": "The sum of accepted & rejected quantity must equal the start quantity",
+  "documentRevision.create.missing.security.groups.message": "{documentType} is configured to allow access for:\n{groups}\n\nDo you want to add it to the document?",
+  "documentRevision.create.missing.security.groups.confirm": "Add and Save",
+  "documentRevision.create.missing.security.groups.cancel": "Save as is"
 }
