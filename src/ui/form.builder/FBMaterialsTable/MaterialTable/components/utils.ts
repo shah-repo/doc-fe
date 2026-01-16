@@ -55,7 +55,7 @@ interface QuantityNeededCheck {isInsufficientQty: boolean, totalAssignedQty: num
 export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number, acceptedQuantity: number): QuantityNeededCheck => {
   const subItems = dataItem?.[SUB_ITEMS_FIELD] ?? [];
   const quantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * lhrsQuantity : 0;
-  const acceptedQuantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * acceptedQuantity : 0;
+  const acceptedQuantityNeeded = dataItem?.quantity && acceptedQuantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * acceptedQuantity : 0;
 
   if (subItems.length === 1 && subItems[0]?.isNew) {
     return {
@@ -66,8 +66,11 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
   }
 
   const totalAssignedQty = subItems.reduce((sum, lot) => sum + (lot.quantity ?? 0), 0);
-
-  return { isInsufficientQty: !(totalAssignedQty <= quantityNeeded && totalAssignedQty >= acceptedQuantityNeeded), totalAssignedQty, quantityNeeded };
+  if (acceptedQuantity) {
+    return { isInsufficientQty: !(totalAssignedQty <= quantityNeeded && totalAssignedQty >= acceptedQuantityNeeded), totalAssignedQty, quantityNeeded };
+  } else {
+    return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
+  }
 };
 
 interface MaterialInsufficientQtyResult {

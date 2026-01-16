@@ -14,7 +14,6 @@ import { MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../components/OverflowContent';
 import { Colors } from '../../../../layout/theme-next';
 import { ADD_FIELD } from '../../../FBAllocation/components/treelist/constants';
-import { LHRS_ACCEPTED_QUANTITY } from '../../../FBLHRStep/utils';
 import { FB } from '../../../helpers';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
@@ -30,9 +29,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(allowedEditOptions ?? []);
-  const { lhrsQuantity = 1, isEBProcedure, disabledOptions } = React.useContext(MaterialTreelistContext);
-  const { formState } = FB.useStores();
-  const acceptedQuantity = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
+  const { lhrsQuantity = 1, isEBProcedure, disabledOptions, isMPIProcedure, acceptedQuantity } = React.useContext(MaterialTreelistContext);
   const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
   const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
@@ -122,7 +119,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   };
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
-  const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
+  const displayValue = (isMPIProcedure && dataItem.LHRTparameter) ? `${dataItem.id}:${fieldValue}` : fieldValue;
 
   return (
     <TreeListCellWrapper {...props}>
