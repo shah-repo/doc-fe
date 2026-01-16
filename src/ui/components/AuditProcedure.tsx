@@ -42,6 +42,7 @@ interface IAssignLot {
   quantity: number
   unit?: string|null
   serialNumber?: string
+  parentTitle?: string
 }
 
 const AuditProcedure: React.FunctionComponent<Props> = ({
@@ -82,20 +83,37 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
 
     const { key, current, previous }: AuditItem = field;
     let value: number | string | null | undefined | ReactNode = !current && previous ? previous : current;
-    if (key === 'title') {
+    if (key === 'title' || key === 'parentTitle') {
       value = renderPartValue(current as string);
     } else if (key === 'lotId') {
       value = renderLotValue(current as string);
     } else if (key === 'attachments') {
-      const getAttachmentIds = (data) => Array.isArray(data) ? data.map((item) => item?.id) : data?.id;
+      const currentItems = Array.isArray(current) ? current : [];
+      const previousItems = Array.isArray(previous) ? previous : [];
 
-      const isRemoval = Array.isArray(previous) && previous?.length && !current;
-      const auditAttachment = {
-        ...audit,
-        previousValue: isRemoval ? getAttachmentIds(previous) : 'undefined',
-        nextValue: !isRemoval ? getAttachmentIds(current) : 'undefined',
-      };
-      value = <AuditAttachment audit={auditAttachment} />;
+      const itemsToMap = currentItems.length > 0 ? currentItems : previousItems;
+
+      return itemsToMap.map((item, index) => {
+        const auditAttachment = {
+          ...audit,
+          previousValue: currentItems.length === 0 ? item?.id : 'undefined',
+          nextValue: currentItems.length > 0 ? item?.id : 'undefined',
+        };
+
+        return (
+          <React.Fragment key={`${key}-${item?.id || index}`}>
+            {/* We repeat the Label and the Component for every single file */}
+            <Typography className={classes.auditKey}>
+              <span data-cy={`change-key-${key}-${innerKey}-${index}`}>
+                {fbLabel}
+              </span>
+            </Typography>
+            <div data-cy={`change-value-${key}-${innerKey}-${index}`}>
+              <AuditAttachment audit={auditAttachment} />
+            </div>
+          </React.Fragment>
+        );
+      });
     }
 
     return (
@@ -135,7 +153,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       : '';
     const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
 
-    if (isNested && key !== 'serialNumber') {
+    if (isNested && !['serialNumber', 'parentTitle'].includes(key)) {
       fbLabel = intl.formatMessage({
         id: 'form.builder.assigned.lots.label',
       }, {
@@ -184,6 +202,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       { key: 'serialNumber', current: assignedLotCurrent?.serialNumber, previous: assignedLotPrevious?.serialNumber },
       { key: 'quantity', current: assignedLotCurrent?.quantity, previous: assignedLotPrevious?.quantity },
       { key: 'unit', current: assignedLotCurrent?.unit, previous: assignedLotPrevious?.unit },
+      { key: 'parentTitle', current: assignedLotCurrent?.parentTitle, previous: assignedLotPrevious?.parentTitle },
     ];
 
     let innerKey = 0;
@@ -284,7 +303,9 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       if (audit.type === 'ARRAY_DELETED') {
         try {
           const data = JSON.parse(auditValue as string);
-          if (data && data.lotId) {
+          if (data && Array.isArray(data) && data.length > 0) {
+            return data.map((item) => renderLotValue(item.lotId));
+          } else if (data && data.lotId) {
             return renderLotValue(data.lotId);
           }
         } catch (err) {
