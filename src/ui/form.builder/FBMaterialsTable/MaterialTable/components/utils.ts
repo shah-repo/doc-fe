@@ -69,12 +69,18 @@ export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantit
   return { isInsufficientQty: totalAssignedQty !== quantityNeeded, totalAssignedQty, quantityNeeded };
 };
 
+type MaterialLimit = 'over-limit' | 'under-limit';
 interface MaterialInsufficientQtyResult {
   hasInsufficientQty: boolean
   insufficientMaterials: string[]
-  insufficientMaterialsWithErrors?: Record<string, 'over-limit' | 'under-limit'>
+  insufficientMaterialsWithErrors?: Record<string, MaterialLimit>
   neededByMaterial?: Record<string, { startQty: number, acceptedQty: number }>
   usedByMaterial?: Record<string, number>
+}
+
+enum MaterialLimitType {
+  OVER_LIMIT = 'over-limit',
+  UNDER_LIMIT = 'under-limit',
 }
 
 export const isMpiOutputInsufficientQty = (
@@ -113,16 +119,16 @@ export const isMpiOutputInsufficientQty = (
     {},
   );
 
-  const insufficientMaterialsWithErrors: Record<string, 'over-limit' | 'under-limit'> = {};
+  const insufficientMaterialsWithErrors: Record<string, MaterialLimit> = {};
 
   Object.keys(neededByMaterial).forEach((materialId) => {
     const usedQty = usedByMaterial[materialId] ?? 0;
     const { startQty, acceptedQty } = neededByMaterial[materialId];
 
     if (usedQty > startQty) {
-      insufficientMaterialsWithErrors[materialId] = 'over-limit';
+      insufficientMaterialsWithErrors[materialId] = MaterialLimitType.OVER_LIMIT;
     } else if (usedQty < acceptedQty) {
-      insufficientMaterialsWithErrors[materialId] = 'under-limit';
+      insufficientMaterialsWithErrors[materialId] = MaterialLimitType.UNDER_LIMIT;
     }
   });
 
