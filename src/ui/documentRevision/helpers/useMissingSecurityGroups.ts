@@ -39,13 +39,6 @@ const useMissingSecurityGroups = (): MissingSecurityGroupsFunction => {
     const missingSecurityGroupIds = difference(systemSecurityGroupsIds, documentSecurityGroupIds);
     const allSecurityGroupsIds = union(systemSecurityGroupsIds, documentSecurityGroupIds);
 
-    console.log({
-      systemSecurityGroupsIds,
-      documentSecurityGroupIds,
-      missingSecurityGroupIds,
-      allSecurityGroupsIds,
-    });
-
     return {
       missingGroups: groups.filter(group => missingSecurityGroupIds.includes(group.value)),
       fixedSecurityGroups: groups.filter(group => allSecurityGroupsIds.includes(group.value)),
