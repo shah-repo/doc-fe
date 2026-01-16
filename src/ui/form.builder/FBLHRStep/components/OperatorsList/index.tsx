@@ -53,8 +53,12 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
         const { stepId, user } = operator;
         const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
-        if (statusInfo?.status && statusMap[statusInfo.status]) {
-          statusInfo.status = statusMap[statusInfo.status];
+        if (statusInfo?.status === FBInlineApprovalStatusIdent.DRAFT) {
+          statusInfo.status = FBInlineApprovalStatusIdent.PENDING;
+        }
+
+        if (statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED) {
+          statusInfo.status = FBInlineApprovalStatusIdent.COMPLETED;
         }
 
         return (
