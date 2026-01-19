@@ -4,6 +4,7 @@ import { ObservableMap, reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
+import { SM } from '../../../App';
 import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
@@ -38,6 +39,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       && ref.type === SmartReferenceType.HiddenPiInstance
       && ref.metadata.fieldId === name);
 
+    const { _tabsState } = SM.useStores();
     const highestReference = getLatesReferenceVersion(smartReferencesFrom);
     stepLHRs = highestReference?.fromDocRev;
 
@@ -131,13 +133,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => lhrStepState.getDocumentApi.data,
       (document) => {
-        if (!document) { return; }
-        const highestRev = getHighestRevision(document.documentRevisions);
-        if (!highestRev) { return; }
-        window.open(
+         _tabsState?.setTabClickRestriction(false);
+         if (!document) { return; }
+         const highestRev = getHighestRevision(document.documentRevisions);
+         if (!highestRev) { return; }
+         window.open(
           `/document_revision/${highestRev.documentId}/version/${highestRev.id}`,
           '_self',
-        );
+         );
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -230,12 +233,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @methods
     startMpi = () => {
-      lhrStepState.startMpi(
-        name,
+       _tabsState?.setTabClickRestriction(true);
+       lhrStepState.startMpi(
+         name,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
         stepIndex,
-      );
+       );
     };
 
     const openLHRs = (docRev?: DocumentRevision) => {

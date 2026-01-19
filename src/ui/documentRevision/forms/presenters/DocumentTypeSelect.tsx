@@ -100,17 +100,13 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       isQms: type.isQms,
       needsSignature: type.needsSignature as boolean,
     });
-    formik.setFieldValue('securityGroups', []);
 
     if (loadDocumentProposedId) {
       formik.setFieldValue('retrain', type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-    // Security groups
-    if (type.isQms) {
-      const securityGroups = getDocTypeGroups(type);
-      formik.setFieldValue('securityGroups', securityGroups);
-    }
+    const securityGroups = getDocTypeGroups(type);
+    formik.setFieldValue('securityGroups', securityGroups);
     formik.handleChange(event);
 
     // FB mode

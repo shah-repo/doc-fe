@@ -41,6 +41,7 @@ export enum FBInlineApprovalStatusIdent {
   ABANDONED = 'ABANDONED',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
 }
 
 export type FBInlineApprovalBody =

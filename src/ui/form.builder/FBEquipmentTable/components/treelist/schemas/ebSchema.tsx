@@ -9,6 +9,7 @@ export const TreeListEBSchema = ({
   actionsClass,
   equipmentOptions,
   allowedEditEqOptions,
+  releasedEquipmentOptions,
   popperHolder,
   getItem,
   addActualId,
@@ -28,7 +29,7 @@ export const TreeListEBSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} isEBProcedure={isEBProcedure} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} isEBProcedure={isEBProcedure} releasedEquipmentOptions={releasedEquipmentOptions} />,
     sortable: false,
   },
   {

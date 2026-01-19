@@ -16,10 +16,10 @@ export const EBDateCell: React.FC<CustomTreeListCellProps> = (props) => {
   const [displayValue, setDisplayValue] = useState<string>();
   const isExpired = displayValue ? isDateOverdue(displayValue) : false;
   const classes = useStyles({ hasChildren });
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
 
   const getFormattedDate = (date) => {
-    return date ? getFormattedDateString(date, MomentFormats.MonthDateYearTwoDigit) : '-';
+    return date ? getFormattedDateString(convertDateTimeToUserTz(date, MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit) : '-';
   };
 
   useEffect(() => {
