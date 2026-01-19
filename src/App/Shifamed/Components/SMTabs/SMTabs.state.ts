@@ -1,11 +1,20 @@
-import { action, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { Size } from 'react-virtualized';
 
 export default class SMTabsState {
   @observable public activeTabId = '';
   @observable public contentSize?: Size;
+  @observable restrictTabClick = false;
+
+  @computed get isTabClickAllowed (): boolean {
+    return !this.restrictTabClick;
+  }
 
   @action public setActiveTabId = (id: string): void => {
+    if (!this.isTabClickAllowed) {
+      return;
+    }
+
     this.activeTabId = id;
   };
 
@@ -15,5 +24,9 @@ export default class SMTabsState {
 
   @action public setContentSize = (size: Size): void => {
     this.contentSize = size;
+  };
+
+  @action setTabClickRestriction = (restricted: boolean): void => {
+    this.restrictTabClick = restricted;
   };
 }
