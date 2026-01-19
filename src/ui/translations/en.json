@@ -1515,6 +1515,8 @@
   "form.builder.eqmaintenance": "Equipment",
   "form.builder.serialNumber": "Serial(s)",
   "form.builder.actualId": "Actual Id",
+  "form.builder.equipmentId": "Actual Id",
+  "form.builder.assignedEquipments": "Actual Id",
   "form.builder.assigned.lots.label": "{stepLabel} {keyLabelType} Lot {keyLabel}",
   "form.builder.preventative.maintenance": "Preventative Maintenance",
   "form.builder.calibration": "Calibration",

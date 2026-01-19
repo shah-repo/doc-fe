@@ -226,7 +226,7 @@ export const getMaterialReplacementAuditLabel = (
     label = intl.formatMessage({ id: 'form.builder.audit.EQUIPMENT_REPLACEMENT' },
       {
         step: stepIndex,
-        field: 'Equipment',
+        field: 'Acutal Id',
         type,
       });
   }
