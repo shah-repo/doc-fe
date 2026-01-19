@@ -173,8 +173,6 @@ export const getMaterialReplacementAuditLabel = (
   field: string, fieldType: string, meta: SmartReferenceMeta|undefined, stepIndex = 1,
 ): string => {
   const { lotPart, lotDocId, materialId } = meta ?? {};
-  console.log('field Replacement', field, 'meta', meta);
-
   let type = '';
   if (materialId) {
     switch (fieldType) {
