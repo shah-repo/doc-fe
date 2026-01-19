@@ -55,16 +55,8 @@ export const useFetchData = () => {
     const equipments = Array.from(asyncData?.values() ?? []) ?? [];
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
-    const excludedStatuses = [
-      DocumentRevisionStatus.Draft,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.Voided,
-      DocumentRevisionStatus.Canceled,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.InReview,
-      DocumentRevisionStatus.PendingChange,
-    ];
-    const releasedEquipments = equipments.filter((equ) => !excludedStatuses.includes(equ.status));
+
+    const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
     const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
 
     return {

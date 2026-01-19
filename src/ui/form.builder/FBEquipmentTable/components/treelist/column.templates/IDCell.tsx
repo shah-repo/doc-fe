@@ -24,6 +24,7 @@ interface EditorProps {
   dataItem: EditableEquipmentItem
   isLoading?: boolean
   equipmentOptions: OptionType[]
+  allowedEditEqOptions?: OptionType[]
   releasedEquipmentOptions: OptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
@@ -36,6 +37,7 @@ const Editor: React.FC<EditorProps> = ({
   isLoading,
   dataItem,
   equipmentOptions,
+  allowedEditEqOptions,
   releasedEquipmentOptions,
   isMPIForm,
   isEBProcedure,
@@ -57,7 +59,12 @@ const Editor: React.FC<EditorProps> = ({
     } else if (fieldValue) {
       setValue({ label: fieldValue, value: fieldValue });
     }
-    setItems(releasedEquipmentOptions);
+
+    if (isEBProcedure) {
+      setItems(allowedEditEqOptions ?? []);
+    } else {
+      setItems(releasedEquipmentOptions ?? []);
+    }
   }, [equipmentOptions, releasedEquipmentOptions]);
 
   useEffect(() => {
@@ -87,7 +94,11 @@ const Editor: React.FC<EditorProps> = ({
     }
 
     if (!isFreeSolo && !title) {
-      setItems(releasedEquipmentOptions ?? []);
+      if (isEBProcedure) {
+        setItems(allowedEditEqOptions ?? []);
+      } else {
+        setItems(releasedEquipmentOptions ?? []);
+      }
     }
   }, [values]);
 
@@ -164,7 +175,7 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, releasedEquipmentOptions, isMPIForm, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, releasedEquipmentOptions, isMPIForm, isEBProcedure, allowedEditEqOptions } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
   const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
@@ -218,6 +229,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
                 isLoading,
                 equipmentOptions,
                 releasedEquipmentOptions: releasedEquipmentOptions || [],
+                allowedEditEqOptions,
                 isMPIForm,
                 isEBProcedure,
               }}
