@@ -151,6 +151,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           if (!data) {
             return;
           }
+          if (!isOperator && !isOwner) {
+            return;
+          }
           const activeApprovals = filter(
             workspaceState?.approvals,
             (a) => a.status !== 'ABANDONED',
