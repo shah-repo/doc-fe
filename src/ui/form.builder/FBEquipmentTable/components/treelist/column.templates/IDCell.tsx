@@ -3,10 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, debounce } from 'lodash';
-import React, { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  Dispatch,
+  memo,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
-import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
+import {
+  Autocomplete,
+  FormikField,
+} from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import OverflowContent from '../../../../../components/OverflowContent';
 import { FB } from '../../../../helpers';
@@ -42,7 +52,8 @@ const Editor: React.FC<EditorProps> = ({
   isMPIForm,
   isEBProcedure,
 }) => {
-  const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableEquipmentItem>();
+  const { setFieldValue, errors, getFieldProps, values }
+    = useFormikContext<EditableEquipmentItem>();
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const { disabledOptions } = React.useContext(EquipmentTreelistContext);
   const [inputValue, setInputValue] = React.useState<string>();
@@ -51,7 +62,9 @@ const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     const fieldValue = dataItem[field ?? ''];
-    const value = equipmentOptions.find((option) => option.value === fieldValue);
+    const value = equipmentOptions.find(
+      (option) => option.value === fieldValue,
+    );
 
     if (value && field) {
       setValue(value);
@@ -60,11 +73,7 @@ const Editor: React.FC<EditorProps> = ({
       setValue({ label: fieldValue, value: fieldValue });
     }
 
-    if (isEBProcedure) {
-      setItems(allowedEditEqOptions ?? []);
-    } else {
-      setItems(releasedEquipmentOptions ?? []);
-    }
+    setOptionsItems();
   }, [equipmentOptions, releasedEquipmentOptions]);
 
   useEffect(() => {
@@ -94,13 +103,17 @@ const Editor: React.FC<EditorProps> = ({
     }
 
     if (!isFreeSolo && !title) {
-      if (isEBProcedure) {
-        setItems(allowedEditEqOptions ?? []);
-      } else {
-        setItems(releasedEquipmentOptions ?? []);
-      }
+      setOptionsItems();
     }
   }, [values]);
+
+  const setOptionsItems = () => {
+    if (isEBProcedure) {
+      setItems(allowedEditEqOptions ?? []);
+    } else {
+      setItems(releasedEquipmentOptions ?? []);
+    }
+  };
 
   const handleChange = (_: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
@@ -109,7 +122,11 @@ const Editor: React.FC<EditorProps> = ({
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+  const onInputChange = (
+    _: React.ChangeEvent<{}>,
+    inputVal: string,
+    reason: string,
+  ) => {
     if (reason !== 'input') {
       return;
     }
@@ -140,11 +157,7 @@ const Editor: React.FC<EditorProps> = ({
   });
 
   return (
-    <FormikField
-      name={field}
-      required
-      error={Boolean(errors[field])}
-    >
+    <FormikField name={field} required error={Boolean(errors[field])}>
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
@@ -154,11 +167,11 @@ const Editor: React.FC<EditorProps> = ({
         disableOpenOnFocus
         blurOnSelect
         ListboxComponent={({ children, ...otherProps }) => {
-          return (<>
-            <ul {...otherProps} >
-              {children}
-            </ul>
-          </>);
+          return (
+            <>
+              <ul {...otherProps}>{children}</ul>
+            </>
+          );
         }}
         getOptionDisabled={(option) =>
           (isEBProcedure && disabledOptions?.includes(option.value)) ?? false
@@ -175,8 +188,27 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, releasedEquipmentOptions, isMPIForm, isEBProcedure, allowedEditEqOptions } = props;
-  const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
+  const {
+    hasChildren,
+    dataItem,
+    field,
+    level,
+    onExpandChange,
+    expanded,
+    getItem,
+    equipmentOptions,
+    releasedEquipmentOptions,
+    isMPIForm,
+    isEBProcedure,
+    allowedEditEqOptions,
+  } = props;
+  const isEditMode = isEBProcedure
+    ? isEditEquipItem(dataItem)
+      && !dataItem.equipmentId
+      && !dataItem.isActualIdAddition
+    : isEditEquipItem(dataItem)
+      && !dataItem.actualId
+      && !dataItem?.isActualIdAddition;
   const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
   const isLoading = !equipmentOptions.length;
@@ -186,7 +218,9 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   };
 
   useEffect(() => {
-    const value = equipmentOptions.find((option) => option.value === dataItem[field ?? '']);
+    const value = equipmentOptions.find(
+      (option) => option.value === dataItem[field ?? ''],
+    );
 
     if (value && field) {
       setValue(value);
@@ -194,13 +228,15 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   }, [equipmentOptions]);
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const displayValue = dataItem.type ? `${dataItem.id}:${fieldValue}` : fieldValue;
+  const displayValue = dataItem.type
+    ? `${dataItem.id}:${fieldValue}`
+    : fieldValue;
 
   return (
     <TreeListCellWrapper {...props}>
       <OverflowContent title={displayValue}>
-        {hasChildren && !isEditMode
-          && <span
+        {hasChildren && !isEditMode && (
+          <span
             className={cx(
               classes.defaultIcon,
               { [classes.expand]: hasChildren },
@@ -217,24 +253,33 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
                   : solid('square-plus')
               }
             />
-          </span>}
-        <span className={cx(classes.nameCell, classes.titleInfoCell, hasChildren ? classes.boldText : classes.normalText)}>
-          {isEditMode && <div className={classes.idCellEditWrapper}>
-            <Editor
-              {...{
-                field,
-                value,
-                setValue,
-                dataItem,
-                isLoading,
-                equipmentOptions,
-                releasedEquipmentOptions: releasedEquipmentOptions || [],
-                allowedEditEqOptions,
-                isMPIForm,
-                isEBProcedure,
-              }}
-            />
-          </div>}
+          </span>
+        )}
+        <span
+          className={cx(
+            classes.nameCell,
+            classes.titleInfoCell,
+            hasChildren ? classes.boldText : classes.normalText,
+          )}
+        >
+          {isEditMode && (
+            <div className={classes.idCellEditWrapper}>
+              <Editor
+                {...{
+                  field,
+                  value,
+                  setValue,
+                  dataItem,
+                  isLoading,
+                  equipmentOptions,
+                  releasedEquipmentOptions: releasedEquipmentOptions || [],
+                  allowedEditEqOptions,
+                  isMPIForm,
+                  isEBProcedure,
+                }}
+              />
+            </div>
+          )}
           {!isEditMode && displayValue}
         </span>
       </OverflowContent>
