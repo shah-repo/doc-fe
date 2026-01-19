@@ -11,7 +11,7 @@ import { customEQOptionType, EquipOption } from '../column.templates/types';
 const isValidDate = (date?: string): boolean => Boolean(date && !Number.isNaN(Date.parse(date)));
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
-  const { id, name, eqStatus, displayRevision, document, precalc } = equipment;
+  const { id, name, eqStatus, displayRevision, document, precalc, status } = equipment;
   const caliDueDate = precalc?.cali_due_date;
   const pmDueDate = precalc?.pm_due_date;
   const validCalDate = isValidDate(caliDueDate) ? caliDueDate : '';
@@ -28,6 +28,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     pmDueDate: validPmDate,
     status: eqStatus,
     value: id,
+    docStatus: status,
   };
 };
 
@@ -55,16 +56,8 @@ export const useFetchData = () => {
     const equipments = Array.from(asyncData?.values() ?? []) ?? [];
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
-    const excludedStatuses = [
-      DocumentRevisionStatus.Draft,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.Voided,
-      DocumentRevisionStatus.Canceled,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.InReview,
-      DocumentRevisionStatus.PendingChange,
-    ];
-    const releasedEquipments = equipments.filter((equ) => !excludedStatuses.includes(equ.status));
+
+    const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
     const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
 
     return {

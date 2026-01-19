@@ -30,7 +30,7 @@ export const TreeListSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} releasedEquipmentOptions={releasedEquipmentOptions} />,
     sortable: false,
   },
   {
