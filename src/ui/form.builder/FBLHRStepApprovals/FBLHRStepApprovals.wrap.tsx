@@ -248,6 +248,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI || workspaceState?.document?.status !== DocumentRevisionStatus.Draft) {
             return;
           }
+          if (!isOperator && !isOwner) {
+            return;
+          }
           const formValue: string[] = get(formState?.oldValues, name);
           const newApprovers = difference(fieldValue, formValue);
           const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
