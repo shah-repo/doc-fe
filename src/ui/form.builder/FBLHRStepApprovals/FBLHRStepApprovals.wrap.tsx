@@ -169,9 +169,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
-        pendingLHRSTriggeredRef.current = false;
-        workspaceState?.document?.id
+        if (!pendingLHRSTriggeredRef.current) {
+          workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
+        }
+
+        pendingLHRSTriggeredRef.current = false;
       },
     });
 
@@ -242,7 +245,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       const dispose = reaction(
         () => formState?.newValues.get(name),
         (fieldValue: string[]) => {
-          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI) {
+          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI || workspaceState?.document?.status !== DocumentRevisionStatus.Draft) {
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
@@ -292,11 +295,10 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     React.useEffect(() => {
       const dispose = reaction(
         () => ({
-          length: workspaceState?.schema?.length,
           items: workspaceState?.schema?.map(item => ({ ...item })),
         }),
         () => {
-          if (!isOperator || !isOwner) {
+          if (!isOperator && !isOwner) {
             return;
           }
           if (

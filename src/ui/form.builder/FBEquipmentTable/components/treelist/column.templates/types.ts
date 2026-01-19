@@ -22,7 +22,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
   releasedEquipmentOptions?: customEQOptionType[]
-  allowedEditEqOptions: customEQOptionType[]
+  allowedEditEqOptions?: customEQOptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
 }

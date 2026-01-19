@@ -24,7 +24,7 @@ interface EditorProps {
   dataItem: EditableEquipmentItem
   isLoading?: boolean
   equipmentOptions: OptionType[]
-  allowedEditEqOptions: OptionType[]
+  releasedEquipmentOptions: OptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
 }
@@ -36,7 +36,7 @@ const Editor: React.FC<EditorProps> = ({
   isLoading,
   dataItem,
   equipmentOptions,
-  allowedEditEqOptions,
+  releasedEquipmentOptions,
   isMPIForm,
   isEBProcedure,
 }) => {
@@ -57,8 +57,8 @@ const Editor: React.FC<EditorProps> = ({
     } else if (fieldValue) {
       setValue({ label: fieldValue, value: fieldValue });
     }
-    setItems(allowedEditEqOptions);
-  }, [equipmentOptions, allowedEditEqOptions]);
+    setItems(releasedEquipmentOptions);
+  }, [equipmentOptions, releasedEquipmentOptions]);
 
   useEffect(() => {
     if (!isMPIForm) {
@@ -87,7 +87,7 @@ const Editor: React.FC<EditorProps> = ({
     }
 
     if (!isFreeSolo && !title) {
-      setItems(allowedEditEqOptions ?? []);
+      setItems(releasedEquipmentOptions ?? []);
     }
   }, [values]);
 
@@ -114,12 +114,12 @@ const Editor: React.FC<EditorProps> = ({
     setValue({ label: inputVal, value: inputVal });
 
     if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
-      const filteredOptions = allowedEditEqOptions?.filter((option) =>
+      const filteredOptions = releasedEquipmentOptions?.filter((option) =>
         option.label.toLowerCase().includes(inputVal?.toLowerCase()),
       );
       setItems(filteredOptions);
     } else if (!inputVal || inputVal?.length < MIN_SEARCH_TERM_LENGTH) {
-      setItems(allowedEditEqOptions ?? []);
+      setItems(releasedEquipmentOptions ?? []);
     }
   };
 
@@ -164,7 +164,7 @@ const Editor: React.FC<EditorProps> = ({
 };
 
 const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, allowedEditEqOptions, isMPIForm, isEBProcedure } = props;
+  const { hasChildren, dataItem, field, level, onExpandChange, expanded, getItem, equipmentOptions, releasedEquipmentOptions, isMPIForm, isEBProcedure } = props;
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (!dataItem.equipmentId && !dataItem.isActualIdAddition) : isEditEquipItem(dataItem) && !dataItem.actualId && !dataItem?.isActualIdAddition;
   const classes = useStyles({ isEditMode });
   const fieldValue = getItem?.(dataItem[field ?? ''] ?? '');
@@ -217,7 +217,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
                 dataItem,
                 isLoading,
                 equipmentOptions,
-                allowedEditEqOptions,
+                releasedEquipmentOptions: releasedEquipmentOptions || [],
                 isMPIForm,
                 isEBProcedure,
               }}

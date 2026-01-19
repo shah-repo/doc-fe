@@ -114,9 +114,15 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    const ProductionId = this.buildTypeOptions.find(data => data.internalType === FBLHRBuildOptions.Production)?.id;
-    return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === (ProductionId ?? FBLHRBuildOptions.Production);
+    const productionId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Production)?.id ?? FBLHRBuildOptions.Production;
+    const clinicalId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Clinical)?.id ?? FBLHRBuildOptions.Clinical;
+
+    const smartReference = this.document?.smartReferencesTo?.find(
+      ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    );
+
+    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string;
+    return lhrBuildType === productionId || lhrBuildType === clinicalId;
   }
 
   public get isLHRRelevantBuilds (): boolean {
