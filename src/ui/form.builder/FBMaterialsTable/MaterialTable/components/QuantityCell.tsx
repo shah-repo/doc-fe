@@ -1,9 +1,10 @@
 import { useFormikContext } from 'formik';
+import { round } from 'lodash';
 import React, { useEffect } from 'react';
 import { MaterialTreelistContext } from '..';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../../components/forms/fields/validators';
-import { CELL_EMPTY_VALUE } from '../constants';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
@@ -39,7 +40,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   let displayValue = dataItem[field] ? Number(dataItem[field]) : CELL_EMPTY_VALUE;
 
   if (dataItem.title && typeof displayValue === 'number') {
-    displayValue = displayValue * lhrsQuantity;
+    displayValue = round((displayValue * lhrsQuantity), MAX_DECIMALS);
   }
 
   useEffect(() => {
