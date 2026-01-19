@@ -118,7 +118,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
           validate={validators}
           inputStyleProps={classes.input}
           labelProps={AutoCompleteStyles.labelStyle}
-          helpText={helpText}
+          helpText={inputProps.disabled ? '' : helpText}
         />
       </CustomLabelTooltip>
     </>

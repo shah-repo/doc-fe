@@ -297,7 +297,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   docId={initialDocId}
                   numberingStyle={numberingStyle}
                   isShownOnDialog={false}
-                  helpText={translate('document.revision.user.numbering.help')}
+                  helpText={documentRevision
+                    ? translate('document.revision.user.numbering.help.docrev')
+                    : translate('document.revision.user.numbering.help')
+                  }
                 />
             }
           </Grid>}

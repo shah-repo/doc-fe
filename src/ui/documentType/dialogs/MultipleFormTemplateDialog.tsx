@@ -59,6 +59,8 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   const activeDocTypes = documentTypes.filter((type) => type.active);
   const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
 
+  const [helpText, setHelpText] = useState<string>(translate('document.revision.user.numbering.help'));
+
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       setParts(data);
@@ -82,6 +84,16 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLHR]);
+
+  useEffect(() => {
+    if (selectedDocumentType) {
+      const isDocIdVisibleFalse = selectedDocumentType.fieldsConfig?.F?.visible === false;
+      setHelpText(
+        isDocIdVisibleFalse ? translate('document.revision.user.numbering.help.doc.id.visible.false')
+          : translate('document.revision.user.numbering.help'),
+      );
+    }
+  }, [selectedDocumentType]);
 
   const checkForPart = (form: DocumentTypeByIdForm) => {
     const id = form.formTemplate?.schema?.find((item) => item.name === 'lhr-selected-part')?.editorConfig?.id;
@@ -204,7 +216,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                       numberingStyle={numberingStyle}
                       isShownOnDialog={true}
                       handleDocIdUpdated={handleDocIdUpdated}
-                      helpText={translate('document.revision.user.numbering.help')}
+                      helpText={helpText}
                     />
                   </>
                 )}

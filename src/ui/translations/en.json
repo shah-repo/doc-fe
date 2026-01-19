@@ -2780,8 +2780,10 @@
   "training.required.tooltip.message": "Training will continue to be generated for users who are new or have not completed it, even if “Training Required” is unchecked, since this is the current released revision",
   "lhr.materials.quantity.mismatch.error": "Lots assigned ({assignedQty}) does not meet the quantity needed ({neededQty}) for the {part}",
   "lhr.materials.total.cannot.exceed.start.quantity": "The sum of accepted & rejected quantity must equal the start quantity",
+  "document.revision.user.numbering.help": "Customer numbering is enabled for this document type. You may provide a number to create the revision, or allow the system to generate a document ID automatically. The document ID can be edited while the revision is in Draft",
+  "document.revision.user.numbering.help.doc.id.visible.false": "Customer numbering is enabled for this document type. You may provide a number to create the revision, or allow the system to generate a document ID automatically.",
+  "document.revision.user.numbering.help.docrev": "Customer numbering is enabled for this document type. The document ID can be edited while the revision is in Draft.",
   "documentRevision.create.missing.security.groups.message": "{documentType} is configured to allow access for:\n{groups}\n\nDo you want to add it to the document?",
   "documentRevision.create.missing.security.groups.confirm": "Add and Save",
-  "documentRevision.create.missing.security.groups.cancel": "Save as is",
-  "document.revision.user.numbering.help": "Customer numbering is enabled for this document type. You may provide a number to create the revision, or allow the system to generate a document ID automatically. The document ID can be edited while the revision is in Draft"
+  "documentRevision.create.missing.security.groups.cancel": "Save as is"
 }
