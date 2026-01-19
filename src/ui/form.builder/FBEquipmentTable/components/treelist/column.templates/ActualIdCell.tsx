@@ -57,7 +57,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
   const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : propEquipmentOptions;
-  console.log('equipmentOptions', propEquipmentOptions);
   const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
   const isDateOverdue = (date: MomentInput): boolean => {
     if (!date) {
