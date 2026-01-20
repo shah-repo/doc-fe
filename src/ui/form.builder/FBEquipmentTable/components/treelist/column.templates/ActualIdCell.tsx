@@ -95,10 +95,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const isReleased = docStatus === DocumentRevisionStatus.Released;
           const isEquipSpec = option.category === DocumentCategory.EquipmentSpecification;
 
-          if (isEquipSpec) {
-            return true;
-          }
-
           if (isEBProcedure) {
             return false;
           }
@@ -110,6 +106,10 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           }
 
           if (!isReleased) {
+            return true;
+          }
+
+          if (isEquipSpec) {
             return true;
           }
 
