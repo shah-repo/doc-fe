@@ -103,6 +103,9 @@ export const useEquipmentOptions = (id: string) => {
         FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
         asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
       }
+    } else if (!apiData || (Array.isArray(apiData) && apiData.length === 0)) {
+      // If API response is empty, set empty array
+      FBAutocompleteAsyncStore.setOptionData(optionId, []);
     }
     const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
     const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
