@@ -276,6 +276,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
         ],
         () => {
+          if (!isOperator && !isOwner) {
+            return;
+          }
           if (
             !lhrApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,

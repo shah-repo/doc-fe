@@ -1,3 +1,4 @@
+import { DocumentCategory } from '../../../../../state/ducks/documentRevisions/types';
 import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EditableEquipmentItem, EquipmentItem } from '../../types';
@@ -84,7 +85,7 @@ export const isEquipmentSpecificationType = (equipmentOptions, id: string): bool
   const selectedEquipInfo = equipmentOptions?.find(
     (option) => option.value === id,
   );
-  if (selectedEquipInfo?.label.startsWith('ES-')) {
+  if (selectedEquipInfo?.category === DocumentCategory.EquipmentSpecification) {
     return true;
   }
   return false;
