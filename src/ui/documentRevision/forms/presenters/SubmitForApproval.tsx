@@ -121,7 +121,8 @@ export const SubmitForApproval: React.FC<Props> = ({
   const isAcceptedRejectedQtyValid
       = typeof lhrsAcceptedQuantity === 'number'
         && typeof lhrsRejectedQuantity === 'number'
-        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) === lhrsStartQuantity;
+        && lhrsAcceptedQuantity >= 0
+        && lhrsRejectedQuantity >= 0;
 
   const {
     equipmentsFromSchema,
@@ -256,6 +257,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
+      return;
     }
 
     if (hasInsufficientQty && isTypeMpiOutput) {
