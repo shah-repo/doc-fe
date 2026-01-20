@@ -8,7 +8,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
-import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevisionStatus, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { ACTIVE_EQUIPMENT_STATUSES, DocumentCategory, DocumentRevisionStatus, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
@@ -93,6 +93,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
           const isActive = isEqActive(status as EquipmentStatus);
           const isReleased = docStatus === DocumentRevisionStatus.Released;
+          const isEquipSpec = option.category === DocumentCategory.EquipmentSpecification;
+
+          if (isEquipSpec) {
+            return true;
+          }
 
           if (isEBProcedure) {
             return false;

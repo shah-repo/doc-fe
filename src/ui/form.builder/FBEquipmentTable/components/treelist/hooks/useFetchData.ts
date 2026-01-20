@@ -29,6 +29,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     status: eqStatus,
     value: id,
     docStatus: status,
+    category: document.documentType.category,
   };
 };
 

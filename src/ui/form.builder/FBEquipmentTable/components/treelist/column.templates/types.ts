@@ -9,6 +9,7 @@ export interface customEQOptionType extends OptionType{
   pmDueDate?: string
   status?: string
   docStatus?: string
+  category?: string
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
   isDisabled?: boolean
