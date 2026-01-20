@@ -20,6 +20,7 @@ import { isOwner } from '../helpers/documentRevisionPermissions';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './References.styles';
 import { ReferencesProps } from './types';
+import ExternalReferencesPresenter from '../../document.revision/summary/externalReference.presenter';
 
 const References = ({
   selectedDocument,
@@ -48,81 +49,86 @@ const References = ({
   const isRecord = checkIsDocumentRecord(groupOptions);
 
   return (
-    <Box padding={1.875} width={1} data-cy="generalInfo">
-      <Typography className={classes.generalInfo}>
-        <Text translation="common.general.info" />
-      </Typography>
-      <UserAvatarListItem
-        name={owner.user.name}
-        user={owner && owner.user}
-        secondaryComponent={<Text translation="common.owner" />}
-      />
-      {edit && (
-        <AvailableReferencesField
-          availableReferences={availableReferences}
-          documentReferences={referenceTo}
-          name="referenceTo"
-          label="documentRevision.form.references"
-          disabled={isDisabledInput}
-          documentGroupOptions={groupOptions}
+    <>
+      <Box className={classes.outerBox} data-cy="generalInfo">
+        <Typography className={classes.generalInfo}>
+          <Text translation="common.general.info" />
+        </Typography>
+        <UserAvatarListItem
+          name={owner.user.name}
+          user={owner && owner.user}
+          secondaryComponent={<Text translation="common.owner" />}
         />
-      )}
-      {!edit && referenceTo && (
-        <ReferenceToContainer
-          canEdit={edit}
-          dataProp={referenceTo}
-          status={status}
-          deprecatedAt={deprecatedAt}
-        />
-      )}
-      {document.referencedBy && (
-        <ReferencedByContainer dataProp={document.referencedBy} />
-      )}
-      {(isVisible && !isRecord) && <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
-        control={
-          <Checkbox
-            checked={retrain}
-            disabled
-            data-cy="training-required-checkbox"
-            id="training-required-checkbox"
+        {edit && (
+          <AvailableReferencesField
+            availableReferences={availableReferences}
+            documentReferences={referenceTo}
+            name="referenceTo"
+            label="documentRevision.form.references"
+            disabled={isDisabledInput}
+            documentGroupOptions={groupOptions}
           />
-        }
-        label={<Text data-cy="training" translation="document.revision.trainingRequired" />}
-      />}
-      <Box>
-        <Typography component="span" className={classes.releaseDate}>
-          <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />
-        </Typography>
-        <Typography className={classes.released}>
-          {releasedAt
-            ? getFormattedDateString(
-              releasedAt,
-              MomentFormats.MonthDateYearTwoDigit,
-            )
-            : <Text translation="common.none" />}
-        </Typography>
-      </Box>
-      <DocumentRevisionFooterNew />
-      {
-        showChangeControlDetails && <Box
-          pt={2.5}
-        >
-          <Typography className={classes.releaseDate}>
-            <SMText label="documentRevision.pmccc.applied.title" />
+        )}
+        {!edit && referenceTo && (
+          <ReferenceToContainer
+            canEdit={edit}
+            dataProp={referenceTo}
+            status={status}
+            deprecatedAt={deprecatedAt}
+          />
+        )}
+        {document.referencedBy && (
+          <ReferencedByContainer dataProp={document.referencedBy} />
+        )}
+        {(isVisible && !isRecord) && <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
+          control={
+            <Checkbox
+              checked={retrain}
+              disabled
+              data-cy="training-required-checkbox"
+              id="training-required-checkbox"
+            />
+          }
+          label={<Text data-cy="training" translation="document.revision.trainingRequired" />}
+        />}
+        <Box>
+          <Typography component="span" className={classes.releaseDate}>
+            <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />
           </Typography>
-          <Typography component="div" className={classes.released}>
-            <>{selectedDocument?.changeControlOptions?.docId}</>,&nbsp;
-            <Text message="documentRevision.pmccc.applied.revision" /> {selectedDocument?.changeControlOptions?.displayRevision}, &nbsp;
-            <>
-              {getFormattedDateString(
-                      selectedDocument?.changeControlOptions?.releasedAt,
-                      MomentFormats.MonthDateYearTwoDigit,
-              )}
-            </>
+          <Typography className={classes.released}>
+            {releasedAt
+              ? getFormattedDateString(
+                releasedAt,
+                MomentFormats.MonthDateYearTwoDigit,
+              )
+              : <Text translation="common.none" />}
           </Typography>
         </Box>
-      }
-    </Box>
+        <DocumentRevisionFooterNew />
+        {
+          showChangeControlDetails && <Box
+            pt={2.5}
+          >
+            <Typography className={classes.releaseDate}>
+              <SMText label="documentRevision.pmccc.applied.title" />
+            </Typography>
+            <Typography component="div" className={classes.released}>
+              <>{selectedDocument?.changeControlOptions?.docId}</>,&nbsp;
+              <Text message="documentRevision.pmccc.applied.revision" /> {selectedDocument?.changeControlOptions?.displayRevision}, &nbsp;
+              <>
+                {getFormattedDateString(
+                        selectedDocument?.changeControlOptions?.releasedAt,
+                        MomentFormats.MonthDateYearTwoDigit,
+                )}
+              </>
+            </Typography>
+          </Box>
+        }
+      </Box>
+      <Box className={classes.outerBox} data-cy="external-references">
+        <ExternalReferencesPresenter selectedDocument={selectedDocument} label="documentRevision.externalReferences" />
+      </Box>
+  </>
   );
 };
 

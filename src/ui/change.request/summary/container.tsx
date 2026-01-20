@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -76,7 +76,7 @@ const Container: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     const formStateContext = FBFormStateContext as any;
-    const updatedValues = formStateContext?._currentValue;
+    const updatedValues = get(formStateContext?._currentValue, changeRequest?.id);
     const dataToSubmit = compareValuesToSubmit(
       {
         ...initialValues,

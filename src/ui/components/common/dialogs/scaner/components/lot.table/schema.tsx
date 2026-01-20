@@ -8,6 +8,7 @@ import { UnitsCellTemplate } from './components/UnitsCellTemplate';
 import { EditableScanLot, SchemaOptions } from './types';
 
 export const buildSchema = ({
+  isSerialNumberHidden,
   onDelete,
   onOpenQuickView,
   onUpdateScanLot,
@@ -21,14 +22,18 @@ export const buildSchema = ({
       filterable: false,
       width: 150,
     },
-    {
-      id: 'serialNumber',
-      field: 'serialNumber',
-      title: 'scan.lot.grid.serial.number',
-      template: (props) => <SerialNumberCellTemplate {...props} onUpdateScanLot={onUpdateScanLot} />,
-      filterable: false,
-      width: 150,
-    },
+    ...(isSerialNumberHidden
+      ? []
+      : [
+        {
+          id: 'serialNumber',
+          field: 'serialNumber',
+          title: 'scan.lot.grid.serial.number',
+          template: (props) => <SerialNumberCellTemplate {...props} onUpdateScanLot={onUpdateScanLot} />,
+          filterable: false,
+          width: 150,
+        },
+      ]),
     {
       id: 'quantityAssigned',
       field: 'quantityAssigned',

@@ -9,6 +9,7 @@ export const FBTextFieldStyles = makeStyles((theme: Theme) =>
         height: params.customHeight || 40,
         fontWeight: 400,
         fontSize: 14,
+        borderColor: params.error ? Colors.error_red : Colors.light_gray_border,
         '&.MuiInputBase-multiline': {
           height: 'auto',
           padding: 0,

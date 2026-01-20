@@ -48,7 +48,7 @@ const Editor: React.FC<CustomCellProps> = ({
         getOptionLabel={(option: OptionType) => option.text}
         getOptionSelected={(option: OptionType, value) => option.text === value}
         placeholder={translate('common.select')}
-        options={dataOptions}
+        options={dataOptions.filter(item => item.isActive)}
         value={value}
         data-cy={`${kebabCase(field)}-field`}
         onChange={handleChange}

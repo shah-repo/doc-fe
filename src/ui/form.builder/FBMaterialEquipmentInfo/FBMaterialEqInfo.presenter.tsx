@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { SMText } from '../../../App';
 import { ReactComponent as ExpandIcon } from '../../../assets/images/tabExpand.svg';
+import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from './FBMaterailEqInfo.types';
@@ -12,18 +13,26 @@ import useStyles, { useItemStatusStyles } from './FBMaterialEqInfo.styles';
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
-const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
+const MaterialItem: React.FC<ItemProps<Material>> = ({ item: { lots, ...item }, classes }) => (<>
   <ListItemText>
-    {item.docId && `${item.docId} -`} {item.title} | {`${item.unit}: `}
-    {toFixed(item?.totalQuantity ?? item?.quantity) || 'None'}
+    {translate(
+      item.docId ? 'form.builder.procedure.eq.materials.title.id' : 'form.builder.procedure.eq.materials.title',
+      {
+        ...item,
+        quantity: toFixed(item?.totalQuantity ?? item?.quantity) || translate('common.none'),
+      },
+    )}
   </ListItemText>
   <ListItemText>
-    {item.lots && item.lots.map((lot: LotItem) => (
+    {lots?.map((lot: LotItem) => (
       <Chip
         className={classes.chip}
         key={lot.lotId}
         size="small"
-        label={`Lot ${lot.lotId ?? ''} | ${lot.partId ?? 'N/A'} | ${lot.quantity ?? ''} ${lot.unit ?? ''}`}
+        label={translate('form.builder.procedure.eq.materials.lot', {
+          ...lot,
+          partId: lot.partId ?? translate('common.not.applicable'),
+        })}
       />
     ))}
   </ListItemText>

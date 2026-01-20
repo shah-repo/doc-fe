@@ -18,5 +18,6 @@ export default (theme: Theme) =>
     contentBox: {
       minHeight: theme.spacing(2),
       width: 'calc(100% - 8px)',
+      marginBottom: theme.spacing(2),
     },
   });

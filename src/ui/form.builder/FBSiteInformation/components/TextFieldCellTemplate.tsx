@@ -18,7 +18,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
         {...getFieldProps(field)}
         defaultValue={undefined}
         size="small"
-        readOnly={values?.isSameAsHQ}
+        readOnly={field !== 'siteName' && values?.isSameAsHQ}
       />
     </FormikField>
   );

@@ -28,7 +28,7 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
 
   // MARK: @computed
   @computed public get getApprovals (): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER');
+    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER' && a.fieldId !== 'lhrStepApprovals');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
       canRequest: this.isOwner && a.status === 'DRAFT',

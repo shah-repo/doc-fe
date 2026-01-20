@@ -47,7 +47,7 @@ const Editor: React.FC<CustomCellProps> = ({
           option.id === value.id
         }
         placeholder={translate('common.select')}
-        options={dataOptions}
+        options={dataOptions.filter(item => item.isActive)}
         defaultValue={dataItem[editField]}
         data-cy={`${kebabCase(field)}-field`}
         onChange={handleChange}

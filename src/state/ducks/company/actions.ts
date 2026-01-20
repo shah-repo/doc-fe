@@ -1,6 +1,7 @@
 import { omit } from 'lodash';
 import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
+import { AuditLogsResponse } from '../../../ui/administration/general.settings/components/SettingsPage/SettingsHistoryDrawer';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
@@ -10,6 +11,7 @@ import {
   LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  SETTINGS_LOGS_URL,
   SUPPLIERS_OPTIONS_URL,
   UPDATE_APPROVAL_ROLES_URL,
   UPDATE_COMPANY_SETTINGS_URL,
@@ -273,6 +275,15 @@ const fetchDocRevOptionsByDocTypeId = (
   });
 };
 
+const fetchSettingsAuditLogs = (
+  handlers: Handlers,
+): ApiAction<AuditLogsResponse> =>
+  apiActionWithCallbacks({
+    url: SETTINGS_LOGS_URL,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   selectCompany,
   getCompanyMine,
@@ -293,4 +304,5 @@ export default {
   updatePremiumFeatureSubscription,
   createApprovalRoles,
   updateApprovalRoles,
+  fetchSettingsAuditLogs,
 };

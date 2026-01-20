@@ -1,6 +1,6 @@
-import { cloneDeep, includes, isArray, isEmpty, map, omit, size } from 'lodash';
+import { cloneDeep, has, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
@@ -8,9 +8,11 @@ import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
+import { LHRS_END_DATE, LHRS_START_DATE } from '../FBLHRStep/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
@@ -31,7 +33,10 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+  @observable.shallow
+  public buildTypeOptions: LHRBuild[] = [];
 
+  public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
 
@@ -41,6 +46,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public hiddenFieldsByRules = new Set<string>();
 
   public omitAutosave = false;
+  public shouldPersistFormDataWithSchema?: boolean;
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
@@ -49,6 +55,10 @@ class FBWorkspaceState extends FBSchemaState {
     this.schema = schema || [];
     this.mode = mode || 'none';
     this.autosave = autosave;
+  }
+
+  public get buildTypeOptionId (): string {
+    return FBAutocompleteAsyncOption.buildType;
   }
 
   public get auth (): FBWorkspaceExternalState['auth'] | undefined {
@@ -104,8 +114,41 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
+    const productionId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Production)?.id ?? FBLHRBuildOptions.Production;
+    const clinicalId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Clinical)?.id ?? FBLHRBuildOptions.Clinical;
+
+    const smartReference = this.document?.smartReferencesTo?.find(
+      ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    );
+
+    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string;
+    return lhrBuildType === productionId || lhrBuildType === clinicalId;
+  }
+
+  public get isLHRRelevantBuilds (): boolean {
+    if (this.buildTypeOptions.length === 0) {
+      return false;
+    }
+
+    const buildTypes = this.buildTypeOptions;
+    const selectedBuildTypeId
+    = this.document?.smartReferencesTo
+      ?.find(ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)
+      ?.toDocRev?.formInput?.['lhr-build-type'];
+
+    if (!buildTypes.length || !selectedBuildTypeId) {
+      return false;
+    }
+
+    const selectedBuildType = buildTypes.find(
+      option => option.id === selectedBuildTypeId,
+    );
+
+    return [
+      FBLHRBuildOptions.Production,
+      FBLHRBuildOptions.Clinical,
+      FBLHRBuildOptions['Verification & Validation'],
+    ].includes(selectedBuildType?.internalType as FBLHRBuildOptions);
   }
 
   public get isChangeRequest (): boolean {
@@ -142,6 +185,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, 'mode', mode);
+  };
+
+  @action public setBuildTypeOptions = (data) => {
+    set(this, 'buildTypeOptions', data);
   };
 
   @action public setIsPreview = (isPreview: boolean) => {
@@ -183,6 +230,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, 'isDirty', isDirty);
   };
 
+  @action public setShouldPersistFormDataWithSchema = (flag: boolean) => {
+    set(this, 'shouldPersistFormDataWithSchema', flag);
+  };
+
   @action public setFormInputSync = (name: string, value: any) => {
     set(this.formInputSync, name, value);
   };
@@ -198,6 +249,16 @@ class FBWorkspaceState extends FBSchemaState {
       return;
     }
     this.loading = true;
+
+    if (values && has(values, 'lhrstep-built-in')) {
+      if (has(values, LHRS_START_DATE)) {
+        delete values[LHRS_START_DATE];
+      }
+      if (has(values, LHRS_END_DATE)) {
+        delete values[LHRS_END_DATE];
+      }
+    }
+
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
     let body = {};
     switch (mode) {

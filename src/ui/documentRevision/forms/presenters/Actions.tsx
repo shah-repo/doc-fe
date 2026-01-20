@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get, isArray, isEmpty, isEqual, isUndefined, keys, map, omit, set } from 'lodash';
-import { Observer } from 'mobx-react';
+import { Observer, useObserver } from 'mobx-react';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -175,6 +175,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild = _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild || false;
+  const isLHRRelevantBuilds = useObserver(
+    () => workspaceState?.isLHRRelevantBuilds ?? false,
+  );
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocHasOutput;
   const shouldShowUpgrade
@@ -245,7 +248,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           const formStateContext = FBFormStateContext as any;
           // TEMPORARY FIX FOR BE VALIDATION
           formik.setFieldValue('formInput',
-            omit(formStateContext?._currentValue,
+            omit(get(formStateContext?._currentValue, documentRevision.id),
               [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
                 'partType', 'childForRevise']));
         }
@@ -403,7 +406,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if ((isStatusReleased || isStatusInDraft) && serializedCSV && !isShipping && !isCustomers) {
     accessableButtons.push(PreviewControlButtons.ExportCsvButton);
   }
-  if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
+  if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRRelevantBuilds)) {
     accessableButtons.push(PreviewControlButtons.RedlineButton);
   }
   if (
