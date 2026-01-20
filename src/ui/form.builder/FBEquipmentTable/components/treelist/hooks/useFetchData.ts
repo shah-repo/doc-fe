@@ -1,7 +1,7 @@
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncState from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
@@ -29,6 +29,7 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     status: eqStatus,
     value: id,
     docStatus: status,
+    category: document.documentType.category,
   };
 };
 
@@ -57,6 +58,9 @@ export const useFetchData = () => {
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
 
+    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment);
+    const filterEquipmentOptions = equipmentOnlyOptions.map(parseEquipmentOption);
+
     const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
     const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
 
@@ -64,6 +68,7 @@ export const useFetchData = () => {
       equipmentOptions,
       allowedEditEqOptions,
       releasedEquipmentOptions,
+      filterEquipmentOptions,
     };
   });
 };
@@ -103,6 +108,9 @@ export const useEquipmentOptions = (id: string) => {
         FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
         asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
       }
+    } else if (!apiData || (Array.isArray(apiData) && apiData.length === 0)) {
+      // If API response is empty, set empty array
+      FBAutocompleteAsyncStore.setOptionData(optionId, []);
     }
     const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
     const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
