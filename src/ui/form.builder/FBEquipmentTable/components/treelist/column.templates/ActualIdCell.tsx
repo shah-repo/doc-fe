@@ -8,7 +8,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
-import { ACTIVE_EQUIPMENT_STATUSES, DocumentCategory, DocumentRevisionStatus, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevisionStatus, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
@@ -35,6 +35,7 @@ interface LotAutocompleteProps {
   allowedEditEqOptions: OptionType[]
   isEBProcedure?: boolean
   releasedEquipmentOptions?: OptionType[]
+  filterEquipmentOptions?: OptionType[]
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -47,7 +48,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   parentPartRevId,
   isEBProcedure,
   equipmentOptions: propEquipmentOptions,
-  releasedEquipmentOptions,
+  filterEquipmentOptions,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
@@ -56,7 +57,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
-  const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : propEquipmentOptions;
+  const equipmentOptions = isEquipmentSpecification ? allowedEditEqSpecOptions : filterEquipmentOptions;
   const isEqActive = (eqStatus: EquipmentStatus) => ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus);
   const isDateOverdue = (date: MomentInput): boolean => {
     if (!date) {
@@ -93,7 +94,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           const isOverdue = isDateOverdue(pmDueDate) || isDateOverdue(calDueDate);
           const isActive = isEqActive(status as EquipmentStatus);
           const isReleased = docStatus === DocumentRevisionStatus.Released;
-          const isEquipSpec = option.category === DocumentCategory.EquipmentSpecification;
 
           if (isEBProcedure) {
             return false;
@@ -106,10 +106,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           }
 
           if (!isReleased) {
-            return true;
-          }
-
-          if (isEquipSpec) {
             return true;
           }
 
@@ -150,7 +146,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions = [], addActualId, isEBProcedure, releasedEquipmentOptions } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions = [], addActualId, isEBProcedure, releasedEquipmentOptions, filterEquipmentOptions } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
@@ -219,6 +215,7 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 isLoading,
                 equipmentOptions,
                 releasedEquipmentOptions: releasedEquipmentOptions || [],
+                filterEquipmentOptions: filterEquipmentOptions || [],
                 allowedEditEqOptions,
                 isEBProcedure,
               }}
