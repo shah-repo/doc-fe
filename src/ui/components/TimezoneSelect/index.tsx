@@ -57,7 +57,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
     timezoneChangeDialog.open();
   };
 
-  const handleConfirm = () => {
+  const onConfirmTimezoneChange = () => {
     if (selectedTimezoneDraft) {
       onChange(selectedTimezoneDraft);
     }
@@ -67,7 +67,7 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
     setAutocompleteResetCounter((k) => k + 1);
   };
 
-  const handleCancel = () => {
+  const onCancelTimezoneChange = () => {
     timezoneChangeDialog.close();
     setSelectedTimezoneDraft(null);
     setAutocompleteResetCounter((k) => k + 1);
@@ -89,8 +89,8 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       />
       <AlertDialog
         handler={timezoneChangeDialog}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
+        onConfirm={onConfirmTimezoneChange}
+        onCancel={onCancelTimezoneChange}
         confirmLabel="common.confirm"
       >
         {translate('administration.general.settings.timezone.confirm.message')}
