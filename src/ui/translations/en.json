@@ -2494,6 +2494,7 @@
   "administration.general.settings.approvalRoles.tab": "Approval Roles",
   "administration.general.settings.approvalRoles.add": "Add Approval Role",
   "administration.general.settings.timezone.title": "Company Timezone",
+  "administration.general.settings.timezone.confirm.message": "This timezone change will effect all users in the company.\n\n Are you sure to make the change?",
   "administration.general.settings.approvalRoles.sync.message.dialog.title": "Approval role changes",
   "administration.general.settings.approvalRoles.sync.message.dialog.content": "Your changes to the Approval Roles will only be applied when you release a new revision of the DAM",
   "administration.general.settings.approvalRoles.sync.message.dialog.content.bottom": "Go to the DAM to update your changes.",
