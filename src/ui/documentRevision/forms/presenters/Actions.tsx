@@ -195,7 +195,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const formDialog = useDialog();
   const [forms, setForms] = React.useState<DocumentTypeByIdForm[]>();
-  const [selectedForm, setSelectedForm] = React.useState<DocumentTypeByIdForm>();
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -287,7 +286,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       const { forms } = data ?? {};
       if(!isEmpty(forms)) {
         if(forms?.length === 1) {
-          setSelectedForm(forms[0]);
+          createDocument(forms[0]);
         } else {
           setForms(forms ?? [] as DocumentTypeByIdForm[]);
           formDialog.open();
@@ -300,22 +299,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   });
 
   const onFormSelection = (formValue) => {
-    setSelectedForm(formValue);
+    createDocument(formValue);
     formDialog.close();
   };
-
-  React.useEffect(() => {
-    if(selectedForm?.id) {
-      createDocument();
-    }
-  }, [selectedForm]);
 
   const onFormClick = () => {
     const values = get(formik, 'values') as DocumentRevision;
     idAsync.start(getDocRevByIds, values.document.documentType.id, idAsync);
   };
 
-  const createDocument = async () => {
+  const createDocument = async (formDocument?: DocumentTypeByIdForm) => {
     if (redlineActive) {
       formik.setFieldValue('redline', true);
       _formState?.setMode('form');
@@ -330,8 +323,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       }
     }
 
-    if(selectedForm?.id) {
-      formik.setFieldValue('formDocument', { id: selectedForm?.id });
+    if(formDocument?.id) {
+      formik.setFieldValue('formDocument', { id: formDocument?.id });
     }
 
     formik.submitForm();
