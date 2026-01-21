@@ -11,6 +11,7 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { DOCUMENT_NUMBERING_STYLE, DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
+import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import FormWrapper from '../../components/forms/FormWrapper';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
@@ -153,8 +154,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isNumberingStyleDifferentFromInternal = numberingStyle !== DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
+  const isDocRevRelatedStatusNo = !documentRevision?.relatedPartsStatus
+    || documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_NO;
+
   const documentId = documentRevision?.documentId;
-  const docIdEditEnabled = !documentRevision || (isDocRevStatusDraft && documentRevision?.version === 1);
+  const docIdEditEnabled = !documentRevision
+    || (isDocRevStatusDraft && documentRevision?.version === 1 && isDocRevRelatedStatusNo);
 
   const initialDocId = initialValues.document?.docId !== ''
     ? initialValues.document?.docId : stripDocIdOfAcronym(values.document?.docId, documentTypeById?.documentTypeAcronym);

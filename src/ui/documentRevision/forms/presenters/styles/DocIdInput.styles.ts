@@ -12,7 +12,7 @@ export const styles = makeStyles((theme) => ({
     },
     '& .MuiInputAdornment-positionStart': {
       marginLeft: 8,
-      marginRight: -8,
+      marginRight: -10,
     },
   },
   renderHtmlRoot: {
