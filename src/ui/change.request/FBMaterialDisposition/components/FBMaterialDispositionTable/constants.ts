@@ -1,16 +1,9 @@
-import { CompositeFilterDescriptor } from '@progress/kendo-data-query';
 import { translate } from '../../../../../common/intl';
 
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
-export const PAGE_SIZE = 25;
-export const ROW_HEIGHT = 50;
-export const DEFAULT_FILTER: CompositeFilterDescriptor = {
-  logic: 'and',
-  filters: [],
-};
 export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.mustConform', value: 'MUST_CONFORM' },
   { label: 'approvalRequest.material.disposition.options.rework', value: 'REWORK' },

@@ -1,13 +1,12 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
-import { process, State } from '@progress/kendo-data-query';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { getSelectedState, getSelectedStateFromKeyDown, GridDataStateChangeEvent, GridFilterChangeEvent, GridKeyDownEvent, GridPageChangeEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +33,7 @@ import useDialog from '../../../../hooks/useDialog';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
 import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
-import { DATA_ITEM_KEY, DEFAULT_FILTER, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, EXISTING_DOC_FIELDS_TO_PICK, FIELDS_TO_PICK, NON_EXISTING_DOC_FIELDS_TO_PICK, PAGE_SIZE, ROW_HEIGHT, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, EXISTING_DOC_FIELDS_TO_PICK, FIELDS_TO_PICK, NON_EXISTING_DOC_FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CopiedItems, EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
@@ -53,7 +52,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const isMDItemAdded = editedMDItem?.[MODE_FIELD] === Mode.add;
   const [isCopyConflictedSelections, setIsCopyConflictedSelections] = React.useState<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
-  const [origionalData, setOrigionalData] = React.useState<EditableMDItem[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const [copiedItems, setCopiedItems] = React.useState<CopiedItems>();
@@ -62,22 +60,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   }>({});
   const [isDeleteDisabled, setIsDeleteDisabled] = React.useState<boolean>(false);
   const { getFormattedDateString } = useDate();
-  const [skip, setSkip] = React.useState(0);
-  const [dataState, setDataState] = React.useState<State>({
-    filter: {
-      logic: 'and',
-      filters: [],
-    },
-    skip: 0,
-    take: PAGE_SIZE,
-    group: [],
-    sort: [],
-  });
-
-  const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
-    setSkip(skip);
-    setDataState(state => ({ ...state, skip }));
-  };
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {
@@ -123,12 +105,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date} | undefined) => {
       setData(data?.records ?? []);
-      setOrigionalData(
-        data?.records?.map((item) => ({
-          ...item,
-          lotDocId: item.lotDocId ?? EMPTY_DROPDOWN_PLACEHOLDER,
-        })) ?? [],
-      );
       setLastRefreshedAt(data?.lastRefreshedAt);
     },
     onError: toastError,
@@ -465,29 +441,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     setSelectedState(newSelectedState);
   };
 
-  const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
-    setDataState(dataState);
-    const processedData = process(origionalData, dataState);
-    setData(processedData.data);
-    return dataState;
-  };
-
-  const onFilterChange = ({ filter }: GridFilterChangeEvent) => {
-    setSkip(0);
-    const updatedDataState = {
-      ...dataState,
-      filter: filter ?? DEFAULT_FILTER,
-    };
-    setDataState(updatedDataState);
-    const processedData = process(origionalData, updatedDataState);
-    setData(filter ? processedData.data : origionalData);
-  };
-
-  const slicedData = useMemo(
-    () => MDItemList.slice(skip, skip + PAGE_SIZE),
-    [MDItemList, skip, PAGE_SIZE],
-  );
-
   return (<>
     <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, containerRef: containerRef.current, onUpdateSelectedCell, populateCopiedValue, clearContent }}>
       <FBSection label={translate('approvalRequest.material.disposition.section.heading')}>
@@ -506,8 +459,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
         <div ref={containerRef} className={classes.root} data-cy="material-disposition-table">
           <KendoDataGrid<EditableMDItem>
-            {...dataState}
-            data={slicedData}
+            data={MDItemList}
             schema={getColumns()}
             fullWidth
             className={classes.rootMDTable}
@@ -516,15 +468,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
             onRowClick={editMDItem}
             selectedField={SELECTED_FIELD}
             dataItemKey={DATA_ITEM_KEY}
-            rowHeight={ROW_HEIGHT}
-            take={PAGE_SIZE}
-            pageSize={PAGE_SIZE}
-            total={MDItemList?.length}
-            skip={skip}
-            scrollable="virtual"
-            onDataStateChange={onDataStateChange}
-            onPageChange={onPageChange}
-            onFilterChange={onFilterChange}
             selectable={{
               enabled: true,
               drag: true,
