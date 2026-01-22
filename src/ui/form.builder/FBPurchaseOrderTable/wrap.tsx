@@ -2,7 +2,7 @@ import { useFormikContext } from 'formik';
 import { cloneDeep, compact, debounce, each, first, get, isNil, omit, template } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue, IReceivedItem } from '..';
 import { SM } from '../../../App';
@@ -105,13 +105,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
     };
 
+    const setTax = (value: string | undefined) => {
+      purchaseOrderState?.setTax(value);
+    };
+
+    const debounceSetTax = useMemo(() => debounce((value) => { setTax(value); }, 500), []);
+
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
       const decimalLength = getDecimalLength(value);
       if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, decimalLength), null)) {
         return;
       }
-      purchaseOrderState?.setTax(getDecimalValue(ev, decimalLength));
+      debounceSetTax(value);
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
