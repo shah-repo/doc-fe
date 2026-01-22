@@ -58,7 +58,7 @@ export const useFetchData = () => {
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
 
-    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment);
+    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment && option.status === DocumentRevisionStatus.Released);
     const filterEquipmentOptions = equipmentOnlyOptions.map(parseEquipmentOption);
 
     const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
