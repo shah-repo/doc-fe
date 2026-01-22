@@ -114,7 +114,7 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    const allowedInternalTypes = [FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical];
+    const allowedInternalTypes = [FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical, FBLHRBuildOptions['Verification & Validation']];
 
     const activeBuildTypeIds = this.buildTypeOptions
       .filter(
