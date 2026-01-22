@@ -114,12 +114,14 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    const allowedInternalTypes = [FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical, FBLHRBuildOptions['Verification & Validation']];
+    const allowedInternalTypes = [
+      FBLHRBuildOptions.Production,
+      FBLHRBuildOptions.Clinical,
+      FBLHRBuildOptions['Verification & Validation'],
+    ];
 
     const activeBuildTypeIds = this.buildTypeOptions
-      .filter(
-        (buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions),
-      )
+      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
       .map((buildType) => buildType.id);
 
     const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
@@ -128,7 +130,7 @@ class FBWorkspaceState extends FBSchemaState {
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
     );
 
-    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
+    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string;
 
     return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
