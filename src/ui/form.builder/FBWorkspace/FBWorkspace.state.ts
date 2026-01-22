@@ -114,15 +114,23 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    const productionId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Production)?.id ?? FBLHRBuildOptions.Production;
-    const clinicalId = this.buildTypeOptions.find(o => o.internalType === FBLHRBuildOptions.Clinical)?.id ?? FBLHRBuildOptions.Clinical;
+    const allowedInternalTypes = [FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical];
+
+    const activeBuildTypeIds = this.buildTypeOptions
+      .filter(
+        (buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions),
+      )
+      .map((buildType) => buildType.id);
+
+    const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
 
     const smartReference = this.document?.smartReferencesTo?.find(
-      ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
     );
 
-    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string;
-    return lhrBuildType === productionId || lhrBuildType === clinicalId;
+    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
+
+    return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
 
   public get isLHRRelevantBuilds (): boolean {
