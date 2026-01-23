@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   input: {
     '&.MuiInputBase-root': {
       marginTop: 10,

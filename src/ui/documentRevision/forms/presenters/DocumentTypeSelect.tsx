@@ -20,7 +20,7 @@ import { DocumentCloneType } from '../../Clone.container';
 import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from '../../helpers/checkDocumentGroup';
 import { getFBSchemeByDocType } from '../../helpers/getFBSchemeByDocType';
 import { getActiveDocumentTypes } from '../transform';
-import { styles } from './styles/DocIdInput.styles';
+import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
   isDocRevStatusDraft: boolean
@@ -43,7 +43,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
   const getDocTypeGroups = useDocTypeGroups();
   const formik = useFormikContext();
-  const classes = styles();
+  const classes = useStyles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync<DocumentProposedId>({
     onSuccess: (documentProposedId) => {

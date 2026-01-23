@@ -66,6 +66,8 @@ const loadDocumentProposedId = (documentTypeId: string): ApiAction<DocumentPropo
   },
 });
 
+const clearDocumentProposedId = () => documentProposedIdSet('');
+
 const loadDocumentProposedIdWithCallback = (documentTypeAcronym: string, handlers: Handlers):
 ApiAction<DocumentProposedId> => apiActionWithCallbacks({
   ...loadDocumentProposedId(documentTypeAcronym),
@@ -147,6 +149,7 @@ export default {
   save,
   applyTransition,
   loadDocumentProposedId,
+  clearDocumentProposedId,
   setDocumentProposedId,
   sendEmailAccessRequest,
   sendDocIdUpdateRequest,

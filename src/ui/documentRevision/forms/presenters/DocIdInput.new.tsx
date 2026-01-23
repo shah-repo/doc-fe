@@ -1,7 +1,8 @@
 import { InputAdornment } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { documentsActions, documentsSelectors } from '../../../../state/ducks/documents';
 import { DocIdRequestBody } from '../../../../state/ducks/documents/types';
@@ -13,7 +14,7 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useDocId } from '../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { styles } from './styles/DocIdInput.styles';
+import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
   isDisabled: boolean
@@ -25,6 +26,7 @@ interface Props {
   documentId?: string
   helpText?: string
   handleDocIdUpdated?: (docId: string) => void
+  docRevId?: string
 }
 
 const DocIdInputNew: React.FunctionComponent<Props> = ({
@@ -36,15 +38,20 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   isShownOnDialog = false,
   documentId,
   helpText,
+  docRevId,
   handleDocIdUpdated,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
-
   const formik = useFormikContext();
-
   const [docIdEntered, setDocIdEntered] = useState<string>(docId);
+
+  useEffect(() => {
+    setDocIdEntered(docId);
+  }, [docId]);
+
   const [isRequestInProgress, setIsRequestInProgress] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
@@ -57,6 +64,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   const sendDocIdUpdateRequestAsync = useAsync({
     onSuccess: () => {
       setIsRequestInProgress(false);
+      docRevId && dispatch(documentRevisionsActions.reload(docRevId));
     },
     onError: (message: string | undefined) => {
       setIsRequestInProgress(false);

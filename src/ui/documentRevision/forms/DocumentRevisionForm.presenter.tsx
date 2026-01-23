@@ -4,7 +4,7 @@ import { flatten, get, includes, isEmpty } from 'lodash';
 import { Observer, observer, useObserver } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
@@ -116,6 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
+  const dispatch = useDispatch();
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
 
   const isPart = checkIsDocumentPart(groupOptions);
@@ -188,6 +189,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       _documentRevisionFormState?.setForceRender(value);
       setFieldValue('revisionStage', value);
     }
+    return () => {
+      dispatch(documentsActions.clearDocumentProposedId());
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposedDocId, setFieldValue]);
 
@@ -296,6 +300,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               isNumberingStyleDifferentFromInternal && documentTypeById
                 && <DocIdInputNew
                   documentTypeId={documentTypeById.id}
+                  docRevId={documentRevision?.id}
                   documentAcronym={documentTypeById.documentTypeAcronym}
                   isDisabled={!docIdEditEnabled}
                   documentId={documentId}
