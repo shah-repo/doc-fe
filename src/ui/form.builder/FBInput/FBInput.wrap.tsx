@@ -257,7 +257,7 @@ export const withFBInput = <T extends FBInputProps>(
         if (isFieldUnderValidation && !isUndefined(showValidationField)) {
           isUnderMode = !showValidationField;
           if (isUnderMode) {
-            formState?.omitFieldValue((name || ''));
+            formState?.setFieldValue(name, null);
           }
         }
         hidden = isUnderMode;
