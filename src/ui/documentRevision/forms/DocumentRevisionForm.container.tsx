@@ -8,20 +8,20 @@ import { useSelector } from 'react-redux';
 import { DocumentRevisionForm, SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
 import { authSelectors } from '../../../state/ducks/auth';
-import { GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { Permission } from '../../../state/ducks/auth/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { FBWorkspaceMode } from '../../form.builder';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDidMount from '../../hooks/useDidMount';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 import useGetHasPermission from '../../hooks/useGetHasPermission';
 import useShouldUpgradeToLatest from '../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../layout/theme/utils/colors';
@@ -101,9 +101,9 @@ DocumentRevisionFormContainerProps
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ''));
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
+  const getDocTypeGroups = useDocTypeGroups();
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const isEditableSchema = checkIsDocumentEditableSchema(initialValues.document?.documentType?.groupOptions);
@@ -114,14 +114,7 @@ DocumentRevisionFormContainerProps
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
-    const securityGroups: any[] = [];
-    if (initialValues.document?.documentType?.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          securityGroups.push({ value: group.value, label: group.label });
-        }
-      });
-    }
+    const securityGroups = getDocTypeGroups(initialValues.document?.documentType);
 
     const retrain = initialValues.id
       ? initialValues.retrain
@@ -146,7 +139,7 @@ DocumentRevisionFormContainerProps
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, FBDataStore?.refreshData]);
+  }, [canUpdateHTML, initialValues, FBDataStore?.refreshData, getDocTypeGroups]);
 
   useObserver(() => {
     if (documentRevision?.id === FBDataStore?.refreshData?.id) {

@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Tooltip, Typography } from '@material-ui/core';
+import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Tooltip, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React, { MouseEventHandler, RefObject, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
@@ -17,6 +17,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   expanded,
   onToggle,
   onAddNew,
+  onManageItems,
   isOutOfSync,
   ...props
 }) => {
@@ -32,6 +33,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     }
     onToggle();
     isAddPending.current = true;
+  };
+
+  const handleManageItems: MouseEventHandler = (e) => {
+    e.stopPropagation();
+    if (expanded) {
+      onManageItems?.();
+      return;
+    }
+    onToggle();
   };
 
   const handleOnEntered = () => {
@@ -81,17 +91,30 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Tooltip>
         )}
         {info && <Typography className={classes.info}>{info}</Typography>}
-        {onAddNew && (
-          <Button
-            kind="ghost"
-            size="small"
-            startIcon={<FontAwesomeIcon icon={regular('circle-plus')} />}
-            onClick={handleAddNew}
-            data-cy="add-new"
-          >
-            {translate('common.add.new')}
-          </Button>
-        )}
+        <Box>
+          {onManageItems && (
+            <Button
+              kind="ghost"
+              size="small"
+              startIcon={<FontAwesomeIcon icon={regular('list-check')} />}
+              onClick={handleManageItems}
+              data-cy="add-new"
+            >
+              {translate('common.manage.configuration.items')}
+            </Button>
+          )}
+          {onAddNew && (
+            <Button
+              kind="ghost"
+              size="small"
+              startIcon={<FontAwesomeIcon icon={regular('circle-plus')} />}
+              onClick={handleAddNew}
+              data-cy="add-new"
+            >
+              {translate('common.add.new')}
+            </Button>
+          )}
+        </Box>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={cx(classes.details, { [classes.detailsWithStickyTitle]: isSticky })}>
         {children}

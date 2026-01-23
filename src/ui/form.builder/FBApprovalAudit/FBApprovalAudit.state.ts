@@ -56,6 +56,9 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'checkboxgroupasync',
     'shippingMethod',
     'workOrderLhrTable',
+    'samplingPlan',
+    'salesOrderNumber',
+    'lhrBuildTypeSelection',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();

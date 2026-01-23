@@ -15,6 +15,7 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
     lhrStepIndex,
     type,
     getItem,
+    value,
     isPreview,
     loading,
     ...props
@@ -54,6 +55,8 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
       onClick,
       getItem,
       dialogState,
+      value,
+      lhrStepIndex,
       type,
       isPreview,
       loading,

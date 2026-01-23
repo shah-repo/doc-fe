@@ -41,7 +41,7 @@ export const DocumentTypeCellTemplate = ({
         alignContent="flex-start"
         justify="flex-start"
       >
-        {documentType && <Tooltip data={documentType} {...{ tooltipContent, showTooltip }} /> }
+        {documentType && <Tooltip data={removeLastCharacterIfNotAlphaNumeric(documentType)} {...{ tooltipContent, showTooltip }} /> }
       </Grid>
     </td>
   );

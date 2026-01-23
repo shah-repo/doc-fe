@@ -12,6 +12,7 @@ import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { OverflowCell } from '../../components/common/kendo.column.templates/OverflowCell';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { TableColumnProps } from '../../components/table/column/types';
 import { ownerFieldsMapping } from '../../documentType/grid/constants';
@@ -39,9 +40,9 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const history = useHistory();
 
   const docListCategory = useSelector(pageDetailsSelectors.byCategory)?.['Document List'];
-  const columns: Array<TableColumnProps<DocumentRevision>> = docListCategory.columns
-    .filter((c) => c.showOnWeb)
-    .map(
+  const columns: Array<TableColumnProps<DocumentRevision>> = docListCategory?.columns
+    ?.filter((c) => c.showOnWeb)
+    ?.map(
       (column: PageDetailsColumn) => {
         const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria);
         return {
@@ -52,20 +53,24 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       },
     );
 
-  const kendoColumnDef = columns.map((columnDetails, index) => {
+  const kendoColumnDef = columns?.map((columnDetails, index) => {
     const columnLabel = isTranslation(columnDetails.label)
       ? intl.formatMessage({ id: columnDetails.label })
       : columnDetails.label;
 
-    return {
+    const columnDef = {
       field: columnDetails.key,
       title: columnLabel,
       show: true,
       showColumnMenu: true,
       key: { index },
       extraFields: ['id', ...ownerFieldsMapping[columnDetails.key] || []],
-      ...predefinedColumnDetails[columnDetails.key],
+      width: 8,
     };
+
+    return predefinedColumnDetails[columnDetails.key]
+      ? { ...columnDef, ...predefinedColumnDetails[columnDetails.key] }
+      : { ...columnDef, cell: OverflowCell, showTooltip: true, tooltipField: columnDetails.key };
   });
   const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);
 

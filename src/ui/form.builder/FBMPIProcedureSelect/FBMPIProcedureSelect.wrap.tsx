@@ -5,7 +5,7 @@ import moment, { MomentInput } from 'moment';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from '..';
+import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ, ProcedureItemType } from '..';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -205,7 +205,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         quantity,
         unit: unit || initialValues?.unit,
         usedOverride: { id: (usedOverride as DocumentRevision).id },
-        type: type.toUpperCase() as 'MATERIAL' | 'EQUIPMENT',
+        type: type.toUpperCase() as ProcedureItemType,
       };
       mpiProcedureSelectState?.useOverride(id, part);
       mpiProcedureState?.addPartsSelected({

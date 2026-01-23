@@ -16,7 +16,7 @@ import {
 } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { DATE_TYPE, LHR_SUMARY_FIELDS } from '../../constants';
-import { CustomTemplateProps } from '../../types';
+import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
@@ -38,8 +38,8 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       displayValue = dataItem.pmDueDateText;
     }
 
-    if((isCalPmDueDate || isExpiryCreateDate) && displayValue) {
-     const momentObject = moment(displayValue, Object.values(MomentFormats));
+    if ((isCalPmDueDate || isExpiryCreateDate) && displayValue) {
+      const momentObject = moment(displayValue, Object.values(MomentFormats));
       displayValue = momentObject.format(MomentFormats.MonthDateYearTwoDigit);
     }
 
@@ -55,7 +55,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       </OverflowTooltip>);
   }
 
-  const { getFieldProps, setFieldValue } = useFormikContext();
+  const { getFieldProps, setFieldValue, values } = useFormikContext<EditableLHRSummaryItem>();
   const removeCustomPrefix = (fieldName: string): string =>
     fieldName.replace(/^custom/, '').replace(/^[A-Z]/, (char) => char.toLowerCase());
 
@@ -64,9 +64,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     const dateValue = dateInPST?.utc().format();
     setFieldValue(field, dateValue);
     setFieldValue(removeCustomPrefix(field), dateValue);
-    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && dataItem.calDueDateText) {
+    if (isCalPmDueDate && DATE_TYPE.customCalDueDate === field && (dataItem.calDueDateText || values?.calDueDateText)) {
       setFieldValue(LHR_SUMARY_FIELDS.calDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
-    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && dataItem.pmDueDateText) {
+    } else if (isCalPmDueDate && DATE_TYPE.customPmDueDate === field && (dataItem.pmDueDateText || values?.pmDueDateText)) {
       setFieldValue(LHR_SUMARY_FIELDS.pmDueDateText, dateValue ? moment(dateValue).format(MomentFormats.MonthDateYearTwoDigit) : dateValue);
     }
   };

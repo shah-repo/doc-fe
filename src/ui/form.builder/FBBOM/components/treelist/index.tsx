@@ -686,7 +686,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.whiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
         [classes.deletedBg]:
           item.isDeleted || (isDiffViewEnabled && item.replacementStatus),
