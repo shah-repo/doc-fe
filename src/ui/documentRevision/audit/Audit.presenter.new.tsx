@@ -213,6 +213,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const assignLotPattern = /^formInput\.[^.]+\.materials\.\d+\.assignedLots$/;
         if (change.type === 'ARRAY_DELETED' && assignLotPattern.test(change.field)) { return; }
 
+        const assignedEquipmentsPattern = /^formInput\.[^.]+\.equipment\.\d+\.assignedEquipments\.\d+\.equipmentId$/;
+        if (change.type === 'STRING_EDITED' && assignedEquipmentsPattern.test(change.field)) { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }

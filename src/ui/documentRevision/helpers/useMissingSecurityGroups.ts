@@ -35,7 +35,7 @@ const useMissingSecurityGroups = (): MissingSecurityGroupsFunction => {
     }
 
     const systemSecurityGroupsIds = getDocTypeGroups(documentType).map((group) => group.value);
-    const documentSecurityGroupIds = values.securityGroups.map(group => group.value) ?? [];
+    const documentSecurityGroupIds = values.securityGroups?.map(group => group.value) ?? [];
     const missingSecurityGroupIds = difference(systemSecurityGroupsIds, documentSecurityGroupIds);
     const allSecurityGroupsIds = union(systemSecurityGroupsIds, documentSecurityGroupIds);
 
