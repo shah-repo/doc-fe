@@ -415,33 +415,31 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       <Grid item>
         <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions }}>
           <FormikProvider value={formik}>
-            <Grid container>
-              <Grid item xs={12} ref={treeListRef}>
-                <TreeList
-                  style={{
-                    overflow: 'auto',
-                    maxHeight: size?.height ? `${size?.height}px` : '100px',
-                  }}
-                  {...state.dataState}
-                  tableProps={{ style: { tableLayout: 'fixed' } }}
-                  rowHeight={TREELIST_CONFIG.rowHeight}
-                  scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
-                  editField={MODE_FIELD}
-                  expandField={EXPAND_FIELD}
-                  dataItemKey={DATA_ITEM_KEY}
-                  subItemsField={subItemsKey}
-                  className={cx(classes.treeList, 'containing-box-scrollbar')}
-                  onExpandChange={onExpandChange}
-                  rowRender={rowRender}
-                  data={processData()}
-                  columns={getColumns()}
-                  onRowClick={editEquipmentItem}
-                  resizable={TREELIST_CONFIG.resizable}
-                  reorderable={TREELIST_CONFIG.reorderable}
-                  sortable={TREELIST_CONFIG.sortable}
-                  cellRender={cellRender}
-                />
-              </Grid>
+            <Grid item xs={12} ref={treeListRef}>
+              <TreeList
+                style={{
+                  overflow: 'auto',
+                  maxHeight: size?.height ? `${size?.height}px` : '100px',
+                }}
+                {...state.dataState}
+                tableProps={{ style: { tableLayout: 'fixed' } }}
+                rowHeight={TREELIST_CONFIG.rowHeight}
+                scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
+                editField={MODE_FIELD}
+                expandField={EXPAND_FIELD}
+                dataItemKey={DATA_ITEM_KEY}
+                subItemsField={subItemsKey}
+                className={cx(classes.treeList, 'containing-box-scrollbar')}
+                onExpandChange={onExpandChange}
+                rowRender={rowRender}
+                data={processData()}
+                columns={getColumns()}
+                onRowClick={editEquipmentItem}
+                resizable={TREELIST_CONFIG.resizable}
+                reorderable={TREELIST_CONFIG.reorderable}
+                sortable={TREELIST_CONFIG.sortable}
+                cellRender={cellRender}
+              />
             </Grid>
           </FormikProvider>
         </EquipmentTreelistContext.Provider>
