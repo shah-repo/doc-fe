@@ -40,4 +40,11 @@ export default makeStyles(theme => ({
     color: Colors.textGray,
     fontSize: 12,
   },
+  gracePeriodDescription: {
+    display: 'flex',
+    color: Colors.textGray,
+    alignItems: 'center',
+    fontSize: 12,
+    justifyContent: 'space-between',
+  },
 }));
