@@ -58,7 +58,7 @@ export const useFetchData = () => {
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
 
-    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment);
+    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment && option.status === DocumentRevisionStatus.Released);
     const filterEquipmentOptions = equipmentOnlyOptions.map(parseEquipmentOption);
 
     const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
@@ -74,44 +74,55 @@ export const useFetchData = () => {
 };
 
 export const useEquipmentOptions = (id: string) => {
-  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
-  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
+  const baseOptionId = FBAutocompleteAsyncOption.equipmentSpecifications;
+  // Create a unique key by combining optionId with id to avoid conflicts between different equipment specs
+  const uniqueOptionId = id ? `${baseOptionId}_${id}` : baseOptionId;
+  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId: baseOptionId });
 
   useEffect(() => {
-    if (id && optionId) {
-      autocompleteAsyncState.setOptionId(optionId);
-      autocompleteAsyncState.fetchAutocompleteOption(id, optionId);
+    if (!id) {
+      return;
     }
-  }, [autocompleteAsyncState, id, optionId]);
+
+    // Check if data is already in store, if so, skip API call
+    const existingData = FBAutocompleteAsyncStore.data.get(uniqueOptionId);
+    if (existingData && existingData.size > 0) {
+      return;
+    }
+
+    autocompleteAsyncState.setOptionId(baseOptionId);
+    autocompleteAsyncState.fetchAutocompleteOption(id, baseOptionId);
+  }, [autocompleteAsyncState, id, baseOptionId, uniqueOptionId]);
 
   return useObserver(() => {
-    if (!optionId) {
+    if (!id) {
       return {
         equipmentSpcOptions: [],
         allowedEditEqSpecOptions: [],
       };
     }
 
-    // Check if data is in the API response
-    const apiData = autocompleteAsyncState.autocompleteValueApi.data;
-    let asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
-    const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+    // Try to get data from store with unique key first
+    let asyncData = FBAutocompleteAsyncStore.data.get(uniqueOptionId) as Map<string, EquipOption>;
 
-    // If API has returned data but store is empty, process and store it
-    if (apiData && preparedData.length > 0) {
-      // Validate that we have data before storing
-      const dataSize = asyncData?.size ?? 0;
-      const isDataEmpty = dataSize === 0;
-      const hasDataMismatch = dataSize !== preparedData.length;
+    // If not in store, check if API has returned data
+    if (!asyncData || asyncData.size === 0) {
+      const apiData = autocompleteAsyncState.autocompleteValueApi.data;
 
-      if (isDataEmpty || hasDataMismatch) {
-        FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
-        asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
+      if (apiData) {
+        const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+
+        if (preparedData.length > 0) {
+          // Store with unique key to avoid conflicts
+          FBAutocompleteAsyncStore.setOptionData(uniqueOptionId, preparedData);
+          asyncData = FBAutocompleteAsyncStore.data.get(uniqueOptionId) as Map<string, EquipOption>;
+        } else {
+          // If API response is empty, set empty array
+          FBAutocompleteAsyncStore.setOptionData(uniqueOptionId, []);
+        }
       }
-    } else if (!apiData || (Array.isArray(apiData) && apiData.length === 0)) {
-      // If API response is empty, set empty array
-      FBAutocompleteAsyncStore.setOptionData(optionId, []);
     }
+
     const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
     const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
     const allowedEditEqSpecOptions = filterByRestrictedStatus(equipmentSpecs).map(parseEquipmentOption);

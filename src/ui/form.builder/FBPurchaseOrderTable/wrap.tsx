@@ -111,7 +111,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, decimalLength), null)) {
         return;
       }
-      purchaseOrderState?.setTax(getDecimalValue(ev, decimalLength));
+      purchaseOrderState?.setTax(value);
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
