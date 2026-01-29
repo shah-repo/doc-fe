@@ -1,3 +1,4 @@
+import { round } from 'lodash';
 import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
@@ -54,7 +55,7 @@ interface QuantityNeededCheck {isInsufficientQty: boolean, totalAssignedQty: num
 
 export const isPartHasInsufficientQty = (dataItem: EditableMaterial, lhrsQuantity: number, acceptedQuantity: number | undefined): QuantityNeededCheck => {
   const subItems = dataItem?.[SUB_ITEMS_FIELD] ?? [];
-  const quantityNeeded = dataItem?.quantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * lhrsQuantity : 0;
+  const quantityNeeded = dataItem?.quantity ? round(dataItem?.quantity * lhrsQuantity, MAX_DECIMALS) : 0;
   const acceptedQuantityNeeded = dataItem?.quantity && acceptedQuantity ? Number(toFixed(dataItem?.quantity, MAX_DECIMALS)) * acceptedQuantity : 0;
 
   if (subItems.length === 1 && subItems[0]?.isNew) {

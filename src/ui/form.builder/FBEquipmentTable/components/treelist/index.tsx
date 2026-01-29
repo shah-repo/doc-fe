@@ -92,7 +92,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const scanSelectedEquipInfo = useRef<ScanSelectedPartItem>();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles({ size });
-  const { equipmentOptions, allowedEditEqOptions, releasedEquipmentOptions } = useFetchData();
+  const { equipmentOptions, allowedEditEqOptions, releasedEquipmentOptions, filterEquipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
   const disabledOptions = map(items, 'title');
 
@@ -305,6 +305,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     addActualId: addActualId,
     equipmentOptions,
     releasedEquipmentOptions,
+    filterEquipmentOptions,
     allowedEditEqOptions,
     onDiscard: discardEquipItem,
     onDelete: removeEquipItem,

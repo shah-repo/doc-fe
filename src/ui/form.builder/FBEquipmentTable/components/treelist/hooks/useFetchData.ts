@@ -1,7 +1,7 @@
 import { useObserver } from 'mobx-react';
 import { useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import FBAutocompleteAsyncState from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
@@ -11,7 +11,7 @@ import { customEQOptionType, EquipOption } from '../column.templates/types';
 const isValidDate = (date?: string): boolean => Boolean(date && !Number.isNaN(Date.parse(date)));
 
 const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
-  const { id, name, eqStatus, displayRevision, document, precalc } = equipment;
+  const { id, name, eqStatus, displayRevision, document, precalc, status } = equipment;
   const caliDueDate = precalc?.cali_due_date;
   const pmDueDate = precalc?.pm_due_date;
   const validCalDate = isValidDate(caliDueDate) ? caliDueDate : '';
@@ -28,6 +28,8 @@ const parseEquipmentOption = (equipment: EquipOption): customEQOptionType => {
     pmDueDate: validPmDate,
     status: eqStatus,
     value: id,
+    docStatus: status,
+    category: document.documentType.category,
   };
 };
 
@@ -55,62 +57,72 @@ export const useFetchData = () => {
     const equipments = Array.from(asyncData?.values() ?? []) ?? [];
     const allowedEditEqOptions = filterByRestrictedStatus(equipments)?.map(parseEquipmentOption);
     const equipmentOptions = equipments.map(parseEquipmentOption);
-    const excludedStatuses = [
-      DocumentRevisionStatus.Draft,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.Voided,
-      DocumentRevisionStatus.Canceled,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.InReview,
-      DocumentRevisionStatus.PendingChange,
-    ];
-    const releasedEquipments = equipments.filter((equ) => !excludedStatuses.includes(equ.status));
+
+    const equipmentOnlyOptions = equipments.filter((option) => option.document.documentType.category === DocumentCategory.Equipment && option.status === DocumentRevisionStatus.Released);
+    const filterEquipmentOptions = equipmentOnlyOptions.map(parseEquipmentOption);
+
+    const releasedEquipments = equipments.filter((equ) => equ.status === DocumentRevisionStatus.Released);
     const releasedEquipmentOptions = releasedEquipments.map(parseEquipmentOption);
 
     return {
       equipmentOptions,
       allowedEditEqOptions,
       releasedEquipmentOptions,
+      filterEquipmentOptions,
     };
   });
 };
 
 export const useEquipmentOptions = (id: string) => {
-  const optionId = FBAutocompleteAsyncOption.equipmentSpecifications;
-  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId });
+  const baseOptionId = FBAutocompleteAsyncOption.equipmentSpecifications;
+  // Create a unique key by combining optionId with id to avoid conflicts between different equipment specs
+  const uniqueOptionId = id ? `${baseOptionId}_${id}` : baseOptionId;
+  const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId: baseOptionId });
 
   useEffect(() => {
-    if (id && optionId) {
-      autocompleteAsyncState.setOptionId(optionId);
-      autocompleteAsyncState.fetchAutocompleteOption(id, optionId);
+    if (!id) {
+      return;
     }
-  }, [autocompleteAsyncState, id, optionId]);
+
+    // Check if data is already in store, if so, skip API call
+    const existingData = FBAutocompleteAsyncStore.data.get(uniqueOptionId);
+    if (existingData && existingData.size > 0) {
+      return;
+    }
+
+    autocompleteAsyncState.setOptionId(baseOptionId);
+    autocompleteAsyncState.fetchAutocompleteOption(id, baseOptionId);
+  }, [autocompleteAsyncState, id, baseOptionId, uniqueOptionId]);
 
   return useObserver(() => {
-    if (!optionId) {
+    if (!id) {
       return {
         equipmentSpcOptions: [],
         allowedEditEqSpecOptions: [],
       };
     }
 
-    // Check if data is in the API response
-    const apiData = autocompleteAsyncState.autocompleteValueApi.data;
-    let asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
-    const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+    // Try to get data from store with unique key first
+    let asyncData = FBAutocompleteAsyncStore.data.get(uniqueOptionId) as Map<string, EquipOption>;
 
-    // If API has returned data but store is empty, process and store it
-    if (apiData && preparedData.length > 0) {
-      // Validate that we have data before storing
-      const dataSize = asyncData?.size ?? 0;
-      const isDataEmpty = dataSize === 0;
-      const hasDataMismatch = dataSize !== preparedData.length;
+    // If not in store, check if API has returned data
+    if (!asyncData || asyncData.size === 0) {
+      const apiData = autocompleteAsyncState.autocompleteValueApi.data;
 
-      if (isDataEmpty || hasDataMismatch) {
-        FBAutocompleteAsyncStore.setOptionData(optionId, preparedData);
-        asyncData = FBAutocompleteAsyncStore.data.get(optionId) as Map<string, EquipOption>;
+      if (apiData) {
+        const preparedData = Array.isArray(apiData) ? apiData : [apiData];
+
+        if (preparedData.length > 0) {
+          // Store with unique key to avoid conflicts
+          FBAutocompleteAsyncStore.setOptionData(uniqueOptionId, preparedData);
+          asyncData = FBAutocompleteAsyncStore.data.get(uniqueOptionId) as Map<string, EquipOption>;
+        } else {
+          // If API response is empty, set empty array
+          FBAutocompleteAsyncStore.setOptionData(uniqueOptionId, []);
+        }
       }
     }
+
     const equipmentSpecs = Array.from(asyncData?.values() ?? []) ?? [];
     const equipmentSpcOptions = equipmentSpecs.map(parseEquipmentOption);
     const allowedEditEqSpecOptions = filterByRestrictedStatus(equipmentSpecs).map(parseEquipmentOption);

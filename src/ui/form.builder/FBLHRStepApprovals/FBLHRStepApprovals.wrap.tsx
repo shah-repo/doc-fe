@@ -151,6 +151,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           if (!data) {
             return;
           }
+          if (!isOperator && !isOwner) {
+            return;
+          }
           const activeApprovals = filter(
             workspaceState?.approvals,
             (a) => a.status !== 'ABANDONED',
@@ -248,6 +251,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI || workspaceState?.document?.status !== DocumentRevisionStatus.Draft) {
             return;
           }
+          if (!isOperator && !isOwner) {
+            return;
+          }
           const formValue: string[] = get(formState?.oldValues, name);
           const newApprovers = difference(fieldValue, formValue);
           const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
@@ -270,6 +276,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
         ],
         () => {
+          if (!isOperator && !isOwner) {
+            return;
+          }
           if (
             !lhrApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
