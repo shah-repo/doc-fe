@@ -409,6 +409,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (!change.field.split('.').includes('editorConfig')) {
           return;
         }
+        if (change.type === 'BOOLEAN_NEW' && last(valueKey) === 'isEquipmentSpecification') { return; }
+
         const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
         const regex = /materials/g;
         const isMaterial = !isEmpty(change.field.match(regex));
