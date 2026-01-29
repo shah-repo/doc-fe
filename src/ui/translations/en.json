@@ -2476,7 +2476,7 @@
   "administration.general.settings.training.reminders.info": "Training reminder emails are not sent in non-production environments by default. If you enable this option, only users from this company will receive training reminder emails.",
   "administration.general.settings.training.reminders.sub.title": "Select how many notifications are required until training is due",
   "administration.general.settings.training.reminders.gracePeriodDays.title": "Grace Period",
-  "administration.general.settings.training.reminders.gracePeriodDays.sub.title": "Grace period for training (in days). Default is 30 days. If changed, it will affect only updated or newly created training records.",
+  "administration.general.settings.training.reminders.gracePeriodDays.sub.title": "Grace period for training. Default is 30 days. If changed, it will affect only updated and newly created training records.",
   "administration.general.settings.training.reminders.training.assigned": "Training Assigned",
   "administration.general.settings.training.reminders.seven.days": "7 days",
   "administration.general.settings.training.reminders.three.days": "3 days",

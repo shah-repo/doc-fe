@@ -183,15 +183,20 @@ const Training: React.FC<SettingsPanelProps> = (props) => {
         <div className={classes.title}>
           {translate('administration.general.settings.training.reminders.gracePeriodDays.title')}
         </div>
-        <div className={classes.gracePeriodDescription}>
-          {translate('administration.general.settings.training.reminders.gracePeriodDays.sub.title')}
-          <TextField
-            className={classes.textArea}
-            {...getFieldProps('trainingReminders.gracePeriodDays')}
-            fullWidth={false}
-            type="number"
-          />
-        </div>
+        <Box className={classes.gracePeriodDescription}>
+          <div className={classes.description}>
+            {translate('administration.general.settings.training.reminders.gracePeriodDays.sub.title')}
+          </div>
+          <Box>
+            <TextField
+              className={classes.textArea}
+              {...getFieldProps('trainingReminders.gracePeriodDays')}
+              fullWidth={false}
+              type="number"
+            />
+            <Text message="administration.general.settings.training.reminders.custom.days" />
+          </Box>
+        </Box>
       </Box>
     </SettingsPanel>
   );

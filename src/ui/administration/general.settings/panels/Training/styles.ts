@@ -42,9 +42,7 @@ export default makeStyles(theme => ({
   },
   gracePeriodDescription: {
     display: 'flex',
-    color: Colors.textGray,
     alignItems: 'center',
-    fontSize: 12,
     justifyContent: 'space-between',
   },
 }));
