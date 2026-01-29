@@ -2,6 +2,17 @@ import isMobile from 'is-mobile';
 import { chain, kebabCase, set } from 'lodash';
 import { KendoColumn } from '../../components/common/kendo/types';
 
+export interface ColumnInfo {
+  width: number
+  groupable: boolean
+  showTooltip?: boolean
+  tooltipField?: string
+  filter?: string
+  cell?: string
+  filterCell?: string
+  locked: boolean
+}
+
 export const removeLastCharacterIfNotAlphaNumeric = (text = ''): string => {
   if (!text) {
     return text;

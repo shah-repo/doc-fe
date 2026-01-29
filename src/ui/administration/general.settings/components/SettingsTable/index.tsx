@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Button } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
@@ -18,7 +18,7 @@ function SettingsTable<T extends EditableItem> ({
   getRowProperties,
   rowRender,
   ...props
-}: SettingsTableProps<T>): React.ReactElement {
+}: PropsWithChildren<SettingsTableProps<T>>): React.ReactElement {
   const classes = useStyles();
 
   const defaultRowRender: DataGridProps<EditableItem>['rowRender'] = (row, { dataItem }) => {

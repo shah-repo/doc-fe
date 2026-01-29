@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { FBMPIProcedureSelectValue } from '..';
+import { FBMPIProcedureSelectEditRequestBody, FBMPIProcedureSelectValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
@@ -9,7 +9,7 @@ class FBMPIProcedureSelectState {
 
   // MARK: @api
   public lotsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
-  public useOverrideApi: FBRequest<DocumentRevision, FBMPIProcedureSelectValue> = new FBRequest();
+  public useOverrideApi: FBRequest<DocumentRevision, FBMPIProcedureSelectValue | FBMPIProcedureSelectEditRequestBody > = new FBRequest();
 
   // MARK: @observables
   @observable public partsAdded?: FBMPIProcedureSelectValue;
@@ -33,6 +33,13 @@ class FBMPIProcedureSelectState {
     url: FBEndpoint.UseOverride,
     urlValues: { id },
     method: 'post',
+    body,
+  });
+
+  public editOverride = (id: string, refId: string, body: FBMPIProcedureSelectEditRequestBody) => this.useOverrideApi.set({
+    url: FBEndpoint.EditOverride,
+    urlValues: { id, refId },
+    method: 'patch',
     body,
   });
 }

@@ -1,65 +1,35 @@
-import { chain } from 'lodash';
+import { ColumnInfo } from '../../common/utils/helpers';
 import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
-import { pagerSettings } from '../../components/common/kendo/helpers';
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import { KendoCellTemplates } from '../../components/common/kendo/types';
 
-const columns: KendoColumn[] = [
-  {
-    field: 'crId',
-    title: 'common.crid',
-    show: true,
-    filter: 'text',
-    locked: false,
+export const predefinedColumnDetails: {[key: string]: ColumnInfo} = {
+  crId: {
     width: 10,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 1,
-    extraFields: ['id'],
-  },
-  {
-    field: 'title',
-    title: 'cr.title',
-    show: true,
+    showTooltip: true,
     filter: 'text',
     locked: false,
+  },
+  title: {
     width: 40,
     groupable: false,
-    showColumnMenu: true,
-    orderIndex: 2,
+    filter: 'text',
     showTooltip: true,
     tooltipField: 'description',
-  },
-  {
-    field: 'owner.user.name',
-    title: 'change.request.list.owner',
-    show: true,
-    filter: 'text',
     locked: false,
+  },
+  'owner.user.name': {
     width: 30,
     groupable: true,
     cell: KendoCellTemplates.USER_AVATAR,
-    showColumnMenu: true,
-    orderIndex: 3,
-    extraFields: ['owner.user.avatar', 'owner.user.initialColor'],
-  },
-  {
-    field: 'state',
-    title: 'common.status',
-    show: true,
+    filter: 'text',
     locked: false,
+  },
+  state: {
     width: 20,
     groupable: true,
     cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.STATE,
-    showColumnMenu: true,
-    orderIndex: 4,
+    locked: false,
   },
-];
-
-const gridConfiguration: KendoGridConfiguration = {
-  columns,
-  pagerSettings,
-  groupableFields: chain(columns).filter({ groupable: true }).map('field').value(),
 };
-
-export default gridConfiguration;

@@ -77,7 +77,7 @@ export const getFBSchemeByDocType = (
         index: indexLast + 1,
       });
     } else {
-      if (![DOC_TYPE_GROUP.WORK_ORDER, DOC_TYPE_GROUP.SHIPPING].includes(outputTypesWithGroups[0].group as DOC_TYPE_GROUP)) {
+      if (![DOC_TYPE_GROUP.WORK_ORDER, DOC_TYPE_GROUP.SHIPPING, DOC_TYPE_GROUP.MPI_OUTPUT].includes(outputTypesWithGroups[0].group as DOC_TYPE_GROUP)) {
         finalScheme.push({
           label: 'form.builder.approvals',
           type: 'approvals',

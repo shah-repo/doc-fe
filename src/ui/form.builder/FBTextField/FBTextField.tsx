@@ -23,10 +23,11 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   className,
   value,
   customHeight,
+  helperText,
   isFbEditorField = false,
   ...props
 }) => {
-  const classes = FBTextFieldStyles({ rows, customHeight });
+  const classes = FBTextFieldStyles({ rows, customHeight, error });
   className = className ?? classes.textfield;
   return (
     <FBInput {...props} {...{ error, defaultValue, isFbEditorField }}
@@ -58,6 +59,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
             placeholder,
             className,
             value,
+            helperText,
           }}
 
         />

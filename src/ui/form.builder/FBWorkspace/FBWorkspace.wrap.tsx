@@ -57,6 +57,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       });
     }
 
+    useEffect(
+      () => reaction(
+        () => workspaceState?.loadBuildTypeOptionsApi.data,
+        (buildTypeOptions) => workspaceState?.setBuildTypeOptions(buildTypeOptions),
+      ), []);
+
     useObserver(() => {
       if (!isEmpty(workspaceState?.schema) && isEmpty(workspaceState?.document?.schema)) {
         schema = workspaceState?.schema;
@@ -146,7 +152,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       const sections = filter(schemaDiff, (schemaItem) =>
         schemaItem.type && FBSectionTypes.includes(schemaItem.type));
       bookmarkState?.removeBookmarks(map(sections, 'name'));
-      setTimeout(() => workspaceState?.initSchema(schema), 0);
+      workspaceState?.initSchema(schema);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [schema, workspaceState]);
 
@@ -178,8 +184,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
           if (!canAddFBFields) { return; }
           if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
           saveSchemaTimer = setTimeout(() => {
-            workspaceState?.saveDocRev();
+            workspaceState?.saveDocRev(
+              workspaceState?.shouldPersistFormDataWithSchema ? formState?.getValues() : undefined,
+            );
             saveSchemaTimer = undefined;
+            workspaceState?.setShouldPersistFormDataWithSchema(false);
           }, 250);
         },
       );

@@ -1,5 +1,6 @@
 export const ownerFieldsMapping = {
   'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
+  'document.docId': ['id', 'document.id'],
 };
 
 export const cellOverflowFields = [

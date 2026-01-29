@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { DataProps } from '../../../state/ducks/common/types';
 import Text from '../../components/Text';
 import { ReferenceSummary as Model } from '../utils/types';
-import { styles } from './references.styles';
+import useStyles from './references.styles';
 
 interface OwnProps {
   label: string
@@ -20,7 +20,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   fromReferencedBy,
   canEdit,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const referencesRenderer = () =>
     dataProp.map((reference: Model, index) => (
       <Box component="span" key={reference.id} data-cy={label}>
