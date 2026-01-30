@@ -9,6 +9,9 @@ const useStyles = makeStyles(() =>
     dialogContent: {
       overflowY: 'unset',
     },
+    paperContent: {
+      overflow: 'visible',
+    },
   }));
 
 interface FormSelectionDialogProps {
@@ -38,6 +41,7 @@ const FormSelectionDialog: React.FunctionComponent<FormSelectionDialogProps> = (
       cancelLabel={'transition.action.cancel'}
       onCancel={dialog.close}
       onClose={dialog.close}
+      PaperProps={{ className: classes.paperContent }}
       contentProps={{ className: classes.dialogContent }} >
       <AutocompleteField
         name="selectForm"
