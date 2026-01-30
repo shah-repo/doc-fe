@@ -192,7 +192,7 @@ const Training: React.FC<SettingsPanelProps> = (props) => {
               fullWidth={false}
               type="number"
             />
-            <Text message="administration.general.settings.training.reminders.custom.days" />
+            {translate('administration.general.settings.training.reminders.custom.days')}
           </Box>
         </Box>
       </Box>
