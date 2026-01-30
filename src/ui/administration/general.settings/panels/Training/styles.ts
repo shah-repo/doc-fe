@@ -40,6 +40,10 @@ export default makeStyles(theme => ({
     color: Colors.textGray,
     fontSize: 12,
   },
+  gracePeriodContainer: {
+    borderTop: `1px solid ${Colors.stroke}`,
+    paddingTop: theme.spacing(2),
+  },
   gracePeriodDescription: {
     display: 'flex',
     alignItems: 'center',
