@@ -167,7 +167,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       change.groupKey = groupKey;
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
-      console.log('isSmartRef', isSmartRef);
       const {
         label,
         placeholder = '',
@@ -303,7 +302,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       // LHRSTEP
       if (fbType === 'lhrstep') {
-        console.log('change.id', change.id, 'type', change?.fbSchemaItem?.type);
         const valueKey = change.field.split('.')[1].split('-');
         let label = '';
         const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
