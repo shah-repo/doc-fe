@@ -83,6 +83,9 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
 
   const handleDocIdBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value;
+    if (value === docIdEntered) {
+      return;
+    }
     if (!isShownOnDialog) {
       // Make a call to update the docId on the document
       if (documentId) {
