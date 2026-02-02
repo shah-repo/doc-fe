@@ -156,7 +156,8 @@ export function KendoPanel ({
         'defaultRevStage',
         'hiddenForCreationForUsersWithoutTagsFormatted',
         'group',
-        'active'].includes(field as string)) {
+        'active',
+        'numberingStyle'].includes(field as string)) {
         setDropDownState((prevState) => {
           const object = { ...prevState };
           let newValue: string;
@@ -349,6 +350,7 @@ export function KendoPanel ({
       defaultRevStage: dataItem.defaultRevStage,
       active: dataItem.active,
       equipmentEnforceProd: dataItem.equipmentEnforceProd,
+      numberingStyle: dataItem.numberingStyle,
     };
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {
