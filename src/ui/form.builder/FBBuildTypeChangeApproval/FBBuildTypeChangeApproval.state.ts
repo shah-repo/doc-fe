@@ -29,7 +29,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
 
   // MARK: @computed
   @computed public get getApprovals (): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER' && a.fieldId !== 'lhrStepApprovals');
+    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'SECTION' && a.fieldId !== 'lhrStepApprovals');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
       canRequest: this.isOwner && a.status === 'DRAFT',
