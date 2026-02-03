@@ -54,7 +54,7 @@ const columns: KendoColumn[] = [{
 {
   field: 'privateNumberPool',
   title: 'common.private.number.pool',
-  cell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: 'boolean',
   show: true,
   width: '110px',
