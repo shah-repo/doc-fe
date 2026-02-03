@@ -1,6 +1,7 @@
 import { isEmpty, isNull } from 'lodash';
 import React from 'react';
-import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBLHRBuildOptions } from '..';
+import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import useDialog from '../../hooks/useDialog';
 import { FBBuildTypeState } from './FBBuildType.state';
@@ -20,8 +21,11 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const [options, setOptions] = React.useState<LHRBuild[]>([]);
     const [refresh, setRefresh] = React.useState(false);
     const lhrBuildDialog = useDialog();
+    const approvalDialog = useDialog();
     const isDialogOpen = lhrBuildDialog.isOpen;
+    const isApprovalDialogOpen = approvalDialog.isOpen;
     const { formState, workspaceState } = FB.useStores();
+    const documentStatus = DocumentStatus.Draft;
 
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.buildType,
@@ -61,24 +65,45 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const onDialogActionClick = (action: 'cancel' | 'confirm') => {
       if (action === 'confirm') {
+        // Close first dialog and open approval dialog
+        lhrBuildDialog.close();
+        approvalDialog.open();
+      } else {
+        setDefaultValue(prevValue);
+        forceRerender();
+        formState?.getInputState(name ?? '')?.setRender();
+        setSelectedValue(undefined);
+        lhrBuildDialog.close();
+      }
+    };
+
+    const onApprovalDialogActionClick = (action: 'cancel' | 'confirm') => {
+      if (action === 'confirm') {
         formState?.setFieldValue(name, selectedValue?.id);
         formState?.setFieldAutosave(name);
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
+        formState?.getInputState(name ?? '')?.setRender();
+        setSelectedValue(undefined);
+        approvalDialog.close();
       } else {
         setDefaultValue(prevValue);
         forceRerender();
+        formState?.getInputState(name ?? '')?.setRender();
+        setSelectedValue(undefined);
+        approvalDialog.close();
       }
-      formState?.getInputState(name ?? '')?.setRender();
-      setSelectedValue(undefined);
-      lhrBuildDialog.close();
     };
 
     const forceRerender = () => {
       setRefresh((x) => !x);
     };
 
-    const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
+    const approvalTransition = () => {
+      // Placeholder for approval transition logic
+    };
+
+    const isDisabled = false;// (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
 
     return Component({
       ...(props as T),
@@ -87,12 +112,16 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       prevValue,
       options,
       isDialogOpen,
+      isApprovalDialogOpen,
       onChange,
       onDialogActionClick,
+      onApprovalDialogActionClick,
       refresh,
       isDisabled,
       name,
       optionId,
+      documentStatus,
+      approvalTransition,
     });
   };
 

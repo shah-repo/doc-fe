@@ -1,101 +1,102 @@
 import { Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import React, { lazy, Suspense } from 'react';
-import { FB, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInput, FBMapWrapper, FBProvider, FBText } from '..';
-import Loader from '../../components/common/kendo/Loader';
+import React from 'react';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText, Owner } from '..';
+import { MomentFormats, useDate } from '../../../common/utils/date';
+import { ApprovalStatus } from '../../../state/ducks/common/types';
+import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
-import Colors from '../../layout/theme/utils/colors';
-import { FBFontStyle } from '../styles/FBFont.styles';
-import FBBuildTypeChangeApprovalSocket from './FBBuildTypeChangeApproval.socket';
-import { FBBuildTypeChangeApprovalBody, FBBuildTypeChangeApprovalProps, FBBuildTypeChangeApprovalStatusIdent } from './FBBuildTypeChangeApproval.types';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
+import ApprovalApprovedGroup from './ApprovalApprovedGroup';
+import { FBBuildTypeChangeApprovalProps } from './FBBuildTypeChangeApproval.types';
 import { withFBBuildTypeChangeApproval } from './FBBuildTypeChangeApproval.wrap';
 
-const LazyFBApprovalAudit = lazy(async () => await import('..').then(module => ({ default: module.FBApprovalAudit })));
-
-const FBBuildTypeChangeApprovalChild: React.FunctionComponent<FBBuildTypeChangeApprovalProps> = ({
+const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprovalProps> = ({
   onApproveClick,
-  requestAllApprovals,
-  label = 'form.builder.approvers',
+  dialogState,
+  requestApproval,
   approvals = [],
+  approvalTransition,
   currentUser,
-  isApproved,
-  isPreview,
-  index,
-  type,
-  options,
-  loading,
-  name,
-  shouldShowApprovals,
-  shouldShowRequestAllApprovals,
   disabled,
-}) =>
-  <>
-    <Box
-      py={1}
-      mb={4}
-      mt={1}
-      display="flex"
-      border={1}
-      borderLeft={0}
-      borderRight={0}
-      borderTop={0}
-      borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
-    >
-      {isApproved
-        ? (<>
-          <CheckCircleIcon style={{ color: Colors.light_green }} />
-          <FBText locale="form.builder.approved" />
-        </>)
-        : (<>
-          <ErrorIcon style={{ color: Colors.latest_red_varient }} />
-          <Box ml={1} width="100%" display="flex" mt={0.3}>
-            <FBText
-              boxProps={{
-                flexGrow: 1, fontSize: '14px', fontWeight: '600', color: Colors.latest_red_varient, lineHeight: '15px',
-              }}
-              locale="form.builder.approval.pending"
-            />
-            <FBText
-              boxProps={{
-                fontSize: '12px', fontWeight: '400', color: Colors.almost_black, lineHeight: '15px',
-              }}
-              locale="form.builder.approval.instruction"
-            />
-          </Box>
-        </>)
-      }
+  docId,
+  documentStatus,
+  groups = {},
+  isIncluded,
+  label,
+  name,
+  ownerId,
+  renderOption,
+  loading,
+  inlineApprovalExists,
+  isAlphaReleased,
+  disabledOptions,
+  disableChipDelete,
+  owners,
+  showFieldOwnersWarning,
+  isContributorIncluded,
+  autosave,
+  approvalApprovedGroup,
+  ...props
+}) => {
+  const { getFormattedDateString } = useDate();
 
-    </Box>
-    {options && !isPreview && (
-      <FBAutocomplete
-        {...{ label, disabled, options, loading }}
-        name={`fb-btca-${name}`}
-        key={approvals.map(approval => approval.id).join('-')}
-        multiple
-        withState
-        autosave={false}
-        optionLabelKey="user.email"
-        labelPrefixRoot="user.name"
-        optionValueKey="id"
-        groupByKey="listGroup"
-        gutter={false}
-      />
-    )}
-    <Box my={1}>
-      <Suspense fallback={<Loader />}>
-        <LazyFBApprovalAudit {...{ name, type, index }} />
-      </Suspense>
-    </Box>
-    {shouldShowApprovals && (
-      <Box mt={approvals.length ? 1 : 0}>
-        <FBMapWrapper<FBBuildTypeChangeApprovalBody[]> collection={approvals}>
-          {(approval: FBBuildTypeChangeApprovalBody, index) => {
+  return (
+    <FBProvider {...{ dialogState }}>
+      <FBDialog />
+      <FBInput {...props} {...{ name, autosave }} type="approvals">
+        <FBSection
+          name={`fb-approvals-section-${name}`}
+          {...{ label }}
+        />
+        <FBAutocompleteAsync
+          placeholder="form.builder.start.typing.list"
+          label="form.builder.approvers"
+          name={`fb-approvals-${name}`}
+          optionId={FBAutocompleteAsyncOption.availableApprovers}
+          withState
+          gutter={false}
+          multiple={true}
+          autosave={false}
+          {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
+        />
+        <Box display="flex" flexWrap="wrap" my={2} mt={1}>
+          {approvalApprovedGroup ? (
+            approvalApprovedGroup.map((groupName: string, index: number) => (
+              <ApprovalApprovedGroup groupName={groupName} key={index} isChecked />
+            ))
+          ) : (
+            <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
+              {(group: FBRequiredApprover, id) => (
+                <ApprovalApprovedGroup groupName={group.name} key={id} isChecked={isIncluded?.(group)} />
+              )}
+            </FBMapWrapper>
+          )}
+        </Box>
+        {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4} mt={1}>
+          <FBMapWrapper<Owner[]> collection={owners}>
+            {(owner: Owner, id) => (
+              <Box display="flex" key={`fb-approvals-${id}`} mr={2.5} >
+                <CheckCircleIcon
+                  data-cy={
+                  `fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? 'marked' : 'disabled'}`
+                  }
+                  color={isContributorIncluded?.(owner.id) ? 'primary' : 'disabled'}
+                />
+                <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
+              </Box>
+            )}
+          </FBMapWrapper>
+        </Box>}
+        <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
+          {(approval: FBInlineApprovalBody, index) => {
             const isApproved = isDocumentRevisionApproved(approval.status);
             return (
-              <Box mb={4}>
+              <Box
+                data-cy={isApproved ? 'approved-' + approval.approverName
+                  : 'not-approved-' + approval.approver?.user.name}>
                 <Box
-                  key={`fb-btca-info-${approval.id}-${index}`}
+                  key={`fb-ia-info-${approval.id}-${index}`}
                   pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
                   display="flex"
                   flexDirection="row"
@@ -108,63 +109,56 @@ const FBBuildTypeChangeApprovalChild: React.FunctionComponent<FBBuildTypeChangeA
                     <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
                   )}
                   {approval.status && (
-                    <Box>&nbsp;| {FBBuildTypeChangeApprovalStatusIdent[approval.status]}</Box>
+                    <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
                   )}
-                  {currentUser === approval.approver?.user.id
-                    && (
-                      <Box flexGrow={1} textAlign="right">
-                        <FBButton
-                          disabled={disabled || approval.status === 'APPROVED'}
-                          label="form.builder.request.approve"
-                          size="small"
-                          style={{ fontSize: '11px' }}
-                          onClick={() => onApproveClick?.(approval.id || '')}
-                        />
-                      </Box>
-                    )}
-                </Box>
-                <Box mt={1}>
-                  {isApproved ? approval.approverEmail : approval.approver?.user.email}
-                </Box>
-                {shouldShowRequestAllApprovals
-                  && <Box flexGrow={1} textAlign="right">
+                  {approval.reviewedAt && isApproved && (
+                    <Box>&nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}</Box>
+                  )}
+                  {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
+                    <>
+                      <Box> |</Box>
+                      <FBButton
+                        style={{ margin: 0 }}
+                        label="form.builder.request.approval"
+                        variant="text"
+                        color="primary"
+                        onClick={() => requestApproval?.(approval.id)}
+                      />
+                    </>
+                  )}
+                  {documentStatus === DocumentStatus.InReview
+                && approval.status === ApprovalStatus.Pending
+                && currentUser === approval.approver?.user.id
+                && (
+                  <Box flexGrow={1} textAlign="right">
+                    <StyledCancelFBButton
+                      {...{ disabled }}
+                      label="common.reject"
+                      size="small"
+                      style={{ fontSize: '11px' }}
+                      onClick={() => approvalTransition('reject', approval.id)}
+                    />
                     <FBButton
-                      style={{ margin: 0 }}
-                      label="form.builder.request.approval"
-                      variant="text"
-                      color="primary"
-                      onClick={() => requestAllApprovals?.(name)}
+                      {...{ disabled }}
+                      label="form.builder.request.approve"
+                      size="small"
+                      style={{ fontSize: '11px' }}
+                      onClick={() => onApproveClick?.(approval.id || '')}
                     />
                   </Box>
-                }
+                )}
+                </Box>
+                <Box mt={1} mb={4}>
+                  { isApproved ? approval.approverEmail : approval.approver?.user.email }
+                </Box>
               </Box>
             );
-          }}
+          }
+          }
         </FBMapWrapper>
-      </Box>
-    )}</>;
-
-const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprovalProps> = ({
-  dialogState,
-  name,
-  buildTypeChangeApprovalState,
-  rules,
-  ...props
-}) => {
-  const { workspaceState } = FB.useStores();
-  const { document } = workspaceState || {};
-  const EQname = document?.formInput?.['fb-requipment-maintenance-section'];
-  const isPMform = Boolean((document?.parentEquipment as any)?.formInput?.[EQname]?.preventativeForm);
-
-  props.disabled = props.disabled && !isPMform;
-  return (
-    <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: buildTypeChangeApprovalState }}>
-      <FBDialog />
-      <FBBuildTypeChangeApprovalSocket {...{ name }} />
-      <FBInput {...props} {...{ name, rules }} type="buildTypeChangeApproval" labelProps={FBFontStyle.labelProps}>
-        <FBBuildTypeChangeApprovalChild {...props} {...{ name }} />
       </FBInput>
     </FBProvider>
   );
 };
+
 export default withFBBuildTypeChangeApproval(FBBuildTypeChangeApproval);

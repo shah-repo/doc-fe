@@ -1,249 +1,132 @@
-import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from 'lodash';
+import { Box } from '@material-ui/core';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee } from '..';
-import { ApprovalStatus } from '../../../state/ducks/common/types';
+import { useHistory } from 'react-router-dom';
+import { FB, FBApprovalPasswordForm, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBRequiredApprover } from '..';
+import { SM } from '../../../App';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { Approval } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
-import { FBDataStoreApprovalKeys } from '../../documentRevision/forms/types';
-import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
-import FBDataStore from '../FBStore/FBDataStore';
+import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
+import { documentVersionPath } from '../../document.revision/utils/paths';
+import { checkIsDocumentReceivable, checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
+import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
+import { generateLHRsDocs } from '../FBLHRStep/utils';
+import FBStore from '../FBStore/FBStore';
 import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
-import { FBBuildTypeChangeApprovalBody, FBBuildTypeChangeApprovalOptions, FBBuildTypeChangeApprovalProps, FBBuildTypeChangeApprovalTransition, FBRequestApprovalTransitionBody } from './FBBuildTypeChangeApproval.types';
+import { FBBuildTypeChangeApprovalProps } from './FBBuildTypeChangeApproval.types';
 
 export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprovalProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    approvalTransition,
-    buildTypeChangeApprovalState,
-    dialogState,
-    editorConfig: { approvers, groups, roles } = {},
-    currentUser,
-    isApproved,
-    isPreview,
+    onApproveClick,
+    requestApproval,
     approvals,
-    disabled,
-    options,
     name = '',
     loading,
-    onApproveClick,
+    disabled,
+    documentStatus,
+    disabledOptions,
+    disableChipDelete,
+    docId,
+    approvalTransition,
+    groups,
+    renderOption,
+    isIncluded,
+    isContributorIncluded,
+    currentUser,
+    ownerId,
+    dialogState,
+    showFieldOwnersWarning,
+    owners,
+    approvalApprovedGroup,
     ...props
   }: T) => {
-    // MARK: @config
+    let isComponentVisible = false;
+    let inlineApprovalExists = false;
+    const history = useHistory();
+    const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState } = FB.useStores();
-    const dispatch = useDispatch();
-    dialogState = FB.useRef(FBDialogState);
     const {
-      id,
       document,
       changeRequest,
+      id,
       isOutput,
-      document: { version: docVersion = 1 } = {},
+      externalState: { company: { companyMine: { employees = [] } = {} } = {} } = {},
     } = workspaceState || {};
-    const docApprovals = FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals;
-    const userId = (
-      document?.owner?.user?.id
-      || changeRequest?.owner?.user?.id
-    );
+    const {
+      inputOwners = [],
+    } = document || {};
+    const ownerIds = uniq(Object.values(inputOwners as unknown as string));
+    owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => ({
+      name: `${owner?.user?.name} (${owner?.user?.email})`,
+      id: owner.id,
+    }));
+    const isReceivable = checkIsDocumentReceivable(document?.document?.documentType?.groupOptions);
+    const isWO = checkIsDocumentWO(document?.document?.documentType?.groupOptions);
 
-    isPreview = workspaceState?.mode === 'preview';
-    const fieldApprovals = useMemo(
-      () => docApprovals?.filter((approval) => approval.fieldId === name && approval.status !== ApprovalStatus.Abandoned) ?? [],
-      [docApprovals, name],
-    );
+    const {
+      owner: { user: { id: userId = '' } = {} } = {},
+    } = document || changeRequest || {};
+    const isAlphaReleased = isDocumentAlphaReleased(document?.revisionStage);
 
+    disabled = disabled || isUndefined(id) || loading;
+    if (document?.status === DocumentRevisionStatus.InReview
+      || changeRequest?.state === ChangeRequestStatus.InReview) {
+      disabled = false;
+    }
+    if (document?.status === DocumentRevisionStatus.Released) {
+      disabled = true;
+    }
+
+    const dispatch = useDispatch();
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
-    buildTypeChangeApprovalState = FB.useRef(FBBuildTypeChangeApprovalState, {
-      approvals: fieldApprovals,
-      isOwner,
-    });
-
-    const shouldShowRequestAllApprovals = isOwner && !isEmpty(buildTypeChangeApprovalState.getApprovals);
+    const outputId = isOutput ? id : null;
+    let docApprovals = document?.approvals || changeRequest?.approvals;
+    if (!docApprovals?.length && FBStore.selectedApprover.length) {
+      docApprovals = FBStore.selectedApprover;
+    }
+    const approvalsState = FB.useRef(
+      FBBuildTypeChangeApprovalState,
+      { id: outputId, approvals: docApprovals, isOwner },
+    );
     dialogState = FB.useRef(FBDialogState);
-    const shouldShowApprovals = document?.status === 'DRAFT' || document?.status === 'IN_REVIEW';
 
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: 'form.builder.password.prompt',
-        open: true,
-        content: (
-          <FBApprovalPasswordForm
-            {...{ approvalTransition, approvalId }}
-          />
-        ),
-      });
+    approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
+      if (!approvalId) { return; }
+      approvalsState?.applyTransition(transition, approvalId, { password });
     };
 
-    // MARK: @reaction
-    // Approvals sync
-    React.useEffect(() => reaction(
-      () => workspaceState?.approvals,
-      (data) => {
-        if (!difference(buildTypeChangeApprovalState?.approvals, data || [])) {
-          return;
-        }
-        const fieldApprovals = filter(data, { fieldId: name });
-        buildTypeChangeApprovalState?.setApprovals(fieldApprovals);
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // On transition
-    React.useEffect(() => reaction(
-      () => buildTypeChangeApprovalState?.transitionApi.data,
-      (data) => {
-        concatApprovals(data);
-        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.BUILD_TYPE_CHANGE_APPROVALS);
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // On requestApprovalTransition
-    React.useEffect(() => reaction(
-      () => buildTypeChangeApprovalState?.requestApprovalApi.data,
-      (data) => {
-        concatApprovals(data);
-        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.BUILD_TYPE_CHANGE_APPROVALS);
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // Form sync
-    React.useEffect(() => reaction(
-      () => formState?.inputState.get('fb-btca-' + name)?.value,
-      (fieldValue: string[]) => {
-        const formValue: string[] = map(buildTypeChangeApprovalState?.getApprovals, 'approver.id');
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // Init
-    const fieldValue = map(buildTypeChangeApprovalState?.getApprovals, 'approver.id');
-    formState?.setFieldValue(`fb-btca-${name}`, fieldValue);
-
-    // On add approver
-    React.useEffect(() => reaction(
-      () => buildTypeChangeApprovalState?.approvalApi.data,
-      (data) => {
-        concatApprovals(data);
-        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.BUILD_TYPE_CHANGE_APPROVALS);
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // Approvers list
-    React.useEffect(() => reaction(
-      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.availableApprovers),
-      (data) => {
-        if (!data) { return; }
-        const value = Array.from(map(approvers as string[], (i) => data.get(i)));
-        concatOptions(value, 'Approvers');
-      }, {
-        fireImmediately: true,
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-    // Groups list
-    React.useEffect(() => reaction(
-      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups),
-      (data) => {
-        if (!data) { return; }
-        map(groups as string[], (groupName: string) => {
-          const group = data.get(groupName);
-          concatOptions(group.joinedEmployees, group.name);
-        });
-      }, {
-        fireImmediately: true,
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // Roles list
-    React.useEffect(() => reaction(
-      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.approvalRoles),
-      (data) => {
-        if (!data) { return; }
-        const value = Array.from(map(roles as string[], (i) => data.get(i)));
-        map(value, (v) => concatOptions(v.joinedEmployees, v.name));
-      }, {
-        fireImmediately: true,
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // MARK: @helpers
-    function concatOptions (approvers: FBEmployee[], listGroup: string) {
-      const approversList = approvers.filter((employee) => employee.active);
-      let options = map(approversList, (o) => ({ ...o, listGroup }));
-      options = sortBy(unionBy(buildTypeChangeApprovalState?.options || [], options, 'id'), 'listGroup');
-      buildTypeChangeApprovalState?.setOptions(options as FBBuildTypeChangeApprovalOptions[]);
+    function includesApprover (group: FBRequiredApprover, approver: string): boolean {
+      return (group.joinedEmployees as string[]).includes(approver);
     }
 
-    function concatApprovals (approval?: FBBuildTypeChangeApprovalBody | FBBuildTypeChangeApprovalBody[]) {
-      if (!approval) { return; }
-      return [approval].flat().map((app) => {
-        const stateApprovals = filter(buildTypeChangeApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
-        buildTypeChangeApprovalState?.setApprovals(unionBy(stateApprovals, [app], 'id'));
-        return app;
-      });
-    }
+    React.useEffect(() => {
+      const fieldValue = map(approvalsState?.getApprovals, 'approver.id');
+      formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
 
-    function addApprover (ids?: string[]) {
-      if (!id) { return; }
-      map(ids, (approver) => buildTypeChangeApprovalState?.approvalBody({
-        assigned: { id: approver },
-        type: 'SECTION',
-        fieldId: name,
-        partOf: { id },
-      }, () => {
-        afterCallIsComplete();
-      }));
-    }
+      const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
+        && document && !document?.formTemplate
+        && !activeApprovals?.length) {
+        // Add Default owner as approver on Work order case
+        addApprover([authUser?.employeeId]);
+        formState?.setFieldValue(`fb-approvals-${name}`, [authUser?.employeeId], false);
+      }
 
-    function removeApprover (ids?: string[]) {
-      if (!ids) { return; }
-      map(ids, (approver) => {
-        const approval = find(buildTypeChangeApprovalState?.getApprovals, (a) => a.approver?.id === approver);
-        buildTypeChangeApprovalState?.approvalTransition('abandon', (approval as FBBuildTypeChangeApprovalBody)?.id, undefined, () => {
-          afterCallIsComplete();
-        });
-      });
-    }
-
-    function afterCallIsComplete () {
-      const { id } = workspaceState || {};
-      if (!id) { return; }
-      workspaceState?.saveDocRev(formState?.getValues());
-      dispatch(documentRevisionsActions.loadAudit(id));
-    }
-
-    function requestAllApprovals (id?: string) {
-      if (!id) { return; }
-      const body = {
-        docRev: pick(workspaceState?.document, 'id'),
-      } as FBRequestApprovalTransitionBody;
-      buildTypeChangeApprovalState?.requestApprovalTransition('pending_by_field', id, body, () => {
-        const id = workspaceState?.id;
-        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
-      });
-      workspaceState?.saveDocRev(formState?.getValues());
-    }
-
-    // MARK: @methods
-    approvalTransition = (transition: FBBuildTypeChangeApprovalTransition, id?: string, password?: string) => {
-      if (!id) { return; }
-      buildTypeChangeApprovalState?.approvalTransition(transition, id, { password }, () => {
-        const { documentId } = workspaceState || {};
-        documentId && buildTypeChangeApprovalState?.getDocument(documentId);
-      });
-    };
+      formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
@@ -253,49 +136,230 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       });
     };
 
+    // On add approver
+    React.useEffect(() => reaction(
+      () => approvalsState?.approvalApi.data,
+      (data) => {
+        if (!data) { return; }
+        document?.approvals?.push(data as Approval);
+        FBStore.selectedApprover.push(data as Approval);
+        concatApprovals(data);
+        // Automatically request approval for newly added approver
+        if (data.id && requestApproval) {
+          requestApproval(data.id);
+        }
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // On transition
+    React.useEffect(() => reaction(
+      () => approvalsState?.transitionApi.data,
+      (data) => {
+        if (
+          isReceivable
+          && data?.poDocId && data?.poDocRevision
+        ) {
+          localStorage.setItem('reOpenedPOInfo', JSON.stringify({ id: data?.poDocId, revId: data?.poDocRevision }));
+        }
+        concatApprovals(data);
+        if (data?.status === DocumentStatus.Draft) {
+          window.location.reload();
+        }
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    function concatApprovals (approval?: FBInlineApprovalBody) {
+      if (!approval) { return; }
+      if (approval.status === ApprovalStatus.Approved
+        && (document?.document.documentType.documentTypeName === 'LHR Step' || document?.document.documentType.group === DocTypeGroups.PI_INSTANCE)) {
+        const values = generateLHRsDocs(_documentRevisionFormState?.documentRevision);
+        history.push(documentVersionPath(values?.docRevId ?? '', values?.documentId ?? ''), { toTabId: 'details' });
+      }
+      if (
+        approval.status
+        && [ApprovalStatus.Rejected, ApprovalStatus.Approved].includes(
+          approval.status as ApprovalStatus,
+        )
+      ) {
+        window.location.reload();
+      } else {
+        const stateApprovals = filter(
+          approvalsState?.approvals,
+          (a) => a.approver?.id !== approval.approver?.id,
+        );
+        approvalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
+      }
+    }
+
+    requestApproval = (id?: string) => {
+      if (!id) { return; }
+      approvalsState?.applyTransition('pending', id);
+    };
+
+    React.useEffect(() => reaction(
+      () => formState?.newValues.get(`fb-approvals-${name}`),
+      (fieldValue: string[]) => {
+        if (workspaceState?.isPreview) {
+          return;
+        }
+        const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
+        addApprover(difference(fieldValue, formValue));
+        removeApprover(difference(formValue, fieldValue));
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    function addApprover (ids?: string[]) {
+      if (!id) { return; }
+      map(ids, (approver) => approvalsState?.addApproval({
+        assigned: { id: approver },
+        type: 'SECTION',
+        fieldId: name,
+        partOf: { id },
+      }, () => {
+        const { id } = workspaceState || {};
+        if (!id) { return; }
+        dispatch(documentRevisionsActions.loadAudit(id));
+        if (!workspaceState?.autosave) { return; }
+        workspaceState?.saveDocRev(formState?.getValues());
+      }));
+    }
+
+    function removeApprover (ids?: string[]) {
+      if (!ids) { return; }
+      map(ids, (approver) => {
+        const deletedApproverIndex = findIndex(document?.approvals, (a) =>
+          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
+        const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
+        document?.approvals?.splice(deletedApproverIndex, 1);
+        const SelApprover = findIndex(FBStore.selectedApprover, (a) =>
+          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
+        FBStore.selectedApprover?.splice(SelApprover, 1);
+
+        if (document?.approvals?.[deletedApproverIndex]) {
+          document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
+        }
+        approvalsState?.applyTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          if (!workspaceState?.autosave) { return; }
+          workspaceState?.saveDocRev(formState?.getValues());
+        });
+      });
+    }
+
+    isIncluded = (group: FBRequiredApprover): boolean =>
+      group.joinedEmployees.some((employee) =>
+        approvals?.map((approval) => approval.approver?.id).includes(employee));
+
+    isContributorIncluded = (id: string): boolean => {
+      const values = formState?.inputState.get('fb-approvals-' + name)?.value;
+      return values?.includes(id);
+    };
+    // eslint-disable-next-line react/display-name
+    renderOption = (option: FBApprover) => {
+      const requiredGroups: string []
+        = compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ''));
+      return (
+        <Box display="flex" key={`fb-required-approver-${option.id}`}>
+          <Box fontWeight="fontWeightMedium">{option.user?.name}</Box>
+          &nbsp;({option.user?.email})
+          {!isEmpty(requiredGroups) && (
+            <Box>
+              &nbsp;{`- ${requiredGroups.join(', ')}`}
+            </Box>
+          )}
+        </Box>
+      );
+    };
+
     // MARK: @observer
     useObserver(() => {
-      options = buildTypeChangeApprovalState?.getOptions;
-      approvals = buildTypeChangeApprovalState?.getApprovals;
+      inlineApprovalExists = Boolean(_documentRevisionFormState?.documentRevision?.formDocument?.formTemplate?.schema
+        .some((e) => (!e.deleted && e.type === 'inlineapproval' as string)));
+
+      groups = approvalsState?.groups;
+      approvals = approvalsState?.getApprovals;
+
+      const isRevisionAfterA = document?.revisionStage !== 1
+        && (document?.revision !== 1 || document?.subRevision !== 0);
+
+      isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
+        && (!inlineApprovalExists || isRevisionAfterA);
 
       loading = (
-        buildTypeChangeApprovalState?.approvalApi.loading
-        || buildTypeChangeApprovalState?.transitionApi.loading
-        || buildTypeChangeApprovalState?.documentApi.loading
+        approvalsState.loading
+        || approvalsState?.approvalApi.loading
+        || approvalsState?.transitionApi.loading
       );
 
-      disabled = loading
-        || !(isOutput && Boolean(id))
-        || document?.status === 'RELEASED'
-        || document?.status === 'VOIDED';
-      // || document?.revisionStage !== 1;
+      if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
+        && document && !document?.formTemplate) {
+        disabledOptions = [authUser?.employeeId];
+        disableChipDelete = true;
+      }
     });
 
-    // MARK: @final config
-    isApproved = (
-      docVersion > 1
-      && isEmpty(buildTypeChangeApprovalState.getApprovals)
-      && Boolean(formState?.getFieldValue(name))
-    ) ? some(fieldApprovals, (approval) => approval.status === 'APPROVED') || !fieldApprovals.length
-      : !isUndefined(find(approvals, { status: 'APPROVED' }));
+    // TODO: check what is going on with the types,
+    // had to add any, DocumentStatus and DocumentRevisionStatus are not the same
+    documentStatus = document?.status as any;
+
+    showFieldOwnersWarning = document?.document
+      .documentType
+      .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS)
+     && !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
+
+    if (!isComponentVisible) {
+      return null;
+    }
+
+    const approvedStates = [
+      DocumentRevisionStatus.Released,
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.Deprecated,
+    ];
+    const isApproved = documentStatus && approvedStates.includes(documentStatus as unknown as DocumentRevisionStatus);
+
+    if (isApproved) {
+      if (approvals?.length) {
+        approvalApprovedGroup = approvals.reduce((list: string[], approval) => {
+          if (approval.status !== ApprovalStatus.Approved) {
+            return list;
+          }
+          return union(list, approval.approverGroups);
+        }, []) as unknown as string[];
+      } else {
+        groups = {};
+      }
+    }
 
     return Component({
       ...(props as T),
-      approvalTransition,
-      requestAllApprovals,
+      requestApproval,
       dialogState,
-      buildTypeChangeApprovalState,
-      currentUser,
-      isApproved,
-      isPreview,
       approvals,
-      disabled,
-      loading,
-      options,
       name,
+      loading,
+      disabled,
+      documentStatus,
+      docId: id,
+      approvalTransition,
+      groups,
+      renderOption,
+      isIncluded,
+      currentUser,
+      ownerId,
+      inlineApprovalExists,
       onApproveClick,
-      shouldShowApprovals,
-      shouldShowRequestAllApprovals,
+      isAlphaReleased,
+      owners,
+      disabledOptions,
+      disableChipDelete,
+      showFieldOwnersWarning,
+      isContributorIncluded,
+      approvalApprovedGroup,
     });
   };
 

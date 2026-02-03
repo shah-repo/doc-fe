@@ -1,4 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import WarningIcon from '@material-ui/icons/Warning';
 import { isUndefined } from 'lodash';
 import React from 'react';
@@ -6,6 +7,7 @@ import { FBInput } from '..';
 import { SMText } from '../../../App';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
+import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBBuildTypeProps } from './FBBuildType.types';
 import { withFBBuildType } from './FBBuildType.wrap';
@@ -15,11 +17,15 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   defaultValue,
   options = [],
   isDialogOpen = false,
+  isApprovalDialogOpen = false,
   onChange,
   onDialogActionClick,
+  onApprovalDialogActionClick,
   refresh,
   isDisabled,
   name,
+  documentStatus,
+  approvalTransition,
   ...props
 }) => {
   return (
@@ -75,6 +81,38 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
             </Typography>
           </Box>
         </Box>
+      </Dialog>
+      <Dialog
+        hideCloseButton
+        title="form.builder.add.approvers"
+        open={isApprovalDialogOpen}
+        maxWidth="md"
+        fullWidth
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        onCancel={() => onApprovalDialogActionClick?.('cancel')}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        onConfirm={() => onApprovalDialogActionClick?.('confirm')}
+        cancelLabel="common.cancel"
+        confirmLabel="form.builder.send.for.approval"
+      >
+        <Box mb={3}>
+          <Typography variant="h6" style={{ fontWeight: 600, marginBottom: 16 }}>
+            Build Type Switch
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <Typography variant="body1">{defaultValue?.displayLabel}</Typography>
+            <Box mx={1}>
+              <ArrowRightAltIcon />
+            </Box>
+            <Typography variant="body1">{selectedValue?.displayLabel}</Typography>
+          </Box>
+        </Box>
+        <FBBuildTypeChangeApproval
+          name="buildTypeApprovals"
+          label="form.builder.approvers"
+          documentStatus={documentStatus}
+          approvalTransition={approvalTransition}
+        />
       </Dialog>
     </>
   );
