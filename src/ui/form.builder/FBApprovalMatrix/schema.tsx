@@ -23,12 +23,14 @@ interface Options {
   cellARHeaderClassName?: string
   cellARClassName?: string
   clearRightBorderClassName?: string
+  popupContainer?: React.RefObject<HTMLDivElement>
 }
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const {
     data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
+    popupContainer,
   } = options;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
@@ -70,6 +72,9 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownCellTemplate
       {...props}
       data={NUMBERING_STYLE_OPTIONS}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
     />
   );
 
@@ -85,6 +90,9 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownCellTemplate
       {...props}
       data={internalTypeOptions}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
     />
   );
 
@@ -101,6 +109,18 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       {...props}
       emptyLabel={DEFAULT_CATEGORY_LABEL}
       data={CATEGORY_OPTIONS}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
+    />
+  );
+
+  const StatusCellRenderer: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <StatusCellTemplate
+      {...props}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
     />
   );
 
@@ -112,7 +132,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: StatusCellTemplate as CellTemplate<FBApprovalMatrixItem>,
+      template: StatusCellRenderer,
       locked: true,
       width: 140,
     },

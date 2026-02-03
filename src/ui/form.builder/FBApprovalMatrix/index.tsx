@@ -29,8 +29,10 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
   children,
   dialogContentStyle,
   onDialogClose,
+  popupContainerRef,
 },
 ) => {
+  const classes = useStyles();
   if (!isDialog) {
     return <>{children}</>;
   }
@@ -40,12 +42,16 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
       fullScreen
       title="tabId.matrixdetails"
       onClose={onDialogClose}
+      PaperProps={{
+        className: classes.dialogPaper,
+      }}
       contentProps={{
         className: dialogContentStyle,
         dividers: true,
       }
       }
     >
+      <div ref={popupContainerRef} />
       {children}
     </Dialog>
   );
@@ -55,6 +61,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { asyncState } = React.useContext(FormHeaderContext) ?? {};
   const { workspaceState } = FB.useStores();
   const exportDialog = useDialog();
+  const popupContainerRef = React.useRef<HTMLDivElement>(null);
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
@@ -72,6 +79,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
+    popupContainer: popupContainerRef,
   });
 
   const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
@@ -133,6 +141,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
         isDialog={dialog.isOpen}
         dialogContentStyle={classes.dialogContentStyle}
         onDialogClose={dialog.close}
+        popupContainerRef={popupContainerRef}
       >
         {isLoading && <Loader />}
         <GridTable
