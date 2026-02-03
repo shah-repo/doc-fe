@@ -1,0 +1,101 @@
+import { isEmpty, isNull } from 'lodash';
+import React from 'react';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
+import useDialog from '../../hooks/useDialog';
+import { FBBuildTypeState } from './FBBuildType.state';
+import { FBBuildTypeProps } from './FBBuildType.types';
+
+export const withFBBuildType = <T extends FBBuildTypeProps>(
+  Component: React.FunctionComponent<T>,
+) => {
+  const Comp = ({
+    optionId,
+    name,
+    ...props
+  }: T) => {
+    const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
+    const [defaultValue, setDefaultValue] = React.useState<undefined | LHRBuild>(undefined);
+    const [prevValue, setPrevValue] = React.useState<undefined | LHRBuild>(undefined);
+    const [options, setOptions] = React.useState<LHRBuild[]>([]);
+    const [refresh, setRefresh] = React.useState(false);
+    const lhrBuildDialog = useDialog();
+    const isDialogOpen = lhrBuildDialog.isOpen;
+    const { formState, workspaceState } = FB.useStores();
+
+    const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.buildType,
+    });
+
+    React.useEffect(() => {
+      buildsAsync.load(true);
+    }, [buildsAsync]);
+
+    React.useEffect(() => {
+      const dispose = FBBuildTypeState.getBuildOptions((options) => {
+        const activeOptions = options.filter(item => item.isActive);
+        setOptions(activeOptions);
+        const selectedId = formState?.getFieldValue(name);
+        const value = options.find((opt) => opt.id === selectedId);
+        setPrevValue(value);
+        setDefaultValue(value);
+      });
+      return dispose;
+    }, [name, formState]);
+
+    const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
+      const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
+      const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
+      if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+        setSelectedValue(selectedLhrBuild);
+        lhrBuildDialog.open();
+      } else if (!isNull(event)) {
+        formState?.setFieldValue(name, selectedLhrBuild?.id);
+        formState?.setFieldAutosave(name);
+        formState?.getInputState(name ?? '')?.setRender();
+        setDefaultValue(selectedLhrBuild);
+        setPrevValue(selectedLhrBuild);
+        workspaceState?.saveDocRev(formState?.getValues());
+      }
+    };
+
+    const onDialogActionClick = (action: 'cancel' | 'confirm') => {
+      if (action === 'confirm') {
+        formState?.setFieldValue(name, selectedValue?.id);
+        formState?.setFieldAutosave(name);
+        setDefaultValue(selectedValue);
+        workspaceState?.saveDocRev(formState?.getValues());
+      } else {
+        setDefaultValue(prevValue);
+        forceRerender();
+      }
+      formState?.getInputState(name ?? '')?.setRender();
+      setSelectedValue(undefined);
+      lhrBuildDialog.close();
+    };
+
+    const forceRerender = () => {
+      setRefresh((x) => !x);
+    };
+
+    const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
+
+    return Component({
+      ...(props as T),
+      selectedValue,
+      defaultValue,
+      prevValue,
+      options,
+      isDialogOpen,
+      onChange,
+      onDialogActionClick,
+      refresh,
+      isDisabled,
+      name,
+      optionId,
+    });
+  };
+
+  Comp.displayName = 'withFBBuildType';
+  return Comp;
+};
