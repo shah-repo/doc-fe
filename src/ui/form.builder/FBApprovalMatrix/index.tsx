@@ -2,17 +2,21 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
+import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
 import { AsyncStatus } from '../../../state/types';
 import Loader from '../../components/common/kendo/Loader';
 import { Dialog } from '../../components/dialogs';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import { DamNumberingStyleRestrictions } from '../FBApprovalMatrixField/FBApprovalMatrixField.state';
 import useTableCriteria from '../FBApprovalMatrixRoles/utils';
 import ExportDAMDialog from './components/ExportUtils/ExportDAMDialog';
 import Grid from './components/Grid';
@@ -66,11 +70,34 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
   const dialog = useDialog();
+  const { approvalMatrixFieldState } = FB.useStores();
+
+  const loadRestrictions = useActionCreator(
+    documentTypeActions.fetchDamNumberingStyleRestrictions,
+  );
+
+  const async = useAsync({
+    onSuccess: (response) => {
+      approvalMatrixFieldState?.setNumberingStyleRestrictions(response as DamNumberingStyleRestrictions);
+    },
+  });
+
+  useEffect(() => {
+    if (!approvalMatrixFieldState?.numberingStyleRestrictions) {
+      async.start(loadRestrictions, async);
+    }
+  }, []);
+
+  console.log('approvalMatrixState?.numberingStyleRestrictions 2', approvalMatrixFieldState?.numberingStyleRestrictions);
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
   const isLoading = useObserver(
     () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
+  );
+
+  const numberingStyleRestrictions = useObserver(() =>
+  approvalMatrixFieldState?.numberingStyleRestrictions,
   );
 
   const schema = createSchema({
@@ -80,6 +107,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
     popupContainer: popupContainerRef,
+    numberingStyleRestrictions,
   });
 
   const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({

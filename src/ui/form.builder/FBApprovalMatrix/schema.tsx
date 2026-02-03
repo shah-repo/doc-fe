@@ -5,6 +5,7 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { DamNumberingStyleRestrictions } from '../FBApprovalMatrixField/FBApprovalMatrixField.state';
 import { FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import BooleanFilter from './components/BooleanFilter';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
@@ -13,6 +14,7 @@ import DropdownFilter from './components/DropdownFilter';
 import { createOption } from './components/Grid';
 import InputCellTemplate from './components/InputCellTemplate';
 import InputFilter from './components/InputFilter';
+import NamingStyleDropdownCellTemplate from './components/NamingStyleDropdownCellTemplate';
 import StatusCellTemplate from './components/StatusCellTemplate';
 import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL, NUMBERING_STYLE_OPTIONS } from './constants';
 import { FBApprovalMatrixRoleTitles } from './types';
@@ -24,6 +26,7 @@ interface Options {
   cellARClassName?: string
   clearRightBorderClassName?: string
   popupContainer?: React.RefObject<HTMLDivElement>
+  numberingStyleRestrictions?: DamNumberingStyleRestrictions
 }
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
@@ -31,6 +34,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
     popupContainer,
+    numberingStyleRestrictions,
   } = options;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
@@ -69,12 +73,13 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   );
 
   const NumberingStyleTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
-    <DropdownCellTemplate
+    <NamingStyleDropdownCellTemplate
       {...props}
       data={NUMBERING_STYLE_OPTIONS}
       popupSettings={{
         appendTo: popupContainer?.current!,
       }}
+      numberingStyleRestrictions={numberingStyleRestrictions}
     />
   );
 
@@ -179,7 +184,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       editable: true,
       filterCell: NumberingStyleFilter,
       template: NumberingStyleTemplate,
-      width: 150,
+      width: 180,
     },
     {
       id: 'training',

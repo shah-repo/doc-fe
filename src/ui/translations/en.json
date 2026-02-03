@@ -2513,6 +2513,7 @@
   "dam.sync.message.in.review.role.sub.label": "The changes will only be applied when you put the {docId} to DRAFT mode and then release it.",
   "dam.sync.message.released.role.sub.label": "Please revise and release your DAM to have Approval Roles match the General Settings/Approved Roles section",
   "dam.sync.message.out.of.sync": "Out of sync",
+  "dam.number.style.dropdown.customer.selected.info.message": "Once a customer is selected, the numbering style cannot be changed.",
   "administration.general.settings.md": "Material Disposition",
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
   "administration.general.settings.suppliers.asl.status": "ASL Status Configuration",
