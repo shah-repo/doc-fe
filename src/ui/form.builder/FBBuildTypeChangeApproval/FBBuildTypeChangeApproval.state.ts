@@ -1,11 +1,12 @@
 import { filter, isEmpty, map } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
-import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from '..';
+import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from '..';
 import { Approval } from '../../../state/ducks/common/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBBuildTypeChangeApprovalConstructor } from './FBBuildTypeChangeApproval.types';
 
-class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
+class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
 
@@ -16,7 +17,7 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
-  public constructor ({ id, approvals, isOwner }: FBApprovalsConstructor) {
+  public constructor ({ id, approvals, isOwner }: FBBuildTypeChangeApprovalConstructor) {
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
@@ -105,4 +106,4 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
   };
 }
 
-export default FBApprovalsState;
+export default FBBuildTypeChangeApprovalState;
