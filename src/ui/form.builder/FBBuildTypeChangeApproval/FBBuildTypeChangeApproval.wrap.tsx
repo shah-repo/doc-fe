@@ -144,6 +144,10 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         document?.approvals?.push(data as Approval);
         FBStore.selectedApprover.push(data as Approval);
         concatApprovals(data);
+        // Automatically request approval for newly added approver
+        if (data.id && requestApproval) {
+          requestApproval(data.id);
+        }
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -211,7 +215,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       if (!id) { return; }
       map(ids, (approver) => approvalsState?.addApproval({
         assigned: { id: approver },
-        type: 'MASTER',
+        type: 'SECTION',
         fieldId: name,
         partOf: { id },
       }, () => {
