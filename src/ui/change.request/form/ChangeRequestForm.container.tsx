@@ -1,8 +1,8 @@
 import { Formik, FormikProps } from 'formik';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import { useObserver } from 'mobx-react';
 import moment from 'moment';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
@@ -53,23 +53,29 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const { formState } = FB.useStores();
 
+  const storeFormInput = useObserver(() => {
+    const input = FBDataStore?.refreshData?.changeRequest?.formInput;
+    return input || undefined;
+  });
+
   const calcInitialValues = useMemo(() => {
-    const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
+    if (!storeFormInput) return initialValues;
+
+    if (isEqual(storeFormInput, initialValues.formInput)) {
+      return initialValues;
+    }
 
     return {
       ...initialValues,
-      formInput,
+      formInput: storeFormInput,
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialValues, FBDataStore?.refreshData]);
+  }, [initialValues, storeFormInput]);
 
-  useObserver(() => {
-    calcInitialValues.formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? calcInitialValues.formInput;
-  });
-
-  const formInput = useMemo(() =>
-    calcInitialValues ? cloneDeep(calcInitialValues.formInput) : {}
-  , [calcInitialValues]);
+  const formInput = useMemo(() => {
+    return calcInitialValues.formInput
+      ? cloneDeep(calcInitialValues.formInput)
+      : calcInitialValues.formInput;
+  }, [calcInitialValues.formInput]);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -87,7 +93,9 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
     ? changeRequest.formDocument?.formTemplate?.schema
     : chosenForm?.formTemplate?.schema;
 
+  useEffect(() => {
   _formState?.setMode(FBWorkspaceModeOptions.FORM);
+  }, [_formState]);
 
   const hasInitializedDefaults = React.useRef(false);
   const { convertDateTimeToUserTz } = useDate();
@@ -126,26 +134,41 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
     hasInitializedDefaults.current = true;
   }, []);
 
-  const render = (props: FormikProps<ChangeRequestFormValues>) => (
-    <ChangeRequestForm
-      formValues={props}
-      asyncState={asyncState}
-      changeRequest={changeRequest}
-      doNotPrompt={doNotPrompt}
-      setDoNotPrompt={setDoNotPrompt}
-      setMDTab={setMDTab}
-      changeOpenStatus={changeOpenStatus}
-      schema={schemaData}
-      mode={FBWorkspaceModeOptions.FORM}
-      withoutBottomBar={true}
-      autosave={autosaveEnabled}
-      _formState={_formState}
-      formInput={formInput}
-      hideSideBar={hideSideBar}
-      currentDocRevId={currentDocRevId}
-      inDialog={inDialog}
-      {...props}
-    />
+  const render = useCallback(
+    (props: FormikProps<ChangeRequestFormValues>) => (
+      <ChangeRequestForm
+        formValues={props}
+        asyncState={asyncState}
+        changeRequest={changeRequest}
+        doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
+        setMDTab={setMDTab}
+        changeOpenStatus={changeOpenStatus}
+        schema={schemaData}
+        mode={FBWorkspaceModeOptions.FORM}
+        withoutBottomBar={true}
+        autosave={autosaveEnabled}
+        _formState={_formState}
+        formInput={formInput}
+        hideSideBar={hideSideBar}
+        currentDocRevId={currentDocRevId}
+        inDialog={inDialog}
+      />
+    ),
+    [
+      asyncState,
+      changeRequest,
+      doNotPrompt,
+      setDoNotPrompt,
+      setMDTab,
+      schemaData,
+      autosaveEnabled,
+      _formState,
+      formInput,
+      hideSideBar,
+      currentDocRevId,
+      inDialog,
+    ],
   );
 
   return (

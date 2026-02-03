@@ -2,7 +2,7 @@ import { BoxProps } from '@material-ui/core';
 import { FormikProps } from 'formik';
 import { cloneDeep, isEqual, map } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
@@ -84,8 +84,19 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  useEffect(() => {
   _formState?.setMode(mode);
+  }, [_formState, mode]);
+
+  useEffect(() => {
   _formState?.setAutosave(autosave);
+  }, [_formState, autosave]);
+
+  useEffect(() => {
+    if (_tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)) {
+    setMDTab?.(true);
+    }
+  }, [_tabsState?.activeTabId]);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
@@ -117,29 +128,37 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
-  const values = useObserver(() => ({
-    ...formValues.values,
-    formInput: formState?.getValues(),
-  }));
+  const formInputValues = useObserver(() => {
+    const v = formState?.getValues();
+    if (!v) return v;
 
-  const isDirty = useObserver(() => _formState?.isDirty ?? false);
+    const { formDocument, ...rest } = v;
+    return rest;
+  });
 
   useEffect(() => {
-    if (inDialog) {
-      _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
+    const nextDirty = !isEqual(
+      formInputValues,
+    formValues.initialValues?.formInput,
+    );
+
+    if (_formState?.isDirty !== nextDirty) {
+    _formState?.setDirty(nextDirty);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    formInputValues,
+  formValues.initialValues?.formInput,
+  _formState,
+  ]);
 
-  useEffect(() => {
-    _formState?.setDirty(!isEqual(values, formValues.initialValues));
-  }, [_formState, formState, formValues.initialValues, values]);
-
-  if (_tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)) {
-    setMDTab?.(true);
-  }
+  const isDirty = _formState?.isDirty ?? false;
 
   const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
+
+  const memoizedChangeRequest = useMemo(() => {
+    if (!changeRequest) return changeRequest;
+    return cloneDeep(changeRequest);
+  }, [changeRequest?.crId, changeRequest?.updatedAt]);
 
   return (
     <SMForm
@@ -202,7 +221,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 isPortal={false}
                                 initialValues={formInput}
                                 formState={formState}
-                                changeRequest={cloneDeep(changeRequest)}
+                                changeRequest={memoizedChangeRequest}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
                                 schema={schema}
@@ -214,7 +233,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             && changeRequest && (
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
-                              changeRequest={cloneDeep(changeRequest)}
+                              changeRequest={memoizedChangeRequest}
                               autosave={autosave}
                               mode={mode}
                               asyncState={asyncState}
@@ -223,12 +242,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabIds.MATERIAL_DISPOSITION)
                             && <>
-                              <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                              <FBMaterialDisposition changeRequest={memoizedChangeRequest} {...{ setDoNotPrompt }} />
                               <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
                                 formState={formState}
-                                changeRequest={cloneDeep(changeRequest)}
+                                changeRequest={memoizedChangeRequest}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
                                 schema={schema}
@@ -242,7 +261,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               isPortal={false}
                               initialValues={formInput}
                               formState={formState}
-                              changeRequest={cloneDeep(changeRequest)}
+                              changeRequest={memoizedChangeRequest}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}
                               schema={schema}
