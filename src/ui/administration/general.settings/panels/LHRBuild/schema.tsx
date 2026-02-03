@@ -48,28 +48,45 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       id: 'calOrPm',
       field: 'calOrPm',
       title: 'administration.general.settings.build.type.allow.cal.or.pm',
-      headerTemplate: <span style={{ whiteSpace: 'normal', textAlign: 'center', display: 'block' }}>
-      {translate('administration.general.settings.build.type.allow.cal.or.pm')}
-    </span>,
+      headerCell: () => (
+        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+          {translate('administration.general.settings.build.type.allow.cal.or.pm')}
+        </span>),
       template: AutocompleteCellTemplate,
+      width: 200,
     },
     {
       id: 'lotQtyLessQtyNeeded',
       field: 'lotQtyLessQtyNeeded',
       title: 'administration.general.settings.build.type.allow.lot.qty.less.qty.needed',
+      headerCell: () => (
+        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+          {translate('administration.general.settings.build.type.allow.lot.qty.less.qty.needed')}
+        </span>),
       template: AutocompleteCellTemplate,
+      width: 200,
     },
     {
       id: 'qtyDiscrepancy',
       field: 'qtyDiscrepancy',
       title: 'administration.general.settings.build.type.allow.qty.discrepancy',
+      headerCell: () => (
+        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+          {translate('administration.general.settings.build.type.allow.qty.discrepancy')}
+        </span>),
       template: AutocompleteCellTemplate,
+      width: 200,
     },
     {
       id: 'lotSelection',
       field: 'lotSelection',
       title: 'administration.general.settings.build.type.allow.require.lot.selection',
+      headerCell: () => (
+        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+          {translate('administration.general.settings.build.type.allow.require.lot.selection')}
+        </span>),
       template: AutocompleteCellTemplate,
+      width: 200,
     },
     {
       id: 'actions',
