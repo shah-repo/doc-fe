@@ -1,4 +1,5 @@
 import { isEmpty, isNull } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBLHRBuildOptions } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
@@ -103,6 +104,19 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       // Placeholder for approval transition logic
     };
 
+    let showApprovalButtons = false;
+
+    useObserver(() => {
+      showApprovalButtons = workspaceState?.buildTypeChangeStatus() ?? false;
+    });
+
+    const onApprovalAction = (action: 'accept' | 'reject') => {
+      // TODO: Implement approval action logic
+      console.log(`Build type change ${action}ed`);
+      // You can add actual approval/rejection logic here
+      // For example: workspaceState?.handleBuildTypeApproval(action);
+    };
+
     const isDisabled = false;// (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
 
     return Component({
@@ -122,6 +136,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       optionId,
       documentStatus,
       approvalTransition,
+      showApprovalButtons,
+      onApprovalAction,
     });
   };
 

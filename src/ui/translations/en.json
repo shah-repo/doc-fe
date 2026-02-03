@@ -1490,6 +1490,8 @@
   "form.builder.start.typing.list": "Start typing to see the list...",
   "form.builder.request.approval": "Request approval",
   "form.builder.request.approve": "Approve",
+  "form.builder.accept.change": "Accept Change",
+  "form.builder.reject.change": "Reject Change",
   "form.builder.send.for.approval": "Send For Approval",
   "form.builder.part": "Part",
   "form.builder.lhrt.parameter": "LHRT Parameter",

@@ -3,11 +3,12 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import WarningIcon from '@material-ui/icons/Warning';
 import { isUndefined } from 'lodash';
 import React from 'react';
-import { FBInput } from '..';
+import { FBButton, FBInput } from '..';
 import { SMText } from '../../../App';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBBuildTypeProps } from './FBBuildType.types';
 import { withFBBuildType } from './FBBuildType.wrap';
@@ -26,6 +27,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   name,
   documentStatus,
   approvalTransition,
+  showApprovalButtons = false,
+  onApprovalAction,
   ...props
 }) => {
   return (
@@ -51,6 +54,23 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           getOptionLabel={option => option.displayLabel}
         />
       </FBInput>
+      {showApprovalButtons && (
+        <Box display="flex" justifyContent="flex-end" mt={2} style={{ gap: '12px' }}>
+          {console.log('Rendering buttons - showApprovalButtons is:', showApprovalButtons)}
+          <StyledCancelFBButton
+            label="form.builder.reject.change"
+            size="medium"
+            onClick={() => onApprovalAction?.('reject')}
+            data-cy="build-type-reject-change-button"
+          />
+          <FBButton
+            label="form.builder.accept.change"
+            size="medium"
+            onClick={() => onApprovalAction?.('accept')}
+            data-cy="build-type-accept-change-button"
+          />
+        </Box>
+      )}
       <Dialog
         hideCloseButton
         title="form.builder.build.title"

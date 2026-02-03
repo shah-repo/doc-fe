@@ -16,4 +16,6 @@ export type FBBuildTypeProps = FBAutocompleteAsyncProps & {
   isDisabled?: boolean
   documentStatus: DocumentStatus
   approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
+  showApprovalButtons?: boolean
+  onApprovalAction?: (action: 'accept' | 'reject') => void
 };
