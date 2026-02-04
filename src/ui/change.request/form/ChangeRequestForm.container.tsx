@@ -101,7 +101,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   const { convertDateTimeToUserTz } = useDate();
 
   useEffect(() => {
-    // This code was added to update form input fields for the date picker when the ‘set default current date’ flag is enabled. 
+    // This code was added to update form input fields for the date picker when the ‘set default current date’ flag is enabled.
     // It also helps avoid multiple API calls after creating the AR.
     if (hasInitializedDefaults.current || isEmpty(changeRequest?.formDocument?.id)) return;
 
