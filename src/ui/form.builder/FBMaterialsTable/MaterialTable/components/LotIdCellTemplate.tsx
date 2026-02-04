@@ -172,7 +172,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     setValue(option ?? { label: '', value: '', documentId: '' });
     setInputValue(undefined);
     const selectedLot = lots.find((lot) => lot.id === option?.value);
-    field && setFieldValue(field, option?.value);
+    field && setFieldValue(field, option?.value ?? '');
     setFieldValue('quantityOnHand', selectedLot?.precalc?.lot_on_hand_quantity);
     setFieldValue(IS_LOT_ADDITION, true);
     setFieldValue('parentPartId', dataItem.parentPartId);
