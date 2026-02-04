@@ -50,6 +50,7 @@ export type DocumentRevisionFormProps =
   workspaceState?: FBWorkspaceState
   isCreateUrl?: boolean
   isDAM?: boolean
+  isInternalTypeNumbering?: boolean
   dirty?: boolean
   isSliderView?: boolean
   inDialog?: boolean

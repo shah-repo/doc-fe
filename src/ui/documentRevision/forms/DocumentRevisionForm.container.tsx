@@ -295,6 +295,7 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
+        isInternalTypeNumbering,
       }}
     />
   );
