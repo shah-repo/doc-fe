@@ -13,7 +13,7 @@ export type Props = OwnProps;
 export const SummaryInfo: React.FunctionComponent<Props> = ({
   label, value, dataCy,
 }) => (
-  <div data-cy={dataCy}>
+  <div data-cy={dataCy} style={{ wordBreak: 'break-all' }}>
     {label
         && <>
           <Text translation={label} />:{' '}
