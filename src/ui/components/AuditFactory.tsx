@@ -19,6 +19,7 @@ import { documentTypeSelectors } from '../../state/ducks/documentRevisions/docum
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { userManagementSelectors } from '../../state/ducks/userManagement';
 import { ASLStatus } from '../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
@@ -248,6 +249,19 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             return (<div data-cy={dataCy}>{whereUserValue}</div>);
           } catch {
             return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+      },
+      approvalRoles () {
+        if (audit.field.includes('groups') && audit.field.endsWith('id')) {
+          const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
+            id: group.value,
+            name: group.label,
+          }));
+          const group = groups.find(item => item.id === auditValue);
+          if (group) {
+            return (<div data-cy={dataCy}>{group.name}</div>);
           }
         }
         return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
@@ -592,7 +606,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           let assignedTo = assignToUser;
-          if(FB.isUUID(assignToUser ?? '')) {
+          if (FB.isUUID(assignToUser ?? '')) {
             assignedTo = getUserDetails(assignToUser)?.user?.name;
           }
           if (audit.type.includes('ARRAY_ADDED')) {
