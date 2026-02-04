@@ -28,6 +28,11 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
   const selectedCompanyMobile = useSelector(companySelectors.getSelectedCompany);
+  const [inputValue, setInputValue] = React.useState<string>();
+
+  const onChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(value);
+  };
 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
@@ -48,7 +53,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       { autoClose: 15000 });
   };
   const companies = orderBy(employees, ['company.name'], ['asc'])
-    .filter((employee) => employee.active)
+    .filter((employee) => employee.active && (inputValue ? employee.company.name.toLocaleLowerCase().includes((inputValue?.toLowerCase())) : true))
     .map(
       (employee: Employee) => {
         const { company } = employee;
@@ -82,7 +87,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       },
     );
   return (
-    <SwitchCompanyPresenter numberOfCompanies={companies.length}>
+    <SwitchCompanyPresenter numberOfCompanies={companies.length} onChange={onChange} value={inputValue}>
       {companies}
     </SwitchCompanyPresenter>
   );
