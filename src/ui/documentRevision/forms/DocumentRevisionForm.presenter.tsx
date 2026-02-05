@@ -184,7 +184,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue('document.docId', proposedDocId);
     }
 
-    if (!isEmpty(documentTypeById?.defaultRevStage) && values.document?.docId === '') {
+    if (!isEmpty(documentTypeById?.defaultRevStage) && !values.id) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       _documentRevisionFormState?.setForceRender(value);
       setFieldValue('revisionStage', value);
