@@ -160,7 +160,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const documentId = documentRevision?.documentId;
   const docIdEditEnabled = !documentRevision
-    || (isDocRevStatusDraft && documentRevision?.version === 1 && isDocRevRelatedStatusNo);
+    || (isDocRevFirstDraft && isDocRevRelatedStatusNo && !inRestrictedEditMode);
 
   const initialDocId = initialValues.document?.docId !== ''
     ? initialValues.document?.docId : stripDocIdOfAcronym(values.document?.docId, documentTypeById?.documentTypeAcronym);
