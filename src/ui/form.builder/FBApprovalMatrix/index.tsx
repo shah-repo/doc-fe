@@ -88,8 +88,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     }
   }, []);
 
-  console.log('approvalMatrixState?.numberingStyleRestrictions 2', approvalMatrixFieldState?.numberingStyleRestrictions);
-
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
   const isLoading = useObserver(
