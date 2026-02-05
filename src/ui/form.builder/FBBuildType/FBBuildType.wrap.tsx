@@ -2,7 +2,7 @@ import { filter, isEmpty, isNull, unionBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
-import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition } from '..';
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBWorkspaceModeOptions } from '..';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
@@ -51,6 +51,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
+
+    const isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
 
     const currentApproverId = document?.approvals?.find(approval => approval.approver?.user.id === authUser.id)?.id;
 
@@ -189,7 +191,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       });
     };
 
-    const isDisabled = false;// (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
+    const isDisabled = workspaceState?.mode !== FBWorkspaceModeOptions.FORM || isBuildTypeChangeApprovalEnabled;
 
     return Component({
       ...(props as T),
