@@ -304,7 +304,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   };
 
   const onFormClick = () => {
-    if(isDisabled) {
+    if(isDisabled && !isDocumentRevisionReleased(status)) {
       createDocument();
     } else {
       const values = get(formik, 'values') as DocumentRevision;
