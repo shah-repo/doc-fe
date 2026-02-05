@@ -1,6 +1,6 @@
 import { InputAdornment } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -44,9 +44,12 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
   const formik = useFormikContext();
+
   const [docIdEntered, setDocIdEntered] = useState<string>(docId);
+  const savedDocIdRef = useRef(docId);
 
   useEffect(() => {
+    savedDocIdRef.current = docId;
     setDocIdEntered(docId);
   }, [docId]);
 
@@ -64,10 +67,12 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   const sendDocIdUpdateRequestAsync = useAsync({
     onSuccess: () => {
       setIsRequestInProgress(false);
+      savedDocIdRef.current = docIdEntered;
       docRevId && dispatch(documentRevisionsActions.reload(docRevId));
     },
     onError: (message: string | undefined) => {
       setIsRequestInProgress(false);
+      setDocIdEntered(savedDocIdRef.current);
       toastError(message);
     },
   });
