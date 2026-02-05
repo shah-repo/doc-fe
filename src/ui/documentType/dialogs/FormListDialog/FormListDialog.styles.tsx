@@ -59,5 +59,8 @@ export const styles = makeStyles((theme: Theme) =>
       position: 'relative',
       display: 'block',
     },
+    relativePos: {
+      position: 'relative',
+    },
   }),
 );

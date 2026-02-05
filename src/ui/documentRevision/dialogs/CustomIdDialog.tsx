@@ -59,7 +59,7 @@ const CustomIdDialog: React.FC<CustomIdDialogProps> = ({
               </Grid>
             </Grid>
           </DialogTitle>
-          <DialogContent classes={{ root: classes.dialogContent }} style={{ position: 'relative' }}>
+          <DialogContent classes={{ root: classes.dialogContent }} className={classes.relativePos}>
             {!isInternalTypeNumbering && (
               <>
                 <DocIdInputNew
