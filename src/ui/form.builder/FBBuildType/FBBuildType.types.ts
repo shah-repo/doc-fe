@@ -1,4 +1,4 @@
-import { FBAutocompleteAsyncProps, FBInlineApprovalTransition } from '..';
+import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalTransition } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 
@@ -18,4 +18,5 @@ export type FBBuildTypeProps = FBAutocompleteAsyncProps & {
   approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
   showApprovalButtons?: boolean
   onApprovalAction?: (action: 'accept' | 'reject') => void
+  dialogState?: FBDialogState
 };

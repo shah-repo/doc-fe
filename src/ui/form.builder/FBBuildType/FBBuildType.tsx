@@ -3,7 +3,7 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import WarningIcon from '@material-ui/icons/Warning';
 import { isUndefined } from 'lodash';
 import React from 'react';
-import { FBButton, FBInput } from '..';
+import { FBButton, FBDialog, FBInput, FBProvider } from '..';
 import { SMText } from '../../../App';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
@@ -29,10 +29,12 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   approvalTransition,
   showApprovalButtons = false,
   onApprovalAction,
+  dialogState,
   ...props
 }) => {
   return (
-    <>
+    <FBProvider {...{ dialogState }}>
+      <FBDialog />
       <FBInput
         {...props}
         {...{ defaultValue, showErrorMsg: isUndefined(defaultValue) }}
@@ -56,7 +58,6 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
       </FBInput>
       {showApprovalButtons && (
         <Box display="flex" justifyContent="flex-end" mt={2} style={{ gap: '12px' }}>
-          {console.log('Rendering buttons - showApprovalButtons is:', showApprovalButtons)}
           <StyledCancelFBButton
             label="form.builder.reject.change"
             size="medium"
@@ -134,7 +135,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           approvalTransition={approvalTransition}
         />
       </Dialog>
-    </>
+    </FBProvider>
   );
 };
 
