@@ -79,7 +79,7 @@ const CustomIdDialog: React.FC<CustomIdDialogProps> = ({
                 color="secondary"
                 className={classes.cancelButton}
                 onClick={closeDialog}
-                id="DocTypeListDialog-cancelButton"
+                id="CustomIdDialog-cancelButton"
                 data-cy="suggest-form-cancel-btn"
               >
                 <Text translation="common.cancel" />
@@ -89,7 +89,7 @@ const CustomIdDialog: React.FC<CustomIdDialogProps> = ({
                 variant="contained"
                 className={classes.submitButton}
                 onClick={e => handleSubmit(docId)}
-                id="DocTypeListDialog-submitButton"
+                id="CustomIdDialog-submitButton"
                 data-cy="suggest-form-submit-btn"
               >
                 <Text translation="common.confirm" />
