@@ -8,7 +8,7 @@ import { translate } from '../../../../../common/intl';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { Colors } from '../../../../layout/theme-next';
-import { DamNumberingStyleRestrictions } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.state';
+import { useDamRestrictions } from '../DamNumberingStyle/DamRestrictionsContext';
 import { DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
@@ -16,7 +16,6 @@ interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   defaultItem?: any
   emptyLabel?: string
   popupSettings?: DropDownsPopupSettings
-  numberingStyleRestrictions?: DamNumberingStyleRestrictions
 }
 
 const Styles = makeStyles((theme) => ({
@@ -44,17 +43,18 @@ const Styles = makeStyles((theme) => ({
 }));
 
 const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
-  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange, popupSettings, numberingStyleRestrictions } = props;
+  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange, popupSettings } = props;
   const { editable } = column;
   const classes = Styles();
   const mode = dataItem[MODE_FIELD];
   const path = field ?? '';
   const value = get(dataItem, path);
   const docTypeId = dataItem.docType.id;
+  const { restrictions } = useDamRestrictions();
   const {
     disabledDocTypeIds = [],
     customDocTypeIds = [],
-  } = numberingStyleRestrictions ?? {};
+  } = restrictions ?? {};
 
   const isDisabledDocType = disabledDocTypeIds.includes(docTypeId);
   const isCustomDocType = customDocTypeIds.includes(docTypeId);
@@ -88,7 +88,7 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
   }
   const tooltipMessage = isCustomDocType
     ? 'dam.number.style.dropdown.customer.selected.info.message'
-    : canBeModified
+    : canBeModified && !isDisabledDocType
       ? 'dam.number.style.dropdown.draft.info.message'
       : null;
 

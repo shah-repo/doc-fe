@@ -20,7 +20,6 @@ type DataType<T extends DataKey> =
 class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
   @observable public mode: FBApprovalMatrixFieldModes = FBApprovalMatrixFieldModes.NONE;
   public url = FBEndpoint.ApprovalMatrix;
-  @observable public numberingStyleRestrictions?: DamNumberingStyleRestrictions = undefined;
 
   public constructor ({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
@@ -131,10 +130,6 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
       return am;
     });
     set(this, 'data', { approvalRoles, approvalMatrix });
-  };
-
-  @action public setNumberingStyleRestrictions = (data: DamNumberingStyleRestrictions): void => {
-    set(this, 'numberingStyleRestrictions', data);
   };
 }
 
