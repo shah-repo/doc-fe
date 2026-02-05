@@ -62,10 +62,6 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
 
   const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);
 
-  if (disabled) {
-    console.log('dataItem', valueItem, dataItem.docType.name);
-  }
-
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
@@ -95,8 +91,6 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
     : canBeModified
       ? 'dam.number.style.dropdown.draft.info.message'
       : null;
-
-  console.log('valueItem', valueItem, defaultItem);
 
   return (
     <div className={classes.dropdownParentContainer}>
