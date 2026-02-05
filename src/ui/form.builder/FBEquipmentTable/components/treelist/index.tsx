@@ -179,6 +179,10 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
         type: values.type,
       };
 
+      if (isEBProcedure && !values[ADD_FIELD] && !isEmpty(values[EB_SUB_ITEMS_FIELD])) {
+        newEquipItem[EB_SUB_ITEMS_FIELD] = values?.[EB_SUB_ITEMS_FIELD]?.map((item) => omit(item, EB_FIELDS_TO_OMIT));
+      }
+
       if (!isEBProcedure) {
         newEquipItem.isEquipmentSpecification = isEquipmentSpecification;
       }
