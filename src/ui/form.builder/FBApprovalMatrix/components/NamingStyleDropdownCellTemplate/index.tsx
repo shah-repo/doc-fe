@@ -62,10 +62,6 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
 
   const valueItem = data.find((item) => item[DATA_ITEM_KEY] === value);
 
-  if (disabled) {
-    console.log('dataItem', valueItem, dataItem.docType.name);
-  }
-
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
 
   const handleChange: DropDownListProps['onChange'] = (event) => {
@@ -90,6 +86,11 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
         {label}
       </OverflowTooltip>);
   }
+  const tooltipMessage = isCustomDocType
+    ? 'dam.number.style.dropdown.customer.selected.info.message'
+    : canBeModified
+      ? 'dam.number.style.dropdown.draft.info.message'
+      : null;
 
   return (
     <div className={classes.dropdownParentContainer}>
@@ -104,8 +105,8 @@ const NamingStyleDropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> 
         popupSettings={popupSettings}
         disabled={disabled}
       />
-      {isCustomDocType && (
-        <Tooltip title={translate('dam.number.style.dropdown.customer.selected.info.message')} placement="top" arrow>
+      {tooltipMessage && (
+        <Tooltip title={translate(tooltipMessage)} placement="top" arrow>
           <span className={classes.infoIconContainer}>
             <FontAwesomeIcon icon={solid('circle-exclamation')} className={classes.infoIcon} />
           </span>
