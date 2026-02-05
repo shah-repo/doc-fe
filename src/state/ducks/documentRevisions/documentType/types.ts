@@ -523,6 +523,7 @@ export interface DocumentType {
   category?: string
   active?: boolean
   equipmentEnforceProd?: boolean
+  numberingStyle: DOCUMENT_NUMBERING_STYLE
 }
 
 interface DocumentForms {
