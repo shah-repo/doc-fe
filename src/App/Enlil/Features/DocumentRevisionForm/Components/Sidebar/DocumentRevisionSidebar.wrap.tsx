@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { DocumentRevisionSidebarProps, DocumentRevisionSidebarState, SM, SMProvider } from '../../../../..';
 import { authSelectors } from '../../../../../../state/ducks/auth';
 import { documentRevisionsSelectors } from '../../../../../../state/ducks/documentRevisions';
+import { DOCUMENT_NUMBERING_STYLE } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import { DOCUMENT_REVISION_OUTPUT_URL } from '../../../../../../ui/constants/urls';
@@ -36,9 +37,12 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     _documentRevisionSidebarState = SM.useRef(DocumentRevisionSidebarState);
     const { _documentRevisionFormState } = SM.useStores();
 
-    const { documentTypeId, documentId, docId } = _documentRevisionFormState || {};
+    const { documentTypeId, documentId, docId, numberingStyle, documentTypeAcronym } = _documentRevisionFormState || {};
     isNewOutput = match.path === DOCUMENT_REVISION_OUTPUT_URL;
     intl = useIntl();
+
+    const docIdToUse
+      = numberingStyle !== DOCUMENT_NUMBERING_STYLE.INTERNAL && documentTypeAcronym && docId ? `${documentTypeAcronym}${docId}` : docId;
 
     documentRevisions = useSelector((state: ApplicationState) => getDocumentRevisions(state, documentId || ''));
 
@@ -100,7 +104,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
             canAccess,
             isRecord,
             isNewOutput,
-            docId,
+            docId: docIdToUse,
             intl,
           }}
         />

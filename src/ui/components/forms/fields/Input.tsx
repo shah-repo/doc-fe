@@ -1,4 +1,4 @@
-import { BoxProps } from '@material-ui/core';
+import { BoxProps, FormHelperText } from '@material-ui/core';
 import { InputBaseProps as MuiInputProps } from '@material-ui/core/InputBase';
 import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import * as React from 'react';
@@ -15,6 +15,7 @@ interface InputOwnProps extends FieldOwnProps {
   dataCy?: string
   inputStyleProps?: string
   labelProps?: BoxProps
+  helpText?: string
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
@@ -27,6 +28,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   dataCy,
   inputStyleProps,
   labelProps,
+  helpText,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -37,14 +39,17 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
         required={false}
         inputProps={{ 'data-lpignore': lpignore, 'data-cy': dataCy, className: inputProps?.className }}
         {...fieldProps.field}
-        {...inputProps}
         onBlur={(evt) => {
           fieldProps.field.onBlur(evt);
           inputProps?.onBlur?.(evt);
           submitForm();
         }}
+        {...inputProps}
         className={inputStyleProps}
       />
+      <FormHelperText id="helpText"
+        style={{ lineHeight: '1.5em' }}
+      >{helpText}</FormHelperText>
     </Field>
   );
 };

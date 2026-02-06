@@ -14,6 +14,8 @@ import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip
 import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
 import useDialog from '../../hooks/useDialog';
 import useTableCriteria from '../FBApprovalMatrixRoles/utils';
+import { DamRestrictionsProvider } from './components/DamNumberingStyle/DamRestrictionsContext';
+import { useDamNumberingStyleRestrictions } from './components/DamNumberingStyle/useDamNumberingStyleRestrictions';
 import ExportDAMDialog from './components/ExportUtils/ExportDAMDialog';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
@@ -29,8 +31,10 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
   children,
   dialogContentStyle,
   onDialogClose,
+  popupContainerRef,
 },
 ) => {
+  const classes = useStyles();
   if (!isDialog) {
     return <>{children}</>;
   }
@@ -40,12 +44,16 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
       fullScreen
       title="tabId.matrixdetails"
       onClose={onDialogClose}
+      PaperProps={{
+        className: classes.dialogPaper,
+      }}
       contentProps={{
         className: dialogContentStyle,
         dividers: true,
       }
       }
     >
+      <div ref={popupContainerRef} />
       {children}
     </Dialog>
   );
@@ -55,6 +63,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { asyncState } = React.useContext(FormHeaderContext) ?? {};
   const { workspaceState } = FB.useStores();
   const exportDialog = useDialog();
+  const popupContainerRef = React.useRef<HTMLDivElement>(null);
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
@@ -66,12 +75,15 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
   );
 
+  const { restrictions } = useDamNumberingStyleRestrictions();
+
   const schema = createSchema({
     data,
     withoutStatus,
     clearRightBorderClassName: classes.clearRightBorder,
     cellARClassName: classes.cellAR,
     cellARHeaderClassName: classes.cellARHeader,
+    popupContainer: popupContainerRef,
   });
 
   const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
@@ -129,10 +141,12 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           </IconButton>
         </StyleTooltip>
       </Box>
+      <DamRestrictionsProvider value={{ restrictions }}>
       <FBGridTableContainer
         isDialog={dialog.isOpen}
         dialogContentStyle={classes.dialogContentStyle}
         onDialogClose={dialog.close}
+        popupContainerRef={popupContainerRef}
       >
         {isLoading && <Loader />}
         <GridTable
@@ -147,6 +161,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           onDataStateChange={dataStateChange}
         />
       </FBGridTableContainer>
+      </DamRestrictionsProvider>
       <ExportDAMDialog dialog={exportDialog} matrixTabDataState={dataState} />
     </Box>
   );
