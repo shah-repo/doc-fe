@@ -113,10 +113,8 @@ export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): J
                             className={classes.entry}
                             id={idGenerator(whereUsedEntry)}>
                             <p className={classes.mainContent}>
-                              <OverflowTooltip placement="top" arrow title={name}>
-                                <div className={classes.name}>
-                                  {name}
-                                </div>
+                              <OverflowTooltip placement="top" arrow title={name} maxLines={3} wrapperClassName={classes.name}>
+                                {name}
                               </OverflowTooltip>
                               <span className={classes.metadataInfo}> - Rev {displayRevision}</span>
                             </p>

@@ -117,10 +117,8 @@ export default function PartWhereUsedTree ({ docRevId }: { docRevId: string }): 
                               className={classes.entry}
                               id={idGenerator(whereUsedEntry)}>
                               <p className={classes.mainContent}>
-                                <OverflowTooltip placement="top" arrow title={name}>
-                                  <div className={classes.name}>
-                                    {name}
-                                  </div>
+                                <OverflowTooltip placement="top" arrow title={name} maxLines={3} wrapperClassName={classes.name}>
+                                  {name}
                                 </OverflowTooltip>
                                 <span className={classes.metadataInfo}> - Rev {revision}</span>
                               </p>
