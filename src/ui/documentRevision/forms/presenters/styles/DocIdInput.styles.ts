@@ -18,4 +18,13 @@ export default makeStyles((theme) => ({
   renderHtmlRoot: {
     marginBottom: theme.spacing(-2.5),
   },
+  outlinedInput: {
+    padding: '10px !important',
+    paddingLeft: '0px !important',
+    fontSize: 14,
+    paddingRight: '0px !important',
+  },
+  adornmentStart: {
+    marginRight: '0px !important',
+  },
 }));
