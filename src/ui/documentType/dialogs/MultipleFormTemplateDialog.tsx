@@ -95,6 +95,11 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
     }
   }, [selectedDocumentType]);
 
+  const handleCloseMultipleFormDialog = () => {
+    setSelectedDocumentType(undefined);
+    closeMultipleFormDialog();
+  };
+
   const checkForPart = (form: DocumentTypeByIdForm) => {
     const id = form.formTemplate?.schema?.find((item) => item.name === 'lhr-selected-part')?.editorConfig?.id;
     return parts.find((part) => part.document.id === id && part.status === DocumentRevisionStatus.Released);
@@ -150,7 +155,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       && <Dialog
         open={dialog.isOpen}
         onSubmit={preventPropagation}
-        onClose={closeMultipleFormDialog}
+        onClose={handleCloseMultipleFormDialog}
         classes={{ paper: classes.dialogPaper }}
       >
         {!shouldDisplayLoader ? (
@@ -225,7 +230,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     variant="text"
                     color="secondary"
                     className={classes.cancelButton}
-                    onClick={closeMultipleFormDialog}
+                    onClick={handleCloseMultipleFormDialog}
                     id="DocTypeListDialog-cancelButton"
                     data-cy="suggest-form-cancel-btn"
                   >
