@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
@@ -71,6 +72,9 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const classes = useStyles();
   const dialog = useDialog();
   const { approvalMatrixFieldState } = FB.useStores();
+
+  const location = useLocation();
+  const isNewVersion: boolean = location.pathname.includes('new-version');
 
   const loadRestrictions = useActionCreator(
     documentTypeActions.fetchDamNumberingStyleRestrictions,
@@ -175,7 +179,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
         <GridTable
           data={approvalMatrix}
           schema={schema}
-          disabled={disabled}
+          disabled={disabled || isNewVersion}
           generateNewItem={generateNewItem}
           onSave={handleSave}
           withoutStatus={withoutStatus}
