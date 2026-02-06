@@ -28,8 +28,6 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
 
   const docTypeId = dataItem?.id;
   const isDisabledDocType = disabledDocTypeIds.includes(docTypeId);
-  const disabled = isDisabledDocType;
-
   const dataValue = dataItem[field] ?? '';
   const dropDownData = NUMBERING_STYLE_OPTIONS;
 
@@ -46,6 +44,7 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
   };
 
   const isCustomerSelected = dataValue === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+  const disabled = isDisabledDocType || isCustomerSelected;
 
   const tooltipMessage = isCustomerSelected
     ? 'dam.number.style.dropdown.customer.selected.info.message'
