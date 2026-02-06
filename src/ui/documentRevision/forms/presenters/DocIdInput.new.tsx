@@ -117,10 +117,13 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   const inputProps = {
     id: 'document.docId',
     disabled: isDisabled,
-    startAdornment: <InputAdornment position="start">{documentAcronym}</InputAdornment>,
+    startAdornment: <InputAdornment position="start" classes={{ positionStart: classes.adornmentStart }}>{documentAcronym}</InputAdornment>,
     value: docIdEntered,
     onChange: handleDocIdChange,
     onBlur: handleDocIdBlur,
+    classes: {
+      input: classes.outlinedInput,
+    },
   };
 
   return (
