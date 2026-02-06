@@ -304,8 +304,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   };
 
   const onFormClick = () => {
-    const values = get(formik, 'values') as DocumentRevision;
-    idAsync.start(getDocRevByIds, values.document.documentType.id, idAsync);
+    if(isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
+      createDocument();
+    } else {
+      const values = get(formik, 'values') as DocumentRevision;
+      idAsync.start(getDocRevByIds, values.document.documentType.id, idAsync);
+    }
   };
 
   const createDocument = async (formDocument?: DocumentTypeByIdForm) => {
