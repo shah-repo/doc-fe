@@ -7,6 +7,7 @@ import { IWhereUsedTree } from '../../form.builder/FBBOM/components/treelist/int
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
+import OverflowTooltip from '../OverflowTooltip';
 import StatusChip from './StatusChip';
 import { IRelation } from './WhereUsed.interface';
 import { WhereUsedLoader } from './WhereUsedLoader';
@@ -116,7 +117,12 @@ export default function PartWhereUsedTree ({ docRevId }: { docRevId: string }): 
                               className={classes.entry}
                               id={idGenerator(whereUsedEntry)}>
                               <p className={classes.mainContent}>
-                                <span className={classes.name}>{name}</span><span className={classes.metadataInfo}> - Rev {revision}</span>
+                                <OverflowTooltip placement="top" arrow title={name}>
+                                  <div className={classes.name}>
+                                    {name}
+                                  </div>
+                                </OverflowTooltip>
+                                <span className={classes.metadataInfo}> - Rev {revision}</span>
                               </p>
                               <StatusChip status={status} />
                             </div>

@@ -50,6 +50,12 @@ export default makeStyles((theme) =>
     name: {
       color: Colors.dark_gray,
       fontWeight: 500,
+      display: 'inline-block',
+      width: 120,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      verticalAlign: 'bottom',
     },
     chip: {
       display: 'flex',

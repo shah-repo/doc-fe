@@ -6,6 +6,7 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
+import OverflowTooltip from '../OverflowTooltip';
 import StatusChip from './StatusChip';
 import { IRelation, IWhereUsedLot } from './WhereUsed.interface';
 import { WhereUsedLoader } from './WhereUsedLoader';
@@ -112,7 +113,12 @@ export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): J
                             className={classes.entry}
                             id={idGenerator(whereUsedEntry)}>
                             <p className={classes.mainContent}>
-                              <span className={classes.name}>{name}</span><span className={classes.metadataInfo}> - Rev {displayRevision}</span>
+                              <OverflowTooltip placement="top" arrow title={name}>
+                                <div className={classes.name}>
+                                  {name}
+                                </div>
+                              </OverflowTooltip>
+                              <span className={classes.metadataInfo}> - Rev {displayRevision}</span>
                             </p>
                             { lhrName && <p className={classes.metadataInfo}>{lhrName}</p> }
                             <StatusChip status={displayStatus} />
