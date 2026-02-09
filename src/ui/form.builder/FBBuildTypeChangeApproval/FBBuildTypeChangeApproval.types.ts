@@ -1,79 +1,37 @@
-import { FBApprovalsProps, FBBuildTypeChangeApprovalRole, FBEmployee, FBGroup, FBId, FBInputProps, FBProviderProps } from '..';
-import { Approval } from '../../../state/ducks/common/types';
-
-export interface FBBuildTypeChangeApprovalValue {
-  approvers?: string[] | FBEmployee[]
-  groups?: string[] | FBGroup[]
-  roles?: string[] | FBBuildTypeChangeApprovalRole[]
-  isApproved?: boolean
-}
+import { FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from '..';
+import { DocumentStatus } from '../../../state/ducks/documents/types';
+import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
 
 export type FBBuildTypeChangeApprovalProps =
-& Omit<FBInputProps, 'editorConfig'>
-& Pick<FBProviderProps, 'buildTypeChangeApprovalState' | 'dialogState'>
-& Pick<FBApprovalsProps, 'approvalTransition'>
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
+& FBAutocompleteAsyncProps
 & {
-  // Please use one method definition and pick it from the type directly to avoid multi changes
-  // approvalTransition?: (transition: FBBuildTypeChangeApprovalTransition, id?: string) => any;
-  requestAllApprovals?: (id?: string) => any
   onApproveClick?: (approvalId: string) => void
-  editorConfig?: FBBuildTypeChangeApprovalValue
-  approvals?: FBBuildTypeChangeApprovalBody[]
+  requestApproval?: (id?: string) => any
+  approvals?: FBInlineApprovalBody[]
+  approvalsState?: FBBuildTypeChangeApprovalState
+  approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
+  docId?: string
+  documentStatus: DocumentStatus
+  formState?: FBFormState
+  groups?: Record<string, FBRequiredApprover>
+  isIncluded?: (group: FBRequiredApprover) => boolean
+  ownerId?: string
   currentUser?: string
-  isApproved?: boolean
-  isPreview?: boolean
-  isOutput?: boolean
-  shouldShowApprovals?: boolean
-  shouldShowRequestAllApprovals?: boolean
+  inlineApprovalExists?: boolean
+  dialogState?: FBDialogState
+  isAlphaReleased?: boolean
+  owners?: Owner[]
+  showFieldOwnersWarning?: boolean
+  isContributorIncluded?: (id: string) => void
+  approvalApprovedGroup?: string[]
 };
 
-export type FBBuildTypeChangeApprovalOptions = FBEmployee & {
-  listGroup: string
+interface Owner {
+  name: string
+  id: string
+}
+
+export type FBBuildTypeChangeApprovalConstructor = FBInlineApprovalConstructor & {
+  id: string[]
 };
-
-type FBBuildTypeChangeApprovalType = 'MASTER' | 'SECTION';
-type FBBuildTypeChangeApprovalStatus = 'DRAFT' | 'PENDING' | 'ABANDONED' | 'APPROVED' | 'REJECTED';
-export type FBBuildTypeChangeApprovalTransition = 'abandon' | 'pending' | 'approve' | 'reject' | 'pending_by_field';
-
-export enum FBBuildTypeChangeApprovalStatusIdent {
-  DRAFT = 'DRAFT',
-  PENDING = 'PENDING',
-  ABANDONED = 'ABANDONED',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-  COMPLETED = 'COMPLETED',
-}
-
-export type FBBuildTypeChangeApprovalBody =
-& Omit<Approval, 'status' | 'assigned' | 'type' | 'partOf' | 'fieldId'>
-& {
-  reviewedAt?: string
-  id?: string
-  assigned?: FBId
-  type: FBBuildTypeChangeApprovalType
-  fieldId: string
-  partOf: FBId
-  status?: FBBuildTypeChangeApprovalStatus
-  approver?: FBEmployee
-  approverId?: string
-  approverName?: string
-  approverEmail?: string
-  approverGroup?: string[]
-  canRequest?: boolean
-  signatureGroupName?: string
-  poDocId?: string
-  poDocRevision?: string
-};
-
-export interface FBBuildTypeChangeApprovalTransitionBody {
-  password?: string
-}
-
-export interface FBRequestApprovalTransitionBody {
-  docRev: FBId
-}
-
-export interface FBBuildTypeChangeApprovalConstructor {
-  approvals?: FBBuildTypeChangeApprovalBody[]
-  isOwner?: boolean
-}

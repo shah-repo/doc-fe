@@ -1,74 +1,76 @@
-import { filter, map, uniqBy } from 'lodash';
+import { filter, isEmpty, map } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBRequestApprovalTransitionBody } from '..';
-import { Document } from '../../../state/ducks/documentRevisions/types';
+import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from '..';
+import { Approval } from '../../../state/ducks/common/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
-import { FBBuildTypeChangeApprovalBody, FBBuildTypeChangeApprovalConstructor, FBBuildTypeChangeApprovalOptions, FBBuildTypeChangeApprovalTransition, FBBuildTypeChangeApprovalTransitionBody } from './FBBuildTypeChangeApproval.types';
+import { FBBuildTypeChangeApprovalConstructor } from './FBBuildTypeChangeApproval.types';
 
-class FBBuildTypeChangeApprovalState {
-  // MARK: @observables
-  @observable public options?: FBBuildTypeChangeApprovalOptions[];
-  @observable approvals?: FBBuildTypeChangeApprovalBody[];
+class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
+  @observable public groups?: Record<string, FBRequiredApprover> = {};
+  @observable approvals?: FBInlineApprovalBody[];
 
   // MARK: @config
-  private isOwner?: boolean;
+  private readonly isOwner?: boolean;
 
-  // MARK: @api
-  public approversApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.availableApprovers });
-  public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.groups });
-  public rolesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.approvalRoles });
-  public approvalApi = new FBRequest<FBBuildTypeChangeApprovalBody, Partial<FBBuildTypeChangeApprovalBody>>(FBEndpoint.Approvals);
+  public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
-  new FBRequest<FBBuildTypeChangeApprovalBody, FBBuildTypeChangeApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
-  public requestApprovalApi =
-  new FBRequest<FBBuildTypeChangeApprovalBody[], FBRequestApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
-
-  public documentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
-
-  // MARK: @constructor
-  public constructor (props: FBBuildTypeChangeApprovalConstructor) {
-    this.initialApprovals(props);
+  public constructor ({ id, approvals, isOwner }: FBBuildTypeChangeApprovalConstructor) {
+    super();
+    this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
+    this.isOwner = isOwner;
+    if (!id) {
+      return;
+    }
+    this.fetchRequiredApprovals(id);
   }
 
   // MARK: @computed
-  @computed public get getApprovals (): FBBuildTypeChangeApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED');
-    return map(filtered, (a: FBBuildTypeChangeApprovalBody) => ({
+  @computed public get getApprovals (): FBInlineApprovalBody[] {
+    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
+    return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
       canRequest: this.isOwner && a.status === 'DRAFT',
     }));
   }
 
-  @computed public get getOptions (): FBBuildTypeChangeApprovalOptions[] {
-    return uniqBy(this.options, 'user.id');
-  }
-
-  // MARK: @actions
-  @action public setOptions = (options?: FBBuildTypeChangeApprovalOptions[]) =>
-    set(this, 'options', options);
-
-  @action public setApprovals = (approvals?: FBBuildTypeChangeApprovalBody[]) =>
-    set(this, 'approvals', approvals);
-
-  // MARK: @helpers
-  public initialApprovals = ({ approvals, isOwner }: FBBuildTypeChangeApprovalConstructor) => {
-    approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
-    this.setApprovals(approvals);
-    this.isOwner = isOwner;
-    const approvers = map(approvals, 'approver');
-    const options = map(approvers, (o) => ({ ...o, listGroup: 'Approvers' })) as FBBuildTypeChangeApprovalOptions[];
-    this.setOptions(options);
+  public fetchRequiredApprovals = (documentRevisions: string[] = []) => {
+    if (isEmpty(documentRevisions)) {
+      this.groups = {};
+      return;
+    }
+    this.setUrl(FBEndpoint.RequiredApprovers);
+    this.setBody({ 'ids[]': documentRevisions });
+    this.fetch();
   };
 
-  public approvalBody = (
-    body: Partial<FBBuildTypeChangeApprovalBody>,
+  public onSuccess () {
+    this.setGroups(this.data);
+    super.onSuccess();
+  }
+
+  private readonly setGroups = (data) => {
+    this.groups = (data || []).reduce((group, item) => {
+      group[item.id] = {
+        ...item,
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
+      };
+      return group;
+    }, {});
+  };
+
+  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
+    set(this, 'approvals', approvals);
+
+  public addApproval = (
+    approval: Partial<FBInlineApprovalBody>,
     callback?: () => any,
   ) => {
     this.approvalApi.set({
       url: FBEndpoint.Approvals,
-      body,
+      body: approval,
       method: 'post',
     }, (data, error) => {
       if (error) {
@@ -81,17 +83,17 @@ class FBBuildTypeChangeApprovalState {
     });
   };
 
-  public approvalTransition = (
-    transition: FBBuildTypeChangeApprovalTransition,
+  public applyTransition = (
+    transition: FBInlineApprovalTransition,
     id?: string,
-    body?: FBBuildTypeChangeApprovalTransitionBody,
+    body?: FBInlineApprovalTransitionBody,
     callback?: () => void,
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
-      body,
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
+      body,
       method: 'post',
     }, (data, error) => {
       if (error) {
@@ -100,34 +102,6 @@ class FBBuildTypeChangeApprovalState {
       this.transitionApi.data = data;
       this.transitionApi.onSuccess();
       callback?.();
-    });
-  };
-
-  public requestApprovalTransition = (
-    transition: FBBuildTypeChangeApprovalTransition,
-    id: string,
-    body: FBRequestApprovalTransitionBody,
-    callback?: () => void,
-  ) => this.requestApprovalApi.set({
-    body,
-    url: FBEndpoint.ApprovalsTransition,
-    urlValues: { id, transition },
-    method: 'post',
-  }, (data, error) => {
-    if (error) {
-      return this.requestApprovalApi.onError(error);
-    }
-    this.requestApprovalApi.data = data;
-    this.requestApprovalApi.onSuccess();
-    callback?.();
-  });
-
-  public getDocument = (id?: string) => {
-    if (!id) { return; }
-    this.documentApi.set({
-      url: FBEndpoint.Document,
-      urlValues: { id },
-      method: 'get',
     });
   };
 }

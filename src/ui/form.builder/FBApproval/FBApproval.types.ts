@@ -72,7 +72,7 @@ export interface FBInlineApprovalRole {
   joinedEmployees?: Employee[]
 }
 
-export interface FBBuildTypeChangeApprovalRole {
+interface FBBuildTypeChangeApprovalRole {
   id: string
   name: string
   joinedEmployees?: Employee[]

@@ -418,6 +418,11 @@ class FBWorkspaceState extends FBSchemaState {
   @action public deleteHiddenFieldByRules = (name: string): void => {
     this.hiddenFieldsByRules.delete(name);
   };
+
+  public buildTypeChangeStatus = () => {
+    const isBuildTypeChangeApprovalPending = this?.approvals?.filter(approval => approval?.type === 'SECTION' && approval?.fieldId === 'buildTypeApprovals' && approval?.status === 'PENDING');
+    return isBuildTypeChangeApprovalPending && isBuildTypeChangeApprovalPending.length > 0;
+  };
 }
 
 export default FBWorkspaceState;

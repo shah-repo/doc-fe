@@ -53,6 +53,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   startDateFieldName,
   endDateFieldName,
+  isBuildTypeChangeApprovalEnabled,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -127,7 +128,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   );
   const { documentType } = workspaceState?.document?.document || {};
   const isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
-  const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
+  const isDisabled = !isOutput || loading || !lhrBuildTypeExist || isBuildTypeChangeApprovalEnabled;
   const isPreviewForLHR = Boolean(isDocumentLHR || (workspaceState?.isPreview && isDocumentLHRT));
 
   return (
