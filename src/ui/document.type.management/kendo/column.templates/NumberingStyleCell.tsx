@@ -6,7 +6,7 @@ import { GridCellProps } from '@progress/kendo-react-grid';
 import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../common/intl';
-import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import useStyles from '../../../components/common/kendo.column.templates/ActiveDropdown.style';
 import { useDamRestrictions } from '../../../form.builder/FBApprovalMatrix/components/DamNumberingStyle/DamRestrictionsContext';
 import { NUMBERING_STYLE_OPTIONS } from '../../../form.builder/FBApprovalMatrix/constants';
@@ -23,6 +23,7 @@ interface NumberingStyleEditCellProps {
 const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataItem, field = '', onChange }) => {
   const { restrictions } = useDamRestrictions();
   const classes = useStyles();
+  const initialValue = dataItem.initialNumberingStyle;
 
   const { disabledDocTypeIds = [] } = restrictions ?? {};
 
@@ -43,10 +44,11 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
     });
   };
 
-  const isCustomerSelected = dataValue === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
-  const disabled = isDisabledDocType || isCustomerSelected;
+  const isInitiallyCustomerSelected
+  = initialValue === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+  const disabled = isDisabledDocType || isInitiallyCustomerSelected;
 
-  const tooltipMessage = isCustomerSelected
+  const tooltipMessage = isInitiallyCustomerSelected
     ? 'dam.number.style.dropdown.customer.selected.info.message'
     : isDisabledDocType
       ? null : 'dtm.number.style.dropdown.draft.info.message';
