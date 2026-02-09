@@ -68,5 +68,3 @@ export class FBBuildTypeState {
     });
   };
 }
-
-export default FBBuildTypeState;
