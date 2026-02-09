@@ -1,5 +1,6 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FB, FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
@@ -59,6 +60,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const { approvalMatrixFieldState } = FB.useStores();
+  const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
+
   const { getFormattedDateString } = useDate();
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
@@ -527,6 +531,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
         if (change.field.includes('groups')) {
           fbLabel = translate('form.builder.approving.groups');
+          const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
+          const roleMatch = groupPattern.exec(change.field);
+          if (roleMatch && roleMatch.length) {
+            const role = existingRoles.find(item => item.id === roleMatch[0]);
+            if (role) {
+              fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
+            }
+          }
         }
       }
 

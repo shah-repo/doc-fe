@@ -1227,6 +1227,7 @@
   "form.builder.add.another.role": "Add Another Role",
   "form.builder.approving.users": "Approving Users",
   "form.builder.approving.groups": "Approving Groups",
+  "form.builder.approving.groups.role": "Approving Groups of {role}",
   "form.builder.approving.roles.placeholder": "Start typing to see the list…",
   "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
   "form.builder.add.item": "Add item",
