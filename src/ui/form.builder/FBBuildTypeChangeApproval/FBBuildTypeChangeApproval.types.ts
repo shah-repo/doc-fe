@@ -2,13 +2,6 @@ import { FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalB
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
 
-export enum FBBuildTypeChangeApprovalStatusEndpoint {
-  APPROVE = 'approve',
-  REJECT = 'reject',
-  PENDING = 'pending',
-  ABANDON = 'abandon',
-}
-
 export type FBBuildTypeChangeApprovalProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
 & FBAutocompleteAsyncProps
@@ -34,7 +27,7 @@ export type FBBuildTypeChangeApprovalProps =
   approvalApprovedGroup?: string[]
 };
 
-export interface Owner {
+interface Owner {
   name: string
   id: string
 }
