@@ -146,7 +146,11 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   };
 
   const handleDocIdUpdated = (updatedDocId: string) => {
-    setDocId(`${selectedDocumentType?.documentTypeAcronym}${updatedDocId}`);
+    if (!updatedDocId.length) {
+      setDocId('');
+    } else {
+      setDocId(`${selectedDocumentType?.documentTypeAcronym}${updatedDocId}`);
+    }
   };
 
   return (
