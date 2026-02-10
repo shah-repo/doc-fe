@@ -278,12 +278,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       if (!lhrStepState?.stepLHRs?.formInput) { return; }
       lhrStepState.updateLHRStepDates(date, undefined);
       lhrStepState.saveLHRStep(lhrStepState.stepLHRs?.formInput);
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     const handleEndDateChange = (date?: string) => {
       if (!lhrStepState?.stepLHRs?.formInput) { return; }
       lhrStepState.updateLHRStepDates(undefined, date);
       lhrStepState.saveLHRStep(lhrStepState.stepLHRs?.formInput);
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     // MARK: @observer

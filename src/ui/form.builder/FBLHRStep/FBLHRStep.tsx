@@ -297,6 +297,18 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
                 onDateChange={handleStartDateChange}
+                stateProvider={{
+                  getValue: () => {
+                    if (!startDateFieldName) return undefined;
+                    return lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] as string | undefined;
+                  },
+                  setValue: (value) => {
+                    if (value !== undefined) {
+                      lhrStepState?.updateLHRStepDates(value, undefined);
+                    }
+                  },
+                  validate: () => lhrStepState?.validate(),
+                }}
               />
             </Box>
             <Box className={classes.lhrsDateWidthBox}>
@@ -304,6 +316,18 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}
                 onDateChange={handleEndDateChange}
+                stateProvider={{
+                  getValue: () => {
+                    if (!endDateFieldName) return undefined;
+                    return lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] as string | undefined;
+                  },
+                  setValue: (value) => {
+                    if (value !== undefined) {
+                      lhrStepState?.updateLHRStepDates(undefined, value);
+                    }
+                  },
+                  validate: () => lhrStepState?.validate(),
+                }}
               />
             </Box>
           </Box>

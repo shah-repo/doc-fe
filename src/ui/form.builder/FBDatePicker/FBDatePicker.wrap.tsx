@@ -12,7 +12,7 @@ import { FBDatePickerProps } from './FBDatePicker.types';
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
-) => {
+): React.FunctionComponent<T> => {
   const Comp = ({
     datePickerState,
     onDatePickerClick,
@@ -23,31 +23,47 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     editorProperties,
     name = '',
     defaultValue,
+    stateProvider,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
-    const initialValue = formState?.getFieldValue(name);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const getStateValue = stateProvider?.getValue ?? ((): string | undefined => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const value = formState?.getFieldValue(name);
+      return typeof value === 'string' ? value : undefined;
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const setStateValue = stateProvider?.setValue ?? ((val) => formState?.setFieldValue(name, val));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const validateState = stateProvider?.validate ?? (() => formState?.validate());
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
+    const initialValue = getStateValue();
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
-    const defaultCurrentDate = editorProperties?.includes('defaultCurrentDate') || false;
-    const disablePastDates = editorProperties?.includes('disablePastDates') || false;
-    const { id, isOutput } = workspaceState || {};
+    const defaultCurrentDate = editorProperties?.includes('defaultCurrentDate') ?? false;
+    const disablePastDates = editorProperties?.includes('disablePastDates') ?? false;
+    const { id, isOutput } = workspaceState ?? {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
     const { convertDateTimeToUserTz } = useDate();
 
     const save = debounce((date?: string) => {
       if (!date) { return; }
-      formState?.setFieldValue(name, date);
-      formState?.validate();
+      setStateValue(date);
+      validateState?.();
 
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!isUnderWorkspace) { return; }
+      // Only perform workspace operations if using default formState and field is under workspace
+      if (!stateProvider) {
+        const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+        if (!isUnderWorkspace) { return; }
 
-      if (workspaceState?.isChangeRequest) {
-        submitForm();
+        if (workspaceState?.isChangeRequest) {
+          submitForm();
+        }
+
+        workspaceState?.saveDocRev(formState?.getValues());
       }
-
-      workspaceState?.saveDocRev(formState?.getValues());
     }, 100);
 
     SM.reaction(
@@ -111,19 +127,25 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     onDatePickerClear = () => {
       datePickerState?.setValue(undefined);
-      formState?.omitFieldValue(name);
-      formState?.validate();
 
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!isUnderWorkspace) {
-        return;
+      if (stateProvider) {
+        setStateValue(undefined);
+        validateState?.();
+      } else {
+        formState?.omitFieldValue(name);
+        validateState?.();
+
+        const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+        if (!isUnderWorkspace) {
+          return;
+        }
+
+        if (workspaceState?.isChangeRequest) {
+          submitForm();
+        }
+
+        workspaceState?.saveDocRev(formState?.getValues());
       }
-
-      if (workspaceState?.isChangeRequest) {
-        submitForm();
-      }
-
-      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     return Component({
@@ -136,8 +158,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       onDateChange,
       editorProperties,
       disablePastDates,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       defaultValue,
       name,
+      stateProvider,
     });
   };
 

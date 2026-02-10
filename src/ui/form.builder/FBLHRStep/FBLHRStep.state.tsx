@@ -145,6 +145,23 @@ class FBLHRStepState {
     this.pendingDateUpdate = false;
   };
 
+  @action public validate = (): boolean => {
+    if (!this.stepLHRs) { return true; }
+
+    const startDate = this.stepLHRs.formInput?.[LHRS_START_DATE];
+    const endDate = this.stepLHRs.formInput?.[LHRS_END_DATE];
+
+    // If both dates are present, validate that end date is not before start date
+    if (startDate && endDate) {
+      // Assuming dates are in string format, compare them
+      if (endDate < startDate) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   public setMaterials = (materials) => set(this, 'materials', materials);
   public setEquipment = (equipment) => set(this, 'equipment', equipment);
   public setEditedParameters = (editedParameters) => set(this, 'editedParameters', editedParameters);
