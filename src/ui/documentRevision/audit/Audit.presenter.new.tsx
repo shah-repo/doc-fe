@@ -32,7 +32,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getapprovalMatrixFieldLabel, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -539,6 +539,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
             }
           }
+        }
+      }
+      if (fbType === 'approvalMatrix') {
+        const valueKey = last(change.field.split('.'));
+        if (valueKey === 'id') return;
+
+        fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
+        if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
         }
       }
 

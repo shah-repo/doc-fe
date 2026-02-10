@@ -1205,6 +1205,7 @@
   "form.builder.purchaseorder": "Purchase Order",
   "form.builder.poreceive": "Receive Purchase Order",
   "form.builder.approvalMatrix": "Approval Matrix",
+  "form.builder.approvalMatrix.field": "Approval Matrix {field}",
   "form.builder.documentRevisions": "Document Revisions",
   "form.builder.poApprovalMatrix": "PO Approval Matrix",
   "form.build.approvalMatrix.addRole": "Add Role",

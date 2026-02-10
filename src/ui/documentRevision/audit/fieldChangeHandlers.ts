@@ -239,3 +239,17 @@ export const getMaterialReplacementAuditField = (type: string): string => {
       type,
     });
 };
+
+export const getapprovalMatrixFieldLabel = (field: string): string => {
+  const fieldMapping = {
+    defaultTraining: 'Training',
+    documentType: 'Document Type',
+    acronym: 'Document Type Acronym',
+    active: 'Status',
+    category: 'Category',
+    group: 'Group',
+    name: 'Document Type Name',
+    needsSignature: 'Needs Signature',
+  };
+  return fieldMapping[field] ? translate('form.builder.approvalMatrix.field', { field: fieldMapping[field] }) : translate('form.builder.approvalMatrix');
+};
