@@ -38,9 +38,13 @@ const MaterialItem: React.FC<ItemProps<Material>> = ({ item: { lots, ...item }, 
   </ListItemText>
 </>);
 
-const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
+const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { lots, ...item }, classes }) => {
   const intl = useIntl();
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
+
+  const getFormattedDate = (date) => {
+    return date ? getFormattedDateString(convertDateTimeToUserTz(date, MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit) : translate('common.not.applicable');
+  };
 
   return (
     <>
@@ -68,6 +72,24 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
             }
           />
         )}
+      </ListItemText>
+      <ListItemText>
+        {lots?.map((lot: LotItem) => {
+          const { nextCalibration, nextPm } = lot;
+
+          return (<Chip
+            className={classes.chip}
+            key={lot.lotId}
+            size="small"
+            label={translate('form.builder.procedure.eq.materials.equip', {
+              ...lot,
+              partId: lot.partId ?? translate('common.not.applicable'),
+              nextCalibration: getFormattedDate(nextCalibration),
+              nextPm: getFormattedDate(nextPm),
+            })}
+          />
+          );
+        })}
       </ListItemText>
     </>
   );
