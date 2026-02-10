@@ -51,7 +51,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
   const isFreeSolo = isEBProcedure;
 
   useEffect(() => {
@@ -155,7 +155,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.calDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.cal.due', {
-                        date: getFormattedDateString(option.calDueDate, MomentFormats.BriefDate),
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.calDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -163,7 +163,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
                   {option.pmDueDate && (
                     <span>
                       {translate('form.builder.lhrs.procedure.select.equipment.option.pm.due', {
-                        date: getFormattedDateString(option.pmDueDate, MomentFormats.BriefDate),
+                        date: getFormattedDateString(convertDateTimeToUserTz(option.pmDueDate, MomentFormats.MonthDateYear), MomentFormats.BriefDate),
                       })}
                     </span>
                   )}
@@ -185,7 +185,7 @@ const EquipmentIdCell: React.FC<CustomTreeListCellProps> = (props) => {
     dataItem,
     field,
     equipmentOptions,
-    allowedEditEqOptions,
+    allowedEditEqOptions = [],
     addActualId,
     isDisabled,
     isEnableActualIdAddition,

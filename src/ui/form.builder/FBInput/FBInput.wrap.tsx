@@ -429,8 +429,6 @@ export const withFBInput = <T extends FBInputProps>(
       const selectedBuildTypeObj = buildTypes.find((item) => item.id === selectedBuildType);
       if (selectedBuildTypeObj?.internalType === FBLHRBuildOptions.Production) {
         inputState?.setIncludeNotes(false);
-      } else {
-        inputState?.setIncludeNotes(true);
       }
     }, [buildTypes]);
 

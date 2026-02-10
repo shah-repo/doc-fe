@@ -8,6 +8,8 @@ export interface customEQOptionType extends OptionType{
   calDueDate?: string
   pmDueDate?: string
   status?: string
+  docStatus?: string
+  category?: string
 }
 export interface CustomTreeListCellProps extends TreeListCellProps {
   isDisabled?: boolean
@@ -22,7 +24,8 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parentRevId?: string
   equipmentOptions: customEQOptionType[]
   releasedEquipmentOptions?: customEQOptionType[]
-  allowedEditEqOptions: customEQOptionType[]
+  filterEquipmentOptions?: customEQOptionType[]
+  allowedEditEqOptions?: customEQOptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
 }

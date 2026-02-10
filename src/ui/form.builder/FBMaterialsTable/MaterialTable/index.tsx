@@ -425,7 +425,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const lotItem = {
         id: selected.refId,
         title: '',
-        lotId: selected.lotId,
+        lotId: selected.lotId ?? selected.actualId,
         lotDocId: selected.lotDocId,
         parentPartId: selected.materialId,
         parentId: index !== -1 ? state.data[index].id : '',

@@ -21,6 +21,7 @@ export const TreeListSchema = ({
   isEnableActualIdAddition,
   isEBProcedure,
   releasedEquipmentOptions,
+  filterEquipmentOptions,
   onRowClick,
 }) => [
   {
@@ -30,7 +31,7 @@ export const TreeListSchema = ({
     expandable: true,
     locked: false,
     mainOrderIndex: 1,
-    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} />,
+    cell: (props) => <IDCell {...props} getItem={getItem} onClick={onRowClick} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} releasedEquipmentOptions={releasedEquipmentOptions} />,
     sortable: false,
   },
   {
@@ -39,7 +40,7 @@ export const TreeListSchema = ({
     title: translate('lhr.equipment.grid.heading.actual.id'),
     width: 150,
     mainOrderIndex: 2,
-    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} releasedEquipmentOptions={releasedEquipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} releasedEquipmentOptions={releasedEquipmentOptions} filterEquipmentOptions={filterEquipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
   },
   {
     field: 'eqStatus',
