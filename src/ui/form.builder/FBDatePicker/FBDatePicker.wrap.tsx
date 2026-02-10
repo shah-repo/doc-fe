@@ -19,6 +19,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     onDatePickerClose,
     onDatePickerClear,
     onChange,
+    onDateChange,
     editorProperties,
     name = '',
     defaultValue,
@@ -102,6 +103,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       const date = convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit);
       datePickerState?.setValue(date);
       save(date);
+      // Call custom onDateChange callback if provided
+      if (onDateChange) {
+        onDateChange(date);
+      }
     };
 
     onDatePickerClear = () => {
@@ -128,6 +133,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       onDatePickerClose,
       onDatePickerClear,
       onChange,
+      onDateChange,
       editorProperties,
       disablePastDates,
       defaultValue,

@@ -53,6 +53,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   startDateFieldName,
   endDateFieldName,
+  handleStartDateChange,
+  handleEndDateChange,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -294,12 +296,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <FBDatePicker
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
+                onDateChange={handleStartDateChange}
               />
             </Box>
             <Box className={classes.lhrsDateWidthBox}>
               <FBDatePicker
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}
+                onDateChange={handleEndDateChange}
               />
             </Box>
           </Box>

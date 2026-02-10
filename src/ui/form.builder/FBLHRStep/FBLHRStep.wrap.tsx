@@ -5,7 +5,7 @@ import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
 import { SM } from '../../../App';
-import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
+import { MomentFormats, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -61,21 +61,25 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const startDateFieldName = LHRS_START_DATE;
     const endDateFieldName = LHRS_END_DATE;
 
+    console.log('lhrstepState', index, lhrStepState);
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
     } else if (stepLHRs) {
-      const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
-      const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
+      const startDate = lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] || '';
+      const endDate = lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] || '';
+      console.log('Initial start and end dates from LHR Step:', { startDate, endDate });
 
-      if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
+      if (startDate && startDate !== lhrStepState.stepLHRs?.formInput?.[startDateFieldName]) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
-        formState?.setFieldValue(startDateFieldName, formattedStartDate);
+        lhrStepState.updateLHRStepDates(formattedStartDate, undefined);
+        console.log('Updated start date in LHR Step:', formattedStartDate);
       }
-      if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
+      if (endDate && endDate !== lhrStepState.stepLHRs?.formInput?.[endDateFieldName]) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
-        formState?.setFieldValue(endDateFieldName, formattedEndDate);
+        lhrStepState.updateLHRStepDates(undefined, formattedEndDate);
+        console.log('Updated end date in LHR Step:', formattedEndDate);
       }
     }
 
@@ -187,8 +191,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
       const disposer = reaction(
         () => [
-          formState?.inputState.get(startDateFieldName)?.value,
-          formState?.inputState.get(endDateFieldName)?.value,
+          lhrStepState?.stepLHRs?.formInput?.[startDateFieldName],
+          lhrStepState?.stepLHRs?.formInput?.[endDateFieldName],
         ],
         ([startDate, endDate]) => {
           if (!stepLHRs || !lhrStepState) { return; }
@@ -200,21 +204,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
           // Debounce the update to prevent multiple API calls
           timeoutId = setTimeout(() => {
-            // Re-check stepLHRs since it might have changed during the timeout
-            if (!stepLHRs || !lhrStepState) { return; }
-
-            // Check if there are actual changes before updating
-            const currentStartDate = stepLHRs.formInput?.[LHRS_START_DATE] as string | undefined;
-            const currentEndDate = stepLHRs.formInput?.[LHRS_END_DATE] as string | undefined;
-
-            // Convert form dates to ISO format for comparison
-            const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
-            const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
-
-            // Only update if there are actual changes
-            if (isoStartDate !== currentStartDate || isoEndDate !== currentEndDate) {
-              lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate);
-            }
+            lhrStepState.saveLHRStep(lhrStepState.stepLHRs?.formInput);
           }, 500); // 500ms debounce to allow both dates to be set
         },
         { fireImmediately: false },
@@ -283,6 +273,19 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     filterOptions = (options, state) => handleFilter(options, state);
 
+    // Custom onChange handlers for date pickers in LHR Step
+    const handleStartDateChange = (date?: string) => {
+      if (!lhrStepState?.stepLHRs?.formInput) { return; }
+      lhrStepState.updateLHRStepDates(date, undefined);
+      lhrStepState.saveLHRStep(lhrStepState.stepLHRs?.formInput);
+    };
+
+    const handleEndDateChange = (date?: string) => {
+      if (!lhrStepState?.stepLHRs?.formInput) { return; }
+      lhrStepState.updateLHRStepDates(undefined, date);
+      lhrStepState.saveLHRStep(lhrStepState.stepLHRs?.formInput);
+    };
+
     // MARK: @observer
     useObserver(() => {
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
@@ -315,6 +318,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrBuildTypeExist,
       startDateFieldName,
       endDateFieldName,
+      handleStartDateChange,
+      handleEndDateChange,
     });
   };
 

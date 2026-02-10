@@ -9,5 +9,6 @@ export type FBDatePickerProps =
   onDatePickerClick?: () => void
   onDatePickerClose?: () => void
   onDatePickerClear?: () => void
+  onDateChange?: (date?: string) => void
   disablePastDates?: boolean
 };

@@ -21,11 +21,14 @@ class FBLHRStepState {
   @observable public equipment: any;
   @observable public editedParameters: any;
   @observable public approvals: any;
+  @observable public isDirty = false;
+  @observable public autosave?: boolean;
   private dateUpdateTimeout?: NodeJS.Timeout;
   private pendingDateUpdate = false;
 
-  public constructor (lhrs?: DocumentRevision) {
+  public constructor (lhrs?: DocumentRevision, autosave?: boolean) {
     this.stepLHRs = lhrs;
+    this.autosave = autosave;
   }
 
   @action public editItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
@@ -145,6 +148,44 @@ class FBLHRStepState {
   public setMaterials = (materials) => set(this, 'materials', materials);
   public setEquipment = (equipment) => set(this, 'equipment', equipment);
   public setEditedParameters = (editedParameters) => set(this, 'editedParameters', editedParameters);
+
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, 'isDirty', isDirty);
+  };
+
+  @action public setAutosave = (autosave: boolean) => {
+    set(this, 'autosave', autosave);
+  };
+
+  public saveLHRStep = (formInput?: Record<string, any>): Promise<void> | void => {
+    if (!this.stepLHRs) {
+      return;
+    }
+
+    const body = {
+      formInput: formInput || this.stepLHRs.formInput,
+    };
+
+    const apiPromise = this.updateLHRStepApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id: this.stepLHRs.id },
+      method: 'patch',
+      body,
+    });
+
+    // Safely handle the promise if it exists
+    if (apiPromise && typeof apiPromise.then === 'function') {
+      return Promise.resolve(apiPromise).then((data: DocumentRevision | undefined) => {
+        this.setDirty(false);
+        if (data) {
+          this.setLHRs(data);
+        }
+        this.updateLHRStepApi.onSuccess();
+      }).catch((error: Error) => {
+        this.updateLHRStepApi.onError(error);
+      });
+    }
+  };
 
   public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number): void => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }
