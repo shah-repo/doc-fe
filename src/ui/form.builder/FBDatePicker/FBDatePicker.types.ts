@@ -1,7 +1,7 @@
 import { BaseKeyboardPickerProps } from '@material-ui/pickers/_shared/hooks/useKeyboardPickerState';
 import { FBInputProps, FBProviderProps } from '..';
 
-export interface StateProvider {
+interface StateProvider {
   getValue: () => string | undefined
   setValue: (value: string | undefined) => void
   validate?: () => void
