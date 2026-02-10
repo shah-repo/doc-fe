@@ -1,4 +1,3 @@
-import { makeStyles, createStyles } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
@@ -18,30 +17,7 @@ import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableLHRBuild, LHRBuild } from './types';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    supplierGrid: {
-    '& .k-grid-header': {
-      position: 'sticky',
-      top: 0,
-      zIndex: 3,
-    },
-    '& .k-grid-header-locked': {
-      position: 'sticky',
-      top: 0,
-      zIndex: 4,
-    },
-    '& .k-grid-header-wrap': {
-      overflow: 'hidden',
-    },
-    '& .k-header': {
-      whiteSpace: 'normal',
-      lineHeight: 1.2,
-    },
-  },
-  }),
-);
+import { useStyles } from './styles';
 
 const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();

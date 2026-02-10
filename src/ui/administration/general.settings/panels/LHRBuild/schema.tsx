@@ -6,6 +6,7 @@ import { AutocompleteCellTemplate } from '../../components/SettingsTable/compone
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
 import { EditableLHRBuild } from './types';
+import { useStyles } from './styles';
 
 export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   isActive,
@@ -14,6 +15,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   onDiscard,
   onConfirm,
 }) => {
+  const classes = useStyles();
   return [
     {
       id: 'isActive',
@@ -49,7 +51,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'calOrPm',
       title: 'administration.general.settings.build.type.allow.cal.or.pm',
       headerCell: () => (
-        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+        <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.cal.or.pm')}
         </span>),
       template: AutocompleteCellTemplate,
@@ -60,7 +62,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'lotQtyLessQtyNeeded',
       title: 'administration.general.settings.build.type.allow.lot.qty.less.qty.needed',
       headerCell: () => (
-        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+        <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.lot.qty.less.qty.needed')}
         </span>),
       template: AutocompleteCellTemplate,
@@ -71,7 +73,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'qtyDiscrepancy',
       title: 'administration.general.settings.build.type.allow.qty.discrepancy',
       headerCell: () => (
-        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+        <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.qty.discrepancy')}
         </span>),
       template: AutocompleteCellTemplate,
@@ -82,7 +84,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'lotSelection',
       title: 'administration.general.settings.build.type.allow.require.lot.selection',
       headerCell: () => (
-        <span className="k-grid-header-sticky" style={{ whiteSpace: 'normal', fontSize: 12, fontWeight: 600, lineHeight: '1.2' }}>
+        <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.require.lot.selection')}
         </span>),
       template: AutocompleteCellTemplate,
