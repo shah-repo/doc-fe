@@ -8,7 +8,7 @@ import { ReactComponent as ExpandIcon } from '../../../assets/images/tabExpand.s
 import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
-import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from './FBMaterailEqInfo.types';
+import { ChildEquipment, Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from './FBMaterailEqInfo.types';
 import useStyles, { useItemStatusStyles } from './FBMaterialEqInfo.styles';
 
 const DATE_FORMAT = MomentFormats.BriefDate;
@@ -38,7 +38,7 @@ const MaterialItem: React.FC<ItemProps<Material>> = ({ item: { lots, ...item }, 
   </ListItemText>
 </>);
 
-const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { lots, ...item }, classes }) => {
+const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { equipments, ...item }, classes }) => {
   const intl = useIntl();
   const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
 
@@ -74,18 +74,20 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { lots, ...item }
         )}
       </ListItemText>
       <ListItemText>
-        {lots?.map((lot: LotItem) => {
-          const { nextCalibration, nextPm } = lot;
+        {equipments?.map((equipment: ChildEquipment) => {
+          const { plannedId, actualId, nextCalibration, nextPm } = equipment;
 
           return (<Chip
             className={classes.chip}
-            key={lot.lotId}
+            key={actualId}
             size="small"
             label={translate('form.builder.procedure.eq.materials.equip', {
-              ...lot,
-              partId: lot.partId ?? translate('common.not.applicable'),
+              ...equipment,
+              plannedId,
               nextCalibration: getFormattedDate(nextCalibration),
               nextPm: getFormattedDate(nextPm),
+              showCalibration: Boolean(nextCalibration),
+              showPm: Boolean(nextPm),
             })}
           />
           );

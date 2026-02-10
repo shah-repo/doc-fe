@@ -14,8 +14,6 @@ export interface LotItem {
   partId: string
   quantity: number
   unit: string
-  nextPm?: string
-  nextCalibration?: string
 }
 
 export interface GenericItem {
@@ -35,7 +33,14 @@ export interface Material extends GenericItem {
 export interface Equipment extends GenericItem {
   nextCalibration: Date
   nextPm: Date
-  lots?: LotItem[]
+  equipments?: ChildEquipment[]
+}
+
+export interface ChildEquipment extends GenericItem {
+  nextCalibration: Date
+  nextPm: Date
+  actualId?: string
+  plannedId?: string
 }
 
 export interface MaterialAndEquipment {
