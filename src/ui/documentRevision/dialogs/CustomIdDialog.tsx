@@ -34,7 +34,11 @@ const CustomIdDialog: React.FC<CustomIdDialogProps> = ({
     : translate('document.revision.user.numbering.help');
 
   const handleDocIdUpdated = (updatedDocId: string) => {
-    setDocId(`${outputDocumentType?.documentTypeAcronym}${updatedDocId}`);
+    if (!updatedDocId.length) {
+      setDocId('');
+    } else {
+      setDocId(`${outputDocumentType?.documentTypeAcronym}${updatedDocId}`);
+    }
   };
 
   return (
