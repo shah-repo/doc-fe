@@ -42,10 +42,6 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { equipments, ...
   const intl = useIntl();
   const { getFormattedDateString } = useDate();
 
-  const getFormattedDate = (date) => {
-    return date ? getFormattedDateString(date, MomentFormats.MonthDateYearTwoDigit) : translate('common.not.applicable');
-  };
-
   return (
     <>
       <ListItemText>
@@ -83,8 +79,8 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item: { equipments, ...
             label={translate('form.builder.procedure.eq.materials.equip', {
               ...equipment,
               plannedId,
-              nextCalibration: getFormattedDate(nextCalibration),
-              nextPm: getFormattedDate(nextPm),
+              nextCalibration: getFormattedDateString(nextCalibration, DATE_FORMAT),
+              nextPm: getFormattedDateString(nextPm, DATE_FORMAT),
               showCalibration: Boolean(nextCalibration),
               showPm: Boolean(nextPm),
             })}
