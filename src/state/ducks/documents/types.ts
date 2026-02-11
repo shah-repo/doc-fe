@@ -1,6 +1,7 @@
 import { TableColumnActionType } from '../../../ui/components/table/column/types';
 import { Attachment } from '../attachments/types';
 import { Owner, User } from '../common/types';
+import { DOCUMENT_NUMBERING_STYLE } from '../documentRevisions/documentType/types';
 import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
 
 export enum DocumentStatus {
@@ -41,6 +42,7 @@ export interface Document {
 
 export interface DocumentProposedId {
   docId?: string
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 export interface DocumentProposedIdSetAction {
@@ -89,4 +91,8 @@ export interface DocumentTransitionResponse {
 
 export interface AccessRequestBody {
   employee: DocumentTransitionResponse
+}
+
+export interface DocIdRequestBody {
+  docId: string
 }

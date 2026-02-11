@@ -164,7 +164,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
             rightSidebar: (
               <Observer>
                 {() => (
-                  <DocumentRevisionSidebar isSliderView={isSliderView} tabConfig={tabConfig} />
+                  <DocumentRevisionSidebar isSliderView={isSliderView} tabConfig={tabConfig} docId={documentRevision?.document?.docId} />
                 )}
               </Observer>
             ),

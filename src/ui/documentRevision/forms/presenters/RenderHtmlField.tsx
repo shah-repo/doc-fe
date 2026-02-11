@@ -2,14 +2,14 @@ import { Box } from '@material-ui/core';
 import * as React from 'react';
 import InputField from '../../../components/forms/fields/Input';
 import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
-import { styles } from './styles/DocIdInput.styles';
+import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
   isDisabled: boolean
 }
 
 const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false }) => {
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <Box className={classes.renderHtmlRoot}>

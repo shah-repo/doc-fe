@@ -11,7 +11,7 @@ import { Employee } from '../company/types';
 import { RELATED_PARTS_STATUS } from '../relatedParts/types';
 import { TrainingRecord } from '../training/types';
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from './constants';
-import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
 
 export enum DocumentRevisionStatus {
   Draft = 'DRAFT',
@@ -328,6 +328,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   supplierStatusId?: string
   mappedConfigDetails?: {[key: string]: ASLStatus}
   isLatestRevision?: boolean
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 interface EQ {

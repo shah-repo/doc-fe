@@ -37,6 +37,8 @@ import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorToolt
 import { KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
 import { toastError } from '../../components/notifications';
 import { TablePanelStateProps } from '../../components/table/types';
+import { DamRestrictionsProvider } from '../../form.builder/FBApprovalMatrix/components/DamNumberingStyle/DamRestrictionsContext';
+import { useDamNumberingStyleRestrictions } from '../../form.builder/FBApprovalMatrix/components/DamNumberingStyle/useDamNumberingStyleRestrictions';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -156,7 +158,8 @@ export function KendoPanel ({
         'defaultRevStage',
         'hiddenForCreationForUsersWithoutTagsFormatted',
         'group',
-        'active'].includes(field as string)) {
+        'active',
+        'numberingStyle'].includes(field as string)) {
         setDropDownState((prevState) => {
           const object = { ...prevState };
           let newValue: string;
@@ -186,6 +189,8 @@ export function KendoPanel ({
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridData]);
+
+  const { restrictions } = useDamNumberingStyleRestrictions();
 
   const setKendoFilterStatus = (
     kendoConfig: string,
@@ -349,6 +354,7 @@ export function KendoPanel ({
       defaultRevStage: dataItem.defaultRevStage,
       active: dataItem.active,
       equipmentEnforceProd: dataItem.equipmentEnforceProd,
+      numberingStyle: dataItem.numberingStyle,
     };
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {
@@ -629,7 +635,9 @@ export function KendoPanel ({
         </Grid>
       </Grid>
       <Grid item xs={12} className={gridClasses.kendoGridItem}>
-        {renderBody()}
+        <DamRestrictionsProvider value={{ restrictions }}>
+          {renderBody()}
+        </DamRestrictionsProvider>
       </Grid>
       <ExportDAMDetails dialog={exportDAMDialog} />
       {confirmationDialog.isOpen && (
