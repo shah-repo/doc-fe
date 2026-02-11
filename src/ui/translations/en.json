@@ -1558,7 +1558,7 @@
     "form.builder.procedure.eq.materials.title": "{title} | Qty: {quantity} {unit}",
     "form.builder.procedure.eq.materials.title.id": "{docId} - {title} | Qty: {quantity} {unit}",
     "form.builder.procedure.eq.materials.lot": "Lot {lotId} | {partId} | {quantity} {unit}",
-    "form.builder.procedure.eq.materials.equip": "Equipment {actualId} | {plannedId} {showCalibration, select, true { | Cal Due: {nextCalibration}} other {}} {showPm, select, true { | PM Due: {nextPm}} other {}}",
+    "form.builder.procedure.eq.materials.equip": "Equipment {actualId} | {plannedId} {showCalibration, select, true { | Next Callibration Due: {nextCalibration}} other {}} {showPm, select, true { | Preventive Maintenance Due: {nextPm}} other {}}",
     "form.builder.lhrs.procedure.select.equipment.option": " Rev {revision} - {name}",
     "form.builder.lhrs.procedure.select.equipment.option.cal.due": " Cal Due: {date} ",
     "form.builder.lhrs.procedure.select.equipment.option.pm.due": " PM Due: {date} ",
