@@ -176,7 +176,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
-        type: values.type,
+        ...(values.type && { type: values.type }),
       };
 
       if (isEBProcedure && !values[ADD_FIELD] && !isEmpty(values[EB_SUB_ITEMS_FIELD])) {
