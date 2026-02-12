@@ -33,6 +33,7 @@ import FBEditorAction from '../FBEditorAction/FBEditorAction';
 import FBEditorApprovalField from '../FBEditorApprovalField/FBEditorApprovalField';
 import FBEditorApprovals from '../FBEditorApprovals/FBEditorApprovals';
 import FBEditorAutocomplete from '../FBEditorAutocomplete/FBEditorAutocomplete';
+import FBEditorBuildTypeChangeApproval from '../FBEditorBuildTypeChangeApproval/FBEditorBuildTypeChangeApproval';
 import FBEditorCheckControl from '../FBEditorCheckControl/FBEditorCheckControl';
 import FBEditorEmpty from '../FBEditorEmpty/FBEditorEmpty';
 import FBEditorEQMaintenance from '../FBEditorEQMaintenance/FBEditorEQMaintenance';
@@ -154,6 +155,7 @@ class FBEditorState {
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
     inlineapproval: FBEditorInlineApproval,
+    buildTypeChangeApproval: FBEditorBuildTypeChangeApproval,
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,

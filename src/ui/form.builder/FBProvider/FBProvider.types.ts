@@ -35,6 +35,7 @@ import {
   FBTextEditorState,
   FBWorkspaceState,
 } from '..';
+import FBBuildTypeChangeApprovalState from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.state';
 import FBLeftPanelState from '../FBLeftPanel/FBLeftPanel.state';
 import FBLHRBuildState from '../FBLHRBuild/FBLHRBuild.state';
 import FBMPIProcedureSelectState from '../FBMPIProcedureSelect/FBMPIProcedureSelect.state';
@@ -61,6 +62,7 @@ export interface FBProviderProps {
   approvalsState?: FBApprovalsState
   bookmarkState?: FBBookmarkState
   inlineApprovalState?: FBInlineApprovalState
+  buildTypeChangeApprovalState?: FBBuildTypeChangeApprovalState
   textEditorState?: FBTextEditorState
   textEditorOptionsState?: FBTextEditorOptionsState
   procedureState?: FBProcedureState

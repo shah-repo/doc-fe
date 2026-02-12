@@ -9,6 +9,7 @@ import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBBuildType from '../FBBuildType/FBBuildType';
+import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
@@ -133,6 +134,7 @@ class FBSchemaState {
     createlabel: FBButton,
     approval: FBApproval,
     inlineapproval: FBInlineApproval,
+    buildTypeChangeApproval: FBBuildTypeChangeApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,

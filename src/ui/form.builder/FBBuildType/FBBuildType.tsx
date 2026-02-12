@@ -1,95 +1,40 @@
-import { isEmpty, isNull, isUndefined } from 'lodash';
-import { reaction } from 'mobx';
+import { Box, Typography } from '@material-ui/core';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import WarningIcon from '@material-ui/icons/Warning';
+import { isUndefined } from 'lodash';
 import React from 'react';
-import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBInput, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { FBButton, FBDialog, FBInput, FBProvider } from '..';
 import { SMText } from '../../../App';
-import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
-import useDialog from '../../hooks/useDialog';
-import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { FBFontStyle } from '../styles/FBFont.styles';
+import { FBBuildTypeProps } from './FBBuildType.types';
+import { withFBBuildType } from './FBBuildType.wrap';
 
-const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
-  optionId,
+const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
+  selectedValue,
+  defaultValue,
+  options = [],
+  isDialogOpen = false,
+  isApprovalDialogOpen = false,
+  onChange,
+  onDialogActionClick,
+  onApprovalDialogActionClick,
+  refresh,
+  isDisabled,
   name,
+  documentStatus,
+  approvalTransition,
+  showApprovalButtons = false,
+  onApprovalAction,
+  dialogState,
   ...props
 }) => {
-  const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
-  const [defaultValue, setDefaultValue] = React.useState<undefined | LHRBuild>(undefined);
-  const [prevValue, setPrevValue] = React.useState<undefined | LHRBuild>(undefined);
-  const [options, setOptions] = React.useState<LHRBuild[]>([]);
-  const lhrBuildDialog = useDialog();
-  const { formState, workspaceState } = FB.useStores();
-
-  const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-    optionId: FBAutocompleteAsyncOption.buildType,
-  });
-
-  React.useEffect(() => {
-    buildsAsync.load(true);
-  }, [buildsAsync]);
-
-  React.useEffect(() => {
-    const dispose = reaction(
-      (): LHRBuild[] => {
-        const map = FBAutocompleteAsyncStore.data.get(
-          FBAutocompleteAsyncOption.buildType,
-        );
-        return map ? Array.from(map.values()) : [];
-      },
-      (options) => {
-        const activeOptions = options.filter(item => item.isActive);
-        setOptions(activeOptions);
-        const selectedId = formState?.getFieldValue(name);
-        const value = options.find((opt) => opt.id === selectedId);
-        setPrevValue(value);
-        setDefaultValue(value);
-      },
-      { fireImmediately: true },
-    );
-    return dispose;
-  }, [name, formState]);
-
-  const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
-    const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
-    const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
-    if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
-      setSelectedValue(selectedLhrBuild);
-      lhrBuildDialog.open();
-    } else if (!isNull(event)) {
-      formState?.setFieldValue(name, selectedLhrBuild?.id);
-      formState?.setFieldAutosave(name);
-      formState?.getInputState(name ?? '')?.setRender();
-      setDefaultValue(selectedLhrBuild);
-      setPrevValue(selectedLhrBuild);
-      workspaceState?.saveDocRev(formState?.getValues());
-    }
-  };
-
-  const onDialogActionClick = (action: 'cancel' | 'confirm') => {
-    if (action === 'confirm') {
-      formState?.setFieldValue(name, selectedValue?.id);
-      formState?.setFieldAutosave(name);
-      setDefaultValue(selectedValue);
-      workspaceState?.saveDocRev(formState?.getValues());
-    } else {
-      setDefaultValue(prevValue);
-      forceRerender();
-    }
-    formState?.getInputState(name ?? '')?.setRender();
-    setSelectedValue(undefined);
-    lhrBuildDialog.close();
-  };
-  const [refresh, setRefresh] = React.useState(false);
-
-  const forceRerender = () => {
-    setRefresh((x) => !x);
-  };
-  const isDisabled = (defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production) || workspaceState?.mode !== FBWorkspaceModeOptions.FORM;
-
   return (
-    <>
+    <FBProvider {...{ dialogState }}>
+      <FBDialog />
       <FBInput
         {...props}
         {...{ defaultValue, showErrorMsg: isUndefined(defaultValue) }}
@@ -111,26 +56,87 @@ const FBBuildType: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
           getOptionLabel={option => option.displayLabel}
         />
       </FBInput>
+      {showApprovalButtons && (
+        <Box display="flex" justifyContent="flex-end" mt={2} style={{ gap: '12px' }}>
+          <StyledCancelFBButton
+            label="form.builder.reject.change"
+            size="medium"
+            onClick={() => onApprovalAction?.('reject')}
+            data-cy="build-type-reject-change-button"
+          />
+          <FBButton
+            label="form.builder.accept.change"
+            size="medium"
+            onClick={() => onApprovalAction?.('accept')}
+            data-cy="build-type-accept-change-button"
+          />
+        </Box>
+      )}
       <Dialog
         hideCloseButton
         title="form.builder.build.title"
-        open={lhrBuildDialog?.isOpen ?? false}
+        open={isDialogOpen}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         onCancel={() => onDialogActionClick?.('cancel')}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         onConfirm={() => onDialogActionClick?.('confirm')}
-        cancelLabel="form.builder.cancel"
-        confirmLabel="form.builder.lhr.build.switch"
-      > <SMText
-          label={{
-            locale: 'form.builder.build.production.msg',
-            values: {
-              prod: defaultValue?.displayLabel ?? '',
-              rd: selectedValue?.displayLabel ?? '',
-            },
-          }}
+        cancelLabel="common.no.go.back"
+        confirmLabel="common.yes.continue"
+      >
+        <Box display="flex" alignItems="flex-start">
+          <Box flexShrink={0} pt={0.5} mr={2}>
+            <WarningIcon style={{ width: 24, height: 24 }} />
+          </Box>
+          <Box flex={1}>
+            <Typography variant="body2" style={{ whiteSpace: 'pre-wrap' }}>
+              {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+              <SMText
+                label={{
+                  locale: 'form.builder.build.production.msg',
+                  values: {
+                    prod: (defaultValue?.displayLabel ?? ''),
+                    rd: (selectedValue?.displayLabel ?? ''),
+                  },
+                }}
+              />
+            </Typography>
+          </Box>
+        </Box>
+      </Dialog>
+      <Dialog
+        hideCloseButton
+        title="form.builder.add.approvers"
+        open={isApprovalDialogOpen}
+        maxWidth="md"
+        fullWidth
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        onCancel={() => onApprovalDialogActionClick?.('cancel')}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        onConfirm={() => onApprovalDialogActionClick?.('confirm')}
+        cancelLabel="common.cancel"
+        confirmLabel="form.builder.send.for.approval"
+      >
+        <Box mb={3}>
+          <Typography variant="h6" style={{ fontWeight: 600, marginBottom: 16 }}>
+            Build Type Switch
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <Typography variant="body1">{defaultValue?.displayLabel}</Typography>
+            <Box mx={1}>
+              <ArrowRightAltIcon />
+            </Box>
+            <Typography variant="body1">{selectedValue?.displayLabel}</Typography>
+          </Box>
+        </Box>
+        <FBBuildTypeChangeApproval
+          name="buildTypeApprovals"
+          label="form.builder.approvers"
+          documentStatus={documentStatus}
+          approvalTransition={approvalTransition}
         />
       </Dialog>
-    </>
+    </FBProvider>
   );
 };
 
-export default FBBuildType;
+export default withFBBuildType(FBBuildType);
