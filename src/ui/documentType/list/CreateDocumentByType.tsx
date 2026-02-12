@@ -163,15 +163,15 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
 
-  const numberingStyle = useSelector(documentTypeSelectors.getDocumentTypeNumberingStye);
-  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
-
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
+
+  const [numberingStyle, setNumberingStyle] = useState<DOCUMENT_NUMBERING_STYLE>();
+  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
 
   const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState('');
   const [selectedForm, setSelectedForm] = useState<DocumentTypeByIdForm | undefined>();
@@ -243,6 +243,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             value: docTypes[0].id,
           }],
         });
+        setNumberingStyle(docTypes[0].numberingStyle);
         return;
       }
       if (isEmpty(docTypes)) {
@@ -295,6 +296,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!docTypeId) {
       return;
     }
+    const selectedDocumentType = documentTypes.find(docType => docType.id === docTypeId);
+    setNumberingStyle(selectedDocumentType?.numberingStyle);
     setSelectedDocumentTypeId(docTypeId);
   };
 
