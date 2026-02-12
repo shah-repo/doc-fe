@@ -2515,7 +2515,7 @@
   "dam.sync.message.out.of.sync": "Out of sync",
   "dam.number.style.dropdown.customer.selected.info.message": "Once the 'Customer' option is selected, the numbering style cannot be changed.",
   "dam.number.style.dropdown.draft.info.message": "Once the 'Customer' option is selected and the DAM is released, the numbering style cannot be changed.",
-  "dtm.number.style.dropdown.draft.info.message": "Once the 'Customer' option is selected and saved, the numbering style cannot be changed.",
+  "dtm.number.style.dropdown.draft.info.message": "Once the 'Customer' option is selected and saved, the numbering style cannot be changed.\n\n  Note: The changes will not be enforced until the Approval Matrix is revised and released. ",
   "administration.general.settings.md": "Material Disposition",
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
   "administration.general.settings.suppliers.asl.status": "ASL Status Configuration",

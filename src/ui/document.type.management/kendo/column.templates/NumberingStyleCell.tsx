@@ -63,7 +63,11 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
         textField="text"
       />
       {tooltipMessage && (
-        <Tooltip title={translate(tooltipMessage)} placement="top" arrow>
+        <Tooltip
+          title={<span className={classes.infoMessageWrapper}>{translate(tooltipMessage)}</span>}
+          placement="top"
+          arrow
+        >
           <span className={classes.infoIconContainer}>
             <FontAwesomeIcon icon={solid('circle-exclamation')} className={classes.infoIcon} />
           </span>
