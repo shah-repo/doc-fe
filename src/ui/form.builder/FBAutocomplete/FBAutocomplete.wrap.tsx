@@ -25,6 +25,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 ) => {
   const Comp = ({
     onInputChange,
+    onOpen,
     getOptionDisabled,
     getOptionLabel,
     filterOptions,
@@ -162,6 +163,16 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.validate();
     };
 
+    onOpen = () => {
+      if (isUndefined(options)) {
+        return setModifiedOptions([]);
+      }
+      if (isEmpty(options)) {
+        return setModifiedOptions([]);
+      }
+      setModifiedOptions(options);
+    };
+
     const handleBlur = (event) => {
       if (freeSolo) {
         formState?.setFieldAutosave(name);
@@ -197,6 +208,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     return Component({
       ...(props as T),
       onInputChange,
+      onOpen,
       getOptionDisabled,
       getOptionLabel,
       filterOptions,
