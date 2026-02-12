@@ -177,18 +177,17 @@ export const PartIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   if (isEditMode) {
     return <Editor {...props} />;
   }
+  const tooltipTitle = fieldValue ?? userEnteredItemId;
 
   return (
-    <OverflowingContent onClick={() => onClick?.({ dataItem })}>
-      {fieldValue && <Tooltip title={fieldValue} placement="top-start" arrow>
-        <Link
-          to={documentPreviewPath(partDocRevId, partDocId)}
-          target="_blank"
-          className={classes.link}
-        >
-          {fieldValue}
-        </Link>
-      </Tooltip>}
+    <OverflowingContent onClick={() => onClick?.({ dataItem })} title={tooltipTitle}>
+      {fieldValue && <Link
+        to={documentPreviewPath(partDocRevId, partDocId)}
+        target="_blank"
+        className={classes.link}
+      >
+        {fieldValue}
+      </Link>}
       {isUserEnteredItemId && <Box display="flex" justifyContent="space-between">
         {userEnteredItemId}
         <span className={classes.nonEnlilDocInfoIcon}>
