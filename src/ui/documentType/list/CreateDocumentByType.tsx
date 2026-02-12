@@ -235,17 +235,18 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     onSuccess: (data) => {
       const docTypes = data ?? [];
       setDocumentTypes(docTypes);
-      if (docTypes.length === 1) {
-        setSelectedDocumentTypeId(docTypes[0].id);
+      const activeDocTypes = docTypes.filter(docType => docType.active);
+      if (activeDocTypes.length === 1) {
+        setSelectedDocumentTypeId(activeDocTypes[0].id);
         setInitialValues({
           selectType: [{
-            label: docTypes[0].documentTypeName,
-            value: docTypes[0].id,
+            label: activeDocTypes[0].documentTypeName,
+            value: activeDocTypes[0].id,
           }],
         });
         return;
       }
-      if (isEmpty(docTypes)) {
+      if (isEmpty(activeDocTypes)) {
         setErrorMessage('missing.type.error');
         multipleFormDialog.close();
         return;
