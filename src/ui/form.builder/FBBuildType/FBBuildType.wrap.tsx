@@ -2,7 +2,9 @@ import { filter, isEmpty, isNull, unionBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBWorkspaceModeOptions } from '..';
+import { companySelectors } from '../../../state/ducks/company';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
@@ -17,6 +19,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
   const Comp = ({
     optionId,
     name,
+    allowedBuildTypeChange,
     ...props
   }: T) => {
     const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
@@ -33,6 +36,11 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.buildType,
     });
+    const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: Array<{ from: string, to: string }> } | null;
+    const lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
+    allowedBuildTypeChange = lhrBuildTypeSwitchConfigApproval.filter((config) => {
+      return config.from === defaultValue?.id;
+    }).map((config) => config.to);
 
     const {
       document,
@@ -213,6 +221,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       showApprovalButtons,
       onApprovalAction,
       dialogState,
+      allowedBuildTypeChange,
     });
   };
 

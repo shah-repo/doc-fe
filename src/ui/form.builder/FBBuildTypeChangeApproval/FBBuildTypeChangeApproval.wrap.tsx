@@ -48,6 +48,8 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     showFieldOwnersWarning,
     owners,
     approvalApprovedGroup,
+    selectedValue,
+    prevValue,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -59,7 +61,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       document,
       changeRequest,
       id,
-      isOutput,
       externalState: { company: { companyMine: { employees = [] } = {} } = {} } = {},
     } = workspaceState || {};
     const {
@@ -91,14 +92,13 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
-    const outputId = isOutput ? id : null;
     let docApprovals = document?.approvals || changeRequest?.approvals;
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
     }
     const approvalsState = FB.useRef(
       FBBuildTypeChangeApprovalState,
-      { id: outputId, approvals: docApprovals, isOwner },
+      { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
 
@@ -360,6 +360,8 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       showFieldOwnersWarning,
       isContributorIncluded,
       approvalApprovedGroup,
+      selectedValue,
+      prevValue,
     });
   };
 

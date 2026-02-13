@@ -19,4 +19,5 @@ export type FBBuildTypeProps = FBAutocompleteAsyncProps & {
   showApprovalButtons?: boolean
   onApprovalAction?: (action: 'accept' | 'reject') => void
   dialogState?: FBDialogState
+  allowedBuildTypeChange?: string[]
 };

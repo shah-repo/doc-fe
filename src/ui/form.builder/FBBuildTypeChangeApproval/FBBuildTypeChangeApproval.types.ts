@@ -1,5 +1,6 @@
 import { FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
 
 export type FBBuildTypeChangeApprovalProps =
@@ -25,6 +26,8 @@ export type FBBuildTypeChangeApprovalProps =
   showFieldOwnersWarning?: boolean
   isContributorIncluded?: (id: string) => void
   approvalApprovedGroup?: string[]
+  selectedValue?: LHRBuild
+  prevValue?: LHRBuild
 };
 
 interface Owner {
@@ -33,5 +36,6 @@ interface Owner {
 }
 
 export type FBBuildTypeChangeApprovalConstructor = FBInlineApprovalConstructor & {
-  id: string[]
+  fromBuildType: string
+  toBuildType: string
 };

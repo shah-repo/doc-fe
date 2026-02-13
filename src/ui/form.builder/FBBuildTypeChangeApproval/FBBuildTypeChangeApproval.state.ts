@@ -17,14 +17,11 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
-  public constructor ({ id, approvals, isOwner }: FBBuildTypeChangeApprovalConstructor) {
+  public constructor ({ approvals, isOwner, fromBuildType, toBuildType }: FBBuildTypeChangeApprovalConstructor) {
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
-    if (!id) {
-      return;
-    }
-    this.fetchRequiredApprovals(id);
+    this.fetchRequiredApprovals(fromBuildType, toBuildType);
   }
 
   // MARK: @computed
@@ -36,13 +33,13 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
     }));
   }
 
-  public fetchRequiredApprovals = (documentRevisions: string[] = []) => {
-    if (isEmpty(documentRevisions)) {
+  public fetchRequiredApprovals = (fromBuildType: string, toBuildType: string) => {
+    if (isEmpty(fromBuildType) || isEmpty(toBuildType)) {
       this.groups = {};
       return;
     }
-    this.setUrl(FBEndpoint.RequiredApprovers);
-    this.setBody({ 'ids[]': documentRevisions });
+    this.setUrl(FBEndpoint.BuildTypeSwitchApprovers);
+    this.setBody({ from: fromBuildType, to: toBuildType } as any);
     this.fetch();
   };
 
