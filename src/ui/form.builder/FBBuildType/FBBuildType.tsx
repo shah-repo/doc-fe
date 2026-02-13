@@ -30,6 +30,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   showApprovalButtons = false,
   onApprovalAction,
   dialogState,
+  prevValue,
   ...props
 }) => {
   return (
@@ -133,6 +134,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           label="form.builder.approvers"
           documentStatus={documentStatus}
           approvalTransition={approvalTransition}
+          selectedValue={selectedValue}
+          prevValue={prevValue}
         />
       </Dialog>
     </FBProvider>
