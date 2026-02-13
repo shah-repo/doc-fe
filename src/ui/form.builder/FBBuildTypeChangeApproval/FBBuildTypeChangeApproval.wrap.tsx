@@ -128,8 +128,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    console.log('selectedValue changed:', selectedValue, prevValue);
-
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
         title: 'form.builder.password.prompt',

@@ -21,10 +21,6 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
-    console.log('constructor called with fromBuildType:', fromBuildType, 'toBuildType:', toBuildType);
-    // if (fromBuildType && toBuildType) {
-    //   return;
-    // }
     this.fetchRequiredApprovals(fromBuildType, toBuildType);
   }
 
@@ -40,7 +36,6 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
   public fetchRequiredApprovals = (fromBuildType: string, toBuildType: string) => {
     if (isEmpty(fromBuildType) || isEmpty(toBuildType)) {
       this.groups = {};
-      console.warn('Missing fromBuildType or toBuildType. Skipping fetch for required approvals.');
       return;
     }
     this.setUrl(FBEndpoint.BuildTypeSwitchApprovers);

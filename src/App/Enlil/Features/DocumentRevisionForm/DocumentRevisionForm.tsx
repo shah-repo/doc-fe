@@ -118,8 +118,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
   const { formState } = FB.useStores();
 
-  console.log('isBuildTypeChangeApprovalEnabled', isBuildTypeChangeApprovalEnabled);
-
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
       ...schemaItem,
