@@ -17,13 +17,14 @@ import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableLHRBuild, LHRBuild } from './types';
+import { useStyles } from './styles';
 
 const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const LHRBuilds = settings.lhrBuildTypeConfig;
-
+  const classes = useStyles();
   const [LHRBuildsData, setLHRBuildData] = React.useState<LHRBuild[]>(LHRBuilds ?? []);
   const [editedLHRBuild, setEditedLHRBuild] = React.useState<EditableLHRBuild>();
 
@@ -122,15 +123,18 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       onAddNew={isActive ? addLHRBuild : undefined}
     >
       <FormikProvider value={formik}>
-        <SettingsTable
-          isActive={isActive}
-          data={LHRBuildsList}
-          isEditing={editedLHRBuild !== undefined}
-          schema={schema}
-          addButtonLabel={translate('common.add.new')}
-          onAdd={addLHRBuild}
-          getRowProperties={getRowAttributes}
-        />
+        <div className={classes.supplierGrid}>
+          <SettingsTable
+            isActive={isActive}
+            data={LHRBuildsList}
+            isEditing={editedLHRBuild !== undefined}
+            schema={schema}
+            addButtonLabel={translate('common.add.new')}
+            onAdd={addLHRBuild}
+            getRowProperties={getRowAttributes}
+            scrollable="scrollable"
+          />
+        </div>
       </FormikProvider>
     </SettingsPanel>
   );

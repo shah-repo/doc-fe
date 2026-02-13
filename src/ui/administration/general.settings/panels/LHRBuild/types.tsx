@@ -14,5 +14,10 @@ export enum FBLHRBuildOptions {
   'Verification & Validation' = 'Verification & Validation',
 }
 
+export enum FBLHRBuildOtherOptions {
+  Yes = 'Yes',
+  No = 'No',
+}
+
 export interface EditableLHRBuild extends LHRBuild, EditableItem {
 }

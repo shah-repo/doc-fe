@@ -5,7 +5,7 @@ import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/consta
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
 import { translate } from '../../../../../../common/intl';
-import { EditableLHRBuild, FBLHRBuildOptions } from '../../../panels/LHRBuild/types';
+import { EditableLHRBuild, FBLHRBuildOptions, FBLHRBuildOtherOptions } from '../../../panels/LHRBuild/types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { createStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core';
@@ -23,7 +23,7 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const mode = get(dataItem, MODE_FIELD);
   const { values, setFieldValue, getFieldProps, errors } = useFormikContext<EditableLHRBuild>();
   const lhrBuilds = Object.keys(FBLHRBuildOptions).map((key) => key);
-
+  const otherOptions = Object.keys(FBLHRBuildOtherOptions).map((key) => key);
   const handleChange = (event: ChangeEvent<unknown>, value: T) => {
     setFieldValue(field, value);
   };
@@ -33,10 +33,10 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
       <Autocomplete
         {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}
-        placeholder={translate('validator.lhr.select.internal.type')}
+        placeholder={field === 'internalType' ? translate('validator.lhr.select.internal.type') : translate('common.select')}
         blurOnSelect
         disableClearable
-        options={lhrBuilds}
+        options={field === 'internalType' ? lhrBuilds : otherOptions}
         onChange={handleChange}
         size="small"
         disabled={mode === Mode.edit}
@@ -46,10 +46,10 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
 }
 
 export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Element => {
-  const { dataItem } = props;
+  const { dataItem, field } = props;
   const mode = get(dataItem, MODE_FIELD);
   const canBeModified = [Mode.edit, Mode.add].includes(mode);
-  const defaultValue = dataItem.internalType;
+  const defaultValue = dataItem[field];
   const classes = useStyles();
   if (canBeModified) {
     return <Editor {...props} />;
