@@ -19,7 +19,6 @@ import { documentTypeSelectors } from '../../state/ducks/documentRevisions/docum
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
-import { userManagementSelectors } from '../../state/ducks/userManagement';
 import { ASLStatus } from '../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
@@ -29,6 +28,7 @@ import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/che
 import { FB, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
+import AuditApprovalRoles from './AuditApprovalRoles';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditCheckboxGroupAsync from './AuditCheckboxGroupAsync';
@@ -254,14 +254,17 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
       },
       approvalRoles () {
-        if (audit.field.includes('groups') && audit.field.endsWith('id')) {
-          const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
-            id: group.value,
-            name: group.label,
-          }));
-          const group = groups.find(item => item.id === auditValue);
-          if (group) {
-            return (<div data-cy={dataCy}>{group.name}</div>);
+        return <AuditApprovalRoles {...{ audit, dataCy, auditValue }} />;
+      },
+      approvalMatrix () {
+        if (audit.type === 'ARRAY_DELETED' && audit.field === 'formInput.dam-built-in') {
+          try {
+            const data = JSON.parse(auditValue as string);
+            if (data) {
+              return (<div data-cy={dataCy}>{data.docType?.name}</div>);
+            }
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
           }
         }
         return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);

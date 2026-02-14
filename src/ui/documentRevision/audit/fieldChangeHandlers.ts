@@ -240,7 +240,7 @@ export const getMaterialReplacementAuditField = (type: string): string => {
     });
 };
 
-export const getapprovalMatrixFieldLabel = (field: string): string => {
+export const getapprovalMatrixFieldLabel = (field: string, parentLabel = true): string => {
   const fieldMapping = {
     defaultTraining: 'Training',
     documentType: 'Document Type',
@@ -250,6 +250,15 @@ export const getapprovalMatrixFieldLabel = (field: string): string => {
     group: 'Group',
     name: 'Document Type Name',
     needsSignature: 'Needs Signature',
+    stage1: translate('form.builder.approvals.numeric'),
+    stage2: translate('form.builder.approvals.numeric.alpha'),
+    stage3: translate('form.builder.approvals.alpha'),
+    admStage: translate('form.builder.approvals.admin'),
   };
-  return fieldMapping[field] ? translate('form.builder.approvalMatrix.field', { field: fieldMapping[field] }) : translate('form.builder.approvalMatrix');
+
+  if (fieldMapping[field]) {
+    return parentLabel ? translate('form.builder.approvalMatrix.field', { field: fieldMapping[field] }) : fieldMapping[field] as string;
+  } else {
+    return translate('form.builder.approvalMatrix');
+  }
 };

@@ -547,6 +547,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
         fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
         if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
+          if (change.field.includes('approvalRoles')) {
+            const stagePart = change.field.split('.').at(-2);
+            if (!isNaN(Number(valueKey)) && valueKey) {
+              const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
+              const role = existingRoles[valueKey].name ?? '';
+              fbLabel = translate('form.builder.approvalMatrix.role.edit', {
+                role,
+                stage,
+              });
+            }
+          }
           change = {
             ...change,
             updatedField: CUSTOM_BOOLEAN_FIELD,
