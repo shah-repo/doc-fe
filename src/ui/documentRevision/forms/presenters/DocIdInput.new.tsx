@@ -87,15 +87,17 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   };
 
   const handleDocIdBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = event.target.value;
+    const value = event.target.value.trim();
     if (value === docId) {
       return;
     }
+
     if (!isShownOnDialog) {
+      const updatedDocId = `${documentAcronym}${value}`;
       // Make a call to update the docId on the document
       if (documentId) {
         const body: DocIdRequestBody = {
-          docId: `${documentAcronym}${value}`,
+          docId: updatedDocId,
         };
         setIsRequestInProgress(true);
         sendDocIdUpdateRequestAsync.start(
@@ -105,7 +107,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
           sendDocIdUpdateRequestAsync,
         );
       } else {
-        formik.setFieldValue('document.docId', `${documentAcronym}${value}`);
+        formik.setFieldValue('document.docId', updatedDocId);
       }
     }
   };

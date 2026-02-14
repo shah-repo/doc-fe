@@ -103,7 +103,7 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
     data.formDocument = { id: formValues?.formDocument?.id };
     data.document = {
       ...data.document,
-      docId,
+      docId: docId?.trim(),
     };
 
     createDocAsync.start(createDocAction, data, createDocAsync);
