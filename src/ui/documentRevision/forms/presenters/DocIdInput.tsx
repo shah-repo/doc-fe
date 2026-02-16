@@ -56,7 +56,16 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     if (!pattern.test(value) || !setDocId) {
       return;
     }
-    setDocId(value);
+
+    if (!type) {
+      setDocId(value?.trim());
+      return;
+    }
+
+    const withoutAcronym = value.replace(type, '');
+    const trimmedValue = withoutAcronym.trim();
+    const updatedValue = trimmedValue ? `${type}${trimmedValue}` : type;
+    setDocId(updatedValue);
   };
 
   if (!isVisible && type !== 'newOutput') {

@@ -167,7 +167,7 @@ export const toNewVersionRequestBody = (
       newValues.document = {
         ...newValues.document,
         id: get(values, 'document.id'),
-        docId: get(values, 'document.docId'),
+        docId: get(values, 'document.docId')?.trim(),
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
