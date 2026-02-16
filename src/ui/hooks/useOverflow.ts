@@ -6,8 +6,8 @@ type UseOverflowType<T> = [RefObject<T>, boolean, { x: boolean, y: boolean }];
 function useOverflow<T extends HTMLElement> (): UseOverflowType<T> {
   const [ref, { width, height }] = useElementSize<T>();
   const isOverflowing = ref.current ? {
-    x: Math.ceil(width) < Math.ceil(ref.current.scrollWidth),
-    y: Math.ceil(height) < Math.ceil(ref.current.scrollHeight),
+    x: width < ref.current.scrollWidth + 1,
+    y: height < ref.current.scrollHeight + 1,
   } : { x: false, y: false };
 
   return [ref, isOverflowing.x || isOverflowing.y, isOverflowing];
