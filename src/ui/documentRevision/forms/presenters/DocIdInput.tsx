@@ -39,7 +39,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   }, [loadProposedDocIdState]);
   const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value?.trim();
+    const value = event.target.value;
     const { documentType } = document;
 
     if (!documentType || !documentType.id) {
@@ -58,7 +58,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     }
 
     if (!type) {
-      setDocId(value);
+      setDocId(value?.trim());
       return;
     }
 
