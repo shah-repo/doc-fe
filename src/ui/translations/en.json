@@ -2785,8 +2785,4 @@
     "documentRevision.create.missing.security.groups.message": "{documentType} is configured to allow access for:\n{groups}\n\nDo you want to add it to the document?",
     "documentRevision.create.missing.security.groups.confirm": "Add and Save",
     "documentRevision.create.missing.security.groups.cancel": "Save as is"
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> fdf7e9aea4a0b18e2049d634ac1f985969456f84
