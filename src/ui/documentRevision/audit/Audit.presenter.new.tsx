@@ -552,7 +552,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
             if (!isNaN(Number(valueKey)) && valueKey) {
               const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
-              const role = existingRoles[valueKey].name ?? '';
+              const key = Number(valueKey) - 1;
+              const role = existingRoles[key]?.name ?? '';
 
               fbLabel = translate('form.builder.approvalMatrix.role.edit', {
                 role,
