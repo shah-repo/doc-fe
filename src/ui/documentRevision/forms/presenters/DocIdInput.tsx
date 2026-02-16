@@ -39,7 +39,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   }, [loadProposedDocIdState]);
   const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    const value = event.target.value?.trim();
     const { documentType } = document;
 
     if (!documentType || !documentType.id) {
@@ -56,7 +56,16 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     if (!pattern.test(value) || !setDocId) {
       return;
     }
-    setDocId(value);
+
+    if (!type) {
+      setDocId(value);
+      return;
+    }
+
+    const withoutAcronym = value.replace(type, '');
+    const trimmedValue = withoutAcronym.trim();
+    const updatedValue = trimmedValue ? `${type}${trimmedValue}` : type;
+    setDocId(updatedValue);
   };
 
   if (!isVisible && type !== 'newOutput') {

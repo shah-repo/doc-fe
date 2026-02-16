@@ -78,7 +78,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   });
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    const value = event.target.value?.trim();
     setDocIdEntered(value);
 
     if (handleDocIdUpdated) {
