@@ -71,4 +71,5 @@ export enum FBEndpoint {
   PrintEquipmentLabels ='/zebra/labels/equipment',
   RelatedEquipment ='/related_equipment',
   LotSerialNumbers = '/lot/${lotId}/serial-numbers',
+  LotForDocRev = '/lot/for-doc-rev/${docRevId}',
 }
