@@ -57,6 +57,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBSerials from '../FBSerials';
 import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
 import FBShippingItems from '../FBShippingItems';
@@ -179,6 +180,7 @@ class FBSchemaState {
     shippingMethod: FBShippingMethod,
     salesOrderNumber: FBSalesOrderNumber,
     samplingPlan: FBSamplingPlan,
+    lotSerialNumbers: FBSerials,
   };
 
   @observable public schema?: FBSchemaProps[];
