@@ -1,52 +1,85 @@
 import { action, computed, observable } from 'mobx';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
-import { checkIsDocumentLot } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
-import { SerialNumber, SerialNumberStatus } from './types';
+import { isPartHasSerialization, isPartSerializationManual, isPartSerializationSystemGenerated } from './helpers';
+import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberStatus, SerialNumberUpdatePayload } from './types';
+class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
+  public lotFindRequest = new FBRequest<LotAndPart, Record<string, never>>(FBEndpoint.LotForDocRev);
+  public documentRevision?: DocumentRevision;
 
-class FBSerialsState extends FBRequest<SerialNumber[], null> {
-  private lotId?: string;
+  @observable
+  public lotData?: LotAndPart;
+
   public readonly url = FBEndpoint.LotSerialNumbers;
-  public createApi: FBRequest<SerialNumber[], { serialNumbers: string[] }> = new FBRequest();
-  public updateApi: FBRequest<SerialNumber, { status: SerialNumberStatus | null }> = new FBRequest();
-  public deleteApi: FBRequest<void, { data: { ids: string[] } }> = new FBRequest();
-  @observable public data: SerialNumber[] = [];
-
-  @computed
-  public get serialNumbers (): SerialNumber[] {
-    return this.data ?? [];
-  }
-
-  @action public prepareData = (data: SerialNumber[]): SerialNumber[] =>
-    data.sort((a, b) => a.serialNumber.localeCompare(b.serialNumber));
+  public data: SerialNumber[] = [];
 
   public constructor (documentRevision?: DocumentRevision) {
     super();
+    this.documentRevision = documentRevision;
+  }
 
-    if (!documentRevision || !checkIsDocumentLot(documentRevision.document?.documentType?.groupOptions)) {
-      this.setData([]);
-      return;
-    }
+  @computed
+  public get lotId (): string | undefined {
+    return this.lotData?.lot?.id;
+  }
 
-    this.lotId = documentRevision.id;
-    this.reload();
+  @computed
+  public get partId (): string | undefined {
+    return this.lotData?.part?.id;
+  }
 
-    this.createApi.onSuccess = () => this.reload();
-    this.updateApi.onSuccess = () => this.reload();
-    this.deleteApi.onSuccess = () => this.reload();
+  @computed
+  public get lot (): DocumentRevision | undefined {
+    return this.lotData?.lot;
+  }
+
+  @computed
+  public get part (): DocumentRevision | undefined {
+    return this.lotData?.part;
+  }
+
+  @computed
+  public get isPartSerialized (): boolean {
+    return isPartHasSerialization(this.part);
+  }
+
+  @computed
+  public get isPartSerializationManual (): boolean {
+    return isPartSerializationManual(this.part);
+  }
+
+  @computed
+  public get isPartSerializationSystemGenerated (): boolean {
+    return isPartSerializationSystemGenerated(this.part);
+  }
+
+  @computed
+  public get isLoading (): boolean {
+    return this.loading || this.lotFindRequest.loading;
+  }
+
+  @computed
+  public get serialNumbers (): SerialNumber[] {
+    return this.data.sort((a, b) => a.serialNumber.localeCompare(b.serialNumber));
   }
 
   public reload (): void {
-    this.load().catch(toastError);
+    if (this.documentRevision?.id) {
+      this.findLotByDocRevId(this.documentRevision.id).catch(toastError);
+    }
   }
 
-  public setLotId (lotId: string): void {
-    this.lotId = lotId;
+  @action
+  public load (docRevId?: string): void {
+    this.findLotByDocRevId(docRevId ?? this.documentRevision?.id).catch(toastError);
   }
 
-  public async load (): Promise<void> {
+  @action
+  public async loadSerialNumbers (): Promise<void> {
+    console.log('loadSerialNumbers');
+    console.log(this.lotId);
     if (!this.lotId) {
       return;
     }
@@ -54,11 +87,15 @@ class FBSerialsState extends FBRequest<SerialNumber[], null> {
     await this.fetch();
   }
 
+  public async createSerialNumber (serialNumber: string): Promise<void> {
+    return await this.createSerialNumbers([serialNumber]);
+  }
+
   public async createSerialNumbers (serialNumbers: string[]): Promise<void> {
     if (!this.lotId || !Array.isArray(serialNumbers) || serialNumbers.length === 0) {
       return;
     }
-    await this.createApi.set({
+    await this.set({
       method: 'post',
       url: this.url,
       urlValues: { lotId: this.lotId },
@@ -70,11 +107,23 @@ class FBSerialsState extends FBRequest<SerialNumber[], null> {
     if (!this.lotId || !id) {
       return;
     }
-    await this.updateApi.set({
+    await this.set({
       method: 'patch',
       url: `${this.url}/${id}`,
       urlValues: { lotId: this.lotId },
-      body: { status },
+      body: { serialNumbers: [{ id, status }] },
+    });
+  }
+
+  public async updateSerialNumbers (serialNumbers: SerialNumberUpdatePayload[]): Promise<void> {
+    if (!this.lotId || !serialNumbers.length) {
+      return;
+    }
+    await this.set({
+      method: 'patch',
+      url: this.url,
+      urlValues: { lotId: this.lotId },
+      body: { serialNumbers },
     });
   }
 
@@ -82,7 +131,7 @@ class FBSerialsState extends FBRequest<SerialNumber[], null> {
     if (!this.lotId || !Array.isArray(ids) || ids.length === 0) {
       return;
     }
-    await this.deleteApi.set({
+    await this.set({
       method: 'delete',
       url: this.url,
       urlValues: { lotId: this.lotId },
@@ -94,11 +143,27 @@ class FBSerialsState extends FBRequest<SerialNumber[], null> {
     if (!this.lotId || !id) {
       return;
     }
-    await this.deleteApi.set({
+    await this.set({
       method: 'delete',
       url: this.url,
       urlValues: { lotId: this.lotId },
       body: { data: { ids: [id] } },
+    });
+  }
+
+  @action
+  async findLotByDocRevId (docRevId?: string): Promise<unknown> {
+    if (!docRevId) {
+      return;
+    }
+    await this.lotFindRequest.set({
+      method: 'get',
+      url: FBEndpoint.LotForDocRev,
+      urlValues: { docRevId },
+    }, (data, error) => {
+      console.log({ data, error });
+      this.lotData = data;
+      this.loadSerialNumbers().catch(toastError);
     });
   }
 }
