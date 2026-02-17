@@ -21,7 +21,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FB, FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FB, FBApprovalAuditState, FBDAMFields, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
@@ -546,7 +546,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (['id', 'updatedCategory'].includes(valueKey as string)) return;
 
         fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
-        if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
+        if (['BOOLEAN_EDITED'].includes(change.type)) {
+          const docTypeId = change.field.split('[')[1].split(']')[0];
+          const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
+          const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
+
           if (change.field.includes('approvalRoles')) {
             const stagePart = change.field.split('.').at(-2);
 
@@ -556,10 +560,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               const role = existingRoles[key]?.name ?? '';
 
               fbLabel = translate('form.builder.approvalMatrix.role.edit', {
-                role,
+                docType,
                 stage,
+                role,
               });
             }
+          } else {
+            const field = getapprovalMatrixFieldLabel(valueKey as string, false);
+            fbLabel = translate('form.builder.approvalMatrix.field.edit', {
+              docType,
+              field,
+            });
           }
           change = {
             ...change,
