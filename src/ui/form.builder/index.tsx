@@ -224,6 +224,7 @@ export { default as FBSection } from './FBSection/FBSection';
 export * from './FBSection/FBSection.types';
 export { default as FBSelect } from './FBSelect/FBSelect';
 export * from './FBSelect/FBSelect.types';
+export { default as FBSerials } from './FBSerials';
 export { default as FBSerialsState } from './FBSerials/state';
 export * from './FBSerials/types';
 export { default as FBSnackbar } from './FBSnackbar/FBSnackbar';
