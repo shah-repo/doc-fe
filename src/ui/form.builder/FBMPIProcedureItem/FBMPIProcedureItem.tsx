@@ -144,6 +144,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               isEnableActualIdAddition={isSelectVisible && !redlineActive}
             />
           )}
+          {type === FBProcedureItemType.serials && (
+            <></>
+          )}
         </>
       )}
     </FBProvider>
