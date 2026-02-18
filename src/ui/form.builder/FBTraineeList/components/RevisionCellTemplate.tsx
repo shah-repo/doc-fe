@@ -5,7 +5,7 @@ import React from 'react';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { CustomTemplateProps, DocumentOption, EditableTrainee } from '../types';
-import { getOptionLabel } from '../utils';
+import { getOptionLabelName } from '../utils';
 import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
 
 interface Props extends CustomTemplateProps {
@@ -39,14 +39,14 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
 
   const source = isEditMode ? values : dataItem;
   const value = get(source, targetField) as DocumentOption;
-  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
+  const displayValue = value ? getOptionLabelName(value) : EMPTY_VALUE_PLACEHOLDER;
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
       <AutocompleteCellTemplate
         {...props}
-        getOptionLabel={getOptionLabel}
+        getOptionLabel={getOptionLabelName}
         renderStoredValue={() => displayValue}
         options={options ?? []}
         getValue={getValue}
