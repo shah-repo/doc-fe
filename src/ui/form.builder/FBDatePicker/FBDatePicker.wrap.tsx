@@ -44,6 +44,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
       if (workspaceState?.isChangeRequest) {
         submitForm();
+        return;
       }
 
       workspaceState?.saveDocRev(formState?.getValues());
@@ -73,6 +74,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
           MomentFormats.MonthDateYearTwoDigit,
         );
         datePickerState?.setValue(nowDate);
+        if (workspaceState?.isChangeRequest) { return; }
         save(nowDate);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

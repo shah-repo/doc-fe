@@ -7,6 +7,11 @@ import FBRequest from '../FBApi/FBApi.request';
 
 type DataKey = 'roles' | 'matrix';
 
+export interface DamNumberingStyleRestrictions {
+  disabledDocTypeIds: string[]
+  customDocTypeIds: string[]
+}
+
 type DataType<T extends DataKey> =
     T extends 'roles' ? FBApprovalRole :
       T extends 'matrix' ? FBApprovalMatrixItem :

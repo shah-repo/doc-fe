@@ -116,6 +116,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     isTodayDueOnCcActive: false,
     isOverdueCcActive: false,
     isEmailSendingEnabled: false,
+    gracePeriodDays: 30,
   },
   aslStatusConfig: [],
   supplierConfig: [],

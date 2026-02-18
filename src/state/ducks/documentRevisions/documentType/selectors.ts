@@ -106,6 +106,8 @@ const docRevTypeForms = (state: ApplicationState) => state.documentType.docRevTy
 
 const getDocumentTypesByCategory = (state: ApplicationState) => state.documentType.docTypesByCategory;
 
+const getDocumentTypeNumberingStye = (state: ApplicationState) => state.documentType.docRevTypeId.numberingStyle;
+
 const getTabConfiguration = (state: ApplicationState, group: DocumentGroupType): TabInfo[] =>
   state.documentType.tabsConfiguration[group];
 
@@ -160,5 +162,6 @@ export default {
   docRevTypeForms,
   makeGetDocTypeByAcronym,
   getDocumentTypesByCategory,
+  getDocumentTypeNumberingStye,
   getTabConfiguration,
 };

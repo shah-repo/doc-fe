@@ -13,8 +13,9 @@ import DropdownFilter from './components/DropdownFilter';
 import { createOption } from './components/Grid';
 import InputCellTemplate from './components/InputCellTemplate';
 import InputFilter from './components/InputFilter';
+import NamingStyleDropdownCellTemplate from './components/NamingStyleDropdownCellTemplate';
 import StatusCellTemplate from './components/StatusCellTemplate';
-import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL } from './constants';
+import { CATEGORY_OPTIONS, DEFAULT_CATEGORY_LABEL, NUMBERING_STYLE_OPTIONS } from './constants';
 import { FBApprovalMatrixRoleTitles } from './types';
 
 interface Options {
@@ -23,12 +24,14 @@ interface Options {
   cellARHeaderClassName?: string
   cellARClassName?: string
   clearRightBorderClassName?: string
+  popupContainer?: React.RefObject<HTMLDivElement>
 }
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const {
     data, withoutStatus,
     cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
+    popupContainer,
   } = options;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
@@ -57,6 +60,25 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     />
   );
 
+  const NumberingStyleFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      disabled={withoutStatus}
+      data={NUMBERING_STYLE_OPTIONS}
+      defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
+
+  const NumberingStyleTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <NamingStyleDropdownCellTemplate
+      {...props}
+      data={NUMBERING_STYLE_OPTIONS}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
+    />
+  );
+
   const InternalTypeFilter: React.FC<GridFilterCellProps> = (props) => (
     <DropdownFilter
       {...props}
@@ -69,6 +91,9 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <DropdownCellTemplate
       {...props}
       data={internalTypeOptions}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
     />
   );
 
@@ -85,6 +110,18 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       {...props}
       emptyLabel={DEFAULT_CATEGORY_LABEL}
       data={CATEGORY_OPTIONS}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
+    />
+  );
+
+  const StatusCellRenderer: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <StatusCellTemplate
+      {...props}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
     />
   );
 
@@ -96,7 +133,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: StatusCellTemplate as CellTemplate<FBApprovalMatrixItem>,
+      template: StatusCellRenderer,
       locked: true,
       width: 140,
     },
@@ -134,6 +171,16 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       locked: true,
       required: true,
       width: 140,
+    },
+    {
+      id: 'numberingStyle',
+      title: 'form.builder.am.numberingStyle',
+      field: 'docType.numberingStyle',
+      filterable: true,
+      editable: true,
+      filterCell: NumberingStyleFilter,
+      template: NumberingStyleTemplate,
+      width: 180,
     },
     {
       id: 'training',

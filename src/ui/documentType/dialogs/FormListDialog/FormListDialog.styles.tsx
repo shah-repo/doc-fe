@@ -53,5 +53,14 @@ export const styles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignSelf: 'center',
     },
+    docIdHelpText: {
+      fontSize: 12,
+      marginTop: theme.spacing(-1.5),
+      position: 'relative',
+      display: 'block',
+    },
+    relativePos: {
+      position: 'relative',
+    },
   }),
 );
