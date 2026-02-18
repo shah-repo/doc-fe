@@ -541,41 +541,29 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         }
       }
+
       if (fbType === 'approvalMatrix') {
         const valueKey = last(change.field.split('.'));
         if (['id', 'updatedCategory'].includes(valueKey as string)) return;
 
         fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
-        if (['BOOLEAN_EDITED'].includes(change.type)) {
+        if (change.type === 'BOOLEAN_EDITED') {
           const docTypeId = change.field.split('[')[1].split(']')[0];
           const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
           const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
 
-          if (change.field.includes('approvalRoles')) {
+          if (change.field.includes('approvalRoles') && valueKey && !isNaN(Number(valueKey))) {
             const stagePart = change.field.split('.').at(-2);
+            const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
+            const role = existingRoles[Number(valueKey) - 1]?.name || '';
 
-            if (!isNaN(Number(valueKey)) && valueKey) {
-              const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
-              const key = Number(valueKey) - 1;
-              const role = existingRoles[key]?.name ?? '';
-
-              fbLabel = translate('form.builder.approvalMatrix.role.edit', {
-                docType,
-                stage,
-                role,
-              });
-            }
+            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role });
           } else {
             const field = getapprovalMatrixFieldLabel(valueKey as string, false);
-            fbLabel = translate('form.builder.approvalMatrix.field.edit', {
-              docType,
-              field,
-            });
+            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field });
           }
-          change = {
-            ...change,
-            updatedField: CUSTOM_BOOLEAN_FIELD,
-          };
+
+          change = { ...change, updatedField: CUSTOM_BOOLEAN_FIELD };
         }
       }
 
