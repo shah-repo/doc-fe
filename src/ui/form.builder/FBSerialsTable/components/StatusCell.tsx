@@ -1,8 +1,8 @@
 import cx from 'classnames';
 import React from 'react';
 import { Autocomplete } from '../../../components/forms/fields-next';
+import { SerialNumber, SerialNumberStatus, SerialsSelectOption } from '../../FBSerials/types';
 import useStyles from '../styles';
-import { SerialNumber, SerialNumberStatus, SerialsSelectOption } from '../types';
 
 interface Props {
   dataItem: SerialNumber

@@ -5,7 +5,7 @@ import React from 'react';
 import { translate } from '../../../../common/intl';
 import { IconButton } from '../../../components/forms/fields-next';
 import useHover from '../../../hooks/useHover';
-import { SerialNumber } from '../types';
+import { SerialNumber } from '../../FBSerials/types';
 
 interface Props {
   dataItem: SerialNumber

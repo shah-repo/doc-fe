@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { SerialNumber, SerialNumberUsage, SerialsSelectOption } from '../types';
+import { SerialNumber, SerialNumberUsage, SerialsSelectOption } from '../../FBSerials/types';
 
 interface Props {
   dataItem: SerialNumber

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '../../../components/forms/fields-next';
-import { SerialNumber } from '../types';
+import { SerialNumber } from '../../FBSerials/types';
 
 interface Props {
   dataItem: SerialNumber

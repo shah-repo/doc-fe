@@ -6,25 +6,23 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
+import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUsage } from '../FBSerials/types';
 import ActionsCell from './components/ActionsCell';
 import NotesCell from './components/NotesCell';
 import SelectFilter from './components/SelectFilter';
 import StatusCell from './components/StatusCell';
 import UsageCell from './components/UsageCell';
 import useStyles from './styles';
-import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUsage } from './types';
 
 interface SchemaOptions {
   isAllSelected: boolean
-  isDeleteEnabled?: boolean
   onCheckAllToggle: (event: CheckboxChangeEvent) => void
-  onUpdate: (id: string, data: SerialNumberUpdateData) => void
-  onDelete: (id: string) => void
+  onUpdate?: (id: string, data: SerialNumberUpdateData) => void
+  onDelete?: (id: string) => void
 }
 
 export const useSchema = ({
   isAllSelected,
-  isDeleteEnabled = false,
   onCheckAllToggle,
   onUpdate,
   onDelete,
@@ -95,7 +93,7 @@ export const useSchema = ({
       width: 160,
       filterCell: StatusFilter,
       template: (props) => (
-        <StatusCell {...props} options={statusOptions} onChange={(id, status) => onUpdate(id, { status })} />
+        <StatusCell {...props} options={statusOptions} onChange={(id, status) => onUpdate?.(id, { status })} />
       ),
     },
     {
@@ -106,7 +104,7 @@ export const useSchema = ({
       resizable: false,
       filterCell: UsageFilter,
       template: (props) => (
-        <UsageCell {...props} options={usageOptions} onChange={(id, usage) => onUpdate(id, { usage })} />
+        <UsageCell {...props} options={usageOptions} onChange={(id, usage) => onUpdate?.(id, { usage })} />
       ),
     },
     {
@@ -115,10 +113,10 @@ export const useSchema = ({
       title: 'form.builder.serials.notes',
       filterCell: InputFilter,
       template: (props) => (
-        <NotesCell {...props} onChange={(id, notes) => onUpdate(id, { notes })} />
+        <NotesCell {...props} onChange={(id, notes) => onUpdate?.(id, { notes })} />
       ),
     },
-    ...(isDeleteEnabled ? [{
+    ...(onDelete ? [{
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
