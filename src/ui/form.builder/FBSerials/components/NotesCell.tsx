@@ -22,16 +22,19 @@ const StatusCell: React.FC<Props> = ({ dataItem, onChange }) => {
 
   return (
     <TextField
-      value={dataItem.notes}
       size="small"
-      onChange={(e) => setValue(e.target.value)}
+      value={value}
+      onChange={(e) => setValue(e.currentTarget.value)}
       onBlur={saveValue}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          saveValue();
-        }
-        if (e.key === 'Escape') {
-          setValue(dataItem.notes ?? '');
+        switch (e.key) {
+          case 'Enter':
+            e.currentTarget.blur();
+            break;
+          case 'Escape':
+            setValue(dataItem.notes ?? '');
+            e.currentTarget.blur();
+            break;
         }
       }}
     />
