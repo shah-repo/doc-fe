@@ -482,7 +482,7 @@
   "common.restore": "Restore",
   "common.required": "Field is required",
   "common.reorder": "Reorder",
-  "common.displayRevision": "{docId} - Rev {displayRevision}",
+  "common.displayRevision": "{docId} - Rev {displayRevision} - {name}",
   "common.assigned.to": "Assigned To",
   "common.due.date": "Due date",
   "common.name": "Name",
