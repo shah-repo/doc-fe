@@ -30,6 +30,7 @@ export type FBProcedureItemProps =
   getItem?: (id: string) => string
   getLot?: (id?: string) => string
   type: FBProcedureItemType
+  stepIndex?: number
   value?: FBProcedureItemConfig[]
   locked?: boolean
   item?: FBProcedureItemConfig

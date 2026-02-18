@@ -35,6 +35,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   disabled,
   loading,
   type,
+  stepIndex,
   value = [],
   name,
   isSelectVisible,
