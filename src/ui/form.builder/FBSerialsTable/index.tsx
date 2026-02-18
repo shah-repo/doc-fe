@@ -6,7 +6,6 @@ import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
 import React, { useMemo, useState } from 'react';
-import { FBSection } from '..';
 import { translate } from '../../../common/intl';
 import { Button, IconButton } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -105,60 +104,58 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
   return (
     <>
-      <FBSection label="form.builder.serials.title">
-        <div className={classes.toolbar}>
-          {shouldShowBulkActions && (
-            <>
-              <div className={classes.selectionContainer}>
-                <Tooltip title={translate('form.builder.serials.clear.selection')}>
-                  <IconButton onClick={clearSelection} size="small" kind="action">
-                    <FontAwesomeIcon icon={solid('xmark')} />
-                  </IconButton>
-                </Tooltip>
-                <span>
-                  <span className={classes.selectedCount}>{selectedIds.length}</span>
+      <div className={classes.toolbar}>
+        {shouldShowBulkActions && (
+          <>
+            <div className={classes.selectionContainer}>
+              <Tooltip title={translate('form.builder.serials.clear.selection')}>
+                <IconButton onClick={clearSelection} size="small" kind="action">
+                  <FontAwesomeIcon icon={solid('xmark')} />
+                </IconButton>
+              </Tooltip>
+              <span>
+                <span className={classes.selectedCount}>{selectedIds.length}</span>
                     &nbsp;
-                  {translate('form.builder.serials.items.selected')}
-                </span>
-              </div>
-              {onBulkUpdate && (
-                <>
-                  <StatusButton
-                    type={StatusButtonType.ACCEPT}
-                    onClick={acceptSelected}
-                  />
-                  <StatusButton
-                    type={StatusButtonType.REJECT}
-                    onClick={rejectSelected}
-                  />
-                </>
-              )}
-              {onBulkDelete && (
-                <Tooltip title={translate('form.builder.serials.delete.selected')}>
-                  <IconButton
-                    kind="destructive"
-                    ref={deleteRef}
-                    onClick={deleteSelected}
-                    data-cy="action-delete"
-                  >
-                    <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </>
-          )}
-          {onImport && !hasSelection && (
-            <Button
-              kind="ghost"
-              size="small"
-              startIcon={<FontAwesomeIcon icon={regular('arrow-down-to-bracket')} />}
-              onClick={onImport}
-            >
-              {translate('form.builder.serials.import')}
-            </Button>
-          )}
-        </div>
-      </FBSection>
+                {translate('form.builder.serials.items.selected')}
+              </span>
+            </div>
+            {onBulkUpdate && (
+              <>
+                <StatusButton
+                  type={StatusButtonType.ACCEPT}
+                  onClick={acceptSelected}
+                />
+                <StatusButton
+                  type={StatusButtonType.REJECT}
+                  onClick={rejectSelected}
+                />
+              </>
+            )}
+            {onBulkDelete && (
+              <Tooltip title={translate('form.builder.serials.delete.selected')}>
+                <IconButton
+                  kind="destructive"
+                  ref={deleteRef}
+                  onClick={deleteSelected}
+                  data-cy="action-delete"
+                >
+                  <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </>
+        )}
+        {onImport && !hasSelection && (
+          <Button
+            kind="ghost"
+            size="small"
+            startIcon={<FontAwesomeIcon icon={regular('arrow-down-to-bracket')} />}
+            onClick={onImport}
+          >
+            {translate('form.builder.serials.import')}
+          </Button>
+        )}
+      </div>
 
       <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })}>
         <KendoDataGrid<EditableSerialNumber>

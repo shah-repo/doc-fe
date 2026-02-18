@@ -1,6 +1,6 @@
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB } from '..';
+import { FB, FBSection } from '..';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
@@ -74,27 +74,29 @@ const FBSerials: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <FBSerialsTable
-        serialNumbers={serialNumbers}
-        isLoading={isLoading}
-        {...actionProps}
-      />
-      {isPartSerializationManual && (
-        <>
-          <AddDialog
-            isOpen={addDialog.isOpen}
-            onClose={addDialog.close}
-            onConfirm={addSerials}
-          />
-          <ImportDialog
-            partName={partName}
-            partDescription={partDescription}
-            isOpen={importDialog.isOpen}
-            onClose={importDialog.close}
-            onConfirm={addSerials}
-          />
-        </>
-      )}
+      <FBSection label="form.builder.serials.title">
+        <FBSerialsTable
+          serialNumbers={serialNumbers}
+          isLoading={isLoading}
+          {...actionProps}
+        />
+        {isPartSerializationManual && (
+          <>
+            <AddDialog
+              isOpen={addDialog.isOpen}
+              onClose={addDialog.close}
+              onConfirm={addSerials}
+            />
+            <ImportDialog
+              partName={partName}
+              partDescription={partDescription}
+              isOpen={importDialog.isOpen}
+              onClose={importDialog.close}
+              onConfirm={addSerials}
+            />
+          </>
+        )}
+      </FBSection>
     </div>
   );
 };
