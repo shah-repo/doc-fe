@@ -1,13 +1,18 @@
-import React from 'react';
+import { DropDownList, DropDownListProps, DropDownsPopupSettings } from '@progress/kendo-react-dropdowns';
 import { get } from 'lodash';
-import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
-import { CellTemplate } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD, TEXT_FIELD, DATA_ITEM_KEY, createOption } from '../Grid';
-import Status from './components/Status';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { FBApprovalMatrixItem } from '../../../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { createOption, DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
+import Status from './components/Status';
 
-const StatusCellTemplate: CellTemplate = (props) => {
-  const { dataItem, dataIndex, field, column, onChange } = props;
+interface StatusCellTemplateProps<T> extends CellTemplateProps<T> {
+  popupSettings?: DropDownsPopupSettings
+}
+
+const StatusCellTemplate: React.FC<StatusCellTemplateProps<FBApprovalMatrixItem>> = (props) => {
+  const { dataItem, dataIndex, field, column, onChange, popupSettings } = props;
   const { editable } = column;
 
   const mode = get(dataItem, MODE_FIELD);
@@ -39,7 +44,7 @@ const StatusCellTemplate: CellTemplate = (props) => {
 
   // Empty for deprecated documents.
   if (value === undefined) {
-    return '-';
+    return <>-</>;
   }
 
   if (!canBeModified) {
@@ -54,6 +59,7 @@ const StatusCellTemplate: CellTemplate = (props) => {
       valueRender={renderValue}
       onChange={handleChange}
       defaultValue={valueItem}
+      popupSettings={popupSettings}
     />
   );
 };

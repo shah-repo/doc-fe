@@ -4,6 +4,7 @@ import { CheckboxCell } from './column.templates/Checkbox';
 import { DocDigitsCell } from './column.templates/DocDigitsCell';
 import { FieldsConfig } from './column.templates/FieldsConfig';
 import { IntegerNumberCell } from './column.templates/IntegerNumberCell';
+import { NumberingStyleCell } from './column.templates/NumberingStyleCell';
 import { Schema } from './column.templates/Schema';
 import { EditDropdownCellFormatter } from './filter.template/CommonCellDropdownFilterTemplate';
 
@@ -16,6 +17,7 @@ export enum DTMCellTemplates {
   FIELDS_CONFIG='FieldsConfig',
   INTEGER_NUMBER_CELL='IntegerNumberCell',
   DOC_DIGITS_CELL='DocDigitsCell',
+  NUMBERING_STYLE_CELL='NumberingStyleCell',
 }
 interface CellTemplateProps {
   ActiveDropdown: (props: CustomGridCellProps) => JSX.Element | null
@@ -25,6 +27,7 @@ interface CellTemplateProps {
   FieldsConfig: (props: CustomGridCellProps) => JSX.Element | null
   IntegerNumberCell: (props: CustomGridCellProps) => JSX.Element | null
   DocDigitsCell: (props: CustomGridCellProps) => JSX.Element | null
+  NumberingStyleCell: (props: CustomGridCellProps) => JSX.Element | null
 }
 export const DTMCellTemplateMapping: CellTemplateProps = {
   ActiveDropdown,
@@ -34,4 +37,5 @@ export const DTMCellTemplateMapping: CellTemplateProps = {
   FieldsConfig,
   IntegerNumberCell,
   DocDigitsCell,
+  NumberingStyleCell,
 };
