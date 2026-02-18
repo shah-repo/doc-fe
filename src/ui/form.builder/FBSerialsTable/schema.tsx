@@ -16,6 +16,7 @@ import useStyles from './styles';
 
 interface SchemaOptions {
   isAllSelected: boolean
+  canSelect?: boolean
   onCheckAllToggle: (event: CheckboxChangeEvent) => void
   onUpdate?: (id: string, data: SerialNumberUpdateData) => void
   onDelete?: (id: string) => void
@@ -23,6 +24,7 @@ interface SchemaOptions {
 
 export const useSchema = ({
   isAllSelected,
+  canSelect,
   onCheckAllToggle,
   onUpdate,
   onDelete,
@@ -66,6 +68,7 @@ export const useSchema = ({
       title: 'Select',
       width: 65,
       resizable: false,
+      isHidden: !canSelect,
       filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
       className: classes.checkbox,
     },
@@ -116,7 +119,7 @@ export const useSchema = ({
         <NotesCell {...props} onChange={(id, notes) => onUpdate?.(id, { notes })} />
       ),
     },
-    ...(onDelete ? [{
+    {
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
@@ -124,9 +127,10 @@ export const useSchema = ({
       filterable: false,
       sortable: false,
       resizable: false,
+      isHidden: !onDelete,
       template: (props) => (
         <ActionsCell {...props} onDelete={onDelete} />
       ),
-    }] : []),
+    },
   ];
 };

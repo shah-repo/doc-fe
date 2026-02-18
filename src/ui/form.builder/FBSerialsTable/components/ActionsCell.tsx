@@ -9,11 +9,15 @@ import { SerialNumber } from '../../FBSerials/types';
 
 interface Props {
   dataItem: SerialNumber
-  onDelete: (id: string) => void
+  onDelete?: (id: string) => void
 }
 
 const ActionsCell: React.FC<Props> = ({ dataItem, onDelete }) => {
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
+
+  if (!onDelete) {
+    return null;
+  }
 
   return (
     <Tooltip title={translate('common.delete')}>
