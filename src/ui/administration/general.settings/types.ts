@@ -22,6 +22,7 @@ export enum GeneralSettingsTabs {
   Training = 'Training',
   Timezone = 'Timezone',
   LHRBuild = 'LHR Build',
+  LHRBuildSwitch = 'LHR Build Switch',
 }
 
 export interface GeneralSettingsProps {
