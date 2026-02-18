@@ -33,10 +33,14 @@ export default makeStyles(theme => ({
     borderRight: `1px solid ${Colors.stroke}`,
   },
   gridContainer: {
-    height: '40vh',
-    minHeight: 150,
+    height: '50vh',
+    minHeight: 230,
     width: '100%',
     position: 'relative',
+  },
+  gridContainerEmpty: {
+    height: 'auto',
+    minHeight: 0,
   },
   grid: {
     '& .k-column-title': {

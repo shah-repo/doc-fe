@@ -4,7 +4,7 @@ import { toastError } from '../../components/notifications';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { isPartHasSerialization, isPartSerializationManual, isPartSerializationSystemGenerated } from './helpers';
-import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberStatus, SerialNumberUpdatePayload } from './types';
+import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
   public lotFindRequest = new FBRequest<LotAndPart, Record<string, never>>(FBEndpoint.LotForDocRev);
   public documentRevision?: DocumentRevision;
@@ -103,16 +103,11 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
     });
   }
 
-  public async updateSerialNumber (id: string, status: Exclude<SerialNumberStatus, null> | null): Promise<void> {
+  public async updateSerialNumber (id: string, data: SerialNumberUpdateData): Promise<void> {
     if (!this.lotId || !id) {
       return;
     }
-    await this.set({
-      method: 'patch',
-      url: `${this.url}/${id}`,
-      urlValues: { lotId: this.lotId },
-      body: { serialNumbers: [{ id, status }] },
-    });
+    await this.updateSerialNumbers([{ id, ...data }]);
   }
 
   public async updateSerialNumbers (serialNumbers: SerialNumberUpdatePayload[]): Promise<void> {

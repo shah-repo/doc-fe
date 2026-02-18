@@ -15,20 +15,20 @@ import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import useHover from '../../hooks/useHover';
 import { withThemeNext } from '../../layout/theme-next';
+import AddDialog from './components/AddDialog';
 import ImportDialog from './components/ImportDialog';
 import StatusButton, { StatusButtonType } from './components/StatusButton';
+import { DATA_ITEM_KEY, SELECTED_FIELD } from './const';
 import { useSchema } from './schema';
 import useStyles from './styles';
 import { EditableSerialNumber, SerialNumberStatus, SerialNumberUpdateData } from './types';
-
-const DATA_ITEM_KEY = 'id';
-const SELECTED_FIELD = 'selected';
 
 const FBSerials: React.FC = () => {
   const classes = useStyles();
   const { serialsState } = FB.useStores();
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
+  const addDialog = useDialog();
   const importDialog = useDialog();
 
   useEffect(() => {
@@ -51,8 +51,8 @@ const FBSerials: React.FC = () => {
   const hasSelection = selectedIds.length > 0;
   const isAllSelected = hasSelection && selectedIds.length === serialsState?.serialNumbers.length;
 
-  const updateSerialNumber = async (id: string, payload: SerialNumberUpdateData) => {
-    await serialsState?.updateSerialNumbers([{ id, ...payload }]);
+  const updateSerialNumber = async (id: string, data: SerialNumberUpdateData) => {
+    await serialsState?.updateSerialNumber(id, data);
   };
 
   const deleteSerialNumber = async (id: string) => {
@@ -60,18 +60,18 @@ const FBSerials: React.FC = () => {
   };
 
   const acceptSelected = async () => {
-    const promises = selectedIds.map(id =>
-        serialsState?.updateSerialNumber(id, SerialNumberStatus.ACCEPTED),
-    );
-    await Promise.all(promises);
+    const payload = {
+      status: SerialNumberStatus.ACCEPTED,
+    };
+    await serialsState?.updateSerialNumbers(selectedIds.map(id => ({ id, ...payload })));
     setSelectedSerials({});
   };
 
   const rejectSelected = async () => {
-    const promises = selectedIds.map(id =>
-        serialsState?.updateSerialNumber(id, SerialNumberStatus.REJECTED),
-    );
-    await Promise.all(promises);
+    const payload = {
+      status: SerialNumberStatus.REJECTED,
+    };
+    await serialsState?.updateSerialNumbers(selectedIds.map(id => ({ id, ...payload })));
     setSelectedSerials({});
   };
 
@@ -80,19 +80,11 @@ const FBSerials: React.FC = () => {
     setSelectedSerials({});
   };
 
-  const handleAddSerialNumber = () => {
-    const serialNumber = prompt(translate('form.builder.serials.add.prompt'));
-    if (serialNumber) {
-      serialsState?.createSerialNumbers([serialNumber])
-        .catch(toastError);
-    }
-  };
-
-  const addImportedSerials = async (serials: string[]) => {
+  const addSerials = async (serials: string[]) => {
     try {
       await serialsState?.createSerialNumbers(serials);
     } catch (error) {
-      toastError('Failed to add imported serial numbers');
+      toastError('Failed to add serial numbers');
     }
   };
 
@@ -135,6 +127,8 @@ const FBSerials: React.FC = () => {
     [SELECTED_FIELD]: selectedSerials[sn.id],
   })));
 
+  const hasData = useMemo(() => data.length > 0, [data]);
+  const isLoading = useObserver(() => serialsState?.isLoading);
   if (!isPartSerialized) {
     return null;
   }
@@ -196,19 +190,23 @@ const FBSerials: React.FC = () => {
         </div>
       </FBSection>
 
-      <div className={classes.gridContainer}>
+      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })}>
         <KendoDataGrid<EditableSerialNumber>
           data={data}
           schema={schema}
+          fullHeight={hasData}
           fullWidth
-          fullHeight
           filterable
           sortable
+          resizable
           hasBoxScrollbars
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
-          loading={serialsState?.isLoading}
-          className={cx(classes.grid, { [classes.gridWithButton]: isPartSerializationManual })}
+          loading={isLoading}
+          className={cx(
+            classes.grid,
+            { [classes.gridWithButton]: isPartSerializationManual },
+          )}
           selectable={{
             enabled: true,
             drag: false,
@@ -224,16 +222,21 @@ const FBSerials: React.FC = () => {
             attached
             fullWidth
             kind="add"
-            onClick={handleAddSerialNumber}
+            onClick={addDialog.open}
           >
             {translate('form.builder.serials.add')}
           </Button>
+          <AddDialog
+            isOpen={addDialog.isOpen}
+            onClose={addDialog.close}
+            onConfirm={addSerials}
+          />
           <ImportDialog
             partName={partName}
             partDescription={partDescription}
             isOpen={importDialog.isOpen}
             onClose={importDialog.close}
-            onConfirm={addImportedSerials}
+            onConfirm={addSerials}
           />
         </>
       )}

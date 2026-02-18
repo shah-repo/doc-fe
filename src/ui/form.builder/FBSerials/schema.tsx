@@ -66,21 +66,24 @@ export const useSchema = ({
       id: 'id',
       field: 'selected',
       title: 'Select',
+      width: 65,
+      resizable: false,
       filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
       className: classes.checkbox,
-      width: 65,
     },
     {
       id: 'index',
       field: 'index',
       title: 'form.builder.serials.item',
-      width: 80,
-      filterCell: InputFilter,
+      width: 55,
+      resizable: false,
+      filterable: false,
       template: ({ dataIndex }) => <div>{(dataIndex ?? 0) + 1}</div>,
     },
     {
       id: 'serialNumber',
       field: 'serialNumber',
+      resizable: true,
       filterCell: InputFilter,
       title: 'form.builder.serials.serial.number',
     },
@@ -88,6 +91,8 @@ export const useSchema = ({
       id: 'status',
       field: 'status',
       title: 'form.builder.serials.status',
+      resizable: false,
+      width: 160,
       filterCell: StatusFilter,
       template: (props) => (
         <StatusCell {...props} options={statusOptions} onChange={(id, status) => onUpdate(id, { status })} />
@@ -97,6 +102,8 @@ export const useSchema = ({
       id: 'usage',
       field: 'usage',
       title: 'form.builder.serials.usage',
+      width: 150,
+      resizable: false,
       filterCell: UsageFilter,
       template: (props) => (
         <UsageCell {...props} options={usageOptions} onChange={(id, usage) => onUpdate(id, { usage })} />
@@ -118,6 +125,7 @@ export const useSchema = ({
       width: 80,
       filterable: false,
       sortable: false,
+      resizable: false,
       template: (props) => (
         <ActionsCell {...props} onDelete={onDelete} />
       ),
