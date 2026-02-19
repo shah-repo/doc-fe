@@ -524,6 +524,7 @@ export interface DocumentType {
   active?: boolean
   equipmentEnforceProd?: boolean
   numberingStyle: DOCUMENT_NUMBERING_STYLE
+  initialNumberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 interface DocumentForms {

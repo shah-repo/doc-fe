@@ -103,7 +103,7 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
     data.formDocument = { id: formValues?.formDocument?.id };
     data.document = {
       ...data.document,
-      docId,
+      docId: docId?.trim(),
     };
 
     createDocAsync.start(createDocAction, data, createDocAsync);
@@ -163,15 +163,15 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
 
-  const numberingStyle = useSelector(documentTypeSelectors.getDocumentTypeNumberingStye);
-  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
-
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
+
+  const [numberingStyle, setNumberingStyle] = useState<DOCUMENT_NUMBERING_STYLE>();
+  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
 
   const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState('');
   const [selectedForm, setSelectedForm] = useState<DocumentTypeByIdForm | undefined>();
@@ -235,17 +235,19 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     onSuccess: (data) => {
       const docTypes = data ?? [];
       setDocumentTypes(docTypes);
-      if (docTypes.length === 1) {
-        setSelectedDocumentTypeId(docTypes[0].id);
+      const activeDocTypes = docTypes.filter(docType => docType.active);
+      if (activeDocTypes.length === 1) {
+        setSelectedDocumentTypeId(activeDocTypes[0].id);
         setInitialValues({
           selectType: [{
-            label: docTypes[0].documentTypeName,
-            value: docTypes[0].id,
+            label: activeDocTypes[0].documentTypeName,
+            value: activeDocTypes[0].id,
           }],
         });
+        setNumberingStyle(docTypes[0].numberingStyle);
         return;
       }
-      if (isEmpty(docTypes)) {
+      if (isEmpty(activeDocTypes)) {
         setErrorMessage('missing.type.error');
         multipleFormDialog.close();
         return;
@@ -295,6 +297,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!docTypeId) {
       return;
     }
+    const selectedDocumentType = documentTypes.find(docType => docType.id === docTypeId);
+    setNumberingStyle(selectedDocumentType?.numberingStyle);
     setSelectedDocumentTypeId(docTypeId);
   };
 
