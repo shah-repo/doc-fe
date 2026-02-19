@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBWorkspaceModeOptions } from '..';
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
@@ -60,7 +60,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
 
-    const isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
+    const isBuildTypeChangeApprovalEnabled = lhrBuildTypeSwitchConfigApproval.length > 0 ? workspaceState?.buildTypeChangeStatus() : defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production;
 
     const currentApproverId = document?.approvals?.find(approval => approval.approver?.user.id === authUser.id)?.id;
 
@@ -119,11 +119,26 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     }
 
     const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
+      const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
 
-      if (!isEmpty(selectedLhrBuild) && !isNull(event)) {
-        setSelectedValue(selectedLhrBuild);
-        lhrBuildDialog.open();
+      if (lhrBuildTypeSwitchConfigApproval.length === 0) {
+        if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+          setSelectedValue(selectedLhrBuild);
+          lhrBuildDialog.open();
+        } else if (!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild?.id);
+          formState?.setFieldAutosave(name);
+          formState?.getInputState(name ?? '')?.setRender();
+          setDefaultValue(selectedLhrBuild);
+          setPrevValue(selectedLhrBuild);
+          workspaceState?.saveDocRev(formState?.getValues());
+        }
+      } else {
+        if (!isEmpty(selectedLhrBuild) && !isNull(event)) {
+          setSelectedValue(selectedLhrBuild);
+          lhrBuildDialog.open();
+        }
       }
     };
 
@@ -133,19 +148,30 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     };
 
     const onDialogActionClick = (action: 'cancel' | 'confirm') => {
-      if (action === 'confirm') {
-        // Close first dialog and open approval dialog
-        buildTypeState.getApprovals.filter(approval => approval.status === ApprovalStatus.Approved).forEach(approval => {
-          requestApproval(approval.id);
-        });
-        lhrBuildDialog.close();
-        approvalDialog.open();
-      } else {
-        setDefaultValue(prevValue);
-        forceRerender();
+      const closeDialogAndReset = () => {
         formState?.getInputState(name ?? '')?.setRender();
         setSelectedValue(undefined);
         lhrBuildDialog.close();
+      };
+
+      if (action === 'confirm') {
+        if (lhrBuildTypeSwitchConfigApproval.length === 0) {
+          formState?.setFieldValue(name, selectedValue?.id);
+          formState?.setFieldAutosave(name);
+          setDefaultValue(selectedValue);
+          workspaceState?.saveDocRev(formState?.getValues());
+          closeDialogAndReset();
+        } else {
+          buildTypeState.getApprovals
+            .filter(approval => approval.status === ApprovalStatus.Approved)
+            .forEach(approval => requestApproval(approval.id));
+          lhrBuildDialog.close();
+          approvalDialog.open();
+        }
+      } else {
+        setDefaultValue(prevValue);
+        forceRerender();
+        closeDialogAndReset();
       }
     };
 
