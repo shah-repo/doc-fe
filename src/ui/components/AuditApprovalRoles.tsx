@@ -28,7 +28,7 @@ const AuditApprovalRoles: React.FC<Props> = ({
   };
 
   let value = getAuditDefaultValue(auditValue);
-  if (audit.type === 'ARRAY_DELETED') {
+  if (['ARRAY_DELETED', 'OBJECT_DELETED'].includes(audit.type)) {
     try {
       const data = JSON.parse(auditValue as string);
       if (data) {

@@ -531,12 +531,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
         if (change.field.includes('groups')) {
           fbLabel = translate('form.builder.approving.groups');
-          const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
-          const roleMatch = groupPattern.exec(change.field);
-          if (roleMatch && roleMatch.length) {
-            const role = existingRoles.find(item => item.id === roleMatch[0]);
-            if (role) {
-              fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
+
+          if (change.type === 'OBJECT_DELETED') {
+            const role = JSON.parse(change.previousValue as string);
+            fbLabel = translate('form.builder.approving.groups.role', { role: role.parentRole });
+          } else {
+            const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
+            const roleMatch = groupPattern.exec(change.field);
+            if (roleMatch && roleMatch.length) {
+              const role = existingRoles.find(item => item.id === roleMatch[0]);
+              if (role) {
+                fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
+              }
             }
           }
         }
