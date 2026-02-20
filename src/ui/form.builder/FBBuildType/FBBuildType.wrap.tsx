@@ -91,7 +91,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`${name}`));
         formState?.setFieldAutosave(`${name}`);
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
@@ -138,9 +138,16 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
           workspaceState?.saveDocRev(formState?.getValues());
         }
       } else {
-        if (!isEmpty(selectedLhrBuild) && !isNull(event)) {
+        if (!isEmpty(selectedLhrBuild) && !isNull(event) && defaultValue) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
+        } else if (!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild?.id);
+          formState?.setFieldAutosave(name);
+          formState?.getInputState(name ?? '')?.setRender();
+          setDefaultValue(selectedLhrBuild);
+          setPrevValue(selectedLhrBuild);
+          workspaceState?.saveDocRev(formState?.getValues());
         }
       }
     };
@@ -185,7 +192,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
         formState?.getInputState(name ?? '')?.setRender();
-        setSelectedValue(undefined);
         approvalDialog.close();
       } else {
         setDefaultValue(prevValue);
