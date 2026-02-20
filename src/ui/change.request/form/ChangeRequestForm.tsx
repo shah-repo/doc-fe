@@ -152,12 +152,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   ]);
 
   useEffect(() => {
-     if (inDialog) {
+    if (inDialog) {
       _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
-     }
+    }
   }, []);
 
-  const isDirty = _formState?.isDirty ?? false;
+  const isDirty = useObserver(() => _formState?.isDirty ?? false);
 
   const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
 
