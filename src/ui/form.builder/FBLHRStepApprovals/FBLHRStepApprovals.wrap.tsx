@@ -26,6 +26,7 @@ import {
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import {
   ApprovalStatus,
@@ -39,7 +40,6 @@ import useAsync from '../../hooks/useAsync';
 import {
   LHRS_ACCEPTED_QUANTITY,
   LHRS_REJECTED_QUANTITY,
-  LHRS_START_DATE,
   LHRS_START_QUANTITY,
   MPI_PROCEDURE_BUILT_IN_ATTACHMENTS,
 } from '../FBLHRStep/utils';
@@ -95,15 +95,17 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     disabled = disabled || isUndefined(id) || loading;
 
-    if (
-      !document?.formTemplate
+    React.useEffect(() => {
+      if (
+        !document?.formTemplate
       && [
         DocumentRevisionStatus.Approved,
         DocumentRevisionStatus.InReview,
       ].includes(documentStatus as DocumentRevisionStatus)
-    ) {
-      disabled = true;
-    }
+      ) {
+        disabled = true;
+      }
+    }, [document?.formTemplate, documentStatus]);
 
     const dispatch = useDispatch();
     const authUser = store.getState().auth.user;
@@ -120,6 +122,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       isOwner,
     });
     dialogState = FB.useRef(FBDialogState);
+    const isOperator = document?.document.operators?.some(
+      (op) => op.id === authUser.employeeId,
+    );
 
     approvalTransition = (
       transition: FBLHRStepApprovalsStatusEndpoint,
@@ -139,45 +144,14 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
-    const shouldSkipDefaultOwner = (): boolean => {
-      return Object.keys(formState?.oldValues ?? {}).includes(LHRS_START_DATE);
-    };
-
-    React.useEffect(() => {
-      const fieldValue = map(lhrApprovalsState?.getApprovals, 'approver.id');
-      formState?.setFieldValue(name, fieldValue, false);
-
-      const activeApprovals = filter(
-        docApprovals,
-        (a) => a.status !== 'ABANDONED',
-      );
-      // Auto-add current user as approver for LHR steps if not already added
-      if (
-        authUser
-        && document?.status === DocumentRevisionStatus.Draft
-        && document
-        && !document?.formTemplate
-        && !activeApprovals?.length
-      ) {
-        if (authUser.employeeId) {
-          if (shouldSkipDefaultOwner()) {
-            // Don't add default owner for LHR step fields - user will be added when they complete entries
-            return;
-          }
-          addApprover([authUser.employeeId]);
-          formState?.setFieldValue(name, [authUser.employeeId], false);
-        }
-      }
-
-      formState?.inputState.get(name)?.setRender();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     React.useEffect(() => {
       const dispose = reaction(
         () => workspaceState?.approvals,
         (data) => {
           if (!data) {
+            return;
+          }
+          if (!isOperator && !isOwner) {
             return;
           }
           const activeApprovals = filter(
@@ -198,8 +172,12 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
     const closeLHRSAsync = useAsync({
       onSuccess: () => {
-        workspaceState?.document?.id
+        if (!pendingLHRSTriggeredRef.current) {
+          workspaceState?.document?.id
           && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
+        }
+
+        pendingLHRSTriggeredRef.current = false;
       },
     });
 
@@ -270,12 +248,15 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       const dispose = reaction(
         () => formState?.newValues.get(name),
         (fieldValue: string[]) => {
-          if (workspaceState?.isPreview || !fieldValue) {
+          if (workspaceState?.isPreview || !fieldValue || workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.PI || workspaceState?.document?.status !== DocumentRevisionStatus.Draft) {
+            return;
+          }
+          if (!isOperator && !isOwner) {
             return;
           }
           const formValue: string[] = get(formState?.oldValues, name);
           const newApprovers = difference(fieldValue, formValue);
-          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
+          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned && a.type === 'MASTER').map((a) => a.approver?.id || '') || [];
           const newApproversToAdd = newApprovers.filter((approver) => !existingApprovers.includes(approver));
           addApprover(newApproversToAdd);
           removeApprover(difference(formValue, fieldValue));
@@ -295,6 +276,9 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
         ],
         () => {
+          if (!isOperator && !isOwner) {
+            return;
+          }
           if (
             !lhrApprovalsState?.getApprovals?.some(
               (a) => a.approver?.id === authUser.employeeId,
@@ -308,6 +292,37 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           );
 
           if (currentUserApproval && !pendingLHRSTriggeredRef.current) {
+            pendingLHRSTriggeredRef.current = true;
+            closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
+          }
+        },
+      );
+      return () => dispose();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      const dispose = reaction(
+        () => ({
+          items: workspaceState?.schema?.map(item => ({ ...item })),
+        }),
+        () => {
+          if (!isOperator && !isOwner) {
+            return;
+          }
+          if (
+            !lhrApprovalsState?.getApprovals?.some(
+              (a) => a.approver?.id === authUser.employeeId,
+            )
+          ) {
+            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+          }
+
+          const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
+            (a) => a.approver?.id === authUser.employeeId && a.status === DocumentStatus.Approved,
+          );
+
+          if (currentUserApproval && !pendingLHRSTriggeredRef.current && document?.status !== DocumentRevisionStatus.Released) {
             pendingLHRSTriggeredRef.current = true;
             closeLHRSAsync.start(pendingApproval, currentUserApproval.id, closeLHRSAsync);
           }
@@ -415,19 +430,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
         = lhrApprovalsState.loading
         || lhrApprovalsState?.approvalApi.loading
         || lhrApprovalsState?.transitionApi.loading;
-
-      if (
-        authUser
-        && document?.status === DocumentRevisionStatus.Draft
-        && document
-        && !document?.formTemplate
-      ) {
-        if (shouldSkipDefaultOwner()) {
-          return;
-        }
-        disabledOptions = [authUser?.employeeId];
-        disableChipDelete = true;
-      }
     });
     documentStatus = document?.status;
 

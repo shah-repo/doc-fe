@@ -74,6 +74,7 @@ export interface LotOptions {
 export interface SchemaOptions {
   isLoading?: boolean
   materialSelectOptions: OptionType[]
+  allowedEditOptions: OptionType[]
   units?: string[]
   parts?: MaterialOption[]
   onConfirm: () => void
@@ -128,6 +129,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   parts?: MaterialOption[]
   isDisabled?: boolean
   materialSelectOptions?: OptionType[]
+  allowedEditOptions?: OptionType[]
   units?: string[]
   onClick?: (e: MaterialEditEvent) => void
   onScanClick?: MaterialCallback
@@ -138,7 +140,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
 }
 
 export type MaterialOption =
-& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'>;
+& Pick<DocumentRevision, 'id' | 'name' | 'displayRevision' | 'document'| 'status'>;
 
 export interface MaterialCellActionsProps<EditableMaterial> {
   dataItem: EditableMaterial

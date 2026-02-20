@@ -1,3 +1,4 @@
+import { DocumentCategory } from '../../../../../state/ducks/documentRevisions/types';
 import { FBMPIProcedureSelectValue } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { EditableEquipmentItem, EquipmentItem } from '../../types';
@@ -31,6 +32,7 @@ export const getMapSelectedByParentEquipId = (equipsSelected: Array<Partial<FBMP
       parentId: index !== -1 ? items[index].id : '',
       pmDueDate: selected.pmDueDate,
       calDueDate: selected.calDueDate,
+      eqStatus: selected.eqStatus,
       [MODE_FIELD]: false,
     };
     acc[equipmentId].push(actualEquipItem);
@@ -77,4 +79,14 @@ export const isDateOverdue = (date?: string) => {
 
 export const getValidDueDate = (date?: string): string => {
   return date && date !== 'N/A' ? date : '-';
+};
+
+export const isEquipmentSpecificationType = (equipmentOptions, id: string): boolean => {
+  const selectedEquipInfo = equipmentOptions?.find(
+    (option) => option.value === id,
+  );
+  if (selectedEquipInfo?.category === DocumentCategory.EquipmentSpecification) {
+    return true;
+  }
+  return false;
 };

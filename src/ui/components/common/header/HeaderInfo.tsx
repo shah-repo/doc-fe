@@ -22,6 +22,7 @@ import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from '../../..
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
 import useGetHasTag from '../../../hooks/useGetHasTag';
+import OverflowTooltip from '../../OverflowTooltip';
 import Text from '../../Text';
 import { useFormContext } from '../../forms/FormContext';
 import { styles } from './HeaderInfo.styles';
@@ -122,14 +123,25 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     const stepRegex = /Step #[0-9]+/;
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const mpiOutputTitle = name.match(stepRegex);
+    const docId = isTypeMpiOutput && mpiOutputTitle ? mpiOutputTitle[0] : id;
 
-    return isTypeMpiOutput && mpiOutputTitle
-      ? <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
-        {mpiOutputTitle[0]}
-      </Typography>
-      : <Typography variant="h6" data-cy="HeaderInfo-docId" className={className} component="span">
-        {id}
-      </Typography>;
+    return (
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={docId}
+        wrapperClassName={classes.truncateText}
+      >
+        <Typography
+          variant="h6"
+          data-cy="HeaderInfo-docId"
+          className={className}
+          component="span"
+        >
+          {docId}
+        </Typography>
+      </OverflowTooltip>
+    );
   };
 
   const statusIcon

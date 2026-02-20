@@ -1,9 +1,9 @@
 import { useFormikContext } from 'formik';
+import { round } from 'lodash';
 import React, { useEffect } from 'react';
 import { MaterialTreelistContext } from '..';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { requiredNumber, validator } from '../../../../components/forms/fields/validators';
-import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial } from '../types';
 import { styles } from './styles';
@@ -16,7 +16,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
   const { getFieldProps, values, errors, setErrors, setTouched, touched }
     = useFormikContext<EditableMaterial>();
   const isEditMode = isEditMaterial(dataItem);
-  const { lhrsQuantity = 1 } = React.useContext(MaterialTreelistContext);
+  const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
 
   const shouldDisable = !isLHRT && values?.LHRTparameter;
 
@@ -24,7 +24,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
     field && (
       <FormikField
         name={field}
-        validate={!shouldDisable ? validator(requiredNumber) : undefined}
+        validate={!shouldDisable && !isEBProcedure ? validator(requiredNumber) : undefined}
         error={!shouldDisable && field ? Boolean(errors[field]) : undefined}
       >
         <TextField
@@ -37,14 +37,14 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = (props) => {
       </FormikField>
     );
 
-  let displayValue = (dataItem[field] ?? null) !== null ? Number(toFixed(dataItem[field], MAX_DECIMALS)) : CELL_EMPTY_VALUE;
+  let displayValue = (dataItem[field] ?? null) !== null ? Number(dataItem[field]) : CELL_EMPTY_VALUE;
 
   if (dataItem.title && typeof displayValue === 'number') {
-    displayValue = displayValue * lhrsQuantity;
+    displayValue = round((displayValue * lhrsQuantity), MAX_DECIMALS);
   }
 
   useEffect(() => {
-    if (shouldDisable && errors[field]) {
+    if (shouldDisable && errors[field] && !isEBProcedure) {
       setErrors({
         ...errors,
         [field]: undefined,

@@ -11,6 +11,11 @@ export enum REVISION_STAGE_OPTIONS {
   ALPHA = 'common.Alpha',
 }
 
+export enum DOCUMENT_NUMBERING_STYLE {
+  INTERNAL = 'INTERNAL',
+  CUSTOMER = 'CUSTOMER',
+}
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export enum DOC_TYPE_GROUP {
   FORM = 'FORM',
@@ -518,6 +523,8 @@ export interface DocumentType {
   category?: string
   active?: boolean
   equipmentEnforceProd?: boolean
+  numberingStyle: DOCUMENT_NUMBERING_STYLE
+  initialNumberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 interface DocumentForms {
@@ -537,6 +544,7 @@ export interface DocumentTypeByIdForm {
 export interface DocumentTypeById {
   documentType: DocumentType
   forms: DocumentTypeByIdForm[]
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 export interface DocumentTypeByIdAction {

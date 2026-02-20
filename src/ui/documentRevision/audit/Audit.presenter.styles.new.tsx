@@ -30,6 +30,11 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       color: Colors.font_gray,
     },
+    auditKeyWithTopSpace: {
+      fontSize: '12px',
+      color: Colors.font_gray,
+      marginTop: '8px',
+    },
     owner: {
       color: theme.palette.text.primary,
       fontWeight: 500,

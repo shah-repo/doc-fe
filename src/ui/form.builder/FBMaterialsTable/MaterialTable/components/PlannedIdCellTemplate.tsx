@@ -21,35 +21,36 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 import { isPartHasInsufficientQty } from './utils';
 
 const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (props) => {
-  const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, expanded, isLHRT } = props;
+  const { field = '', dataItem, onExpandChange, level, hasChildren, materialSelectOptions, allowedEditOptions, expanded, isLHRT } = props;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && !dataItem.lotId && !dataItem?.isLotAddition;
   const isUpdateAction = dataItem[MODE_FIELD];
   const classes = styles({ isEditMode });
   const { getFieldProps, setFieldValue, values, errors } = useFormikContext<EditableMaterial>();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
-  const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(materialSelectOptions ?? []);
-  const { lhrsQuantity = 1, isEBProcedure } = React.useContext(MaterialTreelistContext);
-  const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
+  const [modifiedOptions, setModifiedOptions] = useState<OptionType[]>(allowedEditOptions ?? []);
+  const { lhrsQuantity = 1, isEBProcedure, disabledOptions, isMPIProcedure, acceptedQuantity } = React.useContext(MaterialTreelistContext);
+  const { isInsufficientQty, totalAssignedQty, quantityNeeded } = (!isEditMode && hasChildren) ? isPartHasInsufficientQty(dataItem, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false, totalAssignedQty: 0, quantityNeeded: 0 };
   const isFreeSolo = (!isLHRT && values?.LHRTparameter) || isEBProcedure;
 
-  const onClick = (ev) => {
-    onExpandChange(ev, dataItem, level);
+  const onClick = (event) => {
+    event?.stopPropagation();
+    onExpandChange(event, dataItem, level);
   };
 
   useEffect(() => {
-    if (!materialSelectOptions?.length) {
+    if (!allowedEditOptions?.length) {
       return;
     }
 
-    setModifiedOptions(materialSelectOptions);
+    setModifiedOptions(allowedEditOptions);
     const value = materialSelectOptions?.find((option) => option.value === dataItem[field]);
     if (value && field) {
       setValue(value);
     } else {
       setInputValue(values?.title ?? '');
     }
-  }, [materialSelectOptions]);
+  }, [allowedEditOptions, materialSelectOptions]);
 
   useEffect(() => {
     const title = cloneDeep(values?.title);
@@ -97,8 +98,8 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
       const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
       const updatedOptions = filterOptions(modifiedOptions, { inputValue });
       setModifiedOptions(updatedOptions);
-    } else if (!inputValue) {
-      setModifiedOptions(materialSelectOptions ?? []);
+    } else if (!inputValue || inputValue?.length < 2) {
+      setModifiedOptions(allowedEditOptions ?? []);
     }
 
     setInputValue(inputVal);
@@ -118,7 +119,7 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
   };
 
   const fieldValue = value?.label || dataItem?.[field ?? ''];
-  const displayValue = dataItem.LHRTparameter ? `${dataItem.id}:${fieldValue}` : fieldValue;
+  const displayValue = (isMPIProcedure && dataItem.LHRTparameter) ? `${dataItem.id}:${fieldValue}` : fieldValue;
 
   return (
     <TreeListCellWrapper {...props}>
@@ -140,6 +141,9 @@ const PlannedIdCellTemplate: React.ComponentType<CustomTreeListCellProps> = (pro
                     </>
                   );
                 }}
+                getOptionDisabled={(option) =>
+                  (isEBProcedure && disabledOptions?.includes(option.value)) ?? false
+                }
                 options={modifiedOptions}
                 placeholder={translate('common.select')}
                 getOptionLabel={(option: OptionType) => option.label}

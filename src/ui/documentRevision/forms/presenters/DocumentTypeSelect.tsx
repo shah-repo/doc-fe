@@ -6,6 +6,7 @@ import { authSelectors } from '../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, FBOutputDocumentType } from '../../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../../state/ducks/documents';
+import { DocumentProposedId } from '../../../../state/ducks/documents/types';
 import SelectField, { SelectOption } from '../../../components/forms/fields/Select';
 import { FBEditorPropertiesType, FBSchemaProps } from '../../../form.builder';
 import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
@@ -19,7 +20,7 @@ import { DocumentCloneType } from '../../Clone.container';
 import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from '../../helpers/checkDocumentGroup';
 import { getFBSchemeByDocType } from '../../helpers/getFBSchemeByDocType';
 import { getActiveDocumentTypes } from '../transform';
-import { styles } from './styles/DocIdInput.styles';
+import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
   isDocRevStatusDraft: boolean
@@ -42,11 +43,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
   const getDocTypeGroups = useDocTypeGroups();
   const formik = useFormikContext();
-  const classes = styles();
+  const classes = useStyles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
-  const asyncDocumentProposedId = useAsync({
-    onSuccess: () => {
+  const asyncDocumentProposedId = useAsync<DocumentProposedId>({
+    onSuccess: (documentProposedId) => {
       _documentRevisionFormState?.setCreateDocumentDisabled(false);
+      _documentRevisionFormState?.setNumberingStyle(documentProposedId?.numberingStyle);
     },
 
   });
@@ -100,17 +102,13 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       isQms: type.isQms,
       needsSignature: type.needsSignature as boolean,
     });
-    formik.setFieldValue('securityGroups', []);
 
     if (loadDocumentProposedId) {
       formik.setFieldValue('retrain', type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-    // Security groups
-    if (type.isQms) {
-      const securityGroups = getDocTypeGroups(type);
-      formik.setFieldValue('securityGroups', securityGroups);
-    }
+    const securityGroups = getDocTypeGroups(type);
+    formik.setFieldValue('securityGroups', securityGroups);
     formik.handleChange(event);
 
     // FB mode

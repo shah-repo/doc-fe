@@ -6,7 +6,7 @@ import { intl } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import { styles } from '../documentRevision/audit/Audit.presenter.styles.new';
-import { getMaterialRelacmentAuditField } from '../documentRevision/audit/fieldChangeHandlers';
+import { getMaterialReplacementAuditField } from '../documentRevision/audit/fieldChangeHandlers';
 import { FB, FBProcedureItemType, FBProcedureState } from '../form.builder';
 import { isTranslation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -21,8 +21,12 @@ type Props = OwnProps;
 
 interface AuditItem {
   key: string
-  current?: string|number|null
-  previous?: string|number|null
+  current?: string|number|null|Attachment[]
+  previous?: string|number|null|Attachment[]
+}
+
+interface Attachment {
+  id: string
 }
 
 interface IMaterial {
@@ -30,6 +34,7 @@ interface IMaterial {
   quantity: number
   unit?: string|null
   assignedLots: IAssignLot[]
+  attachments: Attachment[]
 }
 
 interface IAssignLot {
@@ -37,6 +42,7 @@ interface IAssignLot {
   quantity: number
   unit?: string|null
   serialNumber?: string
+  parentTitle?: string
 }
 
 const AuditProcedure: React.FunctionComponent<Props> = ({
@@ -67,20 +73,48 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     return renderWithLoader(result);
   };
 
-  const renderUpdatedMaterailProcedureAudit = (
+  const renderUpdatedMaterialProcedureAudit = (
     field: AuditItem,
     number: number,
     innerKey: number,
     isNested = false,
+    isDelete = false,
   ): ReactNode => {
-    const fbLabel = getUdatedMaterailProcedureAuditLabel(field, number, isNested);
+    const fbLabel = getUpdatedMaterialProcedureAuditLabel(field, number, isNested);
 
     const { key, current, previous }: AuditItem = field;
     let value: number | string | null | undefined | ReactNode = !current && previous ? previous : current;
-    if (key === 'title') {
-      value = renderPartValue(current as string);
+    if (key === 'title' || key === 'parentTitle') {
+      value = renderPartValue((isDelete ? previous : current) as string);
     } else if (key === 'lotId') {
-      value = renderLotValue(current as string);
+      value = renderLotValue((isDelete ? previous : current) as string);
+    } else if (key === 'attachments') {
+      const currentItems = Array.isArray(current) ? current : [];
+      const previousItems = Array.isArray(previous) ? previous : [];
+
+      const itemsToMap = currentItems.length > 0 ? currentItems : previousItems;
+
+      return itemsToMap.map((item, index) => {
+        const auditAttachment = {
+          ...audit,
+          previousValue: currentItems.length === 0 ? item?.id : 'undefined',
+          nextValue: currentItems.length > 0 ? item?.id : 'undefined',
+        };
+
+        return (
+          <React.Fragment key={`${key}-${item?.id || index}`}>
+            {/* We repeat the Label and the Component for every single file */}
+            <Typography className={classes.auditKey}>
+              <span data-cy={`change-key-${key}-${innerKey}-${index}`}>
+                {fbLabel}
+              </span>
+            </Typography>
+            <div data-cy={`change-value-${key}-${innerKey}-${index}`}>
+              <AuditAttachment audit={auditAttachment} />
+            </div>
+          </React.Fragment>
+        );
+      });
     }
 
     return (
@@ -97,18 +131,18 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     );
   };
 
-  const getUdatedMaterailProcedureAuditLabel = (
+  const getUpdatedMaterialProcedureAuditLabel = (
     { key, current, previous }: AuditItem,
     number: number,
     isNested: boolean,
   ): string|null => {
-    let action = getMaterialRelacmentAuditField('added');
+    let action = getMaterialReplacementAuditField('added');
     if (current && !previous) {
-      action = getMaterialRelacmentAuditField('added');
+      action = getMaterialReplacementAuditField('added');
     } else if (current !== previous && current && previous) {
-      action = getMaterialRelacmentAuditField('updated');
+      action = getMaterialReplacementAuditField('updated');
     } else if (!current && previous) {
-      action = getMaterialRelacmentAuditField('deleted');
+      action = getMaterialReplacementAuditField('deleted');
     } else if (!current && !previous) {
       return null;
     }
@@ -120,7 +154,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       : '';
     const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
 
-    if (isNested && key !== 'serialNumber') {
+    if (isNested && !['serialNumber', 'parentTitle'].includes(key)) {
       fbLabel = intl.formatMessage({
         id: 'form.builder.assigned.lots.label',
       }, {
@@ -134,20 +168,56 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     return `${fbLabel} ${action}`;
   };
 
+  if (audit.type === 'OBJECT_DELETED') {
+    const auditValueToUse = auditValue ?? '{}';
+    let parsedValue;
+    if (typeof auditValueToUse === 'string') {
+      try {
+        parsedValue = JSON.parse(auditValueToUse.trim()) as IAssignLot;
+      } catch (e) {
+        parsedValue = auditValueToUse;
+      }
+    }
+    const nestedFieldsToCompare = [
+      { key: 'lotId', current: undefined, previous: parsedValue?.lotId },
+      { key: 'parentTitle', current: undefined, previous: parsedValue?.parentTitle },
+    ];
+    let innerKey = 0;
+    const number = audit?.fbSchemaItem?.stepIndex ?? 1;
+    const fieldsToRender = nestedFieldsToCompare.map((field) =>
+      renderUpdatedMaterialProcedureAudit(field, number, innerKey++, true, true),
+    );
+    return (
+      <>
+        {fieldsToRender}
+      </>
+    );
+  }
   if (audit.type === 'OBJECT_EDITED' && audit.field.includes('materials')) {
     const auditValueToUse = auditValue ?? '{}';
-    const { title, unit, quantity, assignedLots }
-      = typeof auditValueToUse === 'string' ? JSON.parse(auditValueToUse) as IMaterial : auditValueToUse;
+    let parsedValue;
+    if (typeof auditValueToUse === 'string') {
+      try {
+        parsedValue = JSON.parse(auditValueToUse.trim()) as IMaterial;
+      } catch (e) {
+        parsedValue = auditValueToUse;
+      }
+    } else {
+      parsedValue = auditValueToUse;
+    }
+
+    const { title, unit, quantity, assignedLots, attachments } = parsedValue;
 
     const previousValueToUse = audit.previousValue ?? '{}';
     const {
-      title: prevTitle, unit: prevUnit, quantity: prevQuantity, assignedLots: prevAssignedLots,
+      title: prevTitle, unit: prevUnit, quantity: prevQuantity, assignedLots: prevAssignedLots, attachments: prevAttachments,
     } = (typeof previousValueToUse === 'string' ? JSON.parse(previousValueToUse) : previousValueToUse) as IMaterial;
 
     const fieldsToCompare = [
       { key: 'title', current: title, previous: prevTitle },
       { key: 'quantity', current: quantity, previous: prevQuantity },
       { key: 'unit', current: unit, previous: prevUnit },
+      { key: 'attachments', current: attachments, previous: prevAttachments },
     ];
 
     const assignedLotCurrent = assignedLots?.[0];
@@ -158,6 +228,7 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       { key: 'serialNumber', current: assignedLotCurrent?.serialNumber, previous: assignedLotPrevious?.serialNumber },
       { key: 'quantity', current: assignedLotCurrent?.quantity, previous: assignedLotPrevious?.quantity },
       { key: 'unit', current: assignedLotCurrent?.unit, previous: assignedLotPrevious?.unit },
+      { key: 'parentTitle', current: assignedLotCurrent?.parentTitle, previous: assignedLotPrevious?.parentTitle },
     ];
 
     let innerKey = 0;
@@ -165,11 +236,11 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
     const number = audit?.fbSchemaItem?.stepIndex ?? 1;
     if (assignedLots) {
       fieldsToRender = nestedFieldsToCompare.map((field) =>
-        renderUpdatedMaterailProcedureAudit(field, number, innerKey++, true),
+        renderUpdatedMaterialProcedureAudit(field, number, innerKey++, true),
       );
     } else {
       fieldsToRender = fieldsToCompare.map((field) =>
-        renderUpdatedMaterailProcedureAudit(field, number, innerKey++),
+        renderUpdatedMaterialProcedureAudit(field, number, innerKey++),
       );
     }
     return (
@@ -258,7 +329,9 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       if (audit.type === 'ARRAY_DELETED') {
         try {
           const data = JSON.parse(auditValue as string);
-          if (data && data.lotId) {
+          if (data && Array.isArray(data) && data.length > 0) {
+            return data.map((item) => renderLotValue(item.lotId));
+          } else if (data && data.lotId) {
             return renderLotValue(data.lotId);
           }
         } catch (err) {

@@ -46,6 +46,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public hiddenFieldsByRules = new Set<string>();
 
   public omitAutosave = false;
+  public shouldPersistFormDataWithSchema?: boolean;
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
@@ -113,9 +114,25 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRProductionBuild (): boolean {
-    const ProductionId = this.buildTypeOptions.find(data => data.internalType === FBLHRBuildOptions.Production)?.id;
-    return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === (ProductionId ?? FBLHRBuildOptions.Production);
+    const allowedInternalTypes = [
+      FBLHRBuildOptions.Production,
+      FBLHRBuildOptions.Clinical,
+      FBLHRBuildOptions['Verification & Validation'],
+    ];
+
+    const activeBuildTypeIds = this.buildTypeOptions
+      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
+      .map((buildType) => buildType.id);
+
+    const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
+
+    const smartReference = this.document?.smartReferencesTo?.find(
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    );
+
+    const lhrBuildType = smartReference?.toDocRev?.formInput?.['lhr-build-type'] as string;
+
+    return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
 
   public get isLHRRelevantBuilds (): boolean {
@@ -221,6 +238,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setDirty = (isDirty: boolean) => {
     set(this, 'isDirty', isDirty);
+  };
+
+  @action public setShouldPersistFormDataWithSchema = (flag: boolean) => {
+    set(this, 'shouldPersistFormDataWithSchema', flag);
   };
 
   @action public setFormInputSync = (name: string, value: any) => {

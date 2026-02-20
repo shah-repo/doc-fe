@@ -11,7 +11,7 @@ import {
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, get, isEmpty, isNil, keyBy, omit, replace, uniq } from 'lodash';
+import { cloneDeep, get, isEmpty, isNil, keyBy, map, omit, replace, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
@@ -67,6 +67,9 @@ interface MaterialTreelistContextProps {
   isRedlineActive?: boolean
   isDisabled?: boolean
   isEBProcedure?: boolean
+  isMPIProcedure?: boolean
+  disabledOptions?: string[]
+  acceptedQuantity?: number
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
@@ -103,7 +106,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const { procedureState, mpiProcedureState, lhrStepState, workspaceState } = FB.useStores();
   const classes = useStyles({ size });
   const treeListRef = useRef(null);
-  const { materialSelectOptions } = useFetchData();
+  const { materialSelectOptions, allowedEditOptions } = useFetchData({ isEBProcedure });
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
@@ -117,6 +120,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
     inEdit: [],
   });
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+  const disabledOptions = map(items, 'title');
 
   React.useEffect(() => {
     if (isMPIProcedure || isLHRStep || isEBProcedure) {
@@ -330,7 +334,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableMaterial;
     const isEditMode = (item[MODE_FIELD] || item[ADD_FIELD]);
-    const { isInsufficientQty } = (!isEditMode && !isEmpty(item[SUB_ITEMS_FIELD])) ? isPartHasInsufficientQty(item, lhrsQuantity) : { isInsufficientQty: false };
+    const { isInsufficientQty } = (!isEditMode && !isEmpty(item[SUB_ITEMS_FIELD])) ? isPartHasInsufficientQty(item, lhrsQuantity, acceptedQuantity) : { isInsufficientQty: false };
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -421,7 +425,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
       const lotItem = {
         id: selected.refId,
         title: '',
-        lotId: selected.lotId,
+        lotId: selected.lotId ?? selected.actualId,
         lotDocId: selected.lotDocId,
         parentPartId: selected.materialId,
         parentId: index !== -1 ? state.data[index].id : '',
@@ -481,6 +485,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   };
 
   const { formState } = FB.useStores();
+  const acceptedQuantity = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
   const [lhrsQuantity, setLhrsQuantity] = useState(1);
   const { appendItemToStateData, removeScanLot, addPartItem, editPartItem, discardScanLot, addLot }
     = useMaterialActions(
@@ -509,6 +514,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   const schema = getSchemaBuilder()({
     materialSelectOptions,
+    allowedEditOptions,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     onDiscard: discardScanLot,
@@ -523,18 +529,16 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
   React.useEffect(() => {
     const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
-    const acceptedQuantity = cloneDeep(formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY));
-    if (!isNil(formValue) || !isNil(acceptedQuantity)) {
-      setLhrsQuantity(acceptedQuantity > 0 ? acceptedQuantity : formValue);
+    if (!isNil(formValue)) {
+      setLhrsQuantity(formValue);
     }
 
     const dispose = reaction(
-      () => ({
-        start: formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
-        accepted: formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
-      }), ({ start, accepted }) => {
-        if (!isNil(start) || !isNil(accepted)) {
-          setLhrsQuantity(accepted > 0 ? accepted : start);
+      () => formState?.getInputState(LHRS_START_QUANTITY_NAME)?.value,
+      () => {
+        const newValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY_NAME));
+        if (!isNil(newValue)) {
+          setLhrsQuantity(newValue);
         }
       },
     );
@@ -554,6 +558,9 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           isRedlineActive,
           isDisabled: isEBProcedure ? isDisabled : isDesign || !isEnableOnlyLotAddition,
           isEBProcedure,
+          disabledOptions,
+          isMPIProcedure,
+          acceptedQuantity,
         }}
       >
         <FormikProvider value={formik}>
