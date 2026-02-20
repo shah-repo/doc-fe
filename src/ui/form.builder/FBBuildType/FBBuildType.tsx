@@ -32,6 +32,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   dialogState,
   prevValue,
   allowedBuildTypeChange,
+  lhrBuildTypeSwitchConfigApproval,
   ...props
 }) => {
   return (
@@ -54,7 +55,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           onInputChange={onChange}
           onChange={onChange}
           getOptionDisabled={(option) => {
-            if (allowedBuildTypeChange?.includes(option.id)) {
+            if ((lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval?.length === 0) || allowedBuildTypeChange?.includes(option.id)) {
               return false;
             }
             return true;
