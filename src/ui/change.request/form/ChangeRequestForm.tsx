@@ -1,5 +1,5 @@
 import { BoxProps } from '@material-ui/core';
-import { FormikProps } from 'formik';
+import { FormikProps, useFormikContext } from 'formik';
 import { cloneDeep, isEqual, map } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
@@ -69,6 +69,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
   const { isEditing, isLoading } = useFormContext();
+  const { touched } = useFormikContext<ChangeRequestFormValues>();
   const dispatch = useDispatch();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
@@ -127,9 +128,11 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       type: TabTypeOptions.ITEMS,
     });
   }
+  console.log({ touched });
 
   const formInputValues = useObserver(() => {
     const v = formState?.getValues();
+    console.log('useObserver: ', { v });
     if (!v) return v;
 
     const { formDocument, ...rest } = v;
@@ -140,15 +143,16 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     const nextDirty = !isEqual(
       formInputValues,
     formValues.initialValues?.formInput,
-    );
+    ) || touched?.isFormTouched;
 
     if (_formState?.isDirty !== nextDirty) {
-    _formState?.setDirty(nextDirty);
+    _formState?.setDirty(Boolean(nextDirty));
     }
   }, [
     formInputValues,
   formValues.initialValues?.formInput,
   _formState,
+  touched,
   ]);
 
   useEffect(() => {
@@ -158,6 +162,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   }, []);
 
   const isDirty = useObserver(() => _formState?.isDirty ?? false);
+  console.log({ isDirty, _formStateIsDirty: _formState?.isDirty, formStateValues: formState?.values });
 
   const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
 

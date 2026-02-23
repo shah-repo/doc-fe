@@ -2,7 +2,8 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popper } from '@material-ui/core';
 import cx from 'classnames';
-import React, { useRef, useState } from 'react';
+import { useFormikContext } from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -47,6 +48,12 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const popperAnchorRef = useRef<HTMLDivElement>(null);
 
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
+  const { setFieldTouched } = useFormikContext();
+
+  useEffect(() => {
+    setFieldTouched('isFormTouched', true);
+    return () => setFieldTouched('isFormTouched', false);
+  }, []);
 
   return (
     <FBForm {...{ formState }} >

@@ -22,6 +22,7 @@ export interface ChangeRequestFormValues {
   formInput?: Record<string, any>
   formDocument?: FBDocumentRevisionProps
   documentType?: Id
+  isFormTouched?: boolean
 }
 
 export interface PasswordFormValues {

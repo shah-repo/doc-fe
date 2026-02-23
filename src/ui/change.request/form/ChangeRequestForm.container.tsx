@@ -177,8 +177,8 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
     <FBProvider {...{ bookmarkState }}>
       <div className={classes.root}>
         <div className={classes.appFrame}>
-          <Formik
-            initialValues={calcInitialValues}
+          <Formik<ChangeRequestFormValues>
+            initialValues={{ ...calcInitialValues, isFormTouched: false }}
             onSubmit={onSubmit}
             enableReinitialize
           >
