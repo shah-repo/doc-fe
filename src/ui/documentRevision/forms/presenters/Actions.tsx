@@ -304,7 +304,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   };
 
   const onFormClick = () => {
-    if(isDisabled && !isDocumentRevisionReleased(status)) {
+    if(isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
       createDocument();
     } else {
       const values = get(formik, 'values') as DocumentRevision;
@@ -380,13 +380,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     if (
       isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove
       && !(isPO && isDocHasOutput)
-      && !(isWO && isDocHasOutput)) {
+      && !(isWO && isDocHasOutput)
+      && !(isMPIOutput && isDocHasOutput)) {
       accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }
   if (
     isDirectlyApproved
-    && (!isInlineApproval || revisionStage !== 1)
+    && (!isInlineApproval || revisionStage !== 1 || isMPIOutput)
     && showToOwnerOrOperator
   ) {
     accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);

@@ -6,7 +6,7 @@ import { GridCellProps } from '@progress/kendo-react-grid';
 import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../common/intl';
-import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import useStyles from '../../../components/common/kendo.column.templates/ActiveDropdown.style';
 import { useDamRestrictions } from '../../../form.builder/FBApprovalMatrix/components/DamNumberingStyle/DamRestrictionsContext';
 import { NUMBERING_STYLE_OPTIONS } from '../../../form.builder/FBApprovalMatrix/constants';
@@ -23,13 +23,12 @@ interface NumberingStyleEditCellProps {
 const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataItem, field = '', onChange }) => {
   const { restrictions } = useDamRestrictions();
   const classes = useStyles();
+  const initialValue = dataItem.initialNumberingStyle;
 
   const { disabledDocTypeIds = [] } = restrictions ?? {};
 
   const docTypeId = dataItem?.id;
   const isDisabledDocType = disabledDocTypeIds.includes(docTypeId);
-  const disabled = isDisabledDocType;
-
   const dataValue = dataItem[field] ?? '';
   const dropDownData = NUMBERING_STYLE_OPTIONS;
 
@@ -45,9 +44,11 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
     });
   };
 
-  const isCustomerSelected = dataValue === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+  const isInitiallyCustomerSelected
+  = initialValue === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+  const disabled = isDisabledDocType || isInitiallyCustomerSelected;
 
-  const tooltipMessage = isCustomerSelected
+  const tooltipMessage = isInitiallyCustomerSelected
     ? 'dam.number.style.dropdown.customer.selected.info.message'
     : isDisabledDocType
       ? null : 'dtm.number.style.dropdown.draft.info.message';
@@ -62,7 +63,11 @@ const NumberingStyleEditCell: React.FC<NumberingStyleEditCellProps> = ({ dataIte
         textField="text"
       />
       {tooltipMessage && (
-        <Tooltip title={translate(tooltipMessage)} placement="top" arrow>
+        <Tooltip
+          title={<span className={classes.infoMessageWrapper}>{translate(tooltipMessage)}</span>}
+          placement="top"
+          arrow
+        >
           <span className={classes.infoIconContainer}>
             <FontAwesomeIcon icon={solid('circle-exclamation')} className={classes.infoIcon} />
           </span>
