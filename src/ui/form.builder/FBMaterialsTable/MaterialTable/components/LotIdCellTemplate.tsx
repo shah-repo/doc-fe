@@ -208,7 +208,6 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const isValidLOT = (lot) => {
-    console.log('lot', lot);
     let isAcceptedStatus = false;
     if (isEBProcedure) {
       isAcceptedStatus = true; // No constraints on Lot Status
