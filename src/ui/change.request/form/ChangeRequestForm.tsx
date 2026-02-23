@@ -128,11 +128,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       type: TabTypeOptions.ITEMS,
     });
   }
-  console.log({ touched });
 
   const formInputValues = useObserver(() => {
     const v = formState?.getValues();
-    console.log('useObserver: ', { v });
     if (!v) return v;
 
     const { formDocument, ...rest } = v;
@@ -162,7 +160,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   }, []);
 
   const isDirty = useObserver(() => _formState?.isDirty ?? false);
-  console.log({ isDirty, _formStateIsDirty: _formState?.isDirty, formStateValues: formState?.values });
 
   const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
 
