@@ -553,7 +553,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (['id', 'updatedCategory'].includes(valueKey as string)) return;
 
         fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
-        if (change.type === 'BOOLEAN_EDITED') {
+        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type)) {
+          const action = change.type === 'BOOLEAN_NEW' ? 'added' : 'updated';
           const docTypeId = change.field.split('[')[1].split(']')[0];
           const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
           const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
@@ -563,10 +564,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
             const role = existingRoles[Number(valueKey) - 1]?.name || '';
 
-            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role });
+            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role, action });
           } else {
             const field = getapprovalMatrixFieldLabel(valueKey as string, false);
-            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field });
+            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field, action });
           }
 
           change = { ...change, updatedField: CUSTOM_BOOLEAN_FIELD };
