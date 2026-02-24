@@ -14,7 +14,6 @@ const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
   disabled,
   formOptions,
   formAutocompleteDisabled,
-  // docId,
   docType,
 }) => {
   const documentTypeId = formState?.inputState.get('document.documentType.id')?.value as string;
