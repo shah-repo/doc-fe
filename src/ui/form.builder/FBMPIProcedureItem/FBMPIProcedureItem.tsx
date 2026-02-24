@@ -17,6 +17,7 @@ import {
 import Colors from '../../layout/theme/utils/colors';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
+import FBMPIProcedureItemSerialsTable from '../FBMPIProcedureItemSerialsTable';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -146,7 +147,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             />
           )}
           {type === FBProcedureItemType.serials && (
-            <></>
+            <FBMPIProcedureItemSerialsTable
+              name={name}
+              stepIndex={stepIndex}
+              isPreview={isPreview}
+              disabled={disabled}
+            />
           )}
         </>
       )}
