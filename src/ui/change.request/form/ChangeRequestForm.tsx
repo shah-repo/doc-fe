@@ -69,7 +69,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
   const { isEditing, isLoading } = useFormContext();
-  const { touched } = useFormikContext<ChangeRequestFormValues>();
+  const { dirty } = useFormikContext<ChangeRequestFormValues>();
   const dispatch = useDispatch();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
@@ -141,7 +141,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     const nextDirty = !isEqual(
       formInputValues,
     formValues.initialValues?.formInput,
-    ) || touched?.isFormTouched;
+    );
 
     if (_formState?.isDirty !== nextDirty) {
     _formState?.setDirty(Boolean(nextDirty));
@@ -150,7 +150,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     formInputValues,
   formValues.initialValues?.formInput,
   _formState,
-  touched,
   ]);
 
   useEffect(() => {
@@ -161,7 +160,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   const isDirty = useObserver(() => _formState?.isDirty ?? false);
 
-  const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
+  const shouldConfirmLeave = isDirty || dirty || updatingAsyncState.status === AsyncStatus.Active;
 
   const memoizedChangeRequest = useMemo(() => {
     if (!changeRequest) return changeRequest;

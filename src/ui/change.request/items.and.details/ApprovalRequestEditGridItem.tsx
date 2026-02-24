@@ -48,11 +48,11 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const popperAnchorRef = useRef<HTMLDivElement>(null);
 
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
-  const { setFieldTouched } = useFormikContext();
+  const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
-    setFieldTouched('isFormTouched', true);
-    return () => setFieldTouched('isFormTouched', false);
+    setFieldValue('documentRev', true);
+    return () => setFieldValue('documentRev', undefined);
   }, []);
 
   return (
