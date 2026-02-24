@@ -1,5 +1,5 @@
 import { BoxProps } from '@material-ui/core';
-import { FormikProps } from 'formik';
+import { FormikProps, useFormikContext } from 'formik';
 import { cloneDeep, isEqual, map } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
@@ -69,6 +69,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
   const { isEditing, isLoading } = useFormContext();
+  const { dirty } = useFormikContext<ChangeRequestFormValues>();
   const dispatch = useDispatch();
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
 
@@ -143,7 +144,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     );
 
     if (_formState?.isDirty !== nextDirty) {
-    _formState?.setDirty(nextDirty);
+    _formState?.setDirty(Boolean(nextDirty));
     }
   }, [
     formInputValues,
@@ -159,7 +160,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   const isDirty = useObserver(() => _formState?.isDirty ?? false);
 
-  const shouldConfirmLeave = isDirty || updatingAsyncState.status === AsyncStatus.Active;
+  const shouldConfirmLeave = isDirty || dirty || updatingAsyncState.status === AsyncStatus.Active;
 
   const memoizedChangeRequest = useMemo(() => {
     if (!changeRequest) return changeRequest;
