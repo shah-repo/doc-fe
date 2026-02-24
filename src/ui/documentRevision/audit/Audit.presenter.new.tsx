@@ -553,9 +553,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (['id', 'updatedCategory'].includes(valueKey as string)) return;
 
         fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
-        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type)) {
+        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type) && change.field) {
           const action = change.type === 'BOOLEAN_NEW' ? 'added' : 'updated';
-          const docTypeId = change.field.split('[')[1].split(']')[0];
+          let docTypeId;
+          if (change.field && change.field.includes('[')) {
+            docTypeId = change.field.split('[')[1].split(']')[0];
+          }
           const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
           const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
 
