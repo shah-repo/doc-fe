@@ -42,6 +42,16 @@ const columns: KendoColumn[] = [{
   orderIndex: 2,
 },
 {
+  field: 'numberingStyle',
+  title: 'common.doc.numbering.style',
+  cell: DTMCellTemplates.NUMBERING_STYLE_CELL,
+  show: true,
+  width: '180px',
+  groupable: false,
+  showColumnMenu: true,
+  orderIndex: 3,
+},
+{
   field: 'privateNumberPool',
   title: 'common.private.number.pool',
   cell: DTMCellTemplates.CHECKBOX_CELL,
@@ -50,7 +60,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 3,
+  orderIndex: 4,
 },
 {
   field: 'canRedLine',
@@ -61,7 +71,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 4,
+  orderIndex: 5,
 },
 {
   field: 'isQms',
@@ -72,7 +82,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 5,
+  orderIndex: 6,
 },
 {
   field: 'needsSignature',
@@ -83,7 +93,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 6,
+  orderIndex: 7,
 },
 {
   field: 'defaultTraining',
@@ -94,7 +104,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 7,
+  orderIndex: 8,
 },
 {
   field: 'startingNumber',
@@ -105,7 +115,7 @@ const columns: KendoColumn[] = [{
   width: '185px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 8,
+  orderIndex: 9,
 },
 {
   field: 'numOfDocDigits',
@@ -116,7 +126,7 @@ const columns: KendoColumn[] = [{
   width: '120px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 9,
+  orderIndex: 10,
 },
 {
   field: 'defaultRevStage',
@@ -127,7 +137,7 @@ const columns: KendoColumn[] = [{
   width: '165px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 10,
+  orderIndex: 11,
 },
 {
   field: 'hiddenForCreationForUsersWithoutTagsFormatted',
@@ -138,7 +148,7 @@ const columns: KendoColumn[] = [{
   width: '200px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 11,
+  orderIndex: 12,
 },
 {
   field: 'group',
@@ -149,7 +159,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 12,
+  orderIndex: 13,
 }, {
   field: 'equipmentEnforceProd',
   title: 'common.equipmentEnforce',
@@ -159,7 +169,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 13,
+  orderIndex: 14,
 },
 {
   field: 'category',
@@ -168,7 +178,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 14,
+  orderIndex: 15,
 }, {
   field: 'schema',
   title: 'common.schema',
@@ -178,7 +188,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 15,
+  orderIndex: 16,
 }, {
   field: 'fieldsConfig',
   title: 'common.fields.config',
@@ -188,7 +198,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 16,
+  orderIndex: 17,
 }, {
   field: '',
   title: '',
@@ -200,7 +210,7 @@ const columns: KendoColumn[] = [{
   reorderable: false,
   resizable: false,
   showColumnMenu: false,
-  orderIndex: 17,
+  orderIndex: 18,
 }];
 
 const initialDataState: PageState = { skip: 0, take: 25, group: [] };

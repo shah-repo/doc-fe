@@ -267,6 +267,7 @@ interface TrainingReminders {
   isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
   isEmailSendingEnabled?: boolean
+  gracePeriodDays: number
 }
 
 export interface GeneralSettings {

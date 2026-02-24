@@ -25,6 +25,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     selectedDocument,
     showFormMigration,
     isNewOutput,
+    docId,
     canAccess,
     isRecord,
     match,
@@ -36,7 +37,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     _documentRevisionSidebarState = SM.useRef(DocumentRevisionSidebarState);
     const { _documentRevisionFormState } = SM.useStores();
 
-    const { documentTypeId, documentId, docId } = _documentRevisionFormState || {};
+    const { documentTypeId, documentId } = _documentRevisionFormState || {};
     isNewOutput = match.path === DOCUMENT_REVISION_OUTPUT_URL;
     intl = useIntl();
 

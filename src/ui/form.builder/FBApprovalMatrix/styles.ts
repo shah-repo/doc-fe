@@ -30,6 +30,8 @@ export default makeStyles(() => ({
   dialogContentStyle: {
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'visible',
+    flex: 1,
   },
   error: {
     color: Colors.error,
@@ -38,5 +40,8 @@ export default makeStyles(() => ({
   iconContainer: {
     display: 'flex',
     alignSelf: 'end',
+  },
+  dialogPaper: {
+    overflow: 'visible',
   },
 }));
