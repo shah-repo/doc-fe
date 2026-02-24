@@ -11,8 +11,6 @@ interface Props {
 const StatusCell: React.FC<Props> = ({ dataItem, options, onChange }) => {
   const activeOption = options.find(option => option.value === dataItem.usage || (!option.value && !dataItem.usage));
 
-  console.log(activeOption);
-
   return (
     <Autocomplete
       options={options}

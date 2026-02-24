@@ -63,40 +63,45 @@ const FBSerials: React.FC = () => {
     return null;
   }
 
-  const actionProps = isPartSerializationManual ? {
+  const defaultActionProps = {
     onUpdate: updateSerialNumber,
-    onDelete: deleteSerialNumber,
     onBulkUpdate: bulkUpdateSerialNumbers,
+  };
+
+  const actionProps = isPartSerializationManual ? {
+    ...defaultActionProps,
+    onDelete: deleteSerialNumber,
     onBulkDelete: bulkDeleteSerialNumbers,
     onImport: importDialog.open,
     onAdd: addDialog.open,
-  } : {};
+  } : defaultActionProps;
+
+  const canImport = isPartSerializationManual && false;
 
   return (
     <div className={classes.root}>
-      <FBSection label="form.builder.serials.title">
-        <FBSerialsTable
-          serialNumbers={serialNumbers}
-          isLoading={isLoading}
-          {...actionProps}
+      <FBSection label="form.builder.serials.title" />
+      <FBSerialsTable
+        serialNumbers={serialNumbers}
+        isLoading={isLoading}
+        {...actionProps}
+      />
+      {isPartSerializationManual && (
+        <AddDialog
+          isOpen={addDialog.isOpen}
+          onClose={addDialog.close}
+          onConfirm={addSerials}
         />
-        {isPartSerializationManual && (
-          <>
-            <AddDialog
-              isOpen={addDialog.isOpen}
-              onClose={addDialog.close}
-              onConfirm={addSerials}
-            />
-            <ImportDialog
-              partName={partName}
-              partDescription={partDescription}
-              isOpen={importDialog.isOpen}
-              onClose={importDialog.close}
-              onConfirm={addSerials}
-            />
-          </>
-        )}
-      </FBSection>
+      )}
+      {canImport && (
+        <ImportDialog
+          partName={partName}
+          partDescription={partDescription}
+          isOpen={importDialog.isOpen}
+          onClose={importDialog.close}
+          onConfirm={addSerials}
+        />
+      )}
     </div>
   );
 };

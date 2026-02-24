@@ -78,8 +78,6 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
 
   @action
   public async loadSerialNumbers (): Promise<void> {
-    console.log('loadSerialNumbers');
-    console.log(this.lotId);
     if (!this.lotId) {
       return;
     }
@@ -156,7 +154,6 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
       url: FBEndpoint.LotForDocRev,
       urlValues: { docRevId },
     }, (data, error) => {
-      console.log({ data, error });
       this.lotData = data;
       this.loadSerialNumbers().catch(toastError);
     });

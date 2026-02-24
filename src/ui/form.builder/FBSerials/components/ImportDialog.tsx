@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => createStyles({
     color: Colors.textDisabled,
     textAlign: 'center',
   },
-  error: {
+  errorContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -115,6 +115,9 @@ const useStyles = makeStyles((theme) => createStyles({
     textAlign: 'center',
   },
   errorIcon: {
+    fontSize: 48,
+  },
+  warningIcon: {
     fontSize: 48,
   },
   chip: {
@@ -144,6 +147,16 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(1, 1),
+  },
+  warningContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: theme.spacing(2, 2),
+    color: Colors.warning,
+    minHeight: 250,
+    textAlign: 'center',
   },
   accordionSummaryContent: {
     display: 'flex',
@@ -269,7 +282,7 @@ const ImportDialog: React.FC<ImportDialogProps> = ({
     formData.append('part_name', partName);
     formData.append('part_description', partDescription);
     axios.post<{ results: ExtractResponse[] }>(
-      'http://127.0.0.1:3003/extract',
+      'http://localhost:3003/extract',
       formData,
       {
         headers: {
@@ -306,6 +319,9 @@ const ImportDialog: React.FC<ImportDialogProps> = ({
     onClose();
   };
 
+  const foundSerials = importState?.extracts?.filter(extract => extract.serialsToImport.length > 0) ?? [];
+  const isSerialsFound = foundSerials?.length > 0;
+
   return (
     <Dialog
       open={isOpen}
@@ -315,7 +331,7 @@ const ImportDialog: React.FC<ImportDialogProps> = ({
       maxWidth="md"
     >
       <div className={classes.contentContainer}>
-        {importState.status === 'success' && (
+        {importState.status === 'success' && isSerialsFound && (
           <>
             <div className={classes.successBanner}>
               <div className={classes.successBannerContent}>
@@ -335,7 +351,7 @@ const ImportDialog: React.FC<ImportDialogProps> = ({
               </Button>
             </div>
             <div>
-              {importState.extracts?.map(extract => (
+              {foundSerials?.map(extract => (
                 <Accordion expanded={expandedPanels.includes(extract.part_name)} onChange={(event, isExpanded) => toggleExpanded(extract.part_name, isExpanded)} key={extract.part_name}>
                   <AccordionSummary>
                     <div className={classes.accordionSummaryContent}>
@@ -407,13 +423,36 @@ const ImportDialog: React.FC<ImportDialogProps> = ({
             </div>
           </>
         )}
-        {importState.status === 'error' && (
-          <div className={classes.error}>
-            <FontAwesomeIcon className={classes.errorIcon} icon={solid('exclamation-triangle')} />
+        {importState.status === 'success' && !isSerialsFound && (
+          <div className={classes.warningContainer}>
+            <FontAwesomeIcon className={classes.warningIcon} icon={solid('file-magnifying-glass')} />
             <div>
-              <Typography variant="h5">Failed to extract serial numbers</Typography>
+              <Typography variant="h5">No serial numbers found for: <br /> <b>{partName}</b></Typography>
               <div>{importState.error}</div>
             </div>
+            <Button
+              kind="primary"
+              onClick={handleStartOver}
+              startIcon={<FontAwesomeIcon icon={regular('rotate-right')} />}
+            >
+             Try Again
+            </Button>
+          </div>
+        )}
+        {importState.status === 'error' && (
+          <div className={classes.errorContainer}>
+            <FontAwesomeIcon className={classes.errorIcon} icon={solid('exclamation-triangle')} />
+            <div>
+              <Typography variant="h5">Unable to extract serial numbers. <br /> It is not you, it is us.</Typography>
+              <div>{importState.error}</div>
+            </div>
+            <Button
+              kind="primary"
+              onClick={handleStartOver}
+              startIcon={<FontAwesomeIcon icon={regular('rotate-right')} />}
+            >
+              Try Again
+            </Button>
           </div>
         )}
         {(importState.status === 'idle' || importState.status === 'processing') && (

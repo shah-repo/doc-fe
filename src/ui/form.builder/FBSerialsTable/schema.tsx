@@ -68,7 +68,7 @@ export const useSchema = ({
       title: 'Select',
       width: 65,
       resizable: false,
-      isHidden: !canSelect,
+      hidden: !canSelect,
       filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
       className: classes.checkbox,
     },
@@ -127,7 +127,7 @@ export const useSchema = ({
       filterable: false,
       sortable: false,
       resizable: false,
-      isHidden: !onDelete,
+      hidden: !onDelete,
       template: (props) => (
         <ActionsCell {...props} onDelete={onDelete} />
       ),
