@@ -20,6 +20,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     optionId,
     name,
     allowedBuildTypeChange,
+    lhrBuildTypeSwitchConfigApproval,
     ...props
   }: T) => {
     const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
@@ -37,10 +38,12 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       optionId: FBAutocompleteAsyncOption.buildType,
     });
     const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: Array<{ from: string, to: string }> } | null;
-    const lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
+    lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
     allowedBuildTypeChange = lhrBuildTypeSwitchConfigApproval.filter((config) => {
       return config.from === defaultValue?.id;
     }).map((config) => config.to);
+
+    console.log('allowedBuildTypeChange:', allowedBuildTypeChange, defaultValue?.id);
 
     const {
       document,
@@ -88,7 +91,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`${name}`));
         formState?.setFieldAutosave(`${name}`);
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
@@ -122,7 +125,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
 
-      if (lhrBuildTypeSwitchConfigApproval.length === 0) {
+      if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
         if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
@@ -135,9 +138,16 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
           workspaceState?.saveDocRev(formState?.getValues());
         }
       } else {
-        if (!isEmpty(selectedLhrBuild) && !isNull(event)) {
+        if (!isEmpty(selectedLhrBuild) && !isNull(event) && defaultValue) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
+        } else if (!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild?.id);
+          formState?.setFieldAutosave(name);
+          formState?.getInputState(name ?? '')?.setRender();
+          setDefaultValue(selectedLhrBuild);
+          setPrevValue(selectedLhrBuild);
+          workspaceState?.saveDocRev(formState?.getValues());
         }
       }
     };
@@ -155,7 +165,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       };
 
       if (action === 'confirm') {
-        if (lhrBuildTypeSwitchConfigApproval.length === 0) {
+        if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
           formState?.setFieldValue(name, selectedValue?.id);
           formState?.setFieldAutosave(name);
           setDefaultValue(selectedValue);
@@ -182,7 +192,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
         formState?.getInputState(name ?? '')?.setRender();
-        setSelectedValue(undefined);
         approvalDialog.close();
       } else {
         setDefaultValue(prevValue);
@@ -248,6 +257,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       onApprovalAction,
       dialogState,
       allowedBuildTypeChange,
+      lhrBuildTypeSwitchConfigApproval,
     });
   };
 
