@@ -47,9 +47,8 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       locked: true,
     },
     {
-      id: 'calOrPm',
-      field: 'calOrPm',
-      title: 'administration.general.settings.build.type.allow.cal.or.pm',
+      id: 'allowCalOrPm',
+      field: 'allowCalOrPm',
       headerCell: () => (
         <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.cal.or.pm')}
@@ -58,9 +57,8 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'lotQtyLessQtyNeeded',
-      field: 'lotQtyLessQtyNeeded',
-      title: 'administration.general.settings.build.type.allow.lot.qty.less.qty.needed',
+      id: 'allowOverdueQuantityMismatch',
+      field: 'allowOverdueQuantityMismatch',
       headerCell: () => (
         <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.lot.qty.less.qty.needed')}
@@ -69,9 +67,8 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'qtyDiscrepancy',
-      field: 'qtyDiscrepancy',
-      title: 'administration.general.settings.build.type.allow.qty.discrepancy',
+      id: 'allowQuantityDiscrepancy',
+      field: 'allowQuantityDiscrepancy',
       headerCell: () => (
         <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.qty.discrepancy')}
@@ -80,12 +77,51 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'lotSelection',
-      field: 'lotSelection',
-      title: 'administration.general.settings.build.type.allow.require.lot.selection',
+      id: 'requireLotSelection',
+      field: 'requireLotSelection',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.allow.require.lot.selection')}
+          {translate('administration.general.settings.build.type.require.lot.selection')}
+        </span>),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
+      id: 'lotSelection',
+      field: 'lotSelection',
+      headerCell: () => (
+        <span className={classes.header}>
+          {translate('administration.general.settings.build.type.allow.expired.lots')}
+        </span>),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
+      id: 'requireEquipmentSelection',
+      field: 'requireEquipmentSelection',
+      headerCell: () => (
+        <span className={classes.header}>
+          {translate('administration.general.settings.build.type.require.equipment.selection')}
+        </span>),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
+      id: 'requireDeviationApproval',
+      field: 'requireDeviationApproval',
+      headerCell: () => (
+        <span className={classes.header}>
+          {translate('administration.general.settings.build.type.require.deviation.approval')}
+        </span>),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
+      id: 'requireReworkApproval',
+      field: 'requireReworkApproval',
+      headerCell: () => (
+        <span className={classes.header}>
+          {translate('administration.general.settings.build.type.require.rework.approval')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
