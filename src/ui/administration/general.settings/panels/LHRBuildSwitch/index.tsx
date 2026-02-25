@@ -21,6 +21,8 @@ import { buildSchema } from './schema';
 import { EditableLHRBuildSwitch, LHRBuildSwitch } from './types';
 import { useStyles } from './styles';
 import { Box } from '@material-ui/core';
+import { AlertDialog } from '../../../../components/dialogs';
+import useDialog from '../../../../hooks/useDialog';
 
 const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
@@ -36,6 +38,8 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     name: group.label,
   }));
   const newRuleId = useRef<string>();
+  const deleteConfirmationDialog = useDialog();
+  const ruleToDelete = useRef<EditableLHRBuildSwitch>();
 
   const discardLHRBuildSwitch = () => setEditedLHRBuildSwitch(undefined);
   const updateLHRBuildSwitchSettings = useActionCreator(companyActions.updateGeneralSettings);
@@ -88,6 +92,26 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setLHRBuildSwitchData(LHRBuildSwitch ?? []);
   }, [LHRBuildSwitch]);
 
+  const confirmRuleDeletion = (rule: EditableLHRBuildSwitch) => {
+    ruleToDelete.current = rule;
+    deleteConfirmationDialog.open();
+  };
+
+  const deleteRule = () => {
+    deleteConfirmationDialog.close();
+
+    if (!ruleToDelete.current) {
+      return;
+    }
+    const updatedLHRBuildSwitch = LHRBuildSwitchData.filter(item => item.id !== ruleToDelete.current?.id);
+    async.start(updateLHRBuildSwitchSettings, { ...values, lhrBuildTypeSwitchConfigApproval: updatedLHRBuildSwitch }, '', 'POST', async);
+  };
+
+  const discardDelete = () => {
+    ruleToDelete.current = undefined;
+    deleteConfirmationDialog.close();
+  };
+
   const addLHRBuildSwitch = () => {
     setEditedLHRBuildSwitch({
       id: uuidv4(),
@@ -135,6 +159,7 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onEdit: setEditedLHRBuildSwitch,
     onDiscard: discardLHRBuildSwitch,
     onConfirm: submitForm,
+    onDelete: confirmRuleDeletion,
   });
 
   return (
@@ -159,6 +184,13 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
             scrollable="scrollable"
           />
       </FormikProvider>
+      <AlertDialog
+        handler={deleteConfirmationDialog}
+        onConfirm={deleteRule}
+        onCancel={discardDelete}
+      >
+        {translate('administration.general.settings.material.flow.delete.confirmation')}
+      </AlertDialog>
     </SettingsPanel>
   );
 };

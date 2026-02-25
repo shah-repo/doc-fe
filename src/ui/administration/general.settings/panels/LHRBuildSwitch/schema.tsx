@@ -17,6 +17,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, Props> = ({
   onEdit,
   onDiscard,
   onConfirm,
+  onDelete,
 }) => {
   return [
     {
@@ -52,6 +53,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, Props> = ({
           onEdit={onEdit}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          onDelete={onDelete}
         />
       ),
     },
