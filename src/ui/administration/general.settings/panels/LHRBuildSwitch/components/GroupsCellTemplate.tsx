@@ -5,9 +5,10 @@ import { CellTemplateProps } from '../../../../../components/KendoDataGrid/Kendo
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { useStyles } from '../styles';
-import { EditableLHRBuildSwitch, GroupOption, LHRBuildSwitch } from '../types';
+import { EditableLHRBuildSwitch, GroupOption } from '../types';
+import { get, isEmpty } from 'lodash';
 
-interface Props extends CellTemplateProps<LHRBuildSwitch> {
+interface Props extends CellTemplateProps<EditableLHRBuildSwitch> {
   options: GroupOption[]
 }
 
@@ -18,21 +19,22 @@ const GroupsCellTemplate: React.FC<Props> = ({
   onClick,
 }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRBuildSwitch>();
+  const { values, getFieldProps, setFieldValue, errors } = useFormikContext<EditableLHRBuildSwitch>();
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: GroupOption) => {
-    setFieldValue(field, value);
+  const handleChange = (event: ChangeEvent<unknown>, value?: GroupOption[]) => {
+    setFieldValue(field, value?.map(item => item.id));
   };
 
-  const value = (isEditMode ? values[field] : dataItem[field]) as GroupOption[];
+  const value = isEditMode ? options?.filter(group => values[field]?.includes(group.id)) : options?.filter(group => dataItem[field]?.includes(group.id));
 
   if (isEditMode) {
     return (
-      <FormikField name={field}>
+      <FormikField name={field} error={get(errors, field)}>
         <Autocomplete
           {...getFieldProps(field)}
+          key={isEmpty(value) ? 'disabled' : 'enabled'}
           blurOnSelect
           multiple
           value={value}
@@ -51,7 +53,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
 
   return (
     <Box className={classes.chips} onClick={() => onClick?.({ dataItem })}>
-      {value.map((group) => (
+      {value?.map((group) => (
         <Chip size="small" label={group.name} key={group.id} />
       ))}
     </Box>

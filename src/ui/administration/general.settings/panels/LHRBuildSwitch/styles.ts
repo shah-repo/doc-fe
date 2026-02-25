@@ -54,5 +54,8 @@ export const useStyles = makeStyles((theme) =>
       animation: `$newRowAnimation 5s ${theme.transitions.easing.easeIn}`,
     },
   },
+  subTitle: {
+    marginBottom: theme.spacing(2),
+  },
   }),
 );

@@ -5,11 +5,9 @@ export type GroupOption = Pick<Group, 'id' | 'name'>;
 
 export interface LHRBuildSwitch {
   id: string
-  from: string
-  to: string
-  approvalGroup: []
-  groups: GroupOption[]
-  isActive: boolean
+  from?: string
+  to?: string
+  approvalGroups: GroupOption[]
 }
 
 export interface EditableLHRBuildSwitch extends LHRBuildSwitch, EditableItem {

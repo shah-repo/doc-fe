@@ -1,6 +1,6 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
-import React, { useEffect } from 'react';
+import { isEmpty, omit, unionBy } from 'lodash';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -19,20 +19,23 @@ import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableLHRBuildSwitch, LHRBuildSwitch } from './types';
-// import { useStyles } from './styles';
+import { useStyles } from './styles';
+import { Box } from '@material-ui/core';
 
 const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const LHRBuildSwitch = settings.lhrBuildTypeSwitchConfigApproval;
-  // const classes = useStyles();
+  const LHRBuild = settings.lhrBuildTypeConfig;
+  const classes = useStyles();
   const [LHRBuildSwitchData, setLHRBuildSwitchData] = React.useState<LHRBuildSwitch[]>(LHRBuildSwitch ?? []);
   const [editedLHRBuildSwitch, setEditedLHRBuildSwitch] = React.useState<EditableLHRBuildSwitch>();
-  const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
+  const approvalGroups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
     id: group.value,
     name: group.label,
   }));
+  const newRuleId = useRef<string>();
 
   const discardLHRBuildSwitch = () => setEditedLHRBuildSwitch(undefined);
   const updateLHRBuildSwitchSettings = useActionCreator(companyActions.updateGeneralSettings);
@@ -46,23 +49,26 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const updateLHRBuildSwitch = (updatedLHRBuildSwitch: LHRBuildSwitch[]) => {
     setLHRBuildSwitchData(updatedLHRBuildSwitch);
-    async.start(updateLHRBuildSwitchSettings, { ...values, LHRBuildSwitchTypeConfig: updatedLHRBuildSwitch }, '', 'POST', async);
+    async.start(updateLHRBuildSwitchSettings, { ...values, lhrBuildTypeSwitchConfigApproval: updatedLHRBuildSwitch }, '', 'POST', async);
   };
 
   const formik = useFormik<EditableLHRBuildSwitch | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = LHRBuildSwitch?.some(({ from, to, id }) => from.toLowerCase() === values?.from?.toLowerCase().trim() && to.toLowerCase() === values?.to?.toLowerCase().trim() && id !== values.id);
+      const isDuplicate = LHRBuildSwitch?.some(({ from, to, id }) => from?.toLowerCase() === values?.from?.trim() && to?.toLowerCase() === values?.to?.trim() && id !== values.id);
       if (isEmpty(values.from)) {
         error.from = 'validators.required';
       }
       if (isEmpty(values.to)) {
         error.to = 'validators.required';
       }
+      if (isEmpty(values.approvalGroups)) {
+        error.approvalGroups = 'validators.required';
+      }
       if (values.from && values.to && isDuplicate) {
-        error.from = 'validator.lhr.build.same.internal.exist';
-        error.to = 'validator.lhr.build.same.internal.exist';
+        error.from = 'validator.lhr.build.same.rule.exist';
+        error.to = 'validator.lhr.build.same.rule.exist';
       }
       return error;
     },
@@ -85,14 +91,12 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const addLHRBuildSwitch = () => {
     setEditedLHRBuildSwitch({
       id: uuidv4(),
-      isActive: true,
-      // internalType: '',
-      // displayLabel: '',
       from: '',
       to: '',
-      approvalGroup: [],
+      approvalGroups: [],
       [MODE_FIELD]: Mode.add,
     });
+    newRuleId.current = undefined;
   };
 
   const mappedLHRBuildSwitch = LHRBuildSwitchData?.map((LHRBuildSwitch) => {
@@ -107,13 +111,27 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLHRBuildSwitch, editedLHRBuildSwitch]
       : mappedLHRBuildSwitch;
 
-  const getRowAttributes = (LHRBuildSwitch: EditableLHRBuildSwitch) => ({
-    'data-cy': `row-${kebabCase(LHRBuildSwitch.internalType)}`,
-  });
+  const newRuleRowRef = (node: HTMLDivElement | null) => {
+    if (node) {
+      setTimeout(() => {
+        requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+      }, 0);
+    }
+  };
+
+  const getRowAttributes = (LHRBuildSwitch: EditableLHRBuildSwitch) => {
+    if (LHRBuildSwitch.id === newRuleId.current) {
+      return {
+        className: classes.newRow,
+        ref: newRuleRowRef,
+      };
+    }
+  };
 
   const schema = buildSchema({
     isActive,
-    groups,
+    approvalGroups,
+    LHRBuild: LHRBuild ?? [],
     onEdit: setEditedLHRBuildSwitch,
     onDiscard: discardLHRBuildSwitch,
     onConfirm: submitForm,
@@ -124,15 +142,18 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       {...props}
       title={translate('administration.general.settings.lhr.build.switch.tab')}
       onAddNew={addLHRBuildSwitch}
+      addButtonLabel={translate('common.add.rule')}
     >
-      <Text message={translate('administration.general.settings.lhr.build.switch.sub.title')} />
+      <Box className={classes.subTitle}>
+        <Text message={translate('administration.general.settings.lhr.build.switch.sub.title')} />
+      </Box>
       <FormikProvider value={formik}>
           <SettingsTable
             isActive={true}
             data={LHRBuildSwitchList}
             isEditing={editedLHRBuildSwitch !== undefined}
             schema={schema}
-            addButtonLabel={translate('common.add.new')}
+            addButtonLabel={translate('common.add.rule')}
             onAdd={addLHRBuildSwitch}
             getRowProperties={getRowAttributes}
             scrollable="scrollable"

@@ -1,14 +1,19 @@
 import React from 'react';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
-import { AutocompleteCellTemplate } from '../../components/SettingsTable/components/AutocompleteCellTemplate';
+import AutocompleteCellTemplate from './components/AutocompleteCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
-import { EditableLHRBuildSwitch } from './types';
-import { EditableLHRBuild } from '../LHRBuild/types';
+import { EditableLHRBuildSwitch, GroupOption } from './types';
 import GroupsCellTemplate from './components/GroupsCellTemplate';
+import { LHRBuild } from '../LHRBuild/types';
 
-export const buildSchema: SchemaBuilder<EditableLHRBuild, EditableLHRBuildSwitch> = ({
-  isActive,
-  groups,
+interface Props {
+  approvalGroups: GroupOption[]
+  LHRBuild: LHRBuild[]
+}
+
+export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, Props> = ({
+  approvalGroups,
+  LHRBuild,
   onEdit,
   onDiscard,
   onConfirm,
@@ -16,28 +21,23 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild, EditableLHRBuildSwitch
   return [
     {
       id: 'from',
-      field: 'internalType',
+      field: 'from',
       title: 'administration.general.settings.lhr.build.switch.from',
-      template: AutocompleteCellTemplate,
+      template: (props) => (<AutocompleteCellTemplate {...props} options={LHRBuild} />),
       width: 200,
     },
     {
       id: 'to',
-      field: 'internalType',
+      field: 'to',
       title: 'administration.general.settings.lhr.build.switch.to',
-      template: AutocompleteCellTemplate,
+      template: (props) => (<AutocompleteCellTemplate {...props} options={LHRBuild} />),
       width: 200,
     },
     {
-      id: 'approvalGroup',
-      field: 'approvalGroup',
+      id: 'approvalGroups',
+      field: 'approvalGroups',
       title: 'administration.general.settings.lhr.build.switch.approval.group',
-      template: (props) => (
-      <GroupsCellTemplate
-        {...props}
-        options={groups}
-      />
-    ),
+      template: (props) => (<GroupsCellTemplate {...props} options={approvalGroups} />),
       width: 200,
     },
     {
@@ -48,7 +48,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild, EditableLHRBuildSwitch
       template: (props) => (
         <ActionsCellTemplate
           {...props}
-          isActive={isActive}
+          isActive={true}
           onEdit={onEdit}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
