@@ -2,7 +2,9 @@ import { filter, isEmpty, isNull, unionBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
-import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBWorkspaceModeOptions } from '..';
+import { useSelector } from 'react-redux';
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { companySelectors } from '../../../state/ducks/company';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
@@ -17,6 +19,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
   const Comp = ({
     optionId,
     name,
+    allowedBuildTypeChange,
+    lhrBuildTypeSwitchConfigApproval,
     ...props
   }: T) => {
     const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
@@ -33,6 +37,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.buildType,
     });
+    const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: Array<{ from: string, to: string }> } | null;
+    lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
+    allowedBuildTypeChange = lhrBuildTypeSwitchConfigApproval.filter((config) => {
+      return config.from === defaultValue?.id;
+    }).map((config) => config.to);
+
+    console.log('allowedBuildTypeChange:', allowedBuildTypeChange, defaultValue?.id);
 
     const {
       document,
@@ -52,7 +63,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
 
-    const isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
+    const isBuildTypeChangeApprovalEnabled = lhrBuildTypeSwitchConfigApproval.length > 0 ? workspaceState?.buildTypeChangeStatus() : defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production;
 
     const currentApproverId = document?.approvals?.find(approval => approval.approver?.user.id === authUser.id)?.id;
 
@@ -80,7 +91,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`${name}`));
         formState?.setFieldAutosave(`${name}`);
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
@@ -111,11 +122,33 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     }
 
     const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
+      const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
 
-      if (!isEmpty(selectedLhrBuild) && !isNull(event)) {
-        setSelectedValue(selectedLhrBuild);
-        lhrBuildDialog.open();
+      if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
+        if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
+          setSelectedValue(selectedLhrBuild);
+          lhrBuildDialog.open();
+        } else if (!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild?.id);
+          formState?.setFieldAutosave(name);
+          formState?.getInputState(name ?? '')?.setRender();
+          setDefaultValue(selectedLhrBuild);
+          setPrevValue(selectedLhrBuild);
+          workspaceState?.saveDocRev(formState?.getValues());
+        }
+      } else {
+        if (!isEmpty(selectedLhrBuild) && !isNull(event) && defaultValue) {
+          setSelectedValue(selectedLhrBuild);
+          lhrBuildDialog.open();
+        } else if (!isNull(event)) {
+          formState?.setFieldValue(name, selectedLhrBuild?.id);
+          formState?.setFieldAutosave(name);
+          formState?.getInputState(name ?? '')?.setRender();
+          setDefaultValue(selectedLhrBuild);
+          setPrevValue(selectedLhrBuild);
+          workspaceState?.saveDocRev(formState?.getValues());
+        }
       }
     };
 
@@ -125,19 +158,30 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     };
 
     const onDialogActionClick = (action: 'cancel' | 'confirm') => {
-      if (action === 'confirm') {
-        // Close first dialog and open approval dialog
-        buildTypeState.getApprovals.filter(approval => approval.status === ApprovalStatus.Approved).forEach(approval => {
-          requestApproval(approval.id);
-        });
-        lhrBuildDialog.close();
-        approvalDialog.open();
-      } else {
-        setDefaultValue(prevValue);
-        forceRerender();
+      const closeDialogAndReset = () => {
         formState?.getInputState(name ?? '')?.setRender();
         setSelectedValue(undefined);
         lhrBuildDialog.close();
+      };
+
+      if (action === 'confirm') {
+        if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
+          formState?.setFieldValue(name, selectedValue?.id);
+          formState?.setFieldAutosave(name);
+          setDefaultValue(selectedValue);
+          workspaceState?.saveDocRev(formState?.getValues());
+          closeDialogAndReset();
+        } else {
+          buildTypeState.getApprovals
+            .filter(approval => approval.status === ApprovalStatus.Approved)
+            .forEach(approval => requestApproval(approval.id));
+          lhrBuildDialog.close();
+          approvalDialog.open();
+        }
+      } else {
+        setDefaultValue(prevValue);
+        forceRerender();
+        closeDialogAndReset();
       }
     };
 
@@ -148,7 +192,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
         formState?.getInputState(name ?? '')?.setRender();
-        setSelectedValue(undefined);
         approvalDialog.close();
       } else {
         setDefaultValue(prevValue);
@@ -213,6 +256,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       showApprovalButtons,
       onApprovalAction,
       dialogState,
+      allowedBuildTypeChange,
+      lhrBuildTypeSwitchConfigApproval,
     });
   };
 

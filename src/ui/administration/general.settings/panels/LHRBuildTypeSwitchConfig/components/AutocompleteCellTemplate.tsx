@@ -5,7 +5,7 @@ import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/consta
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { EditableLHRBuildSwitch } from '../types';
 import { translate } from '../../../../../../common/intl';
-import { EditableLHRBuild, LHRBuild } from '../../../panels/LHRBuild/types';
+import { EditableLHRBuild, LHRBuild } from '../../LHRBuild/types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { createStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core';
@@ -53,7 +53,6 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
         onChange={handleChange}
         getOptionLabel={(val: LHRBuild) => val.displayLabel}
         size="small"
-        disabled={mode === Mode.edit}
       />
     </FormikField>
   );

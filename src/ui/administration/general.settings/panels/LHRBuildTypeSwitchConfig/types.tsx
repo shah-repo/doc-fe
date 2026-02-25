@@ -3,12 +3,12 @@ import { EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid
 
 export type GroupOption = Pick<Group, 'id' | 'name'>;
 
-export interface LHRBuildSwitch {
+export interface LHRBuildTypeSwitchConfigApproval {
   id: string
   from?: string
   to?: string
   approvalGroups: GroupOption[]
 }
 
-export interface EditableLHRBuildSwitch extends LHRBuildSwitch, EditableItem {
+export interface EditableLHRBuildSwitch extends LHRBuildTypeSwitchConfigApproval, EditableItem {
 }

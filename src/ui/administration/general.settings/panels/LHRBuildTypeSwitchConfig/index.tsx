@@ -18,7 +18,7 @@ import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
-import { EditableLHRBuildSwitch, LHRBuildSwitch } from './types';
+import { EditableLHRBuildSwitch, LHRBuildTypeSwitchConfigApproval } from './types';
 import { useStyles } from './styles';
 import { Box } from '@material-ui/core';
 import { AlertDialog } from '../../../../components/dialogs';
@@ -31,7 +31,7 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const LHRBuildSwitch = settings.lhrBuildTypeSwitchConfigApproval;
   const LHRBuild = settings.lhrBuildTypeConfig;
   const classes = useStyles();
-  const [LHRBuildSwitchData, setLHRBuildSwitchData] = React.useState<LHRBuildSwitch[]>(LHRBuildSwitch ?? []);
+  const [LHRBuildSwitchData, setLHRBuildSwitchData] = React.useState<LHRBuildTypeSwitchConfigApproval[]>(LHRBuildSwitch ?? []);
   const [editedLHRBuildSwitch, setEditedLHRBuildSwitch] = React.useState<EditableLHRBuildSwitch>();
   const approvalGroups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
     id: group.value,
@@ -51,7 +51,7 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
   });
 
-  const updateLHRBuildSwitch = (updatedLHRBuildSwitch: LHRBuildSwitch[]) => {
+  const updateLHRBuildSwitch = (updatedLHRBuildSwitch: LHRBuildTypeSwitchConfigApproval[]) => {
     setLHRBuildSwitchData(updatedLHRBuildSwitch);
     async.start(updateLHRBuildSwitchSettings, { ...values, lhrBuildTypeSwitchConfigApproval: updatedLHRBuildSwitch }, '', 'POST', async);
   };

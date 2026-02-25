@@ -30,6 +30,9 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   showApprovalButtons = false,
   onApprovalAction,
   dialogState,
+  prevValue,
+  allowedBuildTypeChange,
+  lhrBuildTypeSwitchConfigApproval,
   ...props
 }) => {
   return (
@@ -51,6 +54,12 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           options={options}
           onInputChange={onChange}
           onChange={onChange}
+          getOptionDisabled={(option) => {
+            if ((lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval?.length === 0) || (!defaultValue && !allowedBuildTypeChange?.includes(option.id)) || allowedBuildTypeChange?.includes(option.id)) {
+              return false;
+            }
+            return true;
+          }}
           data-cy={`${name}-field`}
           value={defaultValue ?? null}
           getOptionLabel={option => option.displayLabel}
@@ -133,6 +142,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           label="form.builder.approvers"
           documentStatus={documentStatus}
           approvalTransition={approvalTransition}
+          selectedValue={selectedValue}
+          prevValue={prevValue}
         />
       </Dialog>
     </FBProvider>

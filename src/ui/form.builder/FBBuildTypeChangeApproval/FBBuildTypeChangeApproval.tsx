@@ -38,6 +38,8 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
   isContributorIncluded,
   autosave,
   approvalApprovedGroup,
+  selectedValue,
+  prevValue,
   ...props
 }) => {
   const { getFormattedDateString } = useDate();

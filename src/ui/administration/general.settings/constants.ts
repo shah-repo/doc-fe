@@ -5,7 +5,7 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
 import LHRBuildSettingsPanel from './panels/LHRBuild';
-import LHRBuildSwitchSettingsPanel from './panels/LHRBuildSwitch';
+import LHRBuildSwitchSettingsPanel from './panels/LHRBuildTypeSwitchConfig';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
