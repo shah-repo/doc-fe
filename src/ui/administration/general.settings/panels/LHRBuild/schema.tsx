@@ -87,8 +87,8 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'lotSelection',
-      field: 'lotSelection',
+      id: 'allowExpiredLot',
+      field: 'allowExpiredLot',
       headerCell: () => (
         <span className={classes.header}>
           {translate('administration.general.settings.build.type.allow.expired.lots')}

@@ -4,6 +4,14 @@ export interface LHRBuild {
   id: string
   internalType: string
   displayLabel: string
+  allowCalOrPm: boolean
+  allowExpiredLot: boolean
+  allowOverdueQuantityMismatch: boolean
+  allowQuantityDiscrepancy: boolean
+  requireLotSelection: boolean
+  requireEquipmentSelection: boolean
+  requireDeviationApproval: boolean
+  requireReworkApproval: boolean
   isActive: boolean
 }
 
