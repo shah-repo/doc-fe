@@ -25,8 +25,8 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const lhrBuilds = Object.keys(FBLHRBuildOptions).map((key) => key);
   const otherOptions = Object.keys(FBLHRBuildOtherOptions).map((key) => key);
   const handleChange = (event: ChangeEvent<unknown>, value: T) => {
-    if(['Yes', 'No'].includes(String(value))) {
-      return setFieldValue(field, String(value) === 'Yes');
+    if([FBLHRBuildOtherOptions.Yes, FBLHRBuildOtherOptions.No].includes(value as unknown as FBLHRBuildOtherOptions)) {
+      return setFieldValue(field, String(value) === FBLHRBuildOtherOptions.Yes);
     }
     setFieldValue(field, value);
   };
