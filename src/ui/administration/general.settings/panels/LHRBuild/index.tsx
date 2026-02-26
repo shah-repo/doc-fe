@@ -88,6 +88,14 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       internalType: '',
       displayLabel: '',
       isActive: true,
+      allowCalOrPm: true,
+      allowExpiredLot: true,
+      allowOverdueQuantityMismatch: true,
+      allowQuantityDiscrepancy: true,
+      requireLotSelection: true,
+      requireEquipmentSelection: true,
+      requireDeviationApproval: true,
+      requireReworkApproval: true,
       [MODE_FIELD]: Mode.add,
     });
   };

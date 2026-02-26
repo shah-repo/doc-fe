@@ -25,8 +25,15 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const lhrBuilds = Object.keys(FBLHRBuildOptions).map((key) => key);
   const otherOptions = Object.keys(FBLHRBuildOtherOptions).map((key) => key);
   const handleChange = (event: ChangeEvent<unknown>, value: T) => {
+    if(['Yes', 'No'].includes(String(value))) {
+      return setFieldValue(field, String(value) === 'Yes');
+    }
     setFieldValue(field, value);
   };
+  let value = dataItem[field];
+  if([true, false].includes(value)) {
+    value = value === true ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+  }
 
   return (
     <FormikField name={field} error={get(errors, field)}>
@@ -39,7 +46,8 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
         options={field === 'internalType' ? lhrBuilds : otherOptions}
         onChange={handleChange}
         size="small"
-        disabled={mode === Mode.edit}
+        disabled={field === 'internalType' && mode === Mode.edit}
+        value={value}
       />
     </FormikField>
   );
@@ -49,7 +57,12 @@ export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Elemen
   const { dataItem, field } = props;
   const mode = get(dataItem, MODE_FIELD);
   const canBeModified = [Mode.edit, Mode.add].includes(mode);
-  const defaultValue = dataItem[field];
+  let defaultValue = dataItem[field];
+
+  if([true, false].includes(defaultValue)) {
+    defaultValue = defaultValue === true ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+  }
+
   const classes = useStyles();
   if (canBeModified) {
     return <Editor {...props} />;
