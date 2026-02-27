@@ -36,6 +36,9 @@ class FBWorkspaceState extends FBSchemaState {
   @observable.shallow
   public buildTypeOptions: LHRBuild[] = [];
 
+  @observable.shallow
+  public lhrBuildTypeConfig: LHRBuild[] = [];
+
   public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
@@ -135,6 +138,13 @@ class FBWorkspaceState extends FBSchemaState {
     return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
 
+  public get lhrBuildTypeConfigForSelectedBuildType (): LHRBuild | undefined {
+    const buildType = this.document?.smartReferencesTo?.find(
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    )?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
+    return this.lhrBuildTypeConfig?.find((config) => config.id === buildType);
+  }
+
   public get isLHRRelevantBuilds (): boolean {
     if (this.buildTypeOptions.length === 0) {
       return false;
@@ -199,6 +209,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setBuildTypeOptions = (data) => {
     set(this, 'buildTypeOptions', data);
+  };
+
+  @action public setLhrBuildTypeConfig = (data: LHRBuild[]) => {
+    set(this, 'lhrBuildTypeConfig', data);
   };
 
   @action public setIsPreview = (isPreview: boolean) => {
