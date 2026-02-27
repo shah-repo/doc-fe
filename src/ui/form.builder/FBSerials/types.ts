@@ -42,7 +42,7 @@ export interface SerialNumberUpdateData {
 }
 
 export type SerialNumberUpdatePayload = { id: string } & SerialNumberUpdateData;
-export interface SerialNumberUpdateBody {
+interface SerialNumberUpdateBody {
   serialNumbers: SerialNumberUpdatePayload[]
 }
 interface SerialNumberDeleteBody {
