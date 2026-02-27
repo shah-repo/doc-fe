@@ -9,11 +9,15 @@ import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/p
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as CloneIcon } from '../../../assets/images/clone.svg';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DOCUMENT_NUMBERING_STYLE } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import { documentVersionPath } from '../../document.revision/utils/paths';
+import CustomIdDialog from '../../documentRevision/dialogs/CustomIdDialog';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
+import { toastError } from '../notifications';
 
 interface ClonePOButtonProps extends ButtonProps {
   documentRevision: DocumentRevision
@@ -24,6 +28,10 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
   documentRevision, renderAsButton,
 }) => {
   const isNewLayout = SM.isNewLayout;
+
+  const customIdDialog = useDialog();
+  const documentType = documentRevision?.document.documentType;
+  const isInternalTypeNumbering = documentType?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
   const clonePO = useActionCreator(documentRevisionsActions.cloneDoc);
   const history = useHistory();
@@ -37,10 +45,22 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
         ),
       });
     },
+    onError: (error) => {
+      toastError(error);
+    },
   });
 
   const cloneAction = () => {
-    asyncClone.start(clonePO, documentRevision.id, null, asyncClone);
+    if (!isInternalTypeNumbering) {
+      customIdDialog.open();
+    } else {
+      asyncClone.start(clonePO, documentRevision.id, null, asyncClone);
+    }
+  };
+
+  const handleCreateDocument = (docId: string) => {
+    customIdDialog.close();
+    asyncClone.start(clonePO, documentRevision.id, { docId }, asyncClone);
   };
 
   const getUpdatedButton = () => {
@@ -77,6 +97,13 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
   return (
     <>
       {getUpdatedButton()}
+      {customIdDialog.isOpen && <CustomIdDialog
+        isOpen = {customIdDialog.isOpen}
+        closeDialog = {customIdDialog.close}
+        outputDocumentType = {documentType}
+        isInternalTypeNumbering = {isInternalTypeNumbering}
+        handleSubmit = {(docId: string) => handleCreateDocument(docId)}
+      />}
     </>
   );
 };

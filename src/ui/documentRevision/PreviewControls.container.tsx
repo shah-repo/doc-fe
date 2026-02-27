@@ -705,13 +705,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
       )}
-      <CustomIdDialog
+      {customIdDialog.isOpen && <CustomIdDialog
         isOpen = {customIdDialog.isOpen}
         closeDialog = {customIdDialog.close}
         outputDocumentType = {outputDocumentType}
         isInternalTypeNumbering = {isInternalTypeNumbering}
         handleSubmit = {(docId: string) => handleCreateDocument(documentRevision, docId)}
-      />
+      />}
     </>
   );
 };
