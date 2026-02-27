@@ -59,7 +59,6 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
   };
 
   const handleCreateDocument = (docId: string) => {
-    customIdDialog.close();
     asyncClone.start(clonePO, documentRevision.id, { docId }, asyncClone);
   };
 
