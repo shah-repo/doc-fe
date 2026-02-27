@@ -5,7 +5,7 @@ import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/consta
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { EditableLHRBuildSwitch } from '../types';
 import { translate } from '../../../../../../common/intl';
-import { EditableLHRBuild, LHRBuild } from '../../LHRBuild/types';
+import { LHRBuild } from '../../LHRBuild/types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { createStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core';
@@ -30,7 +30,7 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
 }) => {
   const mode = get(dataItem, MODE_FIELD);
   const canBeModified = [Mode.edit, Mode.add].includes(mode);
-  const { values, setFieldValue, getFieldProps, errors } = useFormikContext<EditableLHRBuild>();
+  const { values, setFieldValue, getFieldProps, errors } = useFormikContext<EditableLHRBuildSwitch>();
   const classes = useStyles();
 
   const handleChange = (event: ChangeEvent<unknown>, value: LHRBuild) => {
@@ -40,6 +40,13 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
   const defaultValue = options.find(val => val.id === dataItem[field]);
 
   if (canBeModified) {
+    let filerOptions = options;
+    if(field === 'from' && !isEmpty(values?.to)) {
+      filerOptions = options.filter(item => item.id !== values.to);
+    } else if(field === 'to' && !isEmpty(values.from)) {
+        filerOptions = options.filter(item => item.id !== values.from);
+    }
+
     return (
     <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
@@ -49,7 +56,7 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
         value={defaultValue}
         blurOnSelect
         disableClearable
-        options={options}
+        options={filerOptions}
         onChange={handleChange}
         getOptionLabel={(val: LHRBuild) => val.displayLabel}
         size="small"
