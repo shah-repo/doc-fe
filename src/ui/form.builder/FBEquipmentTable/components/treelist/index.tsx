@@ -95,6 +95,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { equipmentOptions, allowedEditEqOptions, releasedEquipmentOptions, filterEquipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
   const disabledOptions = map(items, 'title');
+  const lhrBuildTypeConfigForSelectedBuildType = workspaceState?.lhrBuildTypeConfigForSelectedBuildType;
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -315,6 +316,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     isEnableActualIdAddition,
     isEBProcedure,
     onRowClick: editEquipmentItem,
+    lhrBuildTypeConfigForSelectedBuildType,
   });
 
   const [columns, setColumns]

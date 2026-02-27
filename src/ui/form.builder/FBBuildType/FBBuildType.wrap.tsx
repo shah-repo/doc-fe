@@ -43,8 +43,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       return config.from === defaultValue?.id;
     }).map((config) => config.to);
 
-    console.log('allowedBuildTypeChange:', allowedBuildTypeChange, defaultValue?.id);
-
     const {
       document,
       changeRequest,
