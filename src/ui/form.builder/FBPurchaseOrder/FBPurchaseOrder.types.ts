@@ -5,6 +5,7 @@ type FBPurchaseOrderMode = 'preview' | 'form';
 export type FBPurchaseOrderProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'gutter' | 'defaultValue' | 'autosave'>
 & {
+  editorConfig?: { taxRate?: number }
   handleItem?: (item?: FBPurchaseOrderItem) => any
   handleReceiveAll?: () => any
   handleLot?: (e?: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => void
@@ -70,6 +71,7 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string
+  defaultTaxRate?: number
 };
 
 export interface ReceiveableQuantity {

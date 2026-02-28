@@ -1,11 +1,12 @@
-import { isEmpty, map } from 'lodash';
+import { isEmpty, isNil, map } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from '..';
 import { SM } from '../../../App';
 import { useDate } from '../../../common/utils/date';
 import { Id } from '../../../state/ducks/common/types';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
@@ -15,8 +16,8 @@ import { isDocumentRevisionReleased } from '../../documentRevision/helpers/docum
 import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handleItem,
     handleLot,
@@ -25,6 +26,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     dialogState,
     disabled,
     receivableName,
+    editorConfig,
     name,
     ...props
   }: T) => {
@@ -38,9 +40,12 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const isReleased = isDocumentRevisionReleased(workspaceState?.document?.status);
     const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
+    const companyTaxRate = useSelector(companySelectors.getCompanyDefaultTaxRate);
+    const defaultTaxRate = editorConfig?.taxRate ?? companyTaxRate;
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
       documentId: isReceivable ? poReceiveState?.data?.documentId : workspaceState?.document?.document?.id,
+      defaultTaxRate,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
@@ -55,6 +60,13 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
       purchaseOrderState.timezone = timezone;
     }, [timezone]);
+
+    useEffect(() => {
+      if (isNil(defaultTaxRate)) {
+        return;
+      }
+      purchaseOrderState?.setTaxRate(defaultTaxRate.toString());
+    }, [defaultTaxRate]);
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {
