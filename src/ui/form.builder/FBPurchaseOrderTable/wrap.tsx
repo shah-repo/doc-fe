@@ -29,8 +29,8 @@ import { checkServiceOrProductPartExists, formatCost, getDecimalLength, getPOLin
 import { FBPurchaseOrderTableProps } from './types';
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handleShippingCostChange,
     handleTaxChange,
@@ -67,7 +67,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
       && SM.isNewVersion;
-    const updatedValues = useRef({ shippingCost: '0', tax: '0', taxRate: TAX_RATE, currency: 'USD', exchangeRate: 1 });
+    const updatedValues = useRef({
+      shippingCost: '0',
+      tax: '0',
+      taxRate: purchaseOrderState?.taxRate ?? TAX_RATE,
+      currency: purchaseOrderState?.currency ?? 'USD',
+      exchangeRate: purchaseOrderState?.exchangeRate ?? 1,
+    });
 
     const isTotalAmountUnderThreshold = (shippingCost, tax, taxRate, exchangeRate?, currency?) => {
       if (isPOEditState) {
@@ -151,8 +157,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       if (isPOEditState && purchaseOrderState) {
         const urlTpl = template(FBEndpoint.Currency);
         const url = urlTpl({ symboName: selectedCurrency });
-        purchaseOrderState?.exchangeRate.setUrl(url);
-        const data = await purchaseOrderState?.exchangeRate?.fetch();
+        purchaseOrderState?.exchangeRateApi.setUrl(url);
+        const data = await purchaseOrderState?.exchangeRateApi?.fetch();
         if (!isTotalAmountUnderThreshold(null, null, null, data?.rate, selectedCurrency)) {
           return;
         }
@@ -214,7 +220,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     const initializeUpdatedValues = () => {
-      updatedValues.current = { shippingCost: purchaseOrderState?.value?.shippingCost ?? '0', tax: purchaseOrderState?.value?.tax ?? '0', taxRate: purchaseOrderState?.value?.taxRate ?? TAX_RATE, currency: purchaseOrderState?.value?.currency ?? 'USD', exchangeRate: purchaseOrderState?.value?.exchangeRate ?? 1 };
+      updatedValues.current = {
+        shippingCost: purchaseOrderState?.value?.shippingCost ?? '0',
+        tax: purchaseOrderState?.value?.tax ?? '0',
+        taxRate: purchaseOrderState?.taxRate ?? TAX_RATE,
+        currency: purchaseOrderState?.currency ?? 'USD',
+        exchangeRate: purchaseOrderState?.exchangeRate ?? 1,
+      };
     };
 
     const onAddLineItemClick = () => {
