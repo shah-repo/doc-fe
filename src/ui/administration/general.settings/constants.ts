@@ -8,6 +8,7 @@ import LHRBuildSettingsPanel from './panels/LHRBuild';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
+import PurchaseOrdersSettings from './panels/PurchaseOrders';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
@@ -104,5 +105,10 @@ export const panels = [
     key: GeneralSettingsTabs.Timezone,
     title: 'administration.general.settings.timezone.title',
     component: TimezoneSettings,
+  },
+  {
+    key: GeneralSettingsTabs.PurchaseOrders,
+    title: 'administration.general.settings.purchase.orders',
+    component: PurchaseOrdersSettings,
   },
 ];
