@@ -295,12 +295,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <FBDatePicker
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
+                disabled={isDisabled}
               />
             </Box>
             <Box className={classes.lhrsDateWidthBox}>
               <FBDatePicker
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}
+                disabled={isDisabled}
               />
             </Box>
           </Box>
