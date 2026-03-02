@@ -256,7 +256,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           }
           const formValue: string[] = get(formState?.oldValues, name);
           const newApprovers = difference(fieldValue, formValue);
-          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned).map((a) => a.approver?.id || '') || [];
+          const existingApprovers = workspaceState?.approvals?.filter((a) => a.status !== ApprovalStatus.Abandoned && a.type === 'MASTER').map((a) => a.approver?.id || '') || [];
           const newApproversToAdd = newApprovers.filter((approver) => !existingApprovers.includes(approver));
           addApprover(newApproversToAdd);
           removeApprover(difference(formValue, fieldValue));

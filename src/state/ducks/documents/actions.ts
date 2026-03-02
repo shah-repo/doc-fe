@@ -1,7 +1,7 @@
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENTS_TO_REVIEW_URL, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from './constants';
-import { AccessRequestBody, Document, DocumentEditRequestBody, DocumentListAction, DocumentProposedId, DocumentProposedIdSetAction, DocumentSetAction, DocumentsToReviewListAction, DocumentTransition, DocumentTransitionRequestBody, DocumentTransitionResponse } from './types';
+import { DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENTS_TO_REVIEW_URL } from './constants';
+import { AccessRequestBody, DocIdRequestBody, Document, DocumentEditRequestBody, DocumentListAction, DocumentProposedId, DocumentProposedIdSetAction, DocumentSetAction, DocumentsToReviewListAction, DocumentTransition, DocumentTransitionRequestBody, DocumentTransitionResponse } from './types';
 
 const getDocumentById = (id: string, handlers: Handlers<any>): ApiAction<any, any> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}`,
@@ -66,6 +66,8 @@ const loadDocumentProposedId = (documentTypeId: string): ApiAction<DocumentPropo
   },
 });
 
+const clearDocumentProposedId = () => documentProposedIdSet('');
+
 const loadDocumentProposedIdWithCallback = (documentTypeAcronym: string, handlers: Handlers):
 ApiAction<DocumentProposedId> => apiActionWithCallbacks({
   ...loadDocumentProposedId(documentTypeAcronym),
@@ -125,6 +127,17 @@ const sendEmailAccessRequest = (
   handlers,
 });
 
+const sendDocIdUpdateRequest = (
+  id: string,
+  body: DocIdRequestBody,
+  handlers: Handlers,
+): ApiAction<AccessRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENTS_ROOT_URL}/${id}/docId_update`,
+  method: 'patch',
+  data: body,
+  handlers,
+});
+
 export default {
   documentsList,
   documentsToReviewList,
@@ -136,8 +149,10 @@ export default {
   save,
   applyTransition,
   loadDocumentProposedId,
+  clearDocumentProposedId,
   setDocumentProposedId,
   sendEmailAccessRequest,
+  sendDocIdUpdateRequest,
   loadDocumentProposedIdWithCallback,
   getDocumentById,
 };

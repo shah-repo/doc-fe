@@ -2,6 +2,7 @@ import { cloneDeep, get } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
+import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
@@ -37,6 +38,9 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       mode: _formState?.mode,
       autosave: _formState?.autosave || false,
     });
+
+    _documentRevisionFormState.setNumberingStyle(
+      props.isInternalTypeNumbering ? DOCUMENT_NUMBERING_STYLE.INTERNAL : DOCUMENT_NUMBERING_STYLE.CUSTOMER);
 
     const schema = _documentRevisionFormState?.schema || documentRevision?.schema;
     const formState = FB.useRef<FBFormState>(FBFormState, {

@@ -2,7 +2,7 @@ import { BoxProps } from '@material-ui/core';
 import { FormikProps } from 'formik';
 import { SMFormStateProps, SMProviderProps, SMTabsHOCProps } from '../../..';
 import { Id } from '../../../../state/ducks/common/types';
-import { DocumentType, DocumentTypeByIdState } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType, DocumentTypeByIdState } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../../state/ducks/documents';
 import { DocumentCloneType } from '../../../../ui/documentRevision/Clone.container';
@@ -50,6 +50,7 @@ export type DocumentRevisionFormProps =
   workspaceState?: FBWorkspaceState
   isCreateUrl?: boolean
   isDAM?: boolean
+  isInternalTypeNumbering?: boolean
   dirty?: boolean
   isSliderView?: boolean
   inDialog?: boolean
@@ -73,6 +74,7 @@ export interface DocumentRevisionFormStateProps {
   documentRevision?: DocumentRevision
   revisionChangeType?: RevisionChangeType
   createDocumentDisabled: boolean
+  numberingStyle: DOCUMENT_NUMBERING_STYLE
   releasedDocRev?: DocumentRevision
   docInfo: DocumentInfo
   forceRender?: any

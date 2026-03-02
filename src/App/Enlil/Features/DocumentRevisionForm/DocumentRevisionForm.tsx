@@ -260,6 +260,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                     canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
                     isSliderView={isSliderView}
                     tabConfig={tabConfig}
+                    docId={documentRevision?.document?.docId}
                   />
                 )}
               </Observer>
