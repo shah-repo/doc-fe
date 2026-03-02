@@ -318,6 +318,10 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     return <LotPreviewCell {...props} />;
   }
 
+  if (!dataItem[ADD_FIELD]) {
+    return <LotPreviewCell {...props} />;
+  }
+
   return (
     <TreeListCellWrapper {...props}>
       <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
