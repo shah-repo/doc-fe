@@ -89,7 +89,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`${name}`));
+        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
         formState?.setFieldAutosave(`${name}`);
         setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
