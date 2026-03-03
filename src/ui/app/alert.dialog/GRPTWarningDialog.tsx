@@ -30,6 +30,9 @@ const GRPTWarningDialog: React.FunctionComponent<Props> = (props) => {
       warning={true}
     >
       <Typography data-cy="dialog-message" className={classes.contentText}>
+        {translate('training.doc.warning.alert.sub.title')}
+      </Typography>
+      <Typography data-cy="dialog-message" className={classes.contentText}>
         {translate('training.doc.warning.alert')}
       </Typography>
     </AlertDialog>
