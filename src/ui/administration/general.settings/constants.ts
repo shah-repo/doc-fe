@@ -8,10 +8,10 @@ import LHRBuildSettingsPanel from './panels/LHRBuild';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
-import PurchaseOrdersSettings from './panels/PurchaseOrders';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
+import TaxRateSettings from './panels/TaxRate';
 import TimezoneSettings from './panels/Timezone';
 import Training from './panels/Training';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
@@ -107,8 +107,8 @@ export const panels = [
     component: TimezoneSettings,
   },
   {
-    key: GeneralSettingsTabs.PurchaseOrders,
-    title: 'administration.general.settings.purchase.orders',
-    component: PurchaseOrdersSettings,
+    key: GeneralSettingsTabs.TaxRate,
+    title: 'administration.general.settings.tax.rate',
+    component: TaxRateSettings,
   },
 ];

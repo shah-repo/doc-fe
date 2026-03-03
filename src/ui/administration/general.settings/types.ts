@@ -22,7 +22,7 @@ export enum GeneralSettingsTabs {
   Training = 'Training',
   Timezone = 'Timezone',
   LHRBuild = 'LHR Build',
-  PurchaseOrders = 'Purchase Orders',
+  TaxRate = 'Tax Rate',
 }
 
 export interface GeneralSettingsProps {
