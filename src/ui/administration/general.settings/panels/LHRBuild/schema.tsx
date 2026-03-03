@@ -51,7 +51,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'allowCalOrPm',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.allow.cal.or.pm')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -61,7 +61,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'allowOverdueQuantityMismatch',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.allow.lot.qty.less.qty.needed')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -71,7 +71,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'allowQuantityDiscrepancy',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.allow.qty.discrepancy')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -81,7 +81,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'requireLotSelection',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.require.lot.selection')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -91,7 +91,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'allowExpiredLot',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.allow.expired.lots')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -101,7 +101,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'requireEquipmentSelection',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.require.equipment.selection')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -111,7 +111,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'requireDeviationApproval',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.require.deviation.approval')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
@@ -121,7 +121,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'requireReworkApproval',
       headerCell: () => (
         <span className={classes.header}>
-          {translate('administration.general.settings.build.type.require.rework.approval')}
+          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval')}
         </span>),
       template: AutocompleteCellTemplate,
       width: 200,
