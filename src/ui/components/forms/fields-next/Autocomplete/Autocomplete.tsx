@@ -76,6 +76,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   ChipProps = { size: 'small' },
   PopperComponent,
   shouldAlwaysShowPlaceholder,
+  shouldShowDefaultAdornment,
   ...props
 }, ref: MutableRefObject<HTMLDivElement>) => {
   const baseClasses = useStyles();
@@ -140,6 +141,16 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           InputProps={{
             ...params.InputProps,
             ...inputProps,
+            ...(
+              shouldShowDefaultAdornment
+                ? {
+                  endAdornment: (
+                    <>
+                      {inputProps?.endAdornment}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                } : {}),
           }}
           size={size}
           name={name}
