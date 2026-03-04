@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { FBEditor, FBEditorLabel, FBEditorProps, FBTextField } from '..';
 import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
-import { TAX_RATE } from '../helpers/constants';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 
 const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
@@ -13,7 +12,6 @@ const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
   ...props
 }) => {
   const companyTaxRate = useSelector(companySelectors.getCompanyDefaultTaxRate);
-  const defaultTaxRate = companyTaxRate ?? TAX_RATE;
 
   return (
     <FBEditor {...props} {...{ inputProps }}>
@@ -23,9 +21,9 @@ const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
           label="form.builder.tax.rate"
           name="editorConfig.taxRate"
           type="number"
-          placeholder={translate('form.builder.tax.rate.editor.placeholder', { value: defaultTaxRate })}
+          placeholder={translate('form.builder.tax.rate.editor.placeholder', { value: companyTaxRate })}
           labelProps={AutoCompleteStyles.labelProps}
-          inputProps={{ min: 0, step: 0.01 }}
+          inputProps={{ min: 0, max: 100, step: 0.01 }}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           isFbEditorField
         />
