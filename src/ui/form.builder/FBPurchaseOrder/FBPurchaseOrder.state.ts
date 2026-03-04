@@ -8,7 +8,7 @@ import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } f
 import FBRequest from '../FBApi/FBApi.request';
 import { getDecimalLength } from '../FBPurchaseOrderTable/helpers';
 import { FBEndpoint } from '../defaults/FBEndpoint';
-import { TAX_RATE } from '../helpers/constants';
+import { DEFAULT_TAX_RATE } from '../helpers/constants';
 
 class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<number>> {
   public exchangeRateApi: FBRequest<CurrencyRate, Dictionary<number>> = new FBRequest();
@@ -19,7 +19,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   @observable public timezone = TIME_ZONE;
   @observable value: FBPurchaseOrderValue = {
     tax: '0.00',
-    taxRate: TAX_RATE,
+    taxRate: DEFAULT_TAX_RATE,
     subTotal: '0.00',
     totalAmount: '0.00',
     shippingCost: '0.00',

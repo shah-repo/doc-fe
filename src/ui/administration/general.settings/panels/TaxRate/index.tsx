@@ -4,7 +4,7 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
-import { TAX_RATE } from '../../../../form.builder/helpers/constants';
+import { DEFAULT_TAX_RATE } from '../../../../form.builder/helpers/constants';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 
@@ -39,9 +39,9 @@ const TaxRateSettings: React.FC<SettingsPanelProps> = (props) => {
           type="number"
           {...getFieldProps(FIELD)}
           onChange={updateValue}
-          inputProps={{ min: 0, step: 0.01 }}
+          inputProps={{ min: 0, max: 100, step: 0.01 }}
           endAdornment={<InputAdornment position="end">%</InputAdornment>}
-          placeholder={translate('form.builder.tax.rate.editor.placeholder', { value: TAX_RATE })}
+          placeholder={translate('form.builder.tax.rate.editor.placeholder', { value: DEFAULT_TAX_RATE })}
           className={classes.input}
         />
       </FormikField>

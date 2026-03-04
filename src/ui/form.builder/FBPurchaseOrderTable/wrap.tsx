@@ -3,11 +3,13 @@ import { cloneDeep, compact, debounce, each, first, get, isNil, omit, template }
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue, IReceivedItem } from '..';
 import { SM } from '../../../App';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
@@ -24,7 +26,6 @@ import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { FBEndpoint } from '../defaults/FBEndpoint';
-import { TAX_RATE } from '../helpers/constants';
 import { checkServiceOrProductPartExists, formatCost, getDecimalLength, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
 
@@ -67,10 +68,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     dialog = useDialog();
     const isPOEditState = isUserAdminEnforce && workspaceState?.documentStatus === DocumentRevisionStatus.Released
       && SM.isNewVersion;
+
+    const companyTaxRate = useSelector(companySelectors.getCompanyDefaultTaxRate);
+
     const updatedValues = useRef({
       shippingCost: '0',
       tax: '0',
-      taxRate: purchaseOrderState?.taxRate ?? TAX_RATE,
+      taxRate: purchaseOrderState?.taxRate ?? companyTaxRate,
       currency: purchaseOrderState?.currency ?? 'USD',
       exchangeRate: purchaseOrderState?.exchangeRate ?? 1,
     });
@@ -223,7 +227,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       updatedValues.current = {
         shippingCost: purchaseOrderState?.value?.shippingCost ?? '0',
         tax: purchaseOrderState?.value?.tax ?? '0',
-        taxRate: purchaseOrderState?.taxRate ?? TAX_RATE,
+        taxRate: purchaseOrderState?.taxRate ?? companyTaxRate,
         currency: purchaseOrderState?.currency ?? 'USD',
         exchangeRate: purchaseOrderState?.exchangeRate ?? 1,
       };
