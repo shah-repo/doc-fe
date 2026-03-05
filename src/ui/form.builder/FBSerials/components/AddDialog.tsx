@@ -1,9 +1,12 @@
-import { createStyles, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Chip, createStyles, makeStyles } from '@material-ui/core';
+import React, { useMemo, useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { Dialog } from '../../../components/dialogs';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { withThemeNext } from '../../../layout/theme-next';
+import { AutocompleteControl } from '../../../components/forms/fields-next/Autocomplete/Autocomplete';
+import { Colors, withThemeNext } from '../../../layout/theme-next';
 
 interface AddDialogProps {
   isOpen: boolean
@@ -11,10 +14,29 @@ interface AddDialogProps {
   onClose: () => void
 }
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   chip: {
     fontFamily: 'monospace',
     fontSize: '0.75rem',
+  },
+  helper: {
+    flexShrink: 0,
+  },
+  helperText: {
+    color: Colors.textDisabled,
+    fontSize: '0.75rem',
+    display: 'flex',
+    alignItems: 'end',
+    gap: theme.spacing(0.5, 0.5),
+  },
+  autocompleteField: {
+    paddingRight: theme.spacing(0.75),
+  },
+  autocompleteInput: {
+    minWidth: '4ch',
+  },
+  autocompleteInputWithHelp: {
+    flexGrow: 0,
   },
 }));
 
@@ -28,6 +50,7 @@ const AddDialog: React.FC<AddDialogProps> = ({
 }) => {
   const classes = useStyles();
   const [serials, setSerials] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => {
@@ -55,6 +78,34 @@ const AddDialog: React.FC<AddDialogProps> = ({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent, originalOnKeyDown?: React.KeyboardEventHandler) => {
+    if (event.key === ',') {
+      event.preventDefault();
+      const v = inputValue.trim();
+      if (v) {
+        setSerials(prev => Array.from(new Set([...prev, v])));
+        setInputValue('');
+      }
+      return;
+    }
+    originalOnKeyDown?.(event);
+  };
+
+  const inputHelp = useMemo(() => {
+    return inputValue && serials.length === 0
+      ? <Chip
+        size="small"
+        className={classes.helper}
+        label={
+          <span className={classes.helperText}>
+            <FontAwesomeIcon icon={regular('arrow-turn-down-left')} />
+            <span>{translate('form.builder.serials.add.dialog.hint')}</span>
+          </span>
+        }
+      />
+      : null;
+  }, [inputValue, classes.helper, classes.helperText, serials.length]);
+
   return (
     <Dialog
       open={isOpen}
@@ -75,12 +126,38 @@ const AddDialog: React.FC<AddDialogProps> = ({
           freeSolo
           options={[]}
           value={serials}
-          placeholder={translate('form.builder.serials.add.dialog.placeholder')}
           shouldAlwaysShowPlaceholder
-          onChange={(_, value: string[]) => setSerials(value)}
+          onChange={(_, value: string[]) => {
+            setSerials(value);
+            setInputValue('');
+          }}
+          onInputChange={(_, value: string) => setInputValue(value)}
           classes={{
             tag: classes.chip,
+            inputRoot: classes.autocompleteField,
           }}
+          renderInput={(params) => (
+            <AutocompleteControl
+              {...params}
+              size="medium"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: inputHelp,
+                onKeyDown: (e) => handleKeyDown(e),
+              }}
+              inputProps={{
+                ...params.inputProps,
+                ...(inputHelp ? {
+                  className: classes.autocompleteInputWithHelp,
+                  style: {
+                    width: `${Math.max(2, (inputValue.length || 0) + 1)}ch`,
+                  },
+                } : {}),
+              }}
+              placeholder={translate('form.builder.serials.add.dialog.placeholder')}
+            />
+          )}
+
         />
       </div>
     </Dialog>

@@ -1,6 +1,10 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBSection } from '..';
+import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
@@ -80,7 +84,20 @@ const FBSerials: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <FBSection label="form.builder.serials.title" />
+      <FBSection label="form.builder.serials.title">
+        {canImport && (
+          <Button
+            kind="ghost"
+            size="small"
+            className={classes.importButton}
+            startIcon={<FontAwesomeIcon icon={regular('arrow-down-to-bracket')} />}
+            onClick={importDialog.open}
+            data-cy="import-serials"
+          >
+            {translate('form.builder.serials.import')}
+          </Button>
+        )}
+      </FBSection>
       <FBSerialsTable
         serialNumbers={serialNumbers}
         isLoading={isLoading}

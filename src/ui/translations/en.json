@@ -1824,6 +1824,7 @@
     "form.builder.serials.add": "Add new",
     "form.builder.serials.add.dialog.title": "Add Serial Numbers",
     "form.builder.serials.add.dialog.placeholder": "Type or paste serial numbers",
+    "form.builder.serials.add.dialog.hint": "press enter to accept",
     "form.builder.serials.delete.all": "Delete All",
     "form.builder.serials.accept.all": "Accept All",
     "form.builder.serials.reject.all": "Reject All",

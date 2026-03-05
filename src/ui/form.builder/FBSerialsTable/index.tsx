@@ -25,7 +25,6 @@ interface FBSerialsTableProps {
   onDelete?: (id: string) => Promise<void>
   onBulkUpdate?: (payload: SerialNumberUpdatePayload[]) => Promise<void>
   onBulkDelete?: (ids: string[]) => Promise<void>
-  onImport?: () => void
 }
 
 const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
@@ -36,7 +35,6 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   onDelete,
   onBulkUpdate,
   onBulkDelete,
-  onImport,
 }) => {
   const classes = useStyles();
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
@@ -87,6 +85,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   };
 
   const schema = useSchema({
+    canSelect: Boolean(onBulkUpdate ?? onBulkDelete),
     isAllSelected,
     onCheckAllToggle: toggleAllSelection,
     onUpdate,
@@ -144,16 +143,6 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
               </Tooltip>
             )}
           </>
-        )}
-        {onImport && !hasSelection && (
-          <Button
-            kind="ghost"
-            size="small"
-            startIcon={<FontAwesomeIcon icon={regular('arrow-down-to-bracket')} />}
-            onClick={onImport}
-          >
-            {translate('form.builder.serials.import')}
-          </Button>
         )}
       </div>
 

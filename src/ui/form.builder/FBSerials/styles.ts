@@ -6,4 +6,7 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     gap: theme.spacing(2),
   },
+  importButton: {
+    float: 'right',
+  },
 }));
