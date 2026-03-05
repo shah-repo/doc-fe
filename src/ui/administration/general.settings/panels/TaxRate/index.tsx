@@ -41,7 +41,7 @@ const TaxRateSettings: React.FC<SettingsPanelProps> = (props) => {
           onChange={updateValue}
           inputProps={{ min: 0, max: 100, step: 0.01 }}
           endAdornment={<InputAdornment position="end">%</InputAdornment>}
-          placeholder={translate('form.builder.tax.rate.editor.placeholder', { value: DEFAULT_TAX_RATE })}
+          placeholder={DEFAULT_TAX_RATE.toString()}
           className={classes.input}
         />
       </FormikField>
