@@ -71,7 +71,6 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string
-  defaultTaxRate?: number
 };
 
 export interface ReceiveableQuantity {

@@ -41,11 +41,11 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     const isReleased = isDocumentRevisionReleased(workspaceState?.document?.status);
     const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
     const companyTaxRate = useSelector(companySelectors.getCompanyDefaultTaxRate);
-    const defaultTaxRate = editorConfig?.taxRate ?? companyTaxRate;
+    const taxRate = formValue?.taxRate ?? editorConfig?.taxRate ?? companyTaxRate;
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
+      taxRate,
       documentId: isReceivable ? poReceiveState?.data?.documentId : workspaceState?.document?.document?.id,
-      defaultTaxRate,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
@@ -62,11 +62,11 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     }, [timezone]);
 
     useEffect(() => {
-      if (isNil(defaultTaxRate)) {
+      if (isNil(taxRate)) {
         return;
       }
-      purchaseOrderState?.setTaxRate(defaultTaxRate.toString());
-    }, [defaultTaxRate]);
+      purchaseOrderState?.setTaxRate(taxRate.toString());
+    }, [taxRate]);
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {

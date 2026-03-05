@@ -78,19 +78,16 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     this.fetchPartDocument(parts);
   };
 
-  public constructor ({ documentId, defaultTaxRate, ...initialValues }: FBPurchaseOrderConstructor) {
+  public constructor ({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
-    if (isNumber(defaultTaxRate)) {
-      this.value.taxRate = defaultTaxRate;
+    if (documentId) {
+      this.fetchReceivedItems(documentId);
     }
     if (!initialValues || isEmpty(initialValues)) {
       return;
     }
-    if (documentId) {
-      this.fetchReceivedItems(documentId);
-    }
     const items = (initialValues?.items || []).map((item, index) => ({ ...item, index }));
-    set(this, 'value', { ...initialValues, items });
+    this.setValue({ ...initialValues, items });
   }
 
   @action public setPartNumber = (partNumber?: string): void => {
