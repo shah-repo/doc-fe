@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DisplayFieldType, FieldType, InputFieldType } from '../../../state/ducks/documentRevisions/documentType/types';
-import { required, validator } from '../../components/forms/fields/validators';
+import { docId, required, validator } from '../../components/forms/fields/validators';
 import { UIConfig } from './types';
 
 export const configureStatus = (status: string) => status && status.replace(' ', '_').toUpperCase();
@@ -55,9 +55,10 @@ const useCustomization = (
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const config = documentType?.fieldsConfig?.[fieldType];
+  const isDocId = InputFieldType.DOC_ID === fieldType;
   const isVisible = customLabelsValue ? true : config?.visible ?? defaultVisibility;
   const label = customLabelsValue ? `<label: ${fieldType}>` : config?.label ?? defaultLabel;
-  const validation = config?.required ?? true ? validator(required) : undefined;
+  const validation = config?.required ?? true ? validator(isDocId ? docId : required) : undefined;
   const tooltipConfig = {
     labelName: fieldType,
     defaultLabel,

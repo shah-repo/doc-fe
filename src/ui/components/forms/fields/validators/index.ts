@@ -20,6 +20,12 @@ export const email: Validator = (value: string) => {
   }
 };
 
+export const docId: Validator = (value: string) => {
+  if (!/^[A-Z]+(?:\.\d+)?-?[A-Za-z0-9]{1,}$/.test(value)) {
+    return 'validators.required';
+  }
+};
+
 export const requiredNumber: Validator = (value) => {
   if (!isNumber(value)) {
     return 'validators.required';
