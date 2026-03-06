@@ -1826,6 +1826,7 @@
   "training.record.trainees.add": "Add Trainee",
   "training.doc.id.rev": "Doc ID Rev",
   "training.doc.warning.alert": "This action cannot be undone. Are you sure you want to continue?",
+  "training.doc.warning.alert.sub.title": "By proceeding, any existing individual pending training assignments for this document and the selected employees will be automatically deactivated.",
   "training.ref.id": "Reference ID",
   "form.builder.trainee.list.name": "User",
   "form.builder.trainee.list.trainingRecordId": "TRN ID",
