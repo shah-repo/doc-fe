@@ -212,7 +212,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     let showApprovalButtons = false;
 
     useObserver(() => {
-      showApprovalButtons = docApprovals?.some((approval) => approval.approver?.user.id === authUser.id) ?? false;
+      showApprovalButtons = (docApprovals?.some((approval) => approval.approver?.user.id === authUser.id && approval.status === 'PENDING') && workspaceState?.buildTypeChangeStatus()) ?? false;
     });
 
     const onApprovalAction = (action: 'accept' | 'reject') => {
