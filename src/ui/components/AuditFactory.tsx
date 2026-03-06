@@ -592,7 +592,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           let assignedTo = assignToUser;
-          if(FB.isUUID(assignToUser ?? '')) {
+          if (FB.isUUID(assignToUser ?? '')) {
             assignedTo = getUserDetails(assignToUser)?.user?.name;
           }
           if (audit.type.includes('ARRAY_ADDED')) {
@@ -864,7 +864,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.po-items-built-in.items.received':
       case 'formInput.po-items-built-in.items.serviceId':
       case 'formInput.po-items-built-in.items.formattedDate':
-      case 'formInput.po-items-built-in.items.partNumberTitle':
       case 'formInput.po-items-built-in.items.description':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -874,6 +873,25 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
+      case 'formInput.po-items-built-in.items.partNumberTitle':
+      case 'formInput.po-items-built-in.items.partNumberDocId':
+        try {
+          if (audit.type.includes('STRING_EDITED')) {
+            const prevEntry: POLineItem & { value: string } = JSON.parse(audit.previousValue as string);
+            const currEntry: POLineItem & { value: string } = JSON.parse(audit.nextValue as string);
+
+            const { value: prevValue } = prevEntry;
+            const { value } = currEntry;
+
+            if (value) {
+              returnValue = (<div data-cy={dataCy}>{`${prevValue || ''} - updated to ${value}`}</div>);
+            }
           }
         } catch (err) {
           // Not valid JSON, so older data and is string
