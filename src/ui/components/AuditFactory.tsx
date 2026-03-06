@@ -887,10 +887,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             const currEntry: POLineItem & { value: string } = JSON.parse(audit.nextValue as string);
 
             const { value: prevValue } = prevEntry;
-            const { value } = currEntry;
+            const { value: nextValue } = currEntry;
 
-            if (value) {
-              returnValue = (<div data-cy={dataCy}>{`${prevValue || ''} - updated to ${value}`}</div>);
+            if (nextValue) {
+              const text
+                = intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.partNumber.UPDATED' }, { prevValue: prevValue ?? 'NA', nextValue });
+              returnValue = (<div data-cy={dataCy}>{text}</div>);
             }
           }
         } catch (err) {
