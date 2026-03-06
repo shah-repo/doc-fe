@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { endsWith, isEmpty, toUpper } from 'lodash';
 import { reaction } from 'mobx';
 import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MaterialTreelistContext } from '..';
@@ -212,8 +212,13 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     if (isEBProcedure) {
       isAcceptedStatus = true; // No constraints on Lot Status
     } else {
+      const isValidStatus = [
+        DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
+        DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
+      ].includes(lot?.lotStatus);
+
       isAcceptedStatus = isLHRProductionBuild
-        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+        ? isValidStatus && !endsWith(toUpper(lot?.document?.docId || ''), 'RD')
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
