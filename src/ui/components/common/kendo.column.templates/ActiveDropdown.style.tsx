@@ -38,5 +38,8 @@ export default makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1),
       pointerEvents: 'auto',
     },
+    infoMessageWrapper: {
+      whiteSpace: 'pre-line',
+    },
   }),
 );

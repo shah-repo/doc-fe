@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
@@ -68,6 +69,9 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
   const dialog = useDialog();
+
+  const location = useLocation();
+  const isNewVersion: boolean = location.pathname.includes('new-version');
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
@@ -142,25 +146,25 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
         </StyleTooltip>
       </Box>
       <DamRestrictionsProvider value={{ restrictions }}>
-      <FBGridTableContainer
-        isDialog={dialog.isOpen}
-        dialogContentStyle={classes.dialogContentStyle}
-        onDialogClose={dialog.close}
-        popupContainerRef={popupContainerRef}
-      >
-        {isLoading && <Loader />}
-        <GridTable
-          data={approvalMatrix}
-          schema={schema}
-          disabled={disabled}
-          generateNewItem={generateNewItem}
-          onSave={handleSave}
-          withoutStatus={withoutStatus}
-          isLoading={isLoading}
-          {...dataState}
-          onDataStateChange={dataStateChange}
-        />
-      </FBGridTableContainer>
+        <FBGridTableContainer
+          isDialog={dialog.isOpen}
+          dialogContentStyle={classes.dialogContentStyle}
+          onDialogClose={dialog.close}
+          popupContainerRef={popupContainerRef}
+        >
+          {isLoading && <Loader />}
+          <GridTable
+            data={approvalMatrix}
+            schema={schema}
+            disabled={disabled || isNewVersion}
+            generateNewItem={generateNewItem}
+            onSave={handleSave}
+            withoutStatus={withoutStatus}
+            isLoading={isLoading}
+            {...dataState}
+            onDataStateChange={dataStateChange}
+          />
+        </FBGridTableContainer>
       </DamRestrictionsProvider>
       <ExportDAMDialog dialog={exportDialog} matrixTabDataState={dataState} />
     </Box>

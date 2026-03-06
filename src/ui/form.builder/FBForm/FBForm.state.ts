@@ -10,7 +10,7 @@ class FBFormState extends FBSchemaState {
   public errorValidation = true;
   public initialValues: Dictionary<any> = {};
   public workspaceMode?: FBWorkspaceMode;
-  public values: Dictionary<any> = {};
+  @observable public values: Dictionary<any> = {};
   public validationValues: Dictionary<any> = {};
   private finalValidationRulse: Dictionary<string> = {};
   @observable public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
