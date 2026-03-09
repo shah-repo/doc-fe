@@ -15,10 +15,11 @@ import { ReactComponent as DeleteIcon } from '../../../../../assets/images/trash
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBButton, FBTooltip } from '../../../../form.builder';
@@ -533,10 +534,17 @@ const RelatedPartViewRow: React.FunctionComponent<{
           <Link
             to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
             target="_blank"
-            className={classes.link}
+            className={`${classes.link} ${classes.truncateText}`}
             onClick={linkHandler}
           >
-            {docIdTitle()}
+            <OverflowTooltip
+              arrow
+              placement="top"
+              title={docIdTitle()}
+              wrapperClassName={classes.truncateText}
+            >
+              {docIdTitle()}
+            </OverflowTooltip>
           </Link>
         </div>
         <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
@@ -693,7 +701,14 @@ const RelatedPartEditRow: React.FunctionComponent<{
       data-cy="related-parts-edit-row"
       >
         <div className={classes.editRowChildDivOne}>
-          <label >{documentRevision?.document?.docId} - </label>
+          <OverflowTooltip
+            arrow
+            placement="top"
+            title={documentRevision?.document?.docId}
+            wrapperClassName={classes.truncateText}
+          >
+            <label>{documentRevision?.document?.docId} - </label>
+          </OverflowTooltip>
           <TextField
             className={classes.textField}
             disabled={listItemBeingEdited?.version ? listItemBeingEdited.version > 1 : false}
