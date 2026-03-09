@@ -23,6 +23,9 @@ export default makeStyles((theme) => ({
     paddingLeft: '0px !important',
     fontSize: 14,
     paddingRight: '0px !important',
+    overflow: 'hidden !important',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
   },
   adornmentStart: {
     marginRight: '0px !important',
