@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import OverflowTooltip from '../../components/OverflowTooltip';
 import Text from '../../components/Text';
 import { Translation } from '../../translations/types';
 
@@ -23,12 +24,18 @@ export const SummaryInfo: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   return (
     <div data-cy={dataCy} className={classes.breakAll}>
-      {label
+      <OverflowTooltip
+        title={value}
+        arrow
+        placement="top"
+      >
+        {label
         && <>
           <Text translation={label} />:{' '}
         </>
-      }
-      {value}
+        }
+        {value}
+      </OverflowTooltip>
     </div>
   );
 };

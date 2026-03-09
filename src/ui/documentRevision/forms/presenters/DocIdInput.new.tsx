@@ -121,6 +121,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     disabled: isDisabled,
     startAdornment: <InputAdornment position="start" classes={{ positionStart: classes.adornmentStart }}>{documentAcronym}</InputAdornment>,
     value: docIdEntered,
+    title: docIdEntered,
     onChange: handleDocIdChange,
     onBlur: handleDocIdBlur,
     classes: {
