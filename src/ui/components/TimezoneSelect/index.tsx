@@ -24,18 +24,18 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   const timezoneChangeDialog = useDialog();
   const [autocompleteResetCounter, setAutocompleteResetCounter] = useState(0);
 
-  const prepareTimzoneOptions = (timezoneOptions: TimezoneResponseBody[]) =>
-    timezoneOptions.map((timzone) => ({
-      value: timzone?.name ?? '',
-      label: `(GMT${timzone?.offsetFromUTC}) ${timzone?.name.replace(/_/g, ' ')}`,
-      offset: timzone?.offsetFromUTC ?? '',
-      abbrev: timzone?.abbreviation ?? '',
-      altName: timzone?.abbreviation ?? '',
+  const prepareTimezoneOptions = (timezoneOptions: TimezoneResponseBody[]) =>
+    timezoneOptions.map((timezone) => ({
+      value: timezone?.name ?? '',
+      label: `(GMT${timezone?.offsetFromUTC}) ${timezone?.name.replace(/_/g, ' ')}`,
+      offset: timezone?.offsetFromUTC ?? '',
+      abbrev: timezone?.abbreviation ?? '',
+      altName: timezone?.abbreviation ?? '',
     }));
 
   const timezoneAsync = useAsync<TimezoneResponseBody[]>({
     onSuccess: (data: TimezoneResponseBody[] | undefined) => {
-      setTimezoneOptions(prepareTimzoneOptions(data ?? []));
+      setTimezoneOptions(prepareTimezoneOptions(data ?? []));
     },
     onError: toastError,
   });
