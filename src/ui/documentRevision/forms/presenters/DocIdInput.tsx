@@ -11,6 +11,7 @@ import { styles as AutoCompleteStyles } from '../../../form.builder/styles/FBAut
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocId } from '../../../hooks/docCustomization/useCustomization';
 import { DocumentCloneType } from '../../Clone.container';
+import { stripAllWhitespace } from '../transform';
 import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
@@ -57,15 +58,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
       return;
     }
 
-    if (!type) {
-      setDocId(value?.trim());
-      return;
-    }
-
-    const withoutAcronym = value.replace(type, '');
-    const trimmedValue = withoutAcronym.trim();
-    const updatedValue = trimmedValue ? `${type}${trimmedValue}` : type;
-    setDocId(updatedValue);
+    setDocId(stripAllWhitespace(value));
   };
 
   if (!isVisible && type !== 'newOutput') {
