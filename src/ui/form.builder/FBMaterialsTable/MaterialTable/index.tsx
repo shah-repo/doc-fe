@@ -448,7 +448,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         updateState({
           ...state,
           data: [...state.data],
-          expanded: [state.data[index].id],
         });
       }
     });
