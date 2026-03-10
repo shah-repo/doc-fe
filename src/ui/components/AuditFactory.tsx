@@ -25,7 +25,8 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FB, FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -90,14 +91,37 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   }
 
   const poDefinePartNumberText = (data: POLineItem) => {
-    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    const {
+      type,
+      partNumber,
+      partNumberDocId,
+      supplierPartNumber,
+      serviceId,
+      description,
+    } = data;
+
     let partNumberText = '';
+
     if (type === FBPurchaseOrderItemType.PRODUCT) {
-      partNumberText = partNumberDocId ?? supplierPartNumber;
+      const storedPart = partNumber
+        ? FBAutocompleteAsyncStore.getValue<DocumentRevision>(
+          FBAutocompleteAsyncOption.parts,
+          partNumber,
+        )
+        : null;
+
+      const latestDocId
+      = storedPart?.document?.docId ?? partNumberDocId ?? supplierPartNumber ?? '';
+
+      partNumberText = latestDocId;
     } else if (type === FBPurchaseOrderItemType.SERVICE) {
-      partNumberText = serviceId !== ''
-        ? serviceId
-        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+      partNumberText
+      = serviceId !== ''
+          ? serviceId
+          : intl.formatMessage(
+            { id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' },
+            { description },
+          );
     }
 
     return partNumberText;
