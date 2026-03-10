@@ -1,7 +1,7 @@
 import { GridCellProps } from '@progress/kendo-react-grid';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { Nullable } from '../../../state/ducks/common/types';
-import { DisplayFieldType, DocumentGroupOptionsType, InputFieldType, PageDetails, TooltipLabelConfig } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DisplayFieldType, DOCUMENT_NUMBERING_STYLE, DocumentGroupOptionsType, InputFieldType, PageDetails, TooltipLabelConfig } from '../../../state/ducks/documentRevisions/documentType/types';
 import { FBSchemaProps } from '../../form.builder/FBSchema/FBSchema.types';
 
 interface IFieldConfigItem {
@@ -49,6 +49,7 @@ export interface DTMRowItem {
   startingNumber: number
   updatedAt: string
   inEdit?: boolean
+  numberingStyle: DOCUMENT_NUMBERING_STYLE
 }
 
 export interface DTMAddRow {

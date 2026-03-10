@@ -16,6 +16,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
     if (o.hiddenForCreationForUsersWithoutTags && o.hiddenForCreationForUsersWithoutTags.length) {
       o.hiddenForCreationForUsersWithoutTagsFormatted = o.hiddenForCreationForUsersWithoutTags.sort().join(', ') || '';
     }
+    o.initialNumberingStyle = o.numberingStyle;
   });
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
   const tableName = 'documentTypeManage';

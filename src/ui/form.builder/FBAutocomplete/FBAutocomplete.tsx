@@ -16,6 +16,7 @@ import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from './Style
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
+  onOpen,
   getOptionDisabled,
   getOptionLabel,
   renderOption,
@@ -177,6 +178,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
+            onOpen={onOpen}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
@@ -198,6 +200,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
+            onOpen={onOpen}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}

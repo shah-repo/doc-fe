@@ -11,7 +11,7 @@ import { styles as AutoCompleteStyles } from '../../../form.builder/styles/FBAut
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocId } from '../../../hooks/docCustomization/useCustomization';
 import { DocumentCloneType } from '../../Clone.container';
-import { styles } from './styles/DocIdInput.styles';
+import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
   isDisabled: boolean
@@ -30,7 +30,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   setDocId,
   type,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
   React.useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
@@ -56,7 +56,16 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     if (!pattern.test(value) || !setDocId) {
       return;
     }
-    setDocId(value);
+
+    if (!type) {
+      setDocId(value?.trim());
+      return;
+    }
+
+    const withoutAcronym = value.replace(type, '');
+    const trimmedValue = withoutAcronym.trim();
+    const updatedValue = trimmedValue ? `${type}${trimmedValue}` : type;
+    setDocId(updatedValue);
   };
 
   if (!isVisible && type !== 'newOutput') {
