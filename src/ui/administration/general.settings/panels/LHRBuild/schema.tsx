@@ -14,6 +14,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   onActiveStateChange,
   onDiscard,
   onConfirm,
+  equipmentEnforceProdConfig,
 }) => {
   // const classes = useStyles();
   return [
@@ -46,7 +47,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
       locked: true,
     },
-    {
+    ...(equipmentEnforceProdConfig ? [{
       id: 'allowCalOrPm',
       field: 'allowCalOrPm',
       headerCell: (props) => (
@@ -58,7 +59,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       ),
       template: AutocompleteCellTemplate,
       width: 200,
-    },
+    }] : []),
     {
       id: 'allowOverdueQuantityMismatch',
       field: 'allowOverdueQuantityMismatch',
