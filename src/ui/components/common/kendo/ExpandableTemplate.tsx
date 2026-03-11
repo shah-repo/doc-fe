@@ -11,6 +11,7 @@ interface Props {
   noOfItems?: number
 }
 const ExpandableTemplate = ({ items, dataId, noOfItems = 15 }: Props) => {
+  console.log('ExpandableTemplate');
   const classes = styles();
   const groupId = dataId;
   const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
@@ -21,7 +22,7 @@ const ExpandableTemplate = ({ items, dataId, noOfItems = 15 }: Props) => {
   const itemsToDisplay = groupId === expandedGroupId ? items : items.slice(0, noOfItems);
   const remainder = groupId === expandedGroupId ? 0 : items.length - noOfItems;
   return (
-    <Box justifyContent="flex-start" alignContent="flex-start">
+    <Box justifyContent="flex-start" alignContent="flex-start" className={classes.wrapText}>
       {itemsToDisplay.join(', ')}
       {
         items.length > noOfItems && (
