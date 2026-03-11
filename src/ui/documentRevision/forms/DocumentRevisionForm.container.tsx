@@ -153,6 +153,9 @@ DocumentRevisionFormContainerProps
   }, [canUpdateHTML, initialValues, FBDataStore?.refreshData, getDocTypeGroups]);
 
   useObserver(() => {
+    if (!documentRevision) {
+      return;
+    }
     if (documentRevision?.id === FBDataStore?.refreshData?.id) {
       cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     }
