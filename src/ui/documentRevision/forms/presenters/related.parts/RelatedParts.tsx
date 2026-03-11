@@ -534,7 +534,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
           <Link
             to={documentVersionPath(listItem.documentRevisionId, listItem.documentId)}
             target="_blank"
-            className={`${classes.link} ${classes.truncateText}`}
+            className={cx(classes.link, classes.truncateText)}
             onClick={linkHandler}
           >
             <OverflowTooltip
