@@ -218,6 +218,7 @@ export interface Precalc {
   lot_part?: string
   lot_part_revision?: string
   related_equipment?: string[]
+  lot_expiry_date?: string
 }
 
 interface DocumentsInLHRS {

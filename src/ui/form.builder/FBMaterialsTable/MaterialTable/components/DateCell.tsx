@@ -1,64 +1,48 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { useEffect, useMemo, useState } from 'react';
+import moment from 'moment';
+import React, { useMemo } from 'react';
+import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { getValidDueDate, isDateOverdue } from '../../../FBEquipmentTable/components/treelist/utils';
+import { getValidDueDate } from '../../../FBEquipmentTable/components/treelist/utils';
 import { CustomTreeListCellProps } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
 
 export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onClick } = props;
-  const isExpired = dataItem[field] ? isDateOverdue(dataItem[field]) : false;
-  const updatedDate = getValidDueDate(dataItem[field]);
   const classes = styles();
-
-  const lotId = useMemo(
-    () => dataItem?.lotId ?? '',
-    [dataItem?.lotId],
-  );
+  const { timezone } = useDate();
+  const updatedDate = getValidDueDate(dataItem[field]);
+  const lotId = dataItem?.lotId ?? '';
 
   const storedLot = useMemo(() => {
     if (!lotId) return null;
 
-    return FBAutocompleteAsyncStore.getValue<DocumentRevision>(
-      FBAutocompleteAsyncOption.ebLots,
-      lotId,
-    );
+    return FBAutocompleteAsyncStore.getValue<DocumentRevision>(FBAutocompleteAsyncOption.ebLots, lotId);
   }, [lotId]);
 
-  const [expiryDate, setExpiryDate] = useState('');
+  const expiryDate = storedLot?.precalc?.lot_expiry_date ?? '';
 
-  useEffect(() => {
-    if (!storedLot) return;
+  const isExpired = useMemo(() => {
+    if (!expiryDate) return false;
 
-    setExpiryDate(storedLot?.precalc?.lot_part ?? '');
-  }, [storedLot]);
+    const expiryDateInMs = moment.tz(expiryDate, MomentFormats.YearMonthDateDash, timezone).add(1, 'day').valueOf();
 
-  console.log('expiryDate', expiryDate);
+    const currentDateInMs = moment().tz(timezone).valueOf();
+
+    return expiryDateInMs < currentDateInMs;
+  }, [expiryDate, timezone]);
 
   return (
     <TreeListCellWrapper {...props}>
-      <OverflowTooltip
-        title={updatedDate}
-        placement="top"
-        onClick={() => onClick?.({ dataItem })}
-        interactive
-        arrow
-      >
-        <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{expiryDate}</span>
-        {isExpired && (<span>
-          <FontAwesomeIcon
-            size="lg"
-            className={cx(classes.expired, classes.expiredIcon)}
-            icon={ solid('circle-exclamation')}
-          />
-        </span>)}
-      </OverflowTooltip>
+      {expiryDate && (
+        <OverflowTooltip title={updatedDate} placement="top" onClick={() => onClick?.({ dataItem })} interactive arrow>
+          <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{expiryDate}</span>
+        </OverflowTooltip>
+      )}
     </TreeListCellWrapper>
   );
 };
