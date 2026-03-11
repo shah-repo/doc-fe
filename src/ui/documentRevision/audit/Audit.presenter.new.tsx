@@ -201,6 +201,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             nextValue: previousValue as string,
           };
         }
+        if (fbType === 'datepicker' && change.type === 'STRING_EDITED' && nextValue === 'null') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'STRING_DELETED',
+            nextValue: 'undefined',
+          };
+        }
       }
 
       // PROCEDURE
