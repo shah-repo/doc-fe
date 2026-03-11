@@ -192,6 +192,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { allowExpiredLots } = React.useContext(MaterialTreelistContext);
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
@@ -219,7 +220,20 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
+    let isExpiryValid = true;
+
+    if (!allowExpiredLots) {
+      const expiryDateStr = lot?.formInput?.lot_expiry_date;
+
+      if (expiryDateStr) {
+        const today = new Date().setHours(0, 0, 0, 0);
+        const expiryDate = new Date(expiryDateStr).setHours(0, 0, 0, 0);
+
+        isExpiryValid = expiryDate >= today;
+      }
+    }
+
+    return isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({
