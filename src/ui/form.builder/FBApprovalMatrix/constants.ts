@@ -26,3 +26,8 @@ export const CATEGORY_OPTIONS = [
   createOption('Customers'),
   createOption('Shipping'),
 ];
+
+export const NUMBERING_STYLE_OPTIONS = [
+  createOption('INTERNAL', 'Internal'),
+  createOption('CUSTOMER', 'Customer'),
+];

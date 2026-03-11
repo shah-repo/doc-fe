@@ -89,16 +89,18 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
         </Button>
       </Box>
       <div className={classes.panels} ref={containerRef}>
-        {panels.map(panel => (
-          <panel.component
-            key={panel.key}
-            title={panel.title}
-            containerRef={containerRef}
-            expanded={expandedPanels.includes(panel.key)}
-            onToggle={togglePanel(panel.key)}
-            data-cy={kebabCase(panel.title)}
-          />
-        ))}
+        <div className={classes.panelsContainer}>
+          {panels.map(panel => (
+            <panel.component
+              key={panel.key}
+              title={panel.title}
+              containerRef={containerRef}
+              expanded={expandedPanels.includes(panel.key)}
+              onToggle={togglePanel(panel.key)}
+              data-cy={kebabCase(panel.title)}
+            />
+          ))}
+        </div>
       </div>
       {isShowHistoryDrawer && (
         <SettingsHistoryDrawer

@@ -88,7 +88,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
-    trainingCompletionDate: moment().tz(timezone).startOf('day').toISOString(),
+    trainingCompletionDate: moment().tz(timezone).toISOString(),
     createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });
