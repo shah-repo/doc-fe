@@ -33,13 +33,11 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
 
     // MARK: @methods
     onDialogConfirm = () => {
-      const formValues = formState.getValues();
-      if (supplierState?.documentTypeApi.data?.documentType?.isQms) {
-        formValues.document.securityList = {
-          securityGroups: getDocTypeGroups(supplierState?.documentTypeApi.data?.documentType),
-        };
-      }
-      supplierState?.addNewSupplier(toNewVersionRequestBody(formValues as DocumentRevisionFormValues));
+      const supplierDocumentRevisionDto = {
+        ...formState.getValues(),
+        securityGroups: getDocTypeGroups(supplierState?.documentTypeApi.data?.documentType),
+      };
+      supplierState?.addNewSupplier(toNewVersionRequestBody(supplierDocumentRevisionDto as DocumentRevisionFormValues));
       onDialogClose?.();
     };
 
