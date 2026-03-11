@@ -2510,7 +2510,7 @@
   "administration.general.settings.lhr.build.menu.tab": "LHR Build Type",
   "administration.general.settings.lhr.build.switch.tab": "LHR Build Type Switch Configuration Approval",
   "administration.general.settings.lhr.build.switch.menu.tab": "LHR Build Type Switch",
-  "administration.general.settings.lhr.build.switch.sub.title": "No approval is required unless a group is selected. If no rule is defined, the system will retain its current functionality, allowing switches only from production to other build types.",
+  "administration.general.settings.lhr.build.switch.sub.title": "Approval is required only if at least one approval group (e.g., QA, Operations) is selected. If no rule is configured, the system retains its default behavior, allowing switches only from Production to other build types.",
   "administration.general.settings.lhr.build.switch.from": "From",
   "administration.general.settings.lhr.build.switch.to": "To",
   "administration.general.settings.lhr.build.switch.approval.group": "Approval Group(s)",
