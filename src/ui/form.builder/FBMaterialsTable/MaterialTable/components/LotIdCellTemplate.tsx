@@ -314,11 +314,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     );
   }
 
-  if (!isEditMode) {
-    return <LotPreviewCell {...props} />;
-  }
-
-  if (!dataItem[ADD_FIELD]) {
+  if (!isEditMode || !dataItem[ADD_FIELD]) {
     return <LotPreviewCell {...props} />;
   }
 
