@@ -70,12 +70,17 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
       const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
 
-      if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
+      if (stepLHRs?.formInput?.[startDateFieldName] === null) {
+        formState?.setFieldValue(startDateFieldName, null);
+      } else if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(startDateFieldName, formattedStartDate);
       }
-      if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
+
+      if (stepLHRs?.formInput?.[endDateFieldName] === null) {
+        formState?.setFieldValue(endDateFieldName, null);
+      } else if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(endDateFieldName, formattedEndDate);

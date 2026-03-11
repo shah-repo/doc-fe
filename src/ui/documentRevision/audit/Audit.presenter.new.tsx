@@ -109,7 +109,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       || change.type.includes('BOOLEAN_EDITED')
       || change.field.includes('items.date')
       || change.field.includes('items.capitalEquipment')
-      || change.field.includes('totalInUSD'))
+      || change.field.includes('totalInUSD')
+      || change.field.endsWith('partNumber')
+      || change.field.endsWith('partNumberDocumentId'))
     // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
     && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
       || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
@@ -197,6 +199,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             ...change,
             type: 'NUMBER_DELETED',
             nextValue: previousValue as string,
+          };
+        }
+        if (fbType === 'datepicker' && change.type === 'STRING_EDITED' && nextValue === 'null') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'STRING_DELETED',
+            nextValue: 'undefined',
           };
         }
       }

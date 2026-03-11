@@ -23,6 +23,7 @@ export enum GeneralSettingsTabs {
   Timezone = 'Timezone',
   LHRBuild = 'LHR Build',
   LHRBuildSwitch = 'LHR Build Switch',
+  TaxRate = 'Tax Rate',
 }
 
 export interface GeneralSettingsProps {

@@ -149,6 +149,9 @@ export const toDocumentRevisionEditRequestBody = (
   return data;
 };
 
+export const stripAllWhitespace = (value?: string): string =>
+  value?.replace(/\s+/g, '') ?? '';
+
 export const toNewVersionRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
@@ -167,7 +170,7 @@ export const toNewVersionRequestBody = (
       newValues.document = {
         ...newValues.document,
         id: get(values, 'document.id'),
-        docId: get(values, 'document.docId')?.trim(),
+        docId: stripAllWhitespace(get(values, 'document.docId')),
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),

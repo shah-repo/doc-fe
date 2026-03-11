@@ -298,6 +298,7 @@ export interface GeneralSettings {
   supplierCapabilities: SupplierLabel[]
   supplierServices: SupplierLabel[]
   lhrBuildTypeSwitchConfigApproval?: LHRBuildTypeSwitchConfigApproval[]
+  defaultTaxRate?: number
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
