@@ -70,6 +70,7 @@ interface MaterialTreelistContextProps {
   isMPIProcedure?: boolean
   disabledOptions?: string[]
   acceptedQuantity?: number
+  allowExpiredLots?: boolean
 }
 
 export const MaterialTreelistContext = React.createContext<MaterialTreelistContextProps>({
@@ -110,6 +111,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
+  const allowExpiredLots = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.allowExpiredLot;
   const [state, setState] = React.useState<MaterialItemState>({
     data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
     expanded: [],
@@ -561,6 +563,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
           disabledOptions,
           isMPIProcedure,
           acceptedQuantity,
+          allowExpiredLots,
         }}
       >
         <FormikProvider value={formik}>

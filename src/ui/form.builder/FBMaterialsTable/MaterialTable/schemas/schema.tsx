@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { ActionsCell } from '../components/Actions';
+import { DateCell } from '../components/DateCell';
 import LotIdCellTemplate from '../components/LotIdCellTemplate';
 import PlannedIdCellTemplate from '../components/PlannedIdCellTemplate';
 import QuantityCell from '../components/QuantityCell';
@@ -51,6 +52,14 @@ export const buildSchema = ({
     field: 'unit',
     title: translate('form.builder.procedure.material.table.unit.title'),
     cell: (props) => <UnitsCellTemplate {...props} onClick={onRowClick} units={units} isLHRS />,
+    mainOrderIndex: 5,
+    width: 150,
+  },
+  {
+    id: 'expiryDate',
+    field: 'expiryDate',
+    title: translate('form.builder.procedure.material.table.expiry.date.title'),
+    cell: (props) => <DateCell {...props} onClick={onRowClick} isLHRS />,
     mainOrderIndex: 5,
     width: 150,
   },
