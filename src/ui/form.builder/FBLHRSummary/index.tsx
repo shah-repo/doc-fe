@@ -83,9 +83,6 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const isAddButtonVisible = !isShowOnly && !isDisabled;
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
   const { getFormattedDateString } = useDate();
-  const { workspaceState } = FB.useStores();
-  const isLHRProductionBuild = workspaceState?.isLHRBuildFromFormInput || false;
-  const isExpiredLotAllowed = workspaceState?.lhrBuildTypeConfigFromFormInput?.allowExpiredLot || false;
 
   const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
     setSkip(skip);
@@ -451,8 +448,6 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
           columns: visibleColumns,
           onLock,
           hasErrors: hasActiveOCRSubscription && isAddButtonVisible,
-          isLHRProductionBuild,
-          isExpiredLotAllowed,
         }}
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
