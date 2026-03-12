@@ -64,7 +64,7 @@ export const panels = [
   },
   {
     key: GeneralSettingsTabs.LHRBuildSwitch,
-    title: 'administration.general.settings.lhr.build.switch.menu.tab',
+    title: 'administration.general.settings.lhrBuildType.menu.tab',
     component: LHRBuildSwitchSettingsPanel,
   },
   {

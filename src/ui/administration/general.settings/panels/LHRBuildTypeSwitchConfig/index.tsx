@@ -165,12 +165,12 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   return (
     <SettingsPanel
       {...props}
-      title={translate('administration.general.settings.lhr.build.switch.tab')}
+      title={translate('administration.general.settings.lhrBuildType.switchConfigApproval.tab')}
       onAddNew={addLHRBuildSwitch}
       addButtonLabel={translate('common.add.rule')}
     >
       <Box className={classes.subTitle}>
-        <Text message={translate('administration.general.settings.lhr.build.switch.sub.title')} />
+        <Text message={translate('administration.general.settings.lhrBuildType.sub.title')} />
       </Box>
       <FormikProvider value={formik}>
           <SettingsTable
