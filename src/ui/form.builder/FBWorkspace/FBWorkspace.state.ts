@@ -116,20 +116,18 @@ class FBWorkspaceState extends FBSchemaState {
     return !isEmpty(this.document?.formDocumentId);
   }
 
-  private get allowedLHRInternalTypes (): FBLHRBuildOptions[] {
-    return [
+  public get isLHRProductionBuild (): boolean {
+    const allowedInternalTypes = [
       FBLHRBuildOptions.Production,
       FBLHRBuildOptions.Clinical,
       FBLHRBuildOptions['Verification & Validation'],
     ];
-  }
 
-  public get isLHRProductionBuild (): boolean {
     const activeBuildTypeIds = this.buildTypeOptions
-      .filter((buildType) => this.allowedLHRInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
+      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
       .map((buildType) => buildType.id);
 
-    const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : this.allowedLHRInternalTypes;
+    const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
 
     const smartReference = this.document?.smartReferencesTo?.find(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
@@ -145,28 +143,6 @@ class FBWorkspaceState extends FBSchemaState {
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
     )?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
     return this.lhrBuildTypeConfig?.find((config) => config.id === buildType);
-  }
-
-  public get lhrBuildTypeConfigFromFormInput (): LHRBuild | undefined {
-    const buildType = this.formInput?.['lhr-build-type'] as string | undefined;
-    return this.lhrBuildTypeConfig?.find((config) => config.id === buildType);
-  }
-
-  private get effectiveBuildTypeIds (): string[] {
-    const activeBuildTypeIds = this.lhrBuildTypeConfig
-      .filter((buildType) =>
-        this.allowedLHRInternalTypes.includes(buildType.internalType as FBLHRBuildOptions),
-      )
-      .map((buildType) => buildType.id);
-
-    return activeBuildTypeIds.length > 0
-      ? activeBuildTypeIds
-      : this.allowedLHRInternalTypes;
-  }
-
-  public get isLHRBuildFromFormInput (): boolean {
-    const buildType = this.formInput?.['lhr-build-type'] as string | undefined;
-    return !!buildType && this.effectiveBuildTypeIds.includes(buildType);
   }
 
   public get isLHRRelevantBuilds (): boolean {

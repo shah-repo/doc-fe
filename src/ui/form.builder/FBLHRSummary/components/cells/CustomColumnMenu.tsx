@@ -15,8 +15,6 @@ interface ColumnMenuContextProps {
   columns: Array<ColumnDefinition<EditableLHRSummaryItem>>
   onLock: (params) => void
   hasErrors: boolean
-  isLHRProductionBuild?: boolean
-  isExpiredLotAllowed?: boolean
 }
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);

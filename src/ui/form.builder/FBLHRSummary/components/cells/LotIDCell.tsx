@@ -1,11 +1,9 @@
 import { Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
-import { endsWith, isEmpty, toUpper } from 'lodash';
-import moment from 'moment';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
@@ -18,7 +16,6 @@ import { FB } from '../../../helpers';
 import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { setFieldValuesForOriginalAndPrefixed } from '../../utils';
-import { ColumnMenuContext } from './CustomColumnMenu';
 import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 interface CustomOptionType extends OptionType {
@@ -35,38 +32,14 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   const fetchLotsByPartId = useActionCreator(
     lhrSummaryActions.fetchLotsByPartId,
   );
-  const { isExpiredLotAllowed, isLHRProductionBuild } = React.useContext(ColumnMenuContext);
   const { actualId } = values ?? {};
-  const { timezone } = useDate();
   const classes = styles();
   const [isOpen, setIsOpen] = useState(false);
   const isTypeFieldEmpty = isEmpty(values.type);
   const [loading, setLoading] = useState(false);
   const fetchPartLotsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      const now = moment().tz(timezone).valueOf();
-
-      const filteredLots = data.filter((lot) => {
-        const docId = toUpper(lot?.document?.docId || '');
-        const expiryDate = lot?.formInput?.lot_expiry_date;
-
-        const expiryDateInMs = expiryDate
-          ? moment.tz(expiryDate, MomentFormats.YearMonthDateDash, timezone)
-            .add(1, 'day')
-            .valueOf()
-          : Infinity;
-
-        const isExpired = expiryDateInMs < now;
-        const isRD = endsWith(docId, 'RD');
-
-        if (!isExpiredLotAllowed && isExpired) return false;
-        // TODO include R&D condition from build type
-        if (isLHRProductionBuild && isRD) return false;
-
-        return true;
-      });
-
-      setLots(filteredLots);
+      setLots(data);
     },
   });
 
