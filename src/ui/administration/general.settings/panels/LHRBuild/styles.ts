@@ -23,9 +23,19 @@ export const useStyles = makeStyles(() =>
   },
   header: {
     whiteSpace: 'normal',
+    overflow: 'visible',
     fontSize: 12,
     fontWeight: 600,
     lineHeight: '1.2',
+    '& .k-link': {
+      overflow: 'visible',
+      whiteSpace: 'normal',
+    },
+    '& .k-column-title': {
+      overflow: 'visible',
+      textOverflow: 'unset',
+      whiteSpace: 'normal',
+    },
   },
   }),
 );

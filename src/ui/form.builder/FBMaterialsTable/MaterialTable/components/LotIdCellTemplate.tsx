@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { endsWith, isEmpty, toUpper } from 'lodash';
 import { reaction } from 'mobx';
 import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MaterialTreelistContext } from '..';
@@ -192,6 +192,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { allowExpiredLots } = React.useContext(MaterialTreelistContext);
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
@@ -212,14 +213,32 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     if (isEBProcedure) {
       isAcceptedStatus = true; // No constraints on Lot Status
     } else {
+      const isValidStatus = [
+        DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
+        DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
+      ].includes(lot?.lotStatus);
+
       isAcceptedStatus = isLHRProductionBuild
-        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+        ? isValidStatus && !endsWith(toUpper(lot?.document?.docId || ''), 'RD')
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
+    let isExpiryValid = true;
+
+    if (!allowExpiredLots) {
+      const expiryDateStr = lot?.formInput?.lot_expiry_date;
+
+      if (expiryDateStr) {
+        const today = new Date().setHours(0, 0, 0, 0);
+        const expiryDate = new Date(expiryDateStr).setHours(0, 0, 0, 0);
+
+        isExpiryValid = expiryDate >= today;
+      }
+    }
+
+    return isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({

@@ -25,7 +25,8 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FB, FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -90,14 +91,37 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   }
 
   const poDefinePartNumberText = (data: POLineItem) => {
-    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    const {
+      type,
+      partNumber,
+      partNumberDocId,
+      supplierPartNumber,
+      serviceId,
+      description,
+    } = data;
+
     let partNumberText = '';
+
     if (type === FBPurchaseOrderItemType.PRODUCT) {
-      partNumberText = partNumberDocId ?? supplierPartNumber;
+      const storedPart = partNumber
+        ? FBAutocompleteAsyncStore.getValue<DocumentRevision>(
+          FBAutocompleteAsyncOption.parts,
+          partNumber,
+        )
+        : null;
+
+      const latestDocId
+      = storedPart?.document?.docId ?? partNumberDocId ?? supplierPartNumber ?? '';
+
+      partNumberText = latestDocId;
     } else if (type === FBPurchaseOrderItemType.SERVICE) {
-      partNumberText = serviceId !== ''
-        ? serviceId
-        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+      partNumberText
+      = serviceId !== ''
+          ? serviceId
+          : intl.formatMessage(
+            { id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' },
+            { description },
+          );
     }
 
     return partNumberText;
@@ -592,7 +616,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           let assignedTo = assignToUser;
-          if(FB.isUUID(assignToUser ?? '')) {
+          if (FB.isUUID(assignToUser ?? '')) {
             assignedTo = getUserDetails(assignToUser)?.user?.name;
           }
           if (audit.type.includes('ARRAY_ADDED')) {
@@ -864,7 +888,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.po-items-built-in.items.received':
       case 'formInput.po-items-built-in.items.serviceId':
       case 'formInput.po-items-built-in.items.formattedDate':
-      case 'formInput.po-items-built-in.items.partNumberTitle':
       case 'formInput.po-items-built-in.items.description':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -874,6 +897,27 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
+      case 'formInput.po-items-built-in.items.partNumberTitle':
+      case 'formInput.po-items-built-in.items.partNumberDocId':
+        try {
+          if (audit.type.includes('STRING_EDITED')) {
+            const prevEntry: POLineItem & { value: string } = JSON.parse(audit.previousValue as string);
+            const currEntry: POLineItem & { value: string } = JSON.parse(audit.nextValue as string);
+
+            const { value: prevValue } = prevEntry;
+            const { value: nextValue } = currEntry;
+
+            if (nextValue) {
+              const text
+                = intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.partNumber.UPDATED' }, { prevValue: prevValue ?? 'NA', nextValue });
+              returnValue = (<div data-cy={dataCy}>{text}</div>);
+            }
           }
         } catch (err) {
           // Not valid JSON, so older data and is string

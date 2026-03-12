@@ -1,12 +1,12 @@
 import React from 'react';
-import { translate } from '../../../../../common/intl';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
 import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
 import { AutocompleteCellTemplate } from '../../components/SettingsTable/components/AutocompleteCellTemplate';
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
+import { HeaderCell } from './components/HeaderCell';
+// import { useStyles } from './styles';
 import { EditableLHRBuild } from './types';
-import { useStyles } from './styles';
 
 export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   isActive,
@@ -14,8 +14,9 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   onActiveStateChange,
   onDiscard,
   onConfirm,
+  equipmentEnforceProdConfig,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   return [
     {
       id: 'isActive',
@@ -46,83 +47,107 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
       locked: true,
     },
-    {
+    ...(equipmentEnforceProdConfig ? [{
       id: 'allowCalOrPm',
       field: 'allowCalOrPm',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
-    },
+    }] : []),
     {
       id: 'allowOverdueQuantityMismatch',
       field: 'allowOverdueQuantityMismatch',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'allowQuantityDiscrepancy',
       field: 'allowQuantityDiscrepancy',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'requireLotSelection',
       field: 'requireLotSelection',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'allowExpiredLot',
       field: 'allowExpiredLot',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'requireEquipmentSelection',
       field: 'requireEquipmentSelection',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'requireDeviationApproval',
       field: 'requireDeviationApproval',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
       id: 'requireReworkApproval',
       field: 'requireReworkApproval',
-      headerCell: () => (
-        <span className={classes.header}>
-          {translate('administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval')}
-        </span>),
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval.tooltip"
+        />
+      ),
       template: AutocompleteCellTemplate,
       width: 200,
     },

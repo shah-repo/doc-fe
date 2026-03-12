@@ -12,6 +12,7 @@ import PrintingSettingsPanel from './panels/Printing';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
+import TaxRateSettings from './panels/TaxRate';
 import TimezoneSettings from './panels/Timezone';
 import Training from './panels/Training';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
@@ -110,5 +111,10 @@ export const panels = [
     key: GeneralSettingsTabs.Timezone,
     title: 'administration.general.settings.timezone.title',
     component: TimezoneSettings,
+  },
+  {
+    key: GeneralSettingsTabs.TaxRate,
+    title: 'administration.general.settings.tax.rate',
+    component: TaxRateSettings,
   },
 ];

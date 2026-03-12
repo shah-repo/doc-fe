@@ -44,6 +44,7 @@ import FBEditorLabel from '../FBEditorLabel/FBEditorLabel';
 import FBEditorMediaAlbum from '../FBEditorMediaAlbum/FBEditorMediaAlbum';
 import FBEditorOptionGroup from '../FBEditorOptionGroup/FBEditorOptionGroup';
 import FBEditorParagraph from '../FBEditorParagraph/FBEditorParagraph';
+import FBEditorPurchaseOrder from '../FBEditorPurchaseOrder/FBEditorPurchaseOrder';
 import FBEditorRequestApproval from '../FBEditorRequestApproval/FBEditorRequestApproval';
 import FBEditorSelectDocument from '../FBEditorSelectDocument/FBEditorSelectDocument';
 import FBEditorTextEditor from '../FBEditorTextEditor/FBEditorTextEditor';
@@ -145,7 +146,7 @@ class FBEditorState {
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
-    purchaseorder: FBEditorLabel,
+    purchaseorder: FBEditorPurchaseOrder,
     poreceive: FBEditorLabel,
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
