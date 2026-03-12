@@ -1,13 +1,29 @@
 import { get } from 'lodash';
-import { reaction } from 'mobx';
 import React from 'react';
 import { FB, FBFormState, FBPurchaseOrderFormProps, FBPurchaseOrderItem } from '..';
+import { SM } from '../../../App';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { generateDocIdLabel } from './helpers';
 
+const PART_FIELDS = [
+  'partNumber',
+  'supplierPartNumber',
+  'partNumberTitle',
+  'partNumberDocumentId',
+  'partNumberDocId',
+  'capitalEquipment',
+  'tax',
+];
+
+const SERVICE_FIELDS = [
+  'serviceId',
+  'description',
+  'tax',
+];
+
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handlePartTitle,
     handleTotal,
@@ -26,7 +42,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    handlePartTitle = (_ev: any, value?: DocumentRevision) => {
+    handlePartTitle = (_ev: unknown, value?: DocumentRevision) => {
       const item = formState?.getValues() as FBPurchaseOrderItem;
       const partNumber = item.partNumber;
 
@@ -47,32 +63,28 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       purchaseOrderState?.setItemTotalAmount(item);
     };
 
-    React.useEffect(() => reaction(
-      () => formState?.newValues.get('type'),
+    SM.reaction(
+      () => String(formState?.newValues.get('type')),
       (type) => {
-        formState?.setFieldValue('tax', false, true);
-        formState?.setFieldValue('capitalEquipment', false, true);
-        formState?.setFieldValue('isTraceabilityRequired', false, true);
-        formState?.setFieldValue('partNumber', undefined, true);
-        formState?.setFieldValue('supplierPartNumber', undefined, true);
-        formState?.setFieldValue('partNumberTitle', undefined, true);
-        formState?.setFieldValue('serviceId', '', true);
-        formState?.setFieldValue('description', '', true);
-        if (type === 'product') {
-          formState?.setFieldRules('partNumber', 'required_without:supplierPartNumber');
-          formState?.setFieldRules('supplierPartNumber', 'required_without:partNumber');
-          formState?.setFieldFinalValidationRules('partNumber', 'required_without:supplierPartNumber');
-          formState?.setFieldFinalValidationRules('supplierPartNumber', 'required_without:partNumber');
-        } else {
-          purchaseOrderState?.setPartNumber(undefined);
-          formState?.removeFieldRules('partNumber');
-          formState?.removeFieldRules('supplierPartNumber');
+        switch (type) {
+          case 'product':
+            SERVICE_FIELDS.forEach((field) => {
+              formState?.omitFieldValue(field);
+              formState?.removeFieldRules(field);
+            });
+            break;
+          case 'service':
+            purchaseOrderState?.setPartNumber(undefined);
+            PART_FIELDS.forEach((field) => {
+              formState?.omitFieldValue(field);
+              formState?.removeFieldRules(field);
+            });
+            break;
         }
       },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    );
 
-    const handlePartDescription = (ev: React.ChangeEvent<any>) => {
+    const handlePartDescription = (ev: React.ChangeEvent<HTMLInputElement>) => {
       const value = get(ev.target, 'value');
       formState?.setFieldValue('partNumberTitle', value, true);
     };
