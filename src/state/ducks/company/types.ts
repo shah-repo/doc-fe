@@ -267,6 +267,7 @@ interface TrainingReminders {
   isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
   isEmailSendingEnabled?: boolean
+  gracePeriodDays: number
 }
 
 export interface GeneralSettings {
@@ -295,6 +296,7 @@ export interface GeneralSettings {
   supplierTypes: SupplierLabel[]
   supplierCapabilities: SupplierLabel[]
   supplierServices: SupplierLabel[]
+  defaultTaxRate?: number
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

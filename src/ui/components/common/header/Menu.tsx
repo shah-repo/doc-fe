@@ -1,4 +1,4 @@
-import { IconButton, MenuItem } from '@material-ui/core';
+import { IconButton, MenuItem, PaperProps } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
@@ -12,9 +12,10 @@ interface Props {
   menuIconButtonClass?: string
   icon?: React.ReactNode
   dataCy?: string
+  PaperProps?: PaperProps
 }
 
-const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass, dataCy }) => {
+const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass, dataCy, PaperProps }) => {
   if (!children.length) {
     children = [children];
   }
@@ -69,6 +70,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
         }}
         className={classes.menu}
         data-cy={dataCy}
+        PaperProps={PaperProps}
       >
         {children.map((menuItem, index) => {
           if (!menuItem) {

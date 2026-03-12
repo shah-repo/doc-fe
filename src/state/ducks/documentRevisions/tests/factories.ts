@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { Audit } from '../../audit/types';
 import { getOwner } from '../../common/tests/factories';
-import { DocumentType } from '../documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType } from '../documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../types';
 
 const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
@@ -11,6 +11,7 @@ const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType
   group: 'OTHER',
   isQms: false,
   defaultTraining: false,
+  numberingStyle: DOCUMENT_NUMBERING_STYLE.INTERNAL,
   ...docType,
 });
 

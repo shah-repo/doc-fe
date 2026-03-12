@@ -13,6 +13,7 @@ import { Approval } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DOCUMENT_NUMBERING_STYLE } from '../../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { ApplicationState } from '../../../state/reducers';
@@ -30,6 +31,7 @@ import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, 
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from '../helpers/records';
 import { isDocumentAlphaReleased } from '../helpers/revisionStage';
 import { shouldShowSyncForRelatedEquipment } from './presenters/related.equipments';
+import { stripDocIdOfAcronym } from './transform';
 import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 
 export interface FormHeaderContext {
@@ -111,6 +113,9 @@ DocumentRevisionFormContainerProps
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   document = document || ({} as Document);
 
+  const isInternalTypeNumbering = !documentRevision?.numberingStyle
+    || documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
@@ -118,11 +123,16 @@ DocumentRevisionFormContainerProps
 
     const retrain = initialValues.id
       ? initialValues.retrain
-      : initialValues.document?.documentType?.defaultTraining || false;
+      : initialValues.document?.documentType?.defaultTraining ?? false;
 
     const attachments = outputRevision
       ? filter(initialValues.attachments, (file) => file.lineType !== 'RED_LINE')
       : initialValues.attachments;
+
+    let docId = proposedDocId ?? initialValues.document?.docId;
+    if (!isInternalTypeNumbering && docId && documentTypeAcronym) {
+      docId = stripDocIdOfAcronym(docId, documentTypeAcronym);
+    }
 
     return {
       ...initialValues,
@@ -131,8 +141,9 @@ DocumentRevisionFormContainerProps
         ...(initialValues.document || {}),
         // NOTE: workaround. DocId is set before groupOptions are loaded
         // after groupOptions have been loaded the initial values are updated and the docId is removed
-        docId: proposedDocId || initialValues.document?.docId,
+        docId,
       },
+      docId,
       retrain,
       renderHTML,
       securityGroups,
@@ -142,6 +153,9 @@ DocumentRevisionFormContainerProps
   }, [canUpdateHTML, initialValues, FBDataStore?.refreshData, getDocTypeGroups]);
 
   useObserver(() => {
+    if (!documentRevision) {
+      return;
+    }
     if (documentRevision?.id === FBDataStore?.refreshData?.id) {
       cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     }
@@ -284,6 +298,7 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
+        isInternalTypeNumbering,
       }}
     />
   );

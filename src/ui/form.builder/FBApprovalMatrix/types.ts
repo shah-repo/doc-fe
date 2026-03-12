@@ -15,6 +15,7 @@ export interface FBGridTableContainerProps {
   isDialog: boolean
   dialogContentStyle: string
   onDialogClose: () => void
+  popupContainerRef: React.RefObject<HTMLDivElement>
 }
 
 export enum FBApprovalMatrixRoleTitles {
