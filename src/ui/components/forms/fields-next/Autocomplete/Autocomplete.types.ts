@@ -13,4 +13,5 @@ export type AutocompleteProps = Omit<MuiAutocompleteProps, 'renderInput' | 'onBl
   inputProps?: InputProps
   shouldAlwaysShowPlaceholder?: boolean
   renderInput?: MuiAutocompleteProps['renderInput']
+  shouldShowDefaultAdornment?: boolean
 };
