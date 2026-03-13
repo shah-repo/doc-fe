@@ -1,11 +1,11 @@
 import { get } from 'lodash';
 import React from 'react';
-import { FB, FBFormState, FBPurchaseOrderFormProps, FBPurchaseOrderItem } from '..';
+import { FB, FBFormState, FBPurchaseOrderFormProps, FBPurchaseOrderItem, FBPurchaseOrderItemType } from '..';
 import { SM } from '../../../App';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { generateDocIdLabel } from './helpers';
 
-const PART_FIELDS = [
+const PART_FIELDS: Array<keyof FBPurchaseOrderItem> = [
   'partNumber',
   'supplierPartNumber',
   'partNumberTitle',
@@ -15,7 +15,7 @@ const PART_FIELDS = [
   'tax',
 ];
 
-const SERVICE_FIELDS = [
+const SERVICE_FIELDS: Array<keyof FBPurchaseOrderItem> = [
   'serviceId',
   'description',
   'tax',
@@ -67,13 +67,13 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       () => String(formState?.newValues.get('type')),
       (type) => {
         switch (type) {
-          case 'product':
+          case FBPurchaseOrderItemType.PRODUCT:
             SERVICE_FIELDS.forEach((field) => {
               formState?.omitFieldValue(field);
               formState?.removeFieldRules(field);
             });
             break;
-          case 'service':
+          case FBPurchaseOrderItemType.SERVICE:
             purchaseOrderState?.setPartNumber(undefined);
             PART_FIELDS.forEach((field) => {
               formState?.omitFieldValue(field);
