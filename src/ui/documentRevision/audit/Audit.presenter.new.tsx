@@ -157,8 +157,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
-    const lotSerialAdds: Audit[] = [];
-    const lotSerialDeletes: Audit[] = [];
+    const lotSerialsAdded: Audit[] = [];
+    const lotSerialsDeleted: Audit[] = [];
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
@@ -534,11 +534,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
 
       if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_NEW') {
-        lotSerialAdds.push(change);
+        lotSerialsAdded.push(change);
         return;
       }
       if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_DELETED') {
-        lotSerialDeletes.push(change);
+        lotSerialsDeleted.push(change);
         return;
       }
       if (!isFBField && change.field.includes('attachments')) {
@@ -809,8 +809,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     });
 
     // Add grouped output for Lot Serial Numbers if present
-    if (lotSerialAdds.length > 0) {
-      const values = lotSerialAdds
+    if (lotSerialsAdded.length > 0) {
+      const values = lotSerialsAdded
         .map(c => String(c.nextValue))
         .filter(Boolean);
 
@@ -866,7 +866,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       singleFields.push(
         <Box
           mb={1}
-          key={`lot-serial-${lotSerialAdds[0].groupId}`}
+          key={`lot-serial-${lotSerialsAdded[0].groupId}`}
           data-cy="no-padding-margin"
           className={classes.auditListItem}
         >
@@ -875,7 +875,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               <Text
                 dataCy={`change-key-${groupKey}-${key}`}
                 translation={
-                  lotSerialAdds.length === 1
+                  lotSerialsAdded.length === 1
                     ? 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.single'
                     : 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.multiple'
                 }
@@ -891,8 +891,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
 
     // Add grouped output for Lot Serial Numbers deletions if present
-    if (lotSerialDeletes.length > 0) {
-      const values = lotSerialDeletes
+    if (lotSerialsDeleted.length > 0) {
+      const values = lotSerialsDeleted
         .map(c => String(c.previousValue))
         .filter(Boolean);
 
@@ -948,7 +948,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       singleFields.push(
         <Box
           mb={1}
-          key={`lot-serial-del-${lotSerialDeletes[0].groupId}`}
+          key={`lot-serial-del-${lotSerialsDeleted[0].groupId}`}
           data-cy="no-padding-margin"
           className={classes.auditListItem}
         >
@@ -957,7 +957,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               <Text
                 dataCy={`change-key-${groupKey}-${key}`}
                 translation={
-                  lotSerialDeletes.length === 1
+                  lotSerialsDeleted.length === 1
                     ? 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.single'
                     : 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.multiple'
                 }
