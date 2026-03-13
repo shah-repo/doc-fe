@@ -132,6 +132,34 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
   const isPreviewForLHR = Boolean(isDocumentLHR || (workspaceState?.isPreview && isDocumentLHRT));
 
+  const validateDate = () => lhrStepState?.validate();
+
+  const startDateStateProvider = {
+    getValue: () => {
+      if (!startDateFieldName) return undefined;
+      return lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] as string | undefined;
+    },
+    setValue: (value: string | undefined) => {
+      if (value !== undefined) {
+        lhrStepState?.updateLHRStepDates(value, undefined);
+      }
+    },
+    validate: validateDate,
+  };
+
+  const endDateStateProvider = {
+    getValue: () => {
+      if (!endDateFieldName) return undefined;
+      return lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] as string | undefined;
+    },
+    setValue: (value: string | undefined) => {
+      if (value !== undefined) {
+        lhrStepState?.updateLHRStepDates(undefined, value);
+      }
+    },
+    validate: validateDate,
+  };
+
   return (
     <FBProvider {...{ lhrStepState }}>
       {!isDocumentLHRT && (<Accordion className={classes.panelBorder} expanded={expand}>
@@ -297,18 +325,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
                 onDateChange={handleStartDateChange}
-                stateProvider={{
-                  getValue: () => {
-                    if (!startDateFieldName) return undefined;
-                    return lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] as string | undefined;
-                  },
-                  setValue: (value) => {
-                    if (value !== undefined) {
-                      lhrStepState?.updateLHRStepDates(value, undefined);
-                    }
-                  },
-                  validate: () => lhrStepState?.validate(),
-                }}
+                stateProvider={startDateStateProvider}
               />
             </Box>
             <Box className={classes.lhrsDateWidthBox}>
@@ -316,18 +333,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}
                 onDateChange={handleEndDateChange}
-                stateProvider={{
-                  getValue: () => {
-                    if (!endDateFieldName) return undefined;
-                    return lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] as string | undefined;
-                  },
-                  setValue: (value) => {
-                    if (value !== undefined) {
-                      lhrStepState?.updateLHRStepDates(undefined, value);
-                    }
-                  },
-                  validate: () => lhrStepState?.validate(),
-                }}
+                stateProvider={endDateStateProvider}
               />
             </Box>
           </Box>

@@ -61,25 +61,21 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const startDateFieldName = LHRS_START_DATE;
     const endDateFieldName = LHRS_END_DATE;
 
-    console.log('lhrstepState', index, lhrStepState);
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
     } else if (stepLHRs) {
       const startDate = lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] || '';
       const endDate = lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] || '';
-      console.log('Initial start and end dates from LHR Step:', { startDate, endDate });
 
       if (startDate && startDate !== lhrStepState.stepLHRs?.formInput?.[startDateFieldName]) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
         lhrStepState.updateLHRStepDates(formattedStartDate, undefined);
-        console.log('Updated start date in LHR Step:', formattedStartDate);
       }
       if (endDate && endDate !== lhrStepState.stepLHRs?.formInput?.[endDateFieldName]) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
         lhrStepState.updateLHRStepDates(undefined, formattedEndDate);
-        console.log('Updated end date in LHR Step:', formattedEndDate);
       }
     }
 
