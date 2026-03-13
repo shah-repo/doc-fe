@@ -1,16 +1,11 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBSection } from '..';
-import { translate } from '../../../common/intl';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
 import FBSerialsTable from '../FBSerialsTable';
 import AddDialog from './components/AddDialog';
-import ImportDialog from './components/ImportDialog';
 import useStyles from './styles';
 import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
@@ -25,13 +20,9 @@ const FBSerials: React.FC = () => {
   }, [serialsState]);
 
   const {
-    partName,
-    partDescription,
     isPartSerialized,
     isPartSerializationManual,
   } = useObserver(() => ({
-    partName: serialsState?.part?.name,
-    partDescription: serialsState?.part?.description,
     isPartSerialized: serialsState?.isPartSerialized,
     isPartSerializationManual: serialsState?.isPartSerializationManual,
   }));
@@ -80,24 +71,9 @@ const FBSerials: React.FC = () => {
     onAdd: addDialog.open,
   } : defaultActionProps;
 
-  const canImport = isPartSerializationManual && false;
-
   return (
     <div className={classes.root}>
-      <FBSection label="form.builder.serials.title">
-        {canImport && (
-          <Button
-            kind="ghost"
-            size="small"
-            className={classes.importButton}
-            startIcon={<FontAwesomeIcon icon={regular('arrow-down-to-bracket')} />}
-            onClick={importDialog.open}
-            data-cy="import-serials"
-          >
-            {translate('form.builder.serials.import')}
-          </Button>
-        )}
-      </FBSection>
+      <FBSection label="form.builder.serials.title" />
       <FBSerialsTable
         serialNumbers={serialNumbers}
         isLoading={isLoading}
@@ -107,15 +83,6 @@ const FBSerials: React.FC = () => {
         <AddDialog
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}
-          onConfirm={addSerials}
-        />
-      )}
-      {canImport && (
-        <ImportDialog
-          partName={partName}
-          partDescription={partDescription}
-          isOpen={importDialog.isOpen}
-          onClose={importDialog.close}
           onConfirm={addSerials}
         />
       )}
