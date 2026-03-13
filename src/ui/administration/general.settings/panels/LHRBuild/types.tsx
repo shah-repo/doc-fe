@@ -12,6 +12,7 @@ export interface LHRBuild {
   requireEquipmentSelection: boolean
   requireDeviationApproval: boolean
   requireReworkApproval: boolean
+  enforceProdLotsOnly: boolean
   isActive: boolean
 }
 

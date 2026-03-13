@@ -126,6 +126,18 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
+      id: 'enforceProdLotsOnly',
+      field: 'enforceProdLotsOnly',
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly"
+        />
+      ),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
       id: 'requireDeviationApproval',
       field: 'requireDeviationApproval',
       headerCell: (props) => (
