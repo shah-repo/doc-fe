@@ -199,6 +199,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const reorderBOMBranch = useActionCreator(
     documentRevisionsActions.changeOrderBOMBranch,
   );
+  const updateBomTreeToLatest = useActionCreator(
+    documentRevisionsActions.updateBomTreeToLatest,
+  );
 
   SM.reaction(
     () => _documentRevisionFormState?.refreshBOMTree,
@@ -827,6 +830,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
   const [maxmizeIconContainerRef, isMaxIconHovered]
     = useHover<HTMLButtonElement>();
+
+  const shouldShowChildUpdateIcon = true; // TODO DRAFT,RELEASED case
+  const handleChildRevisionUpdate = () => {
+    console.log('click');
+    partAsync.start(updateBomTreeToLatest, '', partAsync);
+  };
+
   const renderToolbar = (
     <GridToolbar>
       <Grid
@@ -880,6 +890,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                     )}
                   </span>
                 </span>
+              </Grid>
+            )}
+            {shouldShowChildUpdateIcon && (
+              <Grid item data-cy="child-rev-update">
+                <StyleTooltip title={translate('bom.child.revision.update')} placement="top" arrow>
+                  <FontAwesomeIcon
+                    data-cy="excel-download"
+                    className={classes.exportExcelIcon}
+                    onClick={handleChildRevisionUpdate}
+                    icon={solid('code-branch')}
+                  />
+                </StyleTooltip>
               </Grid>
             )}
             <Grid
