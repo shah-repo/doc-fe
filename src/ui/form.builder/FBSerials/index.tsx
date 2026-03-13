@@ -1,6 +1,7 @@
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBSection } from '..';
+import { translate } from '../../../common/intl';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
@@ -50,7 +51,7 @@ const FBSerials: React.FC = () => {
     try {
       await serialsState?.createSerialNumbers(serials);
     } catch (error) {
-      toastError('Failed to add serial numbers');
+      toastError(translate('form.builder.serials.failed.to.add'));
     }
   };
 
