@@ -5,7 +5,7 @@ const ROW_HEIGHT = 36;
 
 export default makeStyles(theme => ({
   checkbox: {
-    paddingLeft: '20px !important',
+    paddingLeft: `${theme.spacing(2)}px !important`,
   },
   headerCheckbox: {
     marginLeft: theme.spacing(1),
