@@ -2531,6 +2531,7 @@
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection": "Require Lot Selection",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot": "Allow Expired Lots",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection": "Require Equipment Selection",
+  "administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly": "Enforce Production Lots",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval": "Require Deviation Approval",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval": "Require Rework Approval",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm.tooltip": "If set to Yes, the equipment must have current Calibration and Preventive Maintenance (PM). If the equipment is overdue, the user cannot select it. If set to No, the user can select it even if the equipment calibration or PM is overdue.",
