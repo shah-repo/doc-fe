@@ -97,6 +97,7 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       allowQuantityDiscrepancy: true,
       requireLotSelection: true,
       requireEquipmentSelection: true,
+      enforceProdLotsOnly: false,
       requireDeviationApproval: true,
       requireReworkApproval: true,
       [MODE_FIELD]: Mode.add,
