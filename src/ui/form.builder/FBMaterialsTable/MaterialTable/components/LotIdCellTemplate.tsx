@@ -192,7 +192,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
-  const { allowExpiredLots } = React.useContext(MaterialTreelistContext);
+  const { allowExpiredLots, shouldEnforceProductionLotsOnly } = React.useContext(MaterialTreelistContext);
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
@@ -218,8 +218,9 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
         DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
       ].includes(lot?.lotStatus);
 
+      const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
       isAcceptedStatus = isLHRProductionBuild
-        ? isValidStatus && !endsWith(toUpper(lot?.document?.docId || ''), 'RD')
+        ? isValidStatus && (!shouldEnforceProductionLotsOnly || !isRDDocument)
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
