@@ -25,6 +25,7 @@ interface OwnerMap { [key: string]: Employee }
 
 const UI_READ_KEY = 'readFromUi_';
 const MATERIAL_FLOW_ACL_PARENT_KEY = 'materialFlowAcl';
+const LHR_BUILD_TYPE_SWITCH_CONFIG_APPROVAL_PARENT_KEY = 'lhrBuildTypeSwitchConfigApproval';
 
 export interface AuditLogsResponse {
   logs: CompanySettingsChangeLog[]
@@ -119,7 +120,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     if (isChangeTypeAdded) {
       shouldShowHeaderEntry = entryCount === 1;
     } else if (isChangeTypeUpdated) {
-      shouldShowHeaderEntry = parentKey !== MATERIAL_FLOW_ACL_PARENT_KEY;
+      shouldShowHeaderEntry = ![MATERIAL_FLOW_ACL_PARENT_KEY, LHR_BUILD_TYPE_SWITCH_CONFIG_APPROVAL_PARENT_KEY].includes(parentKey);
     } else {
       shouldShowHeaderEntry = true;
     }
