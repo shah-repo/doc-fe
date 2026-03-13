@@ -70,7 +70,7 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
     groupId: string, parentKey: string, changeType: AUDIT_CHANGE_TYPE | undefined, displayText: string,
   ) => {
     let displayEntries = [displayText];
-    if (changeType && [AUDIT_CHANGE_TYPE.UPDATED, AUDIT_CHANGE_TYPE.ADDED].includes(changeType)) {
+    if (changeType && [AUDIT_CHANGE_TYPE.UPDATED, AUDIT_CHANGE_TYPE.ADDED, AUDIT_CHANGE_TYPE.DELETED].includes(changeType)) {
       displayEntries = displayText.split(' | ');
     }
 
@@ -116,11 +116,14 @@ const SettingsHistoryDrawer: React.FC<SettingsHistoryDrawerProps> = ({
 
     const isChangeTypeAdded = changeType === AUDIT_CHANGE_TYPE.ADDED;
     const isChangeTypeUpdated = changeType === AUDIT_CHANGE_TYPE.UPDATED;
+    const isChangeTypeDeleted = changeType === AUDIT_CHANGE_TYPE.DELETED;
 
     if (isChangeTypeAdded) {
       shouldShowHeaderEntry = entryCount === 1;
     } else if (isChangeTypeUpdated) {
       shouldShowHeaderEntry = ![MATERIAL_FLOW_ACL_PARENT_KEY, LHR_BUILD_TYPE_SWITCH_CONFIG_APPROVAL_PARENT_KEY].includes(parentKey);
+    } else if (isChangeTypeDeleted) {
+      shouldShowHeaderEntry = ![LHR_BUILD_TYPE_SWITCH_CONFIG_APPROVAL_PARENT_KEY].includes(parentKey);
     } else {
       shouldShowHeaderEntry = true;
     }
