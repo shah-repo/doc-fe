@@ -370,6 +370,7 @@ export interface SmartReference {
     unit?: string
     lotPart?: string
     lhr?: LSHS
+    eqStatus?: string
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>
