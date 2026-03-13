@@ -1840,6 +1840,7 @@
   "form.builder.serials.usage.do.not.use": "Do Not Use",
   "form.builder.serials.no.usage": "No usage",
   "form.builder.serials.notes": "Notes",
+  "form.builder.serials.failed.to.add": "Failed to add serial numbers",
   "documentRevision.equipment.status.update.alert.title": "Status change",
   "documentRevision.equipment.status.update.alert": "You're changing the equipment status from {oldStatus} to {newStatus}.\n\nAre you sure you want to continue?",
   "documentRevision.equipment.status.update.failed": "Equipment Status update failed",

@@ -1,44 +1,19 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Chip, createStyles, makeStyles } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import React, { useMemo, useState } from 'react';
-import { translate } from '../../../../common/intl';
-import { Dialog } from '../../../components/dialogs';
-import { Autocomplete } from '../../../components/forms/fields-next';
-import { AutocompleteControl } from '../../../components/forms/fields-next/Autocomplete/Autocomplete';
-import { Colors, withThemeNext } from '../../../layout/theme-next';
+import { translate } from '../../../../../common/intl';
+import { Dialog } from '../../../../components/dialogs';
+import { Autocomplete } from '../../../../components/forms/fields-next';
+import { AutocompleteControl } from '../../../../components/forms/fields-next/Autocomplete/Autocomplete';
+import { withThemeNext } from '../../../../layout/theme-next';
+import useStyles from './styles';
 
 interface AddDialogProps {
   isOpen: boolean
   onConfirm: (serials: string[]) => Promise<void>
   onClose: () => void
 }
-
-const useStyles = makeStyles((theme) => createStyles({
-  chip: {
-    fontFamily: 'monospace',
-    fontSize: '0.75rem',
-  },
-  helper: {
-    flexShrink: 0,
-  },
-  helperText: {
-    color: Colors.textDisabled,
-    fontSize: '0.75rem',
-    display: 'flex',
-    alignItems: 'end',
-    gap: theme.spacing(0.5, 0.5),
-  },
-  autocompleteField: {
-    paddingRight: theme.spacing(0.75),
-  },
-  autocompleteInput: {
-    minWidth: '4ch',
-  },
-  autocompleteInputWithHelp: {
-    flexGrow: 0,
-  },
-}));
 
 const splitSerials = (text: string): string[] =>
   text.split(/[,;\n]/).map(s => s.trim()).filter(Boolean);
