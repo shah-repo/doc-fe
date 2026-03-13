@@ -52,7 +52,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           placeholder="form.builder.start.typing.list"
           label="form.builder.approvers"
           name={`fb-approvals-${name}`}
-          filterSelectedOptions={true}
+          filterSelectedOptions
           optionId={FBAutocompleteAsyncOption.availableApprovers}
           withState
           gutter={false}
