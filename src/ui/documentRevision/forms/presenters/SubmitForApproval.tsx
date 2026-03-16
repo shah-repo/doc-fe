@@ -106,7 +106,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   );
   const settings = useSelector(companySelectors.getGeneralSettings);
   const lhrBuildTypeConfig = settings.lhrBuildTypeConfig;
-  const buildType = documentRevision.smartReferencesTo?.find(ref => ref.type === 'HIDDEN_PI_INSTANCE' && ref.toDocRevId === documentRevision?.id)?.toDocRev?.formInput?.['lhr-build-type'];
+  const buildType = documentRevision.smartReferencesTo?.find(ref => ref.type === 'HIDDEN_PI_INSTANCE')?.toDocRev?.formInput?.['lhr-build-type'];
   const lhrBuildTypeConfigForSelectedBuildType = lhrBuildTypeConfig?.find(config => config.id === buildType);
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
@@ -262,7 +262,6 @@ export const SubmitForApproval: React.FC<Props> = ({
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && !lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
-      console.log('lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy', lhrBuildTypeConfigForSelectedBuildType);
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
@@ -281,7 +280,7 @@ export const SubmitForApproval: React.FC<Props> = ({
         { noLotsAdded: [], wrongSum: [] },
       );
 
-      if (errorsByType.noLotsAdded.length > 0 && !lhrBuildTypeConfigForSelectedBuildType?.requireLotSelection) {
+      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.requireLotSelection) {
         toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
         return;
       }
@@ -292,7 +291,7 @@ export const SubmitForApproval: React.FC<Props> = ({
       }
     }
 
-    if (!areAllEquipmentsSelected && isTypeMpiOutput && !lhrBuildTypeConfigForSelectedBuildType?.requireEquipmentSelection) {
+    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.requireEquipmentSelection) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];

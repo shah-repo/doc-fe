@@ -284,8 +284,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: (data?: DocumentTypeById) => {
       const { forms } = data ?? {};
-      if(!isEmpty(forms)) {
-        if(forms?.length === 1) {
+      if (!isEmpty(forms)) {
+        if (forms?.length === 1) {
           createDocument(forms[0]);
         } else {
           setForms(forms ?? [] as DocumentTypeByIdForm[]);
@@ -304,7 +304,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   };
 
   const onFormClick = () => {
-    if(isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
+    if (isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
       createDocument();
     } else {
       const values = get(formik, 'values') as DocumentRevision;
@@ -327,7 +327,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       }
     }
 
-    if(formDocument?.id) {
+    if (formDocument?.id) {
       formik.setFieldValue('formDocument', { id: formDocument?.id });
     }
 
