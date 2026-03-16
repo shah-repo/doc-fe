@@ -6,7 +6,7 @@ const FBEditorBuildTypeChangeApproval: React.FunctionComponent<FBEditorProps> = 
   ...props
 }) => (
   <FBEditorLabel {...props} >
-    <FBCheckbox hidden={true} name="uniqueSchemaItem" defaultValue={true} />
+    <FBCheckbox hidden={true} name="buildTypeChangeApproval" defaultValue={true} />
     {children}
   </FBEditorLabel>
 );
