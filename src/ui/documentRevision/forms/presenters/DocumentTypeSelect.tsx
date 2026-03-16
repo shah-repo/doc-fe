@@ -56,6 +56,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     // Disable create button sets the flag for temporary disabling
     // of create button until correct doc id is generated
     _documentRevisionFormState?.setCreateDocumentDisabled(true);
+    _documentRevisionFormState?.setNumberingStyle(undefined);
     asyncDocumentProposedId.start(loadProposedIdAction, id, asyncDocumentProposedId);
   };
 
