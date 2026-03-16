@@ -1,5 +1,6 @@
 import { filter, map } from 'lodash';
 import { action, computed, observable, reaction, set } from 'mobx';
+import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { FBAutocompleteAsyncOption, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody } from '..';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
@@ -15,16 +16,16 @@ export class FBBuildTypeState {
   private readonly isOwner?: boolean;
 
   public constructor ({ approvals, isOwner }: FBBuildTypeChangeApprovalConstructor) {
-    this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
+    this.approvals = filter(approvals, (a) => a.status !== ApprovalStatus.Abandoned);
     this.isOwner = isOwner;
   }
 
   // MARK: @computed
   @computed public get getApprovals (): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
+    const filtered = filter(this.approvals, (a) => a.status !== ApprovalStatus.Abandoned && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
-      canRequest: this.isOwner && a.status === 'DRAFT',
+      canRequest: this.isOwner && a.status === ApprovalStatus.Draft,
     }));
   }
 

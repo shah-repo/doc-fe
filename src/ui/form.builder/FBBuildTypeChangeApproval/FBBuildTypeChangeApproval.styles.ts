@@ -1,36 +1,37 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme-next/colors';
 
-export default makeStyles(() =>
+export default makeStyles((theme) =>
   createStyles({
     approvalCard: {
-      border: '1px solid #e0e0e0',
+      border: `1px solid ${Colors.stroke}`,
       borderRadius: '8px',
-      backgroundColor: '#fafafa',
+      backgroundColor: Colors.gray,
     },
     avatar: {
       width: 56,
       height: 56,
       marginRight: 16,
-      fontSize: '20px',
+      fontSize: 20,
       fontWeight: 'bold',
-      backgroundColor: 'var(--avatar-bg-color, #e0e0e0)',
+      backgroundColor: `var(--avatar-bg-color, ${Colors.stroke})`,
     },
     requestApprovalButton: {
       margin: 0,
       padding: 0,
-      marginTop: '4px',
+      marginTop: theme.spacing(0.5),
     },
     actionsContainer: {
-      gap: '16px',
+      gap: theme.spacing(2),
       display: 'flex',
       alignItems: 'center',
     },
     buttonGroup: {
-      gap: '8px',
+      gap: theme.spacing(1),
       display: 'flex',
     },
     actionButton: {
-      fontSize: '11px',
+      fontSize: 11,
     },
     approvalApprovedGroupContainer: {
       display: 'flex',
@@ -55,16 +56,16 @@ export default makeStyles(() =>
     },
     approverName: {
       fontWeight: 'bold',
-      fontSize: '16px',
+      fontSize: 16,
       marginBottom: 0.5,
     },
     approverEmail: {
-      fontSize: '14px',
+      fontSize: 14,
       color: 'text.secondary',
     },
     statusText: {
       fontWeight: 500,
-      fontSize: '14px',
+      fontSize: 14,
     },
   }),
 );
