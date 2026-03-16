@@ -182,7 +182,7 @@ export function areRequiredEquipmentsSelected (
   };
 }
 
-export const isDateExpired = (expiryDateStr: string): boolean => {
+export const isDateExpired = (expiryDateStr?: string): boolean => {
   if (!expiryDateStr) return false;
 
   const expiryDate = new Date(expiryDateStr);

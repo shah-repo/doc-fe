@@ -14,21 +14,20 @@ import { isDateExpired } from './utils';
 export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
   const { field = '', dataItem, onClick } = props;
   const classes = styles();
-  const { timezone, formatDisplayDate } = useDate();
+  const { formatDisplayDate } = useDate();
   const updatedDate = getValidDueDate(dataItem[field]);
   const lotId = dataItem?.lotId ?? '';
 
-  const storedLot = useMemo(() => {
-    if (!lotId) return null;
+  const { expiryDate, isExpired } = useMemo(() => {
+    if (!lotId) return { expiryDate: '', isExpired: false };
 
-    return FBAutocompleteAsyncStore.getValue<DocumentRevision>(FBAutocompleteAsyncOption.ebLots, lotId);
+    const lot = FBAutocompleteAsyncStore.getValue<DocumentRevision>(FBAutocompleteAsyncOption.ebLots, lotId);
+    const expiryDate = lot?.precalc?.lot_expiry_date ?? '';
+    return {
+      expiryDate,
+      isExpired: isDateExpired(expiryDate),
+    };
   }, [lotId]);
-
-  const expiryDate = storedLot?.precalc?.lot_expiry_date ?? '';
-
-  const isExpired = useMemo(() => {
-    return isDateExpired(expiryDate);
-  }, [expiryDate, timezone]);
 
   return (
     <TreeListCellWrapper {...props}>
