@@ -5,7 +5,6 @@ import { AutocompleteCellTemplate } from '../../components/SettingsTable/compone
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
 import { HeaderCell } from './components/HeaderCell';
-// import { useStyles } from './styles';
 import { EditableLHRBuild } from './types';
 
 export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
@@ -16,7 +15,6 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   onConfirm,
   equipmentEnforceProdConfig,
 }) => {
-  // const classes = useStyles();
   return [
     {
       id: 'isActive',

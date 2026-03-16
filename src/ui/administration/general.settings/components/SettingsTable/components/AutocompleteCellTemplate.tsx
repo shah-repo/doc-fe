@@ -18,6 +18,8 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+const isValueBoolean = (value: unknown): boolean => typeof value === 'boolean';
+
 function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const { dataItem, field } = props;
   const mode = get(dataItem, MODE_FIELD);
@@ -31,22 +33,24 @@ function Editor<T>(props: CustomTemplateProps): JSX.Element {
     setFieldValue(field, value);
   };
   let value = dataItem[field];
-  if([true, false].includes(value)) {
-    value = value === true ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+
+  if(isValueBoolean(value)) {
+    value = value ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
   }
 
+  const isFieldInternalType = field === 'internalType';
   return (
     <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
         {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}
-        placeholder={field === 'internalType' ? translate('validator.lhr.select.internal.type') : translate('common.select')}
+        placeholder={isFieldInternalType ? translate('validator.lhr.select.internal.type') : translate('common.select')}
         blurOnSelect
         disableClearable
-        options={field === 'internalType' ? lhrBuilds : otherOptions}
+        options={isFieldInternalType ? lhrBuilds : otherOptions}
         onChange={handleChange}
         size="small"
-        disabled={field === 'internalType' && mode === Mode.edit}
+        disabled={isFieldInternalType && mode === Mode.edit}
         value={value}
       />
     </FormikField>
@@ -59,8 +63,8 @@ export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Elemen
   const canBeModified = [Mode.edit, Mode.add].includes(mode);
   let defaultValue = dataItem[field];
 
-  if([true, false].includes(defaultValue)) {
-    defaultValue = defaultValue === true ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+  if(isValueBoolean(defaultValue)) {
+    defaultValue = defaultValue ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
   }
 
   const classes = useStyles();

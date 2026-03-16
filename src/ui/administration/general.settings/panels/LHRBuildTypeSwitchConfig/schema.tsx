@@ -6,12 +6,12 @@ import { EditableLHRBuildSwitch, GroupOption } from './types';
 import GroupsCellTemplate from './components/GroupsCellTemplate';
 import { LHRBuild } from '../LHRBuild/types';
 
-interface Props {
+interface buildSchemaProps {
   approvalGroups: GroupOption[]
   LHRBuild: LHRBuild[]
 }
 
-export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, Props> = ({
+export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, buildSchemaProps> = ({
   approvalGroups,
   LHRBuild,
   onEdit,

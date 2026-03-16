@@ -8,11 +8,11 @@ import { useStyles } from '../styles';
 import { EditableLHRBuildSwitch, GroupOption } from '../types';
 import { get, isEmpty } from 'lodash';
 
-interface Props extends CellTemplateProps<EditableLHRBuildSwitch> {
+interface GroupsCellTemplateProps extends CellTemplateProps<EditableLHRBuildSwitch> {
   options: GroupOption[]
 }
 
-const GroupsCellTemplate: React.FC<Props> = ({
+const GroupsCellTemplate: React.FC<GroupsCellTemplateProps> = ({
   field,
   options,
   dataItem,
