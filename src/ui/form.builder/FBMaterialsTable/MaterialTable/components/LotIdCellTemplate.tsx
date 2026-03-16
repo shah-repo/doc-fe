@@ -28,6 +28,7 @@ import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
+import { isDateExpired } from './utils';
 
 interface LotAutocompleteProps {
   field?: string
@@ -229,13 +230,10 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     let isExpiryValid = true;
 
     if (!allowExpiredLots) {
-      const expiryDateStr = lot?.formInput?.lot_expiry_date;
+      const expiryDate = lot?.formInput?.lot_expiry_date;
 
-      if (expiryDateStr) {
-        const today = new Date().setHours(0, 0, 0, 0);
-        const expiryDate = new Date(expiryDateStr).setHours(0, 0, 0, 0);
-
-        isExpiryValid = expiryDate >= today;
+      if (expiryDate) {
+        isExpiryValid = isDateExpired(expiryDate);
       }
     }
 
