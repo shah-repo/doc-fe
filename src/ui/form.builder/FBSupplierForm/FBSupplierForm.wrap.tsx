@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps } from '..';
+import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
 import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import useDocTypeGroups from '../../hooks/useDocTypeGroups';
@@ -23,6 +24,8 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @config
     const { dialogState, supplierState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
+
+    const [docType, setDocType] = React.useState<DocumentType | undefined>();
 
     React.useEffect(() => dialogState?.setActions(
       <FBSupplierFormActions
@@ -74,6 +77,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
       () => supplierState?.documentTypeApi.data,
       (data) => {
         const forms = data?.forms;
+        setDocType(data?.documentType);
 
         // auto select first form if it's the only one
         if (forms?.length === 1) {
@@ -106,6 +110,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
       loading,
       formOptions,
       formAutocompleteDisabled,
+      docType,
     });
   };
 
