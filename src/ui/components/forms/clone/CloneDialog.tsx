@@ -61,9 +61,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
         ),
       });
     },
-    onError: (error) => {
-      toastError(error);
-    },
+    onError: toastError,
   });
 
   const payload = {
@@ -77,11 +75,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   };
 
   const handleDocIdUpdated = (updatedDocId: string) => {
-    if (!updatedDocId.length) {
-      setDocId('');
-    } else {
-      setDocId(`${documentType?.documentTypeAcronym}${updatedDocId}`);
-    }
+    setDocId(updatedDocId ? `${documentType?.documentTypeAcronym ?? ''}${updatedDocId}` : '');
   };
 
   return (
