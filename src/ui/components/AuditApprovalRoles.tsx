@@ -1,6 +1,7 @@
 import { last } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { translate } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { userManagementSelectors } from '../../state/ducks/userManagement';
 import { getAuditDefaultValue } from '../common/utils/audit';
@@ -35,7 +36,7 @@ const AuditApprovalRoles: React.FC<Props> = ({
         if (field === 'groups') {
           value = getGroupName(data.id);
         } else {
-          value = data.name || 'N/A';
+          value = data.name || translate('common.not.applicable');
         }
       }
     } catch (err) {

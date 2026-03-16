@@ -1312,6 +1312,7 @@
   "form.builder.qms.document": "QMS Document",
   "form.builder.category": "Category",
   "form.builder.documentType": "Document type",
+  "form.builder.documentType.name": "Document Type Name",
   "form.builder.approvals.alpha": "Approvals Alpha",
   "form.builder.approvals.numeric": "Approvals Numeric",
   "form.builder.approvals.numeric.alpha": "Approvals Numeric Alpha",

@@ -242,14 +242,14 @@ export const getMaterialReplacementAuditField = (type: string): string => {
 
 export const getapprovalMatrixFieldLabel = (field: string, parentLabel = true): string => {
   const fieldMapping = {
-    defaultTraining: 'Training',
-    documentType: 'Document Type',
-    acronym: 'Document Type Acronym',
-    active: 'Status',
-    category: 'Category',
-    group: 'Group',
-    name: 'Document Type Name',
-    needsSignature: 'Needs Signature',
+    defaultTraining: translate('common.training'),
+    documentType: translate('common.document.type.name'),
+    acronym: translate('common.document.type.acronym'),
+    active: translate('common.status'),
+    group: translate('common.group'),
+    category: translate('form.builder.category'),
+    name: translate('form.builder.documentType.name'),
+    needsSignature: translate('form.builder.needsSignature'),
     stage1: translate('form.builder.approvals.numeric'),
     stage2: translate('form.builder.approvals.numeric.alpha'),
     stage3: translate('form.builder.approvals.alpha'),
