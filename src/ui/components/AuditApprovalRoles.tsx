@@ -1,4 +1,3 @@
-import { last } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
@@ -17,7 +16,7 @@ const AuditApprovalRoles: React.FC<Props> = ({
   dataCy,
   auditValue,
 }) => {
-  const field = last(audit.field.split('.'));
+  const field = audit.field.split('.').at(-1);
   const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
     id: group.value,
     name: group.label,
