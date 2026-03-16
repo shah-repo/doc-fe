@@ -138,6 +138,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const partAsync = useAsync({
     onSuccess: () => {
+      childUpdateDialog.close();
       _documentRevisionFormState?.setDirty(false);
       _documentRevisionFormState?.setBOMChangesInProgress(false);
       treeListAsync.start(
