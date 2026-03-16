@@ -899,10 +899,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
               </Grid>
             )}
             {shouldShowChildUpdateIcon && (
-              <Grid item data-cy="child-rev-update">
+              <Grid item>
                 <StyleTooltip title={translate('bom.child.revision.update')} placement="top" arrow>
                   <FontAwesomeIcon
-                    data-cy="excel-download"
+                    data-cy="child-rev-update"
                     className={classes.exportExcelIcon}
                     onClick={handleChildRevisionUpdate}
                     icon={solid('code-branch')}
