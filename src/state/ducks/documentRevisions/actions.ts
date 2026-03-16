@@ -1,4 +1,3 @@
-import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
 import { FormikHelpers } from 'formik';
 import qs from 'query-string';
@@ -410,7 +409,7 @@ const setPrimaryAttachment = (
     handlers,
   });
 
-const cloneDoc = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
+const cloneDoc = (id: string, payload: {docId?: string}, handlers: Handlers): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
     method: 'post',

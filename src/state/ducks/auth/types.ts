@@ -64,6 +64,7 @@ export interface AuthResponse {
   iotCredentials: IotCredentials
   passwordUpdatedAt: string
   passwordExpiresAt: string
+  accessToken: string
 }
 
 export interface User {
@@ -144,6 +145,7 @@ export interface UserState {
   initialColor: string
   timezone: string
   userCompanyTimezone: string
+  accessToken: string
 }
 
 export interface AuthProps {

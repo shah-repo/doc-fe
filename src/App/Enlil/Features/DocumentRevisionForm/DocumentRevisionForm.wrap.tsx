@@ -2,12 +2,11 @@ import { cloneDeep, get } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
-import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBSerialsState, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -38,9 +37,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       autosave: _formState?.autosave || false,
     });
 
-    _documentRevisionFormState.setNumberingStyle(
-      props.isInternalTypeNumbering ? DOCUMENT_NUMBERING_STYLE.INTERNAL : DOCUMENT_NUMBERING_STYLE.CUSTOMER);
-
     const schema = _documentRevisionFormState?.schema || documentRevision?.schema;
     const formState = FB.useRef<FBFormState>(FBFormState, {
       schema,
@@ -48,6 +44,8 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       workspaceMode: workspaceState?.mode || 'form',
       workspaceState,
     });
+
+    const serialsState = FB.useRef<FBSerialsState>(FBSerialsState, documentRevision);
 
     const { document: { outputRevision = false } = {} } = workspaceState || {};
 
@@ -146,6 +144,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
           formState,
           workspaceState,
           poApprovalsState,
+          serialsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
