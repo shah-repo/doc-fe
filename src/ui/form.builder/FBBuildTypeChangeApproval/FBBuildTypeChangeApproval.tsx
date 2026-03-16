@@ -65,7 +65,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
           autosave={false}
           {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
         />
-        <Box display="flex" flexWrap="wrap" my={2} mt={1}>
+        <Box className={classes.approvalApprovedGroupContainer}>
           {approvalApprovedGroup ? (
             approvalApprovedGroup.map((groupName: string, index: number) => (
               <ApprovalApprovedGroup groupName={groupName} key={index} isChecked />
@@ -78,10 +78,10 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
             </FBMapWrapper>
           )}
         </Box>
-        {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4} mt={1}>
+        {showFieldOwnersWarning && owners && <Box className={classes.ownersWarningContainer}>
           <FBMapWrapper<Owner[]> collection={owners}>
             {(owner: Owner, id) => (
-              <Box display="flex" key={`fb-approvals-${id}`} mr={2.5} >
+              <Box className={classes.ownerItemContainer} key={`fb-approvals-${id}`}>
                 <CheckCircleIcon
                   data-cy={
                   `fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? 'marked' : 'disabled'}`
@@ -109,22 +109,22 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                 py={2}
                 px={2}
                 mb={2}
-                className={classes.approvalCard}
+                className={classes.approvalCard} /* inline flex layout kept as per MUI pattern */
               >
-                <Box display="flex" alignItems="center" flex={1}>
+                <Box className={classes.approvalInfoContainer}>
                   <Avatar
                     src={approval.approver?.user.avatar || undefined}
                     alt={approverName || ''}
                     className={classes.avatar}
-                    style={{ backgroundColor: approval.approver?.user.initialColor || '#e0e0e0' }}
+                    style={{ '--avatar-bg-color': approval.approver?.user.initialColor } as React.CSSProperties}
                   >
                     {!approval.approver?.user.avatar && approverName && getInitalsFromName(approverName)}
                   </Avatar>
                   <Box>
-                    <Box fontWeight="bold" fontSize="16px" mb={0.5}>
+                    <Box className={classes.approverName}>
                       {approverName}
                     </Box>
-                    <Box fontSize="14px" color="text.secondary">
+                    <Box className={classes.approverEmail}>
                       {approverEmail}
                     </Box>
                     {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
@@ -139,12 +139,12 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                   </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" className={classes.actionsContainer}>
+                <Box className={classes.actionsContainer}>
                   {documentStatus === DocumentStatus.InReview
                     && approval.status === ApprovalStatus.Pending
                     && currentUser === approval.approver?.user.id
                     ? (
-                      <Box display="flex" className={classes.buttonGroup}>
+                      <Box className={classes.buttonGroup}>
                         <StyledCancelFBButton
                           {...{ disabled }}
                           label="common.reject"
@@ -161,7 +161,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                         />
                       </Box>
                     ) : (
-                      <Box fontWeight={500} fontSize="14px">
+                      <Box className={classes.statusText}>
                         {approval.status && (
                           isApproved
                             ? `${FBInlineApprovalStatusIdent[approval.status]}${approval.reviewedAt ? ` | ${getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}` : ''}`
