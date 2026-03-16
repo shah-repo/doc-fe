@@ -11,7 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
     paper: {
       position: 'relative',
       width: '660px',
-      height: '291px',
       background: Colors.white,
       borderRadius: '6px',
     },
@@ -24,16 +23,9 @@ export const styles = makeStyles((theme: Theme) =>
     footer: {
       display: 'flex',
       flexDirection: 'row',
-      'justify-content': 'flex-end',
+      justifyContent: 'flex-end',
       alignItems: 'center',
-      padding: '20px 20px 20px 0px',
-      position: 'absolute',
-      width: '660px',
       height: '76px',
-      right: '0px',
-      bottom: '0px',
-      background: Colors.white_smoke,
-      borderRadius: '0px 0px 6px 6px',
     },
     buttonContinue: {
       width: '100px',
@@ -68,13 +60,14 @@ export const styles = makeStyles((theme: Theme) =>
     contenttitle: {
       position: 'static',
       paddingTop: 29,
-      marginLeft: '35px',
       fontSize: '12px',
       lineHeight: '15px',
     },
+    radioGroup: {
+      marginBottom: theme.spacing(1),
+    },
     radio: {
       paddingTop: 11,
-      marginLeft: '35px',
       '&:hover': {
         backgroundColor: 'transparent',
         boxShadow: 'none',
