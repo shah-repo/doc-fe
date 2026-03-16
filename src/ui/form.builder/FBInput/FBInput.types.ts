@@ -110,6 +110,7 @@ export type FBInputType =
   | 'shippingAddress'
   | 'salesOrderNumber'
   | 'lhrBuildTypeSelection'
+  | 'lotSerialNumbers'
   ;
 
 export type FBInputProps =

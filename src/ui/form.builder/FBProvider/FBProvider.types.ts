@@ -28,6 +28,7 @@ import {
   FBProcedureState,
   FBPurchaseOrderState,
   FBSchemaState,
+  FBSerialsState,
   FBSnackbarState,
   FBSupplierState,
   FBTaskState,
@@ -80,4 +81,5 @@ export interface FBProviderProps {
   datePickerState?: FBDatePickerState
   lhrBuildState?: FBLHRBuildState
   downloadSheetTplState?: FBDownloadSheetTplState
+  serialsState?: FBSerialsState
 }
