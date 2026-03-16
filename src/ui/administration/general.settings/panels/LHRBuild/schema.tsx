@@ -13,7 +13,6 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
   onActiveStateChange,
   onDiscard,
   onConfirm,
-  equipmentEnforceProdConfig,
 }) => {
   return [
     {

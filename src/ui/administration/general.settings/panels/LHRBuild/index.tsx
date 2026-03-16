@@ -8,7 +8,6 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
-import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -24,8 +23,6 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
-  const equipmentEnforceProdConfig = documentTypes?.find((type) => type.documentTypeAcronym === 'LHR-')?.equipmentEnforceProd;
   const LHRBuilds = settings.lhrBuildTypeConfig;
   const classes = useStyles();
   const [LHRBuildsData, setLHRBuildData] = React.useState<LHRBuild[]>(LHRBuilds ?? []);
@@ -126,7 +123,6 @@ const LHRBuildSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onActiveStateChange: isActive ? changeLHRBuildActiveState : undefined,
     onDiscard: discardLHRBuild,
     onConfirm: submitForm,
-    equipmentEnforceProdConfig: equipmentEnforceProdConfig,
   });
 
   return (
