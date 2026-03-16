@@ -5,6 +5,7 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
 import LHRBuildSettingsPanel from './panels/LHRBuild';
+import LHRBuildSwitchSettingsPanel from './panels/LHRBuildTypeSwitchConfig';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
@@ -60,6 +61,11 @@ export const panels = [
     key: GeneralSettingsTabs.LHRBuild,
     title: 'administration.general.settings.lhr.build.menu.tab',
     component: LHRBuildSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.LHRBuildSwitch,
+    title: 'administration.general.settings.lhrBuildType.menu.tab',
+    component: LHRBuildSwitchSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.MaterialFlow,

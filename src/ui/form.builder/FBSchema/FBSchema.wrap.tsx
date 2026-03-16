@@ -115,6 +115,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
                 || isApproved({ ...schemaItem, index })
                 || (reviseDisabled && outputRevision)
                 || (outputDisabled && isOutput && !isEmpty(id))
+                || workspaceState?.buildTypeChangeStatus()
               ),
               gutter: false,
               index,

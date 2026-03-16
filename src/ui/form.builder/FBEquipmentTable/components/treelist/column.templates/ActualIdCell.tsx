@@ -53,7 +53,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
   const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
-  const { isLHRProductionBuild, isEqProdConfigEnforced } = React.useContext(EquipmentTreelistContext);
+  const { isLHRProductionBuild, lhrBuildTypeConfigForSelectedBuildType } = React.useContext(EquipmentTreelistContext);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
@@ -99,7 +99,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
             return false;
           }
 
-          if (isEqProdConfigEnforced) {
+          if (lhrBuildTypeConfigForSelectedBuildType?.allowCalOrPm) {
             if (isLHRProductionBuild && isOverdue) {
               return true;
             } else return !isActive;
