@@ -304,7 +304,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
-
+  const childUpdateDialog = useDialog();
   const exportTreelistDialog = useDialog();
   const [exportFileName, setExportFileName] = useState(EXCEL_FILE_NAME);
 
@@ -831,10 +831,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const [maxmizeIconContainerRef, isMaxIconHovered]
     = useHover<HTMLButtonElement>();
 
-  const shouldShowChildUpdateIcon = true; // TODO DRAFT,RELEASED case
+  const shouldShowChildUpdateIcon = state.data?.some(item => item.childNodes && item.childNodes.length > 0)
+   && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released].includes(documentRevision.status);
+
   const handleChildRevisionUpdate = () => {
-    console.log('click');
-    partAsync.start(updateBomTreeToLatest, '', partAsync);
+    childUpdateDialog.open();
+  };
+
+  const onConfirmChildUpdate = () => {
+    partAsync.start(updateBomTreeToLatest, documentRevision.id, partAsync);
   };
 
   const renderToolbar = (
@@ -1293,6 +1298,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           approvalRequestDialog={approvalRequestDialog}
           closeDialog = {closeCRDialog}
         />
+      }
+      {childUpdateDialog && <AlertDialog
+        dialog={childUpdateDialog}
+        confirmAction={onConfirmChildUpdate}
+        message="bom.child.update.warning.message"
+      />
       }
     </>
   );

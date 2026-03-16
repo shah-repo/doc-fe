@@ -2394,6 +2394,7 @@
   "bom.ar.child.invalid.message": "All line items in the BOM should be released before releasing the BOM. \nRemove these {obsolete} / {void} items, before proceeding with this BOM/AR:",
   "bom.replaced.doc.rev.tooltip.message": "Replacing → {docInfo}",
   "bom.replaced.doc.rev.message": "{docId} • Rev {revId}",
+  "bom.child.update.warning.message": "This will update all the children to their latest revisions. \nAre you sure you want to proceed ?",
   "customer.site.information.same.as.hq.label": "Same as headquater",
   "lhr.summary.table.title": "LHR Summary Table",
   "lhr.summary.add.item": "Add Item",
