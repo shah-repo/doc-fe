@@ -9,7 +9,6 @@ import { EquipmentTreelistContext } from '..';
 import { translate } from '../../../../../../common/intl';
 import { MomentFormats, useDate } from '../../../../../../common/utils/date';
 import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevisionStatus, EquipmentStatus } from '../../../../../../state/ducks/documentRevisions/types';
-import { LHRBuild } from '../../../../../administration/general.settings/panels/LHRBuild/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
@@ -37,7 +36,6 @@ interface LotAutocompleteProps {
   isEBProcedure?: boolean
   releasedEquipmentOptions?: OptionType[]
   filterEquipmentOptions?: OptionType[]
-  lhrBuildTypeConfigForSelectedBuildType?: LHRBuild | undefined
 }
 
 const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
@@ -51,12 +49,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   isEBProcedure,
   equipmentOptions: propEquipmentOptions,
   filterEquipmentOptions,
-  lhrBuildTypeConfigForSelectedBuildType,
 }) => {
   const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableEquipmentItem>();
   const classes = useStyles();
   const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
-  const { isLHRProductionBuild } = React.useContext(EquipmentTreelistContext);
+  const { isLHRProductionBuild, lhrBuildTypeConfigForSelectedBuildType } = React.useContext(EquipmentTreelistContext);
   const equipmentSpecId = dataItem?.parentEquipPlannedId || parentPartRevId || '';
   const { allowedEditEqSpecOptions } = useEquipmentOptions(equipmentSpecId);
   const isEquipmentSpecification = isEquipmentSpecificationType(propEquipmentOptions, equipmentSpecId);
@@ -69,8 +66,6 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     const currentDate = getFormattedDateString(Date.now());
     return moment(currentDate).isAfter(date);
   };
-
-  console.log('lhrBuildTypeConfigForSelectedBuildType,', lhrBuildTypeConfigForSelectedBuildType);
 
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
@@ -151,7 +146,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 };
 
 const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions = [], addActualId, isEBProcedure, releasedEquipmentOptions, filterEquipmentOptions, lhrBuildTypeConfigForSelectedBuildType } = props;
+  const { hasChildren, dataItem, field, isDisabled, equipmentOptions, allowedEditEqOptions = [], addActualId, isEBProcedure, releasedEquipmentOptions, filterEquipmentOptions } = props;
   const { parentEquipPlannedId, actualId } = dataItem;
   const { isRedlineActive, isEnableActualIdAddition } = React.useContext(EquipmentTreelistContext);
   const isEditMode = isEBProcedure ? isEditEquipItem(dataItem) && (dataItem.isActualIdAddition || dataItem.equipmentId) : isEditEquipItem(dataItem);
@@ -223,7 +218,6 @@ const ActualIdCell: React.FC<CustomTreeListCellProps> = (props) => {
                 filterEquipmentOptions: filterEquipmentOptions || [],
                 allowedEditEqOptions,
                 isEBProcedure,
-                lhrBuildTypeConfigForSelectedBuildType,
               }}
             />
           ) : (

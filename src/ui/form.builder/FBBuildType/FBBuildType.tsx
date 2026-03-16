@@ -10,6 +10,7 @@ import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { FBFontStyle } from '../styles/FBFont.styles';
+import useStyles from './FBBuildType.styles';
 import { FBBuildTypeProps } from './FBBuildType.types';
 import { withFBBuildType } from './FBBuildType.wrap';
 
@@ -35,6 +36,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   lhrBuildTypeSwitchConfigApproval,
   ...props
 }) => {
+  const classes = useStyles();
   return (
     <FBProvider {...{ dialogState }}>
       <FBDialog />
@@ -66,7 +68,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
         />
       </FBInput>
       {showApprovalButtons && (
-        <Box display="flex" justifyContent="flex-end" mt={2} style={{ gap: '12px' }}>
+        <Box className={classes.approvalButtonsContainer}>
           <StyledCancelFBButton
             label="form.builder.reject.change"
             size="medium"
@@ -92,12 +94,12 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
         cancelLabel="common.no.go.back"
         confirmLabel="common.yes.continue"
       >
-        <Box display="flex" alignItems="flex-start">
-          <Box flexShrink={0} pt={0.5} mr={2}>
-            <WarningIcon style={{ width: 24, height: 24 }} />
+        <Box className={classes.warningContainer}>
+          <Box className={classes.warningIconContainer}>
+            <WarningIcon className={classes.warningIcon} />
           </Box>
-          <Box flex={1}>
-            <Typography variant="body2" style={{ whiteSpace: 'pre-wrap' }}>
+          <Box className={classes.messageContainer}>
+            <Typography variant="body2" className={classes.messageText}>
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
               <SMText
                 label={{
@@ -125,13 +127,13 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
         cancelLabel="common.cancel"
         confirmLabel="form.builder.send.for.approval"
       >
-        <Box mb={3}>
-          <Typography variant="h6" style={{ fontWeight: 600, marginBottom: 16 }}>
+        <Box className={classes.buildTypeSwitchHeader}>
+          <Typography variant="h6" className={classes.buildTypeSwitchTitle}>
             Build Type Switch
           </Typography>
-          <Box display="flex" alignItems="center">
+          <Box className={classes.buildTypeSwitchValues}>
             <Typography variant="body1">{defaultValue?.displayLabel}</Typography>
-            <Box mx={1}>
+            <Box className={classes.buildTypeArrow}>
               <ArrowRightAltIcon />
             </Box>
             <Typography variant="body1">{selectedValue?.displayLabel}</Typography>

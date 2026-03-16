@@ -216,7 +216,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     });
 
     const onApprovalAction = (action: 'accept' | 'reject') => {
-      console.log('onApprovalAction action:', action);
       if (action === 'reject') {
         approvalTransition('reject', currentApproverId);
       } else if (action === 'accept') {

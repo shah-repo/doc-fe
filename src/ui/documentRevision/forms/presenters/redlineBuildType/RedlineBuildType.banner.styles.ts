@@ -1,7 +1,8 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 import Colors from '../../../../layout/theme/utils/colors';
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles<NextTheme>(theme => ({
   root: {
     backgroundColor: Colors.latest_red_varient,
     color: Colors.white,

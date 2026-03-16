@@ -9,6 +9,7 @@ import { getInitalsFromName } from '../../components/icons/avatar/helpers';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import ApprovalApprovedGroup from './ApprovalApprovedGroup';
+import useStyles from './FBBuildTypeChangeApproval.styles';
 import { FBBuildTypeChangeApprovalProps } from './FBBuildTypeChangeApproval.types';
 import { withFBBuildTypeChangeApproval } from './FBBuildTypeChangeApproval.wrap';
 
@@ -42,6 +43,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
   prevValue,
   ...props
 }) => {
+  const classes = useStyles();
   const { getFormattedDateString } = useDate();
 
   return (
@@ -107,24 +109,14 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                 py={2}
                 px={2}
                 mb={2}
-                style={{
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '8px',
-                  backgroundColor: '#fafafa',
-                }}
+                className={classes.approvalCard}
               >
                 <Box display="flex" alignItems="center" flex={1}>
                   <Avatar
                     src={approval.approver?.user.avatar || undefined}
                     alt={approverName || ''}
-                    style={{
-                      width: 56,
-                      height: 56,
-                      marginRight: 16,
-                      backgroundColor: approval.approver?.user.initialColor || '#e0e0e0',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                    }}
+                    className={classes.avatar}
+                    style={{ backgroundColor: approval.approver?.user.initialColor || '#e0e0e0' }}
                   >
                     {!approval.approver?.user.avatar && approverName && getInitalsFromName(approverName)}
                   </Avatar>
@@ -137,7 +129,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                     </Box>
                     {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
                       <FBButton
-                        style={{ margin: 0, padding: 0, marginTop: '4px' }}
+                        className={classes.requestApprovalButton}
                         label="form.builder.request.approval"
                         variant="text"
                         color="primary"
@@ -147,24 +139,24 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                   </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" style={{ gap: '16px' }}>
+                <Box display="flex" alignItems="center" className={classes.actionsContainer}>
                   {documentStatus === DocumentStatus.InReview
                     && approval.status === ApprovalStatus.Pending
                     && currentUser === approval.approver?.user.id
                     ? (
-                      <Box display="flex" style={{ gap: '8px' }}>
+                      <Box display="flex" className={classes.buttonGroup}>
                         <StyledCancelFBButton
                           {...{ disabled }}
                           label="common.reject"
                           size="small"
-                          style={{ fontSize: '11px' }}
+                          className={classes.actionButton}
                           onClick={() => approvalTransition('reject', approval.id)}
                         />
                         <FBButton
                           {...{ disabled }}
                           label="form.builder.request.approve"
                           size="small"
-                          style={{ fontSize: '11px' }}
+                          className={classes.actionButton}
                           onClick={() => onApproveClick?.(approval.id || '')}
                         />
                       </Box>
