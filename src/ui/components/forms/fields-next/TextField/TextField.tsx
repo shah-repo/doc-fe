@@ -11,6 +11,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef(({
   classes,
   endAdornment,
   startAdornment,
+  inputComponent,
   ...props
 }, ref) => {
   const customClasses = useStyles();
