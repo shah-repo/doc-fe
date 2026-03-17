@@ -3,6 +3,7 @@ import { action, computed, observable, set } from 'mobx';
 import * as Validator from 'validatorjs';
 import { SMFormProps, SMFormStateProps } from '../../..';
 import { SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionFormValues } from '../../../../ui/documentRevision/forms/types';
 import { FBLHRBuildOptions, FBWorkspaceMode } from '../../../../ui/form.builder';
 
 class SMFormState implements SMFormStateProps {
@@ -27,6 +28,7 @@ class SMFormState implements SMFormStateProps {
   public validationValues: SMFormProps['values'] = {};
   public validationAttributeNames: Record<string, string> = {};
   public rules: Record<string, any> = {};
+  public docRevData?: DocumentRevisionFormValues;
 
   // MARK: @observables
   /**
@@ -96,6 +98,10 @@ class SMFormState implements SMFormStateProps {
 
   @action public setLoading = (loading?: boolean) => {
     set(this, 'loading', loading || false);
+  };
+
+  public setDocRevData = (values?: DocumentRevisionFormValues): void => {
+    set(this, 'docRevData', values);
   };
 
   // MARK: @helpers
