@@ -48,7 +48,7 @@ export const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
     [],
   );
 
-  return (<>{option}</>);
+  return (<div>{option}</div>);
 };
 
 const AuditAutocomplete: React.FunctionComponent<Props> = ({
@@ -104,7 +104,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading && <div><RenderOption {...{ label, optionId }} /></div>}
+      {!loading && <RenderOption {...{ label, optionId }} />}
     </Fragment>
   );
 };
