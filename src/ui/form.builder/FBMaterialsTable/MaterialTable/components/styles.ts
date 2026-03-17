@@ -208,4 +208,11 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
     marginLeft: theme.spacing(0.625),
   },
+  expired: {
+    color: Colors.error,
+  },
+  expiredIcon: {
+    marginLeft: theme.spacing(1.25),
+    marginRight: theme.spacing(0.625),
+  },
 }));

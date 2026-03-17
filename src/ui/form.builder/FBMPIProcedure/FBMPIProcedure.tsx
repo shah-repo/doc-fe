@@ -128,6 +128,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       {...{
                         type,
                         name,
+                        stepIndex,
                         disabled,
                         isPreview,
                         isOutput,

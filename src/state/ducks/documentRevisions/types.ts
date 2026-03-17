@@ -218,6 +218,7 @@ export interface Precalc {
   lot_part?: string
   lot_part_revision?: string
   related_equipment?: string[]
+  lot_expiry_date?: string
 }
 
 interface DocumentsInLHRS {
@@ -370,6 +371,7 @@ export interface SmartReference {
     unit?: string
     lotPart?: string
     lhr?: LSHS
+    eqStatus?: string
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>

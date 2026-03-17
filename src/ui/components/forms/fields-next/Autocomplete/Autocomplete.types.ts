@@ -12,5 +12,6 @@ export type AutocompleteProps = Omit<MuiAutocompleteProps, 'renderInput' | 'onBl
   onBlur?: React.FocusEventHandler
   inputProps?: InputProps
   shouldAlwaysShowPlaceholder?: boolean
+  renderInput?: MuiAutocompleteProps['renderInput']
   shouldShowDefaultAdornment?: boolean
 };

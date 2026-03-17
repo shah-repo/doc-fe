@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { companySelectors } from '../../../../../state/ducks/company';
+import { LHRBuild } from '../../../../administration/general.settings/panels/LHRBuild/types';
 import ScanCaptureDialog from '../../../../components/common/dialogs/scaner';
 import { ScanSelectedPartItem } from '../../../../components/common/dialogs/scaner/components/lot.table/types';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
@@ -57,6 +58,7 @@ interface EquipmentTreelistContextProps {
   isEqProdConfigEnforced?: boolean
   isLHRProductionBuild?: boolean
   disabledOptions?: string[]
+  lhrBuildTypeConfigForSelectedBuildType?: LHRBuild | undefined
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
@@ -95,6 +97,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { equipmentOptions, allowedEditEqOptions, releasedEquipmentOptions, filterEquipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
   const disabledOptions = map(items, 'title');
+  const lhrBuildTypeConfigForSelectedBuildType = workspaceState?.lhrBuildTypeConfigForSelectedBuildType;
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -176,8 +179,12 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
-        type: values.type,
+        ...(values.type && { type: values.type }),
       };
+
+      if (isEBProcedure && !values[ADD_FIELD] && !isEmpty(values[EB_SUB_ITEMS_FIELD])) {
+        newEquipItem[EB_SUB_ITEMS_FIELD] = values?.[EB_SUB_ITEMS_FIELD]?.map((item) => omit(item, EB_FIELDS_TO_OMIT));
+      }
 
       if (!isEBProcedure) {
         newEquipItem.isEquipmentSpecification = isEquipmentSpecification;
@@ -315,6 +322,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     isEnableActualIdAddition,
     isEBProcedure,
     onRowClick: editEquipmentItem,
+    lhrBuildTypeConfigForSelectedBuildType,
   });
 
   const [columns, setColumns]
@@ -413,7 +421,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   return (
     <div className={classes.root} data-cy="lhr-equipment-table">
       <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions }}>
+        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions, lhrBuildTypeConfigForSelectedBuildType }}>
           <FormikProvider value={formik}>
             <Grid container>
               <Grid item xs={12} ref={treeListRef}>

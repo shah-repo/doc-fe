@@ -17,4 +17,6 @@ export const cellOverflowFields = [
   'precalc.primaryContactName',
   'name',
   'document.docId',
+  'precalc.formDocId',
+  'precalc.lshs_subtitle.part.label',
 ];

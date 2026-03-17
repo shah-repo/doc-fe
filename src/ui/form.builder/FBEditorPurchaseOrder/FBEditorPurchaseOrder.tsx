@@ -17,7 +17,7 @@ const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
       <FBEditorLabel {...props} {...{ inputProps }} standalone={true} />
       <Box mb={3.125}>
         <FBTextField
-          label="form.builder.tax.rate"
+          label="form.builder.default.tax.rate"
           name="editorConfig.taxRate"
           type="number"
           placeholder={companyTaxRate.toString()}
