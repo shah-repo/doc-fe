@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, useHistory } from 'react-router-dom';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
@@ -8,6 +8,7 @@ import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/form
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { translate } from '../../../../common/intl';
 import { Approval, ApprovalStatus } from '../../../../state/ducks/common/types';
+import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import {
@@ -103,6 +104,10 @@ export const SubmitForApproval: React.FC<Props> = ({
   const isApproverAdded = !documentRevision?.approvals?.some(
     (approval: Approval) => approval.status !== ApprovalStatus.Abandoned,
   );
+  const settings = useSelector(companySelectors.getGeneralSettings);
+  const lhrBuildTypeConfig = settings.lhrBuildTypeConfig;
+  const buildType = documentRevision.smartReferencesTo?.find(ref => ref.type === 'HIDDEN_PI_INSTANCE')?.toDocRev?.formInput?.['lhr-build-type'];
+  const lhrBuildTypeConfigForSelectedBuildType = lhrBuildTypeConfig?.find(config => config.id === buildType);
 
   const [hasInsufficientQty, setHasInsufficientQty] = useState(false);
   const [insufficientMaterials, setInsufficientMaterials] = useState<string[]>([]);
@@ -122,7 +127,8 @@ export const SubmitForApproval: React.FC<Props> = ({
       = typeof lhrsAcceptedQuantity === 'number'
         && typeof lhrsRejectedQuantity === 'number'
         && lhrsAcceptedQuantity >= 0
-        && lhrsRejectedQuantity >= 0;
+        && lhrsRejectedQuantity >= 0
+        && (lhrsAcceptedQuantity + lhrsRejectedQuantity) === (lhrsStartQuantity ?? 0);
 
   const {
     equipmentsFromSchema,
@@ -255,7 +261,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput) {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && !lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
@@ -274,18 +280,18 @@ export const SubmitForApproval: React.FC<Props> = ({
         { noLotsAdded: [], wrongSum: [] },
       );
 
-      if (errorsByType.noLotsAdded.length > 0) {
+      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.requireLotSelection) {
         toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
         return;
       }
 
-      if (errorsByType.wrongSum.length > 0) {
+      if (errorsByType.wrongSum.length > 0 && !lhrBuildTypeConfigForSelectedBuildType?.allowOverdueQuantityMismatch) {
         toastError(translate('form.builder.lhrs.lots.required.error.message'));
         return;
       }
     }
 
-    if (!areAllEquipmentsSelected && isTypeMpiOutput) {
+    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.requireEquipmentSelection) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];

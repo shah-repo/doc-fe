@@ -138,6 +138,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const partAsync = useAsync({
     onSuccess: () => {
+      childUpdateDialog.close();
       _documentRevisionFormState?.setDirty(false);
       _documentRevisionFormState?.setBOMChangesInProgress(false);
       treeListAsync.start(
@@ -198,6 +199,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   );
   const reorderBOMBranch = useActionCreator(
     documentRevisionsActions.changeOrderBOMBranch,
+  );
+  const updateBomTreeToLatest = useActionCreator(
+    documentRevisionsActions.updateBomTreeToLatest,
   );
 
   SM.reaction(
@@ -301,7 +305,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
-
+  const childUpdateDialog = useDialog();
   const exportTreelistDialog = useDialog();
   const [exportFileName, setExportFileName] = useState(EXCEL_FILE_NAME);
 
@@ -827,6 +831,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
   const [maxmizeIconContainerRef, isMaxIconHovered]
     = useHover<HTMLButtonElement>();
+
+  const shouldShowChildUpdateIcon = state.data?.some(item => item.childNodes && item.childNodes.length > 0)
+   && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released].includes(documentRevision.status);
+
+  const handleChildRevisionUpdate = () => {
+    childUpdateDialog.open();
+  };
+
+  const onConfirmChildUpdate = () => {
+    partAsync.start(updateBomTreeToLatest, documentRevision.id, partAsync);
+  };
+
   const renderToolbar = (
     <GridToolbar>
       <Grid
@@ -880,6 +896,18 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                     )}
                   </span>
                 </span>
+              </Grid>
+            )}
+            {shouldShowChildUpdateIcon && (
+              <Grid item>
+                <StyleTooltip title={translate('bom.child.revision.update')} placement="top" arrow>
+                  <FontAwesomeIcon
+                    data-cy="child-rev-update"
+                    className={classes.exportExcelIcon}
+                    onClick={handleChildRevisionUpdate}
+                    icon={solid('code-branch')}
+                  />
+                </StyleTooltip>
               </Grid>
             )}
             <Grid
@@ -1271,6 +1299,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           approvalRequestDialog={approvalRequestDialog}
           closeDialog = {closeCRDialog}
         />
+      }
+      {childUpdateDialog && <AlertDialog
+        dialog={childUpdateDialog}
+        confirmAction={onConfirmChildUpdate}
+        message="bom.child.update.warning.message"
+      />
       }
     </>
   );

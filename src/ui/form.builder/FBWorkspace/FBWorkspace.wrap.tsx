@@ -2,9 +2,10 @@ import { differenceBy, filter, isEmpty, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceState } from '..';
 import { SM } from '../../../App';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { store } from '../../../state/store';
 import { checkIsDocumentEquipment, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -115,6 +116,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+
+    const lhrBuildTypeConfig = useSelector(companySelectors.getGeneralSettings)?.lhrBuildTypeConfig ?? [];
+    useEffect(() => {
+      workspaceState?.setLhrBuildTypeConfig(lhrBuildTypeConfig);
+    }, [lhrBuildTypeConfig, workspaceState]);
+
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
     workspaceState && (workspaceState.formInput = formInput);

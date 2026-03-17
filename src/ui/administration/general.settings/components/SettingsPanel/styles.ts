@@ -3,13 +3,13 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
-    margin: theme.spacing(0, 0, 3.75),
+    margin: 0,
     border: `1px solid ${Colors.stroke}`,
     borderRadius: theme.spacing(0.5),
     boxShadow: 'none',
 
     '&.Mui-expanded': {
-      margin: theme.spacing(0, 0, 3.75),
+      margin: 0,
     },
     '&::before': {
       display: 'none',

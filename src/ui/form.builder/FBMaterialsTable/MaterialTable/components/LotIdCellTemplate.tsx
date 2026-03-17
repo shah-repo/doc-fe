@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { cloneDeep, debounce, isEmpty } from 'lodash';
+import { cloneDeep, debounce, endsWith, isEmpty, toUpper } from 'lodash';
 import { reaction } from 'mobx';
 import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MaterialTreelistContext } from '..';
@@ -29,6 +29,7 @@ import { ADD_FIELD, IS_LOT_ADDITION, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
+import { isDateExpired } from './utils';
 
 interface LotAutocompleteProps {
   field?: string
@@ -269,6 +270,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { allowExpiredLots, shouldEnforceProductionLotsOnly } = React.useContext(MaterialTreelistContext);
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
@@ -289,14 +291,22 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     if (isEBProcedure) {
       isAcceptedStatus = true; // No constraints on Lot Status
     } else {
+      const isValidStatus = [
+        DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
+        DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
+      ].includes(lot?.lotStatus);
+
+      const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
       isAcceptedStatus = isLHRProductionBuild
-        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+        ? isValidStatus && (!shouldEnforceProductionLotsOnly || !isRDDocument)
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
+    const isExpiryValid = allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
+
+    return isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({

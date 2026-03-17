@@ -10,7 +10,7 @@ export default makeStyles<NextTheme>(theme => ({
     display: 'grid',
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
-    gridTemplate: `min-content min-content auto / ${SIDEBAR_WIDTH}px auto`,
+    gridTemplate: `min-content ${theme.spacing(2.5)}px auto / ${SIDEBAR_WIDTH}px auto`,
   },
   header: {
     gridArea: '1 / 1 / 2 / 3',
@@ -49,10 +49,13 @@ export default makeStyles<NextTheme>(theme => ({
   },
   sidebar: {
     gridArea: '2 / 1 / 4 / 2',
-    paddingBottom: theme.spacing(3),
+    overflow: 'hidden',
   },
   list: {
     padding: 0,
+    overflow: 'auto',
+    maxHeight: '100%',
+    paddingBottom: theme.spacing(3),
   },
   listItem: {
     borderRadius: 4,
@@ -79,6 +82,11 @@ export default makeStyles<NextTheme>(theme => ({
     gridArea: '3 / 2 / 4 / 3',
     overflow: 'auto',
     paddingBottom: theme.spacing(3),
+  },
+  panelsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2.5, 2.5),
   },
   toggler: {
     gridArea: '2 / 2 / 3 / 3',
