@@ -261,7 +261,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && !lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
@@ -285,7 +285,7 @@ export const SubmitForApproval: React.FC<Props> = ({
         return;
       }
 
-      if (errorsByType.wrongSum.length > 0 && !lhrBuildTypeConfigForSelectedBuildType?.allowOverdueQuantityMismatch) {
+      if (errorsByType.wrongSum.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.allowOverdueQuantityMismatch) {
         toastError(translate('form.builder.lhrs.lots.required.error.message'));
         return;
       }
