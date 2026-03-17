@@ -32,9 +32,6 @@ export const styles = makeStyles((theme: NextTheme) =>
     search: {
       marginBottom: theme.spacing(3.75),
     },
-    searchInput: {
-      height: '25px',
-    },
     avatar: {
       width: '58px',
       height: '58px',

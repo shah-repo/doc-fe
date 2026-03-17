@@ -11,11 +11,11 @@ import rowstyle from './SwitchCompany.module.css';
 import { styles } from './SwitchCompany.styles';
 interface Props {
   numberOfCompanies: number
-  value: string | undefined
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  searchString: string | undefined
+  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies, onChange, value }) => {
+const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies, onSearch, searchString }) => {
   const classes = styles();
   const history = useHistory();
 
@@ -36,11 +36,10 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numb
         </div>
         <div className={classes.search}>
           <TextField
-            value={value}
+            value={searchString}
             placeholder={translate('common.search')}
-            onChange={onChange}
+            onChange={onSearch}
             autoFocus
-            inputProps={{ className: classes.searchInput }}
             startAdornment={
               <InputAdornment position="start">
                 <FontAwesomeIcon icon={regular('search')} />
