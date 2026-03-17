@@ -82,7 +82,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const [skip, setSkip] = React.useState(0);
   const isAddButtonVisible = !isShowOnly && !isDisabled;
   const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, convertDateTimeToUserTz } = useDate();
 
   const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
     setSkip(skip);
@@ -105,7 +105,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers, getFormattedDateString);
+      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers, getFormattedDateString, convertDateTimeToUserTz);
       data && setData(updatedData);
       setOrigionalData(updatedData);
     },
@@ -362,7 +362,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers, getFormattedDateString), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
     }
   };
 
