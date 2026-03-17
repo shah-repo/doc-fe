@@ -20,7 +20,7 @@ interface OptionProps {
   optionId: string
 }
 
-export const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
+const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
   const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
   const [option, setOption] = useState(label);
 
