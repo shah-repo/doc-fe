@@ -21,7 +21,7 @@ export const email: Validator = (value: string) => {
 };
 
 export const docId: Validator = (value: string, documentTypeAcronym?: string) => {
-  const docIdValue = value.split(documentTypeAcronym ?? '')[1];
+  const docIdValue = value?.slice(documentTypeAcronym?.length);
   return required(docIdValue);
 };
 
