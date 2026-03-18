@@ -29,6 +29,9 @@ export const styles = makeStyles((theme: NextTheme) =>
       fontSize: '16px',
       fontWeight: 300,
     },
+    search: {
+      marginBottom: theme.spacing(3.75),
+    },
     avatar: {
       width: '58px',
       height: '58px',

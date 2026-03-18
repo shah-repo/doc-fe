@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -28,6 +28,11 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
   const selectedCompanyMobile = useSelector(companySelectors.getSelectedCompany);
+  const [searchString, setSearchString] = React.useState<string>();
+
+  const onSearch = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchString(value);
+  };
 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
@@ -47,8 +52,14 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       </div>,
       { autoClose: 15000 });
   };
+
+  const isMatchSearchString = useCallback((employee: Employee) => {
+    if (!searchString) return true;
+    return employee.company.name.toLocaleLowerCase().includes(searchString.toLowerCase());
+  }, [searchString]);
+
   const companies = orderBy(employees, ['company.name'], ['asc'])
-    .filter((employee) => employee.active)
+    .filter((employee) => employee.active && isMatchSearchString(employee))
     .map(
       (employee: Employee) => {
         const { company } = employee;
@@ -82,7 +93,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       },
     );
   return (
-    <SwitchCompanyPresenter numberOfCompanies={companies.length}>
+    <SwitchCompanyPresenter numberOfCompanies={companies.length} onSearch={onSearch} searchString={searchString}>
       {companies}
     </SwitchCompanyPresenter>
   );

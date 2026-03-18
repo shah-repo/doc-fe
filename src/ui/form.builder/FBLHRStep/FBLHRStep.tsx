@@ -55,6 +55,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   endDateFieldName,
   handleStartDateChange,
   handleEndDateChange,
+  isBuildTypeChangeApprovalEnabled,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -129,7 +130,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   );
   const { documentType } = workspaceState?.document?.document || {};
   const isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
-  const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
+  const isDisabled = !isOutput || loading || !lhrBuildTypeExist || isBuildTypeChangeApprovalEnabled;
   const isPreviewForLHR = Boolean(isDocumentLHR || (workspaceState?.isPreview && isDocumentLHRT));
 
   const validateDate = () => lhrStepState?.validate();
@@ -326,6 +327,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 label={translate('lhr.summary.grid.heading.start.date')}
                 onDateChange={handleStartDateChange}
                 stateProvider={startDateStateProvider}
+                disabled={isDisabled}
               />
             </Box>
             <Box className={classes.lhrsDateWidthBox}>
@@ -334,6 +336,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 label={translate('lhr.summary.grid.heading.end.date')}
                 onDateChange={handleEndDateChange}
                 stateProvider={endDateStateProvider}
+                disabled={isDisabled}
               />
             </Box>
           </Box>

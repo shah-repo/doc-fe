@@ -1,5 +1,4 @@
-import { useFormikContext } from 'formik';
-import { cloneDeep, compact, debounce, each, first, get, isNil, omit, template } from 'lodash';
+import { cloneDeep, compact, debounce, each, first, isNil, omit, template } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,7 +14,6 @@ import { PO_APPROVAL_KEY, PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME }
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
-import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -51,9 +49,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
     const { purchaseOrderState, formState, workspaceState, poApprovalsState } = FB.useStores();
-    const { _documentRevisionFormState } = SM.useStores();
+    const { _documentRevisionFormState, _formState } = SM.useStores();
     const { document, id, isOutput } = workspaceState || {};
-    const formik = useFormikContext();
     const history = useHistory();
     const [selectedItemIndex, setSelectedItemIndex] = useState<number>(-1);
     const [isPOAddAction, setIsPOAddAction] = useState<boolean>(false);
@@ -250,7 +247,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     const getLatestDocRevData = (deleteLineItem) => {
-      const values = cloneDeep(get(formik, 'values')) as DocumentRevisionFormValues;
+      const values = _formState?.docRevData;
       if (!values?.formInput) {
         return;
       }

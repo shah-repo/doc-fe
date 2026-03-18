@@ -152,7 +152,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
   const numberingStyle = documentRevision?.numberingStyle ?? _documentRevisionFormState?.numberingStyle;
-
   const isNumberingStyleDifferentFromInternal = numberingStyle !== DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
   const isDocRevRelatedStatusNo = !documentRevision?.relatedPartsStatus
@@ -288,7 +287,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 && <DocIdInput
                   document={values.document}
                   {...{
-                    isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
+                    isDisabled: true,
                     documentTypesById,
                     setDocId,
                     documentTypeId,

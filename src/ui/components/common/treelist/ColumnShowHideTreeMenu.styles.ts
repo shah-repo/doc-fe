@@ -28,8 +28,11 @@ export const styles = makeStyles((theme) =>
     viewIcon: {
       color: Colors.almost_black,
       cursor: 'pointer',
-      height: 14,
-      width: 14,
+      height: 15,
+      width: 15,
+    },
+    viewIconButton: {
+      padding: theme.spacing(0.25),
     },
   }),
 );

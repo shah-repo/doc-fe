@@ -13,7 +13,7 @@ import DocIdInputNew from '../forms/presenters/DocIdInput.new';
 interface CustomIdDialogProps {
   isOpen: boolean
   closeDialog: () => void
-  outputDocumentType: DocumentType
+  outputDocumentType?: Partial<DocumentType>
   isInternalTypeNumbering: boolean
   handleSubmit: (docId: string) => void
 }
@@ -64,7 +64,7 @@ const CustomIdDialog: React.FC<CustomIdDialogProps> = ({
             </Grid>
           </DialogTitle>
           <DialogContent classes={{ root: classes.dialogContent }} className={classes.relativePos}>
-            {!isInternalTypeNumbering && (
+            {!isInternalTypeNumbering && outputDocumentType.documentTypeAcronym && (
               <>
                 <DocIdInputNew
                   documentTypeId={outputDocumentType.id}
