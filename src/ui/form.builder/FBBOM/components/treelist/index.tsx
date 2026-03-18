@@ -829,8 +829,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     _documentRevisionFormState?.setIsMaximizedView(false);
     reloadBOM();
   };
-  const [maxmizeIconContainerRef, isMaxIconHovered]
-    = useHover<HTMLButtonElement>();
+  const [maximizeIconRef, isMaximizeIconHovered] = useHover<HTMLButtonElement>();
+  const [whereUsedIconRef, isWhereUsedIconHovered] = useHover<HTMLButtonElement>();
+  const [downloadIconRef, isDownloadIconHovered] = useHover<HTMLButtonElement>();
+  const [childRevUpdateIconRef, isChildRevUpdateIconHovered] = useHover<HTMLButtonElement>();
 
   const shouldShowChildUpdateIcon = state.data?.some(item => item.childNodes && item.childNodes.length > 0)
    && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released].includes(documentRevision.status);
@@ -900,12 +902,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             )}
             {shouldShowChildUpdateIcon && (
               <Grid item>
-                <StyleTooltip title={translate('bom.child.revision.update')} placement="top" arrow>
+                <StyleTooltip title={translate('bom.child.revision.update')} ref={childRevUpdateIconRef} placement="top" arrow>
                   <FontAwesomeIcon
                     data-cy="child-rev-update"
                     className={classes.exportExcelIcon}
                     onClick={handleChildRevisionUpdate}
-                    icon={solid('code-branch')}
+                    icon={isChildRevUpdateIconHovered ? solid('code-branch') : regular('code-branch')}
                   />
                 </StyleTooltip>
               </Grid>
@@ -918,13 +920,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
               <StyleTooltip
                 title={translate('common.download')}
                 placement="top"
+                ref={downloadIconRef}
                 arrow
               >
                 <FontAwesomeIcon
                   data-cy="excel-download"
                   className={classes.exportExcelIcon}
                   onClick={() => exportTreelistDialog.open()}
-                  icon={solid('arrow-down-to-line')}
+                  icon={isDownloadIconHovered ? solid('arrow-down-to-line') : regular('arrow-down-to-line')}
                 />
               </StyleTooltip>
             </Grid>
@@ -937,11 +940,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 <StyleTooltip
                   title={translate('bom.whereUsed.dialog.title')}
                   placement="top"
+                  ref={whereUsedIconRef}
                   arrow
                 >
                   <FontAwesomeIcon
                     className={classes.viewIcon}
-                    icon={solid('tree-deciduous')}
+                    icon={isWhereUsedIconHovered ? solid('tree-deciduous') : regular('tree-deciduous')}
                     onClick={openWhereUsedDialog}
                   />
                 </StyleTooltip>
@@ -967,12 +971,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   title={translate('bom.maximize.tooltip')}
                   placement="top"
                   arrow
-                  ref={maxmizeIconContainerRef}
+                  ref={maximizeIconRef}
                   onClick={openMaximizeDialog}
                 >
                   <FontAwesomeIcon
                     icon={
-                      isMaxIconHovered
+                      isMaximizeIconHovered
                         ? solid('arrows-maximize')
                         : regular('arrows-maximize')
                     }
