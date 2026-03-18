@@ -53,12 +53,13 @@ const useCustomization = (
   defaultVisibility = true,
 ): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const { documentTypeAcronym } = documentType ?? {};
   const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const config = documentType?.fieldsConfig?.[fieldType];
   const isDocId = InputFieldType.DOC_ID === fieldType;
   const isVisible = customLabelsValue ? true : config?.visible ?? defaultVisibility;
   const label = customLabelsValue ? `<label: ${fieldType}>` : config?.label ?? defaultLabel;
-  const validation = config?.required ?? true ? validator(isDocId ? docId : required) : undefined;
+  const validation = config?.required ?? true ? validator(isDocId ? (value: string) => docId(value, documentTypeAcronym) : required) : undefined;
   const tooltipConfig = {
     labelName: fieldType,
     defaultLabel,
