@@ -32,17 +32,13 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({ pageD
     async.start(updatePageDetailsAction, id, toPageDetailsBodyValues(values), async);
   };
 
-  const handleDelete = () => {
-    deleteDialog.open();
-  };
-
   const onConfirmDelete = () => {
     dispatch(pageDetailsActions.deletePageDetails(id));
     deleteDialog.close();
   };
 
   const render = (props: FormikProps<PageDetailsCategory>) => (
-    <PageDetailsFormPresenter {...{ handleTransition: handleDelete, transitionLabel }} {...props} />
+    <PageDetailsFormPresenter {...{ handleTransition: deleteDialog.open, transitionLabel }} {...props} />
   );
 
   return (
