@@ -16,6 +16,7 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import { showPasswordExpiryToast } from './PasswordExpiryToast';
 import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
+import { RETURN_URL_STORAGE_KEY, tryRedirectToReturnUrl } from '../../utils/returnUrl';
 
 interface StateProps {
   isUserAuthenticated: boolean
@@ -43,6 +44,10 @@ const redirectToSSO = () => {
 const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
   const { from } = props.location.state ?? { from: { pathname: HOME_URL } };
   const intl = useIntl();
+  // returnUrl from URL param (direct visit from target server redirect) takes
+  // priority; sessionStorage holds it across the Keycloak OAuth round-trip.
+  const urlReturnUrl = new URLSearchParams(window.location.search).get('returnUrl');
+  const returnUrl = urlReturnUrl ?? sessionStorage.getItem(RETURN_URL_STORAGE_KEY);
   const async = useAsync({
     onError: (message) => {
       toastError(
@@ -77,13 +82,20 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
   }, [code, props.isUserAuthenticated]);
 
   if (props.isUserAuthenticated) {
+    // Company selection must happen before any returnUrl redirect,
+    // otherwise the user gets bounced to target frontend without a selected company.
     if (props.hasMultipleCompanies) {
       return (
         <SwitchCompanyContainer
           {...props}
+          returnUrl={returnUrl}
         />
       );
     }
+
+    // If returnUrl was provided (e.g. from target frontend redirect), navigate there
+    // after authentication succeeds — but only if it's a safe URL.
+    if (tryRedirectToReturnUrl(returnUrl)) return null;
 
     if (!props.hasCompanies) {
       return <Redirect to={NO_ACCESS} />;
@@ -105,6 +117,10 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
   }
 
   if (!code && !props.isUserAuthenticated) {
+    // Save returnUrl before SSO redirect — Keycloak's callback drops extra query params.
+    if (urlReturnUrl) {
+      sessionStorage.setItem(RETURN_URL_STORAGE_KEY, urlReturnUrl);
+    }
     redirectToSSO();
   }
 

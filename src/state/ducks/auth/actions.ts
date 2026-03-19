@@ -6,6 +6,7 @@ import { ResetPasswordValues } from '../../../ui/users/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApplicationState } from '../../reducers';
 import { ApiAction, Handlers } from '../../types';
+import { setCompanyCookie } from '../../../utils/companyCookie';
 import { companyActions } from '../company';
 import { Employee } from '../company/types';
 import { userManagementActions } from '../userManagement';
@@ -100,6 +101,7 @@ const onLoginSuccessCallback = (data: AuthResponse, dispatch) => {
 
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(selectEmployee(employee));
+    setCompanyCookie(employee.company.id);
   }
 };
 
@@ -317,6 +319,7 @@ const getSessionDetails = (employeeId: string) =>
       const company = employee.company;
       dispatch(companyActions.selectCompany(company));
       dispatch(selectEmployee(employee));
+      setCompanyCookie(company.id);
       dispatch(setUserTimezone(data.timezone));
     },
   });
