@@ -304,7 +304,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    const isExpiryValid = allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
+    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
 
     return isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
