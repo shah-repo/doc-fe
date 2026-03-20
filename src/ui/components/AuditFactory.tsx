@@ -29,6 +29,7 @@ import { FB, FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.
 import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
+import AuditApprovalRoles from './AuditApprovalRoles';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
 import AuditCheckboxGroupAsync from './AuditCheckboxGroupAsync';
@@ -270,6 +271,22 @@ const AuditFactory: React.FunctionComponent<Props> = ({
               whereUserValue = data.name;
             }
             return (<div data-cy={dataCy}>{whereUserValue}</div>);
+          } catch {
+            return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+          }
+        }
+        return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
+      },
+      approvalRoles () {
+        return <AuditApprovalRoles {...{ audit, dataCy, auditValue }} />;
+      },
+      approvalMatrix () {
+        if (audit.type === 'ARRAY_DELETED' && audit.field === 'formInput.dam-built-in') {
+          try {
+            const data = JSON.parse(auditValue as string);
+            if (data) {
+              return (<div data-cy={dataCy}>{data.docType?.name}</div>);
+            }
           } catch {
             return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>);
           }
