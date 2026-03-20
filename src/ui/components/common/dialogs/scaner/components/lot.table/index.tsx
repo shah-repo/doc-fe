@@ -2,9 +2,11 @@ import Typography from '@material-ui/core/Typography';
 import cx from 'classnames';
 import React, { useRef, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
+import { FBProcedureItemType } from '../../../../../../form.builder';
 import useDialog from '../../../../../../hooks/useDialog';
 import KendoDataGrid from '../../../../../KendoDataGrid/KendoDataGrid';
 import DocumentRevisionDialog from '../../../DocumentRevisionDialog';
+import { buildEqSchema } from './eqSchema';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableScanLot, ScanLotTableProps } from './types';
@@ -15,8 +17,11 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
   isLoading,
   onUpdateScanLot,
   onDeleteScanLot,
+  type,
+  isSerialNumberHidden,
 }) => {
   const classes = useStyles();
+  const isEquipmentScan = type === FBProcedureItemType.equipment;
   const [selectedDataItem, setSelectedDataItem] = useState<EditableScanLot>();
   const quickViewDialog = useDialog();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +37,8 @@ const ScanLotTable: React.FC<ScanLotTableProps> = ({
     event.stopPropagation();
   };
 
-  const schema = buildSchema({
+  const schema = (isEquipmentScan ? buildEqSchema : buildSchema)({
+    isSerialNumberHidden,
     onUpdateScanLot,
     onDelete: removeScanLot,
     onOpenQuickView: onOpenQuickView,

@@ -138,5 +138,13 @@ export const styles = makeStyles((theme: Theme) =>
     undefined: {
       color: Colors.dodger_blue,
     },
+    truncateText: {
+      maxWidth: 230,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      display: 'inline-block',
+      verticalAlign: 'middle',
+    },
   },
   ));

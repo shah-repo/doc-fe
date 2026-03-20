@@ -34,6 +34,7 @@ export enum FBEndpoint {
   TaskDone = '/tasks/${id}/done',
   Document = '/documents/${id}',
   RequiredApprovers = '/document_revisions/required_approvers',
+  BuildTypeSwitchApprovers = '/approvals/required_build_type_switch_approvers',
   Approvals = '/approvals',
   ApprovalsTransition = '/approvals/${id}/${transition}',
   ApprovalsUpdate = '/approvals/${id}/update',
@@ -52,6 +53,7 @@ export enum FBEndpoint {
   FetchAutocompleteValue = '/autocomplete_options/${id}/${optionId}',
   UseOverride = '/lhr/lhrs/${id}/use_override',
   RemoveOverride = '/lhr/lhrs/${id}/remove_override/${refId}',
+  EditOverride = '/lhr/lhrs/${id}/reference/${refId}/edit_override',
   Notes = '/notes',
   DocumentRevisionPatch = '/document_revisions/${id}',
   ChangeRequestPatch = '/change_requests/${id}',
@@ -69,4 +71,6 @@ export enum FBEndpoint {
   PrintLotLabels ='/zebra/labels/lot',
   PrintEquipmentLabels ='/zebra/labels/equipment',
   RelatedEquipment ='/related_equipment',
+  LotSerialNumbers = '/lot/${lotId}/serial-numbers',
+  LotForDocRev = '/lot/for-doc-rev/${docRevId}',
 }

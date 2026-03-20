@@ -10,7 +10,7 @@ export default makeStyles<NextTheme>(theme => ({
     display: 'grid',
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
-    gridTemplate: `min-content min-content auto / ${SIDEBAR_WIDTH}px auto`,
+    gridTemplate: `min-content ${theme.spacing(2.5)}px auto / ${SIDEBAR_WIDTH}px auto`,
   },
   header: {
     gridArea: '1 / 1 / 2 / 3',
@@ -49,10 +49,13 @@ export default makeStyles<NextTheme>(theme => ({
   },
   sidebar: {
     gridArea: '2 / 1 / 4 / 2',
-    paddingBottom: theme.spacing(3),
+    overflow: 'hidden',
   },
   list: {
     padding: 0,
+    overflow: 'auto',
+    maxHeight: '100%',
+    paddingBottom: theme.spacing(3),
   },
   listItem: {
     borderRadius: 4,
@@ -79,6 +82,11 @@ export default makeStyles<NextTheme>(theme => ({
     gridArea: '3 / 2 / 4 / 3',
     overflow: 'auto',
     paddingBottom: theme.spacing(3),
+  },
+  panelsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2.5, 2.5),
   },
   toggler: {
     gridArea: '2 / 2 / 3 / 3',
@@ -107,5 +115,68 @@ export default makeStyles<NextTheme>(theme => ({
     spaceTitle: {
       display: 'block',
     },
+  },
+  drawerAuditLogsPaper: {
+    width: '32vw',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  appBarBox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: theme.spacing(2, 4),
+  },
+  groupBox: {
+    fontSize: 16,
+    boxShadow: `inset 0px 1px 0px -1px ${Colors.lightGray3}, inset 0px -1px 0px 0px ${Colors.lightGray3}`,
+    padding: theme.spacing(2),
+  },
+  logEntry: {
+    fontSize: 12,
+    marginTop: theme.spacing(2),
+  },
+  auditListItem: {
+    margin: 0,
+    padding: 0,
+    marginBottom: theme.spacing(2),
+  },
+  auditValue: {
+    fontSize: 13,
+    wordBreak: 'break-word',
+    color: Colors.textBlack,
+    lineHeight: 1.5,
+  },
+  auditKey: {
+    fontSize: 12,
+    color: Colors.textGray,
+    marginBottom: theme.spacing(0.5),
+  },
+  owner: {
+    color: theme.palette.text.primary,
+    fontWeight: 500,
+  },
+  dateContainer: {
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.hint,
+  },
+  revisionContainer: {
+    background: Colors.statusDraftBg,
+    height: theme.spacing(5),
+    paddingTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    borderRadius: theme.spacing(0.4),
+  },
+  changeType: {
+    textTransform: 'lowercase',
+    marginLeft: theme.spacing(0.25),
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  displayEntryList: {
+    paddingLeft: theme.spacing(2.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: 0,
   },
 }));

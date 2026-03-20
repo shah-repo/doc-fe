@@ -61,6 +61,16 @@ export const styles = makeStyles((theme) => ({
     height: 14,
     width: 14,
     cursor: 'pointer',
-    marginLeft: theme.spacing(0.625),
+    marginLeft: theme.spacing(1),
+    flexShrink: 0,
+  },
+  partWrapper: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  partIdWrapper: {
+    flex: 1,
+    minWidth: 0,
   },
 }));

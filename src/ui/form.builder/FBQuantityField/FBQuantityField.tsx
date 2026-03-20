@@ -4,7 +4,7 @@ import { FBInputProps, FBTextField } from '..';
 const FBQuantityField: React.FunctionComponent<FBInputProps> = ({
   ...props
 }) => (
-  <FBTextField {...props} type="number" inputProps={{ min: '0' }} />
+  <FBTextField {...props} type="number" inputProps={{ min: '0', step: 'any' }} />
 );
 
 export default FBQuantityField;

@@ -4,7 +4,7 @@ import { Translation } from '../../../../translations/types';
 
 const reactQuillEmptyString = '<p><br></p>';
 
-export type Validator = (value: any) => Translation | undefined;
+export type Validator = (value: any, documentTypeAcronym?: string) => Translation | undefined;
 
 export const required: Validator = (value) => {
   if (value === reactQuillEmptyString || isEmpty(value)) {
@@ -18,6 +18,11 @@ export const email: Validator = (value: string) => {
   if (!/^[a-z0-9!'#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return 'validators.email';
   }
+};
+
+export const docId: Validator = (value: string, documentTypeAcronym?: string) => {
+  const docIdValue = value?.slice(documentTypeAcronym?.length);
+  return required(docIdValue);
 };
 
 export const requiredNumber: Validator = (value) => {

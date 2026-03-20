@@ -1,4 +1,4 @@
-import { filter, flattenDeep, get, omit, unionBy } from 'lodash';
+import { filter, flattenDeep, get, omit } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -50,10 +50,24 @@ class FBProcedureState {
       item = { title: item.title, id: String.fromCharCode(nextId), type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
-    const items = unionBy([item], get(this, `value.${type}`), 'id');
+    const existingItems = get(this, `value.${type}`, []);
+
+    const items = existingItems.reduce((acc, curr) => {
+      if (curr.id === item.id) {
+        return [...acc, item];
+      }
+      return [...acc, curr];
+    }, []);
+
+    const isItemExists = existingItems.some(i => i.id === item.id);
+
+    if (!item.LHRTparameter && isItemExists && item.type) {
+      delete item.type;
+    }
+
     const value = {
       ...this.value,
-      [type]: items.reverse(),
+      [type]: isItemExists ? items : [...items, item],
     };
     this.setValue(value);
   };
@@ -65,6 +79,23 @@ class FBProcedureState {
       [type]: items,
     };
     this.setValue(value);
+  };
+
+  @action public removeEBChildrenItem = (parentId: string, id: string, type: FBProcedureItemType, subItemsKey: string) => {
+    const items = get(this, `value.${type}`, []);
+    const updatedItems = items.map((item) => {
+      if (item.id !== parentId) return item;
+
+      return {
+        ...item,
+        [subItemsKey]: (item[subItemsKey] || []).filter((child) => child.id !== id),
+      };
+    });
+
+    this.setValue({
+      ...this.value,
+      [type]: updatedItems,
+    });
   };
 
   @action public setValue = (value?: FBProcedureValue) => {

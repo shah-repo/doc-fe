@@ -1,42 +1,41 @@
 import { Box, Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import { map, pick } from 'lodash';
-import { reaction } from 'mobx';
-import React, { useEffect } from 'react';
-import { FB, FBPurchaseOrderProps, FBText } from '..';
-import SM from '../../../App/Shifamed/Utils/SM/SM';
+import { useObserver } from 'mobx-react';
+import React from 'react';
+import { FB, FBPurchaseOrderProps } from '..';
+import { translate } from '../../../common/intl';
+import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import FormattedNumber from '../../components/FormattedNumber';
 import Colors from '../../layout/theme/utils/colors';
 import FBStore from '../FBStore/FBStore';
 
-const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
-  const requiredKeys = ['subTotal', 'tax', 'shippingCost', 'currency', 'totalAmount'];
+const KEYS_TO_PICK = ['subTotal', 'tax', 'shippingCost', 'currency', 'totalAmount'];
+const KEYS_TO_RENDER = ['subTotal', 'tax', 'shippingCost'];
+
+const LABELS = {
+  subTotal: 'common.summary.sub.total',
+  tax: 'common.summary.tax',
+  shippingCost: 'common.summary.shipping.cost',
+};
+
+const FBPurchaseOrderSummary: React.FC<FBPurchaseOrderProps> = ({
+  defaultValue,
+  lineItem = PO_ITEMS_COMPONENT_NAME,
+}) => {
   const { formState, workspaceState } = FB.useStores();
-  const { _tabsState } = SM.useStores();
-  const formInputName = props?.lineItem ? props?.lineItem : 'po-items-built-in';
-  const formValue = formState?.getFieldValue(formInputName, defaultValue);
-  const [poSummary, setPoSummary] = React.useState(formValue ? pick(formValue, requiredKeys) : {
-    subTotal: 0,
-    tax: 0,
-    currency: 'USD',
-    totalAmount: 0,
+
+  const poSummary = useObserver(() => {
+    const formValue = FBStore?.purchaseOrderValue ?? formState?.getFieldValue(lineItem, defaultValue) ?? {};
+    return {
+      subTotal: 0,
+      tax: 0,
+      currency: 'USD',
+      totalAmount: 0,
+      ...pick(formValue, KEYS_TO_PICK),
+    };
   });
-
-  useEffect(() => reaction(
-    () => _tabsState?.activeTabId,
-    () => {
-      const formValue = FBStore?.purchaseOrderValue || formState?.getFieldValue('po-items-built-in', defaultValue);
-      const poSummaryObj = pick(formValue, requiredKeys);
-      setPoSummary(poSummaryObj);
-    },
-  ));
-
-  const labelMap = {
-    subTotal: 'common.summary.sub.total',
-    tax: 'common.summary.tax',
-    shippingCost: 'common.summary.shipping.cost',
-  };
 
   if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE) {
     return null;
@@ -45,15 +44,15 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   return (
     <Box color={Colors.almost_black} width={242} fontSize={12}>
       <Box mb={1.25} fontWeight={600} fontSize={12}>
-        <FBText locale="common.summary.total" />
+        {translate('common.summary.total')}
       </Box>
       <Box pl={2.75} pr={3.125} pt={3.5} pb={4.75} bgcolor={Colors.white}>
         <Box>
-          {map(pick(poSummary, ['subTotal', 'tax', 'shippingCost']), (value, key) => (
+          {map(pick(poSummary, KEYS_TO_RENDER), (value, key) => (
             <Grid container spacing={3} alignItems="center" justify="space-between"
               style={{ marginBottom: key !== 'shippingCost' ? 8 : 0 }}>
               <Grid item xs="auto">
-                <FBText locale={labelMap[key]} />
+                {translate(LABELS[key])}
               </Grid>
               <Grid item xs="auto">
                 <Box fontWeight={600}>
@@ -70,7 +69,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
         <Box>
           <Grid container spacing={3} alignItems="center" justify="space-between">
             <Grid item xs="auto">
-              <FBText locale="form.builder.grand.total" />
+              {translate('form.builder.grand.total')}
             </Grid>
             <Grid item xs="auto">
               <Box fontWeight={600}>

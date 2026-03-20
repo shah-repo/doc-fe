@@ -27,7 +27,7 @@ const FBAttachmentNamePresenter: React.FC<Props> = ({
   attachments = [],
   boxProps,
   isDisabled,
-  width = 235,
+  width,
 }) => {
   const dialogHandler = useDialog();
   const classes = styles();
@@ -83,7 +83,7 @@ const FBAttachmentNamePresenter: React.FC<Props> = ({
               />
             </div>
             <Box
-              width={width}
+              width={width ?? '100%'}
               onClick={() => downloadOrViewFile(file)}
               className={classes.attchmentNameWrapper}
             >

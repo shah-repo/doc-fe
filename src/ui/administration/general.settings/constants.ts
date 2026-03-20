@@ -4,12 +4,15 @@ import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
+import LHRBuildSettingsPanel from './panels/LHRBuild';
+import LHRBuildSwitchSettingsPanel from './panels/LHRBuildTypeSwitchConfig';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
+import TaxRateSettings from './panels/TaxRate';
 import TimezoneSettings from './panels/Timezone';
 import Training from './panels/Training';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
@@ -55,6 +58,16 @@ export const panels = [
     component: CompanyLocationSettingsPanel,
   },
   {
+    key: GeneralSettingsTabs.LHRBuild,
+    title: 'administration.general.settings.lhr.build.menu.tab',
+    component: LHRBuildSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.LHRBuildSwitch,
+    title: 'administration.general.settings.lhrBuildType.menu.tab',
+    component: LHRBuildSwitchSettingsPanel,
+  },
+  {
     key: GeneralSettingsTabs.MaterialFlow,
     title: 'administration.general.settings.material.flow',
     component: MaterialFlowSettingsPanel,
@@ -98,5 +111,10 @@ export const panels = [
     key: GeneralSettingsTabs.Timezone,
     title: 'administration.general.settings.timezone.title',
     component: TimezoneSettings,
+  },
+  {
+    key: GeneralSettingsTabs.TaxRate,
+    title: 'administration.general.settings.tax.rate',
+    component: TaxRateSettings,
   },
 ];

@@ -2,10 +2,11 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
+import { FB, FBAutocompleteProps, FBLHRBuildOptions, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -24,6 +25,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 ) => {
   const Comp = ({
     onInputChange,
+    onOpen,
     getOptionDisabled,
     getOptionLabel,
     filterOptions,
@@ -55,6 +57,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       && !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue || workspaceState?.formInput?.[name];
     const includeQRScan = editorProperties?.includes('includeQRScan') || props.includeQRScan;
+    const isTypeLhrBuild = name === 'lhr-build-type';
     const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
     disabled
       = PO_REQUESTOR_COMPONENT_NAME === name
@@ -81,6 +84,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
+
     const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
     const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus && workspaceState.mode === FBWorkspaceModeOptions.DESIGN;
     const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
@@ -143,9 +147,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     groupByKey && (groupBy = (option) => option[groupByKey]);
 
-    disabledOptions && (getOptionDisabled = (option) =>
-      includes(disabledOptions, option.id)
-    );
+    disabledOptions
+      && (getOptionDisabled = (option) => includes(disabledOptions, option.id));
+
+    if (isTypeLhrBuild && defaultValue) {
+      const { internalType } = defaultValue as LHRBuild;
+      disabled = !!(internalType && internalType !== FBLHRBuildOptions.Production);
+    }
 
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // setField doesn't work here, the same problem prefilled with first option
@@ -153,6 +161,16 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       const { target: { value = '' } = {} } = ev;
       formState?.setFieldValue(name, value, withState, omitFormValue);
       formState?.validate();
+    };
+
+    onOpen = () => {
+      if (isUndefined(options)) {
+        return setModifiedOptions([]);
+      }
+      if (isEmpty(options)) {
+        return setModifiedOptions([]);
+      }
+      setModifiedOptions(options);
     };
 
     const handleBlur = (event) => {
@@ -190,6 +208,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     return Component({
       ...(props as T),
       onInputChange,
+      onOpen,
       getOptionDisabled,
       getOptionLabel,
       filterOptions,
@@ -215,6 +234,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       disabledOptions,
       type: schemaItem?.type,
       onBlur: handleBlur,
+      isTypeLhrBuild,
     });
   };
 

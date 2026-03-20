@@ -25,34 +25,36 @@ export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGri
 export const formDataToStoreData = (
   documentRevisionsAssigned: FBDocumentRevisionsValue[],
   documentRevisionsData?: any[],
-) => documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
-  const entryInfo = {
-    justificationOfChange: item.justificationOfChange,
-    descriptionOfChange: item.descriptionOfChange,
-    docRevId: item.proposedDocumentRevision.id,
-    autoUpdate: item.autoUpdate,
-    documentId: '',
-    id: item.id,
-    titleText: '',
-    displayRevision: '',
-    isPart: false,
-    revisionFormTo: item.revisionFormTo,
-    whereUsedView: item.whereUsedView,
-    attachments: [] as Attachment[],
-  };
+) => documentRevisionsAssigned
+  .filter((item: FBDocumentRevisionsValue) => item && Object.keys(item).length)
+  .map((item: FBDocumentRevisionsValue) => {
+    const entryInfo = {
+      justificationOfChange: item.justificationOfChange,
+      descriptionOfChange: item.descriptionOfChange,
+      docRevId: item.proposedDocumentRevision.id,
+      autoUpdate: item.autoUpdate,
+      documentId: '',
+      id: item.id,
+      titleText: '',
+      displayRevision: '',
+      isPart: false,
+      revisionFormTo: item.revisionFormTo,
+      whereUsedView: item.whereUsedView,
+      attachments: [] as Attachment[],
+    };
 
-  const docRevId = item.proposedDocumentRevision.id;
-  const { displayRevision, document, attachments }
+    const docRevId = item.proposedDocumentRevision.id;
+    const { displayRevision, document, attachments }
           = documentRevisionsData?.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
 
-  if (document) {
-    entryInfo.titleText = generateDocTitleText(document.docId, displayRevision);
-    entryInfo.isPart
+    if (document) {
+      entryInfo.titleText = generateDocTitleText(document.docId, displayRevision);
+      entryInfo.isPart
           = checkIsDocumentPart(document.documentType.group) || checkIsDocumentOTHER(document.documentType.group);
-    entryInfo.documentId = document.id;
-    entryInfo.displayRevision = displayRevision;
-    entryInfo.attachments = (attachments || []);
-  }
+      entryInfo.documentId = document.id;
+      entryInfo.displayRevision = displayRevision;
+      entryInfo.attachments = (attachments || []);
+    }
 
-  return entryInfo;
-});
+    return entryInfo;
+  });

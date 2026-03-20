@@ -2,13 +2,13 @@ import { Box, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { styles as useStyles } from '../../app/alert.dialog/AlertDialog.styles';
 import Text from '../../components/Text';
 import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { ApprovalFailureResponse, ApprovalItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
-import { styles as useStyles } from './AlertDialog.styles';
 
 interface Props {
   confirmAction?: (values?) => void
@@ -49,6 +49,10 @@ const POLineItemAlert: React.FC<Props> = ({
     return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
+  const getConflictingParts = (items: ApprovalItem[]) => {
+    return items.map((item) => `${item.docId} - ${item.displayRevision}`).join(', ');
+  };
+
   return (
     <AlertDialog
       handler={dialog}
@@ -76,6 +80,9 @@ const POLineItemAlert: React.FC<Props> = ({
           <Text message={translate('purchaseOrder.part.dialog.general.prefix')} />
           <b> {getConflictingPhases(items)} </b>
           <Text message={translate('purchaseOrder.part.dialog.general.suffix')} />
+        </Typography>
+        <Typography data-cy="dialog-message" className={`${classes.contentText} ${classes.textBold}`}>
+          [{!isError && isWarning ? getConflictingParts(warningItems) : getConflictingParts(errorItems)}]
         </Typography>
         {!isError && isWarning && (
           <Box className={cx(classes.topSpacing, classes.contentText)}>

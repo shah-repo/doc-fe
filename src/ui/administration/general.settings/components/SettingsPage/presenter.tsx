@@ -7,6 +7,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { panels } from '../../constants';
 import { GeneralSettingsProps, GeneralSettingsTabs } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
+import SettingsHistoryDrawer from './SettingsHistoryDrawer';
 import useStyles from './styles';
 
 const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
@@ -26,6 +27,14 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
     state.includes(key) ? state.filter(it => it !== key) : [...state, key]
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
+
+  const [isShowHistoryDrawer, setIsShowHistoryDrawer] = useState<boolean>(false);
+  const showHistoryDialog = () => {
+    setIsShowHistoryDrawer(true);
+  };
+  const handleHistoryDrawerClose = () => {
+    setIsShowHistoryDrawer(false);
+  };
 
   return (
     <Box className={classes.root}>
@@ -53,7 +62,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
             />
           )}
           <Box className={classes.buttons}>
-            <Button kind="outlined" data-cy="settings-history" disabled>{translate('common.history')}</Button>
+            <Button onClick={showHistoryDialog} kind="outlined" data-cy="settings-history">{translate('common.history')}</Button>
             <Button onClick={onSave} data-cy="settings-save">{translate('common.save.changes')}</Button>
           </Box>
         </Box>
@@ -80,17 +89,25 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
         </Button>
       </Box>
       <div className={classes.panels} ref={containerRef}>
-        {panels.map(panel => (
-          <panel.component
-            key={panel.key}
-            title={panel.title}
-            containerRef={containerRef}
-            expanded={expandedPanels.includes(panel.key)}
-            onToggle={togglePanel(panel.key)}
-            data-cy={kebabCase(panel.title)}
-          />
-        ))}
+        <div className={classes.panelsContainer}>
+          {panels.map(panel => (
+            <panel.component
+              key={panel.key}
+              title={panel.title}
+              containerRef={containerRef}
+              expanded={expandedPanels.includes(panel.key)}
+              onToggle={togglePanel(panel.key)}
+              data-cy={kebabCase(panel.title)}
+            />
+          ))}
+        </div>
       </div>
+      {isShowHistoryDrawer && (
+        <SettingsHistoryDrawer
+          isOpen={isShowHistoryDrawer}
+          onClose={handleHistoryDrawerClose}
+        />
+      )}
     </Box>
   );
 };

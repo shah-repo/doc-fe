@@ -1,4 +1,5 @@
-import { ColumnDefinition, DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplateProps, ColumnDefinition, DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { EditableLHRBuild } from '../../panels/LHRBuild/types';
 
 interface CustomRowProperties extends Record<string, unknown> {
   className?: string
@@ -24,3 +25,5 @@ interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
 }
 
 export type SchemaBuilder<T extends EditableItem = EditableItem, O = Record<string, unknown>> = (options: SettingsSchemaOptions<T> & O) => Array<ColumnDefinition<T>>;
+
+export interface CustomTemplateProps extends CellTemplateProps<EditableLHRBuild> {}
