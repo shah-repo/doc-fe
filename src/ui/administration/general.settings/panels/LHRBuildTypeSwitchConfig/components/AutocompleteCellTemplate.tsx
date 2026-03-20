@@ -1,15 +1,15 @@
+import { makeStyles } from '@material-ui/core';
+import { createStyles } from '@material-ui/styles';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
-import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
-import { EditableLHRBuildSwitch } from '../types';
 import { translate } from '../../../../../../common/intl';
-import { LHRBuild } from '../../LHRBuild/types';
-import OverflowTooltip from '../../../../../components/OverflowTooltip';
-import { createStyles } from '@material-ui/styles';
-import { makeStyles } from '@material-ui/core';
 import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../../components/OverflowTooltip';
+import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
+import { LHRBuild } from '../../LHRBuild/types';
+import { EditableLHRBuildSwitch } from '../types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -41,33 +41,33 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
 
   if (canBeModified) {
     let filerOptions = options;
-    if(field === 'from' && !isEmpty(values?.to)) {
+    if (field === 'from' && !isEmpty(values?.to)) {
       filerOptions = options.filter(item => item.id !== values.to);
-    } else if(field === 'to' && !isEmpty(values.from)) {
-        filerOptions = options.filter(item => item.id !== values.from);
+    } else if (field === 'to' && !isEmpty(values.from)) {
+      filerOptions = options.filter(item => item.id !== values.from);
     }
 
     return (
-    <FormikField name={field} error={get(errors, field)}>
-      <Autocomplete
-        {...getFieldProps(field)}
-        key={isEmpty(values) ? 'disabled' : 'enabled'}
-        placeholder={translate('common.select')}
-        value={defaultValue}
-        blurOnSelect
-        disableClearable
-        options={filerOptions}
-        onChange={handleChange}
-        getOptionLabel={(val: LHRBuild) => val.displayLabel}
-        size="small"
-      />
-    </FormikField>
-  );
+      <FormikField name={field} error={get(errors, field)}>
+        <Autocomplete
+          {...getFieldProps(field)}
+          key={isEmpty(values) ? 'disabled' : 'enabled'}
+          placeholder={translate('common.select')}
+          value={defaultValue}
+          blurOnSelect
+          disableClearable
+          options={filerOptions}
+          onChange={handleChange}
+          getOptionLabel={(val: LHRBuild) => val.displayLabel}
+          size="small"
+        />
+      </FormikField>
+    );
   }
 
   return (
     <OverflowTooltip
-      title={defaultValue}
+      title={defaultValue?.displayLabel}
       placement="top"
       arrow
       className={classes.tooltip}

@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { TrainingListData } from '../../../state/ducks/training/types';
-import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import Text from '../../components/Text';
+import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import styles from '../../document.revision/grid/ExportButton/styles';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
 import useDialog from '../../hooks/useDialog';
@@ -82,6 +82,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
         data={exportData}
         {...{ dialog, headers }}
         customFileName="DocumentList"
+        isMultiplePagesDownloadAllowed
       />
     </>
   );

@@ -66,7 +66,7 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
 
   const updateStepQty = throttle(
     (serialNumbers?: SerialNumber[]) => {
-      if (!serialNumbers) { return; }
+      if (!serialNumbers || serialNumbers.length === 0) { return; }
       const acceptedQty = serialNumbers.filter((serial) => serial.status === SerialNumberStatus.ACCEPTED).length;
       const rejectedQty = serialNumbers.filter((serial) => serial.status === SerialNumberStatus.REJECTED).length;
       formState?.setFieldValue(LHRS_ACCEPTED_QUANTITY, acceptedQty);

@@ -3,9 +3,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { PageDetails } from '../../../state/ducks/documentRevisions/documentType/types';
 import { pageDetailsActions } from '../../../state/ducks/pageDetails';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import useDialog from '../../hooks/useDialog';
 import { toPageDetailsBodyValues, toPageDetailsInitialValues } from '../transform';
 import { PageDetailsCategory, PageDetailsCategoryValues } from '../types';
 import { PageDetailsFormPresenter } from './presenter';
@@ -14,14 +16,11 @@ interface Props {
   pageDetails: PageDetails
 }
 
-export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
-  pageDetails,
-}) => {
+export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({ pageDetails }) => {
   const dispatch = useDispatch();
+  const deleteDialog = useDialog();
   const async = useAsync({
-    onError: (error) => {
-      toastError(error as string);
-    },
+    onError: toastError,
   });
   const { id } = pageDetails;
   const initialValues = toPageDetailsInitialValues(pageDetails);
@@ -30,32 +29,30 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
   const updatePageDetailsAction = useActionCreator(pageDetailsActions.updatePageDetails);
 
   const onSubmit = (values: PageDetailsCategoryValues) => {
-    async.start(
-      updatePageDetailsAction,
-      id,
-      toPageDetailsBodyValues(values),
-      async,
-    );
+    async.start(updatePageDetailsAction, id, toPageDetailsBodyValues(values), async);
   };
 
-  const handleTransition = () => {
+  const onConfirmDelete = () => {
     dispatch(pageDetailsActions.deletePageDetails(id));
+    deleteDialog.close();
   };
 
   const render = (props: FormikProps<PageDetailsCategory>) => (
-    <PageDetailsFormPresenter
-      {...{ handleTransition, transitionLabel }}
-      {...props}
-    />
+    <PageDetailsFormPresenter {...{ handleTransition: deleteDialog.open, transitionLabel }} {...props} />
   );
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {render}
-    </Formik>
+    <>
+      <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize={true}>
+        {render}
+      </Formik>
+      {deleteDialog.isOpen && (
+        <AlertDialog
+          dialog={deleteDialog}
+          confirmAction={onConfirmDelete}
+          message="page.details.delete.confirm.message"
+        />
+      )}
+    </>
   );
 };
