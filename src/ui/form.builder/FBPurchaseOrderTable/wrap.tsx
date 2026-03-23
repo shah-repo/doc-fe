@@ -374,6 +374,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     useEffect(() => {
       if (isReceivable) { purchaseOrderState?.getPartsVersion(); }
       // eslint-disable-next-line react-hooks/exhaustive-deps
+      return () => {
+        FBStore?.setPurchaseOrderValue(undefined);
+      };
     }, []);
 
     if (isReceivable) {
