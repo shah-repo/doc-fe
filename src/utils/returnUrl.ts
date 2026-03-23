@@ -17,7 +17,7 @@ export const RETURN_URL_STORAGE_KEY = appConfig.returnUrlStorageKey;
  * Accepts localhost, 127.0.0.1, and the current page's own hostname
  * (covers production where all apps share the same domain).
  */
-export function isSafeReturnUrl(url: string): boolean {
+function isSafeReturnUrl (url: string): boolean {
   try {
     const target = new URL(url);
     return (
@@ -34,7 +34,7 @@ export function isSafeReturnUrl(url: string): boolean {
  * If ``returnUrl`` is a safe redirect target, navigate the browser there
  * and clear the stored key.  Returns ``true`` if redirect was performed.
  */
-export function tryRedirectToReturnUrl(returnUrl: string | null | undefined): boolean {
+export function tryRedirectToReturnUrl (returnUrl: string | null | undefined): boolean {
   if (!returnUrl) return false;
   if (!isSafeReturnUrl(returnUrl)) return false;
 

@@ -33,7 +33,7 @@ export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'locati
 const IS_DEV_BUILD = process.env.NODE_ENV === 'development';
 
 const redirectToSSO = () => {
-  const redirectUrl = new URL(`${Config.ApiEndpoint}${SSO_LOGIN_URL}`);
+  const redirectUrl = new URL(`${Config.ApiEndpoint}${SSO_LOGIN_URL}`, window.location.origin);
 
   if (IS_DEV_BUILD) {
     redirectUrl.searchParams.append(SSO_REDIRECT_PARAM, window.location.origin);
