@@ -129,6 +129,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
         <HeaderCell
           {...props}
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
