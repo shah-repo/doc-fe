@@ -1,0 +1,61 @@
+import React from 'react';
+import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
+import AutocompleteCellTemplate from './components/AutocompleteCellTemplate';
+import { SchemaBuilder } from '../../components/SettingsTable/types';
+import { EditableLHRBuildSwitch, GroupOption } from './types';
+import GroupsCellTemplate from './components/GroupsCellTemplate';
+import { LHRBuild } from '../LHRBuild/types';
+
+interface buildSchemaProps {
+  approvalGroups: GroupOption[]
+  LHRBuild: LHRBuild[]
+}
+
+export const buildSchema: SchemaBuilder<EditableLHRBuildSwitch, buildSchemaProps> = ({
+  approvalGroups,
+  LHRBuild,
+  onEdit,
+  onDiscard,
+  onConfirm,
+  onDelete,
+}) => {
+  return [
+    {
+      id: 'from',
+      field: 'from',
+      title: 'administration.general.settings.lhrBuildType.switchConfigApproval.from',
+      template: (props) => (<AutocompleteCellTemplate {...props} options={LHRBuild} />),
+      width: 200,
+    },
+    {
+      id: 'to',
+      field: 'to',
+      title: 'administration.general.settings.lhrBuildType.switchConfigApproval.to',
+      template: (props) => (<AutocompleteCellTemplate {...props} options={LHRBuild} />),
+      width: 200,
+    },
+    {
+      id: 'approvalGroups',
+      field: 'approvalGroups',
+      title: 'administration.general.settings.lhrBuildType.switchConfigApproval.approvalGroups',
+      template: (props) => (<GroupsCellTemplate {...props} options={approvalGroups} />),
+      width: 200,
+    },
+    {
+      id: 'actions',
+      field: 'actions',
+      title: 'common.actions',
+      width: 75,
+      template: (props) => (
+        <ActionsCellTemplate
+          {...props}
+          isActive={true}
+          onEdit={onEdit}
+          onDiscard={onDiscard}
+          onConfirm={onConfirm}
+          onDelete={onDelete}
+        />
+      ),
+    },
+  ];
+};

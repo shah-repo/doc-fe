@@ -42,4 +42,5 @@ export interface ApproveAndReleaseFormValues {
 export enum FBDataStoreApprovalKeys {
   PO_APPROVALS='poApprovals',
   INLINE_APPROVALS='inlineApprovals',
+  BUILD_TYPE_CHANGE_APPROVALS='buildTypeChangeApprovals',
 }

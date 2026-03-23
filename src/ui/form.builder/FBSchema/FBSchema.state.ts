@@ -9,6 +9,7 @@ import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBBuildType from '../FBBuildType/FBBuildType';
+import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
@@ -57,6 +58,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBSerials from '../FBSerials';
 import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
 import FBShippingItems from '../FBShippingItems';
@@ -133,6 +135,7 @@ class FBSchemaState {
     createlabel: FBButton,
     approval: FBApproval,
     inlineapproval: FBInlineApproval,
+    buildTypeChangeApproval: FBBuildTypeChangeApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,
@@ -179,6 +182,7 @@ class FBSchemaState {
     shippingMethod: FBShippingMethod,
     salesOrderNumber: FBSalesOrderNumber,
     samplingPlan: FBSamplingPlan,
+    lotSerialNumbers: FBSerials,
   };
 
   @observable public schema?: FBSchemaProps[];

@@ -47,6 +47,7 @@ const USER_DEFAULT_STATE: UserState = {
   initialColor: Colors.deep_purple,
   timezone: '',
   userCompanyTimezone: '',
+  accessToken: '',
 };
 
 type AuthUserActions =

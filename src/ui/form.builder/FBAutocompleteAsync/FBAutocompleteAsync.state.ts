@@ -31,6 +31,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     });
   };
 
+  public fetchDepricatedAutocompleteOption = (id: string) => {
+    this.autocompleteValueApi.set({
+      url: FBEndpoint.Document,
+      urlValues: { id },
+      method: 'get',
+    });
+  };
+
   @computed public get optionConfig (): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;

@@ -1,5 +1,5 @@
 import { Dictionary, filter, isEmpty, isNil, isNumber, isUndefined, size, template, toNumber, union } from 'lodash';
-import { action, observable, set } from 'mobx';
+import { action, computed, observable, set } from 'mobx';
 import moment, { MomentInput } from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
 import { TIME_ZONE } from '../../../common/utils/date';
@@ -8,10 +8,10 @@ import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } f
 import FBRequest from '../FBApi/FBApi.request';
 import { getDecimalLength } from '../FBPurchaseOrderTable/helpers';
 import { FBEndpoint } from '../defaults/FBEndpoint';
-import { TAX_RATE } from '../helpers/constants';
+import { DEFAULT_TAX_RATE } from '../helpers/constants';
 
 class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<number>> {
-  public exchangeRate: FBRequest<CurrencyRate, Dictionary<number>> = new FBRequest();
+  public exchangeRateApi: FBRequest<CurrencyRate, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
   @observable public hasPartNumber = false;
   @observable public isAllItemsReceived = false;
@@ -19,7 +19,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   @observable public timezone = TIME_ZONE;
   @observable value: FBPurchaseOrderValue = {
     tax: '0.00',
-    taxRate: TAX_RATE,
+    taxRate: DEFAULT_TAX_RATE,
     subTotal: '0.00',
     totalAmount: '0.00',
     shippingCost: '0.00',
@@ -29,6 +29,18 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     dateOfExchangeRate: '',
     items: [],
   };
+
+  @computed public get taxRate (): number {
+    return this.value.taxRate;
+  }
+
+  @computed public get currency (): FBCurrency {
+    return this.value.currency;
+  }
+
+  @computed public get exchangeRate (): number {
+    return this.value.exchangeRate;
+  }
 
   public partApi = new FBRequest<DocumentRevision, null>();
 
@@ -68,14 +80,14 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
 
   public constructor ({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
-    if (!initialValues || isEmpty(initialValues)) {
-      return;
-    }
     if (documentId) {
       this.fetchReceivedItems(documentId);
     }
+    if (!initialValues || isEmpty(initialValues)) {
+      return;
+    }
     const items = (initialValues?.items || []).map((item, index) => ({ ...item, index }));
-    set(this, 'value', { ...initialValues, items });
+    this.setValue({ ...initialValues, items });
   }
 
   @action public setPartNumber = (partNumber?: string): void => {
@@ -89,7 +101,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   @action public setCurrency = async (currency: FBCurrency): Promise<void> => {
     // FBInput.onchange, line 87
     // on change is triggered twice
-    if (this.exchangeRate.loading) {
+    if (this.exchangeRateApi.loading) {
       return;
     }
     const setToUsd = () => {
@@ -102,10 +114,10 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
 
     const urlTpl = template(FBEndpoint.Currency);
     const url = urlTpl({ symboName: currency });
-    this.exchangeRate.setUrl(url);
+    this.exchangeRateApi.setUrl(url);
 
     try {
-      const data = await this.exchangeRate.fetch();
+      const data = await this.exchangeRateApi?.fetch();
       this.value.currency = currency;
       this.value.exchangeRate = parseFloat(data.rate.toFixed(2));
       this.value.dateOfExchangeRate = moment().tz(this.timezone).format();
@@ -189,7 +201,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   public calculateCost = (): FBPurchaseOrderValue => {
     const sum = this.calculateItemSum();
     const lineItemsLength = this.value.items.length;
-    const taxRate = lineItemsLength ? this.value.taxRate : TAX_RATE;
+    const taxRate = this.value.taxRate;
     let tax = 0;
     if (lineItemsLength && sum.forTax && !isNil(this.value.taxRate)) {
       tax = sum.forTax * this.value.taxRate / 100;
