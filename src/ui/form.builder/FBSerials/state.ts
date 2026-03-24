@@ -155,6 +155,9 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
       urlValues: { docRevId },
     }, (data, error) => {
       this.lotData = data;
+      if(data) {
+        this.lotFindRequest.onSuccess();
+      }
       this.loadSerialNumbers().catch(toastError);
     });
   }
