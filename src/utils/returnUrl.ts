@@ -20,10 +20,12 @@ export const RETURN_URL_STORAGE_KEY = appConfig.returnUrlStorageKey;
 function isSafeReturnUrl (url: string): boolean {
   try {
     const target = new URL(url);
+    const current = window.location.hostname;
     return (
       target.hostname === 'localhost'
       || target.hostname === '127.0.0.1'
-      || target.hostname === window.location.hostname
+      || target.hostname === current
+      || target.hostname.endsWith(`.${current}`)
     );
   } catch {
     return false;
