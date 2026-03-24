@@ -53,7 +53,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
-      {isAttachmentType && <Box
+      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && <Box
         bgcolor={Colors.athens_gray}
         color= {Colors.almost_black}
         fontWeight={600}
@@ -100,7 +100,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
       )}
-      {isAttachmentType && (
+      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && (
         <Box data-cy="mediaUploadField" mt={2}>
           <FBMediaAlbumField
             name={`${name}.attachments`}

@@ -5,10 +5,12 @@ import { DOC_TYPE_GROUP_OPTION, DOCUMENT_NUMBERING_STYLE, DocumentType } from '.
 import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
+import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 import { AllocationState } from '../../../../ui/form.builder/FBAllocation/components/treelist/interface';
+import FBRequest from '../../../../ui/form.builder/FBApi/FBApi.request';
 import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
-import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
+import { MaterialAndEquipment } from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.types';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -19,6 +21,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // and we need to know the values from both FB and AvailableReferences to create
   // new merged value
   public referenceValue: Id[] = [];
+  private readonly materialAndEquipmentApi = new FBRequest<MaterialAndEquipment, null>(FBEndpoint.MaterialAndEquipment);
 
   // MARK: @observables
   @observable public documentRevision?: DocumentRevision;
@@ -292,6 +295,17 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   public get isOutputSchema (): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+  }
+
+  public fetchMaterialAndEquipmentItems (id: string) {
+    this.materialAndEquipmentApi.set({
+      method: 'get',
+      urlValues: { id },
+    });
+  }
+
+  @computed public get materialAndEquipmentItems () {
+    return this.materialAndEquipmentApi.data;
   }
 
   // *TODO

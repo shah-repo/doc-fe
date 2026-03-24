@@ -55,6 +55,7 @@ export type DocumentRevisionFormProps =
   isSliderView?: boolean
   inDialog?: boolean
   isBuildTypeChangeApprovalEnabled?: boolean
+  isMEQTabVisible?: boolean
 };
 
 export interface DocumentRevisionFormStateProps {
@@ -93,4 +94,5 @@ export interface DocumentRevisionFormStateProps {
   referenceValue: Id[]
   schema: FBSchemaProps[]
   leftPanelOpen: boolean
+  isMEQTabVisible?: boolean
 }
