@@ -12,5 +12,7 @@ const MAX_AGE_SECONDS = appConfig.companyCookieMaxAgeDays * 24 * 60 * 60;
  */
 export function setCompanyCookie(companyId: string): void {
   const secure = window.location.protocol === 'https:' ? '; secure' : '';
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(companyId)}; path=/; max-age=${MAX_AGE_SECONDS}; samesite=lax${secure}`;
+  const host = window.location.hostname;
+  const domainPart = host === 'localhost' || host === '127.0.0.1' ? '' : `; domain=${host}`;
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(companyId)}; path=/; max-age=${MAX_AGE_SECONDS}; samesite=lax${secure}${domainPart}`;
 }
