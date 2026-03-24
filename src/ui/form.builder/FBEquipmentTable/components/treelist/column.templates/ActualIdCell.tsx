@@ -103,7 +103,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
             return true;
           }
 
-          if (lhrBuildTypeConfigForSelectedBuildType?.allowCalOrPm) {
+          if (lhrBuildTypeConfigForSelectedBuildType?.enforceCurrentCalOrPm) {
             return !isActive;
           }
 
