@@ -296,17 +296,17 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
         DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
       ].includes(lot?.lotStatus);
 
-      const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
-      isAcceptedStatus = isLHRProductionBuild
-        ? isValidStatus && (!shouldEnforceProductionLotsOnly || !isRDDocument)
+      isAcceptedStatus = isLHRProductionBuild ? isValidStatus
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
     const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
+    const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
+    const isLotTypeAllowed = !shouldEnforceProductionLotsOnly || !isRDDocument;
 
-    return isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
+    return isLotTypeAllowed && isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({
