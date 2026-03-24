@@ -93,7 +93,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       },
     );
   return (
-    <SwitchCompanyPresenter numberOfCompanies={companies.length} onSearch={onSearch} searchString={searchString}>
+    <SwitchCompanyPresenter key={searchString} numberOfCompanies={companies.length} onSearch={onSearch} searchString={searchString}>
       {companies}
     </SwitchCompanyPresenter>
   );
