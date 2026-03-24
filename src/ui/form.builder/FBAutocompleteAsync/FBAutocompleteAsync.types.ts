@@ -78,6 +78,7 @@ export enum FBAutocompleteAsyncOption {
   shippingInformation = '47',
   buildType = '48',
   equipmentSpecifications = '49',
+  documentsEligibleForGroupTrainee = '51',
 }
 
 export interface FBAutocompleteAsyncConstructor {

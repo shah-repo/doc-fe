@@ -22,7 +22,7 @@ const getValue = (item?: DocumentOption) => {
 
   return {
     docId: item.docId,
-    documentId: item.id,
+    documentId: item.documentId,
     docRevId: latestDocRev?.id,
     displayRevision: item.displayRevision,
   };

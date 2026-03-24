@@ -287,7 +287,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 && <DocIdInput
                   document={values.document}
                   {...{
-                    isDisabled: true,
+                    isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
                     documentTypesById,
                     setDocId,
                     documentTypeId,
