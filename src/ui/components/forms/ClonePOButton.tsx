@@ -45,9 +45,7 @@ const ClonePOButton: React.FunctionComponent<ClonePOButtonProps> = ({
         ),
       });
     },
-    onError: (error) => {
-      toastError(error);
-    },
+    onError: toastError,
   });
 
   const cloneAction = () => {

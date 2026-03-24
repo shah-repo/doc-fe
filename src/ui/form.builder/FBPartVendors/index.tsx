@@ -173,44 +173,46 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
         dirty={dirty}
       />
       <FBInput {...props} type="partVendors" name={name}>
-        <FBSection label={label}>
+        <>
+          <FBSection label={label}>
+            {isActive && (
+              <Button
+                kind="ghost"
+                size="small"
+                disabled={isInEditMode}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={createDraftVendor}
+                data-cy="add-link"
+              >
+                {translate('form.builder.part.vendors.add')}
+              </Button>
+            )}
+          </FBSection>
+          <KendoDataGrid<EditableVendor>
+            className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+            fullWidth
+            filterable
+            hasBoxScrollbars
+            schema={schema}
+            data={vendorsList as EditableVendor[]}
+            onRowClick={handleRowClick}
+            rowRender={rowRender}
+          />
           {isActive && (
             <Button
-              kind="ghost"
-              size="small"
+              kind="add"
+              fullWidth
+              attached
               disabled={isInEditMode}
-              className={classes.addButton}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftVendor}
-              data-cy="add-link"
+              data-cy="add-button"
             >
               {translate('form.builder.part.vendors.add')}
             </Button>
           )}
-        </FBSection>
+        </>
       </FBInput>
-      <KendoDataGrid<EditableVendor>
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        fullWidth
-        filterable
-        hasBoxScrollbars
-        schema={schema}
-        data={vendorsList as EditableVendor[]}
-        onRowClick={handleRowClick}
-        rowRender={rowRender}
-      />
-      {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          attached
-          disabled={isInEditMode}
-          onClick={createDraftVendor}
-          data-cy="add-button"
-        >
-          {translate('form.builder.part.vendors.add')}
-        </Button>
-      )}
       <Dialog
         open={primarySupplierDialog.isOpen}
         title="relatedParts.set.new.primary.supplier"

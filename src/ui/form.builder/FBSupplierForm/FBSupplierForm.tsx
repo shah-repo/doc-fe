@@ -18,11 +18,8 @@ const FBSupplierForm: React.FunctionComponent<FBSupplierFormProps> = ({
   const documentTypeId = formState?.inputState.get('document.documentType.id')?.value as string;
 
   const handleDocIdUpdated = (updatedDocId: string) => {
-    if (!updatedDocId.length) {
-      formState?.setFieldValue('document.docId', '');
-    } else {
-      formState?.setFieldValue('document.docId', `${docType?.documentTypeAcronym}${updatedDocId}`);
-    }
+    const value = updatedDocId.length ? `${docType?.documentTypeAcronym}${updatedDocId}` : '';
+    formState?.setFieldValue('document.docId', value);
   };
 
   return (

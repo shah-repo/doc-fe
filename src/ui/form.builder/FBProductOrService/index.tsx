@@ -200,43 +200,45 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     <Box className={classes.root} data-cy="product-service">
       <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="productorservice" name={name}>
-        <FBSection label={label}>
+        <>
+          <FBSection label={label}>
+            {isActive && (
+              <Button
+                kind="ghost"
+                size="small"
+                disabled={isInEditMode}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={createDraftItem}
+                data-cy="add-link"
+              >
+                {translate('form.builder.add.item')}
+              </Button>
+            )}
+          </FBSection>
+          <KendoDataGrid<EditableProductORService>
+            className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+            fullWidth
+            hasBoxScrollbars
+            schema={schema}
+            data={itemsList as EditableProductORService[]}
+            onRowClick={handleRowClick}
+            rowRender={rowRender}
+          />
           {isActive && (
             <Button
-              kind="ghost"
-              size="small"
+              kind="add"
+              fullWidth
+              attached
               disabled={isInEditMode}
-              className={classes.addButton}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftItem}
-              data-cy="add-link"
+              data-cy="add-button"
             >
               {translate('form.builder.add.item')}
             </Button>
           )}
-        </FBSection>
+        </>
       </FBInput>
-      <KendoDataGrid<EditableProductORService>
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        fullWidth
-        hasBoxScrollbars
-        schema={schema}
-        data={itemsList as EditableProductORService[]}
-        onRowClick={handleRowClick}
-        rowRender={rowRender}
-      />
-      {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          attached
-          disabled={isInEditMode}
-          onClick={createDraftItem}
-          data-cy="add-button"
-        >
-          {translate('form.builder.add.item')}
-        </Button>
-      )}
       <DocumentRevisionDialog
         dialog={quickViewDialog}
         {...{

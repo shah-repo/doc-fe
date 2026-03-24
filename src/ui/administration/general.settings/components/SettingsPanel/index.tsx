@@ -19,6 +19,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onAddNew,
   onManageItems,
   isOutOfSync,
+  addButtonLabel,
   ...props
 }) => {
   const classes = useStyles();
@@ -111,7 +112,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
               onClick={handleAddNew}
               data-cy="add-new"
             >
-              {translate('common.add.new')}
+              {addButtonLabel ?? translate('common.add.new')}
             </Button>
           )}
         </Box>

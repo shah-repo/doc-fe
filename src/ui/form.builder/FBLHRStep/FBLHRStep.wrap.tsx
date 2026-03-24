@@ -30,6 +30,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     isDocumentLHRT,
     stepIndex,
     label,
+    isBuildTypeChangeApprovalEnabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -55,6 +56,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
     const isPendingChange = isDocumentRevisionPendingChange(workspaceState?.document?.status);
 
+    isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
+
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === 'LHRT-';
 
@@ -67,12 +70,17 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
       const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
 
-      if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
+      if (stepLHRs?.formInput?.[startDateFieldName] === null) {
+        formState?.setFieldValue(startDateFieldName, null);
+      } else if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(startDateFieldName, formattedStartDate);
       }
-      if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
+
+      if (stepLHRs?.formInput?.[endDateFieldName] === null) {
+        formState?.setFieldValue(endDateFieldName, null);
+      } else if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
         // Format the date to MM/DD/YYYY format expected by FBDatePicker
         const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
         formState?.setFieldValue(endDateFieldName, formattedEndDate);
@@ -315,6 +323,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrBuildTypeExist,
       startDateFieldName,
       endDateFieldName,
+      isBuildTypeChangeApprovalEnabled,
     });
   };
 

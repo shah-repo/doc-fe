@@ -167,43 +167,45 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     <Box className={classes.root} data-cy="contacts">
       <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="contacts" name={name}>
-        <FBSection label={label}>
+        <>
+          <FBSection label={label}>
+            {isActive && (
+              <Button
+                kind="ghost"
+                size="small"
+                disabled={isInEditMode}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={createDraftContact}
+                data-cy="add-link"
+              >
+                {translate('form.builder.supplier.contacts.add')}
+              </Button>
+            )}
+          </FBSection>
+          <KendoDataGrid<EditableSupplierContact>
+            className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+            fullWidth
+            hasBoxScrollbars
+            schema={schema}
+            data={contactsList as EditableSupplierContact[]}
+            onRowClick={handleRowClick}
+            rowRender={rowRender}
+          />
           {isActive && (
             <Button
-              kind="ghost"
-              size="small"
+              kind="add"
+              fullWidth
+              attached
               disabled={isInEditMode}
-              className={classes.addButton}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftContact}
-              data-cy="add-link"
+              data-cy="add-button"
             >
               {translate('form.builder.supplier.contacts.add')}
             </Button>
           )}
-        </FBSection>
+        </>
       </FBInput>
-      <KendoDataGrid<EditableSupplierContact>
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        fullWidth
-        hasBoxScrollbars
-        schema={schema}
-        data={contactsList as EditableSupplierContact[]}
-        onRowClick={handleRowClick}
-        rowRender={rowRender}
-      />
-      {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          attached
-          disabled={isInEditMode}
-          onClick={createDraftContact}
-          data-cy="add-button"
-        >
-          {translate('form.builder.supplier.contacts.add')}
-        </Button>
-      )}
     </Box>
   );
 };

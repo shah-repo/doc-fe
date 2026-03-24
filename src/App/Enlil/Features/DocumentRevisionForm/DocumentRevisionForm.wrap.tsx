@@ -6,7 +6,7 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBSerialsState, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -22,6 +22,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     doNotPrompt,
     setDoNotPrompt,
     formInput,
+    isBuildTypeChangeApprovalEnabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -45,7 +46,10 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       workspaceState,
     });
 
+    const serialsState = FB.useRef<FBSerialsState>(FBSerialsState, documentRevision);
+
     const { document: { outputRevision = false } = {} } = workspaceState || {};
+    isBuildTypeChangeApprovalEnabled = workspaceState.buildTypeChangeStatus();
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(
@@ -142,6 +146,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
           formState,
           workspaceState,
           poApprovalsState,
+          serialsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
@@ -159,6 +164,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               isCreateUrl,
               doNotPrompt,
               setDoNotPrompt,
+              isBuildTypeChangeApprovalEnabled,
             }}
           />
         </FBProvider>

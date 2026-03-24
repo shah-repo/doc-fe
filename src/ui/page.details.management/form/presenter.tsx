@@ -6,6 +6,7 @@ import { HelpModule } from '../../../App/Enlil/Features/HelpCenter/HelpCenter.ty
 import InputField from '../../components/forms/fields/Input';
 import SelectField from '../../components/forms/fields/Select';
 import FormWrapper from '../../components/forms/FormWrapper';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import Text from '../../components/Text';
 import { Translation } from '../../translations/types';
 import { PageDetailsCategory } from '../types';
@@ -43,6 +44,7 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container className={classes.gridWrapper}>
+      <PromptIfDirty dirty={dirty} />
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}

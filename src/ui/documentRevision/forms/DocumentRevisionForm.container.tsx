@@ -152,7 +152,14 @@ DocumentRevisionFormContainerProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, FBDataStore?.refreshData, getDocTypeGroups]);
 
+  useEffect(() => {
+     _formState?.setDocRevData(cloneDeep(cleanInitialValues));
+  }, [cleanInitialValues]);
+
   useObserver(() => {
+    if (!documentRevision) {
+      return;
+    }
     if (documentRevision?.id === FBDataStore?.refreshData?.id) {
       cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     }

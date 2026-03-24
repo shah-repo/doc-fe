@@ -1,4 +1,5 @@
 import { differenceBy, orderBy, unionBy } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
@@ -19,6 +20,17 @@ export const withTraineeList = <T extends TraineeListProps>(
     const { formState, workspaceState } = FB.useStores();
     const [trainees, setTrainees] = useState<Trainee[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
 
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.loading,
+        (loading) => {
+          if (!loading) {
+            setTrainees(prepareData(workspaceState?.formInputSync.get(name)));
+          }
+        },
+      );
+    }, []);
+
     const updateState = (state: Trainee[]) => {
       const data = prepareData(state);
       setTrainees(data);
@@ -37,7 +49,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     };
 
     const documentOptionsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-      optionId: FBAutocompleteAsyncOption.trainingDocuments,
+      optionId: FBAutocompleteAsyncOption.documentsEligibleForGroupTrainee,
     });
 
     useEffect(() => {
@@ -47,7 +59,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     const documentOptions = useObserver(
       () => {
         const asyncData = FBAutocompleteAsyncStore.data.get(
-          FBAutocompleteAsyncOption.trainingDocuments,
+          FBAutocompleteAsyncOption.documentsEligibleForGroupTrainee,
         ) as Map<string, DocumentOption[]>;
         return asyncData ? Array.from(asyncData.values()) : [];
       },

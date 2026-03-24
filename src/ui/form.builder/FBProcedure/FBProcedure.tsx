@@ -153,7 +153,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                 />
               )}
               <Box flexGrow={1}>
-                <FBProcedureItem type={types.pop() as FBProcedureItemType} {...{ name, disabled, isPreview }} />
+                <FBProcedureItem type={types.pop() as FBProcedureItemType} {...{ name, disabled, isPreview, stepIndex }} />
               </Box>
             </Box>
           </FBProvider>

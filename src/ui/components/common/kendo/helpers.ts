@@ -8,13 +8,14 @@ export const orderByLockedState = (
   _groupableFields: string[],
 ): KendoColumn[] => {
   const sortedColumnDefinitions = chain([...columnDefinitions])
-    .orderBy(['locked'], ['desc'])
     .map((column, index) => {
+      column.locked = column.locked ?? false;
       column.reorderable = !column.locked;
       column.orderIndex = column.locked ? 0 : column.orderIndex ?? index;
       column.disabled = false;
       return column;
     })
+    .orderBy(['locked'], ['desc'])
     .value();
   const hiddenColumns = filter(sortedColumnDefinitions, { show: false }).length;
   if (hiddenColumns === sortedColumnDefinitions.length - 1) {

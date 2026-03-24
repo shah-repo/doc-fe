@@ -1,5 +1,6 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FB, FBApprovalAuditState, FBDAMFields, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
@@ -31,7 +32,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getapprovalMatrixFieldLabel, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -59,6 +60,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const { approvalMatrixFieldState } = FB.useStores();
+  const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
+
   const { getFormattedDateString } = useDate();
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
@@ -109,7 +113,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       || change.type.includes('BOOLEAN_EDITED')
       || change.field.includes('items.date')
       || change.field.includes('items.capitalEquipment')
-      || change.field.includes('totalInUSD'))
+      || change.field.includes('totalInUSD')
+      || change.field.endsWith('partNumber')
+      || change.field.endsWith('partNumberDocumentId'))
     // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
     && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
       || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
@@ -155,6 +161,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
+    const lotSerialsAdded: Audit[] = [];
+    const lotSerialsDeleted: Audit[] = [];
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
@@ -197,6 +205,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             ...change,
             type: 'NUMBER_DELETED',
             nextValue: previousValue as string,
+          };
+        }
+        if (fbType === 'datepicker' && change.type === 'STRING_EDITED' && nextValue === 'null') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'STRING_DELETED',
+            nextValue: 'undefined',
           };
         }
       }
@@ -521,6 +537,67 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_NEW') {
+        lotSerialsAdded.push(change);
+        return;
+      }
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_DELETED') {
+        lotSerialsDeleted.push(change);
+        return;
+      }
+
+      if (fbType === 'approvalRoles') {
+        const valueKey = last(change.field.split('.'));
+        if (['id', 'index'].includes(valueKey as string) && !change.field.includes('groups')) { return; }
+
+        if (change.field.includes('groups')) {
+          fbLabel = translate('form.builder.approving.groups');
+
+          if (change.type === 'OBJECT_DELETED') {
+            const role = JSON.parse(change.previousValue as string);
+            fbLabel = translate('form.builder.approving.groups.role', { role: role.parentRole });
+          } else {
+            const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
+            const roleMatch = groupPattern.exec(change.field);
+            if (roleMatch && roleMatch.length) {
+              const role = existingRoles.find(item => item.id === roleMatch[0]);
+              if (role) {
+                fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
+              }
+            }
+          }
+        }
+      }
+
+      if (fbType === 'approvalMatrix') {
+        const valueKey = last(change.field.split('.'));
+        if (['id', 'updatedCategory'].includes(valueKey as string)) return;
+
+        fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
+        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type) && change.field) {
+          const action = change.type === 'BOOLEAN_NEW' ? 'added' : 'updated';
+          let docTypeId;
+          if (change.field && change.field.includes('[')) {
+            docTypeId = change.field.split('[')[1].split(']')[0];
+          }
+          const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
+          const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
+
+          if (change.field.includes('approvalRoles') && valueKey && !isNaN(Number(valueKey))) {
+            const stagePart = change.field.split('.').at(-2);
+            const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
+            const role = existingRoles[Number(valueKey) - 1]?.name || '';
+
+            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role, action });
+          } else {
+            const field = getapprovalMatrixFieldLabel(valueKey as string, false);
+            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field, action });
+          }
+
+          change = { ...change, updatedField: CUSTOM_BOOLEAN_FIELD };
+        }
+      }
+
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
@@ -725,11 +802,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             mb={1}
             key={`${change.groupId}-${index}`}
             data-cy="no-padding-margin"
-            className={
-              index === array.length - 1
-                ? classes.noPaddingMargin
-                : classes.auditListItem
-            }
+            className={classes.auditListItem}
           >
             <>
               {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
@@ -791,6 +864,170 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         key++;
       }
     });
+
+    // Add grouped output for Lot Serial Numbers if present
+    if (lotSerialsAdded.length > 0) {
+      const values = lotSerialsAdded
+        .map(c => String(c.nextValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-${lotSerialsAdded[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsAdded.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
+
+    // Add grouped output for Lot Serial Numbers deletions if present
+    if (lotSerialsDeleted.length > 0) {
+      const values = lotSerialsDeleted
+        .map(c => String(c.previousValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-del-${lotSerialsDeleted[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsDeleted.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
 
     // This key is added to keep sequential data-cy identifier in the history
     attachments.forEach((change) => {
