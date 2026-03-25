@@ -104,13 +104,10 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
           }
 
           if (lhrBuildTypeConfigForSelectedBuildType?.enforceCurrentCalOrPm) {
-            return !isActive;
+            if (isLHRProductionBuild && isOverdue) {
+              return true;
+            }
           }
-
-          if (isLHRProductionBuild && isOverdue) {
-            return true;
-          }
-
           if (!isReleased) {
             return true;
           }
