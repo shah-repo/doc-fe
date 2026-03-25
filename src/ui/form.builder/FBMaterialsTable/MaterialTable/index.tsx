@@ -1,13 +1,13 @@
 import { Box, Grid } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy,
-  TreeList,
-  TreeListCellProps,
-  TreeListDataStateChangeEvent,
+    extendDataItem,
+    filterBy,
+    mapTree,
+    orderBy,
+    TreeList,
+    TreeListCellProps,
+    TreeListDataStateChangeEvent,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -33,15 +33,15 @@ import { FBProcedureItemConfig, FBProcedureItemType } from '../../FBProcedureIte
 import { FB } from '../../helpers';
 import { isPartHasInsufficientQty, prepareData } from './components/utils';
 import {
-  ADD_FIELD,
-  DATA_ITEM_KEY,
-  EB_FIELDS_TO_OMIT,
-  EXPAND_FIELD,
-  FIELDS_TO_OMIT,
-  IS_LOT_ADDITION,
-  LHRS_START_QUANTITY_NAME,
-  LOT_FIELDS_TO_OMIT,
-  SUB_ITEMS_FIELD,
+    ADD_FIELD,
+    DATA_ITEM_KEY,
+    EB_FIELDS_TO_OMIT,
+    EXPAND_FIELD,
+    FIELDS_TO_OMIT,
+    IS_LOT_ADDITION,
+    LHRS_START_QUANTITY_NAME,
+    LOT_FIELDS_TO_OMIT,
+    SUB_ITEMS_FIELD,
 } from './constants';
 import { useFetchData } from './hooks/useFetchData';
 import { useMaterialActions } from './hooks/useMaterialActions';
@@ -51,12 +51,12 @@ import { buildMPISchema } from './schemas/mpiSchema';
 import { buildSchema } from './schemas/schema';
 import useStyles from './styles';
 import {
-  CustomTreeListExpandChangeEvent,
-  CustomTreeListRowProps,
-  EditableMaterial,
-  Material,
-  MaterialItemState,
-  MaterialTableProps,
+    CustomTreeListExpandChangeEvent,
+    CustomTreeListRowProps,
+    EditableMaterial,
+    Material,
+    MaterialItemState,
+    MaterialTableProps,
 } from './types';
 import { withMaterialsTable } from './wrap';
 
@@ -112,7 +112,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
-  const allowExpiredLots = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.allowExpiredLot;
+  const allowExpiredLots = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.enforceNonExpiredLots;
   const shouldEnforceProductionLotsOnly = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.enforceProdLotsOnly;
   const [state, setState] = React.useState<MaterialItemState>({
     data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
