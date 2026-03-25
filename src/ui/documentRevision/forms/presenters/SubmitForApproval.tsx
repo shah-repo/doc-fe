@@ -12,11 +12,11 @@ import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  ErrorCodes,
-  RevisionChangeType,
-  SmartReferenceType,
+    DocumentRevision,
+    DocumentRevisionStatus,
+    ErrorCodes,
+    RevisionChangeType,
+    SmartReferenceType,
 } from '../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
@@ -31,9 +31,9 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import {
-  checkIsDocumentEquipment,
-  checkIsDocumentLHR,
-  checkIsDocumentMPIOutput,
+    checkIsDocumentEquipment,
+    checkIsDocumentLHR,
+    checkIsDocumentMPIOutput,
 } from '../../helpers/checkDocumentGroup';
 
 interface Props {
@@ -261,7 +261,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.enforceQtyReconciliation) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
@@ -280,18 +280,18 @@ export const SubmitForApproval: React.FC<Props> = ({
         { noLotsAdded: [], wrongSum: [] },
       );
 
-      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.requireLotSelection) {
+      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.enforceLotRequired) {
         toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
         return;
       }
 
-      if (errorsByType.wrongSum.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.allowOverdueQuantityMismatch) {
+      if (errorsByType.wrongSum.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.enforceLotQtyRange) {
         toastError(translate('form.builder.lhrs.lots.required.error.message'));
         return;
       }
     }
 
-    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.requireEquipmentSelection) {
+    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.enforceEquipmentRequired) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];
