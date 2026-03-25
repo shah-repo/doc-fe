@@ -118,7 +118,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict)) {
+    if (isEmpty(tableCriteria.queryDict) && kendoColumnDef?.length) {
       const dataState: DataStateProps = {
         filter: {
           logic: 'and',
