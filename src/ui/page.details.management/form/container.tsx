@@ -35,6 +35,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({ pageD
   };
 
   const onConfirmDelete = () => {
+    dispatch(tableSearchActions.clearAllTables());
     dispatch(pageDetailsActions.deletePageDetails(id));
     deleteDialog.close();
   };
