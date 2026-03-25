@@ -80,7 +80,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   dirty = false,
   inDialog,
   isBuildTypeChangeApprovalEnabled,
-  isMEQTabVisible,
 }) => {
   const outputDocumentType = documentRevision?.formTemplate?.outputDocumentTypes[0];
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
@@ -141,7 +140,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }
 
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
-    .includes(group as DOC_TYPE_GROUP) && isMEQTabVisible) {
+    .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [...tabConfig, {
       labelId: 'tabId.materialsandequipment',
       tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),

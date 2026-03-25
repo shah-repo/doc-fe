@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
-import { checkIsDocumentLHR, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBSerialsState, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
@@ -23,7 +23,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     setDoNotPrompt,
     formInput,
     isBuildTypeChangeApprovalEnabled,
-    isMEQTabVisible,
     ...props
   }: T) => {
     // MARK: @config
@@ -37,17 +36,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       schema: _documentRevisionFormState?.schema,
       mode: _formState?.mode,
       autosave: _formState?.autosave || false,
-    });
-    const isLHR = checkIsDocumentLHR(documentRevision?.document?.documentType?.groupOptions);
-
-    useEffect(() => {
-      if (isLHR && documentRevision) {
-        _documentRevisionFormState?.fetchMaterialAndEquipmentItems(documentRevision.id);
-      }
-    }, [isLHR]);
-
-    useObserver(() => {
-      isMEQTabVisible = (_documentRevisionFormState?.materialAndEquipmentItems?.equipment?.length ?? 0) > 0 || (_documentRevisionFormState?.materialAndEquipmentItems?.materials?.length ?? 0) > 0;
     });
 
     const schema = _documentRevisionFormState?.schema || documentRevision?.schema;
@@ -177,7 +165,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               doNotPrompt,
               setDoNotPrompt,
               isBuildTypeChangeApprovalEnabled,
-              isMEQTabVisible,
             }}
           />
         </FBProvider>
