@@ -2,6 +2,7 @@ import { flatten, unflatten } from 'flat';
 import { cloneDeep, Dictionary, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
+import { translate } from '../../../common/intl';
 import FBSchemaState from '../FBSchema/FBSchema.state';
 
 class FBFormState extends FBSchemaState {
@@ -364,9 +365,10 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-            `The ${attributeNames[attribute]} field is required when ${fields
-              ?.map((f) => attributeNames[f] || f)
-              ?.join(', ')} is not empty.`,
+            translate('validator.required.with.field.error.message', {
+              fieldName: attributeNames[attribute] || attribute,
+              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+            }),
           );
         }
 
@@ -394,9 +396,10 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-            `The ${attributeNames[attribute]} field is required when ${fields
-              ?.map((f) => attributeNames[f] || f)
-              ?.join(', ')} is empty.`,
+            translate('validator.required.with.field.error.message', {
+              fieldName: attributeNames[attribute] || attribute,
+              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+            }),
           );
         }
 
