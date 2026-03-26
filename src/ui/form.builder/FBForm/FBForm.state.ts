@@ -364,7 +364,9 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-        `The ${attributeNames[attribute]} is a required field.`,
+            `The ${attributeNames[attribute]} field is required when ${fields
+              ?.map((f) => attributeNames[f] || f)
+              ?.join(', ')} is not empty.`,
           );
         }
 
@@ -392,7 +394,9 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-        `The ${attributeNames[attribute]} is a required field.`,
+            `The ${attributeNames[attribute]} field is required when ${fields
+              ?.map((f) => attributeNames[f] || f)
+              ?.join(', ')} is empty.`,
           );
         }
 
