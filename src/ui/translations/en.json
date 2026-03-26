@@ -2589,6 +2589,8 @@
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval.tooltip": "If set to Yes, rework must be formally approved before the step can be completed (when rework applies). If set to No, the step can be completed without rework approval.",
   "administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly.tooltip": "If set to Yes, only production lots can be selected. R&D lots will not be allowed. If set to No, R&D lots may be selected and the step can be completed without restriction.",
   "validator.lhr.build.same.rule.exist": "This rule already exists, please enter a different rule",
+  "validator.required.with.field.error.message": "The {fieldName} field is required when {fields} is not empty.",
+  "validator.required.with.out.field.error.message": "The {fieldName} field is required when {fields} is empty.",
   "dam.sync.message.role.added.removed.label": "The {roleAdded, plural, one {role} other {roles}} {addedList} {roleAdded, plural, one {was} other {were}} added and {roleRemoved, plural, one {role} other {roles}} {removedlist} {roleRemoved, plural, one {was} other {were}} removed from the General Settings/Approval Roles section.",
   "dam.sync.message.role.added.label": "The {rolesCount, plural, one {role} other {roles}} {addedList} {rolesCount, plural, one {was} other {were}} added from the General Settings/Approval Roles section.",
   "dam.sync.message.role.removed.label": "The {rolesCount, plural, one {role} other {roles}} {removedlist} {rolesCount, plural, one {was} other {were}} removed from the General Settings/Approval Roles section.",
