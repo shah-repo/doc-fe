@@ -343,6 +343,62 @@ class FBFormState extends FBSchemaState {
 
         return passes();
       });
+    this.Validator.registerAsyncImplicit(
+      'required_with',
+      function (val: any, req: string[], attribute: string, passes) {
+        const fields = req || [];
+        const { messages: { attributeNames } } = validator;
+
+        let shouldRequire = false;
+
+        for (let i = 0; i < fields.length; i++) {
+          const fieldName = fields[i];
+          const inputValue = lodashGet(validator.input, fieldName);
+
+          if (inputValue !== undefined && inputValue !== null && inputValue !== '') {
+            shouldRequire = true;
+            break;
+          }
+        }
+
+        if (shouldRequire && (!val || isEmpty(val))) {
+          return passes(
+            false,
+        `The ${attributeNames[attribute]} is a required field.`,
+          );
+        }
+
+        return passes();
+      },
+    );
+    this.Validator.registerAsyncImplicit(
+      'required_without',
+      function (val: any, req: string[], attribute: string, passes) {
+        const fields = req || [];
+        const { messages: { attributeNames } } = validator;
+
+        let shouldRequire = false;
+
+        for (let i = 0; i < fields.length; i++) {
+          const fieldName = fields[i];
+          const inputValue = lodashGet(validator.input, fieldName);
+
+          if (inputValue === undefined || inputValue === null || inputValue === '') {
+            shouldRequire = true;
+            break;
+          }
+        }
+
+        if (shouldRequire && (!val || isEmpty(val))) {
+          return passes(
+            false,
+        `The ${attributeNames[attribute]} is a required field.`,
+          );
+        }
+
+        return passes();
+      },
+    );
   };
 
   public setFieldAutosave = (name?: string) => {
