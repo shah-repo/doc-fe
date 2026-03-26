@@ -21,14 +21,11 @@ class FBLHRStepState {
   @observable public equipment: any;
   @observable public editedParameters: any;
   @observable public approvals: any;
-  @observable public isDirty = false;
-  @observable public autosave?: boolean;
   private dateUpdateTimeout?: NodeJS.Timeout;
   private pendingDateUpdate = false;
 
-  public constructor (lhrs?: DocumentRevision, autosave?: boolean) {
+  public constructor (lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
-    this.autosave = autosave;
   }
 
   @action public editItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
@@ -145,64 +142,9 @@ class FBLHRStepState {
     this.pendingDateUpdate = false;
   };
 
-  @action public validate = (): boolean => {
-    if (!this.stepLHRs) { return true; }
-
-    const startDate = this.stepLHRs.formInput?.[LHRS_START_DATE];
-    const endDate = this.stepLHRs.formInput?.[LHRS_END_DATE];
-
-    // If both dates are present, validate that end date is not before start date
-    if (startDate && endDate) {
-      // Assuming dates are in string format, compare them
-      if (endDate < startDate) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   public setMaterials = (materials) => set(this, 'materials', materials);
   public setEquipment = (equipment) => set(this, 'equipment', equipment);
   public setEditedParameters = (editedParameters) => set(this, 'editedParameters', editedParameters);
-
-  @action public setDirty = (isDirty: boolean) => {
-    set(this, 'isDirty', isDirty);
-  };
-
-  @action public setAutosave = (autosave: boolean) => {
-    set(this, 'autosave', autosave);
-  };
-
-  public saveLHRStep = (formInput?: Record<string, any>): Promise<void> | void => {
-    if (!this.stepLHRs) {
-      return;
-    }
-
-    const body = {
-      formInput: formInput || this.stepLHRs.formInput,
-    };
-
-    const apiPromise = this.updateLHRStepApi.set({
-      url: FBEndpoint.DocumentRevisionPatch,
-      urlValues: { id: this.stepLHRs.id },
-      method: 'patch',
-      body,
-    });
-
-    // Safely handle the promise if it exists
-    if (apiPromise && typeof apiPromise.then === 'function') {
-      return Promise.resolve(apiPromise).then((data: DocumentRevision | undefined) => {
-        this.setDirty(false);
-        if (data) {
-          this.setLHRs(data);
-        }
-        this.updateLHRStepApi.onSuccess();
-      }).catch((error: Error) => {
-        this.updateLHRStepApi.onError(error);
-      });
-    }
-  };
 
   public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number): void => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }

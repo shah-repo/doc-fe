@@ -53,8 +53,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   lhrBuildTypeExist,
   startDateFieldName,
   endDateFieldName,
-  handleStartDateChange,
-  handleEndDateChange,
   isBuildTypeChangeApprovalEnabled,
   ...props
 }) => {
@@ -132,34 +130,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
   const isDisabled = !isOutput || loading || !lhrBuildTypeExist || isBuildTypeChangeApprovalEnabled;
   const isPreviewForLHR = Boolean(isDocumentLHR || (workspaceState?.isPreview && isDocumentLHRT));
-
-  const validateDate = () => lhrStepState?.validate();
-
-  const startDateStateProvider = {
-    getValue: () => {
-      if (!startDateFieldName) return undefined;
-      return lhrStepState?.stepLHRs?.formInput?.[startDateFieldName] as string | undefined;
-    },
-    setValue: (value: string | undefined) => {
-      if (value !== undefined) {
-        lhrStepState?.updateLHRStepDates(value, undefined);
-      }
-    },
-    validate: validateDate,
-  };
-
-  const endDateStateProvider = {
-    getValue: () => {
-      if (!endDateFieldName) return undefined;
-      return lhrStepState?.stepLHRs?.formInput?.[endDateFieldName] as string | undefined;
-    },
-    setValue: (value: string | undefined) => {
-      if (value !== undefined) {
-        lhrStepState?.updateLHRStepDates(undefined, value);
-      }
-    },
-    validate: validateDate,
-  };
 
   return (
     <FBProvider {...{ lhrStepState }}>
@@ -325,8 +295,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <FBDatePicker
                 name={startDateFieldName}
                 label={translate('lhr.summary.grid.heading.start.date')}
-                onDateChange={handleStartDateChange}
-                stateProvider={startDateStateProvider}
                 disabled={isDisabled}
               />
             </Box>
@@ -334,8 +302,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               <FBDatePicker
                 name={endDateFieldName}
                 label={translate('lhr.summary.grid.heading.end.date')}
-                onDateChange={handleEndDateChange}
-                stateProvider={endDateStateProvider}
                 disabled={isDisabled}
               />
             </Box>

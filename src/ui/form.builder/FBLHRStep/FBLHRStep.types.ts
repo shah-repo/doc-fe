@@ -11,8 +11,6 @@ export type FBLHRStepProps =
   startMpi: () => void
   setDisplayToLHRs: () => void
   openLHRs: (docRev?: DocumentRevision) => void
-  handleStartDateChange?: (date?: string) => void
-  handleEndDateChange?: (date?: string) => void
   editorConfig: {
     value: string
   }

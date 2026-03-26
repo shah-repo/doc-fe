@@ -12,58 +12,42 @@ import { FBDatePickerProps } from './FBDatePicker.types';
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
-): React.FunctionComponent<T> => {
+) => {
   const Comp = ({
     datePickerState,
     onDatePickerClick,
     onDatePickerClose,
     onDatePickerClear,
     onChange,
-    onDateChange,
     editorProperties,
     name = '',
     defaultValue,
-    stateProvider,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const getStateValue = stateProvider?.getValue ?? ((): string | undefined => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const value = formState?.getFieldValue(name);
-      return typeof value === 'string' ? value : undefined;
-    });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const setStateValue = stateProvider?.setValue ?? ((val) => formState?.setFieldValue(name, val));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const validateState = stateProvider?.validate ?? (() => formState?.validate());
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-
-    const initialValue = getStateValue();
+    const initialValue = formState?.getFieldValue(name);
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
-    const defaultCurrentDate = editorProperties?.includes('defaultCurrentDate') ?? false;
-    const disablePastDates = editorProperties?.includes('disablePastDates') ?? false;
-    const { id, isOutput } = workspaceState ?? {};
+    const defaultCurrentDate = editorProperties?.includes('defaultCurrentDate') || false;
+    const disablePastDates = editorProperties?.includes('disablePastDates') || false;
+    const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
     const { convertDateTimeToUserTz } = useDate();
 
     const save = debounce((date?: string) => {
       if (!date) { return; }
-      setStateValue(date);
-      validateState?.();
+      formState?.setFieldValue(name, date);
+      formState?.validate();
 
-      // Only perform workspace operations if using default formState and field is under workspace
-      if (!stateProvider) {
-        const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-        if (!isUnderWorkspace) { return; }
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) { return; }
 
-        if (workspaceState?.isChangeRequest) {
-          submitForm();
-        }
-
-        workspaceState?.saveDocRev(formState?.getValues());
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+        return;
       }
+
+      workspaceState?.saveDocRev(formState?.getValues());
     }, 100);
 
     SM.reaction(
@@ -120,33 +104,23 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       const date = convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit);
       datePickerState?.setValue(date);
       save(date);
-      // Call custom onDateChange callback if provided
-      if (onDateChange) {
-        onDateChange(date);
-      }
     };
 
     onDatePickerClear = () => {
       datePickerState?.setValue(undefined);
+      formState?.omitFieldValue(name);
+      formState?.validate();
 
-      if (stateProvider) {
-        setStateValue(undefined);
-        validateState?.();
-      } else {
-        formState?.omitFieldValue(name);
-        validateState?.();
-
-        const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-        if (!isUnderWorkspace) {
-          return;
-        }
-
-        if (workspaceState?.isChangeRequest) {
-          submitForm();
-        }
-
-        workspaceState?.saveDocRev(formState?.getValues());
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) {
+        return;
       }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+      }
+
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     return Component({
@@ -156,13 +130,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       onDatePickerClose,
       onDatePickerClear,
       onChange,
-      onDateChange,
       editorProperties,
       disablePastDates,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       defaultValue,
       name,
-      stateProvider,
     });
   };
 
