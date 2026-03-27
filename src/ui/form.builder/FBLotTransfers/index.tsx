@@ -226,47 +226,49 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
         dirty={dirty}
       />
       <FBInput {...props} type="lotTransfers" name={name}>
-        <FBSection
-          label="form.builder.lot.transfers.title"
-        >
+        <>
+          <FBSection
+            label="form.builder.lot.transfers.title"
+          >
+            {isActive && (
+              <Button
+                kind="ghost"
+                size="small"
+                disabled={isInEditMode}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={createDraftLotTransfer}
+                data-cy="add-link"
+              >
+                {translate('form.builder.lot.transfers.add')}
+              </Button>
+            )}
+          </FBSection>
+          <FormikProvider value={formik}>
+            <KendoDataGrid<EditableLotTransfer>
+              filterable
+              fullWidth
+              hasBoxScrollbars
+              data={transferList as EditableLotTransfer[]}
+              schema={schema}
+              rowRender={rowRender}
+              onRowClick={handleRowClick}
+              className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+            />
+          </FormikProvider>
           {isActive && (
             <Button
-              kind="ghost"
-              size="small"
+              kind="add"
+              fullWidth
               disabled={isInEditMode}
-              className={classes.addButton}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftLotTransfer}
-              data-cy="add-link"
+              data-cy="add-button"
             >
               {translate('form.builder.lot.transfers.add')}
             </Button>
           )}
-        </FBSection>
+        </>
       </FBInput>
-      <FormikProvider value={formik}>
-        <KendoDataGrid<EditableLotTransfer>
-          filterable
-          fullWidth
-          hasBoxScrollbars
-          data={transferList as EditableLotTransfer[]}
-          schema={schema}
-          rowRender={rowRender}
-          onRowClick={handleRowClick}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        />
-      </FormikProvider>
-      {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          disabled={isInEditMode}
-          onClick={createDraftLotTransfer}
-          data-cy="add-button"
-        >
-          {translate('form.builder.lot.transfers.add')}
-        </Button>
-      )}
     </Box>
   );
 };
