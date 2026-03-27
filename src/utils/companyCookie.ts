@@ -1,7 +1,7 @@
-import { appConfig } from '../appConfig';
+import Config from '../config';
 
-const COOKIE_NAME = appConfig.companyCookieName;
-const MAX_AGE_SECONDS = appConfig.companyCookieMaxAgeDays * 24 * 60 * 60;
+const COOKIE_NAME = Config.CompanyCookieName;
+const MAX_AGE_SECONDS = Config.CompanyCookieMaxAgeDays * 24 * 60 * 60;
 
 /**
  * Persist the selected company ID as a browser cookie so that other

@@ -6,10 +6,10 @@
  * after company selection.
  */
 
-import { appConfig } from '../appConfig';
+import Config from '../config';
 
 /** sessionStorage key used to persist returnUrl across the Keycloak OAuth round-trip. */
-export const RETURN_URL_STORAGE_KEY = appConfig.returnUrlStorageKey;
+export const RETURN_URL_STORAGE_KEY = Config.ReturnUrlStorageKey;
 
 /**
  * Check whether a URL is safe to redirect to.

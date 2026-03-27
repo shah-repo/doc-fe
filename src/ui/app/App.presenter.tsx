@@ -10,21 +10,14 @@ const AppPresenter: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const pingServer = useCallback(() => dispatch(authActions.pingServer()), [dispatch]);
   const [showSpinner, toggleSpinner] = React.useState(true);
-  const employeeId = useSelector(authSelectors.currentEmployeeId);
 
   const pingServerAsyncInfo = useSelector((state: ApplicationState) =>
     authSelectors.getPingServerAsyncState(state));
 
   useEffect(() => {
     if (pingServerAsyncInfo.status === AsyncStatus.Idle) {
-      // Only ping if employeeId is set — multi-company users haven't selected
-      // a company yet, so sending an empty employeeId triggers 401 → logoutUser loop.
-      if (employeeId) {
-        pingServer();
-        toggleSpinner(true);
-      } else {
-        toggleSpinner(false);
-      }
+      pingServer();
+      toggleSpinner(true);
     }
 
     if (pingServerAsyncInfo.status === AsyncStatus.Success || pingServerAsyncInfo.status === AsyncStatus.Error) {
@@ -32,7 +25,7 @@ const AppPresenter: React.FunctionComponent = () => {
         toggleSpinner(false);
       }, 500);
     }
-  }, [pingServer, pingServerAsyncInfo, employeeId]);
+  }, [pingServer, pingServerAsyncInfo]);
 
   if (showSpinner) {
     return (
