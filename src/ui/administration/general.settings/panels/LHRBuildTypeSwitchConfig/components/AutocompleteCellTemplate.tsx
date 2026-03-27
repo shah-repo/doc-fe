@@ -40,7 +40,7 @@ const AutocompleteCellTemplate: React.FC<Props> = ({
   const defaultValue = options.find(val => val.id === dataItem[field]);
 
   if (canBeModified) {
-    let filerOptions = options;
+    let filerOptions = options.filter(val => val.isActive);
     if (field === 'from' && !isEmpty(values?.to)) {
       filerOptions = options.filter(item => item.id !== values.to);
     } else if (field === 'to' && !isEmpty(values.from)) {
