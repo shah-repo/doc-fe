@@ -76,7 +76,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
               </Box>
             </Box>
           )}
-          <FBTextEditor
+          {(!isPreview || mpiProcedureState?.value?.description) && <FBTextEditor
             {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
             name={`${name}.description`}
             gutter={false}
@@ -89,7 +89,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
             withState
             removeBorder={isPreview}
-          />
+          />}
           <Box
             display="flex"
             flexDirection="column"
