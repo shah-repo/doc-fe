@@ -346,9 +346,12 @@ class FBFormState extends FBSchemaState {
       });
     this.Validator.registerAsyncImplicit(
       'required_with',
-      function (val: any, req: string[], attribute: string, passes) {
-        const fields = req || [];
-        const { messages: { attributeNames } } = validator;
+      function (val: any, req: string[] | string, attribute: string, passes) {
+        const fields = Array.isArray(req) ? req : typeof req === 'string' ? req.split(',') : [];
+
+        const {
+          messages: { attributeNames },
+        } = validator;
 
         let shouldRequire = false;
 
@@ -367,7 +370,7 @@ class FBFormState extends FBSchemaState {
             false,
             translate('validator.required.with.field.error.message', {
               fieldName: attributeNames[attribute] || attribute,
-              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+              fields: fields.map((f) => attributeNames[f] || f).join(', '),
             }),
           );
         }
@@ -375,11 +378,15 @@ class FBFormState extends FBSchemaState {
         return passes();
       },
     );
+
     this.Validator.registerAsyncImplicit(
       'required_without',
-      function (val: any, req: string[], attribute: string, passes) {
-        const fields = req || [];
-        const { messages: { attributeNames } } = validator;
+      function (val: any, req: string[] | string, attribute: string, passes) {
+        const fields = Array.isArray(req) ? req : typeof req === 'string' ? req.split(',') : [];
+
+        const {
+          messages: { attributeNames },
+        } = validator;
 
         let shouldRequire = false;
 
@@ -398,7 +405,7 @@ class FBFormState extends FBSchemaState {
             false,
             translate('validator.required.with.field.error.message', {
               fieldName: attributeNames[attribute] || attribute,
-              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+              fields: fields.map((f) => attributeNames[f] || f).join(', '),
             }),
           );
         }
