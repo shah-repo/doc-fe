@@ -188,8 +188,11 @@ export const isDateExpired = (expiryDateStr?: string): boolean => {
   const expiryDate = new Date(expiryDateStr);
   expiryDate.setHours(0, 0, 0, 0);
 
+  const nextDay = new Date(expiryDate);
+  nextDay.setDate(nextDay.getDate() + 1);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  return expiryDate.getTime() < today.getTime();
+  return today.getTime() >= nextDay.getTime();
 };
