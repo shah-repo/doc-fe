@@ -2,6 +2,7 @@ import { flatten, unflatten } from 'flat';
 import { cloneDeep, Dictionary, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
+import { translate } from '../../../common/intl';
 import FBSchemaState from '../FBSchema/FBSchema.state';
 
 class FBFormState extends FBSchemaState {
@@ -343,6 +344,68 @@ class FBFormState extends FBSchemaState {
 
         return passes();
       });
+    this.Validator.registerAsyncImplicit(
+      'required_with',
+      function (val: any, req: string[], attribute: string, passes) {
+        const fields = req || [];
+        const { messages: { attributeNames } } = validator;
+
+        let shouldRequire = false;
+
+        for (let i = 0; i < fields.length; i++) {
+          const fieldName = fields[i];
+          const inputValue = lodashGet(validator.input, fieldName);
+
+          if (inputValue !== undefined && inputValue !== null && inputValue !== '') {
+            shouldRequire = true;
+            break;
+          }
+        }
+
+        if (shouldRequire && (!val || isEmpty(val))) {
+          return passes(
+            false,
+            translate('validator.required.with.field.error.message', {
+              fieldName: attributeNames[attribute] || attribute,
+              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+            }),
+          );
+        }
+
+        return passes();
+      },
+    );
+    this.Validator.registerAsyncImplicit(
+      'required_without',
+      function (val: any, req: string[], attribute: string, passes) {
+        const fields = req || [];
+        const { messages: { attributeNames } } = validator;
+
+        let shouldRequire = false;
+
+        for (let i = 0; i < fields.length; i++) {
+          const fieldName = fields[i];
+          const inputValue = lodashGet(validator.input, fieldName);
+
+          if (inputValue === undefined || inputValue === null || inputValue === '') {
+            shouldRequire = true;
+            break;
+          }
+        }
+
+        if (shouldRequire && (!val || isEmpty(val))) {
+          return passes(
+            false,
+            translate('validator.required.with.field.error.message', {
+              fieldName: attributeNames[attribute] || attribute,
+              fields: fields?.map((f) => attributeNames[f] || f)?.join(', '),
+            }),
+          );
+        }
+
+        return passes();
+      },
+    );
   };
 
   public setFieldAutosave = (name?: string) => {

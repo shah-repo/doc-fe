@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
     border: `1px solid ${Colors.white}`,
     position: 'sticky',
     top: 0,
-    zIndex: 2,
+    zIndex: 4,
 
     '&.Mui-expanded': {
       minHeight: 0,
