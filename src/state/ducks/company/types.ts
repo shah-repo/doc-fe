@@ -108,13 +108,12 @@ export interface CompanyMineRequest {
 
 export type SelectCompanyState = Company;
 
-export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY' | 'EXTERNAL_LINK';
+export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
 
 export enum NavigationItems {
   LINK = 'LINK',
   MENU = 'MENU',
   CATEGORY = 'CATEGORY',
-  EXTERNAL_LINK = 'EXTERNAL_LINK',
 }
 
 export enum AllocationOrder {

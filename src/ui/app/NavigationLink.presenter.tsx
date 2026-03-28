@@ -52,9 +52,8 @@ NavigationLinkPresenterProps
   checkIfItemIsActive,
   isNew,
 }) => {
-  const isExternalLink = type === NavigationItems.EXTERNAL_LINK;
-  if (isExternalLink && path === 'PROJECT_MILESTONE_NAV_URL') {
-    path = process.env.REACT_APP_PROJECT_MILESTONE_NAV_URL || 'http://pm.qa.enlil.io';
+  if (path === 'PROJECT_MILESTONE_NAV_URL') {
+    path = process.env.REACT_APP_PROJECT_MILESTONE_NAV_URL || '/mv';
   }
 
   const isMenu = type === NavigationItems.MENU;
@@ -72,7 +71,7 @@ NavigationLinkPresenterProps
   );
   return (
     <ListItem
-      component={isExternalLink ? 'a' : (path || category ? NavLink : null)}
+      component={path || category ? NavLink : null}
       button
       className={classNames(classes.link, {
         [classes.childLink]: isChild,
@@ -82,11 +81,8 @@ NavigationLinkPresenterProps
       to={
         type === NavigationItems.CATEGORY
           ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`
-          : (!isExternalLink ? path : undefined)
+          : path
       }
-      href={isExternalLink ? path : undefined}
-      target={isExternalLink ? '_blank' : undefined}
-      rel={isExternalLink ? 'noopener noreferrer' : undefined}
       onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, '0')}
       onMouseLeave={onMouseLeave}
       data-cy={`navigation.${camelCase(label)}`}
