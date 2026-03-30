@@ -32,6 +32,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const approvalDialog = useDialog();
     const isDialogOpen = lhrBuildDialog.isOpen;
     const isApprovalDialogOpen = approvalDialog.isOpen;
+    const submitApproversRef = React.useRef<(() => void) | null>(null);
     const { formState, workspaceState } = FB.useStores();
     const documentStatus = DocumentStatus.Draft;
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -194,6 +195,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const onApprovalDialogActionClick = (action: 'cancel' | 'confirm') => {
       if (action === 'confirm') {
+        submitApproversRef.current?.();
         formState?.setFieldValue(`new-${name}`, selectedValue?.id);
         formState?.setFieldAutosave(`new-${name}`);
         setDefaultValue(selectedValue);
@@ -264,6 +266,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       dialogState,
       allowedBuildTypeChange,
       lhrBuildTypeSwitchConfigApproval,
+      submitApproversRef,
     });
   };
 
