@@ -89,10 +89,12 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-        formState?.setFieldAutosave(`${name}`);
-        setDefaultValue(selectedValue);
-        workspaceState?.saveDocRev(formState?.getValues());
+        if (data?.status === ApprovalStatus.Approved) {
+          formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+          formState?.setFieldAutosave(`${name}`);
+          setDefaultValue(selectedValue);
+          workspaceState?.saveDocRev(formState?.getValues());
+        }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
