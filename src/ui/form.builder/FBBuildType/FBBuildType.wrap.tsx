@@ -90,10 +90,17 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       () => buildTypeState?.transitionApi.data,
       (data) => {
         if (data?.status === ApprovalStatus.Approved) {
-          formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-          formState?.setFieldAutosave(`${name}`);
-          setDefaultValue(selectedValue);
-          workspaceState?.saveDocRev(formState?.getValues());
+          const currentApprovals = buildTypeState?.approvals || [];
+          const updatedApprovals = unionBy([data], currentApprovals, 'id');
+          const allApproved = updatedApprovals.length > 0 && updatedApprovals.every(
+            (a) => a.status === ApprovalStatus.Approved,
+          );
+          if (allApproved) {
+            formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+            formState?.setFieldAutosave(`${name}`);
+            setDefaultValue(selectedValue);
+            workspaceState?.saveDocRev(formState?.getValues());
+          }
         }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
