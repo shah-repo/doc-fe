@@ -4,8 +4,8 @@ import { FBControlPickerDataProps, FBEditorCustomControl, FBFavouritesBody, FBFa
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { store } from '../../../state/store';
 import { checkIsDocumentBulkCreate, checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFavouritesBody>> {
   public data: FBFavouritesResponse| undefined;
@@ -75,7 +75,6 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
         ...this.hasApproval ? ['inlineapproval'] as FBInputType[] : [],
         ...this.hasRequestApproval ? ['requestapproval'] as FBInputType[] : [],
       ],
-      customcontrols: ['customcontrol'],
       instructions: ['instructionsdocument', 'selectdocument'],
       buttons: ['checkpoint', 'createlabel', 'task'],
       actions: ['action'],
