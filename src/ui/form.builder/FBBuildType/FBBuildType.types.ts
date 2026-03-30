@@ -1,3 +1,4 @@
+import React from 'react';
 import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalTransition } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
@@ -21,4 +22,5 @@ export type FBBuildTypeProps = FBAutocompleteAsyncProps & {
   dialogState?: FBDialogState
   allowedBuildTypeChange?: string[]
   lhrBuildTypeSwitchConfigApproval?: Array<{ from: string, to: string }>
+  submitApproversRef?: React.MutableRefObject<(() => void) | null>
 };

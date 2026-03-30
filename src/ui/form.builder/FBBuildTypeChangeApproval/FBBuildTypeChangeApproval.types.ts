@@ -1,3 +1,4 @@
+import React from 'react';
 import { FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
@@ -28,6 +29,7 @@ export type FBBuildTypeChangeApprovalProps =
   approvalApprovedGroup?: string[]
   selectedValue?: LHRBuild
   prevValue?: LHRBuild
+  submitRef?: React.MutableRefObject<(() => void) | null>
 };
 
 interface Owner {
