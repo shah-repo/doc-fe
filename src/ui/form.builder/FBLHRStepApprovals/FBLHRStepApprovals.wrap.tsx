@@ -285,11 +285,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            const existingFormIds = formState?.getFieldValue(name) as string[] ?? [];
-            const existingApprovalIds = lhrApprovalsState?.getApprovals
-              ?.map(a => a.approver?.id)
-              .filter(Boolean) ?? [];
-            formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
+            addCurrentUserToApprovers();
           }
 
           const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
@@ -320,11 +316,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            const existingFormIds = formState?.getFieldValue(name) as string[] ?? [];
-            const existingApprovalIds = lhrApprovalsState?.getApprovals
-              ?.map(a => a.approver?.id)
-              .filter(Boolean) ?? [];
-            formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
+            addCurrentUserToApprovers();
           }
 
           const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
@@ -340,6 +332,14 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       return () => dispose();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    function addCurrentUserToApprovers () {
+      const existingFormIds = formState?.getFieldValue(name) as string[] ?? [];
+      const existingApprovalIds = lhrApprovalsState?.getApprovals
+        ?.map(a => a.approver?.id)
+        .filter(Boolean) ?? [];
+      formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
+    }
 
     function addApprover (ids?: string[]) {
       if (!id) {
