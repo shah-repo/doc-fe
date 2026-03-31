@@ -50,9 +50,9 @@ import {
   FBLHRStepApprovalsStatusEndpoint,
 } from './FBLHRStepApprovals.types';
 
-export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
+export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
   Component: React.FunctionComponent<T>,
-) => {
+) {
   const Comp = ({
     onApproveClick,
     approvals,
@@ -115,6 +115,13 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     let docApprovals = document?.approvals;
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
+    }
+    function addCurrentUserToApprovers () {
+      const existingFormIds = (formState?.getFieldValue(name) as string[]) ?? [];
+      const existingApprovalIds = lhrApprovalsState?.getApprovals
+        ?.map(a => a.approver?.id)
+        .filter(Boolean) ?? [];
+      formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
     }
     const lhrApprovalsState = FB.useRef(FBLHRStepApprovalsState, {
       id: outputId,
@@ -333,14 +340,6 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function addCurrentUserToApprovers () {
-      const existingFormIds = formState?.getFieldValue(name) as string[] ?? [];
-      const existingApprovalIds = lhrApprovalsState?.getApprovals
-        ?.map(a => a.approver?.id)
-        .filter(Boolean) ?? [];
-      formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
-    }
-
     function addApprover (ids?: string[]) {
       if (!id) {
         return;
@@ -466,4 +465,4 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
   Comp.displayName = 'withFBLHRStepApprovals';
   return Comp;
-};
+}
