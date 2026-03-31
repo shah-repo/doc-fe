@@ -49,7 +49,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const serialsState = FB.useRef<FBSerialsState>(FBSerialsState, documentRevision);
 
     const { document: { outputRevision = false } = {} } = workspaceState || {};
-    isBuildTypeChangeApprovalEnabled = workspaceState.buildTypeChangeStatus();
+    isBuildTypeChangeApprovalEnabled = useObserver(() => workspaceState.buildTypeChangeStatus());
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(
