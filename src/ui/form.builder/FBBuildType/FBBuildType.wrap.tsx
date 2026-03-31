@@ -32,6 +32,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const approvalDialog = useDialog();
     const isDialogOpen = lhrBuildDialog.isOpen;
     const isApprovalDialogOpen = approvalDialog.isOpen;
+    const submitApproversRef = React.useRef<(() => void) | null>(null);
     const { formState, workspaceState } = FB.useStores();
     const documentStatus = DocumentStatus.Draft;
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -89,10 +90,19 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-        formState?.setFieldAutosave(`${name}`);
-        setDefaultValue(selectedValue);
-        workspaceState?.saveDocRev(formState?.getValues());
+        if (data?.status === ApprovalStatus.Approved) {
+          const currentApprovals = buildTypeState?.approvals || [];
+          const updatedApprovals = unionBy([data], currentApprovals, 'id');
+          const allApproved = updatedApprovals.length > 0 && updatedApprovals.every(
+            (a) => a.status === ApprovalStatus.Approved,
+          );
+          if (allApproved) {
+            formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+            formState?.setFieldAutosave(`${name}`);
+            setDefaultValue(selectedValue);
+            workspaceState?.saveDocRev(formState?.getValues());
+          }
+        }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -185,6 +195,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const onApprovalDialogActionClick = (action: 'cancel' | 'confirm') => {
       if (action === 'confirm') {
+        submitApproversRef.current?.();
         formState?.setFieldValue(`new-${name}`, selectedValue?.id);
         formState?.setFieldAutosave(`new-${name}`);
         setDefaultValue(selectedValue);
@@ -255,6 +266,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       dialogState,
       allowedBuildTypeChange,
       lhrBuildTypeSwitchConfigApproval,
+      submitApproversRef,
     });
   };
 
