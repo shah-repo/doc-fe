@@ -23,6 +23,7 @@ export const DOCUMENT_REVISION_UPGRADE_URL = `${DOCUMENT_REVISION_ROOT_URL}/upgr
 export const DOCUMENT_REVISION_FORMS_URL = `${DOCUMENT_REVISION_ROOT_URL}/forms_group_option`;
 export const DOCUMENT_REVISION_FAI_INSPECTION_URL = `${DOCUMENT_REVISION_ROOT_URL}/fai_inspection`;
 export const DOCUMENT_REVISION_PARTS_URL = `${DOCUMENT_REVISION_ROOT_URL}/available_parts`;
+export const DOCUMENT_EXTERNAL_REFERENCES_URL = 'document_external_references/documentId';
 
 export const FETCH_BOM_TREE = 'bom/parent_tree';
 export const FETCH_BOM_BRANCH = 'bom/branch/details';
@@ -32,6 +33,7 @@ export const DELETE_BOM_BRANCH = 'bom/branch';
 export const CHANGE_ORDER_BOM_BRANCH = 'bom/change_order';
 export const FETCH_WHERE_USED_TREE = 'bom/where_used';
 export const CHECK_IS_USED = 'bom/where_used_status';
+export const UPDATE_BOM_TREE_TO_LATEST = 'bom/upgrade_to_latest';
 
 export const FETCH_ALTERNATE_PART = 'bom/alternate_part';
 export const ADD_ALTERNATE_PART = 'bom/alternate_part';

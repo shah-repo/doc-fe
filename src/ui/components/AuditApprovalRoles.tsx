@@ -1,0 +1,55 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { translate } from '../../common/intl';
+import { Audit } from '../../state/ducks/audit/types';
+import { userManagementSelectors } from '../../state/ducks/userManagement';
+import { getAuditDefaultValue } from '../common/utils/audit';
+
+interface Props {
+  audit: Audit
+  dataCy?: string
+  auditValue?: string
+}
+
+const AuditApprovalRoles: React.FC<Props> = ({
+  audit,
+  dataCy,
+  auditValue,
+}) => {
+  const field = audit.field.split('.').at(-1);
+  const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
+    id: group.value,
+    name: group.label,
+  }));
+
+  const getGroupName = (value: string): string => {
+    const group = groups.find(item => item.id === value);
+    return group ? group.name : value;
+  };
+
+  let value = getAuditDefaultValue(auditValue);
+  if (['ARRAY_DELETED', 'OBJECT_DELETED'].includes(audit.type)) {
+    try {
+      const data = JSON.parse(auditValue as string);
+      if (data) {
+        if (field === 'groups') {
+          value = getGroupName(data.id);
+        } else {
+          value = data.name || translate('common.not.applicable');
+        }
+      }
+    } catch (err) {
+      value = getAuditDefaultValue(auditValue);
+    }
+  } else if (audit.field.includes('groups') && audit.field.endsWith('id')) {
+    value = getGroupName(auditValue as string);
+  }
+
+  return (
+    <div data-cy={dataCy}>
+      {value}
+    </div>
+  );
+};
+
+export default AuditApprovalRoles;

@@ -3,6 +3,7 @@ import moment from 'moment';
 import { createSelector } from 'reselect';
 import { sortStringsByKey } from '../../../common/utils/helpers';
 import Config from '../../../config';
+import { DEFAULT_TAX_RATE } from '../../../ui/form.builder/helpers/constants';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
@@ -92,6 +93,8 @@ const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.g
 
 const getCompanyTimezone = (state: ApplicationState) => state.company.generalSettings.timezone;
 
+const getCompanyDefaultTaxRate = (state: ApplicationState): number => state.company.generalSettings.defaultTaxRate ?? DEFAULT_TAX_RATE;
+
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
@@ -145,6 +148,7 @@ export default {
   getGeneralSettingsUpdatedAt,
   getPremiumFeatureSubscriptionsUpdatedAt,
   getCompanyTimezone,
+  getCompanyDefaultTaxRate,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
   getPremiumFeatureSubscriptions,

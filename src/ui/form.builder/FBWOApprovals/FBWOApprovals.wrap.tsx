@@ -97,17 +97,20 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       formState?.setFieldValue(name, fieldValue, false);
 
       const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      // Auto-add current user as approver for LHR steps if not already added
       if (authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate
         && !activeApprovals?.length) {
-        // Add Default owner as approver on Work order case
-        addApprover([authUser?.employeeId]);
-        formState?.setFieldValue(name, [authUser?.employeeId], false);
+        if (authUser.employeeId) {
+          addApprover([authUser.employeeId]);
+          formState?.setFieldValue(name, [authUser.employeeId], false);
+        }
       }
 
       formState?.inputState.get(name)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const completeWO = useActionCreator(taskActions.completeWO);
 
     const closeWOAsync = useAsync({

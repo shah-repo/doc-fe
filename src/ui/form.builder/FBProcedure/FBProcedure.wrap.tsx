@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBMediaProps, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from '..';
+import { checkIsDocumentEB } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -34,6 +35,8 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
+    const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
+    const isEB = checkIsDocumentEB(groupOptions);
 
     // MARK: @reactions
 
@@ -170,6 +173,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         name: newName,
       };
       if (isClone) {
+        isEB && workspaceState.setShouldPersistFormDataWithSchema(true);
         formState?.setFieldValue(newName, formState.getFieldValue(name));
       }
       workspaceState?.setSchemaItemAt(newItem, index + 1);

@@ -17,6 +17,7 @@ import { compareValuesToSubmit } from '../components/forms/helpers';
 import { toastError } from '../components/notifications';
 import { FB, FBFormState, FBProvider, FBWorkspaceState } from '../form.builder';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
+import FBStore from '../form.builder/FBStore/FBStore';
 import { useRestrictedEditUpdates } from './FBMaterialDisposition/components/FBTasksListTable/useRestrictedEditUpdates';
 import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
@@ -68,14 +69,20 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
 
   useEffect(() => {
     const isItemsRevDataSame = isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
+    const isStoreFormInputSame = isEqual(
+    FBDataStore?.refreshData?.changeRequest?.formInput,
+    initialValues?.formInput,
+    );
 
-    FBDataStore?.setRefreshData({
-      ...FBDataStore?.refreshData,
-      changeRequest: {
-        ...FBDataStore?.refreshData?.changeRequest,
-        formInput: initialValues.formInput,
-      },
-    });
+    if (!isStoreFormInputSame) {
+      FBDataStore?.setRefreshData({
+        ...FBDataStore?.refreshData,
+        changeRequest: {
+          ...FBDataStore?.refreshData?.changeRequest,
+          formInput: initialValues.formInput,
+        },
+      });
+    }
 
     if (!isItemsRevDataSame) {
       formState.setValues(initialValues?.formInput ?? {});
@@ -146,7 +153,9 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
           },
         });
 
-        loadAudit(changeRequest.id);
+        if (FBStore?.isHistoryTabSelected) {
+          loadAudit(changeRequest.id);
+        }
 
         if (isEditing) {
           setAutosave(true);

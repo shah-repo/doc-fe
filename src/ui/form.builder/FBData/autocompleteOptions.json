@@ -377,5 +377,32 @@
     "includeRevision": "displayRevision",
     "root": "",
     "hidden": false
+  },
+  {
+    "id": "48",
+    "label": "LHR Build Types",
+    "valueKey": "id",
+    "labelKey": "displayLabel",
+    "hidden": false
+  },
+  {
+    "id": "50",
+    "label": "Work Orders",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision",
+    "hidden": false
+    },
+  {
+    "id": "51",
+    "label": "Documents eligible for training",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "docId",
+    "root": "",
+    "includeRevision": "displayRevision",
+    "hidden": false
   }
 ]

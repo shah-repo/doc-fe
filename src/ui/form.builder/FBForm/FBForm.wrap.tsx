@@ -31,7 +31,8 @@ export const withFBForm = <T extends FBFormProps>(
     const isReceivableType
         = checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
     if (!(isReceivableType && has(initialValues, 'po-items-built-in'))) {
-      FBFormStateContext = React.createContext<any>(formState?.getValues());
+      const formStateContext = FBFormStateContext as any;
+      FBFormStateContext = React.createContext<any>({ ...formStateContext?._currentValue, [workspaceState?.id ?? '']: formState?.getValues() });
     }
 
     formState.setIncludeLocking(includeLocking);

@@ -95,13 +95,13 @@ export function shouldShowEQStatus (documentRevision?: DocumentRevision): boolea
   }
 
   const isEquipment = documentRevision.document.documentType.group === DOC_TYPE_GROUP.EQUIPMENT;
-  if (!isEquipment) {
-    return false;
-  }
-
   const document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, documentRevision?.document.id ?? ''),
   );
+
+  if (!isEquipment) {
+    return false;
+  }
 
   const lastRevisionId = getLatestRevisionId(document?.documentRevisions);
 

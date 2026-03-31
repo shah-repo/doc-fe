@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import { kebabCase } from 'lodash';
 import React, { ComponentType } from 'react';
 import { getCellValue } from '../utils';
 import { styles } from './styles';
@@ -25,7 +26,7 @@ const CostCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-cost"
+      data-cy={`cell-${kebabCase(field)}`}
     >
       <span className={classes.Cell}>
         {`${getCellValue(dataItem, field)} `}

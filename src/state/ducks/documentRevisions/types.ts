@@ -11,7 +11,7 @@ import { Employee } from '../company/types';
 import { RELATED_PARTS_STATUS } from '../relatedParts/types';
 import { TrainingRecord } from '../training/types';
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from './constants';
-import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentGroupOptionsType, DocumentGroupType, DocumentType } from './documentType/types';
 
 export enum DocumentRevisionStatus {
   Draft = 'DRAFT',
@@ -218,6 +218,7 @@ export interface Precalc {
   lot_part?: string
   lot_part_revision?: string
   related_equipment?: string[]
+  lot_expiry_date?: string
 }
 
 interface DocumentsInLHRS {
@@ -328,6 +329,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   supplierStatusId?: string
   mappedConfigDetails?: {[key: string]: ASLStatus}
   isLatestRevision?: boolean
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
 }
 
 interface EQ {
@@ -369,6 +371,7 @@ export interface SmartReference {
     unit?: string
     lotPart?: string
     lhr?: LSHS
+    eqStatus?: string
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>
@@ -556,4 +559,29 @@ export interface TypeSpecificConfig {
     date: string
     value: boolean
   }
+}
+
+interface ExternalSystem {
+  createdAt: string
+  updatedAt: string
+  id: string
+  name: string
+}
+
+export interface ExternalReference {
+  createdAt: string
+  updatedAt: string
+  id: string
+  resourceType: string
+  resourceId: string
+  resourceName: string
+  resourceUrl: string
+  externalSystem: ExternalSystem
+}
+
+export interface ExternalReferencesResponse {
+  documentId: string
+  documentRevisionId: string
+  companyId: string
+  externalReferences: ExternalReference[]
 }

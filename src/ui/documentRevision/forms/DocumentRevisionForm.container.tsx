@@ -8,20 +8,21 @@ import { useSelector } from 'react-redux';
 import { DocumentRevisionForm, SMFormHOCProps } from '../../../App';
 import { withSMForm } from '../../../App/Shifamed/Components/SMForm/SMForm.hoc';
 import { authSelectors } from '../../../state/ducks/auth';
-import { GroupTag, Permission } from '../../../state/ducks/auth/types';
+import { Permission } from '../../../state/ducks/auth/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DOCUMENT_NUMBERING_STYLE } from '../../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { FBWorkspaceMode } from '../../form.builder';
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDidMount from '../../hooks/useDidMount';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 import useGetHasPermission from '../../hooks/useGetHasPermission';
 import useShouldUpgradeToLatest from '../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../layout/theme/utils/colors';
@@ -30,6 +31,7 @@ import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, 
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from '../helpers/records';
 import { isDocumentAlphaReleased } from '../helpers/revisionStage';
 import { shouldShowSyncForRelatedEquipment } from './presenters/related.equipments';
+import { stripDocIdOfAcronym } from './transform';
 import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 
 export interface FormHeaderContext {
@@ -101,9 +103,9 @@ DocumentRevisionFormContainerProps
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ''));
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
+  const getDocTypeGroups = useDocTypeGroups();
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const isEditableSchema = checkIsDocumentEditableSchema(initialValues.document?.documentType?.groupOptions);
@@ -111,25 +113,26 @@ DocumentRevisionFormContainerProps
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   document = document || ({} as Document);
 
+  const isInternalTypeNumbering = !documentRevision?.numberingStyle
+    || documentRevision?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
-    const securityGroups: any[] = [];
-    if (initialValues.document?.documentType?.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          securityGroups.push({ value: group.value, label: group.label });
-        }
-      });
-    }
+    const securityGroups = getDocTypeGroups(initialValues.document?.documentType);
 
     const retrain = initialValues.id
       ? initialValues.retrain
-      : initialValues.document?.documentType?.defaultTraining || false;
+      : initialValues.document?.documentType?.defaultTraining ?? false;
 
     const attachments = outputRevision
       ? filter(initialValues.attachments, (file) => file.lineType !== 'RED_LINE')
       : initialValues.attachments;
+
+    let docId = proposedDocId ?? initialValues.document?.docId;
+    if (!isInternalTypeNumbering && docId && documentTypeAcronym) {
+      docId = stripDocIdOfAcronym(docId, documentTypeAcronym);
+    }
 
     return {
       ...initialValues,
@@ -138,17 +141,25 @@ DocumentRevisionFormContainerProps
         ...(initialValues.document || {}),
         // NOTE: workaround. DocId is set before groupOptions are loaded
         // after groupOptions have been loaded the initial values are updated and the docId is removed
-        docId: proposedDocId || initialValues.document?.docId,
+        docId,
       },
+      docId,
       retrain,
       renderHTML,
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, FBDataStore?.refreshData]);
+  }, [canUpdateHTML, initialValues, FBDataStore?.refreshData, getDocTypeGroups]);
+
+  useEffect(() => {
+     _formState?.setDocRevData(cloneDeep(cleanInitialValues));
+  }, [cleanInitialValues]);
 
   useObserver(() => {
+    if (!documentRevision) {
+      return;
+    }
     if (documentRevision?.id === FBDataStore?.refreshData?.id) {
       cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     }
@@ -291,6 +302,7 @@ DocumentRevisionFormContainerProps
         formInput,
         mode,
         isDAM,
+        isInternalTypeNumbering,
       }}
     />
   );

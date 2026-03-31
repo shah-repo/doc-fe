@@ -75,6 +75,7 @@ export const processData = (
   data: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
   formatDate: (date: string, format: string) => string,
+  convertDateTimeToUserTz: (date: string, format: string) => string,
 ): EditableLHRSummaryItem[] => {
   return data?.map(item => {
     const modifiedItem = {
@@ -84,10 +85,10 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.DateTimeComplete),
-      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.DateTimeComplete),
-      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.DateTimeComplete),
-      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.DateTimeComplete),
+      customCalDueDate: item?.calDueDateText && formatDate(convertDateTimeToUserTz(item?.calDueDateText ?? '', MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit),
+      customPmDueDate: item?.pmDueDateText && formatDate(convertDateTimeToUserTz(item?.pmDueDateText ?? '', MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit),
+      customExpiryDate: item?.expiryDate && formatDate(convertDateTimeToUserTz(item?.expiryDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
+      customRecordCreationDate: item?.recordCreationDate && formatDate(convertDateTimeToUserTz(item?.recordCreationDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
       customEnteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,

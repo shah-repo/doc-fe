@@ -33,6 +33,7 @@ import FBEditorAction from '../FBEditorAction/FBEditorAction';
 import FBEditorApprovalField from '../FBEditorApprovalField/FBEditorApprovalField';
 import FBEditorApprovals from '../FBEditorApprovals/FBEditorApprovals';
 import FBEditorAutocomplete from '../FBEditorAutocomplete/FBEditorAutocomplete';
+import FBEditorBuildTypeChangeApproval from '../FBEditorBuildTypeChangeApproval/FBEditorBuildTypeChangeApproval';
 import FBEditorCheckControl from '../FBEditorCheckControl/FBEditorCheckControl';
 import FBEditorEmpty from '../FBEditorEmpty/FBEditorEmpty';
 import FBEditorEQMaintenance from '../FBEditorEQMaintenance/FBEditorEQMaintenance';
@@ -43,6 +44,7 @@ import FBEditorLabel from '../FBEditorLabel/FBEditorLabel';
 import FBEditorMediaAlbum from '../FBEditorMediaAlbum/FBEditorMediaAlbum';
 import FBEditorOptionGroup from '../FBEditorOptionGroup/FBEditorOptionGroup';
 import FBEditorParagraph from '../FBEditorParagraph/FBEditorParagraph';
+import FBEditorPurchaseOrder from '../FBEditorPurchaseOrder/FBEditorPurchaseOrder';
 import FBEditorRequestApproval from '../FBEditorRequestApproval/FBEditorRequestApproval';
 import FBEditorSelectDocument from '../FBEditorSelectDocument/FBEditorSelectDocument';
 import FBEditorTextEditor from '../FBEditorTextEditor/FBEditorTextEditor';
@@ -63,7 +65,6 @@ class FBEditorState {
     'hyperlink',
     'action',
     'paragraph',
-    'quantity',
     'timer',
     'purchaseorder',
     'instructionsmediaupload',
@@ -85,10 +86,10 @@ class FBEditorState {
     'procedure',
     'mpiprocedure',
     'eqmaintenance',
+    'samplingPlan',
   ];
 
   public static pickDefaultValue: FBInputType[] = [
-    'quantity',
     'timer',
     'stepsection',
     'teststep',
@@ -119,6 +120,10 @@ class FBEditorState {
 
   public static pickCustomHandler: FBInputType[] = ['teststep'];
 
+  private static readonly editorOverrides: Record<string, React.FunctionComponent> = {
+    'radiogroup:item-type': FBEditorLabel,
+  };
+
   private static readonly editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
     subsection: FBEditorLabel,
@@ -141,7 +146,7 @@ class FBEditorState {
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
-    purchaseorder: FBEditorLabel,
+    purchaseorder: FBEditorPurchaseOrder,
     poreceive: FBEditorLabel,
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
@@ -151,6 +156,7 @@ class FBEditorState {
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
     inlineapproval: FBEditorInlineApproval,
+    buildTypeChangeApproval: FBEditorBuildTypeChangeApproval,
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
@@ -161,11 +167,13 @@ class FBEditorState {
     task: FBEditorLabel,
     approvals: FBEditorApprovals,
     woApprovals: FBEditorApprovals,
+    lhrStepApprovals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     mpiprocedure: FBEditorEmpty,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
+    samplingPlan: FBEditorLabel,
     supplier: FBEditorLabel,
     lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
@@ -184,6 +192,7 @@ class FBEditorState {
     supplierReferences: FBEditorLabel,
     shippingCustomer: FBEditorAutocomplete,
     shippingMethod: FBEditorOptionGroup,
+    salesOrderNumber: FBEditorLabel,
   };
 
   public static editorTypeIconMapping = {
@@ -215,6 +224,7 @@ class FBEditorState {
     mpiprocedure: ProcedureIcon,
     eqmaintenance: EquipmentIcon,
     textfieldwithrange: TextfieldwithrangeIcon,
+    samplingPlan: TextfieldwithrangeIcon,
     supplier: SupplierIcon,
     lhrstep: StepsectionIcon,
     approvals: ApprovalsIcon,
@@ -244,8 +254,11 @@ class FBEditorState {
   ];
 
   public static editor = (editorProps: FBEditorProps): React.ReactElement | undefined => {
-    const { inputProps: { type = '', index = 0 } = {} } = editorProps;
-    const editorControl = FBEditorState.editors[type];
+    const { inputProps: { type = '', index = 0, name } = {} } = editorProps;
+    const overrideKey = `${type}:${name}`;
+    const overrideControl = FBEditorState.editorOverrides[overrideKey];
+    const editorControl = overrideControl || FBEditorState.editors[type];
+
     if (!editorControl) {
       return;
     }

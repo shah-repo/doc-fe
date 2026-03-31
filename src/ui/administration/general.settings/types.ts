@@ -21,6 +21,9 @@ export enum GeneralSettingsTabs {
   SystemTransactions = 'System Transactions Setup',
   Training = 'Training',
   Timezone = 'Timezone',
+  LHRBuild = 'LHR Build',
+  LHRBuildSwitch = 'LHR Build Switch',
+  TaxRate = 'Tax Rate',
 }
 
 export interface GeneralSettingsProps {
@@ -34,8 +37,10 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   info?: string
   containerRef?: RefObject<HTMLElement>
   isOutOfSync?: boolean
+  addButtonLabel?: string
   onToggle: () => void
   onAddNew?: () => void
+  onManageItems?: () => void
 }
 
 export interface SwitchControlProps extends SwitchProps {
@@ -47,4 +52,25 @@ export interface HeaderLastSavedProps {
   timestamp: string
   loading?: boolean
   updateInterval?: number
+}
+
+export enum AUDIT_CHANGE_TYPE {
+  DELETED = 'DELETED',
+  ADDED = 'ADDED',
+  UPDATED = 'UPDATED',
+}
+
+export interface CompanySettingsChangeLog {
+  id: string
+  companyId: string
+  ownerId: string
+  ownerName: string
+  ownerEmail: string
+  parentKey: string
+  parentKeyLabel: string
+  fieldChanged: string
+  changeType?: AUDIT_CHANGE_TYPE
+  displayText: string
+  updatedAt: string
+  groupId: string
 }

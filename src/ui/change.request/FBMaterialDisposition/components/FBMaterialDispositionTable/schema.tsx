@@ -32,7 +32,7 @@ export const buildSchema = ({
       template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       selectable: false,
-      width: 201,
+      width: 250,
     },
     {
       id: 'lotPartDisplayRev',

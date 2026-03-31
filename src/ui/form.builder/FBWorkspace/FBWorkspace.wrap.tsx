@@ -2,9 +2,10 @@ import { differenceBy, filter, isEmpty, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceState } from '..';
 import { SM } from '../../../App';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { store } from '../../../state/store';
 import { checkIsDocumentEquipment, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -56,6 +57,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         autosave,
       });
     }
+
+    useEffect(
+      () => reaction(
+        () => workspaceState?.loadBuildTypeOptionsApi.data,
+        (buildTypeOptions) => workspaceState?.setBuildTypeOptions(buildTypeOptions),
+      ), []);
 
     useObserver(() => {
       if (!isEmpty(workspaceState?.schema) && isEmpty(workspaceState?.document?.schema)) {
@@ -109,6 +116,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+
+    const lhrBuildTypeConfig = useSelector(companySelectors.getGeneralSettings)?.lhrBuildTypeConfig ?? [];
+    useEffect(() => {
+      workspaceState?.setLhrBuildTypeConfig(lhrBuildTypeConfig);
+    }, [lhrBuildTypeConfig, workspaceState]);
+
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
     workspaceState && (workspaceState.formInput = formInput);
@@ -169,15 +182,29 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.externalState = store.getState();
     }, [workspaceState, changeRequest]);
 
-    useEffect(() => reaction(
-      () => workspaceState?.schema,
-      () => {
-        const canAddFBFields = workspaceState?.mode === 'design' || workspaceState?.mode === 'formDesign';
-        if (!canAddFBFields) { return; }
-        workspaceState?.saveDocRev();
-      },
+    useEffect(() => {
+      let saveSchemaTimer;
+      const disposeReaction = reaction(
+        () => workspaceState?.schema,
+        () => {
+          const canAddFBFields = workspaceState?.mode === 'design' || workspaceState?.mode === 'formDesign';
+          if (!canAddFBFields) { return; }
+          if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
+          saveSchemaTimer = setTimeout(() => {
+            workspaceState?.saveDocRev(
+              workspaceState?.shouldPersistFormDataWithSchema ? formState?.getValues() : undefined,
+            );
+            saveSchemaTimer = undefined;
+            workspaceState?.setShouldPersistFormDataWithSchema(false);
+          }, 250);
+        },
+      );
+      return () => {
+        if (saveSchemaTimer) { clearTimeout(saveSchemaTimer); }
+        disposeReaction();
+      };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    }, []);
 
     return Component({
       ...(props as T),

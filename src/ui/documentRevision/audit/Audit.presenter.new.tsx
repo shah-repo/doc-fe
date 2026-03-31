@@ -1,5 +1,6 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -20,9 +21,10 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FB, FBApprovalAuditState, FBDAMFields, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
+import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -30,7 +32,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getapprovalMatrixFieldLabel, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -58,6 +60,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const { approvalMatrixFieldState } = FB.useStores();
+  const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
+
   const { getFormattedDateString } = useDate();
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
@@ -108,7 +113,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       || change.type.includes('BOOLEAN_EDITED')
       || change.field.includes('items.date')
       || change.field.includes('items.capitalEquipment')
-      || change.field.includes('totalInUSD'))
+      || change.field.includes('totalInUSD')
+      || change.field.endsWith('partNumber')
+      || change.field.endsWith('partNumberDocumentId'))
     // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
     && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
       || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
@@ -154,6 +161,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
+    const lotSerialsAdded: Audit[] = [];
+    const lotSerialsDeleted: Audit[] = [];
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
@@ -198,12 +207,31 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             nextValue: previousValue as string,
           };
         }
+        if (fbType === 'datepicker' && change.type === 'STRING_EDITED' && nextValue === 'null') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'STRING_DELETED',
+            nextValue: 'undefined',
+          };
+        }
       }
+
       // PROCEDURE
+      let isProcedureMaterilEdit = false;
       if (fbType === 'procedure') {
+        const isAssignedLots = change.field.includes('assignedLots');
         let valueKey = last(change.field.split('.'));
         let valueKeyType = '';
         if (valueKey === 'id' && !change.field.includes('attachments')) { return; }
+        if (valueKey === 'assignedEquipments' && change?.previousValue === '[object Object]') { return; }
+
+        const assignLotPattern = /^formInput\.[^.]+\.materials\.\d+\.assignedLots$/;
+        if (change.type === 'ARRAY_DELETED' && assignLotPattern.test(change.field)) { return; }
+
+        const assignedEquipmentsPattern = /^formInput\.[^.]+\.equipment\.\d+\.assignedEquipments\.\d+\.equipmentId$/;
+        if (change.type === 'STRING_EDITED' && assignedEquipmentsPattern.test(change.field)) { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }
@@ -212,19 +240,74 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         } else if (valueKey !== 'equipment' && change.field.includes('equipment')) {
           valueKeyType = 'equipment';
         }
+
+        if (change.type === 'STRING_EDITED' && valueKeyType === 'materials' && change.field.includes('attachments') && valueKey === 'id') {
+          return;
+        }
         if (change.field.includes('attachments')) {
           valueKey = 'attachments';
         }
         const stepLabel = intl.formatMessage({ id: 'form.builder.step.number' }, { number });
         let keyLabel = '';
+        let keyLabelType = '';
         if (isTranslation(`form.builder.${valueKeyType}`)) {
-          keyLabel = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
+          keyLabelType = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ': ';
         }
         if (isTranslation(`form.builder.${valueKey}`)) {
-          keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
+          keyLabel = intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
-        fbLabel = `${stepLabel} ${keyLabel}`;
+
+        if (isAssignedLots && valueKey !== 'serialNumber') {
+          fbLabel = intl.formatMessage({
+            id: 'form.builder.assigned.lots.label',
+          }, {
+            stepLabel,
+            keyLabelType,
+            keyLabel,
+          });
+        } else {
+          fbLabel = `${stepLabel} ${keyLabelType} ${keyLabel}`;
+        }
+
+        if (change.type === 'OBJECT_EDITED') {
+          fbLabel = '';
+          isProcedureMaterilEdit = true;
+        }
+
+        if (change.type === 'OBJECT_DELETED' && assignLotPattern.test(change.field)) {
+          fbLabel = '';
+          isProcedureMaterilEdit = true;
+        }
       }
+
+      // SAMPLING PLAN
+      if (fbType === 'samplingPlan') {
+        const fieldParts = change.field.split('.');
+        switch (fieldParts.at(-1)) {
+          case 'type':
+            fbLabel = `${fbLabel} ${translate('form.builder.samplingPlan.type')}`;
+            change = {
+              ...change,
+              nextValue: change.nextValue === SamplingPlanType.ALL ? '100%' : change.nextValue,
+            };
+            break;
+          case 'aqlLevel':
+            fbLabel = `${fbLabel} ${translate('form.builder.samplingPlan.aqlLevel')}`;
+            change = {
+              ...change,
+              nextValue: (() => {
+                const value = Number(change.nextValue);
+                if (isNaN(value)) {
+                  return change.nextValue;
+                }
+                const decimalPart = value.toString().split('.')[1];
+                return decimalPart?.length > 2 ? change.nextValue : value.toFixed(2);
+              })(),
+            };
+            break;
+        }
+      }
+
       // LHRSTEP
       if (fbType === 'lhrstep') {
         const valueKey = change.field.split('.')[1].split('-');
@@ -348,6 +431,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const isAttachment = !isEmpty(change.field.match(/attachments/g));
         const fieldType = isMaterial ? intl.formatMessage({ id: 'form.builder.materials|s' })
           : intl.formatMessage({ id: 'form.builder.equipment|s' });
+        const field = last(valueKey);
         // skip audit values
         if (
           (last(valueKey) === 'id'
@@ -369,17 +453,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // adding more equipment or material to the list
         if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
           if (last(valueKey) === 'title') {
-            const value = documentRevisions.find((e) => e.id === change.nextValue);
             fbLabel = intl.formatMessage({ id: 'form.builder.audit.field.step' },
               {
                 fieldType,
                 stepLabel,
               });
-            change = {
-              ...change,
-              nextValue: `${value?.document.docId} - ${value?.name} - rev
-                      ${value?.displayRevision}`,
-            };
           }
           if (last(valueKey) === 'unit' || last(valueKey) === 'quantity') {
             const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
@@ -393,16 +471,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         // editing material or equipment
         if (change.type === 'STRING_EDITED' || change.type === 'NUMBER_EDITED') {
-          let nextMaterial;
           let previousMaterial;
 
           if (last(valueKey) === 'title') {
-            nextMaterial = documentRevisions.find((e) => e.id === change.nextValue);
             previousMaterial = documentRevisions.find((e) => e.id === change.previousValue);
-            change = {
-              ...change,
-              nextValue: `${nextMaterial?.document.docId} - ${nextMaterial?.name} - rev ${nextMaterial?.displayRevision}`,
-            };
             fbLabel = intl.formatMessage({ id: 'form.builder.audit.value' },
               {
                 field: fieldType,
@@ -434,6 +506,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               stepLabel,
             });
         }
+
+        if (field === 'paramsId') {
+          fbLabel = `${intl.formatMessage({ id: 'form.builder.step.paramsId' })} for ${stepLabel}`;
+        }
+        if (field === 'LHRTparameter' && ['BOOLEAN_NEW', 'BOOLEAN_NEW_EDITED'].includes(change.type)) {
+          fbLabel = `${intl.formatMessage({ id: 'form.builder.step.LHRTparameter' })} for ${stepLabel}`;
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
+        }
       }
 
       if (fbType === 'supplierContacts') {
@@ -451,6 +534,67 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             ...change,
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
+        }
+      }
+
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_NEW') {
+        lotSerialsAdded.push(change);
+        return;
+      }
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_DELETED') {
+        lotSerialsDeleted.push(change);
+        return;
+      }
+
+      if (fbType === 'approvalRoles') {
+        const valueKey = last(change.field.split('.'));
+        if (['id', 'index'].includes(valueKey as string) && !change.field.includes('groups')) { return; }
+
+        if (change.field.includes('groups')) {
+          fbLabel = translate('form.builder.approving.groups');
+
+          if (change.type === 'OBJECT_DELETED') {
+            const role = JSON.parse(change.previousValue as string);
+            fbLabel = translate('form.builder.approving.groups.role', { role: role.parentRole });
+          } else {
+            const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
+            const roleMatch = groupPattern.exec(change.field);
+            if (roleMatch && roleMatch.length) {
+              const role = existingRoles.find(item => item.id === roleMatch[0]);
+              if (role) {
+                fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
+              }
+            }
+          }
+        }
+      }
+
+      if (fbType === 'approvalMatrix') {
+        const valueKey = last(change.field.split('.'));
+        if (['id', 'updatedCategory'].includes(valueKey as string)) return;
+
+        fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
+        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type) && change.field) {
+          const action = change.type === 'BOOLEAN_NEW' ? 'added' : 'updated';
+          let docTypeId;
+          if (change.field && change.field.includes('[')) {
+            docTypeId = change.field.split('[')[1].split(']')[0];
+          }
+          const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
+          const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
+
+          if (change.field.includes('approvalRoles') && valueKey && !isNaN(Number(valueKey))) {
+            const stagePart = change.field.split('.').at(-2);
+            const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
+            const role = existingRoles[Number(valueKey) - 1]?.name || '';
+
+            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role, action });
+          } else {
+            const field = getapprovalMatrixFieldLabel(valueKey as string, false);
+            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field, action });
+          }
+
+          change = { ...change, updatedField: CUSTOM_BOOLEAN_FIELD };
         }
       }
 
@@ -499,37 +643,120 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split('.').includes('smartRefs')) {
+          const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
           if (change.type === 'STRING_NEW' || change.type === 'NUMBER_NEW') {
+            const { materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={classes.auditListItem}
+              >
+                {materialId ? (
+                  <>
+                    {change.field.endsWith('metadata.quantity')
+                      && renderSmartRefsAuditRows('quantity', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                    {change.field.endsWith('metadata.unit')
+                      && renderSmartRefsAuditRows('unit', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                  </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                )}
+              </Box>,
+            );
             return;
           }
-          if (change.type === 'BOOLEAN_NEW' || change.type === 'BOOLEAN_EDITED') {
-            const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
-            const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata || {};
-            const value = documentRevisions.find((e) => {
-              if (change.reference?.metadata.materialId) {
-                return e.id === change.reference?.metadata?.materialId;
-              }
-              return e.id === change.reference?.metadata?.equipmentId;
-            },
+
+          if (change.type === 'BOOLEAN_NEW') {
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={classes.auditListItem}
+              >
+                {materialId ? (
+                  <>
+                    {lotDocId && lotPart
+                      && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                    }
+                  </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                )}
+              </Box>,
             );
-            const nextValue = materialId ? `${lotDocId} | ${lotPart} | ${quantity} ${unit}`
-              : `${change.reference?.toDocRev?.document.docId}`;
-            change = {
-              ...change,
-              field: 'smartRefs',
-              type: `${change.reference?.type}.${change.type}` as unknown as Audit['type'],
-              nextValue,
-            };
-            fbLabel = intl.formatMessage({ id: 'form.builder.audit.replacement' },
-              {
-                type: (change.type === 'LOT_USAGE.BOOLEAN_NEW' as unknown as Audit['type']
-                  || change.type === 'LOT_USAGE.BOOLEAN_EDITED' as unknown as Audit['type'])
-                  ? intl.formatMessage({ id: 'form.builder.materials|s' })
-                  : intl.formatMessage({ id: 'form.builder.equipment|s' }),
-                value: value?.document.docId,
-                step: stepIndex,
-              });
+            return;
           }
+
+          if (['NUMBER_EDITED', 'STRING_EDITED'].includes(change.type)) {
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const innerKey = 0;
+            singleFields.push(
+              <Box
+                mb={1}
+                key={`${change.groupId}-${index}`}
+                data-cy="no-padding-margin"
+                className={classes.auditListItem}
+              >
+                {materialId ? (
+                  <>
+                    {lotDocId && lotPart
+                      && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                    }
+                    {change.field.endsWith('metadata.quantity')
+                      && renderSmartRefsAuditRows('quantity', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                    {change.field.endsWith('metadata.unit')
+                      && renderSmartRefsAuditRows('unit', change.nextValue, groupKey, key, innerKey, change, stepIndex, classes, true)
+                    }
+                  </>
+                ) : (renderSmartRefsAuditRows(
+                  'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                )}
+              </Box>,
+            );
+            return;
+          }
+
+          if (change.type === 'BOOLEAN_EDITED') {
+            const { lotPart, lotDocId, materialId } = change.reference?.metadata ?? {};
+            const { active } = change.reference ?? {};
+            const innerKey = 0;
+
+            if (!active) {
+              // Material was removed
+              singleFields.push(
+                <Box
+                  mb={1}
+                  key={`${change.groupId}-${index}`}
+                  data-cy="no-padding-margin"
+                  className={
+                    index === array.length - 1
+                      ? classes.noPaddingMargin
+                      : classes.auditListItem
+                  }
+                >
+                  {materialId ? (
+                    <>
+                      {lotDocId && lotPart
+                        && renderSmartRefsAuditRows('lot', lotDocId, groupKey, key, innerKey, change, stepIndex, classes, false)
+                      }
+                    </>
+                  ) : (renderSmartRefsAuditRows(
+                    'actualId', change.reference?.toDocRev?.document.docId, groupKey, key, innerKey, change, stepIndex, classes, true)
+                  )}
+                </Box>,
+              );
+            }
+          }
+          return;
         }
 
         if (change.field.includes(PO_ITEMS_COMPONENT_NAME)) {
@@ -575,11 +802,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             mb={1}
             key={`${change.groupId}-${index}`}
             data-cy="no-padding-margin"
-            className={
-              index === array.length - 1
-                ? classes.noPaddingMargin
-                : classes.auditListItem
-            }
+            className={classes.auditListItem}
           >
             <>
               {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
@@ -614,7 +837,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   </span>
                 </Typography>
               )}
-              {(isFBField || isSmartRef) && !isCustomBooleanField && (
+              {(isFBField || isSmartRef) && !isCustomBooleanField && !isProcedureMaterilEdit && (
                 <Typography
                   className={classes.auditKey}
                 >
@@ -641,6 +864,170 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         key++;
       }
     });
+
+    // Add grouped output for Lot Serial Numbers if present
+    if (lotSerialsAdded.length > 0) {
+      const values = lotSerialsAdded
+        .map(c => String(c.nextValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-${lotSerialsAdded[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsAdded.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
+
+    // Add grouped output for Lot Serial Numbers deletions if present
+    if (lotSerialsDeleted.length > 0) {
+      const values = lotSerialsDeleted
+        .map(c => String(c.previousValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-del-${lotSerialsDeleted[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsDeleted.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
 
     // This key is added to keep sequential data-cy identifier in the history
     attachments.forEach((change) => {
@@ -798,6 +1185,41 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   } catch (error) {
     return '';
   }
+};
+
+const renderSmartRefsAuditRows = (
+  labelKey: string,
+  value: React.ReactNode,
+  groupKey: number | undefined,
+  key: number,
+  innerKey: number,
+  change: Audit,
+  stepIndex: number | undefined,
+  classes: Record<string, any>,
+  withTopSpace = false,
+) => {
+  return (
+    <>
+      <Typography
+        className={withTopSpace ? classes.auditKeyWithTopSpace : classes.auditKey}
+      >
+        <span data-cy={`change-key-${groupKey}-${key}-${innerKey++}`}>
+          {getMaterialReplacementAuditLabel(
+            labelKey,
+            change.type,
+            change.reference?.metadata,
+            stepIndex,
+          )}
+        </span>
+      </Typography>
+      <div
+        data-cy={`change-key-${groupKey}-${key}-${innerKey}`}
+        className={classes.auditValue}
+      >
+        {value}
+      </div>
+    </>
+  );
 };
 
 export default AuditPresenter;

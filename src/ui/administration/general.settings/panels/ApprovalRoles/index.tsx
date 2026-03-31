@@ -20,6 +20,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values: formValues, dirty: parentDirty, setFieldValue } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
+  const idDamExists = Boolean(dam);
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRole, setEditedApprovalRole] = React.useState<EditableApprovalRole>();
   const mode = editedApprovalRole?.[MODE_FIELD];
@@ -74,7 +75,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const addApprovalRole = () => {
-    const lastIndex = Math.max(0, ...approvalRoles.map(item => item.index));
+    const lastIndex = approvalRoles?.length > 0 ? Math.max(-1, ...approvalRoles.map(item => item.index)) : -1;
 
     setEditedApprovalRole({
       id: uuidv4(),
@@ -143,11 +144,11 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       <SettingsPanel
         {...props}
         title={translate('administration.general.settings.approvalRoles.tab')}
-        isOutOfSync={!dam?.isSynced}
+        isOutOfSync={idDamExists && !dam?.isSynced}
       >
         <FormikProvider value={formik}>
           <SettingsTable
-            isActive
+            isActive={idDamExists}
             data={approvalRoleList}
             isEditing={editedApprovalRole !== undefined}
             schema={schema}

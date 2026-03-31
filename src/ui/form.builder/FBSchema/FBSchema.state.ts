@@ -8,6 +8,8 @@ import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatri
 import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
+import FBBuildType from '../FBBuildType/FBBuildType';
+import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
@@ -25,6 +27,7 @@ import FBInlineApproval from '../FBInlineApproval/FBInlineApproval';
 import FBInstructionsDocument from '../FBInstructionsDocument/FBInstructionsDocument';
 import FBLHRBuild from '../FBLHRBuild/FBLHRBuild';
 import FBLHRStep from '../FBLHRStep/FBLHRStep';
+import FBLHRStepApprovals from '../FBLHRStepApprovals/FBLHRStepApprovals';
 import FBLotOnHandQuantityField from '../FBLotOnHandQuantityField/FBLotOnHandQuantityField';
 import FBLotQuantityField from '../FBLotQuantityField/FBLotQuantityField';
 import FBLotTransfers from '../FBLotTransfers';
@@ -49,10 +52,13 @@ import FBRadio from '../FBRadio/FBRadio';
 import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
 import FBReferences from '../FBReferences';
 import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
+import FBSalesOrderNumber from '../FBSalesOrderNumber';
+import FBSamplingPlan from '../FBSamplingPlan';
 import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBSerials from '../FBSerials';
 import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
 import FBShippingItems from '../FBShippingItems';
@@ -98,6 +104,7 @@ class FBSchemaState {
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
     checkboxgroupasync: FBSupplierCheckboxGroupAsync,
+    lhrBuildTypeSelection: FBBuildType,
     autocomplete: FBAutocompleteAsync,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
@@ -128,6 +135,7 @@ class FBSchemaState {
     createlabel: FBButton,
     approval: FBApproval,
     inlineapproval: FBInlineApproval,
+    buildTypeChangeApproval: FBBuildTypeChangeApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,
@@ -138,6 +146,7 @@ class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     woApprovals: FBWOApprovals,
+    lhrStepApprovals: FBLHRStepApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
@@ -171,6 +180,9 @@ class FBSchemaState {
     shippingAddress: FBShippingAddress,
     shippingCustomer: FBShippingCustomer,
     shippingMethod: FBShippingMethod,
+    salesOrderNumber: FBSalesOrderNumber,
+    samplingPlan: FBSamplingPlan,
+    lotSerialNumbers: FBSerials,
   };
 
   @observable public schema?: FBSchemaProps[];

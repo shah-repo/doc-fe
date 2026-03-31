@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from '..';
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -11,6 +11,7 @@ import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '..
 import { toFixed } from '../../dashboard.new/line.items/common/Utils';
 import { checkIsDocumentForm, checkIsDocumentMPI } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { LHRS_ACCEPTED_QUANTITY, LHRS_START_QUANTITY } from '../FBLHRStep/utils';
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -36,11 +37,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     redlineActive,
     isDocumentMPI,
     isReleased,
+    isDesign,
     ...props
   }: T) => {
     // MARK: @config
     const dispatch = useDispatch();
     const [lhrsQuantity, setLhrsQuantity] = useState(1);
+    const [lhrsAcceptedQty, setLhrsAcceptedQty] = useState(NaN);
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document, id } = workspaceState || {};
     const { version, status } = document || {};
@@ -61,6 +64,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     dialogState = FB.useRef(FBDialogState);
     isPreview = isPreview && workspaceState?.mode !== 'formPreview';
     isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
+    isDesign = workspaceState?.mode === FBWorkspaceModeOptions.DESIGN;
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319
     isSelectVisible = (!isDocumentForm
@@ -79,18 +83,35 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.getInputState('lhrs-start-quantity')?.value,
+        () => formState?.getInputState(LHRS_START_QUANTITY)?.value,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+          const formValue = cloneDeep(formState?.getFieldValue(LHRS_START_QUANTITY));
           setLhrsQuantity(formValue);
+        },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    React.useEffect(() => {
+      reaction(
+        () => formState?.getInputState(LHRS_ACCEPTED_QUANTITY)?.value,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
+          setLhrsAcceptedQty(formValue);
         },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
-      const formValue = cloneDeep(formState?.getFieldValue('lhrs-start-quantity'));
+      const formValue = formState?.getFieldValue(LHRS_ACCEPTED_QUANTITY);
+      formValue && setLhrsQuantity(formValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lhrsAcceptedQty]);
+
+    React.useEffect(() => {
+      const formValue = formState?.getFieldValue(LHRS_START_QUANTITY);
       formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsQuantity]);
@@ -118,11 +139,15 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       return Date.parse(date) < Date.now();
     };
 
+    const isLotUsage = (type) => {
+      return type === SmartReferenceType.LotUsage;
+    };
+
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
             && ref.active
-            && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
+            && (ref?.type === SmartReferenceType.EquipmentReplacement || isLotUsage(ref?.type))) {
           selected.push({
             ...ref?.metadata,
             refId: ref?.id,
@@ -130,6 +155,9 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
             calDueDate: ref.toDocRev?.precalc?.cali_due_date,
             lotPartRevision: ref.toDocRev?.precalc?.lot_part_revision,
+            lotId: ref.toDocRevId,
+            eqStatus: (ref?.metadata)?.eqStatus ?? ref?.toDocRev?.eqStatus,
+            actualId: isLotUsage(ref?.type) ? ref?.metadata?.actualId : ref?.toDocRevId,
           });
         }
         return selected;
@@ -196,6 +224,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
+      const minimumQty = item.quantity ? toFixed(item.quantity * lhrsAcceptedQty) || toFixed(item.quantity * lhrsQuantity) : 'form.builder.none';
 
       if (isDocumentMPI) {
         return item.type
@@ -204,8 +233,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       }
 
       return usedItem
-        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit }
-        : { title: getItem?.(item.title), quantity, unit };
+        ? { title: getItem?.(usedItem?.docRevId), revision, quantity, unit, minimumQty }
+        : { title: getItem?.(item.title), quantity, unit, minimumQty };
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
@@ -252,6 +281,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       isDocumentMPI,
       redlineActive,
       isReleased,
+      isDesign,
     });
   };
 

@@ -44,6 +44,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
       if (workspaceState?.isChangeRequest) {
         submitForm();
+        return;
       }
 
       workspaceState?.saveDocRev(formState?.getValues());
@@ -73,6 +74,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
           MomentFormats.MonthDateYearTwoDigit,
         );
         datePickerState?.setValue(nowDate);
+        if (workspaceState?.isChangeRequest) { return; }
         save(nowDate);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,8 +101,9 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
-      datePickerState?.setValue(value);
-      save(convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit));
+      const date = convertDateTimeToUserTz(value ?? '', MomentFormats.MonthDateYearTwoDigit);
+      datePickerState?.setValue(date);
+      save(date);
     };
 
     onDatePickerClear = () => {

@@ -7,10 +7,15 @@ import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
 import useStyles from '../styles';
 
+interface TextCellTemplateProps<T> extends CellTemplateProps<T> {
+  required?: boolean
+}
+
 function TextCellTemplate<T extends EditableItem> ({
   dataItem,
   field,
-}: CellTemplateProps<T>): React.ReactElement {
+  required = false,
+}: TextCellTemplateProps<T>): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
   const classes = useStyles();
@@ -20,7 +25,7 @@ function TextCellTemplate<T extends EditableItem> ({
 
   if (isEditMode) {
     return (
-      <FormikField name={field}>
+      <FormikField name={field} required={required}>
         <TextField
           {...getFieldProps(field)}
           classes={{

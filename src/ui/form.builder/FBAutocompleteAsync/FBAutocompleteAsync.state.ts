@@ -31,6 +31,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     });
   };
 
+  public fetchDepricatedAutocompleteOption = (id: string) => {
+    this.autocompleteValueApi.set({
+      url: FBEndpoint.Document,
+      urlValues: { id },
+      method: 'get',
+    });
+  };
+
   @computed public get optionConfig (): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;
@@ -136,6 +144,18 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: latestDocRev?.displayRevision ?? '',
           });
         });
+      case FBAutocompleteAsyncOption.documentsEligibleForGroupTrainee:
+        return data.flatMap(({ documentRevisions, ...doc }) =>
+          (documentRevisions || []).map((rev) => ({
+            ...doc,
+            id: rev?.id,
+            documentRevisionId: rev?.id,
+            documentId: doc?.id,
+            name: rev?.name ?? '',
+            displayRevision: rev?.displayRevision ?? '',
+            documentRevisions: [rev],
+          })),
+        );
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {
           const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
