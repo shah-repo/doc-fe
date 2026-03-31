@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq } from 'lodash';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq, without } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
@@ -50,6 +50,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     approvalApprovedGroup,
     selectedValue,
     prevValue,
+    submitRef,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -101,6 +102,8 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
+
+    const stagedApproverIds = React.useRef<string[]>([]);
 
     approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
@@ -205,11 +208,32 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
           return;
         }
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
+        const addedIds = difference(fieldValue, formValue);
+        const removedIds = difference(formValue, fieldValue);
+        // Stage newly selected approvers; do not make API calls yet
+        stagedApproverIds.current = [
+          ...without(stagedApproverIds.current, ...removedIds),
+          ...addedIds,
+        ];
+        // Only abandon approvers that were already committed via API
+        const committedRemovedIds = removedIds.filter(removedId =>
+          approvalsState?.getApprovals.some(a => a.approver?.id === removedId),
+        );
+        removeApprover(committedRemovedIds);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    // Register submit function so parent's confirm button triggers approval creation
+    React.useEffect(() => {
+      if (submitRef) {
+        submitRef.current = () => {
+          addApprover(stagedApproverIds.current);
+          stagedApproverIds.current = [];
+        };
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function addApprover (ids?: string[]) {
       if (!id) { return; }
@@ -300,6 +324,10 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         disabledOptions = [authUser?.employeeId];
         disableChipDelete = true;
       }
+
+      const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
+      isIncluded = (group: FBRequiredApprover): boolean =>
+        group.joinedEmployees.some((employee) => currentSelectedIds.includes(employee));
     });
 
     // TODO: check what is going on with the types,
