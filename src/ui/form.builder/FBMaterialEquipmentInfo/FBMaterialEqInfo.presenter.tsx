@@ -149,10 +149,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
   isObsolete,
 }) => {
   const [expandedPanels, setExpanedPanels] = useState<string[]>([]);
-  const visiblePanels = panels.filter(
-    (panel) => !loading && (data?.[panel.dataKey]?.length ?? 0) > 0,
-  );
-  const allPanelsExpaned = visiblePanels.length > 0 && expandedPanels.length === visiblePanels.length;
+  const allPanelsExpaned = expandedPanels.length === panels.length;
   const classes = useStyles();
 
   const toggleAllPanels = () => setExpanedPanels(() => (
@@ -199,7 +196,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
               <SMText label={allPanelsExpaned ? 'common.collapse.all' : 'common.expand.all'} />
             </Button>
           </Box>
-          {visiblePanels.map((panel) => (
+          {panels.map((panel) => (
             <Panel
               key={panel.dataKey}
               panel={panel}
@@ -214,7 +211,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
         <Grid item xs={3}>
           <SMText label="common.jump.to" boxProps={{ className: classes.navTitle }} />
           <MenuList>
-            {visiblePanels.map((panel) => (
+            {panels.map((panel) => (
               <MenuItem
                 key={panel.dataKey}
                 onClick={jumpToPanel(panel.dataKey)}
