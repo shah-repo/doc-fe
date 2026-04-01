@@ -123,7 +123,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       )}
       {type !== FBProcedureItemType.attachments && !loading && (
         <>
-          {type === FBProcedureItemType.materials && (
+          {type === FBProcedureItemType.materials && (!isPreview || value.length > 0) && (
             <MaterialsTable
               name={name}
               isEnableOnlyLotAddition={isSelectVisible && !redlineActive}
@@ -139,7 +139,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               isPreview={isPreview}
             />
           )}
-          {type === FBProcedureItemType.equipment && (
+          {type === FBProcedureItemType.equipment && (!isPreview || value.length > 0) && (
             <FBEquipmentTable
               name={name}
               isDisabled={Boolean(disabled)}
