@@ -403,7 +403,7 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-            translate('validator.required.with.field.error.message', {
+            translate('validator.required.with.out.field.error.message', {
               fieldName: attributeNames[attribute] || attribute,
               fields: fields.map((f) => attributeNames[f] || f).join(', '),
             }),
