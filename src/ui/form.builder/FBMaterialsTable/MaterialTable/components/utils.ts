@@ -1,5 +1,5 @@
 import { round } from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { MomentFormats, TIME_ZONE } from '../../../../../common/utils/date';
 import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
