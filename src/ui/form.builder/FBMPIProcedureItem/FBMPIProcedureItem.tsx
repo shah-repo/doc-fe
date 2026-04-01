@@ -1,6 +1,8 @@
-import { Box } from '@material-ui/core';
+import { Box, Collapse, IconButton } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
@@ -47,6 +49,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isDocumentMPI,
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const [isAttachmentExpanded, setIsAttachmentExpanded] = useState(false);
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const isAttachmentType = type === FBProcedureItemType.attachments;
 
@@ -74,6 +77,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           }}
           locale={FBProcedureItemLocale[type]}
         />
+        <IconButton size="small" style={{ padding: '8px 12px' }} onClick={() => setIsAttachmentExpanded(prev => !prev)}>
+          {isAttachmentExpanded ? <ExpandLessIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }} /> : <ExpandMoreIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }} />}
+        </IconButton>
         {!isPreview && isUnrelatedToMaterialAndEquipment && !FBProcedureItemOmitAction.includes(type) && (
           <Box pt={1.6} pr={2}
             onMouseEnter={() => setIsHover(true)}
@@ -101,17 +107,19 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         </Box>
       )}
       {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && (
-        <Box data-cy="mediaUploadField" mt={2}>
-          <FBMediaAlbumField
-            name={`${name}.attachments`}
-            isTemplate={true}
-            editorProperties={['copyableValue']}
-            gutter={false}
-            editorConfig={defaultValue}
-            autosave={false}
-            fieldType="mpiprocedure"
-          />
-        </Box>
+        <Collapse in={isAttachmentExpanded}>
+          <Box data-cy="mediaUploadField" mt={2}>
+            <FBMediaAlbumField
+              name={`${name}.attachments`}
+              isTemplate={true}
+              editorProperties={['copyableValue']}
+              gutter={false}
+              editorConfig={defaultValue}
+              autosave={false}
+              fieldType="mpiprocedure"
+            />
+          </Box>
+        </Collapse>
       )}
       {type !== FBProcedureItemType.attachments && !loading && (
         <>
