@@ -6,7 +6,7 @@ import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
 
 export type ApprovalValidationError =
   | { type: 'no_approvers' }
-  | { type: 'group_required'; groupNames: string[] };
+  | { type: 'group_required', groupNames: string[] };
 
 export type FBBuildTypeChangeApprovalProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
