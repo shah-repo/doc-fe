@@ -546,6 +546,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return;
       }
 
+      if (!isFBField && change.field === 'revisionChangeType') {
+        return;
+      }
+
       if (fbType === 'approvalRoles') {
         const valueKey = last(change.field.split('.'));
         if (['id', 'index'].includes(valueKey as string) && !change.field.includes('groups')) { return; }
