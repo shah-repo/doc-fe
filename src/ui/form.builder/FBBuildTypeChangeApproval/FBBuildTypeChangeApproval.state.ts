@@ -9,6 +9,7 @@ import { FBBuildTypeChangeApprovalConstructor } from './FBBuildTypeChangeApprova
 class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
+  @observable public fetchError?: any;
 
   // MARK: @config
   private readonly isOwner?: boolean;
@@ -45,7 +46,14 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
 
   public onSuccess () {
     this.setGroups(this.data);
+    this.fetchError = undefined;
     super.onSuccess();
+  }
+
+  public onError (error: any) {
+    this.groups = {};
+    this.fetchError = error;
+    super.onError(error);
   }
 
   private readonly setGroups = (data) => {
