@@ -2146,6 +2146,7 @@
   "training.assign": "A training is assigned to you",
   "training.as.per": "as per {reference}",
   "require.approval": "needs your approval for",
+  "require.approval.build.type.switch": " build type switch",
   "require.completion": "needs your completion for",
   "pending.approval": "pending approvals from",
   "training.stats.all": "ALL",

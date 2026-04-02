@@ -3,6 +3,7 @@ import { cloneDeep, Dictionary, isArray, isBoolean, isEmpty, isEqual, isNumber, 
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import { translate } from '../../../common/intl';
+import { isEmptyValue } from '../../common/utils/helpers';
 import FBSchemaState from '../FBSchema/FBSchema.state';
 
 class FBFormState extends FBSchemaState {
@@ -316,7 +317,7 @@ class FBFormState extends FBSchemaState {
             return reqs.includes(inputVal);
           }
         });
-        if (diff && diff.length > 0 && (!val || isEmpty(val))) {
+        if (diff && diff.length > 0 && (!val || isEmptyValue(val))) {
           const { messages: { attributeNames } } = validator;
           // validator message changed according to ENC-5130
           // `The ${attributeNames[attribute]} field is required when ` +
@@ -365,7 +366,7 @@ class FBFormState extends FBSchemaState {
           }
         }
 
-        if (shouldRequire && (!val || isEmpty(val))) {
+        if (shouldRequire && (!val || isEmptyValue(val))) {
           return passes(
             false,
             translate('validator.required.with.field.error.message', {
@@ -403,7 +404,7 @@ class FBFormState extends FBSchemaState {
         if (shouldRequire && (!val || isEmpty(val))) {
           return passes(
             false,
-            translate('validator.required.with.field.error.message', {
+            translate('validator.required.with.out.field.error.message', {
               fieldName: attributeNames[attribute] || attribute,
               fields: fields.map((f) => attributeNames[f] || f).join(', '),
             }),
