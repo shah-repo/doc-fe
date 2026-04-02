@@ -252,7 +252,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       dialogState?.config({
         title: 'form.builder.password.prompt',
         open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, hideForm: true }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true }} />,
       });
     };
 
