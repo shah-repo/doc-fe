@@ -5,7 +5,7 @@ import { intl } from '../../../common/intl';
 import { redirectTo } from '../../../common/redirectHandler';
 import { encodeString } from '../../../common/utils/helpers';
 import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from '../../../ui/constants/urls';
-import apiClient from '../../apiClient';
+import apiClient, { externalClient } from '../../apiClient';
 import apiXClient from '../../apiXClient';
 import { authActions } from '../../ducks/auth';
 import { ErrorCodes } from '../../ducks/documentRevisions/types';
@@ -86,7 +86,8 @@ const apiMiddleware: Middleware = ({
       requestConfig.headers['X-Enlil-Send-No-Response'] = true;
     }
 
-    const { data } = await apiClient.request(requestConfig);
+    const clientToUse = action.isExternal ? externalClient : apiClient;
+    const { data } = await clientToUse.request(requestConfig);
 
     action.onSuccess(data, dispatch);
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
