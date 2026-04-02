@@ -15,7 +15,7 @@ import { ReactComponent as DeleteIcon } from '../../../../../assets/images/trash
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
@@ -681,7 +681,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   const { scrollHeight, clientHeight } = (titleCellRef?.current ? titleCellRef?.current : {}) as HTMLLabelElement;
 
   const validateDocId = () => (
-    relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId, skipId)
+    relatedPartsState.validateDocId(relatedPartDetails.docId, skipId)
   );
 
   return useObserver(() => (
