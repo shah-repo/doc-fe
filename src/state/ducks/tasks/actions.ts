@@ -1,7 +1,7 @@
 import { TasksListEditRequestBody, TasksListItem } from '../../../ui/change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { APPROVALS_BASE_URL, CLOSE_WO, FETCH_ALL_TASKS_LIST, FETCH_PENDING_TASKS_COUNT, TASKS_LIST } from './constants';
+import { APPROVALS_BASE_URL, CLOSE_WO, FETCH_ALL_TASKS_LIST, FETCH_PENDING_TASKS_COUNT, LHR_BASE_URL, TASKS_LIST } from './constants';
 
 const fetchTasksList = (arId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
@@ -96,6 +96,17 @@ const pendingApproval = (
     handlers,
   });
 
+const nextLhrStep = (
+  lhrRevId: string,
+  currentLhrStepId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${LHR_BASE_URL}/${lhrRevId}/next_lhr_step/${currentLhrStepId}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   fetchTasksList,
   fetchTask,
@@ -107,4 +118,5 @@ export default {
   closeWO,
   completeWO,
   pendingApproval,
+  nextLhrStep,
 };
