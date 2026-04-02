@@ -30,7 +30,7 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({ dataItem, field, colu
 
   useEffect(() => {
     if (storedPart?.document?.docId) {
-      setLatestPartDocId(storedPart.document.docId);
+      setLatestPartDocId(`${storedPart.document.docId} - ${storedPart.displayRevision}`);
     }
   }, [storedPart]);
 
