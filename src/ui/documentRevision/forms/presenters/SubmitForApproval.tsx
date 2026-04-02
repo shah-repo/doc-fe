@@ -146,11 +146,11 @@ export const SubmitForApproval: React.FC<Props> = ({
     );
 
     return {
-      equipmentsFromSchema: mpiProcedureSchema.map(
+      equipmentsFromSchema: mpiProcedureSchema.filter((item) => !item.deleted).map(
         (item) => item.editorConfig?.equipment ?? [],
       ),
 
-      neededMaterials: mpiProcedureSchema.map(
+      neededMaterials: mpiProcedureSchema.filter((item) => !item.deleted).map(
         (item) => item.editorConfig?.materials ?? [],
       ),
 
