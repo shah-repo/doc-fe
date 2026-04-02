@@ -9,4 +9,5 @@ export type FBApprovalPasswordFormProps =
   approvalId?: string
   onDialogClose?: () => any
   onDialogApprove?: () => any
+  hideForm?: boolean
 };
