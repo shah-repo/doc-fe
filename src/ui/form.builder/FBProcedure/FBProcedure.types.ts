@@ -26,6 +26,7 @@ export interface FBProcedureValue {
   materials?: FBProcedureItemConfig[]
   equipment?: FBProcedureItemConfig[]
   attachments?: FBMediaProps[]
+  shouldSkipSerialization?: boolean
 }
 
 export const FBProcedureOmitDiffKey: string[] = ['description', 'attachments'];
