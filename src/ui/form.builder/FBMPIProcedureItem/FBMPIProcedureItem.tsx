@@ -16,10 +16,10 @@ import {
   FBText,
   FBTooltip,
 } from '..';
-import Colors from '../../layout/theme/utils/colors';
 import FBEquipmentTable from '../FBEquipmentTable/components/treelist';
 import MaterialsTable from '../FBMaterialsTable/MaterialTable';
 import FBMPIProcedureItemSerialsTable from '../FBMPIProcedureItemSerialsTable';
+import useStyles from './FBMPIProcedureItem.styles';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -48,26 +48,17 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isDesign,
   isDocumentMPI,
 }) => {
+  const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
   const [isAttachmentExpanded, setIsAttachmentExpanded] = useState(false);
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const isAttachmentType = type === FBProcedureItemType.attachments;
+  const hasItems = !isPreview || value.length > 0;
 
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
-      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && <Box
-        bgcolor={Colors.athens_gray}
-        color= {Colors.almost_black}
-        fontWeight={600}
-        fontSize= "12px"
-        display="flex"
-        lineHeight= "15px"
-        height="44px"
-        boxShadow= {`0 1px 0 ${Colors.chinese_silver}`}
-        borderRadius="3px 3px 0 0"
-        border = {`1px solid ${Colors.chinese_silver}`}
-      >
+      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && <Box className={classes.attachmentHeader}>
         <FBText
           {...{ loading }}
           boxProps={{
@@ -77,8 +68,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           }}
           locale={FBProcedureItemLocale[type]}
         />
-        <IconButton size="small" style={{ padding: '8px 12px' }} onClick={() => setIsAttachmentExpanded(prev => !prev)}>
-          {isAttachmentExpanded ? <ExpandLessIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }} /> : <ExpandMoreIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }} />}
+        <IconButton size="small" className={classes.iconButton} onClick={() => setIsAttachmentExpanded(prev => !prev)}>
+          {isAttachmentExpanded ? <ExpandLessIcon className={classes.expandIcon} /> : <ExpandMoreIcon className={classes.expandIcon} />}
         </IconButton>
         {!isPreview && isUnrelatedToMaterialAndEquipment && !FBProcedureItemOmitAction.includes(type) && (
           <Box pt={1.6} pr={2}
@@ -86,12 +77,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             onMouseLeave={() => setIsHover(false)}>
             <FBTooltip title="form.builder.add">
               { isHover
-                ? <AddCircleIcon style={{ color: Colors.almost_black, width: '17px', height: '17px' }}
+                ? <AddCircleIcon className={classes.addIcon}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
                 />
-                : <AddCircleOutlineOutlinedIcon style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                : <AddCircleOutlineOutlinedIcon className={classes.addIconOutline}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
@@ -102,7 +93,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         )}
       </Box>}
       {!isAttachmentType && (
-        <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
+        <Box className={classes.typeLabel}>
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
       )}
@@ -123,7 +114,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       )}
       {type !== FBProcedureItemType.attachments && !loading && (
         <>
-          {type === FBProcedureItemType.materials && (!isPreview || value.length > 0) && (
+          {type === FBProcedureItemType.materials && hasItems && (
             <MaterialsTable
               name={name}
               isEnableOnlyLotAddition={isSelectVisible && !redlineActive}
@@ -139,7 +130,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               isPreview={isPreview}
             />
           )}
-          {type === FBProcedureItemType.equipment && (!isPreview || value.length > 0) && (
+          {type === FBProcedureItemType.equipment && hasItems && (
             <FBEquipmentTable
               name={name}
               isDisabled={Boolean(disabled)}

@@ -142,15 +142,15 @@ export const SubmitForApproval: React.FC<Props> = ({
     const smartRefs = documentRevision?.smartReferencesTo ?? [];
 
     const mpiProcedureSchema = schema.filter(
-      (item) => item.type === 'mpiprocedure',
+      (item) => item.type === 'mpiprocedure' && !item.deleted,
     );
 
     return {
-      equipmentsFromSchema: mpiProcedureSchema.filter((item) => !item.deleted).map(
+      equipmentsFromSchema: mpiProcedureSchema.map(
         (item) => item.editorConfig?.equipment ?? [],
       ),
 
-      neededMaterials: mpiProcedureSchema.filter((item) => !item.deleted).map(
+      neededMaterials: mpiProcedureSchema.map(
         (item) => item.editorConfig?.materials ?? [],
       ),
 
