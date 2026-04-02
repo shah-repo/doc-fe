@@ -17,12 +17,14 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
 }) => {
   const classes = useStyles();
 
+  const panesToShow = panels.filter(panel => !panel.hidden);
+
   const [expandedPanels, setExpanedPanels] = useState<GeneralSettingsTabs[]>([]);
-  const allPanelsExpaned = expandedPanels.length === panels.length;
+  const allPanelsExpaned = expandedPanels.length === panesToShow.length;
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panels.map(panel => panel.key));
+  const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panesToShow.map(panel => panel.key));
   const togglePanel = (key: GeneralSettingsTabs) => () => setExpanedPanels(state => (
     state.includes(key) ? state.filter(it => it !== key) : [...state, key]
   ));
@@ -70,7 +72,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
       </Box>
       <Box className={classes.sidebar}>
         <MenuList className={classes.list}>
-          {panels.map(panel => (
+          {panesToShow.map(panel => (
             <MenuItem
               key={panel.key}
               className={classes.listItem}
@@ -90,7 +92,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
       </Box>
       <div className={classes.panels} ref={containerRef}>
         <div className={classes.panelsContainer}>
-          {panels.map(panel => (
+          {panesToShow.map(panel => (
             <panel.component
               key={panel.key}
               title={panel.title}

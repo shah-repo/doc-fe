@@ -116,5 +116,6 @@ export const panels = [
     key: GeneralSettingsTabs.TaxRate,
     title: 'administration.general.settings.tax.rate',
     component: TaxRateSettings,
+    hidden: true,
   },
 ];
