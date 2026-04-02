@@ -6,7 +6,9 @@ import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
 import FBSerialsTable from '../FBSerialsTable';
+import FBDataStore from '../FBStore/FBDataStore';
 import AddDialog from './components/AddDialog';
+import { LOT_PART_SELECT_KEY } from './helpers';
 import useStyles from './styles';
 import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
@@ -16,17 +18,23 @@ const FBSerials: React.FC = () => {
   const addDialog = useDialog();
   const importDialog = useDialog();
 
+  const lotPart = useObserver(
+    () => FBDataStore.refreshData?.formInput?.[LOT_PART_SELECT_KEY] as string | undefined,
+  );
+
   useEffect(() => {
-    serialsState?.load();
-  }, [serialsState]);
+    serialsState?.reload();
+  }, [lotPart, serialsState]);
 
   const {
-    isPartSerialized,
+    shouldShowSerials,
     isPartSerializationManual,
   } = useObserver(() => ({
-    isPartSerialized: serialsState?.isPartSerialized,
+    shouldShowSerials: serialsState?.shouldShowSerials,
     isPartSerializationManual: serialsState?.isPartSerializationManual,
   }));
+
+  console.log({ shouldShowSerials, isPartSerializationManual });
 
   const serialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading);
@@ -55,7 +63,7 @@ const FBSerials: React.FC = () => {
     }
   };
 
-  if (!isPartSerialized) {
+  if (!shouldShowSerials) {
     return null;
   }
 
