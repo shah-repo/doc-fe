@@ -51,6 +51,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     selectedValue,
     prevValue,
     submitRef,
+    validateRef,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -275,7 +276,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     }
 
     isIncluded = (group: FBRequiredApprover): boolean =>
-      group.joinedEmployees.some((employee) =>
+      (group.joinedEmployees as string[]).some((employee) =>
         approvals?.map((approval) => approval.approver?.id).includes(employee));
 
     isContributorIncluded = (id: string): boolean => {
@@ -327,7 +328,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 
       const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
       isIncluded = (group: FBRequiredApprover): boolean =>
-        group.joinedEmployees.some((employee) => currentSelectedIds.includes(employee));
+        (group.joinedEmployees as string[]).some((employee) => currentSelectedIds.includes(employee));
     });
 
     // TODO: check what is going on with the types,
@@ -362,6 +363,33 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         groups = {};
       }
     }
+
+    // Register validation function so parent can validate before confirming
+    React.useEffect(() => {
+      if (validateRef) {
+        validateRef.current = () => {
+          const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
+          const hasApprovers = currentSelectedIds.length > 0 || stagedApproverIds.current.length > 0;
+
+          if (!hasApprovers) {
+            return { type: 'no_approvers' };
+          }
+
+          const currentGroups = approvalsState?.groups;
+          if (currentGroups && Object.keys(currentGroups).length > 0) {
+            const satisfiedGroups = Object.values(currentGroups).filter(group =>
+              (group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
+            );
+            if (satisfiedGroups.length === 0) {
+              return { type: 'group_required', groupNames: Object.values(currentGroups).map(g => g.name) };
+            }
+          }
+
+          return null;
+        };
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return Component({
       ...(props as T),
