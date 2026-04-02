@@ -54,11 +54,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const isAttachmentType = type === FBProcedureItemType.attachments;
   const hasItems = !isPreview || value.length > 0;
+  const showAttachments = isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length);
 
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
       <FBDialog />
-      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && <Box className={classes.attachmentHeader}>
+      {showAttachments && <Box className={classes.attachmentHeader}>
         <FBText
           {...{ loading }}
           boxProps={{
@@ -97,7 +98,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
       )}
-      {isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length) && (
+      {showAttachments && (
         <Collapse in={isAttachmentExpanded}>
           <Box data-cy="mediaUploadField" mt={2}>
             <FBMediaAlbumField

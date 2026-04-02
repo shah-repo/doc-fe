@@ -160,8 +160,6 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
   ));
   const jumpToPanel = (key: string) => () => setExpanedPanels([key]);
 
-  console.log('Data in presenter', data);
-
   if (isObsolete) {
     return null;
   }
