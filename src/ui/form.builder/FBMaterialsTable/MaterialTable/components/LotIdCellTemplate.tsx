@@ -281,6 +281,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         }}
         loading={isLoading}
         onChange={handleChange}
+        forcePopupIcon
       />
     </FormikField>
   );
