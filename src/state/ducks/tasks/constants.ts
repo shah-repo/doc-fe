@@ -3,3 +3,4 @@ export const FETCH_PENDING_TASKS_COUNT = `${TASKS_LIST}/findPendingTasksCount`;
 export const FETCH_ALL_TASKS_LIST = `${TASKS_LIST}/findAllTasks`;
 export const CLOSE_WO = 'document_revisions/release_without_ar';
 export const APPROVALS_BASE_URL = 'approvals';
+export const LHR_BASE_URL = 'lhr';
