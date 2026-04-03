@@ -211,15 +211,16 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       tax = sum.forTax * this.value.taxRate / 100;
     }
 
+    const roundedTax = Math.round(tax * 100) / 100;
     const shippingCost = lineItemsLength ? this.value.shippingCost || 0 : 0;
-    const totalAmount = tax + sum.subTotal + Number(shippingCost);
+    const totalAmount = roundedTax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.value.exchangeRate;
 
     const value = {
       ...this.value,
       taxRate,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax, getDecimalLength(taxRate)),
+      tax: this.formatCost(roundedTax),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
