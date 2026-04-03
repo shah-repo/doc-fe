@@ -34,8 +34,6 @@ const FBSerials: React.FC = () => {
     isPartSerializationManual: serialsState?.isPartSerializationManual,
   }));
 
-  console.log({ shouldShowSerials, isPartSerializationManual });
-
   const serialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading);
 

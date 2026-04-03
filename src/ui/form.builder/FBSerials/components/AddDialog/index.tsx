@@ -108,7 +108,6 @@ const AddDialog: React.FC<AddDialogProps> = ({
           }}
           onInputChange={(_, value: string) => setInputValue(value)}
           classes={{
-            tag: classes.chip,
             inputRoot: classes.autocompleteField,
           }}
           renderInput={(params) => (

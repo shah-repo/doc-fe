@@ -2,10 +2,6 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
-  chip: {
-    fontFamily: 'monospace',
-    fontSize: '0.75rem',
-  },
   helper: {
     flexShrink: 0,
   },
