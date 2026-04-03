@@ -229,6 +229,9 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     React.useEffect(() => {
       if (submitRef) {
         submitRef.current = () => {
+          if (approvalsState?.fetchError) {
+            return; // Don't allow submission if there was a fetch error
+          }
           addApprover(stagedApproverIds.current);
           stagedApproverIds.current = [];
         };
@@ -319,6 +322,11 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         || approvalsState?.approvalApi.loading
         || approvalsState?.transitionApi.loading
       );
+
+      // Disable when build type switch approvals fetch fails (e.g. RD Lots restricted)
+      if (approvalsState?.fetchError) {
+        disabled = true;
+      }
 
       if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate) {
