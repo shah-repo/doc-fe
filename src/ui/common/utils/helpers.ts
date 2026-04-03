@@ -17,8 +17,8 @@ export const isEmptyValue = (value: unknown): boolean => {
   if (value === undefined || value === null) {
     return true;
   }
-  if (typeof value === 'number' && isNaN(value)) {
-    return true;
+  if (typeof value === 'number') {
+    return isNaN(value);
   }
   return isEmpty(value);
 };
