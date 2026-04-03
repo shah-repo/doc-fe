@@ -4,13 +4,15 @@ import { useSelector } from 'react-redux';
 import { FBEditor, FBEditorLabel, FBEditorProps, FBTextField } from '..';
 import { companySelectors } from '../../../state/ducks/company';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
+import useStyles from './FBEditorPurchaseOrder.styles';
 
-const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
+const FBEditorPurchaseOrder: React.FC<FBEditorProps> = ({
   children,
   inputProps,
   ...props
 }) => {
   const companyTaxRate = useSelector(companySelectors.getCompanyDefaultTaxRate);
+  const classes = useStyles();
 
   return (
     <FBEditor {...props} {...{ inputProps }}>
@@ -22,7 +24,7 @@ const FBEditorPurchaseOrder: React.FunctionComponent<FBEditorProps> = ({
           type="number"
           placeholder={companyTaxRate.toString()}
           labelProps={AutoCompleteStyles.labelProps}
-          inputProps={{ min: 0, max: 100, step: 0.01 }}
+          inputProps={{ min: 0, max: 100, step: 0.01, className: classes.input }}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           isFbEditorField
         />
