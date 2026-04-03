@@ -6,4 +6,8 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
+export const externalClient = axios.create({
+  withCredentials: false,
+});
+
 export default apiClient;
