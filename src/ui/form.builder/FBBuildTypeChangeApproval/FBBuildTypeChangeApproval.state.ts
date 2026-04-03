@@ -60,7 +60,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
-        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], 'id'),
+        joinedEmployees: map(item.employees as FBJoinedEmployee[], 'id'),
       };
       return group;
     }, {});
