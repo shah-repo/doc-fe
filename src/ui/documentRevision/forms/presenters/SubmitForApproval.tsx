@@ -83,7 +83,6 @@ export const SubmitForApproval: React.FC<Props> = ({
     documentRevisionsActions.applyTransition,
   );
   const closeWorkOrder = useActionCreator(taskActions.closeWO);
-  const nextLhrStepAction = useActionCreator(taskActions.nextLhrStep);
   const isEquipment = checkIsDocumentEquipment(
     currentDocumentType?.groupOptions,
   );
@@ -245,22 +244,18 @@ export const SubmitForApproval: React.FC<Props> = ({
       releaseRecord();
     },
   });
-  const nextLhrStepAsync = useAsync({
-    onSuccess: (response?: DocumentRevision) => {
-      dispatch(documentRevisionsActions.load(docRevId));
-      const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
-        documentId: response?.document.id ?? '',
-        documentRevisionId: response?.id ?? '',
-      });
-      history.push(documentVersionUrl);
-    },
-  });
   const closeWOAsync = useAsync({
     onSuccess: () => {
       const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
         return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
       })?.toDocRev;
-      nextLhrStepAsync.start(nextLhrStepAction, lhrDocRevision?.id ?? '', docRevId, nextLhrStepAsync);
+      const documentVersionUrl = generatePath(DOCUMENT_REVISION_VERSION_URL, {
+        documentId:
+          lhrDocRevision?.documentId ?? '',
+        documentRevisionId:
+          lhrDocRevision?.id ?? '',
+      });
+      history.push(documentVersionUrl, { toTabId: 'details' });
     },
   });
 
