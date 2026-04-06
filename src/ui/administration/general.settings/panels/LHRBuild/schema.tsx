@@ -166,6 +166,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'actions',
       title: 'common.actions',
       width: 75,
+      locked: true,
       template: (props) => (
         <ActionsCellTemplate
           {...props}

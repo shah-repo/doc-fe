@@ -4,11 +4,14 @@ import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBLHRBuildOptions, FBWorkspaceModeOptions } from '..';
+import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
+import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
+import { ApprovalValidationError } from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.types';
 import FBStore from '../FBStore/FBStore';
 import { FBBuildTypeState } from './FBBuildType.state';
 import { FBBuildTypeProps } from './FBBuildType.types';
@@ -28,10 +31,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const [prevValue, setPrevValue] = React.useState<undefined | LHRBuild>(undefined);
     const [options, setOptions] = React.useState<LHRBuild[]>([]);
     const [refresh, setRefresh] = React.useState(false);
+
     const lhrBuildDialog = useDialog();
     const approvalDialog = useDialog();
     const isDialogOpen = lhrBuildDialog.isOpen;
     const isApprovalDialogOpen = approvalDialog.isOpen;
+    const submitApproversRef = React.useRef<(() => void) | null>(null);
+    const validateApproversRef = React.useRef<(() => ApprovalValidationError | null) | null>(null);
     const { formState, workspaceState } = FB.useStores();
     const documentStatus = DocumentStatus.Draft;
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -89,10 +95,19 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-        formState?.setFieldAutosave(`${name}`);
-        setDefaultValue(selectedValue);
-        workspaceState?.saveDocRev(formState?.getValues());
+        if (data?.status === ApprovalStatus.Approved) {
+          const currentApprovals = buildTypeState?.approvals || [];
+          const updatedApprovals = unionBy([data], currentApprovals, 'id');
+          const allApproved = updatedApprovals.length > 0 && updatedApprovals.every(
+            (a) => a.status === ApprovalStatus.Approved,
+          );
+          if (allApproved) {
+            formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+            formState?.setFieldAutosave(`${name}`);
+            setDefaultValue(selectedValue);
+            workspaceState?.saveDocRev(formState?.getValues());
+          }
+        }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -185,6 +200,16 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const onApprovalDialogActionClick = (action: 'cancel' | 'confirm') => {
       if (action === 'confirm') {
+        const validationError = validateApproversRef.current?.();
+        if (validationError) {
+          if (validationError.type === 'no_approvers') {
+            toastError(translate('form.builder.approvals.not.present'));
+          } else {
+            toastError(translate('form.builder.approvals.group.required', { groupNames: validationError.groupNames.join(', ') }));
+          }
+          return;
+        }
+        submitApproversRef.current?.();
         formState?.setFieldValue(`new-${name}`, selectedValue?.id);
         formState?.setFieldAutosave(`new-${name}`);
         setDefaultValue(selectedValue);
@@ -255,6 +280,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       dialogState,
       allowedBuildTypeChange,
       lhrBuildTypeSwitchConfigApproval,
+      submitApproversRef,
+      validateApproversRef,
     });
   };
 

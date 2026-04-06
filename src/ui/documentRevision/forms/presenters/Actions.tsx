@@ -152,6 +152,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formState, formState, schema, _formState?.Validator, _formState?.getValues()]);
 
+  const isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isEquipment = checkIsDocumentEquipment(values.document?.documentType?.groupOptions);
@@ -611,7 +612,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
-      {!redlineActive && (
+      {!redlineActive && !isBuildTypeChangeApprovalEnabled && (
         <>
           {renderActionItems(initialButtons, true)}
           {restButtons.length > 0 && (

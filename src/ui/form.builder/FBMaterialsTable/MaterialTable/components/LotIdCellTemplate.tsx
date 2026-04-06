@@ -1,6 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { cloneDeep, debounce, endsWith, isEmpty, toUpper } from 'lodash';
@@ -20,6 +20,8 @@ import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useHover from '../../../../hooks/useHover';
+import { Colors } from '../../../../layout/theme-next';
+import { LotAutoCompleteOptions } from '../../../FBAllocation/components/treelist/column.templates/types';
 import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
@@ -145,16 +147,18 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   dataItem,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableMaterial>();
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, timezone } = useDate();
   const options = useMemo(
     () =>
       lots.map((lot) => {
-        const { id, isExpired, expiryDate, document, displayRevision, name } = lot;
+        const { id, document, displayRevision, name, formInput } = lot;
+        const expiryDate = formInput?.lot_expiry_date;
+        const isLotExpired = isDateExpired(expiryDate, timezone);
         return {
           label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
           value: id,
-          expiryDate: isExpired ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
-          isExpired: isExpired,
+          expiryDate: isLotExpired ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
+          isExpired: isLotExpired,
         };
       }),
     [lots],
@@ -254,6 +258,20 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
+        renderOption={(option: LotAutoCompleteOptions, props) => (
+          <ListItem {...props} className="lot-list-item" disableGutters>
+            <ListItemText primary={option.label} />
+            {option.isExpired && (
+              <ListItemIcon>
+                <StyleTooltip
+                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
+                >
+                  <FontAwesomeIcon icon={regular('circle-exclamation')} color={Colors.error} size="sm" />
+                </StyleTooltip>
+              </ListItemIcon>
+            )}
+          </ListItem>
+        )}
         ListboxComponent={({ children, ...otherProps }) => {
           return (
             <>
@@ -263,6 +281,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         }}
         loading={isLoading}
         onChange={handleChange}
+        forcePopupIcon
       />
     </FormikField>
   );
@@ -274,6 +293,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
+  const { timezone } = useDate();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -302,7 +322,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
+    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date, timezone);
     const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
     const isLotTypeAllowed = !shouldEnforceProductionLotsOnly || !isRDDocument;
 

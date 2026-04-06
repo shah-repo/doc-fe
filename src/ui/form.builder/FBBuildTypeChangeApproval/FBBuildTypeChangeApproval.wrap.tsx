@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq } from 'lodash';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq, without } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
@@ -50,6 +50,8 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     approvalApprovedGroup,
     selectedValue,
     prevValue,
+    submitRef,
+    validateRef,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -101,6 +103,8 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
+
+    const stagedApproverIds = React.useRef<string[]>([]);
 
     approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
@@ -205,11 +209,35 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
           return;
         }
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
-        addApprover(difference(fieldValue, formValue));
-        removeApprover(difference(formValue, fieldValue));
+        const addedIds = difference(fieldValue, formValue);
+        const removedIds = difference(formValue, fieldValue);
+        // Stage newly selected approvers; do not make API calls yet
+        stagedApproverIds.current = [
+          ...without(stagedApproverIds.current, ...removedIds),
+          ...addedIds,
+        ];
+        // Only abandon approvers that were already committed via API
+        const committedRemovedIds = removedIds.filter(removedId =>
+          approvalsState?.getApprovals.some(a => a.approver?.id === removedId),
+        );
+        removeApprover(committedRemovedIds);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    // Register submit function so parent's confirm button triggers approval creation
+    React.useEffect(() => {
+      if (submitRef) {
+        submitRef.current = () => {
+          if (approvalsState?.fetchError) {
+            return; // Don't allow submission if there was a fetch error
+          }
+          addApprover(stagedApproverIds.current);
+          stagedApproverIds.current = [];
+        };
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function addApprover (ids?: string[]) {
       if (!id) { return; }
@@ -251,7 +279,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     }
 
     isIncluded = (group: FBRequiredApprover): boolean =>
-      group.joinedEmployees.some((employee) =>
+      (group.joinedEmployees as string[]).some((employee) =>
         approvals?.map((approval) => approval.approver?.id).includes(employee));
 
     isContributorIncluded = (id: string): boolean => {
@@ -295,11 +323,20 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         || approvalsState?.transitionApi.loading
       );
 
+      // Disable when build type switch approvals fetch fails (e.g. RD Lots restricted)
+      if (approvalsState?.fetchError) {
+        disabled = true;
+      }
+
       if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate) {
         disabledOptions = [authUser?.employeeId];
         disableChipDelete = true;
       }
+
+      const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
+      isIncluded = (group: FBRequiredApprover): boolean =>
+        (group.joinedEmployees as string[]).some((employee) => currentSelectedIds.includes(employee));
     });
 
     // TODO: check what is going on with the types,
@@ -334,6 +371,33 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         groups = {};
       }
     }
+
+    // Register validation function so parent can validate before confirming
+    React.useEffect(() => {
+      if (validateRef) {
+        validateRef.current = () => {
+          const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
+          const hasApprovers = currentSelectedIds.length > 0 || stagedApproverIds.current.length > 0;
+
+          if (!hasApprovers) {
+            return { type: 'no_approvers' };
+          }
+
+          const currentGroups = approvalsState?.groups;
+          if (currentGroups && Object.keys(currentGroups).length > 0) {
+            const satisfiedGroups = Object.values(currentGroups).filter(group =>
+              (group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
+            );
+            if (satisfiedGroups.length === 0) {
+              return { type: 'group_required', groupNames: Object.values(currentGroups).map(g => g.name) };
+            }
+          }
+
+          return null;
+        };
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return Component({
       ...(props as T),

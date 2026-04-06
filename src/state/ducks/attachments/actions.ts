@@ -643,6 +643,7 @@ const uploadAvatar = (
     method: 'put',
     data: file,
     includeAuthorization: false,
+    isExternal: true,
     contentType: 'image/jpeg',
     onSuccess: (res, dispatch) => {
       if (id) {

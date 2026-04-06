@@ -20,7 +20,7 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
   const translatedTooltipTitle = tooltipTitle ? translate(tooltipTitle) : translatedContent;
 
   return (
-    <Tooltip title={translatedTooltipTitle} placement="top-start" arrow>
+    <Tooltip classes={{ popper: classes.tooltipContent }} title={translatedTooltipTitle} placement="top-start" arrow>
       <span className={`k-cell-inner ${classes.header}`}>
         <span className="k-link">
           <span className="k-column-title" data-cy={`header-cell-${kebabCase(field)}`}>

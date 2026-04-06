@@ -34,6 +34,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   prevValue,
   allowedBuildTypeChange,
   lhrBuildTypeSwitchConfigApproval,
+  submitApproversRef,
+  validateApproversRef,
   ...props
 }) => {
   const classes = useStyles();
@@ -146,6 +148,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           approvalTransition={approvalTransition}
           selectedValue={selectedValue}
           prevValue={prevValue}
+          submitRef={submitApproversRef}
+          validateRef={validateApproversRef}
         />
       </Dialog>
     </FBProvider>

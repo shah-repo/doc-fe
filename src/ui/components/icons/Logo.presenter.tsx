@@ -1,4 +1,3 @@
-import cx from 'classnames';
 import React from 'react';
 import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
 import { theme } from '../../../common/utils/helpers';
@@ -57,10 +56,7 @@ const Logo: React.FunctionComponent<Props> = ({
           <img
             id="logo"
             src={logo}
-            className={cx(classes.logo, {
-              [classes.mt0]: shouldShowEnvironment,
-              [classes.mt20]: !shouldShowEnvironment,
-            })}
+            className={classes.logo}
             alt={companyName}
           />
         </div>
