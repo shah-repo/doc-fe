@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from '../../..';
 import { openPOToastr } from '../../../../ui/components/notifications/POStatus';
 import { checkIsDocumentPO, checkIsDocumentReceivable } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
-import { FB, FBPOApprovalsState, FBProvider } from '../../../../ui/form.builder';
+import { FB, FBPOApprovalsState, FBProvider, FBSerialsState } from '../../../../ui/form.builder';
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
   Component: React.FunctionComponent<T>,
@@ -35,6 +35,8 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
       },
     ) : undefined;
 
+    const serialsState = FB.useRef<FBSerialsState>(FBSerialsState, documentRevision);
+
     // MARK: @state
     useEffect(() => {
       const reOpenedPOInfo = localStorage.getItem('reOpenedPOInfo');
@@ -59,7 +61,7 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <FBProvider {...{ poApprovalsState }}>
+        <FBProvider {...{ poApprovalsState, serialsState }}>
           <Component
             {...props as T}
             {...{

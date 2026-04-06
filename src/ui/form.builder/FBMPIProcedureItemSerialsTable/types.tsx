@@ -10,6 +10,7 @@ export interface FBMPIProcedureItemSerialsTableProps {
 export interface LHRSSerialNumbers {
   isRnD: boolean
   isLoading: boolean
+  shouldShowSerials: boolean
   stepSerialNumbers: SerialNumber[]
   allSerialNumbers: SerialNumber[]
   updateSerialNumber: (id: string, data: SerialNumberUpdateData) => Promise<void>

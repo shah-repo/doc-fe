@@ -108,7 +108,6 @@ const AddDialog: React.FC<AddDialogProps> = ({
           }}
           onInputChange={(_, value: string) => setInputValue(value)}
           classes={{
-            tag: classes.chip,
             inputRoot: classes.autocompleteField,
           }}
           renderInput={(params) => (
@@ -125,7 +124,7 @@ const AddDialog: React.FC<AddDialogProps> = ({
                 ...(inputHelp ? {
                   className: classes.autocompleteInputWithHelp,
                   style: {
-                    width: `${Math.max(2, (inputValue.length || 0) + 1)}ch`,
+                    width: `${Math.max(2, inputValue.length)}ch`,
                   },
                 } : {}),
               }}
