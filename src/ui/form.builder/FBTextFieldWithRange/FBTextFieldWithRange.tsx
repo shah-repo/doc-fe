@@ -17,6 +17,7 @@ const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
   tooltip,
   className,
   isActive = false,
+  isDisabled = false,
   onChange,
 }) => {
   const classes = useStyles();
@@ -32,8 +33,9 @@ const ChipComponent: React.FC<ChipComponentProps> = withThemeNext(({
           </span>
           {label}
         </>}
+        clickable={!isDisabled}
         className={cx(classes.chip, className, { [classes.chipActive]: isActive })}
-        onClick={() => onChange?.(!isActive)}
+        onClick={() => isDisabled ? undefined : onChange?.(!isActive)}
       />
     </Tooltip>
   );
@@ -116,6 +118,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                           label={translate('form.builder.fai')}
                           tooltip={value?.isFaiRequired ? translate('form.builder.fai.required') : translate('form.builder.fai.not.required')}
                           isActive={value?.isFaiRequired}
+                          isDisabled={disabled}
                           className={cx(classes.chip, { [classes.chipActive]: value?.isFaiRequired })}
                           onChange={(isActive) => onUpdate?.({ isFaiRequired: isActive })}
                         />
@@ -125,6 +128,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                           label={translate('form.builder.iqc')}
                           tooltip={value?.isIqcRequired ? translate('form.builder.iqc.required') : translate('form.builder.iqc.not.required')}
                           isActive={value?.isIqcRequired}
+                          isDisabled={disabled}
                           className={cx(classes.chip, { [classes.chipActive]: value?.isIqcRequired })}
                           onChange={(isActive) => onUpdate?.({ isIqcRequired: isActive })}
                         />
