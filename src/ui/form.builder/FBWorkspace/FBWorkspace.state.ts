@@ -12,7 +12,7 @@ import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../FBLHRStep/utils';
+import { cleanupLHRDateFields } from '../FBLHRStep/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
@@ -275,12 +275,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.loading = true;
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, LHRS_START_DATE)) {
-        delete values[LHRS_START_DATE];
-      }
-      if (has(values, LHRS_END_DATE)) {
-        delete values[LHRS_END_DATE];
-      }
+      cleanupLHRDateFields(values);
     }
 
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
