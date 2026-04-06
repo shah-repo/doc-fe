@@ -61,18 +61,18 @@ export const withFBReferences = <T extends FBReferenceProps>(
     });
 
     useEffect(() => {
-      if (!workspaceState?.formInputSync.get(name)) {
+      if (!referenceFormInput) {
         return;
       }
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        (workspaceState?.formInputSync.get(name) ?? []).map(
+        (referenceFormInput ?? []).map(
           (data) => data.referenceRevId,
         ),
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    }, [workspaceState?.documentId, referenceFormInput]);
 
     return Component({
       ...(props as T),

@@ -12,11 +12,11 @@ import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import {
-    DocumentRevision,
-    DocumentRevisionStatus,
-    ErrorCodes,
-    RevisionChangeType,
-    SmartReferenceType,
+  DocumentRevision,
+  DocumentRevisionStatus,
+  ErrorCodes,
+  RevisionChangeType,
+  SmartReferenceType,
 } from '../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
@@ -31,9 +31,9 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import {
-    checkIsDocumentEquipment,
-    checkIsDocumentLHR,
-    checkIsDocumentMPIOutput,
+  checkIsDocumentEquipment,
+  checkIsDocumentLHR,
+  checkIsDocumentMPIOutput,
 } from '../../helpers/checkDocumentGroup';
 
 interface Props {
@@ -141,7 +141,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     const smartRefs = documentRevision?.smartReferencesTo ?? [];
 
     const mpiProcedureSchema = schema.filter(
-      (item) => item.type === 'mpiprocedure',
+      (item) => item.type === 'mpiprocedure' && !item.deleted,
     );
 
     return {
@@ -246,7 +246,6 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
   const closeWOAsync = useAsync({
     onSuccess: () => {
-      dispatch(documentRevisionsActions.load(docRevId));
       const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
         return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
       })?.toDocRev;

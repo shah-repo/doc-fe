@@ -147,13 +147,13 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   dataItem,
 }) => {
   const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableMaterial>();
-  const { getFormattedDateString } = useDate();
+  const { getFormattedDateString, timezone } = useDate();
   const options = useMemo(
     () =>
       lots.map((lot) => {
         const { id, document, displayRevision, name, formInput } = lot;
         const expiryDate = formInput?.lot_expiry_date;
-        const isLotExpired = isDateExpired(expiryDate);
+        const isLotExpired = isDateExpired(expiryDate, timezone);
         return {
           label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
           value: id,
@@ -281,6 +281,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         }}
         loading={isLoading}
         onChange={handleChange}
+        forcePopupIcon
       />
     </FormikField>
   );
@@ -292,6 +293,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
+  const { timezone } = useDate();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -320,7 +322,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date);
+    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date, timezone);
     const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
     const isLotTypeAllowed = !shouldEnforceProductionLotsOnly || !isRDDocument;
 

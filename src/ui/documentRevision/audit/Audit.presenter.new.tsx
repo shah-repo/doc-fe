@@ -1,6 +1,5 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
-import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -21,7 +20,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FB, FBApprovalAuditState, FBDAMFields, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
@@ -32,7 +31,7 @@ import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presente
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
-import { CUSTOM_BOOLEAN_FIELD, getapprovalMatrixFieldLabel, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -60,8 +59,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-  const { approvalMatrixFieldState } = FB.useStores();
-  const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
 
   const { getFormattedDateString } = useDate();
 
@@ -546,56 +543,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return;
       }
 
-      if (fbType === 'approvalRoles') {
-        const valueKey = last(change.field.split('.'));
-        if (['id', 'index'].includes(valueKey as string) && !change.field.includes('groups')) { return; }
-
-        if (change.field.includes('groups')) {
-          fbLabel = translate('form.builder.approving.groups');
-
-          if (change.type === 'OBJECT_DELETED') {
-            const role = JSON.parse(change.previousValue as string);
-            fbLabel = translate('form.builder.approving.groups.role', { role: role.parentRole });
-          } else {
-            const groupPattern = /(?<=dar-built-in\[)[^\]]+/;
-            const roleMatch = groupPattern.exec(change.field);
-            if (roleMatch && roleMatch.length) {
-              const role = existingRoles.find(item => item.id === roleMatch[0]);
-              if (role) {
-                fbLabel = translate('form.builder.approving.groups.role', { role: role.name });
-              }
-            }
-          }
-        }
-      }
-
-      if (fbType === 'approvalMatrix') {
-        const valueKey = last(change.field.split('.'));
-        if (['id', 'updatedCategory'].includes(valueKey as string)) return;
-
-        fbLabel = getapprovalMatrixFieldLabel(valueKey as string);
-        if (['BOOLEAN_EDITED', 'BOOLEAN_NEW'].includes(change.type) && change.field) {
-          const action = change.type === 'BOOLEAN_NEW' ? 'added' : 'updated';
-          let docTypeId;
-          if (change.field && change.field.includes('[')) {
-            docTypeId = change.field.split('[')[1].split(']')[0];
-          }
-          const auditLogDocRev = documentRevisions.find((item) => item.id === change.documentRevisionId);
-          const docType = auditLogDocRev && auditLogDocRev.formInput?.[FBDAMFields.DAM].find((item) => item.id === docTypeId)?.docType?.name;
-
-          if (change.field.includes('approvalRoles') && valueKey && !isNaN(Number(valueKey))) {
-            const stagePart = change.field.split('.').at(-2);
-            const stage = getapprovalMatrixFieldLabel(stagePart as string, false);
-            const role = existingRoles[Number(valueKey) - 1]?.name || '';
-
-            fbLabel = translate('form.builder.approvalMatrix.role.edit', { docType, stage, role, action });
-          } else {
-            const field = getapprovalMatrixFieldLabel(valueKey as string, false);
-            fbLabel = translate('form.builder.approvalMatrix.field.edit', { docType, field, action });
-          }
-
-          change = { ...change, updatedField: CUSTOM_BOOLEAN_FIELD };
-        }
+      if (!isFBField && change.field === 'revisionChangeType') {
+        return;
       }
 
       if (!isFBField && change.field.includes('attachments')) {
