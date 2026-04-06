@@ -37,7 +37,8 @@ export default makeStyles((theme) =>
       display: 'flex',
       flexWrap: 'wrap',
       marginY: 2,
-      marginTop: 1,
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
     },
     ownersWarningContainer: {
       display: 'flex',

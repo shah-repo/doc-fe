@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import { Colors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
 
 export default makeStyles((theme: NextTheme) =>
@@ -12,9 +13,11 @@ export default makeStyles((theme: NextTheme) =>
     warningIcon: {
       width: 24,
       height: 24,
+      color: Colors.warning,
     },
     messageText: {
       whiteSpace: 'pre-wrap',
+      marginTop: theme.spacing(2),
     },
     buildTypeSwitchTitle: {
       fontWeight: 600,
@@ -42,6 +45,10 @@ export default makeStyles((theme: NextTheme) =>
     buildTypeArrow: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
+    },
+    warningText: {
+      fontWeight: 'bold',
+      marginTop: theme.spacing(0.5),
     },
   }),
 );
