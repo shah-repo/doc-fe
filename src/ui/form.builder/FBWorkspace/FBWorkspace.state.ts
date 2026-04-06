@@ -275,12 +275,16 @@ class FBWorkspaceState extends FBSchemaState {
     this.loading = true;
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, LHRS_START_DATE)) {
-        delete values[LHRS_START_DATE];
-      }
-      if (has(values, LHRS_END_DATE)) {
-        delete values[LHRS_END_DATE];
-      }
+      // Delete static and dynamic LHR date field keys
+      // Static keys: 'lhrs-start-date', 'lhrs-end-date'
+      // Dynamic keys: 'lhrs-start-date-{uuid}', 'lhrs-end-date-{uuid}'
+      Object.keys(values).forEach((key) => {
+        if (key === LHRS_START_DATE || key === LHRS_END_DATE
+            || key.startsWith(`${LHRS_START_DATE}-`)
+            || key.startsWith(`${LHRS_END_DATE}-`)) {
+          delete values[key];
+        }
+      });
     }
 
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));

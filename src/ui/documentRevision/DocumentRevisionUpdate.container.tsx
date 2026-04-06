@@ -126,16 +126,20 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       set(values, 'formInput', formValues);
     }
 
-    if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, LHRS_START_DATE)) {
-        delete values[LHRS_START_DATE];
-      }
-      if (has(values, LHRS_END_DATE)) {
-        delete values[LHRS_END_DATE];
-      }
-    }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, 'formInput');
+
+    // Delete static and dynamic LHR date field keys from formInput
+    if (formInput && has(formInput, 'lhr-build-type')) {
+      Object.keys(formInput).forEach((key) => {
+        if (key === LHRS_START_DATE
+            || key === LHRS_END_DATE
+            || key.startsWith(`${LHRS_START_DATE}-`)
+            || key.startsWith(`${LHRS_END_DATE}-`)) {
+          delete formInput[key];
+        }
+      });
+    }
 
     if (!isEmpty(formInput) && formInput.WO_TYPE_KEY !== '') {
       const updatedFormInput = getPayloadBasedOnWorkOrderType(formInput);
