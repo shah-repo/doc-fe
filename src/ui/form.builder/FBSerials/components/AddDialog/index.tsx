@@ -124,7 +124,7 @@ const AddDialog: React.FC<AddDialogProps> = ({
                 ...(inputHelp ? {
                   className: classes.autocompleteInputWithHelp,
                   style: {
-                    width: `${Math.max(2, (inputValue.length || 0) + 1)}ch`,
+                    width: `${Math.max(2, inputValue.length)}ch`,
                   },
                 } : {}),
               }}
