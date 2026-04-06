@@ -17,7 +17,7 @@ import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../form.builder/FBLHRStep/utils';
+import { cleanupLHRDateFields } from '../form.builder/FBLHRStep/utils';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -129,16 +129,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, 'formInput');
 
-    // Delete static and dynamic LHR date field keys from formInput
+    // Remove LHR step date field keys before submission
     if (formInput && has(formInput, 'lhr-build-type')) {
-      Object.keys(formInput).forEach((key) => {
-        if (key === LHRS_START_DATE
-            || key === LHRS_END_DATE
-            || key.startsWith(`${LHRS_START_DATE}-`)
-            || key.startsWith(`${LHRS_END_DATE}-`)) {
-          delete formInput[key];
-        }
-      });
+      cleanupLHRDateFields(formInput);
     }
 
     if (!isEmpty(formInput) && formInput.WO_TYPE_KEY !== '') {
