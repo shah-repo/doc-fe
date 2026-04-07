@@ -864,13 +864,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             formattedDate: formattedDate ?? '',
           };
 
-          let messageId: string;
+          let messageId = 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE';
           if (serviceId) {
             messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil';
           } else if (partNumber) {
             messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE';
-          } else {
-            messageId = 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE';
           }
 
           const text = intl.formatMessage({ id: messageId }, values);
