@@ -43,7 +43,7 @@ const FBPurchaseOrderSummary: React.FC<FBPurchaseOrderProps> = ({
 
   return (
     <Box color={Colors.almost_black} width={242} fontSize={12}>
-      <Box mb={1.25} fontWeight={600} fontSize={12}>
+      <Box mb={1.25} fontWeight={600} fontSize={12} data-cy="common.summary.total">
         {translate('common.summary.total')}
       </Box>
       <Box pl={2.75} pr={3.125} pt={3.5} pb={4.75} bgcolor={Colors.white}>
@@ -51,7 +51,7 @@ const FBPurchaseOrderSummary: React.FC<FBPurchaseOrderProps> = ({
           {map(pick(poSummary, KEYS_TO_RENDER), (value, key) => (
             <Grid container spacing={3} alignItems="center" justify="space-between"
               style={{ marginBottom: key !== 'shippingCost' ? 8 : 0 }}>
-              <Grid item xs="auto">
+              <Grid item xs="auto" data-cy={LABELS[key]}>
                 {translate(LABELS[key])}
               </Grid>
               <Grid item xs="auto">
@@ -68,7 +68,7 @@ const FBPurchaseOrderSummary: React.FC<FBPurchaseOrderProps> = ({
         <Divider style={{ marginTop: 8, marginBottom: 20 }} />
         <Box>
           <Grid container spacing={3} alignItems="center" justify="space-between">
-            <Grid item xs="auto">
+            <Grid item xs="auto" data-cy="form.builder.grand.total">
               {translate('form.builder.grand.total')}
             </Grid>
             <Grid item xs="auto">
