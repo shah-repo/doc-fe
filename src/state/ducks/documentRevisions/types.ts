@@ -413,7 +413,7 @@ export interface DocumentRevisionDocumentRequest {
   docId?: string
   id?: string
   documentType?: Partial<DocumentType>
-  securityList: SecurityListRequest
+  securityList: Partial<SecurityListRequest>
 }
 
 export interface ExportToEmailRequest {
