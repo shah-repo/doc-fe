@@ -110,8 +110,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         )
         : null;
 
-      const latestDocId
-      = storedPart?.document?.docId ?? partNumberDocId ?? supplierPartNumber ?? '';
+      const latestDocId = storedPart?.document?.docId
+        ? `${storedPart.document.docId}${storedPart.displayRevision ? ` - ${storedPart.displayRevision}` : ''}`
+        : partNumberDocId ?? supplierPartNumber ?? '';
 
       partNumberText = latestDocId;
     } else if (type === FBPurchaseOrderItemType.SERVICE) {

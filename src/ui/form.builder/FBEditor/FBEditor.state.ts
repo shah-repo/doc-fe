@@ -42,6 +42,7 @@ import FBEditorInlineApproval from '../FBEditorInlineApproval/FBEditorInlineAppr
 import FBEditorInstructionsDocument from '../FBEditorInstructionsDocument/FBEditorInstructionsDocument';
 import FBEditorLabel from '../FBEditorLabel/FBEditorLabel';
 import FBEditorMediaAlbum from '../FBEditorMediaAlbum/FBEditorMediaAlbum';
+import FBEditorMpiProcedure from '../FBEditorMpiProcedure/FBEditorMpiProcedure';
 import FBEditorOptionGroup from '../FBEditorOptionGroup/FBEditorOptionGroup';
 import FBEditorParagraph from '../FBEditorParagraph/FBEditorParagraph';
 import FBEditorPurchaseOrder from '../FBEditorPurchaseOrder/FBEditorPurchaseOrder';
@@ -169,7 +170,7 @@ class FBEditorState {
     woApprovals: FBEditorApprovals,
     lhrStepApprovals: FBEditorApprovals,
     procedure: FBEditorEmpty,
-    mpiprocedure: FBEditorEmpty,
+    mpiprocedure: FBEditorMpiProcedure,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,

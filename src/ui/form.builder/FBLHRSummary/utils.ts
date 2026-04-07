@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { LotStatus } from '../../../state/ducks/documentRevisions/types';
@@ -105,4 +106,18 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
 const getDisplayStepAndMpiValue = (step?: string, stepOrMpiDetails?: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
   return !step ? `/${customMpiIdValue}` : (customMpiIdValue === step) ? `${step}/` : `${step}/${customMpiIdValue}`;
+};
+
+export const normalizeDate = (date: string): string => {
+  if (!date) return date;
+
+  if (moment(date, MomentFormats.YearMonthDateDash, true).isValid()) {
+    return date;
+  }
+
+  if (moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid()) {
+    return moment(date, MomentFormats.MonthDateYearTwoDigit).format(MomentFormats.YearMonthDateDash);
+  }
+
+  return date;
 };

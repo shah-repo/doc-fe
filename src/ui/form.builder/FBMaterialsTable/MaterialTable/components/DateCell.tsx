@@ -2,7 +2,6 @@ import cx from 'classnames';
 import React, { useMemo } from 'react';
 import { MomentFormats, useDate } from '../../../../../common/utils/date';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
 import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { CustomTreeListCellProps } from '../types';
@@ -11,7 +10,7 @@ import TreeListCellWrapper from './TreeListCellWrapper';
 import { isDateExpired } from './utils';
 
 export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
-  const { dataItem, onClick } = props;
+  const { dataItem } = props;
   const classes = styles();
   const { formatDisplayDate } = useDate();
   const lotId = dataItem?.lotId ?? '';
@@ -30,9 +29,7 @@ export const DateCell: React.FC<CustomTreeListCellProps> = (props) => {
   return (
     <TreeListCellWrapper {...props}>
       {expiryDate && (
-        <OverflowTooltip title={formatDisplayDate(expiryDate, MomentFormats.MonthDateYear)} placement="top" onClick={() => onClick?.({ dataItem })} interactive arrow>
-          <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{formatDisplayDate(expiryDate, MomentFormats.MonthDateYear)}</span>
-        </OverflowTooltip>
+        <span className={cx(classes.Cell, { [classes.expired]: isExpired })}>{formatDisplayDate(expiryDate, MomentFormats.MonthDateYear)}</span>
       )}
     </TreeListCellWrapper>
   );
