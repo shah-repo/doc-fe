@@ -1349,7 +1349,7 @@
   "form.builder.step.complete": "Completed",
   "form.builder.step.noStarted": "Not started",
   "form.builder.teststep": "Test Step",
-  "form.builder.step.number": "Sequence #{number}",
+  "form.builder.step.number": "Step #{number}",
   "form.builder.save": "Save",
   "form.builder.add.step": "Add Step",
   "form.builder.clone.step": "Clone",
