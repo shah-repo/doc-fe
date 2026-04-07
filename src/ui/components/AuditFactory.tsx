@@ -863,12 +863,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             tax: `${Boolean(tax)}`,
             formattedDate: formattedDate ?? '',
           };
-          const text
-            = !serviceId
-              ? intl.formatMessage(
-                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
-                { ...values })
-              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
+
+          let messageId = 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE';
+          if (serviceId) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil';
+          } else if (partNumber) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE';
+          }
+
+          const text = intl.formatMessage({ id: messageId }, values);
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
