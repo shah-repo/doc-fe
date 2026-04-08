@@ -1,4 +1,5 @@
 import { action, computed, observable } from 'mobx';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { FBEndpoint } from '../defaults/FBEndpoint';
@@ -21,6 +22,11 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
   }
 
   @computed
+  public get isForm (): boolean {
+    return this.documentRevision?.document?.documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.FORM) ?? false;
+  }
+
+  @computed
   public get lotId (): string | undefined {
     return this.lotData?.lot?.id;
   }
@@ -38,6 +44,10 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
   @computed
   public get part (): DocumentRevision | undefined {
     return this.lotData?.part;
+  }
+
+  @computed get shouldShowSerials (): boolean {
+    return this.isPartSerialized || this.isForm;
   }
 
   @computed
@@ -73,7 +83,9 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
 
   @action
   public load (docRevId?: string): void {
-    this.findLotByDocRevId(docRevId ?? this.documentRevision?.id).catch(toastError);
+    if (!this.lotData && !this.isLoading) {
+      this.findLotByDocRevId(docRevId ?? this.documentRevision?.id).catch(toastError);
+    }
   }
 
   @action
@@ -146,7 +158,7 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
 
   @action
   async findLotByDocRevId (docRevId?: string): Promise<unknown> {
-    if (!docRevId) {
+    if (!docRevId || this.isForm) {
       return;
     }
     await this.lotFindRequest.set({
@@ -155,6 +167,9 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
       urlValues: { docRevId },
     }, (data, error) => {
       this.lotData = data;
+      if (data) {
+        this.lotFindRequest.onSuccess();
+      }
       this.loadSerialNumbers().catch(toastError);
     });
   }

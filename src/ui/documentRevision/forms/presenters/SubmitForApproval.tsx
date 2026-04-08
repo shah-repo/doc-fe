@@ -141,7 +141,7 @@ export const SubmitForApproval: React.FC<Props> = ({
     const smartRefs = documentRevision?.smartReferencesTo ?? [];
 
     const mpiProcedureSchema = schema.filter(
-      (item) => item.type === 'mpiprocedure',
+      (item) => item.type === 'mpiprocedure' && !item.deleted,
     );
 
     return {
@@ -246,7 +246,6 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
   const closeWOAsync = useAsync({
     onSuccess: () => {
-      dispatch(documentRevisionsActions.load(docRevId));
       const lhrDocRevision = documentRevision.smartReferencesTo?.find((ref) => {
         return ref.type === SmartReferenceType.HiddenPiInstance && ref?.active;
       })?.toDocRev;
@@ -261,7 +260,7 @@ export const SubmitForApproval: React.FC<Props> = ({
   });
 
   const releaseRecord = (event?, ignoreWarning?: boolean) => {
-    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.allowQuantityDiscrepancy) {
+    if (!isAcceptedRejectedQtyValid && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.enforceQtyReconciliation) {
       toastError(translate('form.builder.lhrs.insufficient.accepted.rejected.error.message'));
       return;
     }
@@ -280,18 +279,18 @@ export const SubmitForApproval: React.FC<Props> = ({
         { noLotsAdded: [], wrongSum: [] },
       );
 
-      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.requireLotSelection) {
+      if (errorsByType.noLotsAdded.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.enforceLotRequired) {
         toastError(translate('form.builder.lhrs.lots.selection.incomplete.error.message'));
         return;
       }
 
-      if (errorsByType.wrongSum.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.allowOverdueQuantityMismatch) {
+      if (errorsByType.wrongSum.length > 0 && lhrBuildTypeConfigForSelectedBuildType?.enforceLotQtyRange) {
         toastError(translate('form.builder.lhrs.lots.required.error.message'));
         return;
       }
     }
 
-    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.requireEquipmentSelection) {
+    if (!areAllEquipmentsSelected && isTypeMpiOutput && lhrBuildTypeConfigForSelectedBuildType?.enforceEquipmentRequired) {
       const usedDocInLHRS = documentRevision?.usedDocumentsInLHRS;
       const equipmentId = unselectedEquipment[0];
       const equipmentRef = usedDocInLHRS?.[equipmentId];

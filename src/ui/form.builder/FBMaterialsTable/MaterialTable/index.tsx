@@ -112,7 +112,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
   const [selectedDataItem, setSelectedDataItem] = useState<EditableMaterial>();
   const quickViewDialog = useDialog();
   const isLHRProductionBuild = workspaceState?.isLHRProductionBuild || false;
-  const allowExpiredLots = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.allowExpiredLot;
+  const allowExpiredLots = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.enforceNonExpiredLots;
   const shouldEnforceProductionLotsOnly = workspaceState?.lhrBuildTypeConfigForSelectedBuildType?.enforceProdLotsOnly;
   const [state, setState] = React.useState<MaterialItemState>({
     data: prepareData(cloneDeep(items), isDesign, isEBProcedure),
@@ -452,7 +452,6 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
         updateState({
           ...state,
           data: [...state.data],
-          expanded: [state.data[index].id],
         });
       }
     });

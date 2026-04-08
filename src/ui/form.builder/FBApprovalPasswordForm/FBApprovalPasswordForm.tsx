@@ -10,6 +10,7 @@ import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
 
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
+  isApproverVisible = false,
   children,
 }) => {
   // Prevent form submitting.
@@ -24,7 +25,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
     <FBForm {...{ formState }}>
       {/* Isolate autocomplete triggering in current form */}
       <form autoComplete="off" onSubmit={submitHandler}>
-        <Box className={classes.labelContainer}>
+        {!isApproverVisible && <Box className={classes.labelContainer}>
           <Typography className={classes.label}>
             <Text translation="common.approvers" />
           </Typography>
@@ -33,7 +34,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
             value={{ label: name, value: name }}
             getOptionLabel={(option) => option.label}
           />
-        </Box>
+        </Box>}
         <FBTextField
           rules="required"
           name="password"

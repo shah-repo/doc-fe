@@ -11,6 +11,7 @@ import ActionsCell from './components/ActionsCell';
 import NotesCell from './components/NotesCell';
 import SelectFilter from './components/SelectFilter';
 import StatusCell from './components/StatusCell';
+import TextCell from './components/TextCell';
 import UsageCell from './components/UsageCell';
 import useStyles from './styles';
 
@@ -86,6 +87,7 @@ export const useSchema = ({
       field: 'serialNumber',
       resizable: true,
       filterCell: InputFilter,
+      template: (props) => <TextCell {...props} />,
       title: 'form.builder.serials.serial.number',
     },
     {

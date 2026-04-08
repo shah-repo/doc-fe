@@ -45,78 +45,78 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       locked: true,
     },
     {
-      id: 'allowCalOrPm',
-      field: 'allowCalOrPm',
+      id: 'enforceCurrentCalOrPm',
+      field: 'enforceCurrentCalOrPm',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowCalOrPm.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceCurrentCalOrPm"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceCurrentCalOrPm.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'allowOverdueQuantityMismatch',
-      field: 'allowOverdueQuantityMismatch',
+      id: 'enforceLotQtyRange',
+      field: 'enforceLotQtyRange',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowOverdueQuantityMismatch.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceLotQtyRange"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceLotQtyRange.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'allowQuantityDiscrepancy',
-      field: 'allowQuantityDiscrepancy',
+      id: 'enforceQtyReconciliation',
+      field: 'enforceQtyReconciliation',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowQuantityDiscrepancy.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceQtyReconciliation"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceQtyReconciliation.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'requireLotSelection',
-      field: 'requireLotSelection',
+      id: 'enforceLotRequired',
+      field: 'enforceLotRequired',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireLotSelection.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceLotRequired"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceLotRequired.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'allowExpiredLot',
-      field: 'allowExpiredLot',
+      id: 'enforceNonExpiredLots',
+      field: 'enforceNonExpiredLots',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.allowExpiredLot.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceNonExpiredLots"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceNonExpiredLots.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'requireEquipmentSelection',
-      field: 'requireEquipmentSelection',
+      id: 'enforceEquipmentRequired',
+      field: 'enforceEquipmentRequired',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireEquipmentSelection.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
@@ -129,32 +129,33 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
         <HeaderCell
           {...props}
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceProdLotsOnly.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'requireDeviationApproval',
-      field: 'requireDeviationApproval',
+      id: 'enforceDeviationApproval',
+      field: 'enforceDeviationApproval',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireDeviationApproval.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
       width: 200,
     },
     {
-      id: 'requireReworkApproval',
-      field: 'requireReworkApproval',
+      id: 'enforceReworkApproval',
+      field: 'enforceReworkApproval',
       headerCell: (props) => (
         <HeaderCell
           {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.requireReworkApproval.tooltip"
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
@@ -165,6 +166,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       field: 'actions',
       title: 'common.actions',
       width: 75,
+      locked: true,
       template: (props) => (
         <ActionsCellTemplate
           {...props}

@@ -1,10 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-import WarningIcon from '@material-ui/icons/Warning';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { isUndefined } from 'lodash';
 import React from 'react';
 import { FBButton, FBDialog, FBInput, FBProvider } from '..';
 import { SMText } from '../../../App';
+import { translate } from '../../../common/intl';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
@@ -34,6 +35,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   prevValue,
   allowedBuildTypeChange,
   lhrBuildTypeSwitchConfigApproval,
+  submitApproversRef,
+  validateApproversRef,
   ...props
 }) => {
   const classes = useStyles();
@@ -85,7 +88,6 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
       )}
       <Dialog
         hideCloseButton
-        title="form.builder.build.title"
         open={isDialogOpen}
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         onCancel={() => onDialogActionClick?.('cancel')}
@@ -96,20 +98,26 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
       >
         <Box className={classes.warningContainer}>
           <Box className={classes.warningIconContainer}>
-            <WarningIcon className={classes.warningIcon} />
+            <ErrorOutlineIcon className={classes.warningIcon} />
           </Box>
           <Box className={classes.messageContainer}>
+            <Typography variant="h4" className={classes.warningText}>
+              {translate('common.warning')}
+            </Typography>
             <Typography variant="body2" className={classes.messageText}>
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
               <SMText
                 label={{
-                  locale: 'form.builder.build.production.msg',
+                  locale: 'form.builder.build.type.header.msg',
                   values: {
-                    prod: (defaultValue?.displayLabel ?? ''),
-                    rd: (selectedValue?.displayLabel ?? ''),
+                    buildTypeOld: (<strong>{defaultValue?.displayLabel ?? ''}</strong>) as unknown as string,
+                    buildTypeNew: (<strong>{selectedValue?.displayLabel ?? ''}</strong>) as unknown as string,
                   },
                 }}
               />
+            </Typography>
+            <Typography variant="body2" className={classes.messageText}>
+              {translate('form.builder.build.type.sub.header.msg')}
             </Typography>
           </Box>
         </Box>
@@ -146,6 +154,8 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           approvalTransition={approvalTransition}
           selectedValue={selectedValue}
           prevValue={prevValue}
+          submitRef={submitApproversRef}
+          validateRef={validateApproversRef}
         />
       </Dialog>
     </FBProvider>

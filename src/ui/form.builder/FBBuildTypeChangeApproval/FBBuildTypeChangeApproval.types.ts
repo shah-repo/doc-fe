@@ -1,7 +1,12 @@
+import React from 'react';
 import { FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from '..';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import FBBuildTypeChangeApprovalState from './FBBuildTypeChangeApproval.state';
+
+export type ApprovalValidationError =
+  | { type: 'no_approvers' }
+  | { type: 'group_required', groupNames: string[] };
 
 export type FBBuildTypeChangeApprovalProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
@@ -28,6 +33,8 @@ export type FBBuildTypeChangeApprovalProps =
   approvalApprovedGroup?: string[]
   selectedValue?: LHRBuild
   prevValue?: LHRBuild
+  submitRef?: React.MutableRefObject<(() => void) | null>
+  validateRef?: React.MutableRefObject<(() => ApprovalValidationError | null) | null>
 };
 
 interface Owner {

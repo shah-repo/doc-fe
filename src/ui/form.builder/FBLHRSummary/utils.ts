@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { LotStatus } from '../../../state/ducks/documentRevisions/types';
@@ -85,8 +86,8 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customCalDueDate: item?.calDueDateText && formatDate(convertDateTimeToUserTz(item?.calDueDateText ?? '', MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit),
-      customPmDueDate: item?.pmDueDateText && formatDate(convertDateTimeToUserTz(item?.pmDueDateText ?? '', MomentFormats.MonthDateYear), MomentFormats.MonthDateYearTwoDigit),
+      customCalDueDate: item?.calDueDate && formatDate(convertDateTimeToUserTz(item?.calDueDate ?? '', MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
+      customPmDueDate: item?.pmDueDate && formatDate(convertDateTimeToUserTz(item?.pmDueDate ?? '', MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
       customExpiryDate: item?.expiryDate && formatDate(convertDateTimeToUserTz(item?.expiryDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
       customRecordCreationDate: item?.recordCreationDate && formatDate(convertDateTimeToUserTz(item?.recordCreationDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
       customEnteredBy: FB.isUUID(item.enteredBy)
@@ -105,4 +106,18 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
 const getDisplayStepAndMpiValue = (step?: string, stepOrMpiDetails?: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
   return !step ? `/${customMpiIdValue}` : (customMpiIdValue === step) ? `${step}/` : `${step}/${customMpiIdValue}`;
+};
+
+export const normalizeDate = (date: string): string => {
+  if (!date) return date;
+
+  if (moment(date, MomentFormats.YearMonthDateDash, true).isValid()) {
+    return date;
+  }
+
+  if (moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid()) {
+    return moment(date, MomentFormats.MonthDateYearTwoDigit).format(MomentFormats.YearMonthDateDash);
+  }
+
+  return date;
 };

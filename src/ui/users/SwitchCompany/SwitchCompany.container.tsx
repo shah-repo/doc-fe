@@ -11,15 +11,18 @@ import { Employee, WhiteLabelingEnv } from '../../../state/ducks/company/types';
 import { toastSuccess } from '../../components/notifications';
 import { COMPANY_EMAIL, HOME_URL } from '../../constants/urls';
 import { ThemeEnv } from '../../layout/theme/utils/types';
+import { setCompanyCookie } from '../../../utils/companyCookie';
+import { tryRedirectToReturnUrl } from '../../../utils/returnUrl';
 import { LoginContainerProps } from '../Login.container';
 import { showPasswordExpiryToast } from '../PasswordExpiryToast';
 import SwitchCompanyPresenter from './SwitchCompany.presenter';
 import { styles } from './SwitchCompany.styles';
 
-type Props = LoginContainerProps;
+type Props = LoginContainerProps & { returnUrl?: string | null };
 
 const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   employees,
+  returnUrl,
 }) => {
   const intl = useIntl();
   const classes = styles();
@@ -37,7 +40,11 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
+    setCompanyCookie(employee.company.id);
 
+    // After company selection, redirect to returnUrl if it was provided
+    // (e.g. target frontend), otherwise navigate within doc-fe.
+    if (tryRedirectToReturnUrl(returnUrl)) return;
     history.push(HOME_URL);
 
     if (passwordSoonToExpire) {
@@ -93,7 +100,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       },
     );
   return (
-    <SwitchCompanyPresenter numberOfCompanies={companies.length} onSearch={onSearch} searchString={searchString}>
+    <SwitchCompanyPresenter key={searchString} numberOfCompanies={companies.length} onSearch={onSearch} searchString={searchString}>
       {companies}
     </SwitchCompanyPresenter>
   );

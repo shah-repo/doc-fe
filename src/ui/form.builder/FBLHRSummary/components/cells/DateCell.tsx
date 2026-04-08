@@ -17,6 +17,7 @@ import {
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { DATE_TYPE, LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { normalizeDate } from '../../utils';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
@@ -86,8 +87,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       <DatePicker
         {...getFieldProps(field)}
         PopoverProps={PopoverProps}
+        value={normalizeDate(values[field] || '')}
         size="small"
-        data-cy={`${field}`}
+        data-cy={field}
         onChange={handleChange}
         onClear={field === LHR_SUMARY_FIELDS.customRecordCreationDate ? undefined : handleClear}
         format={MomentFormats.MonthDateYearTwoDigit}

@@ -16,6 +16,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
   @observable public hasPartNumber = false;
   @observable public isAllItemsReceived = false;
   @observable public rerenderCurrency = false;
+  @observable public isManualTax = false;
   @observable public timezone = TIME_ZONE;
   @observable value: FBPurchaseOrderValue = {
     tax: '0.00',
@@ -133,6 +134,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     }
     const taxRate = Number(this.formatCost(value, 6));
     set(this.value, 'taxRate', taxRate);
+    set(this, 'isManualTax', false);
   };
 
   @action public setTax = (tax?: string): void => {
@@ -144,6 +146,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       set(this.value, 'taxRate', Number(this.formatCost(taxRate, getDecimalLength(tax))));
     }
     set(this.value, 'tax', tax);
+    set(this, 'isManualTax', true);
   };
 
   @action public setShippingCost = (shippingCost?: string): void => {
@@ -164,6 +167,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     isUndefined(item.index)
       ? this.addItem(item)
       : this.updateItem(item);
+    set(this, 'isManualTax', false);
     this.reCalculateValue();
     this.setItemTotalAmount();
   };
@@ -202,20 +206,21 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     const sum = this.calculateItemSum();
     const lineItemsLength = this.value.items.length;
     const taxRate = this.value.taxRate;
-    let tax = 0;
-    if (lineItemsLength && sum.forTax && !isNil(this.value.taxRate)) {
+    let tax = lineItemsLength ? (parseFloat(String(this.value.tax)) || 0) : 0;
+    if (!this.isManualTax && lineItemsLength && !isNil(this.value.taxRate)) {
       tax = sum.forTax * this.value.taxRate / 100;
     }
 
+    const roundedTax = Math.round(tax * 100) / 100;
     const shippingCost = lineItemsLength ? this.value.shippingCost || 0 : 0;
-    const totalAmount = tax + sum.subTotal + Number(shippingCost);
+    const totalAmount = roundedTax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.value.exchangeRate;
 
     const value = {
       ...this.value,
       taxRate,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax, getDecimalLength(taxRate)),
+      tax: this.formatCost(roundedTax),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
@@ -233,6 +238,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     this.value.items = this.value.items
       .filter((itm, indx) => indx !== index)
       .map((itm, indx) => ({ ...itm, index: indx }));
+    set(this, 'isManualTax', false);
     this.reCalculateValue();
   };
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { PageDetails } from '../../../state/ducks/documentRevisions/documentType/types';
 import { pageDetailsActions } from '../../../state/ducks/pageDetails';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -20,6 +21,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({ pageD
   const dispatch = useDispatch();
   const deleteDialog = useDialog();
   const async = useAsync({
+    onSuccess: () => dispatch(tableSearchActions.clearAllTables()),
     onError: toastError,
   });
   const { id } = pageDetails;
@@ -33,6 +35,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({ pageD
   };
 
   const onConfirmDelete = () => {
+    dispatch(tableSearchActions.clearAllTables());
     dispatch(pageDetailsActions.deletePageDetails(id));
     deleteDialog.close();
   };

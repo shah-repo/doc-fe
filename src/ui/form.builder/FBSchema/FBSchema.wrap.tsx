@@ -28,6 +28,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
+    const isBuildTypeChangeApprovalEnabled = useObserver(() => workspaceState?.buildTypeChangeStatus());
 
     // To avoid UI-freezes on rendering huge list in schema.
     const [rendered, setRendered] = useState(false);
@@ -115,7 +116,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
                 || isApproved({ ...schemaItem, index })
                 || (reviseDisabled && outputRevision)
                 || (outputDisabled && isOutput && !isEmpty(id))
-                || workspaceState?.buildTypeChangeStatus()
+                || isBuildTypeChangeApprovalEnabled
               ),
               gutter: false,
               index,

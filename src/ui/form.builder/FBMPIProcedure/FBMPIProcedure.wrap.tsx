@@ -30,7 +30,9 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
     && !redlineActive;
-    types = keys(FBProcedureItemType);
+    types = keys(FBProcedureItemType).filter((type) => {
+      return type !== FBProcedureItemType.serials || !mpiProcedureState?.value?.shouldSkipSerialization;
+    });
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
     const descFormValue = formState?.getFieldValue(`${name}.description`);

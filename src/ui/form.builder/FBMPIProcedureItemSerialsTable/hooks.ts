@@ -27,6 +27,7 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
 
   const allSerialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading ?? false);
+  const shouldShowSerials = useObserver(() => serialsState?.shouldShowSerials ?? false);
 
   const isRnD = useMemo(() => {
     const smartRef = workspaceState?.document?.smartReferencesTo?.find(
@@ -86,6 +87,7 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
   return {
     isRnD,
     isLoading,
+    shouldShowSerials,
     stepSerialNumbers,
     allSerialNumbers,
     updateSerialNumber,
