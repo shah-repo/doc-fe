@@ -26,12 +26,18 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isAddIconHover, setIsHoverAddIcon] = useState(false);
+  const hasAnyContent = !isPreview
+  || !!mpiProcedureState?.value?.description
+  || types.some(type => {
+    const valueForType = mpiProcedureState?.[type] || [];
+    return type === FBProcedureItemType.serials || valueForType.length > 0;
+  });
 
   return (
     <FBInput {...props } {...{ name }} type="mpiprocedure">
       <Box
         pb={3.8}
-        mt={1.75}
+        mt={hasAnyContent ? 1.75 : 0}
         color={Colors.hint_gray}
         borderBottom={1}
       >
@@ -102,8 +108,14 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             pb={0}
           >
             <FBMapWrapper<string[]> collection={types}>
-              {(type, index) => (
-                <Box
+              {(type, index) => {
+                const valueForType = mpiProcedureState?.[type] || [];
+                const hasItems = !isPreview || valueForType.length > 0;
+                const isSerials = type === FBProcedureItemType.serials;
+
+                if (!isSerials && !hasItems) return null;
+
+                return (<Box
                   key={`fb-procedure-item-${type}-${index}`}
                   display="flex"
                   flexDirection="row"
@@ -137,7 +149,8 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                     />
                   </Box>
                 </Box>
-              )}
+                );
+              }}
             </FBMapWrapper>
           </Box>
           <Box display="flex" flexDirection="row" mt={3.8} ml={isPreview ? 0 : 1.5}>
