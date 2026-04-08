@@ -110,6 +110,12 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       }
     };
 
+    const nonSerialTypes = types.filter((type) => type !== FBProcedureItemType.serials);
+
+    const hasAnyContent = !isPreview
+      || Boolean(mpiProcedureState?.value?.description)
+      || nonSerialTypes.some((type) => (mpiProcedureState?.[type]?.length ?? 0) > 0);
+
     // MARK: @observer
 
     return Component({
@@ -119,6 +125,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       mpiProcedureState,
       isPreview,
       name,
+      hasAnyContent,
       disabled,
       types,
     });

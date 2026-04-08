@@ -6,4 +6,5 @@ export type FBMPIProcedureProps =
 & {
   editorConfig?: FBProcedureValue
   redlineActive?: boolean
+  hasAnyContent?: boolean
 };

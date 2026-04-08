@@ -20,18 +20,13 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   types = [],
   name,
   redlineActive,
+  hasAnyContent,
   autoFocus,
   autoScrollTo,
   ...props
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isAddIconHover, setIsHoverAddIcon] = useState(false);
-  const hasAnyContent = !isPreview
-  || !!mpiProcedureState?.value?.description
-  || types.some(type => {
-    const valueForType = mpiProcedureState?.[type] || [];
-    return type === FBProcedureItemType.serials || valueForType.length > 0;
-  });
 
   return (
     <FBInput {...props } {...{ name }} type="mpiprocedure">
