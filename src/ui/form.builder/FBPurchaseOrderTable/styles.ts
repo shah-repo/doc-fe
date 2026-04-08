@@ -67,6 +67,13 @@ export default makeStyles((theme) => ({
     textAlign: 'right',
     width: 160,
   },
+  percentageIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    height: 25,
+    position: 'relative',
+    top: theme.spacing(0.75),
+  },
   calculationTotal: {
     fontWeight: 600,
     textAlign: 'right',
