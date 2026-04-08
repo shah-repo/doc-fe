@@ -52,9 +52,9 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   const docTypeTableContext = useContext(DocTypeTableContext);
   const { tableSearchQueryPayload } = useContext(SearchContext);
 
-  const action = isTrainingRecord 
-  ? documentRevisionsActions.downloadTrainingRecordCsvData 
-  : documentRevisionsActions.downloadCsvData;
+  const action = isTrainingRecord
+    ? documentRevisionsActions.downloadTrainingRecordCsvData
+    : documentRevisionsActions.downloadCsvData;
   const loadAction = useActionCreator(action);
 
   const options = {
