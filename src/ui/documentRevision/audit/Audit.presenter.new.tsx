@@ -547,9 +547,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return;
       }
 
-      if (change.type === 'OBJECT_NEW' && change.nextValue === 'null'
-          && (change.field === 'formInput.wo_part_quantity' || change.field === 'formInput.wo_part_unit')) {
-        return;
+      if (['formInput.wo_part_quantity', 'formInput.wo_part_unit'].includes(change.field)
+        && change.type === 'OBJECT_NEW' && change.nextValue === 'null') {
+        return null;
       }
 
       if (!isFBField && change.field.includes('attachments')) {
