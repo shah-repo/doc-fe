@@ -547,6 +547,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return;
       }
 
+      if (change.type === 'OBJECT_NEW' && change.nextValue === 'null'
+          && (change.field === 'formInput.wo_part_quantity' || change.field === 'formInput.wo_part_unit')) {
+        return;
+      }
+
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
