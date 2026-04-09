@@ -83,6 +83,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
         {...{ dialog, headers }}
         customFileName="DocumentList"
         isMultiplePagesDownloadAllowed
+        isTrainingRecord
       />
     </>
   );
