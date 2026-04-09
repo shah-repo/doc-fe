@@ -36,10 +36,21 @@ const RowComponent = ({ index, style, data }) => {
 
   useEffect(() => {
     if (rowRef.current) {
-      const height = rowRef.current.getBoundingClientRect().height;
-      const style = window.getComputedStyle(rowRef?.current?.firstChild as Element);
-      const marginTop = parseFloat(style.marginTop);
-      data.setSize(index, height + marginTop);
+      const ele = rowRef?.current?.firstChild as Element;
+      const style = window.getComputedStyle(ele);
+
+      const measure = () => {
+        const rect = ele.getBoundingClientRect();
+        const marginTop = parseFloat(style.marginTop);
+        const calculatedHeight = rect.height + marginTop;
+        data.setSize(index, rect.height ? calculatedHeight : 1);
+      };
+
+      requestAnimationFrame(measure);
+      const observer = new ResizeObserver(measure);
+      observer.observe(ele);
+
+      return () => observer.disconnect();
     }
   }, []);
 
