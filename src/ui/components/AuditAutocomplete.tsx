@@ -94,7 +94,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
       } catch {
         arrayValue.push(auditValue);
       }
-      label = arrayValue.reduce((label, value) => {
+      label = arrayValue?.reduce((label, value) => {
         label += getRecordLabel(value);
         return label;
       }, '');

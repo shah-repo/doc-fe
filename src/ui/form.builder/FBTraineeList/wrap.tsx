@@ -25,7 +25,10 @@ export const withTraineeList = <T extends TraineeListProps>(
         () => workspaceState?.loading,
         (loading) => {
           if (!loading) {
-            setTrainees(prepareData(workspaceState?.formInputSync.get(name)));
+            const data = prepareData(workspaceState?.formInputSync.get(name));
+            setTrainees(data);
+            formState?.setFieldValue(name, data);
+            formState?.setFieldAutosave(name);
           }
         },
       );
