@@ -105,40 +105,41 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             pb={0}
           >
             <FBMapWrapper<string[]> collection={types}>
-              {(type, index) => (<Box
-                key={`fb-procedure-item-${type}-${index}`}
-                display="flex"
-                flexDirection="row"
-                mt={3.8}
+              {(type, index) => (
+                <Box
+                  key={`fb-procedure-item-${type}-${index}`}
+                  display="flex"
+                  flexDirection="row"
+                  mt={3.8}
 
-              >
+                >
 
-                {!isPreview && (
-                  <Box
-                    width={11.51}
-                    mt={2.7}
-                    border={1}
-                    borderColor={Colors.chinese_silver}
-                    borderBottom={0}
-                    borderLeft={0}
-                    borderRight={0}
-                  />
-                )}
-                <Box flexGrow={1}>
-                  <FBMPIProcedureItem
-                    defaultValue={props.editorConfig?.attachments}
-                    {...{
-                      type,
-                      name,
-                      stepIndex,
-                      disabled,
-                      isPreview,
-                      isOutput,
-                      redlineActive,
-                    }}
-                  />
+                  {!isPreview && (
+                    <Box
+                      width={11.51}
+                      mt={2.7}
+                      border={1}
+                      borderColor={Colors.chinese_silver}
+                      borderBottom={0}
+                      borderLeft={0}
+                      borderRight={0}
+                    />
+                  )}
+                  <Box flexGrow={1}>
+                    <FBMPIProcedureItem
+                      defaultValue={props.editorConfig?.attachments}
+                      {...{
+                        type,
+                        name,
+                        stepIndex,
+                        disabled,
+                        isPreview,
+                        isOutput,
+                        redlineActive,
+                      }}
+                    />
+                  </Box>
                 </Box>
-              </Box>
               )}
             </FBMapWrapper>
           </Box>
