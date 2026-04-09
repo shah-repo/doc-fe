@@ -50,11 +50,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
 }) => {
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
-  const [isAttachmentExpanded, setIsAttachmentExpanded] = useState(false);
   const isUnrelatedToMaterialAndEquipment = ![FBProcedureItemType.materials, FBProcedureItemType.equipment].includes(type);
   const isAttachmentType = type === FBProcedureItemType.attachments;
   const hasItems = !isPreview || value.length > 0;
-  const showAttachments = isAttachmentType && (!isPreview || !!mpiProcedureState?.value?.attachments?.length);
+  const attachmentsLength = mpiProcedureState?.value?.attachments?.length ?? 0;
+  const hasAttachments = attachmentsLength > 0;
+  const showAttachments = isAttachmentType && (!isPreview || hasAttachments);
+  const [isAttachmentExpanded, setIsAttachmentExpanded] = useState(hasAttachments);
 
   return (
     <FBProvider {...{ dialogState, mpiProcedureState }}>
