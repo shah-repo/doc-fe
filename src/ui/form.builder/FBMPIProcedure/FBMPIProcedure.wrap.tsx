@@ -31,7 +31,14 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
     && !redlineActive;
     types = keys(FBProcedureItemType).filter((type) => {
-      return type !== FBProcedureItemType.serials || !mpiProcedureState?.value?.shouldSkipSerialization;
+      switch (type) {
+        case FBProcedureItemType.serials:
+          return !mpiProcedureState?.value?.shouldSkipSerialization;
+        default: {
+          const itemValues = mpiProcedureState?.[type] ?? [];
+          return !isPreview || itemValues.length > 0;
+        }
+      }
     });
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
@@ -110,12 +117,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       }
     };
 
-    const nonSerialTypes = types.filter((type) => type !== FBProcedureItemType.serials);
-
-    const hasAnyContent = !isPreview
-      || Boolean(mpiProcedureState?.value?.description)
-      || nonSerialTypes.some((type) => (mpiProcedureState?.[type]?.length ?? 0) > 0);
-
     // MARK: @observer
 
     return Component({
@@ -125,7 +126,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       mpiProcedureState,
       isPreview,
       name,
-      hasAnyContent,
       disabled,
       types,
     });

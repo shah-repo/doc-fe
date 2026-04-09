@@ -20,13 +20,15 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   types = [],
   name,
   redlineActive,
-  hasAnyContent,
   autoFocus,
   autoScrollTo,
   ...props
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isAddIconHover, setIsHoverAddIcon] = useState(false);
+  const hasItems = types.length > 0;
+  const hasDescription = Boolean(mpiProcedureState?.value?.description);
+  const hasAnyContent = !isPreview || hasItems || hasDescription;
 
   return (
     <FBInput {...props } {...{ name }} type="mpiprocedure">
@@ -103,49 +105,41 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             pb={0}
           >
             <FBMapWrapper<string[]> collection={types}>
-              {(type, index) => {
-                const valueForType = mpiProcedureState?.[type] || [];
-                const hasItems = !isPreview || valueForType.length > 0;
-                const isSerials = type === FBProcedureItemType.serials;
+              {(type, index) => (<Box
+                key={`fb-procedure-item-${type}-${index}`}
+                display="flex"
+                flexDirection="row"
+                mt={3.8}
 
-                if (!isSerials && !hasItems) return null;
+              >
 
-                return (<Box
-                  key={`fb-procedure-item-${type}-${index}`}
-                  display="flex"
-                  flexDirection="row"
-                  mt={3.8}
-
-                >
-
-                  {!isPreview && (
-                    <Box
-                      width={11.51}
-                      mt={2.7}
-                      border={1}
-                      borderColor={Colors.chinese_silver}
-                      borderBottom={0}
-                      borderLeft={0}
-                      borderRight={0}
-                    />
-                  )}
-                  <Box flexGrow={1}>
-                    <FBMPIProcedureItem
-                      defaultValue={props.editorConfig?.attachments}
-                      {...{
-                        type,
-                        name,
-                        stepIndex,
-                        disabled,
-                        isPreview,
-                        isOutput,
-                        redlineActive,
-                      }}
-                    />
-                  </Box>
+                {!isPreview && (
+                  <Box
+                    width={11.51}
+                    mt={2.7}
+                    border={1}
+                    borderColor={Colors.chinese_silver}
+                    borderBottom={0}
+                    borderLeft={0}
+                    borderRight={0}
+                  />
+                )}
+                <Box flexGrow={1}>
+                  <FBMPIProcedureItem
+                    defaultValue={props.editorConfig?.attachments}
+                    {...{
+                      type,
+                      name,
+                      stepIndex,
+                      disabled,
+                      isPreview,
+                      isOutput,
+                      redlineActive,
+                    }}
+                  />
                 </Box>
-                );
-              }}
+              </Box>
+              )}
             </FBMapWrapper>
           </Box>
           <Box display="flex" flexDirection="row" mt={3.8} ml={isPreview ? 0 : 1.5}>
