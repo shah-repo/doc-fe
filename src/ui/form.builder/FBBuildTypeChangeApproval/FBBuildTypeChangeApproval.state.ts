@@ -17,6 +17,8 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
+  private readonly EXCLUDED_APPROVAL_STATUSES = ['ABANDONED', 'REJECTED', 'APPROVED'];
+
   public constructor ({ approvals, isOwner, fromBuildType, toBuildType }: FBBuildTypeChangeApprovalConstructor) {
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
@@ -26,7 +28,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
 
   // MARK: @computed
   @computed public get getApprovals (): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => (a.status !== 'ABANDONED' && a.status !== 'REJECTED') && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
+    const filtered = filter(this.approvals, (a) => !this.EXCLUDED_APPROVAL_STATUSES.includes(a?.status || '') && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
       canRequest: this.isOwner && a.status === 'DRAFT',
