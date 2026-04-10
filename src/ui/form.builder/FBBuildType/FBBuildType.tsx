@@ -3,9 +3,9 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { isUndefined } from 'lodash';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { FBButton, FBDialog, FBInput, FBProvider } from '..';
 import { translate } from '../../../common/intl';
-import { FormattedMessage } from 'react-intl';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
@@ -112,9 +112,6 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
                   buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
                 }}
               />
-            </Typography>
-            <Typography variant="body2" className={classes.messageText}>
-              {translate('form.builder.build.type.sub.header.msg')}
             </Typography>
           </Box>
         </Box>
