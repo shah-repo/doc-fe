@@ -98,7 +98,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       () => buildTypeState?.transitionApi.data,
       (data) => {
         concatApprovals(data);
-        if (data?.status === DocumentStatus.Draft) {
+        if (data?.status === DocumentStatus.Draft || data?.status === DocumentStatus.Rejected) {
           window.location.reload();
         }
       },
@@ -113,8 +113,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       );
       buildTypeState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
       const currentApprovals = buildTypeState?.approvals || [];
-      const allApproved = currentApprovals.length > 0 && !currentApprovals.some(
-        (a) => a.status === ApprovalStatus.Pending,
+      const allApproved = currentApprovals.length > 0 && currentApprovals.every(
+        (a) => a.status === ApprovalStatus.Approved,
       );
       if (allApproved) {
         const currentSelectedValue = selectedValueRef.current;
@@ -158,11 +158,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       }
     };
 
-    const requestApproval = (id: string) => {
-      if (!id) { return; }
-      buildTypeState?.applyTransition('pending', id);
-    };
-
     const onDialogActionClick = (action: 'cancel' | 'confirm') => {
       const closeDialogAndReset = () => {
         formState?.getInputState(name ?? '')?.setRender();
@@ -179,8 +174,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
           closeDialogAndReset();
         } else {
           buildTypeState.getApprovals
-            .filter(approval => approval.status === ApprovalStatus.Approved)
-            .forEach(approval => requestApproval(approval.id));
+            .filter(approval => approval.status === ApprovalStatus.Approved);
           lhrBuildDialog.close();
           approvalDialog.open();
         }
