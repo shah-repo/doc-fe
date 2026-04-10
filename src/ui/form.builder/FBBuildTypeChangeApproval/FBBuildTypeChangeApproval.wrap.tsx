@@ -28,7 +28,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 ) => {
   const Comp = ({
     onApproveClick,
-    requestApproval,
     approvals,
     name = '',
     loading,
@@ -148,10 +147,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         document?.approvals?.push(data as Approval);
         FBStore.selectedApprover.push(data as Approval);
         concatApprovals(data);
-        // Automatically request approval for newly added approver
-        if (data.id && requestApproval) {
-          requestApproval(data.id);
-        }
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -196,11 +191,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         approvalsState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
       }
     }
-
-    requestApproval = (id?: string) => {
-      if (!id) { return; }
-      approvalsState?.applyTransition('pending', id);
-    };
 
     React.useEffect(() => reaction(
       () => formState?.newValues.get(`fb-approvals-${name}`),
@@ -393,7 +383,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 
     return Component({
       ...(props as T),
-      requestApproval,
       dialogState,
       approvals,
       name,
