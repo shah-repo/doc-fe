@@ -228,18 +228,15 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     });
 
     const onApprovalAction = (action: 'accept' | 'reject') => {
-      if (action === 'reject') {
-        approvalTransition('reject', currentApproverId);
-      } else if (action === 'accept') {
-        onApproveClick(currentApproverId!);
-      }
+      const transition = action === 'accept' ? 'approve' : 'reject_with_password';
+      onApproveClick(currentApproverId!, transition);
     };
 
-    const onApproveClick = (approvalId: string) => {
+    const onApproveClick = (approvalId: string, transition: string) => {
       dialogState?.config({
         title: 'form.builder.password.prompt',
         open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true, transition }} />,
       });
     };
 
