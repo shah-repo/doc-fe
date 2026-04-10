@@ -10,6 +10,7 @@ import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/t
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { toastError } from '../../components/notifications';
+import { APPROVE, REJECT_WITH_PASSWORD } from '../../dashboard.new/line.items/dialogs/transitionDialog/types';
 import useDialog from '../../hooks/useDialog';
 import { ApprovalValidationError } from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.types';
 import FBStore from '../FBStore/FBStore';
@@ -228,7 +229,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     });
 
     const onApprovalAction = (action: 'accept' | 'reject') => {
-      const transition = action === 'accept' ? 'approve' : 'reject_with_password';
+      const transition = action === 'accept' ? APPROVE : REJECT_WITH_PASSWORD;
       onApproveClick(currentApproverId!, transition);
     };
 
