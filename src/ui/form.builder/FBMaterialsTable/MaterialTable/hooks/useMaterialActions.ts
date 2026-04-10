@@ -224,7 +224,6 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
       updateState({
         ...state,
         data: [...state.data],
-        expanded: [state.data[index].id],
         inEdit: [lotItem],
       });
       formik.setValues(lotItem);
