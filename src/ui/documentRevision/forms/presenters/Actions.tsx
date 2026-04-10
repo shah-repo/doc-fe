@@ -389,7 +389,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if (
     isDirectlyApproved
     && (!isInlineApproval || revisionStage !== 1 || isMPIOutput)
-    && showToOwnerOrOperator
+    && showToOwnerOrOperator && !isBuildTypeChangeApprovalEnabled
   ) {
     accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);
   }
@@ -612,7 +612,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
-      {!redlineActive && !isBuildTypeChangeApprovalEnabled && (
+      {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
           {restButtons.length > 0 && (
