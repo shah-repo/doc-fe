@@ -514,6 +514,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
         }
+
+        if (field === 'LHRTparameter' && ['BOOLEAN_DELETED'].includes(change.type)) {
+          return;
+        }
       }
 
       if (fbType === 'supplierContacts') {
