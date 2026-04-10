@@ -4,8 +4,8 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { isUndefined } from 'lodash';
 import React from 'react';
 import { FBButton, FBDialog, FBInput, FBProvider } from '..';
-import { SMText } from '../../../App';
 import { translate } from '../../../common/intl';
+import { FormattedMessage } from 'react-intl';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
@@ -105,14 +105,11 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
               {translate('common.warning')}
             </Typography>
             <Typography variant="body2" className={classes.messageText}>
-              {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
-              <SMText
-                label={{
-                  locale: 'form.builder.build.type.header.msg',
-                  values: {
-                    buildTypeOld: (<strong>{defaultValue?.displayLabel ?? ''}</strong>) as unknown as string,
-                    buildTypeNew: (<strong>{selectedValue?.displayLabel ?? ''}</strong>) as unknown as string,
-                  },
+              <FormattedMessage
+                id="form.builder.build.type.header.msg"
+                values={{
+                  buildTypeOld: <strong>{defaultValue?.displayLabel ?? ''}</strong>,
+                  buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
                 }}
               />
             </Typography>
