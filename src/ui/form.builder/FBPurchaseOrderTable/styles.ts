@@ -70,9 +70,6 @@ export default makeStyles((theme) => ({
   percentageIcon: {
     display: 'flex',
     alignItems: 'center',
-    height: 25,
-    position: 'relative',
-    top: theme.spacing(0.75),
   },
   calculationTotal: {
     fontWeight: 600,

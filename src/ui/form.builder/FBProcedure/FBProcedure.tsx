@@ -123,7 +123,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                     {!isPreview && (
                       <Box
                         width={10}
-                        mr={1}
+                        mr={0.75}
                         mt={2.7}
                         border={0.5}
                         borderColor={Colors.hint_gray}
@@ -132,7 +132,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                         borderRight={0}
                       />
                     )}
-                    <Box flexGrow={1}>
+                    <Box flexGrow={1} className={classes.itemContainer}>
                       <FBProcedureItem {...{ type, name, disabled, isPreview }} />
                     </Box>
                   </Box>
