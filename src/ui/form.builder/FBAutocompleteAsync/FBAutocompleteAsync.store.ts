@@ -5,42 +5,47 @@ export class AutocompleteAsyncStore {
   @observable public data = new Map<string, any>();
   @observable public loading = new Map<string, boolean>();
 
-  @action public setOptionData = (optionId: string, data: any) => {
-    this.data.set(optionId, observable.map(
+  @action public setOptionData = (optionId: string, data: any, additionalKey?: string) => {
+    const optionsKey = additionalKey ? `${optionId}-${additionalKey}` : optionId;
+    this.data.set(optionsKey, observable.map(
       (data as any[]).map((show: any) => [show.id || show.value, show]),
       { deep: false },
     ));
   };
 
-  public getValue = <T>(optionId?: string, by?: string): T | undefined => {
+  public getValue = <T>(optionId?: string, by?: string, additionalKey?: string): T | undefined => {
     if (!optionId || !by) { return; }
-    const list = this.data.get(optionId);
+    const key = additionalKey ? `${optionId}-${additionalKey}` : optionId;
+    const list = this.data.get(key);
     if (!list) { return; }
     return list.get(by) as T;
   };
 
-  public getValues = <T>(optionId?: string, by?: string[]): T[] | undefined => {
+  public getValues = <T>(optionId?: string, by?: string[], additionalKey?: string): T[] | undefined => {
     if (!optionId || !by || isEmpty(by)) { return; }
-    const list = this.data.get(optionId);
+    const optionsKey = additionalKey ? `${optionId}-${additionalKey}` : optionId;
+    const list = this.data.get(optionsKey);
     if (!list) { return; }
     return Array.from(map(by, (i) => list.get(i))) as T[];
   };
 
-  public add = <T>(optionId: string, key?: string, value?: T | undefined) => {
+  public add = <T>(optionId: string, key?: string, value?: T | undefined, additionalKey?: string) => {
     if (!optionId || !key || isEmpty(key)) { return; }
-    const optionsMap = this.data.get(optionId);
+    const optionsKey = additionalKey ? `${optionId}-${additionalKey}` : optionId;
+    const optionsMap = this.data.get(optionsKey);
     if (!optionsMap) {
-      this.data.set(optionId, new ObservableMap([
+      this.data.set(optionsKey, new ObservableMap([
         [key, value],
       ]));
-      return;
+    } else {
+      optionsMap.set(key, value);
     }
-    optionsMap.set(key, value);
   };
 
-  public reset = (optionId: string) => {
+  public reset = (optionId: string, additionalKey?: string) => {
     if (!optionId) { return; }
-    this.data.set(optionId, undefined);
+    const optionsKey = additionalKey ? `${optionId}-${additionalKey}` : optionId;
+    this.data.set(optionsKey, undefined);
   };
 }
 

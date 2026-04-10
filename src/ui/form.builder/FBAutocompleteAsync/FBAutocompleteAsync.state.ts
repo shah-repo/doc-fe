@@ -12,13 +12,22 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
+  private readonly docTypeIds?: string[] = [];
   private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, docTypeIds, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
+    this.docTypeIds = docTypeIds;
     this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
+  }
+
+  @computed public get optionsKey (): string | undefined {
+    if (!this.optionId) {
+      return undefined;
+    }
+    return this.docTypeIds?.length ? `${this.optionId}-${this.docTypeIds.join(',')}` : this.optionId;
   }
 
   public setAdditionalData = (data?: any[]) => set(this, 'additionalData', data);
@@ -47,19 +56,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   @computed public get sliceData (): any {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    if (FBAutocompleteAsyncStore.data.get(this.optionId)) {
-      return Array.from(FBAutocompleteAsyncStore.data.get(this.optionId).values());
+    if (FBAutocompleteAsyncStore.data.get(this.optionsKey)) {
+      return Array.from(FBAutocompleteAsyncStore.data.get(this.optionsKey).values());
     }
   }
 
   @action public sliceValue = (id: string | string[]): any => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    const options = FBAutocompleteAsyncStore.data.get(this.optionId);
+    const options = FBAutocompleteAsyncStore.data.get(this.optionsKey);
     if (!options) {
       return;
     }
@@ -75,19 +84,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   };
 
   @action public load = (force = false) => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
+    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionsKey);
     if (isLoading) { return; }
-    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
+    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionsKey));
     if (force || !hasData) {
       this.loadInternal();
     }
   };
 
   @action public prepareData = (data: any): any[] | undefined => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
     // TODO: refactore autocomplete list to reuse doc rev list (check with mobile)
@@ -103,6 +112,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
+      case FBAutocompleteAsyncOption.allDocuments:
         return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions:
@@ -173,27 +183,27 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
   public onSuccess () {
     super.onSuccess();
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    FBAutocompleteAsyncStore.loading.set(this.optionId, false);
+    FBAutocompleteAsyncStore.loading.set(this.optionsKey, false);
     let data = this.data;
     if (!data) {
       return;
     }
     if (data.some && !data.some((value) => typeof value === 'object')) {
       data = map(this.data, (d) => ({ id: d, name: d }));
-      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
+      return FBAutocompleteAsyncStore.setOptionData(this.optionsKey, data);
     }
-    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
+    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionsKey, data.slice());
   }
 
   protected loadInternal () {
-    if (!this.optionConfig || !this.optionId) {
+    if (!this.optionConfig || !this.optionsKey) {
       return;
     }
 
-    FBAutocompleteAsyncStore.loading.set(this.optionId, true);
+    FBAutocompleteAsyncStore.loading.set(this.optionsKey, true);
     const { id, root = '', publicApi } = this.optionConfig;
 
     this.setRoot(root);
@@ -210,6 +220,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.set({
       url: FBEndpoint.AutocompleteByOptionId,
       urlValues: { optionId: id },
+      body: this.docTypeIds?.length ? { docTypeIds: this.docTypeIds.join(',') } : undefined,
       method: 'get',
     });
   }

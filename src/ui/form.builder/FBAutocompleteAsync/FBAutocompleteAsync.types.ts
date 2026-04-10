@@ -10,6 +10,7 @@ export type FBAutocompleteAsyncProps =
   shouldReloadOnInit?: boolean
   additionalData?: any[] // TODO: make autocomplete async generic type by data
   forceNewRender?: boolean
+  docTypeIds?: string[]
   /**
    * @cfg {Record} Additional url params.
    */
@@ -79,11 +80,13 @@ export enum FBAutocompleteAsyncOption {
   buildType = '48',
   equipmentSpecifications = '49',
   documentsEligibleForGroupTrainee = '51',
+  allDocuments = '52',
 }
 
 export interface FBAutocompleteAsyncConstructor {
   optionId?: string
   urlValues?: Record<string, any>
+  docTypeIds?: string[]
   documentStatus?: string
   includePrevReleaseDoc?: boolean
 }

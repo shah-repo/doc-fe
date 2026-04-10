@@ -10,8 +10,8 @@ import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentG
 import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     getOptionLabel,
     refresh,
@@ -30,6 +30,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     optionId,
     options,
     loading,
+    docTypeIds,
     multiple,
     name,
     withoutPrefixRoot,
@@ -46,9 +47,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
+
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
+      docTypeIds,
       includePrevReleaseDoc: isWO && isWOPart,
     });
     const {
@@ -215,6 +218,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       freeSolo,
       multiple,
       urlValues,
+      docTypeIds,
+      autocompleteAsyncState,
       name,
       value,
     });

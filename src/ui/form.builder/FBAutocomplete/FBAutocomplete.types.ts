@@ -15,6 +15,7 @@ export type FBAutocompleteProps =
  | 'groupBy'
  | 'disableClearable'
  > & {
+   getTagLabel?: (option: any) => React.ReactNode
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any
    onOpen?: () => any
    refresh?: () => any

@@ -19,6 +19,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onOpen,
   getOptionDisabled,
   getOptionLabel,
+  getTagLabel,
   renderOption,
   filterOptions,
   debounceFilterInput,
@@ -109,8 +110,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       return (
         <StyledChip
           key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-          label={ <Box whiteSpace="normal" style={{ wordBreak: 'break-word' }}>
-            {getOptionLabel && getOptionLabel(option)} </Box> }
+          label={(
+            <Box whiteSpace="normal" style={{ wordBreak: 'break-word' }}>
+              {getTagLabel ? getTagLabel(option) : getOptionLabel?.(option)}
+            </Box>
+          )}
           style={{ minHeight: '32px', height: 'auto' }}
           {...getTagProps({ index })}
           disabled={props.name === 'approvers' ? isAlreadyApproved : isOptionDisabled || disabled}
