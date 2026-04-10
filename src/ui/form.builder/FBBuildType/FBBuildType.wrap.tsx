@@ -29,6 +29,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
     const [defaultValue, setDefaultValue] = React.useState<undefined | LHRBuild>(undefined);
     const [prevValue, setPrevValue] = React.useState<undefined | LHRBuild>(undefined);
+    const selectedValueRef = React.useRef(selectedValue);
+    selectedValueRef.current = selectedValue;
     const [options, setOptions] = React.useState<LHRBuild[]>([]);
     const [refresh, setRefresh] = React.useState(false);
 
@@ -69,7 +71,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     const isBuildTypeChangeApprovalEnabled = lhrBuildTypeSwitchConfigApproval.length > 0 ? workspaceState?.buildTypeChangeStatus() : defaultValue && defaultValue.internalType !== FBLHRBuildOptions.Production;
 
-    const currentApproverId = document?.approvals?.find(approval => approval.approver?.user.id === authUser.id)?.id;
+    const currentApproverId = document?.approvals?.find(approval => approval.approver?.user.id === authUser.id && approval.status === ApprovalStatus.Pending)?.id;
 
     const buildTypeState = FB.useRef(
       FBBuildTypeState,
@@ -95,19 +97,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     React.useEffect(() => reaction(
       () => buildTypeState?.transitionApi.data,
       (data) => {
-        if (data?.status === ApprovalStatus.Approved) {
-          const currentApprovals = buildTypeState?.approvals || [];
-          const updatedApprovals = unionBy([data], currentApprovals, 'id');
-          const allApproved = updatedApprovals.length > 0 && updatedApprovals.every(
-            (a) => a.status === ApprovalStatus.Approved,
-          );
-          if (allApproved) {
-            formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-            formState?.setFieldAutosave(`${name}`);
-            setDefaultValue(selectedValue);
-            workspaceState?.saveDocRev(formState?.getValues());
-          }
-        }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -118,19 +107,23 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
     function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (
-        approval.status
-        && [ApprovalStatus.Rejected, ApprovalStatus.Approved].includes(
-          approval.status as ApprovalStatus,
-        )
-      ) {
-        window.location.reload();
-      } else {
-        const stateApprovals = filter(
-          buildTypeState?.approvals,
-          (a) => a.approver?.id !== approval.approver?.id,
-        );
-        buildTypeState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
+      const stateApprovals = filter(
+        buildTypeState?.approvals,
+        (a) => a.approver?.id !== approval.approver?.id,
+      );
+      buildTypeState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
+      const currentApprovals = buildTypeState?.approvals || [];
+      const allApproved = currentApprovals.length > 0 && !currentApprovals.some(
+        (a) => a.status === ApprovalStatus.Pending,
+      );
+      if (allApproved) {
+        const currentSelectedValue = selectedValueRef.current;
+        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
+        formState?.setFieldAutosave(`${name}`);
+        setDefaultValue(currentSelectedValue);
+        setSelectedValue(currentSelectedValue);
+        setPrevValue(currentSelectedValue);
+        workspaceState?.saveDocRev(formState?.getValues());
       }
     }
 
