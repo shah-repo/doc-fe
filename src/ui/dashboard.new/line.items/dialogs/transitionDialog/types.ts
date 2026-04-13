@@ -13,10 +13,3 @@ export type Transition =
   | 'to_review'
   | 'withdraw'
   | 'complete';
-
-export const APPROVE = 'approve';
-export const REJECT_WITH_PASSWORD = 'reject_with_password';
-export const ACCEPT = 'accept';
-const REJECT = 'reject';
-
-export type ApprovalAction = typeof ACCEPT | typeof REJECT;

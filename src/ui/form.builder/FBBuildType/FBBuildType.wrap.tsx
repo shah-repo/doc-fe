@@ -10,7 +10,6 @@ import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/t
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 import { toastError } from '../../components/notifications';
-import { ACCEPT, ApprovalAction, APPROVE, REJECT_WITH_PASSWORD } from '../../dashboard.new/line.items/dialogs/transitionDialog/types';
 import useDialog from '../../hooks/useDialog';
 import { ApprovalValidationError } from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.types';
 import FBStore from '../FBStore/FBStore';
@@ -228,12 +227,11 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       showApprovalButtons = (docApprovals?.some((approval) => approval.approver?.user.id === authUser.id && approval.status === 'PENDING') && workspaceState?.buildTypeChangeStatus()) ?? false;
     });
 
-    const onApprovalAction = (action: ApprovalAction) => {
-      const transition = action === ACCEPT ? APPROVE : REJECT_WITH_PASSWORD;
-      onApproveClick(currentApproverId!, transition);
+    const onApprovalAction = (action: FBInlineApprovalTransition) => {
+      onApproveClick(currentApproverId!, action);
     };
 
-    const onApproveClick = (approvalId: string, transition: string) => {
+    const onApproveClick = (approvalId: string, transition: FBInlineApprovalTransition) => {
       dialogState?.config({
         title: 'form.builder.password.prompt',
         open: true,
