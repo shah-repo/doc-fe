@@ -6,7 +6,7 @@ import { getLotStatusLabel } from '../../components/common/header/HeaderLotStatu
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
-import { EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
+import { DATE_TYPE, EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
 import { DetailsObj, EditableLHRSummaryItem, NullableString } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSummaryItem>>): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
@@ -108,8 +108,13 @@ const getDisplayStepAndMpiValue = (step?: string, stepOrMpiDetails?: DetailsObj)
   return !step ? `/${customMpiIdValue}` : (customMpiIdValue === step) ? `${step}/` : `${step}/${customMpiIdValue}`;
 };
 
-export const normalizeDate = (date: string): string => {
-  if (!date) return date;
+export const normalizeDate = (date: string, field: string): string | null => {
+  if (!date) {
+    if ([DATE_TYPE.customCalDueDate, DATE_TYPE.customPmDueDate, DATE_TYPE.customExpiryDate].includes(DATE_TYPE[field])) {
+      return null;
+    }
+    return date;
+  }
 
   if (moment(date, MomentFormats.YearMonthDateDash, true).isValid()) {
     return date;
