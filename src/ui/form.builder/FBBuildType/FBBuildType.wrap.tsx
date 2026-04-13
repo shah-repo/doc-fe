@@ -98,9 +98,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       () => buildTypeState?.transitionApi.data,
       (data) => {
         concatApprovals(data);
-        if (data?.status === DocumentStatus.Draft || data?.status === DocumentStatus.Rejected) {
-          window.location.reload();
-        }
+        window.location.reload();
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -112,19 +110,6 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         (a) => a.approver?.id !== approval.approver?.id,
       );
       buildTypeState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
-      const currentApprovals = buildTypeState?.approvals || [];
-      const allApproved = currentApprovals.length > 0 && currentApprovals.every(
-        (a) => a.status === ApprovalStatus.Approved,
-      );
-      if (allApproved) {
-        const currentSelectedValue = selectedValueRef.current;
-        formState?.setFieldValue(`${name}`, formState?.getFieldValue(`new-${name}`));
-        formState?.setFieldAutosave(`${name}`);
-        setDefaultValue(currentSelectedValue);
-        setSelectedValue(currentSelectedValue);
-        setPrevValue(currentSelectedValue);
-        workspaceState?.saveDocRev(formState?.getValues());
-      }
     }
 
     const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
