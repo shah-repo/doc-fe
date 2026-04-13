@@ -3,9 +3,9 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { isUndefined } from 'lodash';
 import React from 'react';
-import { FBButton, FBDialog, FBInput, FBProvider } from '..';
-import { translate } from '../../../common/intl';
 import { FormattedMessage } from 'react-intl';
+import { FBButton, FBDialog, FBInlineApprovalTransitionIdent, FBInput, FBProvider } from '..';
+import { translate } from '../../../common/intl';
 import Dialog from '../../components/dialogs';
 import { Autocomplete } from '../../components/forms/fields-next';
 import FBBuildTypeChangeApproval from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
@@ -75,13 +75,13 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           <StyledCancelFBButton
             label="form.builder.reject.change"
             size="medium"
-            onClick={() => onApprovalAction?.('reject')}
+            onClick={() => onApprovalAction?.(FBInlineApprovalTransitionIdent.REJECT_WITH_PASSWORD)}
             data-cy="build-type-reject-change-button"
           />
           <FBButton
             label="form.builder.accept.change"
             size="medium"
-            onClick={() => onApprovalAction?.('accept')}
+            onClick={() => onApprovalAction?.(FBInlineApprovalTransitionIdent.APPROVE)}
             data-cy="build-type-accept-change-button"
           />
         </Box>
@@ -112,9 +112,6 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
                   buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
                 }}
               />
-            </Typography>
-            <Typography variant="body2" className={classes.messageText}>
-              {translate('form.builder.build.type.sub.header.msg')}
             </Typography>
           </Box>
         </Box>

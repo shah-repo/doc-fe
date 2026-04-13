@@ -227,19 +227,15 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       showApprovalButtons = (docApprovals?.some((approval) => approval.approver?.user.id === authUser.id && approval.status === 'PENDING') && workspaceState?.buildTypeChangeStatus()) ?? false;
     });
 
-    const onApprovalAction = (action: 'accept' | 'reject') => {
-      if (action === 'reject') {
-        approvalTransition('reject', currentApproverId);
-      } else if (action === 'accept') {
-        onApproveClick(currentApproverId!);
-      }
+    const onApprovalAction = (action: FBInlineApprovalTransition) => {
+      onApproveClick(currentApproverId!, action);
     };
 
-    const onApproveClick = (approvalId: string) => {
+    const onApproveClick = (approvalId: string, transition: FBInlineApprovalTransition) => {
       dialogState?.config({
         title: 'form.builder.password.prompt',
         open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true, transition }} />,
       });
     };
 
