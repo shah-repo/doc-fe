@@ -57,3 +57,23 @@ export const isLhrInvalid = (
 
   return false;
 };
+
+/**
+ * Removes static and dynamic LHR date field keys from form values
+ * Static keys: 'lhrs-start-date', 'lhrs-end-date'
+ * Dynamic keys: 'lhrs-start-date-{uuid}', 'lhrs-end-date-{uuid}'
+ */
+export const cleanupLHRDateFields = (values: Record<string, any> | undefined): void => {
+  if (!values) {
+    return;
+  }
+
+  Object.keys(values).forEach((key) => {
+    if (key === LHRS_START_DATE
+        || key === LHRS_END_DATE
+        || key.startsWith(`${LHRS_START_DATE}-`)
+        || key.startsWith(`${LHRS_END_DATE}-`)) {
+      delete values[key];
+    }
+  });
+};

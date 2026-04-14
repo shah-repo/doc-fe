@@ -11,7 +11,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
 import { AutocompleteInputProps, AutocompleteProps } from './Autocomplete.types';
 
-const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
+export const AutocompleteControl: React.FC<AutocompleteInputProps> = ({
   autoFocus = false,
   defaultValue,
   disabled,
@@ -73,9 +73,11 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   size,
   filterOptions,
   getOptionLabel,
+  renderInput,
   ChipProps = { size: 'small' },
   PopperComponent,
   shouldAlwaysShowPlaceholder,
+  shouldShowDefaultAdornment,
   ...props
 }, ref: MutableRefObject<HTMLDivElement>) => {
   const baseClasses = useStyles();
@@ -134,20 +136,33 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       getOptionLabel={getOptionLabel}
       filterOptions={filterOptions ?? internalFilterOptions}
       PopperComponent={PopperComponent ?? ((props) => <AutocompletePopper {...props} />)}
-      renderInput={(params) => (
-        <AutocompleteControl
-          {...params}
-          InputProps={{
-            ...params.InputProps,
-            ...inputProps,
-          }}
-          size={size}
-          name={name}
-          error={controlState.error}
-          disabled={controlState.disabled}
-          placeholder={inputPlaceholder}
-        />
-      )}
+      renderInput={(params) => renderInput
+        ? renderInput(params)
+        : (
+          <AutocompleteControl
+            {...params}
+            InputProps={{
+              ...params.InputProps,
+              ...inputProps,
+              ...(
+                shouldShowDefaultAdornment
+                  ? {
+                    endAdornment: (
+                      <>
+                        {inputProps?.endAdornment}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  } : {}),
+            }}
+            size={size}
+            name={name}
+            error={controlState.error}
+            disabled={controlState.disabled}
+            placeholder={inputPlaceholder}
+          />
+        )
+      }
       ChipProps={ChipProps}
     />
   );

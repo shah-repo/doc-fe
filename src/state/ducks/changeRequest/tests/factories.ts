@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { Audit } from '../../audit/types';
 import { getOwner, getUser } from '../../common/tests/factories';
-import { DocumentType } from '../../documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../documentRevisions/documentType/types';
 import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from '../types';
 
 const createNestedObject = () => (
@@ -19,6 +19,7 @@ const createDocumentType = (docType: Partial<DocumentType> = {}): DocumentType =
   group: 'OTHER',
   isQms: false,
   defaultTraining: false,
+  numberingStyle: DOCUMENT_NUMBERING_STYLE.INTERNAL,
   ...docType,
 });
 

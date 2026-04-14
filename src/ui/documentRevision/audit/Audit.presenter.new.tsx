@@ -59,6 +59,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+
   const { getFormattedDateString } = useDate();
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
@@ -109,7 +110,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       || change.type.includes('BOOLEAN_EDITED')
       || change.field.includes('items.date')
       || change.field.includes('items.capitalEquipment')
-      || change.field.includes('totalInUSD'))
+      || change.field.includes('totalInUSD')
+      || change.field.endsWith('partNumber')
+      || change.field.endsWith('partNumberDocumentId'))
     // Even though these are of type NUMBER_NEW - we keep them while they are being set for the 1st time
     && !(change.field.includes('items-built-in.subTotal') || change.field.includes('items-built-in.tax')
       || change.field.includes('items-built-in.taxRate') || change.field.includes('items-built-in.totalAmount'))
@@ -155,6 +158,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
+    const lotSerialsAdded: Audit[] = [];
+    const lotSerialsDeleted: Audit[] = [];
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
@@ -197,6 +202,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             ...change,
             type: 'NUMBER_DELETED',
             nextValue: previousValue as string,
+          };
+        }
+        if (fbType === 'datepicker' && change.type === 'STRING_EDITED' && nextValue === 'null') {
+          auditValue = previousValue;
+          change = {
+            ...change,
+            type: 'STRING_DELETED',
+            nextValue: 'undefined',
           };
         }
       }
@@ -501,6 +514,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
         }
+
+        if (field === 'LHRTparameter' && ['BOOLEAN_DELETED'].includes(change.type)) {
+          return;
+        }
       }
 
       if (fbType === 'supplierContacts') {
@@ -519,6 +536,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
         }
+      }
+
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_NEW') {
+        lotSerialsAdded.push(change);
+        return;
+      }
+      if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_DELETED') {
+        lotSerialsDeleted.push(change);
+        return;
+      }
+
+      if (!isFBField && change.field === 'revisionChangeType') {
+        return;
+      }
+
+      if (['formInput.wo_part_quantity', 'formInput.wo_part_unit'].includes(change.field)
+        && change.type === 'OBJECT_NEW' && change.nextValue === 'null') {
+        return null;
       }
 
       if (!isFBField && change.field.includes('attachments')) {
@@ -725,11 +760,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             mb={1}
             key={`${change.groupId}-${index}`}
             data-cy="no-padding-margin"
-            className={
-              index === array.length - 1
-                ? classes.noPaddingMargin
-                : classes.auditListItem
-            }
+            className={classes.auditListItem}
           >
             <>
               {!isFBField && !isSmartRef && isArrayEdited && isDocIdORDescriptionChanged && (
@@ -791,6 +822,170 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         key++;
       }
     });
+
+    // Add grouped output for Lot Serial Numbers if present
+    if (lotSerialsAdded.length > 0) {
+      const values = lotSerialsAdded
+        .map(c => String(c.nextValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-${lotSerialsAdded[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsAdded.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_NEW.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
+
+    // Add grouped output for Lot Serial Numbers deletions if present
+    if (lotSerialsDeleted.length > 0) {
+      const values = lotSerialsDeleted
+        .map(c => String(c.previousValue))
+        .filter(Boolean);
+
+      const formatSerials = (items: string[]): string => {
+        const map = new Map<string, { width: number, nums: number[] }>();
+
+        items.forEach(s => {
+          // eslint-disable-next-line
+          const m = s.match(/^(.*)-(\d+)$/);
+          if (!m) {
+            const key = '';
+            const obj = map.get(key) || { width: 0, nums: [] };
+            obj.nums.push(NaN);
+            map.set(key, obj);
+            return;
+          }
+          const prefix = m[1];
+          const numStr = m[2];
+          const num = parseInt(numStr, 10);
+          const obj = map.get(prefix) || { width: numStr.length, nums: [] };
+          obj.width = Math.max(obj.width, numStr.length);
+          obj.nums.push(num);
+          map.set(prefix, obj);
+        });
+
+        const parts: string[] = [];
+        map.forEach(({ width, nums }, prefix) => {
+          const uniq = Array.from(new Set(nums.filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+          let i = 0;
+          const fmt = (n: number) => `${prefix}-${String(n).padStart(width, '0')}`;
+
+          while (i < uniq.length) {
+            const start = uniq[i];
+            let j = i;
+            while (j + 1 < uniq.length && uniq[j + 1] === uniq[j] + 1) {
+              j++;
+            }
+            const end = uniq[j];
+            if (start === end) {
+              parts.push(fmt(start));
+            } else {
+              parts.push(`${fmt(start)} \u2013 ${fmt(end)}`);
+            }
+            i = j + 1;
+          }
+        });
+
+        return parts.join(', ');
+      };
+
+      const combined = formatSerials(values);
+
+      singleFields.push(
+        <Box
+          mb={1}
+          key={`lot-serial-del-${lotSerialsDeleted[0].groupId}`}
+          data-cy="no-padding-margin"
+          className={classes.auditListItem}
+        >
+          <>
+            <Typography variant="subtitle1" className={classes.auditKey}>
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                translation={
+                  lotSerialsDeleted.length === 1
+                    ? 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.single'
+                    : 'documentRevision.audit.lotSerialNumbers.OBJECT_DELETED.multiple'
+                }
+              />
+            </Typography>
+          </>
+          <div className={classes.auditValue}>
+            <div data-cy={`change-value-${groupKey}-${key}`}>{combined}</div>
+          </div>
+        </Box>,
+      );
+      key++;
+    }
 
     // This key is added to keep sequential data-cy identifier in the history
     attachments.forEach((change) => {

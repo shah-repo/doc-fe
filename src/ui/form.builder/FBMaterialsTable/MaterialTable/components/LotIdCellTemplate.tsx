@@ -1,9 +1,9 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { cloneDeep, debounce, endsWith, isEmpty, toUpper } from 'lodash';
 import { reaction } from 'mobx';
 import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MaterialTreelistContext } from '..';
@@ -13,21 +13,25 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField, IconButton } from '../../../../components/forms/fields-next';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { checkIsDocumentLot } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useHover from '../../../../hooks/useHover';
+import { Colors } from '../../../../layout/theme-next';
+import { LotAutoCompleteOptions } from '../../../FBAllocation/components/treelist/column.templates/types';
 import FBAutocompleteAsyncState from '../../../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import FBAutocompleteAsyncStore from '../../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { DOCUMENT_REVISION_LOT_STATUS } from '../../../FBMPIProcedureSelect/FBMPIProcedureSelect.types';
 import FB from '../../../helpers/FB';
-import { ADD_FIELD, IS_LOT_ADDITION, MODE_FIELD } from '../constants';
+import { ADD_FIELD, IS_LOT_ADDITION, MIN_SEARCH_TERM_LENGTH, MODE_FIELD } from '../constants';
 import { CustomTreeListCellProps, EditableMaterial, LotOptions } from '../types';
 import { styles } from './styles';
 import TreeListCellWrapper from './TreeListCellWrapper';
+import { isDateExpired } from './utils';
 
 interface LotAutocompleteProps {
   field?: string
@@ -38,6 +42,7 @@ interface LotAutocompleteProps {
   parentPartId?: string
   lotRevId?: string
   isLoading?: boolean
+  isEBProcedure?: boolean
 }
 
 const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
@@ -56,7 +61,7 @@ const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
   );
 
   const storedLot = useMemo(() => {
-    if (!lotId) return null;
+    if (!lotId || !FB.isUUID(lotId)) return null;
 
     return FBAutocompleteAsyncStore.getValue<DocumentRevision>(
       FBAutocompleteAsyncOption.ebLots,
@@ -67,7 +72,7 @@ const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
   const [lotDocId, setLotDocId] = useState('');
 
   useEffect(() => {
-    if (!lotId || storedLot) return;
+    if (!lotId || storedLot || !FB.isUUID(lotId)) return;
 
     autocompleteAsyncState.fetchAutocompleteOption(
       lotId,
@@ -76,6 +81,11 @@ const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
   }, [lotId, storedLot, autocompleteAsyncState]);
 
   useEffect(() => {
+    if (!isEmpty(lotId) && !FB.isUUID(lotId)) {
+      setLotDocId(lotId);
+      return;
+    }
+
     if (!storedLot) return;
 
     setLotDocId(storedLot.document.docId);
@@ -101,7 +111,7 @@ const LotPreviewCell: React.FC<CustomTreeListCellProps> = (props) => {
           {lotDocId}
         </span>
 
-        {lotDocId && (
+        {lotDocId && FB.isUUID(lotId) && (
           <StyleTooltip
             title={translate('relatedParts.created.modal.quick.view')}
             placement="top"
@@ -133,28 +143,41 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   value,
   setValue,
   isLoading,
+  isEBProcedure,
   dataItem,
 }) => {
-  const { setFieldValue, errors, getFieldProps } = useFormikContext<EditableMaterial>();
-  const { getFormattedDateString } = useDate();
+  const { setFieldValue, errors, getFieldProps, values } = useFormikContext<EditableMaterial>();
+  const { getFormattedDateString, timezone } = useDate();
   const options = useMemo(
     () =>
       lots.map((lot) => {
-        const { id, isExpired, expiryDate, document, displayRevision, name } = lot;
+        const { id, document, displayRevision, name, formInput } = lot;
+        const expiryDate = formInput?.lot_expiry_date;
+        const isLotExpired = isDateExpired(expiryDate, timezone);
         return {
           label: translate('common.select.revision', { docId: document.docId, displayRevision, name }),
           value: id,
-          expiryDate: isExpired ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
-          isExpired: isExpired,
+          expiryDate: isLotExpired ? getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) : '',
+          isExpired: isLotExpired,
         };
       }),
     [lots],
   );
 
+  const [items, setItems] = React.useState<OptionType[] | undefined>([]);
+  const [inputValue, setInputValue] = React.useState<string>();
+  const isUpdateAction = dataItem[MODE_FIELD];
+  const isFreeSolo = isEBProcedure;
+
+  useEffect(() => {
+    setItems(options);
+  }, [options]);
+
   const handleChange = (_, option?: LotOptions) => {
     setValue(option ?? { label: '', value: '', documentId: '' });
+    setInputValue(undefined);
     const selectedLot = lots.find((lot) => lot.id === option?.value);
-    field && setFieldValue(field, option?.value);
+    field && setFieldValue(field, option?.value ?? '');
     setFieldValue('quantityOnHand', selectedLot?.precalc?.lot_on_hand_quantity);
     setFieldValue(IS_LOT_ADDITION, true);
     setFieldValue('parentPartId', dataItem.parentPartId);
@@ -164,18 +187,91 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
+  useEffect(() => {
+    const lotId = cloneDeep(values?.[field]) ?? dataItem[field ?? ''];
+
+    if (isEBProcedure && inputValue) {
+      setFieldValue(field, inputValue);
+      setFieldValue(IS_LOT_ADDITION, true);
+      setFieldValue('parentPartId', dataItem?.parentPartId);
+      setFieldValue('selectedLotLabel', inputValue);
+      setFieldValue('parentId', dataItem?.parentId);
+      setFieldValue('id', dataItem.id);
+      setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+      return;
+    }
+
+    if (isUpdateAction && !values?.[field] && lotId) {
+      setFieldValue(field, lotId);
+    }
+
+    if (!isUpdateAction || FB.isUUID(lotId ?? '')) {
+      return;
+    }
+
+    if (!isFreeSolo && !lotId) {
+      setItems(options ?? []);
+    }
+  }, [values]);
+
+  const onInputChange = (_: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    if (reason !== 'input') {
+      return;
+    }
+
+    if (!isFreeSolo) {
+      setInputValue(inputVal);
+      setFieldValue(field, '');
+      return;
+    }
+
+    setFieldValue(field, inputVal);
+    setInputValue(inputVal);
+    setValue({ label: inputVal, value: inputVal });
+
+    if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
+      const filteredOptions = options?.filter((option) =>
+        option.label.toLowerCase().includes(inputVal?.toLowerCase()),
+      );
+      setItems(filteredOptions);
+    } else if (!inputVal || inputVal?.length < MIN_SEARCH_TERM_LENGTH) {
+      setItems(options ?? []);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
+
   return (
     <FormikField name={field} required error={Boolean(errors[field])}>
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
-        disabled={!!dataItem[field]}
-        options={options}
+        disabled={!!dataItem[field] && !isEBProcedure}
+        options={items}
         blurOnSelect
+        freeSolo={isFreeSolo}
+        onInputChange={debounceFunction}
         disableOpenOnFocus
         placeholder={translate('common.select')}
         size="small"
         getOptionLabel={(opt) => opt.label}
+        renderOption={(option: LotAutoCompleteOptions, props) => (
+          <ListItem {...props} className="lot-list-item" disableGutters>
+            <ListItemText primary={option.label} />
+            {option.isExpired && (
+              <ListItemIcon>
+                <StyleTooltip
+                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
+                >
+                  <FontAwesomeIcon icon={regular('circle-exclamation')} color={Colors.error} size="sm" />
+                </StyleTooltip>
+              </ListItemIcon>
+            )}
+          </ListItem>
+        )}
         ListboxComponent={({ children, ...otherProps }) => {
           return (
             <>
@@ -185,6 +281,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         }}
         loading={isLoading}
         onChange={handleChange}
+        forcePopupIcon
       />
     </FormikField>
   );
@@ -192,9 +289,11 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
 
 const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const { hasChildren, dataItem, field, onScanClick, isLHRProductionBuild, isEBProcedure } = props;
+  const { allowExpiredLots, shouldEnforceProductionLotsOnly } = React.useContext(MaterialTreelistContext);
   const { parentPartId, lotId } = dataItem;
   const isEditMode = (dataItem[MODE_FIELD] || dataItem[ADD_FIELD]) && (dataItem?.isLotAddition || dataItem?.lotId);
   const classes = styles({ isEditMode });
+  const { timezone } = useDate();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [addBarCodeRef, isAddBarCodeRef] = useHover<HTMLButtonElement>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -212,14 +311,22 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
     if (isEBProcedure) {
       isAcceptedStatus = true; // No constraints on Lot Status
     } else {
-      isAcceptedStatus = isLHRProductionBuild
-        ? lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.ACCEPTED || lot?.lotStatus === DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS
+      const isValidStatus = [
+        DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
+        DOCUMENT_REVISION_LOT_STATUS.USE_AS_IS,
+      ].includes(lot?.lotStatus);
+
+      isAcceptedStatus = isLHRProductionBuild ? isValidStatus
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
     const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
 
-    return isAcceptedStatus && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
+    const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date, timezone);
+    const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
+    const isLotTypeAllowed = !shouldEnforceProductionLotsOnly || !isRDDocument;
+
+    return isLotTypeAllowed && isAcceptedStatus && isExpiryValid && !isZeroOnHandQuantity && !dataItem.childrenLotIds?.includes(lot.id);
   };
 
   const fetchAvailablePartsAsync = useAsync({
@@ -251,7 +358,8 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   }, [parentPartId, dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
 
   useEffect(() => {
-    const value = renderOptions().find((option) => option.value === lotId);
+    const defaultValue = lotId ?? '';
+    const value = renderOptions().find((option) => option.value === defaultValue) ?? { label: defaultValue, value: defaultValue, documentId: '' };
 
     if (value && field) {
       setValue(value);
@@ -336,6 +444,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
               setValue,
               dataItem,
               parentPartId,
+              isEBProcedure,
               isLoading: fetchAvailablePartsAsync.isLoading,
             }}
           />

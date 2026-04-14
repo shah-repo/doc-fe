@@ -1,5 +1,5 @@
 import { get, isEmpty, maxBy, pick } from 'lodash';
-import { DocumentType, DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from '../../../state/ducks/documentRevisions/types';
 import FBDRStore from '../../form.builder/stores/ui/FBDRStore';
 import { DEFAULT_INITIAL_VALUES } from '../DocumentRevisionCreate.container';
@@ -149,6 +149,9 @@ export const toDocumentRevisionEditRequestBody = (
   return data;
 };
 
+export const stripAllWhitespace = (value?: string): string =>
+  value?.replace(/\s+/g, '') ?? '';
+
 export const toNewVersionRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
@@ -167,7 +170,7 @@ export const toNewVersionRequestBody = (
       newValues.document = {
         ...newValues.document,
         id: get(values, 'document.id'),
-        docId: get(values, 'document.docId'),
+        docId: stripAllWhitespace(get(values, 'document.docId')),
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
@@ -229,3 +232,12 @@ export const toDocumentRevisionFormValuesForOutput = (
 };
 
 export const getActiveDocumentTypes = (documentTypes: DocumentType[]) => documentTypes.filter((type) => type.active);
+
+export const stripDocIdOfAcronym = (initialDocId: string | undefined, acronym: string): string => {
+  if (!initialDocId) {
+    return '';
+  }
+  const escapedPrefix = acronym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`^${escapedPrefix}`);
+  return initialDocId?.replace(regex, '');
+};

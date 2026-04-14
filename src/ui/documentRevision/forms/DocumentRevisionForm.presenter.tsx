@@ -4,12 +4,14 @@ import { flatten, get, includes, isEmpty } from 'lodash';
 import { Observer, observer, useObserver } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../App';
+import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
-import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
+import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import FormWrapper from '../../components/forms/FormWrapper';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
@@ -26,6 +28,7 @@ import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDoc
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
+import DocIdInputNew from './presenters/DocIdInput.new';
 import DocumentSecurity from './presenters/DocumentSecurity';
 import DocumentTypeSelect from './presenters/DocumentTypeSelect';
 import EquipmentSpecification from './presenters/EquipmentSpecification';
@@ -36,6 +39,7 @@ import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
+import { stripDocIdOfAcronym } from './transform';
 import { DocumentRevisionFormValues } from './types';
 
 interface Props extends FormikProps<DocumentRevisionFormValues> {
@@ -112,6 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
+  const dispatch = useDispatch();
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
 
   const isPart = checkIsDocumentPart(groupOptions);
@@ -146,6 +151,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
+  const numberingStyle = documentRevision?.numberingStyle ?? _documentRevisionFormState?.numberingStyle;
+  const isNumberingStyleDifferentFromInternal = numberingStyle !== DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
+  const isDocRevRelatedStatusNo = !documentRevision?.relatedPartsStatus
+    || documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.PARENT_NO;
+
+  const documentId = documentRevision?.documentId;
+  const docIdEditEnabled = !documentRevision
+    || (isDocRevFirstDraft && isDocRevRelatedStatusNo && !inRestrictedEditMode);
+
+  const initialDocId = initialValues.document?.docId !== ''
+    ? initialValues.document?.docId : stripDocIdOfAcronym(values.document?.docId, documentTypeById?.documentTypeAcronym);
+
   useEffect(() => {
     if (!redlineActive) {
       return;
@@ -165,11 +183,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue('document.docId', proposedDocId);
     }
 
-    if (!isEmpty(documentTypeById?.defaultRevStage) && values.document?.docId === '') {
+    if (!isEmpty(documentTypeById?.defaultRevStage) && !values.id) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       _documentRevisionFormState?.setForceRender(value);
       setFieldValue('revisionStage', value);
     }
+    return () => {
+      dispatch(documentsActions.clearDocumentProposedId());
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposedDocId, setFieldValue]);
 
@@ -261,16 +282,36 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>}
           {isDocIdVisible && <Grid item xs={6}>
-            <DocIdInput
-              document={values.document}
-              {...{
-                isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
-                documentTypesById,
-                setDocId,
-                documentTypeId,
-                type,
-              }}
-            />
+            {
+              !isNumberingStyleDifferentFromInternal
+                && <DocIdInput
+                  document={values.document}
+                  {...{
+                    isDisabled: isDisabledInputInPreview || inRestrictedEditMode,
+                    documentTypesById,
+                    setDocId,
+                    documentTypeId,
+                    type,
+                  }}
+                />
+            }
+            {
+              isNumberingStyleDifferentFromInternal && documentTypeById
+                && <DocIdInputNew
+                  documentTypeId={documentTypeById.id}
+                  docRevId={documentRevision?.id}
+                  documentAcronym={documentTypeById.documentTypeAcronym}
+                  isDisabled={!docIdEditEnabled}
+                  documentId={documentId}
+                  docId={initialDocId}
+                  numberingStyle={numberingStyle}
+                  isShownOnDialog={false}
+                  helpText={documentRevision
+                    ? translate('document.revision.user.numbering.help.docrev')
+                    : translate('document.revision.user.numbering.help')
+                  }
+                />
+            }
           </Grid>}
           {enableRevision && <Grid item xs={6}>
             {/* hack for rerender revision stage */}

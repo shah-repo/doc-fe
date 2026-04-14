@@ -50,6 +50,14 @@ export default makeStyles((theme) =>
     name: {
       color: Colors.dark_gray,
       fontWeight: 500,
+      maxWidth: '100%',
+      overflow: 'hidden',
+      display: '-webkit-box',
+      WebkitBoxOrient: 'vertical',
+      WebkitLineClamp: 3,
+      textOverflow: 'ellipsis',
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
     },
     chip: {
       display: 'flex',

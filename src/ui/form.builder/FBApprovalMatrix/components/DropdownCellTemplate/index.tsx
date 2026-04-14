@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
+import { DropDownList, DropDownListProps, DropDownsPopupSettings } from '@progress/kendo-react-dropdowns';
 import { get } from 'lodash';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -10,6 +10,7 @@ interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
   defaultItem?: any
   emptyLabel?: string
+  popupSettings?: DropDownsPopupSettings
 }
 
 const Styles = makeStyles(() => ({
@@ -19,7 +20,7 @@ const Styles = makeStyles(() => ({
 }));
 
 const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
-  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange } = props;
+  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange, popupSettings } = props;
   const { editable } = column;
   const classes = Styles();
   const mode = dataItem[MODE_FIELD];
@@ -62,6 +63,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
       defaultItem={defaultItem}
       onChange={handleChange}
       defaultValue={valueItem ?? defaultItem}
+      popupSettings={popupSettings}
     />
   );
 };

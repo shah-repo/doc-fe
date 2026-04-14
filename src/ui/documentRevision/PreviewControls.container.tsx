@@ -21,7 +21,7 @@ import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
 import { Approval } from '../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
-import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
 import { ApprovalStatus } from '../../state/ducks/documents/types';
@@ -57,10 +57,11 @@ import Colors from '../layout/theme/utils/colors';
 import { Translation } from '../translations/types';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from './PreviewControls.container.types';
+import CustomIdDialog from './dialogs/CustomIdDialog';
 import WOClose from './forms/presenters/Close';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { useIsLatestRevision } from './helpers/useIsLatestRevision';
@@ -118,7 +119,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
+
   const printDialog = useDialog();
+  const customIdDialog = useDialog();
+
   const formDocumentId = documentRevision.formDocument?.document?.id || '';
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const formDocuments: Document = useSelector((state: ApplicationState) =>
@@ -158,6 +162,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
     .find((type) => type.documentTypeName === 'Approval Request' || type.documentTypeName === 'Change Request');
+
+  const outputDocumentTypes = documentRevision?.formTemplate?.outputDocumentTypes ?? [];
+  const outputDocumentType = outputDocumentTypes[0] as DocumentType;
+
+  const isInternalTypeNumbering = outputDocumentType?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
   useEffect(() => {
     if (formDocumentId) {
@@ -225,7 +234,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       const templateId = isAR.id;
       history.push(`/change_request/${revisionId}/create/${templateId}`);
     }
-    handleCreateDocument(documentRevision);
+
+    if (!isInternalTypeNumbering) {
+      customIdDialog.open();
+    } else {
+      handleCreateDocument(documentRevision);
+    }
   };
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
@@ -278,6 +292,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       );
     }
   };
+
   const renderUpdateButton = (renderAsButton) => {
     if (hasAccess && canCreate() && showUpdate) {
       return (
@@ -690,6 +705,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
       )}
+      {customIdDialog.isOpen && <CustomIdDialog
+        isOpen = {customIdDialog.isOpen}
+        closeDialog = {customIdDialog.close}
+        outputDocumentType = {outputDocumentType}
+        isInternalTypeNumbering = {isInternalTypeNumbering}
+        handleSubmit = {(docId: string) => handleCreateDocument(documentRevision, docId)}
+      />}
     </>
   );
 };

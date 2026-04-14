@@ -177,35 +177,33 @@ export const PartIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   if (isEditMode) {
     return <Editor {...props} />;
   }
+  const tooltipTitle = fieldValue ?? userEnteredItemId;
 
   return (
-    <OverflowingContent onClick={() => onClick?.({ dataItem })}>
-      {fieldValue && <Tooltip title={fieldValue} placement="top-start" arrow>
-        <Link
-          to={documentPreviewPath(partDocRevId, partDocId)}
-          target="_blank"
-          className={classes.link}
-        >
-          {fieldValue}
-        </Link>
-      </Tooltip>}
-      {isUserEnteredItemId && <Box display="flex" justifyContent="space-between">
-        {userEnteredItemId}
-        <span className={classes.nonEnlilDocInfoIcon}>
+    <Box onClick={() => onClick?.({ dataItem })} className={classes.partWrapper}>
+      <Box className={classes.partIdWrapper}>
+        <OverflowingContent title={tooltipTitle}>
+          {fieldValue ? (
+            <Link to={documentPreviewPath(partDocRevId, partDocId)} target="_blank" className={classes.link}>
+              {fieldValue}
+            </Link>
+          ) : (
+            userEnteredItemId
+          )}
+        </OverflowingContent>
+      </Box>
+
+      {isUserEnteredItemId && (
+        <Box className={classes.nonEnlilDocInfoIcon}>
           <Tooltip
             arrow
             title={translate('approvalRequest.material.disposition.warning.non.enlil.doc')}
             placement="top"
           >
-            <FontAwesomeIcon
-              data-cy="non-enlil-doc"
-              color={Colors.warning}
-              icon={regular('circle-exclamation')}
-            />
+            <FontAwesomeIcon data-cy="non-enlil-doc" color={Colors.warning} icon={regular('circle-exclamation')} />
           </Tooltip>
-        </span>
-      </Box>
-      }
-    </OverflowingContent>
+        </Box>
+      )}
+    </Box>
   );
 };

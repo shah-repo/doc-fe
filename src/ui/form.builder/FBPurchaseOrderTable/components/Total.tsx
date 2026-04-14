@@ -101,7 +101,9 @@ const Total: React.FC<FBPurchaseOrderTableTotalProps> = ({
                     rules="min:0"
                     disabled={disabled}
                   />
-                  %
+                  <Box className={classes.percentageIcon}>
+                    %
+                  </Box>
                 </Box>
               </Box>
             </Box>

@@ -64,6 +64,7 @@ export interface AuthResponse {
   iotCredentials: IotCredentials
   passwordUpdatedAt: string
   passwordExpiresAt: string
+  accessToken: string
 }
 
 export interface User {
@@ -144,6 +145,7 @@ export interface UserState {
   initialColor: string
   timezone: string
   userCompanyTimezone: string
+  accessToken: string
 }
 
 export interface AuthProps {
@@ -257,6 +259,10 @@ export enum Permission {
   // REDLINE FILE ACCESS
   CAN_ACCESS_REDLINE_ATTACHMENTS = 'CAN_ACCESS_REDLINE_ATTACHMENTS',
   PREMIUM_AI = 'PREMIUM_AI',
+  MILESTONE_VIEW_READ = 'MILESTONE_VIEW_READ',
+  MILESTONE_VIEW_CREATE = 'MILESTONE_VIEW_CREATE',
+  MILESTONE_VIEW_UPDATE = 'MILESTONE_VIEW_UPDATE',
+  MILESTONE_VIEW_DELETE = 'MILESTONE_VIEW_DELETE',
 }
 
 export enum GroupTag {

@@ -23,9 +23,12 @@ const DEFAULTS = {
   DATADOG_CLIENT_TOKEN: '',
   DATADOG_ENABLED: false,
   DATADOG_SAMPLE_RATE: '0',
+  COMPANY_COOKIE_MAX_AGE_DAYS: '7',
+  COMPANY_COOKIE_NAME: 'enlil_company_id',
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
   OCR_SUPPORTED_FILE_TYPES: '',
+  RETURN_URL_STORAGE_KEY: 'enlil_return_url',
   TM_URL: '',
 };
 
@@ -39,7 +42,13 @@ class Config {
   }
 
   private static getNumber (name: ConfigKey): number {
-    return parseInt(this.get(name), 10);
+    const value = parseInt(this.get(name), 10);
+
+    if (!Number.isNaN(value)) {
+      return value;
+    }
+
+    return parseInt(String(DEFAULTS[name]), 10);
   }
 
   public static get ApiEndpoint () {
@@ -131,6 +140,18 @@ class Config {
 
   public static get DatadogSampleRate () {
     return this.getNumber('DATADOG_SAMPLE_RATE');
+  }
+
+  public static get CompanyCookieName (): string {
+    return this.get('COMPANY_COOKIE_NAME');
+  }
+
+  public static get CompanyCookieMaxAgeDays (): number {
+    return this.getNumber('COMPANY_COOKIE_MAX_AGE_DAYS');
+  }
+
+  public static get ReturnUrlStorageKey (): string {
+    return this.get('RETURN_URL_STORAGE_KEY');
   }
 
   public static get EnvironmentName (): string {

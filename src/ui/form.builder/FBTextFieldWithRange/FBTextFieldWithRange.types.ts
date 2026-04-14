@@ -5,6 +5,7 @@ export interface ChipComponentProps {
   tooltip: string
   isActive?: boolean
   className?: string
+  isDisabled?: boolean
   onChange?: (isActive: boolean) => void
 }
 

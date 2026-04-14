@@ -1,14 +1,14 @@
 import { action, computed, observable, set } from 'mobx';
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from '../../..';
 import { Id } from '../../../../state/ducks/common/types';
-import { DOC_TYPE_GROUP_OPTION, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
+import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 import { AllocationState } from '../../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
-import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -24,6 +24,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public documentRevision?: DocumentRevision;
   @observable public revisionChangeType?: RevisionChangeType;
   @observable public createDocumentDisabled = false;
+  @observable public numberingStyle: DOCUMENT_NUMBERING_STYLE = DOCUMENT_NUMBERING_STYLE.INTERNAL;
   @observable public releasedDocRev?: DocumentRevision;
   @observable public forceRender?: any;
   @observable public disabledAction = false;
@@ -167,6 +168,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setCreateDocumentDisabled = (disabled?: boolean) => {
     set(this, 'createDocumentDisabled', disabled || false);
+  };
+
+  @action public setNumberingStyle = (value?: DOCUMENT_NUMBERING_STYLE) => {
+    set(this, 'numberingStyle', value || DOCUMENT_NUMBERING_STYLE.INTERNAL);
   };
 
   @action public setReleasedDocRev = (releasedDocRev?: DocumentRevision) => {

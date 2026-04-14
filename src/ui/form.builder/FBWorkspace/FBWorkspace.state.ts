@@ -12,7 +12,7 @@ import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../FBLHRStep/utils';
+import { cleanupLHRDateFields } from '../FBLHRStep/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
@@ -35,6 +35,9 @@ class FBWorkspaceState extends FBSchemaState {
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   @observable.shallow
   public buildTypeOptions: LHRBuild[] = [];
+
+  @observable.shallow
+  public lhrBuildTypeConfig: LHRBuild[] = [];
 
   public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
@@ -135,6 +138,13 @@ class FBWorkspaceState extends FBSchemaState {
     return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
 
+  public get lhrBuildTypeConfigForSelectedBuildType (): LHRBuild | undefined {
+    const buildType = this.document?.smartReferencesTo?.find(
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    )?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
+    return this.lhrBuildTypeConfig?.find((config) => config.id === buildType);
+  }
+
   public get isLHRRelevantBuilds (): boolean {
     if (this.buildTypeOptions.length === 0) {
       return false;
@@ -201,6 +211,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, 'buildTypeOptions', data);
   };
 
+  @action public setLhrBuildTypeConfig = (data: LHRBuild[]) => {
+    set(this, 'lhrBuildTypeConfig', data);
+  };
+
   @action public setIsPreview = (isPreview: boolean) => {
     set(this, 'isPreview', isPreview);
   };
@@ -261,12 +275,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.loading = true;
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, LHRS_START_DATE)) {
-        delete values[LHRS_START_DATE];
-      }
-      if (has(values, LHRS_END_DATE)) {
-        delete values[LHRS_END_DATE];
-      }
+      cleanupLHRDateFields(values);
     }
 
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
@@ -417,6 +426,11 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public deleteHiddenFieldByRules = (name: string): void => {
     this.hiddenFieldsByRules.delete(name);
+  };
+
+  public buildTypeChangeStatus = () => {
+    const isBuildTypeChangeApprovalPending = this?.approvals?.filter(approval => approval?.type === 'SECTION' && approval?.fieldId === 'buildTypeApprovals' && approval?.status === 'PENDING');
+    return isBuildTypeChangeApprovalPending && isBuildTypeChangeApprovalPending.length > 0;
   };
 }
 

@@ -1,9 +1,9 @@
+import { FBApprovalMatrixFieldData } from '../../../../ui/form.builder';
 import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from '../../../../ui/form.builder/FBApprovalMatrix/constants';
 import { apiAction, apiActionWithCallbacks } from '../../../factories';
 import { ApiAction, Handlers } from '../../../types';
-import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from './constants';
+import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_NUMBERING_STYLE_RESTRICTIONS_URL, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from './constants';
 import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, TabConfiguration, TabConfigurationListAction } from './types';
-import { FBApprovalMatrixFieldData } from '../../../../ui/form.builder';
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
@@ -40,6 +40,16 @@ const loadTabConfiguration = (): ApiAction<TabConfiguration[]> => apiAction({
 
 const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeById> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/${id}`,
+  method: 'get',
+  asyncType: DOCUMENT_TYPE_BY_ID_ASYNC,
+  onSuccess: (documentTypes, dispatch) => {
+    dispatch(docTypeIds(documentTypes));
+  },
+  handlers,
+});
+
+const getDocTypeIdsWithNumberingStyle = (id: string, handlers: Handlers): ApiAction<DocumentTypeById> => apiActionWithCallbacks({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/${id}?getNumberingStyle=true`,
   method: 'get',
   asyncType: DOCUMENT_TYPE_BY_ID_ASYNC,
   onSuccess: (documentTypes, dispatch) => {
@@ -143,9 +153,19 @@ const getGroupWithGroupOptions = (
   handlers,
 });
 
+const fetchDamNumberingStyleRestrictions = (
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_TYPE_NUMBERING_STYLE_RESTRICTIONS_URL}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   loadList,
   getDocTypeIds,
+  getDocTypeIdsWithNumberingStyle,
   getApprovalMatrix,
   getPOApprovalMatrix,
   getDocTypeByGroup,
@@ -155,5 +175,6 @@ export default {
   addDocumentType,
   getApprovalMatrixNco,
   getGroupWithGroupOptions,
+  fetchDamNumberingStyleRestrictions,
   loadTabConfiguration,
 };

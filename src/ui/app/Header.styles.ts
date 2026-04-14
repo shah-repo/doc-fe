@@ -27,6 +27,7 @@ export default makeStyles<NextTheme>(theme => createStyles({
       right: 0,
       top: 0,
       bottom: 0,
+      opacity: 0.1,
       backgroundRepeat: 'no-repeat',
       backgroundImage: `url(${EnlilLogo})`,
       backgroundPosition: 'left top',

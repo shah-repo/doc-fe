@@ -1,3 +1,5 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
   Card,
@@ -11,12 +13,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { ReactComponent as ViewGridIcon } from '../../../../assets/images/grid_view.svg';
 import { ReactComponent as SolidIcon } from '../../../../assets/images/view.svg';
 import { ReactComponent as ViewChecked } from '../../../../assets/images/view_checked.svg';
 import { translate } from '../../../../common/intl';
 import Text from '../../../components/Text';
 import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
+import useHover from '../../../hooks/useHover';
 import { styles } from './ColumnShowHideTreeMenu.styles';
 import { CustomTreeListColumnProps } from './types';
 
@@ -32,6 +34,9 @@ function ColumnShowHideTreeMenu<T extends CustomTreeListColumnProps> ({
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isOpened = Boolean(anchorEl);
+  const [whereUsedIconRef, isWhereUsedIconHovered]
+      = useHover<HTMLButtonElement>();
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -45,8 +50,11 @@ function ColumnShowHideTreeMenu<T extends CustomTreeListColumnProps> ({
         placement="top"
         arrow
       >
-        <IconButton onClick={handleClick} data-cy="manage-columns-btn">
-          <ViewGridIcon className={classes.viewIcon} />
+        <IconButton onClick={handleClick} className={classes.viewIconButton} data-cy="manage-columns-btn" ref={whereUsedIconRef}>
+          <FontAwesomeIcon
+            className={classes.viewIcon}
+            icon={isWhereUsedIconHovered ? solid('columns-3') : regular('columns-3')}
+          />
         </IconButton>
       </StyleTooltip>
       <Menu

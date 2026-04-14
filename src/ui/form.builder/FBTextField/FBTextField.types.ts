@@ -25,4 +25,5 @@ export type FBTextFieldProps =
     }
     customHeight?: number
     isFbEditorField?: boolean
+    previewClassName?: string
   };

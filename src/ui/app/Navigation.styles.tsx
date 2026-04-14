@@ -58,6 +58,8 @@ export default makeStyles<NextTheme>(theme => createStyles({
     flexGrow: 1,
     overflowX: 'hidden',
     overflowY: 'auto',
+    marginTop: 0,
+    paddingTop: 0,
   },
   progress: {
     margin: 'auto',
