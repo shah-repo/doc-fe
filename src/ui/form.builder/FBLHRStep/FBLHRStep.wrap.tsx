@@ -6,9 +6,9 @@ import React from 'react';
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from '..';
 import { SM } from '../../../App';
 import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
+import { checkIsDocumentLHRT } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
@@ -60,7 +60,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
 
     // TO DO: Find another way with BE to chechk if doc is LHRT
-    isDocumentLHRT = workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP_OPTION.LHRT;
+    isDocumentLHRT = checkIsDocumentLHRT(workspaceState?.document?.document.documentType.groupOptions);
 
     // Use step-specific field names so each LHR step's dates are isolated in formState.
     // All steps previously shared the same key ('lhrs-start-date'), causing one step's
