@@ -1207,7 +1207,7 @@
   "form.builder.send.signature": "Send Signature Request",
   "form.builder.send.for.approval": "Send for Approval",
   "form.builder.approvals.not.present": "Approvals not present",
-  "form.builder.approvals.group.required": "At least one approver from {groupNames} group(s) has to be selected",
+  "form.builder.approvals.group.required": "At least one approver from {groupNames} group(s) is required",
   "form.builder.signature.label": "Signature {number}",
   "form.builder.signature.sent": "Signature request sent",
   "form.builder.signature.cancelled": "Signature request cancelled successfully",
