@@ -64,6 +64,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
           multiple={true}
           autosave={false}
           {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
+          autoCompleteClasses={{ root: classes.deleteChip }}
         />
         <Box className={classes.approvalApprovedGroupContainer}>
           {approvalApprovedGroup ? (
