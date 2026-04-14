@@ -21,8 +21,16 @@ export const email: Validator = (value: string) => {
 };
 
 export const docId: Validator = (value: string, documentTypeAcronym?: string) => {
-  const docIdValue = value?.slice(documentTypeAcronym?.length);
-  return required(docIdValue);
+  if (!value) return required(value);
+
+  let docIdValue = value;
+
+  // Remove prefix only if it actually exists
+  if (documentTypeAcronym && value.startsWith(documentTypeAcronym)) {
+    docIdValue = value.slice(documentTypeAcronym.length);
+  }
+
+  return required(docIdValue.trim());
 };
 
 export const requiredNumber: Validator = (value) => {
