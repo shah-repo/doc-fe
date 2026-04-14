@@ -8,7 +8,7 @@ import { SM } from '../../../App';
 import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
-import { checkIsDocumentLHRT } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
