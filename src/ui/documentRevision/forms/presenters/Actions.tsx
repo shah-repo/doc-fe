@@ -56,6 +56,7 @@ import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
 import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
+import ApproversButton from './ApproversButton';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
@@ -424,6 +425,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if (isDocumentDraft || canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
   }
+  if (isBuildTypeChangeApprovalEnabled) {
+    accessableButtons.push(PreviewControlButtons.ApproversButton);
+  }
   if (canChangeOwnerShip && values.id) {
     accessableButtons.push(PreviewControlButtons.ChangeOwner);
   }
@@ -545,6 +549,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes(PreviewControlButtons.ExportCsvButton) && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes(PreviewControlButtons.ApproversButton) && (
+        <ApproversButton renderAsButton={renderAsButton} />
       )}
       {buttons.includes(PreviewControlButtons.ChangeOwner) && values.id && (
         <OwnerChangerContainer
