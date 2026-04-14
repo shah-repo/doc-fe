@@ -150,7 +150,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                           label="common.reject"
                           size="small"
                           className={classes.actionButton}
-                          onClick={() => approvalTransition('reject', approval.id)}
+                          onClick={() => approvalTransition?.('reject', approval.id)}
                         />
                         <FBButton
                           {...{ disabled }}
