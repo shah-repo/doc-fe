@@ -11,6 +11,7 @@ import { documentRevisionsActions } from '../../../../state/ducks/documentRevisi
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AiWidgetContext } from '../../../app/AiWidget';
 import { Attachment } from '../../../change.request/form/types';
+import { attachmentsDisabledChangeControl } from '../../../document.revision/utils/helpers';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
@@ -51,7 +52,8 @@ const AttachmentTable: React.FC<Props> = ({
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
   const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
   const { _formState } = SM.useStores();
-  const isDisabled = [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Approved, DocumentRevisionStatus.Deprecated].includes(documentRevision?.status);
+  const isRestrictEditDisabled = attachmentsDisabledChangeControl(documentRevision);
+  const isDisabled = [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Approved, DocumentRevisionStatus.Deprecated].includes(documentRevision?.status) || isRestrictEditDisabled;
   const aiWidgetContext = useContext(AiWidgetContext);
 
   const async = useAsync<DocumentRevision>({
