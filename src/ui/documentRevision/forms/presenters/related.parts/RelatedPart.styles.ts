@@ -318,5 +318,13 @@ export default makeStyles((theme) =>
     dialogContent: {
       height: '72vh',
     },
+    truncateText: {
+      maxWidth: '90%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      display: 'inline-block',
+      verticalAlign: 'middle',
+    },
   }),
 );
