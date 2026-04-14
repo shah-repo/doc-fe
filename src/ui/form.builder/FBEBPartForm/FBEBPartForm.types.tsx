@@ -1,5 +1,5 @@
 import { FBFormProps, FBInputProps } from '..';
-import { DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export type FBEBPartFormProps =
 & Pick<FBFormProps, 'formState'>
@@ -10,4 +10,5 @@ export type FBEBPartFormProps =
   ebId?: string
   formOptions?: DocumentTypeByIdForm[]
   formAutocompleteDisabled?: boolean
+  docType?: DocumentType
 };

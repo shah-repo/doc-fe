@@ -8,4 +8,7 @@ export const styles = makeStyles({
     zIndex: 1,
     right: 0,
   },
+  itemContainer: {
+    width: '100%',
+  },
 });

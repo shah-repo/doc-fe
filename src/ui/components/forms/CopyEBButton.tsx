@@ -23,24 +23,24 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   const isNewLayout = SM.isNewLayout;
 
   const classes = styles();
-  const [cloneModelopen, setCloneModelopen] = React.useState(false);
+  const [cloneModalOpen, setCloneModalOpen] = React.useState(false);
 
-  const openCloneModel = (e) => {
+  const openCloneModal = (e) => {
     e.stopPropagation();
-    setCloneModelopen(true);
+    setCloneModalOpen(true);
   };
 
-  const handleCloneModelClose = () => {
-    setCloneModelopen(false);
+  const handleCloneModalClose = () => {
+    setCloneModalOpen(false);
   };
 
   const onClose = () => {
-    handleCloneModelClose();
+    handleCloneModalClose();
   };
   const getUpdatedButton = () => {
     if (isNewLayout) {
       if (!renderAsButton) {
-        return (<StyledMenuListItem button alignItems="flex-start" onClick={openCloneModel}>
+        return (<StyledMenuListItem button alignItems="flex-start" onClick={openCloneModal}>
           <StyledMenuListIcon><CloneIcon /></StyledMenuListIcon>
           <StyledMenuListItemText
             data-cy="CloneEBButton"
@@ -52,7 +52,7 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
         <StyledButton
           color="primary"
           data-cy="CloneEBButton"
-          onClick={openCloneModel}
+          onClick={openCloneModal}
         >
           <Text translation="documentRevision.clone.eb" />
         </StyledButton>
@@ -62,7 +62,7 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
       variant="contained"
       color="secondary"
       data-cy="CloneEBButton"
-      onClick={openCloneModel}
+      onClick={openCloneModal}
     >
       <Text translation="documentRevision.clone.eb" />
     </Button>);
@@ -71,12 +71,12 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   return (
     <>
       {getUpdatedButton()}
-      <Modal open={cloneModelopen} onClose={onClose} className={classes.modal}>
+      {cloneModalOpen && <Modal open={cloneModalOpen} onClose={onClose} className={classes.modal}>
         <CloneModal
-          handleCloneModelClose={onClose}
+          handleCloneModalClose={onClose}
           documentRevision={documentRevision}
         />
-      </Modal>
+      </Modal>}
     </>
   );
 };

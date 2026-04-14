@@ -30,7 +30,7 @@ const LHRBanner: React.FC<LHRBannerProps> = ({ documentRevision }) => {
 
   const lhrData = parentLHRReference.toDocRev?.precalc?.lshs_subtitle ?? parentLHRReference.metadata?.lhr;
 
-  if (!lhrData || !DATA_KEYS.every(k => k in lhrData)) {
+  if (!lhrData || typeof lhrData !== 'object' || !DATA_KEYS.every(k => k in lhrData)) {
     return null;
   }
 

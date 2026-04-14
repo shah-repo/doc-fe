@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { EBPartPostBody, FB, FBEBPartFormActions, FBEBPartFormProps, FBFormState } from '..';
+import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export const withFBEBPartForm = <T extends FBEBPartFormProps>(
   Component: React.FunctionComponent<T>,
@@ -20,6 +21,8 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // MARK: @config
     const { dialogState, ebPartState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
+
+    const [docType, setDocType] = React.useState<DocumentType | undefined>();
 
     React.useEffect(() => dialogState?.setActions(
       <FBEBPartFormActions
@@ -68,6 +71,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
       () => ebPartState?.documentTypeApi.data,
       (data) => {
         const forms = data?.forms;
+        setDocType(data?.documentType);
 
         // auto select first form if it's the only one
         if (forms?.length === 1) {
@@ -98,6 +102,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
       loading,
       formOptions,
       formAutocompleteDisabled,
+      docType,
     });
   };
 

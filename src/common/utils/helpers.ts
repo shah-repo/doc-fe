@@ -131,6 +131,22 @@ export const getPayloadBasedOnWorkOrderType = (payload: Record<string, unknown>)
       payload[WO_LHR_TABLE_KEY_NAME] = [];
       payload = getPayloadBasedOnWoTypeMakeKit(payload);
     }
+
+    if (payload[WO_LOT_ID_KEY_NAME] === null) {
+      payload[WO_LOT_ID_KEY_NAME] = '';
+    }
+
+    if (payload[WO_LHR_TABLE_KEY_NAME] === null) {
+      payload[WO_LHR_TABLE_KEY_NAME] = [];
+    }
+  }
+
+  if (payload[WO_PART_KEY_NAME] === null || !payload[WO_PART_KEY_NAME]) {
+    if (!payload[WO_TYPE_KEY] || (payload[WO_TYPE_KEY] !== WorkOrderTypes.OTHER && payload[WO_PART_QTY_KEY_NAME] === null)) {
+      delete payload[WO_PART_KEY_NAME];
+      delete payload[WO_PART_UNIT_KEY_NAME];
+      delete payload[WO_PART_QTY_KEY_NAME];
+    }
   }
 
   return payload;

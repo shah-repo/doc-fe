@@ -199,11 +199,12 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
   ) => onOpenQuickView?.(evt, dataItem);
 
   const { referenceDisplayName, documentId, referenceRevId } = dataItem ?? {};
+  const isValidLink = documentId && referenceRevId;
 
   return (
     <Grid justify="flex-start" alignItems="center" container onClick={handleClick} data-cy="reference-cell">
       <Grid item xs={10} className={classes.grid}>
-        {documentId ? (
+        {isValidLink ? (
           <StyledLink
             to={documentVersionPath(referenceRevId, documentId)}
             onClick={(e) => e.stopPropagation()}

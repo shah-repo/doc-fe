@@ -1,13 +1,15 @@
-import { Box, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
 import PostAddTwoToneIcon from '@material-ui/icons/PostAddTwoTone';
 import { FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { translate } from '../../../common/intl';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOCUMENT_NUMBERING_STYLE, DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import FormWrapper from '../../components/forms/FormWrapper';
 import AutocompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
+import DocIdInputNew from '../../documentRevision/forms/presenters/DocIdInput.new';
 import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -17,10 +19,12 @@ import { styles } from './FormListDialog/FormListDialog.styles';
 interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[]
   formIds: DocumentTypeByIdForm[]
+  numberingStyle?: DOCUMENT_NUMBERING_STYLE
   areFormIdsLoading?: boolean
   dialog: DialogHandler
   handleSelection: (id: string) => void
   handleTemplateSelection?: (id: string) => void
+  handleUserSubmit?: (docId: string) => void
   isRecord: boolean
   closeMultipleFormDialog: () => void
   isLHR: boolean
@@ -29,10 +33,12 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
+  numberingStyle,
   areFormIdsLoading = false,
   documentTypes,
   handleSelection,
   handleTemplateSelection,
+  handleUserSubmit,
   initialValues,
   dirty,
   resetForm,
@@ -44,16 +50,28 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   const [parts, setParts] = useState<DocumentRevision[]>([]);
 
+  const [selectedDocumentType, setSelectedDocumentType] = useState<DocumentType>();
+  const [docId, setDocId] = useState<string>('');
+
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
 
   const activeDocTypes = documentTypes.filter((type) => type.active);
+  const isCustomerTypeNumbering = numberingStyle === DOCUMENT_NUMBERING_STYLE.CUSTOMER;
+
+  const [helpText, setHelpText] = useState<string>(translate('document.revision.user.numbering.help'));
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       setParts(data);
     },
   });
+
+  useEffect(() => {
+    if (activeDocTypes?.length === 1) {
+      setSelectedDocumentType(activeDocTypes[0]);
+    }
+  }, [activeDocTypes]);
 
   useEffect(() => {
     if (!isLHR) {
@@ -66,6 +84,22 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLHR]);
+
+  useEffect(() => {
+    if (selectedDocumentType) {
+      setDocId('');
+      const isDocIdVisibleFalse = selectedDocumentType.fieldsConfig?.F?.visible === false;
+      setHelpText(
+        isDocIdVisibleFalse ? translate('document.revision.user.numbering.help.doc.id.visible.false')
+          : translate('document.revision.user.numbering.help'),
+      );
+    }
+  }, [selectedDocumentType]);
+
+  const handleCloseMultipleFormDialog = () => {
+    setSelectedDocumentType(undefined);
+    closeMultipleFormDialog();
+  };
 
   const checkForPart = (form: DocumentTypeByIdForm) => {
     const id = form.formTemplate?.schema?.find((item) => item.name === 'lhr-selected-part')?.editorConfig?.id;
@@ -107,13 +141,26 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       || documentTypes.length === 0
       || (documentTypes.length === 1 && (!formIds || formIds?.length === 0));
 
+  const onDocumentTypeSelected = (value) => {
+    setSelectedDocumentType(activeDocTypes.find(docType => docType.id === value));
+    handleSelection(value);
+  };
+
+  const handleDocIdUpdated = (updatedDocId: string) => {
+    if (!updatedDocId.length) {
+      setDocId('');
+    } else {
+      setDocId(`${selectedDocumentType?.documentTypeAcronym}${updatedDocId}`);
+    }
+  };
+
   return (
     <>
       {dialog.isOpen
       && <Dialog
         open={dialog.isOpen}
         onSubmit={preventPropagation}
-        onClose={closeMultipleFormDialog}
+        onClose={handleCloseMultipleFormDialog}
         classes={{ paper: classes.dialogPaper }}
       >
         {!shouldDisplayLoader ? (
@@ -153,7 +200,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     label: docType.documentTypeName,
                     value: docType.id,
                   }))}
-                  onClick={(option) => handleSelection(option.value)}
+                  onClick={(option) => onDocumentTypeSelected(option.value)}
                   label={isRecord ? 'record.select.type' : 'supplier.select.type' }
                   data-cy={isRecord ? 'record.select.type' : 'supplier.select.type' }
                 />
@@ -169,16 +216,42 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     data-cy={isRecord ? 'record.select.template' : 'supplier.select.form'}
                   />
                 )}
-                <Button
-                  variant="text"
-                  color="secondary"
-                  className={classes.cancelButton}
-                  onClick={closeMultipleFormDialog}
-                  id="DocTypeListDialog-cancelButton"
-                  data-cy="suggestFormCancelBtn"
-                >
-                  <Text translation="transition.action.cancel" />
-                </Button>
+                {isCustomerTypeNumbering && selectedDocumentType && (
+                  <>
+                    <DocIdInputNew
+                      documentTypeId={selectedDocumentType.id}
+                      documentAcronym={selectedDocumentType.documentTypeAcronym}
+                      isDisabled={false}
+                      docId=""
+                      numberingStyle={numberingStyle}
+                      isShownOnDialog={true}
+                      handleDocIdUpdated={handleDocIdUpdated}
+                      helpText={helpText}
+                    />
+                  </>
+                )}
+                <DialogActions>
+                  <Button
+                    variant="text"
+                    color="secondary"
+                    className={classes.cancelButton}
+                    onClick={handleCloseMultipleFormDialog}
+                    id="DocTypeListDialog-cancelButton"
+                    data-cy="suggest-form-cancel-btn"
+                  >
+                    <Text translation="common.cancel" />
+                  </Button>
+                  { isCustomerTypeNumbering && <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.submitButton}
+                    onClick={e => handleUserSubmit?.(docId)}
+                    id="DocTypeListDialog-submitButton"
+                    data-cy="suggest-form-submit-btn"
+                  >
+                    <Text translation="common.confirm" />
+                  </Button> }
+                </DialogActions>
               </FormWrapper>
             </DialogContent>
           </>

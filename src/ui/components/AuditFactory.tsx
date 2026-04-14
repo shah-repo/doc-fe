@@ -25,7 +25,8 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FB, FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -90,14 +91,38 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   }
 
   const poDefinePartNumberText = (data: POLineItem) => {
-    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    const {
+      type,
+      partNumber,
+      partNumberDocId,
+      supplierPartNumber,
+      serviceId,
+      description,
+    } = data;
+
     let partNumberText = '';
+
     if (type === FBPurchaseOrderItemType.PRODUCT) {
-      partNumberText = partNumberDocId ?? supplierPartNumber;
+      const storedPart = partNumber
+        ? FBAutocompleteAsyncStore.getValue<DocumentRevision>(
+          FBAutocompleteAsyncOption.parts,
+          partNumber,
+        )
+        : null;
+
+      const latestDocId = storedPart?.document?.docId
+        ? `${storedPart.document.docId}${storedPart.displayRevision ? ` - ${storedPart.displayRevision}` : ''}`
+        : partNumberDocId ?? supplierPartNumber ?? '';
+
+      partNumberText = latestDocId;
     } else if (type === FBPurchaseOrderItemType.SERVICE) {
-      partNumberText = serviceId !== ''
-        ? serviceId
-        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+      partNumberText
+      = serviceId !== ''
+          ? serviceId
+          : intl.formatMessage(
+            { id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' },
+            { description },
+          );
     }
 
     return partNumberText;
@@ -592,7 +617,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           let assignedTo = assignToUser;
-          if(FB.isUUID(assignToUser ?? '')) {
+          if (FB.isUUID(assignToUser ?? '')) {
             assignedTo = getUserDetails(assignToUser)?.user?.name;
           }
           if (audit.type.includes('ARRAY_ADDED')) {
@@ -838,12 +863,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             tax: `${Boolean(tax)}`,
             formattedDate: formattedDate ?? '',
           };
-          const text
-            = !serviceId
-              ? intl.formatMessage(
-                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
-                { ...values })
-              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
+
+          let messageId = 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE';
+          if (serviceId) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil';
+          } else if (partNumber) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE';
+          }
+
+          const text = intl.formatMessage({ id: messageId }, values);
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
@@ -864,7 +892,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.po-items-built-in.items.received':
       case 'formInput.po-items-built-in.items.serviceId':
       case 'formInput.po-items-built-in.items.formattedDate':
-      case 'formInput.po-items-built-in.items.partNumberTitle':
       case 'formInput.po-items-built-in.items.description':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -874,6 +901,27 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (<div data-cy={dataCy}>{`${partNumberText} - updated to ${entry.value}`}</div>);
           } else {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } catch (err) {
+          // Not valid JSON, so older data and is string
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
+      case 'formInput.po-items-built-in.items.partNumberTitle':
+      case 'formInput.po-items-built-in.items.partNumberDocId':
+        try {
+          if (audit.type.includes('STRING_EDITED')) {
+            const prevEntry: POLineItem & { value: string } = JSON.parse(audit.previousValue as string);
+            const currEntry: POLineItem & { value: string } = JSON.parse(audit.nextValue as string);
+
+            const { value: prevValue } = prevEntry;
+            const { value: nextValue } = currEntry;
+
+            if (nextValue) {
+              const text
+                = intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.partNumber.UPDATED' }, { prevValue: prevValue ?? 'NA', nextValue });
+              returnValue = (<div data-cy={dataCy}>{text}</div>);
+            }
           }
         } catch (err) {
           // Not valid JSON, so older data and is string
@@ -1010,7 +1058,7 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
     const {
       type, step, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
       stepOrMpiDetails, plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
-      recordCreationDate,
+      recordCreationDate, unit,
     } = JSON.parse(nextVal);
 
     return (
@@ -1018,6 +1066,7 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
         {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.added', { type: getTypeOptionLabelByValue(type) })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.added', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.added', { endQuantity })}
+        {unit && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.unit.updated', { unit })}
         {enteredByUserName && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.enteredBy.added', { enteredByUserName })}
         {expiryDate && [<Text
           dataCy={dataCy}
@@ -1112,7 +1161,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
     const {
       type, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
       plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
-      recordCreationDate,
+      recordCreationDate, unit,
     } = JSON.parse(nextVal);
 
     return (
@@ -1120,7 +1169,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
         {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.updated', { type: getTypeOptionLabelByValue(type) })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.updated', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.updated', { endQuantity })}
-
+        {unit && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.unit.updated', { unit })}
         {enteredByUserName && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.enteredBy.added', { enteredByUserName })}
 
         {expiryDate && [<Text

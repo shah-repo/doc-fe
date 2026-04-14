@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { TreeList, TreeListCellProps } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { companySelectors } from '../../../../../state/ducks/company';
+import { LHRBuild } from '../../../../administration/general.settings/panels/LHRBuild/types';
 import ScanCaptureDialog from '../../../../components/common/dialogs/scaner';
 import { ScanSelectedPartItem } from '../../../../components/common/dialogs/scaner/components/lot.table/types';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
@@ -57,6 +58,7 @@ interface EquipmentTreelistContextProps {
   isEqProdConfigEnforced?: boolean
   isLHRProductionBuild?: boolean
   disabledOptions?: string[]
+  lhrBuildTypeConfigForSelectedBuildType?: LHRBuild | undefined
 }
 
 export const EquipmentTreelistContext = React.createContext<EquipmentTreelistContextProps>({
@@ -95,6 +97,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   const { equipmentOptions, allowedEditEqOptions, releasedEquipmentOptions, filterEquipmentOptions } = useFetchData();
   const isRedlineActive = useSelector(companySelectors.getRedlineActive);
   const disabledOptions = map(items, 'title');
+  const lhrBuildTypeConfigForSelectedBuildType = workspaceState?.lhrBuildTypeConfigForSelectedBuildType;
 
   const [state, setState] = useState<EquipmentItemState>({
     data: prepareData(cloneDeep(items) ?? [], isEBProcedure),
@@ -176,8 +179,12 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
       let newEquipItem: EditableEquipmentItem = {
         id,
         title: isDesign ? title : plannedId,
-        type: values.type,
+        ...(values.type && { type: values.type }),
       };
+
+      if (isEBProcedure && !values[ADD_FIELD] && !isEmpty(values[EB_SUB_ITEMS_FIELD])) {
+        newEquipItem[EB_SUB_ITEMS_FIELD] = values?.[EB_SUB_ITEMS_FIELD]?.map((item) => omit(item, EB_FIELDS_TO_OMIT));
+      }
 
       if (!isEBProcedure) {
         newEquipItem.isEquipmentSpecification = isEquipmentSpecification;
@@ -315,6 +322,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     isEnableActualIdAddition,
     isEBProcedure,
     onRowClick: editEquipmentItem,
+    lhrBuildTypeConfigForSelectedBuildType,
   });
 
   const [columns, setColumns]
@@ -372,10 +380,6 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
     setColumns(columns);
   };
 
-  const getColumns = () => {
-    return columns.filter(({ isHidden }) => !isHidden) ?? [];
-  };
-
   const addScannedEquipments = (scannedEquips) => {
     scanDialog.close();
     const parentIndex = state.data?.findIndex((data) => data.id === scanSelectedEquipInfo.current?.id);
@@ -411,53 +415,49 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
   };
 
   return (
-    <div className={classes.root} data-cy="lhr-equipment-table">
-      <Grid item>
-        <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions }}>
-          <FormikProvider value={formik}>
-            <Grid item xs={12} ref={treeListRef}>
-              <TreeList
-                style={{
-                  overflow: 'auto',
-                  maxHeight: size?.height ? `${size?.height}px` : '100px',
-                }}
-                {...state.dataState}
-                tableProps={{ style: { tableLayout: 'fixed' } }}
-                rowHeight={TREELIST_CONFIG.rowHeight}
-                scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
-                editField={MODE_FIELD}
-                expandField={EXPAND_FIELD}
-                dataItemKey={DATA_ITEM_KEY}
-                subItemsField={subItemsKey}
-                className={cx(classes.treeList, 'containing-box-scrollbar')}
-                onExpandChange={onExpandChange}
-                rowRender={rowRender}
-                data={processData()}
-                columns={getColumns()}
-                onRowClick={editEquipmentItem}
-                resizable={TREELIST_CONFIG.resizable}
-                reorderable={TREELIST_CONFIG.reorderable}
-                sortable={TREELIST_CONFIG.sortable}
-                cellRender={cellRender}
-              />
-            </Grid>
-          </FormikProvider>
-        </EquipmentTreelistContext.Provider>
-      </Grid>
-      <Grid item>
-        {!isDisabled && (
-          <AddButton
-            fullWidth
-            attached
-            kind="add"
-            className={classes.bottomAddButtom}
-            data-cy="add-equipment"
-            onClick={addEquipItem}
-          >
-            {translate('form.builder.add.item')}
-          </AddButton>
-        )}
-      </Grid>
+    <Box className={classes.root} data-cy="lhr-equipment-table">
+      <EquipmentTreelistContext.Provider value={{ isRedlineActive, isEnableActualIdAddition, isLHRProductionBuild, isEqProdConfigEnforced, disabledOptions, lhrBuildTypeConfigForSelectedBuildType }}>
+        <FormikProvider value={formik}>
+          <Grid item xs={12} ref={treeListRef}>
+            <TreeList
+              style={{
+                overflow: 'auto',
+                maxHeight: size?.height ? `${size?.height}px` : '100px',
+              }}
+              {...state.dataState}
+              tableProps={{ style: { tableLayout: 'fixed' } }}
+              rowHeight={TREELIST_CONFIG.rowHeight}
+              scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
+              editField={MODE_FIELD}
+              expandField={EXPAND_FIELD}
+              dataItemKey={DATA_ITEM_KEY}
+              subItemsField={subItemsKey}
+              className={cx(classes.treeList, 'containing-box-scrollbar')}
+              onExpandChange={onExpandChange}
+              rowRender={rowRender}
+              data={processData()}
+              columns={columns}
+              onRowClick={editEquipmentItem}
+              resizable={TREELIST_CONFIG.resizable}
+              reorderable={TREELIST_CONFIG.reorderable}
+              sortable={TREELIST_CONFIG.sortable}
+              cellRender={cellRender}
+            />
+            {!isDisabled && (
+              <AddButton
+                fullWidth
+                attached
+                kind="add"
+                className={classes.bottomAddButtom}
+                data-cy="add-equipment"
+                onClick={addEquipItem}
+              >
+                {translate('form.builder.add.item')}
+              </AddButton>
+            )}
+          </Grid>
+        </FormikProvider>
+      </EquipmentTreelistContext.Provider>
       {scanDialog.isOpen && (
         <ScanCaptureDialog
           handler={scanDialog}
@@ -467,7 +467,7 @@ const FBEquipmentTable: React.FC<FBEquipmentProps> = ({
           selectedPart ={scanSelectedEquipInfo.current as ScanSelectedPartItem}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

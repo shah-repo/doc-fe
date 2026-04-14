@@ -36,7 +36,7 @@ export const TreeListEBSchema = ({
     field: 'equipmentId',
     locked: false,
     title: translate('lhr.equipment.grid.heading.actual.id'),
-    width: 200,
+    width: 250,
     mainOrderIndex: 2,
     cell: (props) => <EquipmentIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} isDisabled={isDisabled} />,
   },

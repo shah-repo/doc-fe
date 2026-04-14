@@ -394,5 +394,15 @@
     "root": "",
     "includeRevision": "displayRevision",
     "hidden": false
+    },
+  {
+    "id": "51",
+    "label": "Documents eligible for training",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "docId",
+    "root": "",
+    "includeRevision": "displayRevision",
+    "hidden": false
   }
 ]

@@ -5,7 +5,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { DisplayText, TranslatedText } from '../kendo/helpers';
 import Tooltip from '../kendo/Tooltip';
-import { styles } from './ActiveDropdown.style';
+import useStyles from './ActiveDropdown.style';
 
 export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   dataItem,
@@ -34,7 +34,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   if (rowType === 'groupHeader') {
     return null;
   }
-  const classes = styles();
+  const classes = useStyles();
   const handleChange = (e) => {
     if (!onChange) {
       return;

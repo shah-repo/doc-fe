@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Divider } from '@material-ui/core';
+import { Divider, PaperProps } from '@material-ui/core';
 import cx from 'classnames';
 import { get, kebabCase } from 'lodash';
 import React, { useMemo } from 'react';
@@ -58,6 +58,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
   return (
     <HeaderMenu
       columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
+      PaperProps={{ 'data-cy': `attachment-popover-${dataIndex}` } as PaperProps}
       menuIconButtonClass={classes.iconButton}
       dataCy={`${kebabCase(attachment?.name)}-menu-${dataIndex}`}
       icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
