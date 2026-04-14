@@ -229,6 +229,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const assignedEquipmentsPattern = /^formInput\.[^.]+\.equipment\.\d+\.assignedEquipments\.\d+\.equipmentId$/;
         if (change.type === 'STRING_EDITED' && assignedEquipmentsPattern.test(change.field)) { return; }
 
+        const attachmentPattern = /^formInput\.[^.]+\.materials\.\d+\.attachments$/;
+        if (change.type === 'ARRAY_DELETED' && attachmentPattern.test(change.field)) { return; }
+
+        if (change.type === 'OBJECT_NEW' && valueKey === 'unit' && change.nextValue === 'null') { return; }
+
         if (valueKey === 'title') {
           valueKey = change.field.split('.')[2].split('[')[0];
         }

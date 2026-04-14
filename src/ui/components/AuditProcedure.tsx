@@ -147,6 +147,10 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
       return null;
     }
 
+    if (key === 'attachments' && Array.isArray(previous) && previous.length && Array.isArray(current) && !current.length) {
+      action = getMaterialReplacementAuditField('deleted');
+    }
+
     let fbLabel = key;
     const keyLabelType = intl.formatMessage({ id: 'form.builder.materials' }) + ': ';
     const keyLabel = isTranslation(`form.builder.${key}`)
