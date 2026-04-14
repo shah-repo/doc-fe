@@ -16,6 +16,7 @@ import Text from '../../../components/Text';
 import { FB } from '../../../form.builder';
 import { FBBuildTypeState } from '../../../form.builder/FBBuildType/FBBuildType.state';
 import useStyles from '../../../form.builder/FBBuildType/FBBuildType.styles';
+import { LHR_BUILD_TYPE, NEW_LHR_BUILD_TYPE } from '../../../form.builder/FBBuildType/utills';
 import FBBuildTypeChangeApproval from '../../../form.builder/FBBuildTypeChangeApproval/FBBuildTypeChangeApproval';
 import { ApprovalValidationError } from '../../../form.builder/FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.types';
 import useDialog from '../../../hooks/useDialog';
@@ -24,7 +25,7 @@ interface Props {
   renderAsButton?: boolean
 }
 
-const ApproversButton: React.FunctionComponent<Props> = ({ renderAsButton }) => {
+const BuildTypeChangeApproversButton: React.FunctionComponent<Props> = ({ renderAsButton }) => {
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const classes = useStyles();
@@ -40,8 +41,8 @@ const ApproversButton: React.FunctionComponent<Props> = ({ renderAsButton }) => 
     return dispose;
   }, []);
 
-  const currentBuildTypeId = workspaceState?.getFieldByName('lhr-build-type') as string | undefined;
-  const newBuildTypeId = workspaceState?.getFieldByName('new-lhr-build-type') as string | undefined;
+  const currentBuildTypeId = workspaceState?.getFieldByName(LHR_BUILD_TYPE) as string | undefined;
+  const newBuildTypeId = workspaceState?.getFieldByName(NEW_LHR_BUILD_TYPE) as string | undefined;
   const currentBuildType = buildTypeOptions.find(opt => opt.id === currentBuildTypeId);
   const newBuildType = buildTypeOptions.find(opt => opt.id === newBuildTypeId);
 
@@ -109,7 +110,6 @@ const ApproversButton: React.FunctionComponent<Props> = ({ renderAsButton }) => 
           name="buildTypeApprovals"
           label="form.builder.approvers"
           documentStatus={DocumentStatus.Draft}
-          approvalTransition={() => { /* overridden by wrap */ }}
           prevValue={prevValueProp}
           selectedValue={selectedValueProp}
           submitRef={submitRef}
@@ -120,4 +120,4 @@ const ApproversButton: React.FunctionComponent<Props> = ({ renderAsButton }) => 
   );
 };
 
-export default ApproversButton;
+export default BuildTypeChangeApproversButton;

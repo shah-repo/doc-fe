@@ -24,5 +24,5 @@ export enum PreviewControlButtons {
   CancelEditPartButton='cancelEditPart',
   PrintLabelButton='printLabelButton',
   WithdrawButton='withdrawButton',
-  ApproversButton='approversButton',
+  BuildTypeChangeApproversButton='buildTypeChangeApproversButton',
 }
