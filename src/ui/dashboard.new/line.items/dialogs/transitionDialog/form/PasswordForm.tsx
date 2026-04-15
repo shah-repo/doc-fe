@@ -1,6 +1,7 @@
 import { Button, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
+import { SMTextEditor } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { store } from '../../../../../../state/store';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
@@ -49,6 +50,13 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         inputStyleProps={classes.inputFieldWrap}
         inputProps={{ type: 'password', placeholder: translate('common.enter.here'), className: classes.inputField }}
         validate={validator(required)}
+      />
+      <SMTextEditor
+        name="comment"
+        label="transition.action.rejection.comment"
+        dataCy="transition.action.rejection.comment"
+        placeholder={translate('transition.action.rejection.comment.placeholder')}
+        disabled={false}
       />
       <FormProgress asyncState={asyncState} />
       <SubmitButton

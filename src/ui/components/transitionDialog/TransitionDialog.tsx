@@ -100,7 +100,7 @@ const TransitionDialog: React.FunctionComponent<Props>
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={transition === 'closed' ? { effectiveDate: '' } : { password: '' }}
+                initialValues={transition === 'closed' ? { effectiveDate: '' } : { password: '', comment: '' }}
                 onSubmit={onSubmit}
               >
                 {transition === 'closed' ? renderCloseForm : renderPasswordForm}
