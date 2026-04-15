@@ -34,7 +34,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
     <FBInput {...props } {...{ name }} type="mpiprocedure">
       <Box
         pb={3.8}
-        mt={hasAnyContent ? 1.75 : 0}
+        mt={hasAnyContent ?? isPreview ? 1.75 : 0}
         color={Colors.hint_gray}
         borderBottom={1}
       >
@@ -79,7 +79,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
               </Box>
             </Box>
           )}
-          {(!isPreview || mpiProcedureState?.value?.description) && <FBTextEditor
+          <FBTextEditor
             {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
             name={`${name}.description`}
             gutter={false}
@@ -91,8 +91,9 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             }}
             boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
             withState
+            isPreview={isPreview}
             removeBorder={isPreview}
-          />}
+          />
           <Box
             display="flex"
             flexDirection="column"
