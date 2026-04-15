@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { FBForm, FBTextField } from '..';
+import { FBForm, FBTextEditor, FBTextField } from '..';
+import { translate } from '../../../common/intl';
 import { store } from '../../../state/store';
 import { Autocomplete } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
@@ -12,6 +13,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
   formState,
   isApproverVisible = false,
   children,
+  transition,
 }) => {
   // Prevent form submitting.
   const submitHandler: React.FormEventHandler = React.useCallback(
@@ -35,14 +37,21 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
             getOptionLabel={(option) => option.label}
           />
         </Box>}
-        <FBTextField
+        {transition !== 'reject' && <FBTextField
           rules="required"
           name="password"
           inputProps={{
             type: 'password',
           }}
           label="form.builder.password"
-        />
+        /> }
+        {transition === 'reject' && <FBTextEditor
+          name="comment"
+          label="transition.action.rejection.comment"
+          dataCy="transition.action.rejection.comment"
+          placeholder={translate('transition.action.rejection.comment.placeholder')}
+          disabled={false}
+        /> }
         <Box display="flex" justifyContent="center" mx={0}>
           {children}
         </Box>

@@ -16,7 +16,7 @@ export type FBBuildTypeChangeApprovalProps =
   requestApproval?: (id?: string) => any
   approvals?: FBInlineApprovalBody[]
   approvalsState?: FBBuildTypeChangeApprovalState
-  approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
+  approvalTransition?: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
   docId?: string
   documentStatus: DocumentStatus
   formState?: FBFormState

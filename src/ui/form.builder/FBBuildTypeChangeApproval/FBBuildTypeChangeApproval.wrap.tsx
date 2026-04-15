@@ -28,7 +28,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 ) => {
   const Comp = ({
     onApproveClick,
-    requestApproval,
     approvals,
     name = '',
     loading,
@@ -148,10 +147,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         document?.approvals?.push(data as Approval);
         FBStore.selectedApprover.push(data as Approval);
         concatApprovals(data);
-        // Automatically request approval for newly added approver
-        if (data.id && requestApproval) {
-          requestApproval(data.id);
-        }
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -197,11 +192,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       }
     }
 
-    requestApproval = (id?: string) => {
-      if (!id) { return; }
-      approvalsState?.applyTransition('pending', id);
-    };
-
     React.useEffect(() => reaction(
       () => formState?.newValues.get(`fb-approvals-${name}`),
       (fieldValue: string[]) => {
@@ -229,9 +219,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     React.useEffect(() => {
       if (submitRef) {
         submitRef.current = () => {
-          if (approvalsState?.fetchError) {
-            return; // Don't allow submission if there was a fetch error
-          }
           addApprover(stagedApproverIds.current);
           stagedApproverIds.current = [];
         };
@@ -323,11 +310,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         || approvalsState?.transitionApi.loading
       );
 
-      // Disable when build type switch approvals fetch fails (e.g. RD Lots restricted)
-      if (approvalsState?.fetchError) {
-        disabled = true;
-      }
-
       if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
         && document && !document?.formTemplate) {
         disabledOptions = [authUser?.employeeId];
@@ -385,11 +367,21 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 
           const currentGroups = approvalsState?.groups;
           if (currentGroups && Object.keys(currentGroups).length > 0) {
-            const satisfiedGroups = Object.values(currentGroups).filter(group =>
+            const allGroups = Object.values(currentGroups);
+            const satisfiedGroups = allGroups.filter(group =>
               (group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
             );
+
             if (satisfiedGroups.length === 0) {
-              return { type: 'group_required', groupNames: Object.values(currentGroups).map(g => g.name) };
+              return { type: 'group_required', groupNames: allGroups.map(g => g.name) };
+            }
+
+            // If multiple groups needed but only one satisfied
+            if (allGroups.length > 1 && satisfiedGroups.length < allGroups.length) {
+              const unsatisfiedGroups = allGroups
+                .filter(group => !satisfiedGroups.includes(group))
+                .map(g => g.name);
+              return { type: 'group_required', groupNames: unsatisfiedGroups };
             }
           }
 
@@ -401,7 +393,6 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 
     return Component({
       ...(props as T),
-      requestApproval,
       dialogState,
       approvals,
       name,

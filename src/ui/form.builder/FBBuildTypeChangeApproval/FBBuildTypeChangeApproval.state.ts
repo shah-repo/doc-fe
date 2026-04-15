@@ -9,7 +9,6 @@ import { FBBuildTypeChangeApprovalConstructor } from './FBBuildTypeChangeApprova
 class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
-  @observable public fetchError?: any;
 
   // MARK: @config
   private readonly isOwner?: boolean;
@@ -17,6 +16,8 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+
+  private readonly EXCLUDED_APPROVAL_STATUSES = ['ABANDONED', 'REJECTED', 'APPROVED'];
 
   public constructor ({ approvals, isOwner, fromBuildType, toBuildType }: FBBuildTypeChangeApprovalConstructor) {
     super();
@@ -27,7 +28,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
 
   // MARK: @computed
   @computed public get getApprovals (): FBInlineApprovalBody[] {
-    const filtered = filter(this.approvals, (a) => (a.status !== 'ABANDONED' && a.status !== 'REJECTED') && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
+    const filtered = filter(this.approvals, (a) => !this.EXCLUDED_APPROVAL_STATUSES.includes(a?.status || '') && a.type === 'SECTION' && a.fieldId === 'buildTypeApprovals');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
       canRequest: this.isOwner && a.status === 'DRAFT',
@@ -46,14 +47,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
 
   public onSuccess () {
     this.setGroups(this.data);
-    this.fetchError = undefined;
     super.onSuccess();
-  }
-
-  public onError (error: any) {
-    this.groups = {};
-    this.fetchError = error;
-    super.onError(error);
   }
 
   private readonly setGroups = (data) => {

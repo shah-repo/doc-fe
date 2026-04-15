@@ -31,7 +31,17 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
     && !redlineActive;
     types = keys(FBProcedureItemType).filter((type) => {
-      return type !== FBProcedureItemType.serials || !mpiProcedureState?.value?.shouldSkipSerialization;
+      const attachments = mpiProcedureState?.value?.attachments;
+      switch (type) {
+        case FBProcedureItemType.serials:
+          return !mpiProcedureState?.value?.shouldSkipSerialization;
+        case FBProcedureItemType.attachments:
+          return !isPreview || (attachments?.length ?? 0) > 0;
+        default: {
+          const itemValues = mpiProcedureState?.[type] ?? [];
+          return !isPreview || itemValues.length > 0;
+        }
+      }
     });
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;

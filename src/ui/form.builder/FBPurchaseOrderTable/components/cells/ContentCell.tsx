@@ -1,6 +1,7 @@
 import { kebabCase } from 'lodash';
 import { reaction } from 'mobx';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import { translate } from '../../../../../common/intl';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import StyledLink from '../../../../components/common/kendo/StyledLink';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -52,7 +53,7 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({ dataItem, field, colu
 
     return () => disposer();
   }, [autocompleteAsyncState]);
-  const displayValue = isPartColumn ? latestPartDocId : value;
+  const displayValue = isPartColumn ? latestPartDocId || translate('common.not.applicable') : value;
   const shouldRenderLink = isPartColumn && !!latestPartDocId && !!partNumber && !!partNumberDocumentId;
 
   return (

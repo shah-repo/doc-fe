@@ -56,6 +56,7 @@ import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
 import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
+import BuildTypeChangeApproversButton from './BuildTypeChangeApproversButton';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
@@ -389,7 +390,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if (
     isDirectlyApproved
     && (!isInlineApproval || revisionStage !== 1 || isMPIOutput)
-    && showToOwnerOrOperator
+    && showToOwnerOrOperator && !isBuildTypeChangeApprovalEnabled
   ) {
     accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);
   }
@@ -423,6 +424,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision?.status);
   if (isDocumentDraft || canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
+  }
+  if (isBuildTypeChangeApprovalEnabled) {
+    accessableButtons.push(PreviewControlButtons.BuildTypeChangeApproversButton);
   }
   if (canChangeOwnerShip && values.id) {
     accessableButtons.push(PreviewControlButtons.ChangeOwner);
@@ -546,6 +550,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {buttons.includes(PreviewControlButtons.ExportCsvButton) && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
       )}
+      {buttons.includes(PreviewControlButtons.BuildTypeChangeApproversButton) && (
+        <BuildTypeChangeApproversButton renderAsButton={renderAsButton} />
+      )}
       {buttons.includes(PreviewControlButtons.ChangeOwner) && values.id && (
         <OwnerChangerContainer
           requestId={values.id}
@@ -612,7 +619,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           </>
         )}
       </Observer>
-      {!redlineActive && !isBuildTypeChangeApprovalEnabled && (
+      {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
           {restButtons.length > 0 && (

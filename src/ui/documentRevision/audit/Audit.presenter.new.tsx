@@ -514,6 +514,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
         }
+
+        if (field === 'LHRTparameter' && ['BOOLEAN_DELETED'].includes(change.type)) {
+          return;
+        }
       }
 
       if (fbType === 'supplierContacts') {
@@ -545,6 +549,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       if (!isFBField && change.field === 'revisionChangeType') {
         return;
+      }
+
+      if (['formInput.wo_part_quantity', 'formInput.wo_part_unit'].includes(change.field)
+        && change.type === 'OBJECT_NEW' && change.nextValue === 'null') {
+        return null;
       }
 
       if (!isFBField && change.field.includes('attachments')) {

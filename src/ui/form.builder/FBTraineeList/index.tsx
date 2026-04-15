@@ -135,6 +135,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       id: uuidv4(),
       trainingCompletionDate: lastTrainee?.trainingCompletionDate,
       trainingDocument: lastTrainee?.trainingDocument,
+      employee: lastTrainee?.employee,
       createdAt: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     });

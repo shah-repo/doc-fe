@@ -60,16 +60,19 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
     onClick?.({ dataItem });
   };
 
+  const val = options?.find(item => item.documentId === value?.documentId);
+  const displayVal = val ? getOptionLabel(val) : EMPTY_VALUE_PLACEHOLDER;
+
   return (
     <Box onClick={handleClick}>
       <OverflowTooltip
-        title={displayValue}
+        title={displayVal}
         placement="top"
         interactive
         arrow
         onClick={handleClick}
       >
-        {displayValue}
+        {displayVal}
       </OverflowTooltip>
     </Box>
   );
