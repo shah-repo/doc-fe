@@ -27,6 +27,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 ) => {
   const Comp = ({
     onApproveClick,
+    onRejectClick,
     requestApproval,
     approvals,
     name = '',
@@ -101,9 +102,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
+    approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string, comment?: string) => {
       if (!approvalId) { return; }
-      approvalsState?.applyTransition(transition, approvalId, { password });
+      const body = password ? { password } : comment ? { comment } : {};
+      approvalsState?.applyTransition(transition, approvalId, body);
     };
 
     function includesApprover (group: FBRequiredApprover, approver: string): boolean {
@@ -132,6 +134,14 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    onRejectClick = (approvalId: string) => {
+      dialogState?.config({
+        title: 'form.builder.password.prompt',
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: 'reject' }} />,
       });
     };
 
@@ -348,6 +358,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       ownerId,
       inlineApprovalExists,
       onApproveClick,
+      onRejectClick,
       isAlphaReleased,
       owners,
       disabledOptions,
