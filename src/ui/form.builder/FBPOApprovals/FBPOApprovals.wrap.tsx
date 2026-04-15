@@ -21,6 +21,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded,
     approvalTransition,
     onApproveClick,
+    onRejectClick,
     onConfirmClick,
     name = '',
     loading,
@@ -88,14 +89,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       supplierStatusDialog.open();
     };
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning = false) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, comment?: string, ignoreWarning = false) => {
       if (!approvalId) { return; }
-      setPassword(password);
-      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, ignoreWarning);
+      const body = password ? { password } : comment ? { comment } : {};
+      if (password) {
+        setPassword(password);
+      }
+      poApprovalsState?.applyTransition(transition, approvalId, body, handleError, ignoreWarning);
     };
 
     onConfirmClick = (approvalId: string) => {
-      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, true);
+      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, undefined, true);
       setPassword('');
       supplierStatusDialog.close();
     };
@@ -105,6 +109,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    onRejectClick = (approvalId: string) => {
+      dialogState?.config({
+        title: 'form.builder.password.prompt',
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: 'reject' }} />,
       });
     };
 
@@ -208,6 +220,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       isIncluded,
       approvalTransition,
       onApproveClick,
+      onRejectClick,
       onConfirmClick,
       loading,
       name,
