@@ -34,7 +34,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
     <FBInput {...props } {...{ name }} type="mpiprocedure">
       <Box
         pb={3.8}
-        mt={hasAnyContent ?? isPreview ? 1.75 : 0}
+        mt={hasAnyContent ? 1.75 : 0}
         color={Colors.hint_gray}
         borderBottom={1}
       >
