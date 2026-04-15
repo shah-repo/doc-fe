@@ -9,6 +9,7 @@ export type FBApprovalPasswordFormProps =
   approvalId?: string
   onDialogClose?: () => any
   onDialogApprove?: () => any
+  onDialogReject?: () => any
   isApproverVisible?: boolean
   transition?: FBInlineApprovalTransition
 };
