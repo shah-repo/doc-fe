@@ -54,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
   },
   iconWrap: {
     position: 'absolute',
-    padding: theme.spacing(0, 1.5),
+    padding: theme.spacing(0, 1),
     top: 0,
-    right: -32,
+    right: -28,
     bottom: 0,
     display: 'flex',
     alignItems: 'center',
