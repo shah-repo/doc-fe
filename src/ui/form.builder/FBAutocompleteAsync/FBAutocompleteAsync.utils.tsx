@@ -49,13 +49,14 @@ const useStyles = makeStyles((theme) => ({
 
     '&:hover .icon-wrap': {
       opacity: 1,
+      pointerEvents: 'auto',
     },
   },
   iconWrap: {
     position: 'absolute',
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, 1.5),
     top: 0,
-    right: -28,
+    right: -32,
     bottom: 0,
     display: 'flex',
     alignItems: 'center',

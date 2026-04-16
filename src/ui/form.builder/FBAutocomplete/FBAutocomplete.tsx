@@ -198,6 +198,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       <Observer>{() =>
         <FBInput
           {...props}
+          name={name}
           {...{ multiple, defaultValue, loading, showErrorMsg: isShowErrorMsg() }}
           type="autocomplete"
           disabled={name === 'approvers' ? false : disabled}
