@@ -69,13 +69,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const buildAutocompleteConfig = ({ optionId, getOptionLabel }: BuildAutocompleteConfigProps): BuildAutocompleteConfigReturn => {
+export const useAutocompleteConfig = ({
+  optionId,
+  getOptionLabel,
+}: BuildAutocompleteConfigProps): BuildAutocompleteConfigReturn => {
+  const classes = useStyles();
+
   switch (optionId) {
     case FBAutocompleteAsyncOption.allDocuments:
       return {
         getTagLabel: (value, getTagProps: GetTagProps) => {
           const text = getOptionLabel(value);
-          const classes = useStyles();
           const revision = findLatestRevision(value?.documentRevisions);
 
           if (!value?.id || !revision || !revision.id) {

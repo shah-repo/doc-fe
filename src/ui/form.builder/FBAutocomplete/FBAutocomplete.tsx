@@ -35,7 +35,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   includeQRScan,
   optionLabelKey = '',
   placeholder,
-  disabled,
+  disabled = false,
   loading,
   groupByKey,
   value,
@@ -69,8 +69,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     </Box>
   ), []);
 
-  // useCallback(
-  const renderAutoCompleteInput = (params: RenderInputParams) => (
+  const renderAutoCompleteInput = useCallback((params: RenderInputParams) => (
     <Box display="flex">
       <Box width="100%">
         <TextField
@@ -121,41 +120,41 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       {(refresh && type !== 'lhrstep') && renderRefreshButton(refresh, disabled)}
       {(refresh && type === 'lhrstep' && !disabled) && renderRefreshButton(refresh, disabled)}
     </Box>
-  );
-  // [
-  //   type,
-  //   name,
-  //   value,
-  //   placeholder,
-  //   disabled,
-  //   disableBackspace,
-  //   refresh,
-  //   renderRefreshButton,
-  //   customStyles,
-  //   inputStyle,
-  //   inputPropStyle,
-  //   inputPropStyleSize,
-  //   onInputChange,
-  //   onBlur,
-  //   renderEndAdornment,
-  //   isCustomEndAdornment,
-  //   renderStartAdornment,
-  //   isCustomStartAdornment,
-  // ]);
+  ), [
+    type,
+    name,
+    value,
+    placeholder,
+    disabled,
+    disableBackspace,
+    refresh,
+    renderRefreshButton,
+    customStyles,
+    inputStyle,
+    inputPropStyle,
+    inputPropStyleSize,
+    onInputChange,
+    onBlur,
+    renderEndAdornment,
+    isCustomEndAdornment,
+    renderStartAdornment,
+    isCustomStartAdornment,
+  ]);
 
-  const renderAutoCompleteTags = (value, getTagProps: GetTagProps) =>
+  const renderAutoCompleteTags = (value: Array<{ id: string }>, getTagProps: GetTagProps) =>
     value.map((option, index) => {
       const isAlreadyApproved = !!workspaceState?.changeRequest?.approvals.find(
         (e) => (e.approver.id === get(option, 'id')) && e.status === ApprovalStatus.Approved,
       );
       const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
       const isDisabled = disabled || name === 'approvers' ? isAlreadyApproved : isOptionDisabled;
+      const key = get(option, optionLabelKey) as string;
 
       return (
         <StyledChip
-          key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
-          label={getTagLabel ? getTagLabel(option) : getOptionLabel?.(option)}
           {...getTagProps({ index })}
+          key={`fb-autocomplete-${key}-${index}`}
+          label={getTagLabel ? getTagLabel(option) : getOptionLabel?.(option)}
           disabled={isDisabled}
         />
       );
