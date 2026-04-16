@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { FBAutocomplete, FBAutocompleteAsyncProps } from '..';
 import { styles } from '../styles/FBAutocomplete.styles';
 import { withFBAutocompleteAsync } from './FBAutocompleteAsync.wrap';
-import ValueLinks from './components/ValueLinks';
 
 const FBAutocompleteAsync: React.FC<FBAutocompleteAsyncProps> = ({
   options,
@@ -48,11 +47,6 @@ const FBAutocompleteAsync: React.FC<FBAutocompleteAsyncProps> = ({
           inputPropStyleSize="small"
         />
       )}
-      <ValueLinks
-        name={props.name}
-        optionId={props.optionId}
-        state={props.autocompleteAsyncState}
-      />
     </>
   );
 };

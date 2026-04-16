@@ -1,3 +1,4 @@
+import { FormControlProps } from '@material-ui/core';
 import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import { UseAutocompleteProps } from '@material-ui/lab/useAutocomplete';
 import { FBAutocompleteAsyncConfig, FBInputProps } from '..';
@@ -16,18 +17,22 @@ export type FBAutocompleteProps =
  | 'disableClearable'
  > & {
    getTagLabel?: (option: any) => React.ReactNode
-   onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any
-   onOpen?: () => any
-   refresh?: () => any
+   onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => unknown
+   onOpen?: () => unknown
+   refresh?: () => unknown
+   isCustomEndAdornment?: boolean
+   renderEndAdornment?: (value: any) => React.ReactNode
+   isCustomStartAdornment?: boolean
+   renderStartAdornment?: (value: any) => React.ReactNode
    autoCompleteClasses?: AutocompleteProps['classes']
    disabledOptions?: string[]
-   customStyles?: {}
+   customStyles?: React.CSSProperties
    groupByKey?: string
-   inputStyle?: any
+   inputStyle?: React.CSSProperties
    modifiedOptions?: any[]
    debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void
    inputPropStyle?: React.CSSProperties
-   inputPropStyleSize?: any
+   inputPropStyleSize?: FormControlProps['size']
    isDocumentLHRT?: boolean
    /**
     * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.

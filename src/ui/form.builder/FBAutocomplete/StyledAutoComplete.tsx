@@ -1,5 +1,6 @@
 import { Chip, withStyles } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { withThemeNext } from '../../layout/theme-next';
 
 export const StyledAutoComplete = withStyles((theme) => ({
   endAdornment: {
@@ -16,8 +17,18 @@ export const StyledPopupAutoComplete = withStyles((theme) => ({
   },
 }))(Autocomplete);
 
-export const StyledChip = withStyles((theme) => ({
-  label: {
-    padding: '5px 8px',
+export const StyledChip = withThemeNext(withStyles((theme) => ({
+  root: {
+    '& .chip-delete': {
+      padding: theme.spacing(0, 0.5, 0, 1),
+      position: 'static',
+      opacity: 1,
+    },
+    '& .chip-delete-icon': {
+      transform: 'none',
+    },
   },
-}))(Chip);
+  label: {
+    overflow: 'visible',
+  },
+}))(Chip));

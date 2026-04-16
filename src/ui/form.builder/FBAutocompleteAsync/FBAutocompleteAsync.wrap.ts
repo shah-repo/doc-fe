@@ -8,6 +8,7 @@ import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FB
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
+import { buildAutocompleteConfig } from './FBAutocompleteAsync.utils';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FC<T>,
@@ -200,6 +201,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       return contentState.getPlainText();
     }
 
+    const { getTagLabel, renderEndAdornment, renderStartAdornment } = buildAutocompleteConfig({
+      optionId,
+      getOptionLabel,
+    });
+
     return Component({
       ...(props as T),
       getOptionLabel,
@@ -213,6 +219,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueType,
       selectedOptions,
       defaultValue,
+      getTagLabel,
+      renderEndAdornment,
+      renderStartAdornment,
       omitFormValue,
       forceNewRender,
       freeSolo,
