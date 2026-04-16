@@ -51,6 +51,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     prevValue,
     submitRef,
     validateRef,
+    skipExistingApprovals,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -99,7 +100,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     }
     const approvalsState = FB.useRef(
       FBBuildTypeChangeApprovalState,
-      { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
+      { approvals: skipExistingApprovals ? [] : docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
 
