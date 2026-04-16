@@ -150,6 +150,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           prevValue={prevValue}
           submitRef={submitApproversRef}
           validateRef={validateApproversRef}
+          skipExistingApprovals={true}
         />
       </Dialog>
     </FBProvider>
