@@ -2,7 +2,6 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputAdornment, makeStyles } from '@material-ui/core';
 import { GetTagProps } from '@material-ui/lab/Autocomplete';
-import cx from 'classnames';
 import { isArray } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -89,14 +88,10 @@ export const useAutocompleteConfig = ({
           return (
             <Link
               className={classes.link}
-              style={{ textDecoration: 'none', color: Colors.primary }}
               to={documentVersionPath(revision.id, value.id)}
               target="_blank"
             >
               {text}
-              <span className={cx(classes.iconWrap, 'icon-wrap')}>
-                <FontAwesomeIcon icon={solid('external-link-alt')} size="sm" />
-              </span>
             </Link>
           );
         },
@@ -117,7 +112,50 @@ export const useAutocompleteConfig = ({
                   to={documentVersionPath(revision.id, value.id)}
                   target="_blank"
                 >
-                  <FontAwesomeIcon icon={solid('external-link-alt')} size="sm" />
+                  <FontAwesomeIcon icon={solid('external-link')} size="sm" />
+                </Link>
+              </FBTooltip>
+            </InputAdornment>
+          );
+        },
+        renderEndAdornment: undefined,
+      };
+    case FBAutocompleteAsyncOption.activeDocumentRevisions:
+      return {
+        getTagLabel: (value, getTagProps: GetTagProps) => {
+          const text = getOptionLabel(value);
+
+          if (!value?.id || !value.document?.id) {
+            return text;
+          }
+          return (
+            <Link
+              className={classes.link}
+              to={documentVersionPath(value.id, value.document.id)}
+              target="_blank"
+            >
+              {text}
+            </Link>
+          );
+        },
+        renderStartAdornment: (value, getTagProps: GetTagProps) => {
+          if (isArray(value)) {
+            return undefined;
+          }
+          const text = getOptionLabel(value);
+
+          if (!value?.id || !value.document?.id) {
+            return text;
+          }
+          return (
+            <InputAdornment position="start">
+              <FBTooltip title="Open in new tab">
+                <Link
+                  style={{ textDecoration: 'none', color: Colors.primary, marginLeft: 4 }}
+                  to={documentVersionPath(value.document.id, value.id)}
+                  target="_blank"
+                >
+                  <FontAwesomeIcon icon={solid('external-link')} size="sm" />
                 </Link>
               </FBTooltip>
             </InputAdornment>
