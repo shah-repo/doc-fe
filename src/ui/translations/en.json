@@ -984,7 +984,7 @@
   "documentRevision.audit.bomParts.comment.updated": "comment -  updated to {comment}",
   "documentRevision.audit.bomItemUpgraded.ARRAY_EDITED": "BOM Part Item Upgraded",
   "documentRevision.audit.bomItemUpgraded.lineItem.upgraded.arId": "{oldDocId}.{oldDisplayRevision} updated to {newDocId}.{newDisplayRevision} as per {arId}",
-  "documentRevision.audit.bomItemUpgraded.lineItem.upgraded": "{oldDocId}.{oldDisplayRevision} updated to {newDocId}.{newDisplayRevision}}",
+  "documentRevision.audit.bomItemUpgraded.lineItem.upgraded": "{oldDocId}.{oldDisplayRevision} updated to {newDocId}.{newDisplayRevision}",
   "documentRevision.audit.lhrSummary.ARRAY_ADDED": "LHR Summary row added",
   "documentRevision.audit.lhrSummary.ARRAY_EDITED": "LHR Summary row updated - {rowDetails}",
   "documentRevision.audit.lhrSummary.ARRAY_DELETED": "LHR Summary row deleted",
