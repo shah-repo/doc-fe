@@ -1,173 +1,99 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { InputAdornment, makeStyles } from '@material-ui/core';
-import { GetTagProps } from '@material-ui/lab/Autocomplete';
-import { isArray } from 'lodash';
+import { InputAdornment } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { translate } from '../../../common/intl';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
-import { Colors } from '../../layout/theme-next';
 import FBTooltip from '../FBTooltip/FBTooltip';
-import { FBAutocompleteAsyncOption } from './FBAutocompleteAsync.types';
+import useStyles from './FBAutocompleteAsync.styles';
+import { AutocompleteAdornmentTagProps, AutocompleteLinkRefs, AutocompleteValue, BuildAutocompleteConfig, BuildAutocompleteConfigProps, FBAutocompleteAsyncOption, OptionDocument, OptionDocumentRevision } from './FBAutocompleteAsync.types';
 
-interface BuildAutocompleteConfigProps {
-  optionId?: string
-  getOptionLabel: (value: any) => string
-}
-
-interface BuildAutocompleteConfigReturn {
-  getTagLabel: ((value: any, getTagProps: GetTagProps) => React.ReactNode) | undefined
-  renderEndAdornment: ((value: any, getTagProps: GetTagProps) => React.ReactNode) | undefined
-  renderStartAdornment: ((value: any, getTagProps: GetTagProps) => React.ReactNode) | undefined
-}
-
-const DOCUMENT_REVISION_STATUSES = [
+const VIABLE_STATUSES = new Set<DocumentRevisionStatus>([
   DocumentRevisionStatus.Draft,
   DocumentRevisionStatus.PendingChange,
   DocumentRevisionStatus.InReview,
   DocumentRevisionStatus.Approved,
   DocumentRevisionStatus.Released,
-];
+]);
 
-const findLatestRevision = (revisions) => {
-  if (!revisions || revisions.length === 0) {
+const findLatestViableRevision = (revisions: OptionDocumentRevision[] = []) =>
+  revisions.reduce<OptionDocumentRevision | undefined>((best, r) => {
+    if (!VIABLE_STATUSES.has(r.status)) return best;
+    return !best || r.version > best.version ? r : best;
+  }, undefined);
+
+const isDocument = (
+  value: OptionDocument | OptionDocumentRevision,
+): value is OptionDocument => Object.prototype.hasOwnProperty.call(value, 'docId');
+
+export const getLinkRefs = (
+  value: AutocompleteValue,
+): AutocompleteLinkRefs | null => {
+  if (Array.isArray(value)) {
     return null;
   }
-  return revisions
-    .filter((revision) => DOCUMENT_REVISION_STATUSES.includes(revision.status))
-    .sort((a, b) => b.version - a.version)
-    .at(0);
+  if (isDocument(value)) {
+    if (!value.id) return null;
+    const revision = findLatestViableRevision(value.documentRevisions);
+    return revision?.id ? { documentId: value.id, revisionId: revision.id } : null;
+  }
+  if (!value?.id || !value.document?.id) return null;
+  return { documentId: value.document.id, revisionId: value.id };
 };
 
-const useStyles = makeStyles((theme) => ({
-  link: {
-    textDecoration: 'none',
-    color: Colors.primary,
-    position: 'relative',
+const LinkTag: React.FC<AutocompleteLinkRefs> = ({
+  documentId,
+  revisionId,
+  children,
+}) => {
+  const classes = useStyles();
+  return (
+    <Link
+      className={classes.link}
+      to={documentVersionPath(revisionId, documentId)}
+      target="_blank"
+    >
+      {children}
+    </Link>
+  );
+};
 
-    '&:hover .icon-wrap': {
-      opacity: 1,
-      pointerEvents: 'auto',
-    },
-  },
-  iconWrap: {
-    position: 'absolute',
-    padding: theme.spacing(0, 1),
-    top: 0,
-    right: -28,
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 3,
-    opacity: 0,
-    cursor: 'pointer',
-    transition: theme.transitions.create('opacity', { duration: 100 }),
-    background: Colors.primaryBg,
-    pointerEvents: 'none',
-  },
-}));
+const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
+  position = 'start',
+  ...refs
+}) => {
+  return (
+    <InputAdornment position={position}>
+      <FBTooltip title={translate('common.open.in.new.tab')}>
+        <LinkTag {...refs}>
+          <FontAwesomeIcon icon={solid('external-link')} size="sm" />
+        </LinkTag>
+      </FBTooltip>
+    </InputAdornment>
+  );
+};
 
-export const useAutocompleteConfig = ({
+const LINKABLE_OPTIONS = new Set<string>([
+  FBAutocompleteAsyncOption.allDocuments,
+  FBAutocompleteAsyncOption.activeDocumentRevisions,
+]);
+
+export const buildAutocompleteConfig: BuildAutocompleteConfig = ({
   optionId,
   getOptionLabel,
-}: BuildAutocompleteConfigProps): BuildAutocompleteConfigReturn => {
-  const classes = useStyles();
-
-  switch (optionId) {
-    case FBAutocompleteAsyncOption.allDocuments:
-      return {
-        getTagLabel: (value, getTagProps: GetTagProps) => {
-          const text = getOptionLabel(value);
-          const revision = findLatestRevision(value?.documentRevisions);
-
-          if (!value?.id || !revision || !revision.id) {
-            return text;
-          }
-          return (
-            <Link
-              className={classes.link}
-              to={documentVersionPath(revision.id, value.id)}
-              target="_blank"
-            >
-              {text}
-            </Link>
-          );
-        },
-        renderStartAdornment: (value, getTagProps: GetTagProps) => {
-          if (isArray(value)) {
-            return undefined;
-          }
-          const revision = findLatestRevision(value?.documentRevisions);
-
-          if (!value?.id || !revision || !revision.id) {
-            return undefined;
-          }
-          return (
-            <InputAdornment position="start">
-              <FBTooltip title="Open in new tab">
-                <Link
-                  style={{ textDecoration: 'none', color: Colors.primary, marginLeft: 4 }}
-                  to={documentVersionPath(revision.id, value.id)}
-                  target="_blank"
-                >
-                  <FontAwesomeIcon icon={solid('external-link')} size="sm" />
-                </Link>
-              </FBTooltip>
-            </InputAdornment>
-          );
-        },
-        renderEndAdornment: undefined,
-      };
-    case FBAutocompleteAsyncOption.activeDocumentRevisions:
-      return {
-        getTagLabel: (value, getTagProps: GetTagProps) => {
-          const text = getOptionLabel(value);
-
-          if (!value?.id || !value.document?.id) {
-            return text;
-          }
-          return (
-            <Link
-              className={classes.link}
-              to={documentVersionPath(value.id, value.document.id)}
-              target="_blank"
-            >
-              {text}
-            </Link>
-          );
-        },
-        renderStartAdornment: (value, getTagProps: GetTagProps) => {
-          if (isArray(value)) {
-            return undefined;
-          }
-          const text = getOptionLabel(value);
-
-          if (!value?.id || !value.document?.id) {
-            return text;
-          }
-          return (
-            <InputAdornment position="start">
-              <FBTooltip title="Open in new tab">
-                <Link
-                  style={{ textDecoration: 'none', color: Colors.primary, marginLeft: 4 }}
-                  to={documentVersionPath(value.document.id, value.id)}
-                  target="_blank"
-                >
-                  <FontAwesomeIcon icon={solid('external-link')} size="sm" />
-                </Link>
-              </FBTooltip>
-            </InputAdornment>
-          );
-        },
-        renderEndAdornment: undefined,
-      };
-    default:
-      return {
-        getTagLabel: undefined,
-        renderEndAdornment: undefined,
-        renderStartAdornment: undefined,
-      };
-  }
+}: BuildAutocompleteConfigProps) => {
+  if (!optionId || !LINKABLE_OPTIONS.has(optionId)) return {};
+  return {
+    getTagLabel: (value) => {
+      const text = getOptionLabel(value);
+      const refs = getLinkRefs(value);
+      return refs ? <LinkTag {...refs}>{text}</LinkTag> : text;
+    },
+    renderStartAdornment: (value) => {
+      const refs = getLinkRefs(value);
+      return refs ? <AdornmentTag {...refs} /> : undefined;
+    },
+  };
 };

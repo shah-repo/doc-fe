@@ -1,5 +1,7 @@
+import { InputAdornmentProps } from '@material-ui/core';
 import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import { FBAutocompleteAsyncState, FBAutocompleteProps } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export type FBAutocompleteAsyncProps =
 & FBAutocompleteProps
@@ -90,3 +92,37 @@ export interface FBAutocompleteAsyncConstructor {
   documentStatus?: string
   includePrevReleaseDoc?: boolean
 }
+
+export interface OptionDocument {
+  id: string
+  docId: string
+  documentRevisions?: OptionDocumentRevision[]
+}
+export interface OptionDocumentRevision {
+  id: string
+  version: number
+  status: DocumentRevisionStatus
+  document?: OptionDocument
+}
+export interface BuildAutocompleteConfigProps {
+  optionId?: string
+  getOptionLabel: (value: OptionDocument | OptionDocumentRevision) => string
+}
+
+export type AutocompleteValue = OptionDocument | OptionDocumentRevision | OptionDocument[] | OptionDocumentRevision[];
+
+type GetTagLabel = (value: OptionDocument | OptionDocumentRevision) => React.ReactNode;
+type RenderAdornment = (value: AutocompleteValue) => React.ReactNode;
+export interface AutocompleteConfig {
+  getTagLabel?: GetTagLabel
+  renderEndAdornment?: RenderAdornment
+  renderStartAdornment?: RenderAdornment
+}
+
+export type BuildAutocompleteConfig = (props: BuildAutocompleteConfigProps) => AutocompleteConfig;
+
+export interface AutocompleteAdornmentTagProps extends AutocompleteLinkRefs {
+  position?: InputAdornmentProps['position']
+}
+
+export interface AutocompleteLinkRefs { documentId: string, revisionId: string }
