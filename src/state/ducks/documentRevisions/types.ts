@@ -438,7 +438,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   equipmentSection?: string
   redline?: boolean
   tabId?: string
-  schema?: any;
+  schema?: FBSchemaProps[];
 }
 
 export interface DocumentRevisionSetAction {
