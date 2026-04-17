@@ -143,7 +143,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   );
 
 const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
-    approval => approval?.type === 'SECTION' && approval?.fieldId === 'buildTypeApprovals' && approval?.status === 'PENDING');
+    ({ type, fieldId, status }) => type === 'SECTION' && fieldId === 'buildTypeApprovals' && status === 'PENDING');
 
   return (
     <>

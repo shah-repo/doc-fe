@@ -23,14 +23,13 @@ const RedlineBuildTypeBanner: React.FunctionComponent<Props> = ({
   const buildTypes = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.buildType);
   const options = buildTypes ? Array.from(buildTypes?.values() as LHRBuild[]) : workspaceState?.buildTypeOptions;
   const loggedInUser = store.getState().auth.user;
-  const isUserHaveAccess = documentRevision?.approvals?.some(approval => approval.approver.user.id === loggedInUser.id);
-  let oldBuildType = options?.find(option => option.id === formState?.getFieldValue('lhr-build-type'));
-  let newBuildType = options?.find(option => option.id === formState?.getFieldValue('new-lhr-build-type'));
+  const isUserHaveAccess = documentRevision?.approvals?.some(({ approver }) => approver.user.id === loggedInUser.id);
 
-  if(documentRevision && isUserHaveAccess) {
-    oldBuildType = options?.find(option => option.id === documentRevision?.formInput?.['lhr-build-type']);
-    newBuildType = options?.find(option => option.id === documentRevision?.formInput?.['new-lhr-build-type']);
-  }
+  const buildTypeSource = documentRevision && isUserHaveAccess ? documentRevision.formInput
+   : { 'lhr-build-type': formState?.getFieldValue('lhr-build-type'), 'new-lhr-build-type': formState?.getFieldValue('new-lhr-build-type') };
+
+  const oldBuildType = options?.find(({ id }) => id === buildTypeSource?.['lhr-build-type']);
+  const newBuildType = options?.find(({ id }) => id === buildTypeSource?.['new-lhr-build-type']);
 
   const message = translate('form.builder.redline.build.type.switch.pending', {
     oldBuildType: oldBuildType?.displayLabel || 'N/A',
