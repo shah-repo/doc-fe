@@ -169,23 +169,23 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.mpiDocuments:
         return map(
           groupBy(union(data, this.additionalData), 'document.id'),
-          (recs: DocumentRevision[]) => {
-            if (!recs?.length) return [];
+          (documents: DocumentRevision[]) => {
+            if (!documents?.length) return [];
 
             let draft: DocumentRevision | undefined;
             let released: DocumentRevision | undefined;
 
-            for (const rev of recs) {
-              if (!draft && isDocumentRevisionInDraft(rev?.status)) {
-                draft = rev;
-              } else if (!released && isDocumentRevisionReleased(rev?.status)) {
-                released = rev;
+            for (const document of documents) {
+              if (!draft && isDocumentRevisionInDraft(document?.status)) {
+                draft = document;
+              } else if (!released && isDocumentRevisionReleased(document?.status)) {
+                released = document;
               }
 
               if (draft && released) break;
             }
 
-            return draft ?? released ?? recs[0];
+            return draft ?? released ?? documents[0];
           },
         );
       case FBAutocompleteAsyncOption.parts:
