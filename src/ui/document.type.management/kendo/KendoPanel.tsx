@@ -126,9 +126,7 @@ export function KendoPanel ({
   });
 
   const asyncDeleteDocType = useAsync({
-    onError: (error) => {
-      toastError(error as string);
-    },
+    onError: toastError,
   });
 
   const [dropDownState, setDropDownState] = React.useState({});
