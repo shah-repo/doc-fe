@@ -323,7 +323,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           item.lots = lots?.map((lot) => lot.fromDocument?.docId).join(', ');
         });
       }
-      formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
+      formState?.setFieldValue(name, { ...purchaseOrderState?.value, taxRate: disabled ? undefined : value?.taxRate }, true);
       loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading || async.isLoading;
       FBStore?.setPurchaseOrderValue(value);
     });
