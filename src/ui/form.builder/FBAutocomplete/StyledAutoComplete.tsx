@@ -17,17 +17,7 @@ export const StyledPopupAutoComplete = withStyles((theme) => ({
 }))(Autocomplete);
 
 export const StyledChip = withStyles((theme) => ({
-  root: {
-    '& .chip-delete': {
-      padding: theme.spacing(0, 0.5, 0, 1),
-      position: 'static',
-      opacity: 1,
-    },
-    '& .chip-delete-icon': {
-      transform: 'none',
-    },
-  },
   label: {
-    overflow: 'visible',
+    padding: '5px 8px',
   },
 }))(Chip);

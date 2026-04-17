@@ -8,7 +8,7 @@ import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/t
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import FBTooltip from '../FBTooltip/FBTooltip';
 import useStyles from './FBAutocompleteAsync.styles';
-import { AutocompleteAdornmentTagProps, AutocompleteLinkRefs, AutocompleteValue, BuildAutocompleteConfig, BuildAutocompleteConfigProps, FBAutocompleteAsyncOption, OptionDocument, OptionDocumentRevision } from './FBAutocompleteAsync.types';
+import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, BuildAutocompleteConfig, BuildAutocompleteConfigProps, FBAutocompleteAsyncOption, OptionDocument, OptionDocumentRevision } from './FBAutocompleteAsync.types';
 
 const VIABLE_STATUSES = new Set<DocumentRevisionStatus>([
   DocumentRevisionStatus.Draft,
@@ -28,33 +28,25 @@ const isDocument = (
   value: OptionDocument | OptionDocumentRevision,
 ): value is OptionDocument => Object.prototype.hasOwnProperty.call(value, 'docId');
 
-export const getLinkRefs = (
-  value: AutocompleteValue,
-): AutocompleteLinkRefs | null => {
-  if (Array.isArray(value)) {
-    return null;
-  }
-  if (isDocument(value)) {
-    if (!value.id) return null;
-    const revision = findLatestViableRevision(value.documentRevisions);
-    return revision?.id ? { documentId: value.id, revisionId: revision.id } : null;
-  }
-  if (!value?.id || !value.document?.id) return null;
-  return { documentId: value.document.id, revisionId: value.id };
+type LinkResolver = (
+  value: OptionDocument | OptionDocumentRevision,
+) => string | null;
+
+const getLinkFromDocument: LinkResolver = (value) => {
+  if (!isDocument(value) || !value.id) return null;
+  const revision = findLatestViableRevision(value.documentRevisions);
+  return revision?.id ? documentVersionPath(revision.id, value.id) : null;
 };
 
-const LinkTag: React.FC<AutocompleteLinkRefs> = ({
-  documentId,
-  revisionId,
-  children,
-}) => {
+const getLinkFromDocumentRevision: LinkResolver = (value) => {
+  if (isDocument(value) || !value?.id || !value.document?.id) return null;
+  return documentVersionPath(value.id, value.document.id);
+};
+
+const LinkTag: React.FC<AutocompleteLinkTagProps> = ({ to, children }) => {
   const classes = useStyles();
   return (
-    <Link
-      className={classes.link}
-      to={documentVersionPath(revisionId, documentId)}
-      target="_blank"
-    >
+    <Link className={classes.link} to={to} target="_blank">
       {children}
     </Link>
   );
@@ -62,12 +54,12 @@ const LinkTag: React.FC<AutocompleteLinkRefs> = ({
 
 const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
   position = 'start',
-  ...refs
+  to,
 }) => {
   return (
     <InputAdornment position={position}>
       <FBTooltip title={translate('common.open.in.new.tab')}>
-        <LinkTag {...refs}>
+        <LinkTag to={to}>
           <FontAwesomeIcon icon={solid('external-link')} size="sm" />
         </LinkTag>
       </FBTooltip>
@@ -75,25 +67,60 @@ const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
   );
 };
 
-const LINKABLE_OPTIONS = new Set<string>([
+const DOCUMENT_OPTIONS: FBAutocompleteAsyncOption[] = [
   FBAutocompleteAsyncOption.allDocuments,
+  FBAutocompleteAsyncOption.availablePartDocuments,
+  FBAutocompleteAsyncOption.preventativeMaintenaceForms,
+  FBAutocompleteAsyncOption.trainingDocuments,
+];
+
+const DOCUMENT_REVISION_OPTIONS: FBAutocompleteAsyncOption[] = [
   FBAutocompleteAsyncOption.activeDocumentRevisions,
+  FBAutocompleteAsyncOption.suppliers,
+  FBAutocompleteAsyncOption.TLList,
+  FBAutocompleteAsyncOption.CSLList,
+  FBAutocompleteAsyncOption.parts,
+  FBAutocompleteAsyncOption.POList,
+  FBAutocompleteAsyncOption.WOParts,
+  FBAutocompleteAsyncOption.DRAFTdocumentRevisions,
+  FBAutocompleteAsyncOption.documentRevisions,
+  FBAutocompleteAsyncOption.materials,
+  FBAutocompleteAsyncOption.equipment,
+  FBAutocompleteAsyncOption.availableParts,
+  FBAutocompleteAsyncOption.lots,
+  FBAutocompleteAsyncOption.ebLots,
+  FBAutocompleteAsyncOption.seed,
+  FBAutocompleteAsyncOption.mpiDocuments,
+  FBAutocompleteAsyncOption.releasedEquipment,
+  FBAutocompleteAsyncOption.releasedFormDocuments,
+  FBAutocompleteAsyncOption.releasedParts,
+  FBAutocompleteAsyncOption.lotBuilds,
+  FBAutocompleteAsyncOption.records,
+  FBAutocompleteAsyncOption.shippingInformation,
+  FBAutocompleteAsyncOption.equipmentSpecifications,
+];
+
+const LINKABLE_OPTIONS = new Map<string, LinkResolver>([
+  ...DOCUMENT_OPTIONS.map((id): [string, LinkResolver] => [id, getLinkFromDocument]),
+  ...DOCUMENT_REVISION_OPTIONS.map((id): [string, LinkResolver] => [id, getLinkFromDocumentRevision]),
 ]);
 
 export const buildAutocompleteConfig: BuildAutocompleteConfig = ({
   optionId,
   getOptionLabel,
 }: BuildAutocompleteConfigProps) => {
-  if (!optionId || !LINKABLE_OPTIONS.has(optionId)) return {};
+  const resolveLink = optionId ? LINKABLE_OPTIONS.get(optionId) : undefined;
+  if (!resolveLink) return {};
   return {
     getTagLabel: (value) => {
       const text = getOptionLabel(value);
-      const refs = getLinkRefs(value);
-      return refs ? <LinkTag {...refs}>{text}</LinkTag> : text;
+      const to = resolveLink(value);
+      return to ? <LinkTag to={to}>{text}</LinkTag> : text;
     },
     renderStartAdornment: (value) => {
-      const refs = getLinkRefs(value);
-      return refs ? <AdornmentTag {...refs} /> : undefined;
+      if (Array.isArray(value)) return undefined;
+      const to = resolveLink(value);
+      return to ? <AdornmentTag to={to} /> : undefined;
     },
   };
 };

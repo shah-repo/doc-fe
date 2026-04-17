@@ -121,8 +121,8 @@ export interface AutocompleteConfig {
 
 export type BuildAutocompleteConfig = (props: BuildAutocompleteConfigProps) => AutocompleteConfig;
 
-export interface AutocompleteAdornmentTagProps extends AutocompleteLinkRefs {
+export interface AutocompleteLinkTagProps { to: string }
+
+export interface AutocompleteAdornmentTagProps extends AutocompleteLinkTagProps {
   position?: InputAdornmentProps['position']
 }
-
-export interface AutocompleteLinkRefs { documentId: string, revisionId: string }
