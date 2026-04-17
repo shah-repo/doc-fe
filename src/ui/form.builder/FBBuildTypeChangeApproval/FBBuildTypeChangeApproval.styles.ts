@@ -68,5 +68,17 @@ export default makeStyles((theme) =>
       fontWeight: 500,
       fontSize: 14,
     },
+  deleteChip: {
+      ...theme.typography.subtitle1,
+
+      '& .chip-delete': {
+        left: 0,
+        padding: theme.spacing(0, 0.75, 0, 2),
+        background: Colors.errorHighlight,
+      },
+      '& .chip-delete-icon': {
+        transform: 'translate(0, 150%)',
+      },
+    },
   }),
 );

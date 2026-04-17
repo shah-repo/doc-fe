@@ -72,7 +72,7 @@ export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
     owners,
     ...props
   }: T) => {
-    const { workspaceState, formState } = FB.useStores();
+    const { workspaceState, formState, mpiProcedureState } = FB.useStores();
     const {
       document,
       id,
@@ -282,6 +282,7 @@ export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
           formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
           formState?.getInputState(LHRS_START_QUANTITY)?.value,
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
+          mpiProcedureState?.partsSelected?.map(part => ({ ...part })),
         ],
         () => {
           if (!isOperator && !isOwner) {

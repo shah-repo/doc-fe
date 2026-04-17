@@ -8,6 +8,7 @@ export const withFBApprovalPasswordForm = (
   const Comp = ({
     approvalTransition,
     approvalId,
+    transition = 'approve',
     ...props
   }) => {
     const { dialogState } = FB.useStores();
@@ -20,7 +21,7 @@ export const withFBApprovalPasswordForm = (
 
     const onDialogApprove = () => {
       const password = formState?.getFieldValue('password');
-      approvalTransition?.('approve', approvalId, password, true);
+      approvalTransition?.(transition, approvalId, password, true);
       onDialogClose();
     };
 

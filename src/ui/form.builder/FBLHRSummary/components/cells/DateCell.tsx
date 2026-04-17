@@ -87,7 +87,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       <DatePicker
         {...getFieldProps(field)}
         PopoverProps={PopoverProps}
-        value={normalizeDate(values[field] || '')}
+        value={normalizeDate(values[field] || '', field)}
         size="small"
         data-cy={field}
         onChange={handleChange}

@@ -51,6 +51,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     prevValue,
     submitRef,
     validateRef,
+    skipExistingApprovals,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -99,7 +100,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     }
     const approvalsState = FB.useRef(
       FBBuildTypeChangeApprovalState,
-      { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
+      { approvals: skipExistingApprovals ? [] : docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
 
@@ -367,11 +368,21 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
 
           const currentGroups = approvalsState?.groups;
           if (currentGroups && Object.keys(currentGroups).length > 0) {
-            const satisfiedGroups = Object.values(currentGroups).filter(group =>
+            const allGroups = Object.values(currentGroups);
+            const satisfiedGroups = allGroups.filter(group =>
               (group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
             );
+
             if (satisfiedGroups.length === 0) {
-              return { type: 'group_required', groupNames: Object.values(currentGroups).map(g => g.name) };
+              return { type: 'group_required', groupNames: allGroups.map(g => g.name) };
+            }
+
+            // If multiple groups needed but only one satisfied
+            if (allGroups.length > 1 && satisfiedGroups.length < allGroups.length) {
+              const unsatisfiedGroups = allGroups
+                .filter(group => !satisfiedGroups.includes(group))
+                .map(g => g.name);
+              return { type: 'group_required', groupNames: unsatisfiedGroups };
             }
           }
 

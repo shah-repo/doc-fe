@@ -64,6 +64,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
           multiple={true}
           autosave={false}
           {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
+          autoCompleteClasses={{ root: classes.deleteChip }}
         />
         <Box className={classes.approvalApprovedGroupContainer}>
           {approvalApprovedGroup ? (
@@ -150,7 +151,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                           label="common.reject"
                           size="small"
                           className={classes.actionButton}
-                          onClick={() => approvalTransition('reject', approval.id)}
+                          onClick={() => approvalTransition?.('reject', approval.id)}
                         />
                         <FBButton
                           {...{ disabled }}
