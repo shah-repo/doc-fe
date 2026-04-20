@@ -294,6 +294,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'approvals':
         returnValue = (audit.nextValue as Approval).approver.user.name;
         break;
+      case 'approvals.buildTypeApprovals.approver':
       case 'approvals.approver':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name} - {(audit.nextValue as Employee).user?.email}</div>);
         break;
@@ -335,6 +336,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'documentType':
         returnValue = (audit.nextValue as DocumentType).documentTypeName;
         break;
+      case 'approvals.buildTypeApprovals.status':
       case 'approvals.status':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name}</div>);
