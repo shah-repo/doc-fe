@@ -4,7 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Audit } from '../../state/ducks/audit/types';
-import { FB, FBAutocompleteAsyncState } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../form.builder';
 import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 interface OwnProps {
@@ -27,7 +27,13 @@ const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
   useEffect(() => {
     if (FB.isUUID(label)) {
       autocompleteState?.setOptionId(optionId);
-      autocompleteState.fetchDepricatedAutocompleteOption(label);
+      if (optionId === FBAutocompleteAsyncOption.trainingDocuments) {
+        autocompleteState.fetchDepricatedAutocompleteOption(label);
+      }
+
+      if (optionId === FBAutocompleteAsyncOption.employees) {
+        autocompleteState.fetchAutocompleteOption(label, optionId);
+      }
     }
   }, []);
 
