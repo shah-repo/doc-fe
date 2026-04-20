@@ -1,11 +1,11 @@
-import { useObserver } from 'mobx-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { useFormValue } from '../../hooks/useFormValue';
 import { FBProductORServiceProps, ProductORService } from './types';
 
 export const withFBProductORService = <T extends FBProductORServiceProps>(
@@ -18,13 +18,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
-
-    const stableProductOrServiceIds = useMemo(() => {
-      return (referenceFormInput ?? []).map((data) => data.revId);
-    }, [referenceFormInput]);
-
-    const prevIdsRef = useRef<string[]>([]);
+    const referenceFormInput = useFormValue(name);
 
     const mergeArrays = (
       references: ProductORService[],
@@ -63,30 +57,24 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
 
     const fetchOptionsDataAsync = useAsync<DocumentRevision[]>({
       onSuccess: (data) => {
-        setProductOrServices(mergeArrays(referenceFormInput, data));
+        setProductOrServices(mergeArrays(referenceFormInput as ProductORService[], data));
       },
     });
 
     useEffect(() => {
-      if (!stableProductOrServiceIds) {
+      if (!referenceFormInput) {
         return;
       }
 
-      const isSame
-        = prevIdsRef.current.length === stableProductOrServiceIds.length
-        && prevIdsRef.current.every((id, index) => id === stableProductOrServiceIds[index]);
-
-      if (isSame) return;
-
-      prevIdsRef.current = stableProductOrServiceIds;
+      const productOrServiceIds = Array.isArray(referenceFormInput) ? referenceFormInput.map((item) => item.revId) : [];
 
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        stableProductOrServiceIds ?? [],
+        productOrServiceIds,
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, stableProductOrServiceIds]);
+    }, [workspaceState?.documentId, referenceFormInput]);
 
     return Component({
       ...(props as T),
