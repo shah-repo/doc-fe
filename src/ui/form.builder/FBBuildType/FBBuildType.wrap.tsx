@@ -9,6 +9,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
 import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
+import { LHRBuildTypeSwitchConfigApproval } from '../../administration/general.settings/panels/LHRBuildTypeSwitchConfig/types';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import { ApprovalValidationError } from '../FBBuildTypeChangeApproval/FBBuildTypeChangeApproval.types';
@@ -24,6 +25,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     name,
     allowedBuildTypeChange,
     lhrBuildTypeSwitchConfigApproval,
+    enableNewBuildTypeFlow,
     ...props
   }: T) => {
     const [selectedValue, setSelectedValue] = React.useState<undefined | LHRBuild>(undefined);
@@ -45,11 +47,10 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     const buildsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.buildType,
     });
-    const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: Array<{ from: string, to: string }> } | null;
+    const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: LHRBuildTypeSwitchConfigApproval[] } | null;
     lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
-    allowedBuildTypeChange = lhrBuildTypeSwitchConfigApproval.filter((config) => {
-      return config.from === defaultValue?.id;
-    }).map((config) => config.to);
+    const currentBuildType = lhrBuildTypeSwitchConfigApproval.filter((config) => { return config.from === defaultValue?.id; });
+    allowedBuildTypeChange = currentBuildType.map((config) => config.to).filter((value): value is string => value !== undefined) || [];
 
     const {
       document,
@@ -112,11 +113,16 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       buildTypeState?.setApprovals(unionBy(stateApprovals, [approval], 'id'));
     }
 
+    enableNewBuildTypeFlow = lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length > 0;
+    if (currentBuildType && currentBuildType.length > 0 && enableNewBuildTypeFlow) {
+      enableNewBuildTypeFlow = currentBuildType[0].approvalGroups.length > 0;
+    }
+
     const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
       const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
 
-      if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
+      if (!enableNewBuildTypeFlow) {
         if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
@@ -151,7 +157,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       };
 
       if (action === 'confirm') {
-        if (lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length === 0) {
+        if (!enableNewBuildTypeFlow) {
           formState?.setFieldValue(name, selectedValue?.id);
           formState?.setFieldAutosave(name);
           setDefaultValue(selectedValue);
@@ -250,6 +256,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       lhrBuildTypeSwitchConfigApproval,
       submitApproversRef,
       validateApproversRef,
+      enableNewBuildTypeFlow,
     });
   };
 
