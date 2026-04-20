@@ -18,7 +18,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = useFormValue(name);
+    const referenceFormInput = useFormValue<ProductORService[]>(name);
 
     const mergeArrays = (
       references: ProductORService[],
