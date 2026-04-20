@@ -29,11 +29,10 @@ const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
       autocompleteState?.setOptionId(optionId);
       if (optionId === FBAutocompleteAsyncOption.trainingDocuments) {
         autocompleteState.fetchDepricatedAutocompleteOption(label);
+        return;
       }
 
-      if (optionId === FBAutocompleteAsyncOption.employees) {
-        autocompleteState.fetchAutocompleteOption(label, optionId);
-      }
+      autocompleteState.fetchAutocompleteOption(label, optionId);
     }
   }, []);
 
