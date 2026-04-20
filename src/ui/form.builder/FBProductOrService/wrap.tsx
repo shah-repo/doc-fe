@@ -1,5 +1,5 @@
 import { useObserver } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -19,6 +19,12 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
       documentRevisionsActions.fetchReferencesTableData,
     );
     const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
+
+    const stableProductOrServiceIds = useMemo(() => {
+      return (referenceFormInput ?? []).map((data) => data.revId);
+    }, [referenceFormInput]);
+
+    const prevIdsRef = useRef<string[]>([]);
 
     const mergeArrays = (
       references: ProductORService[],
@@ -62,19 +68,25 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     });
 
     useEffect(() => {
-      if (!workspaceState?.formInputSync.get(name)) {
+      if (!stableProductOrServiceIds) {
         return;
       }
+
+      const isSame
+        = prevIdsRef.current.length === stableProductOrServiceIds.length
+        && prevIdsRef.current.every((id, index) => id === stableProductOrServiceIds[index]);
+
+      if (isSame) return;
+
+      prevIdsRef.current = stableProductOrServiceIds;
 
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        (workspaceState?.formInputSync.get(name) ?? []).map(
-          (data) => data.revId,
-        ),
+        stableProductOrServiceIds ?? [],
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    }, [workspaceState?.documentId, stableProductOrServiceIds]);
 
     return Component({
       ...(props as T),
