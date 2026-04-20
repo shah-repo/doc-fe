@@ -52,12 +52,8 @@ const BuildTypeChangeApproversButton: React.FunctionComponent<Props> = ({ render
 
   const handleConfirm = () => {
     const validationError = validateRef.current?.();
-    if (validationError) {
-      if (validationError.type === 'no_approvers') {
-        toastError(translate('form.builder.approvals.not.present'));
-      } else {
-        toastError(translate('form.builder.approvals.group.required', { groupNames: validationError.groupNames.join(', ') }));
-      }
+    if (validationError?.type === 'group_required') {
+      toastError(translate('form.builder.approvals.group.required', { groupNames: validationError.groupNames.join(', ') }));
       return;
     }
     submitRef.current?.();
