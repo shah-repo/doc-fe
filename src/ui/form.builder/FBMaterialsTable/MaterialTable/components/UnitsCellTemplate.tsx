@@ -14,7 +14,7 @@ import { CustomTreeListCellProps, EditableMaterial, UnitOption } from '../types'
 import TreeListCellWrapper from './TreeListCellWrapper';
 import { isEditMaterial } from './utils';
 
-const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS }) => {
+const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS, dataItem }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableMaterial>();
   const { isRedlineActive } = React.useContext(MaterialTreelistContext);
 
@@ -38,7 +38,7 @@ const Editor: React.FC<CustomTreeListCellProps> = ({ field = '', isLHRT, isLHRS 
     return asyncData ? Array.from(asyncData.values()).map((item) => item.text) : [];
   });
 
-  const value = values[field] as string;
+  const value = values[field] ?? dataItem[field] ?? '';
   const shouldDisable = isLHRS
     ? isRedlineActive
       ? Boolean(values.parentId)
