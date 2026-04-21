@@ -21,12 +21,12 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     const referenceFormInput = useFormValue<ProductORService[]>(name);
 
     const mergeArrays = (
-      references: ProductORService[],
+      references?: ProductORService[],
       selectedProductOrServices?: DocumentRevision[],
     ) => {
       const map = new Map();
 
-      references.forEach((item) => {
+      references?.forEach((item) => {
         map.set(item.revId ?? item.id, { ...item });
       });
 
@@ -57,7 +57,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
 
     const fetchOptionsDataAsync = useAsync<DocumentRevision[]>({
       onSuccess: (data) => {
-        setProductOrServices(mergeArrays(Array.isArray(referenceFormInput) ? referenceFormInput : [], data));
+        setProductOrServices(mergeArrays(referenceFormInput, data));
       },
     });
 
@@ -66,12 +66,10 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
         return;
       }
 
-      const productOrServiceIds = Array.isArray(referenceFormInput) ? referenceFormInput.map((item) => item.revId) : [];
-
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        productOrServiceIds,
+        referenceFormInput.map((item) => item.revId),
         fetchOptionsDataAsync,
       );
     }, [workspaceState?.documentId, referenceFormInput]);
