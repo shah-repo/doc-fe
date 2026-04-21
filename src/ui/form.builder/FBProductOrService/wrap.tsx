@@ -1,4 +1,3 @@
-import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
@@ -6,6 +5,7 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { useFormValue } from '../../hooks/useFormValue';
 import { FBProductORServiceProps, ProductORService } from './types';
 
 export const withFBProductORService = <T extends FBProductORServiceProps>(
@@ -18,15 +18,15 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
+    const referenceFormInput = useFormValue<ProductORService[]>(name);
 
     const mergeArrays = (
-      references: ProductORService[],
+      references?: ProductORService[],
       selectedProductOrServices?: DocumentRevision[],
     ) => {
       const map = new Map();
 
-      references.forEach((item) => {
+      references?.forEach((item) => {
         map.set(item.revId ?? item.id, { ...item });
       });
 
@@ -62,19 +62,17 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     });
 
     useEffect(() => {
-      if (!workspaceState?.formInputSync.get(name)) {
+      if (!referenceFormInput) {
         return;
       }
 
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        (workspaceState?.formInputSync.get(name) ?? []).map(
-          (data) => data.revId,
-        ),
+        referenceFormInput.map((item) => item.revId),
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    }, [workspaceState?.documentId, referenceFormInput]);
 
     return Component({
       ...(props as T),
