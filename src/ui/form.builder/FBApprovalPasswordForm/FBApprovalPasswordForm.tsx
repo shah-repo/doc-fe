@@ -48,7 +48,6 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
         {transition === 'reject' && <FBTextEditor
           name="comment"
           label="transition.action.rejection.comment"
-          dataCy="transition.action.rejection.comment"
           placeholder={translate('transition.action.rejection.comment.placeholder')}
           disabled={false}
         /> }

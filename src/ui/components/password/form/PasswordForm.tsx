@@ -12,14 +12,16 @@ import FormMessage from '../../forms/FormMessage';
 import FormProgress from '../../forms/FormProgress';
 import SubmitButton from '../../forms/SubmitButton';
 import Text from '../../Text';
+import { Transition } from '../../transitionDialog/types';
 import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
+  transition?: Transition
   asyncState: AsyncState
   cancel: () => void
 }
 
-const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, classes, asyncState }) => {
+const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, cancel, classes, asyncState }) => {
   const { name } = store.getState().auth.user;
 
   return (
@@ -44,13 +46,13 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
         inputProps={{ type: 'password', className: classes.inputField }}
         validate={validator(required)}
       />
-      <SMTextEditor
+      {transition === 'reject' && <SMTextEditor
         name="comment"
         label="transition.action.rejection.comment"
         dataCy="transition.action.rejection.comment"
         placeholder={translate('transition.action.rejection.comment.placeholder')}
         disabled={false}
-      />
+      />}
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         id="passwordConfirm"
