@@ -125,13 +125,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
 
       const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
-      const isValid = (isEmpty(inputValue) || selectedLhrBuild);
+      const isValid = !isNull(event) && (isEmpty(inputValue) || selectedLhrBuild);
 
       if (!enableNewBuildTypeFlow) {
         if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
-        } else if (!isNull(event) && isValid) {
+        } else if (isValid) {
           formState?.setFieldValue(name, selectedLhrBuild?.id);
           formState?.getInputState(name ?? '')?.setRender();
           setDefaultValue(selectedLhrBuild);
@@ -142,7 +142,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         if (!isEmpty(selectedLhrBuild) && !isNull(event) && defaultValue) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
-        } else if (!isNull(event) && isValid) {
+        } else if (isValid) {
           formState?.setFieldValue(name, selectedLhrBuild?.id);
           formState?.getInputState(name ?? '')?.setRender();
           setDefaultValue(selectedLhrBuild);
