@@ -57,7 +57,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
 
     const fetchOptionsDataAsync = useAsync<DocumentRevision[]>({
       onSuccess: (data) => {
-        setProductOrServices(mergeArrays(referenceFormInput as ProductORService[], data));
+        setProductOrServices(mergeArrays(Array.isArray(referenceFormInput) ? referenceFormInput : [], data));
       },
     });
 
