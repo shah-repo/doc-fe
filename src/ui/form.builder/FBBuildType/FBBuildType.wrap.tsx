@@ -193,17 +193,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         submitApproversRef.current?.();
         formState?.setFieldValue(`new-${name}`, selectedValue?.id);
         formState?.setFieldAutosave(`new-${name}`);
-        setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
-        formState?.getInputState(name ?? '')?.setRender();
-        approvalDialog.close();
-      } else {
-        setDefaultValue(prevValue);
-        forceRerender();
-        formState?.getInputState(name ?? '')?.setRender();
-        setSelectedValue(undefined);
-        approvalDialog.close();
       }
+      setDefaultValue(prevValue);
+      forceRerender();
+      formState?.getInputState(name ?? '')?.setRender();
+      setSelectedValue(undefined);
+      approvalDialog.close();
     };
 
     const forceRerender = () => {
