@@ -43,12 +43,22 @@ const TransitionDialog: React.FunctionComponent<Props>
   }) => {
     const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
     const renderPasswordForm = (props: FormikProps<any>) => (
-      <PasswordForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
+      <PasswordForm {...props} asyncState={asyncState} cancel={transitionDialog.close} transition={transition} />
     );
 
     const renderCloseForm = (props: FormikProps<any>) => (
       <EffectiveDateForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
+
+    const getDialogTitle = () => {
+      if (transition === 'closed') {
+        return 'transition.action.close.date';
+      } else if (transition === 'reject') {
+        return 'form.builder.rejection.prompt';
+      } else {
+        return 'transition.action.title';
+      }
+    };
 
     const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
     return (
@@ -95,7 +105,7 @@ const TransitionDialog: React.FunctionComponent<Props>
           onSubmit={preventPropagation}
         >
           <DialogTitle>
-            <Text translation={transition === 'closed' ? 'transition.action.close.date' : 'transition.action.title'} />
+            <Text translation={getDialogTitle()} />
           </DialogTitle>
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>

@@ -17,7 +17,7 @@ class FBBuildTypeChangeApprovalState extends FBRequest<Approval, {'ids[]': strin
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
-  private readonly EXCLUDED_APPROVAL_STATUSES = ['ABANDONED', 'REJECTED', 'APPROVED'];
+  private readonly EXCLUDED_APPROVAL_STATUSES = ['ABANDONED', 'REJECTED'];
 
   public constructor ({ approvals, isOwner, fromBuildType, toBuildType }: FBBuildTypeChangeApprovalConstructor) {
     super();

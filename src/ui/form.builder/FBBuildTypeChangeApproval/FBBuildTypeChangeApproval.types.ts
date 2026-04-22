@@ -35,6 +35,7 @@ export type FBBuildTypeChangeApprovalProps =
   prevValue?: LHRBuild
   submitRef?: React.MutableRefObject<(() => void) | null>
   validateRef?: React.MutableRefObject<(() => ApprovalValidationError | null) | null>
+  skipExistingApprovals?: boolean
 };
 
 interface Owner {

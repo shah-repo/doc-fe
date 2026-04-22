@@ -37,6 +37,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
   lhrBuildTypeSwitchConfigApproval,
   submitApproversRef,
   validateApproversRef,
+  enableNewBuildTypeFlow,
   ...props
 }) => {
   const classes = useStyles();
@@ -104,15 +105,32 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
             <Typography variant="h4" className={classes.warningText}>
               {translate('common.warning')}
             </Typography>
-            <Typography variant="body2" className={classes.messageText}>
-              <FormattedMessage
-                id="form.builder.build.type.header.msg"
-                values={{
-                  buildTypeOld: <strong>{defaultValue?.displayLabel ?? ''}</strong>,
-                  buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
-                }}
-              />
-            </Typography>
+            {enableNewBuildTypeFlow ? (
+              <>
+                <Typography variant="body2" className={classes.messageText}>
+                  <FormattedMessage
+                    id="form.builder.build.type.header.new.msg"
+                    values={{
+                      buildTypeOld: <strong>{defaultValue?.displayLabel ?? ''}</strong>,
+                      buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
+                    }}
+                  />
+                </Typography>
+                <Typography variant="body2" className={classes.messageText}>
+                  <FormattedMessage id="form.builder.build.type.sub.header.new.msg" />
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="body2" className={classes.messageText}>
+                <FormattedMessage
+                  id="form.builder.build.type.header.msg"
+                  values={{
+                    buildTypeOld: <strong>{defaultValue?.displayLabel ?? ''}</strong>,
+                    buildTypeNew: <strong>{selectedValue?.displayLabel ?? ''}</strong>,
+                  }}
+                />
+              </Typography>
+            )}
           </Box>
         </Box>
       </Dialog>
@@ -150,6 +168,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
           prevValue={prevValue}
           submitRef={submitApproversRef}
           validateRef={validateApproversRef}
+          skipExistingApprovals={true}
         />
       </Dialog>
     </FBProvider>

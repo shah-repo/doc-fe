@@ -244,7 +244,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     onRejectClick = (approvalId: string) => {
       dialogState?.config({
-        title: 'form.builder.password.prompt',
+        title: 'form.builder.rejection.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: 'reject' }} />,
       });
