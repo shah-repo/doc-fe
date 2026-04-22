@@ -203,10 +203,14 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
         const addedIds = difference(fieldValue, formValue);
         const removedIds = difference(formValue, fieldValue);
+        // Only add approvers that aren't already committed in approvals list
+        const newAddedIds = addedIds.filter(addedId =>
+          !approvalsState?.getApprovals.some(a => a.approver?.id === addedId),
+        );
         // Stage newly selected approvers; do not make API calls yet
         stagedApproverIds.current = [
           ...without(stagedApproverIds.current, ...removedIds),
-          ...addedIds,
+          ...newAddedIds,
         ];
         // Stage removals of committed approvals — don't call API until Update is clicked
         const committedRemovedIds = removedIds.filter(removedId =>
