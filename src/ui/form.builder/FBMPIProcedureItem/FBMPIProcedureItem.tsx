@@ -95,7 +95,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           </Box>
         )}
       </Box>}
-      {!isAttachmentType && (
+      {!FBProcedureItemOmitAction.includes(type) && (
         <Box className={classes.typeLabel}>
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
