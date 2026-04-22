@@ -22,8 +22,15 @@ export const useDate = () => {
 
   const getCurrentDate = (format: string) => moment().tz(timezone).format(format);
 
-  const convertDateTimeToUserTz = (date: string, format: string): string => {
-    return moment.tz(date, format, timezone).format(MomentFormats.YearMonthDateDash);
+  const convertDateTimeToUserTz = (inputDateTime: string, inputFormat?: string): string => {
+    if (!inputDateTime) return '';
+
+    const strictMoment = inputFormat ? moment(inputDateTime, inputFormat, true) : null;
+    const momentObj = strictMoment?.isValid() ? strictMoment.tz(timezone) : moment(inputDateTime).tz(timezone);
+
+    if (!momentObj.isValid()) return '';
+
+    return momentObj.format(MomentFormats.YearMonthDateDash);
   };
 
   const formatDisplayDate = (dateStr?: string, format = MomentFormats.MonthDateYearTwoDigit) => {
