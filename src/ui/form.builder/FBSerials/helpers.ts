@@ -4,6 +4,7 @@ const PART_SERIALIZATION_KEY = 'has-serialization';
 const PART_SERIALIZATION_TYPE_KEY = 'select-serialization';
 
 export const LOT_PART_SELECT_KEY = 'lot_part';
+export const LOT_QUANTITY_SELECT_KEY = 'lot_quantity';
 
 const HAS_SERIALIZATION_VALUES = ['Yes'];
 const SERIALIZATION_MANUAL_VALUES = ['manual', 'Select Provided Serialization'];

@@ -4,11 +4,11 @@ import { FB, FBSection } from '..';
 import { translate } from '../../../common/intl';
 import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
+import { useFormValue } from '../../hooks/useFormValue';
 import { withThemeNext } from '../../layout/theme-next';
 import FBSerialsTable from '../FBSerialsTable';
-import FBDataStore from '../FBStore/FBDataStore';
 import AddDialog from './components/AddDialog';
-import { LOT_PART_SELECT_KEY } from './helpers';
+import { LOT_PART_SELECT_KEY, LOT_QUANTITY_SELECT_KEY } from './helpers';
 import useStyles from './styles';
 import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
@@ -18,13 +18,12 @@ const FBSerials: React.FC = () => {
   const addDialog = useDialog();
   const importDialog = useDialog();
 
-  const lotPart = useObserver(
-    () => FBDataStore.refreshData?.formInput?.[LOT_PART_SELECT_KEY] as string | undefined,
-  );
+  const lotPart = useFormValue(LOT_PART_SELECT_KEY);
+  const lotQuantity = useFormValue(LOT_QUANTITY_SELECT_KEY);
 
   useEffect(() => {
     serialsState?.reload();
-  }, [lotPart, serialsState]);
+  }, [lotPart, lotQuantity, serialsState]);
 
   const {
     shouldShowSerials,
