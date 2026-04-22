@@ -23,7 +23,13 @@ const FBSerials: React.FC = () => {
 
   useEffect(() => {
     serialsState?.reload();
-  }, [lotPart, lotQuantity, serialsState]);
+  }, [lotPart, serialsState]);
+
+  useEffect(() => {
+    if (serialsState?.shouldShowSerials) {
+      serialsState?.reload();
+    }
+  }, [lotQuantity, serialsState]);
 
   const {
     shouldShowSerials,

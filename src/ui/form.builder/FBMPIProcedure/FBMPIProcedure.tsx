@@ -156,11 +156,13 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 borderRight={0}
               />
             )}
-            <Box flexGrow={1}>
-              <FBMPIProcedureItem
-                type={types.pop() as FBProcedureItemType}
-                {...{ name, disabled, isPreview, isOutput, redlineActive }} />
-            </Box>
+            {types.length > 0 && (
+              <Box flexGrow={1}>
+                <FBMPIProcedureItem
+                  type={types.pop() as FBProcedureItemType}
+                  {...{ name, disabled, isPreview, isOutput, redlineActive }} />
+              </Box>
+            )}
           </Box>
         </FBProvider>
       </Box>
