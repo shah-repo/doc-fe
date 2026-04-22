@@ -24,16 +24,18 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 
 export const TextFieldCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
+  const mode = dataItem[MODE_FIELD];
+  const value = dataItem[field] ?? EMPTY_VALUE_PLACEHOLDER;
 
-  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
+  if ([Mode.add, Mode.edit].includes(mode)) {
     return <Editor {...props} />;
   }
 
   const handleClick = () => onClick?.({ dataItem });
 
   return (
-    <OverflowContent onClick={handleClick}>
-      {dataItem[field] ?? EMPTY_VALUE_PLACEHOLDER}
+    <OverflowContent key={`${field}-${mode}-${value}`} onClick={handleClick}>
+      {value}
     </OverflowContent>
   );
 };

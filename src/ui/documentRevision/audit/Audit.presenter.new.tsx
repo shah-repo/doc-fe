@@ -515,7 +515,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
 
-        if (field === 'LHRTparameter' && ['BOOLEAN_DELETED'].includes(change.type)) {
+        const targetFields = ['LHRTparameter', 'isEquipmentSpecification'];
+
+        if (targetFields.includes(field ?? '') && ['BOOLEAN_DELETED'].includes(change.type)) {
           return;
         }
       }
