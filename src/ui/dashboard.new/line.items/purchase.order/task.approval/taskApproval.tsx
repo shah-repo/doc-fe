@@ -31,7 +31,7 @@ import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
-import ApproveDialogueContainer from './POApprovalDialogContainer';
+import ApproveDialogContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
 interface Props {
   id: string
@@ -420,7 +420,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </Button>
         </Grid>
       </Collapse>
-      <ApproveDialogueContainer
+      <ApproveDialogContainer
         transition="approve"
         approvalId={approvalId}
         transitionDialog={transitionDialog}
