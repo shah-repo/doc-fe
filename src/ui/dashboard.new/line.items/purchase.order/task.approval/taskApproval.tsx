@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, Collapse, Grid, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import isMobile from 'is-mobile';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
@@ -10,22 +9,14 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
-import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
-import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { Nullable } from '../../../../../state/ducks/common/types';
-import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
-import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
-import { toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../../constants/urls';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
-import { Translation } from '../../../../translations/types';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -53,9 +44,7 @@ interface Props {
   unPinLineItem?: (pinnedItemId: string) => void
   dismissLineItem?: (id: string) => void
 }
-interface ResponseProps {
-  status: string
-}
+
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
@@ -77,7 +66,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
@@ -98,7 +86,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setApproved(!approved);
   };
   const handleRejectClick = () => {
-    onReject();
+    openApproveDialog();
+    setApproved(false);
   };
   const handleClick = () => {
     setOpen(!open);
@@ -129,40 +118,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const transitionDialog = useDialog();
   const openApproveDialog = () => {
     transitionDialog.open();
-  };
-
-  const rejectDialogAsync = useAsync({
-    onSuccess: (response?: ResponseProps) => {
-      toastSuccess(
-        <>
-          <div style={{ display: 'flex' }}>
-            <div>
-              <SuccessIcon style={{ height: '30px' }} />
-            </div>
-            <div style={{ color: Colors.black }}>
-              <div>
-                <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
-                </span>
-              </div>
-            </div>
-          </div>
-        </>, {
-          closeButton: true,
-        });
-      dispatch(dashboardTodoActions.loadMyFeedsList());
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
-    },
-  });
-  const applyTransition = useActionCreator(approvalsActions.applyTransition);
-  const onReject = () => {
-    rejectDialogAsync.start(
-      applyTransition,
-      approvalId,
-      'reject',
-      rejectDialogAsync,
-      null,
-    );
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -421,7 +376,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         </Grid>
       </Collapse>
       <ApproveDialogContainer
-        transition="approve"
+        transition={approved ? 'approve' : 'reject'}
         approvalId={approvalId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
