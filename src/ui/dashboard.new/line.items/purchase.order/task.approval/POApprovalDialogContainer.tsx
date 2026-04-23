@@ -10,7 +10,6 @@ import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/t
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
 import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
-import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
@@ -38,14 +37,12 @@ interface ResponseProps {
   status: string
 }
 
-const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
+const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   approvalId,
   transition,
   buttonProps,
   label,
-  type,
   transitionDialog,
-  translationRejectMsg = 'dashboard.po.reject.alert',
   onSuccess,
 }) => {
   const dispatch = useDispatch();
@@ -104,12 +101,14 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   });
   const asyncState = useSelector(documentRevisionsSelectors.getLoadAsyncTaskApprovalState);
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
+
   const onSubmit = (props: PasswordFormValues) => {
-    setPassword(props.password);
-    async.start(applyTransition, approvalId, transition, async, props.password, TASK_APPROVAL_GET_ASYNC);
-  };
-  const onReject = () => {
-    async.start(applyTransition, approvalId, transition, async, null);
+    if (props.password) {
+      setPassword(props.password);
+      async.start(applyTransition, approvalId, transition, async, null, props.password, TASK_APPROVAL_GET_ASYNC);
+    } else {
+      async.start(applyTransition, approvalId, transition, async, { comment: props.comment }, null, TASK_APPROVAL_GET_ASYNC);
+    }
   };
 
   const onConfirmClick = () => {
@@ -120,13 +119,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { type && <AlertDialog
-        dialog={transitionDialog}
-        message="dashboard.po.reject.alert"
-        confirmAction={onReject}
-        cancelAction={transitionDialog.close}
-      /> }
-      { !type && <ApproveDialog
+      <ApproveDialog
         onSubmit={onSubmit}
         asyncState={asyncState}
         buttonProps={buttonProps}
@@ -135,7 +128,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         {...{
           transitionDialog,
         }}
-      />}
+      />
       {errorResponse && (
         <SupplierStatusDialog
           dialog={supplierStatusDialog}
@@ -146,4 +139,4 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ApproveDialogueContainer;
+export default ApproveDialogContainer;

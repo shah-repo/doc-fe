@@ -1,21 +1,23 @@
 import { Button, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
-import { SMTextEditor } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { store } from '../../../../../../state/store';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
 import AutocompleteField from '../../../../../components/forms/fields/Autocomplete/Autocomplete';
 import InputField from '../../../../../components/forms/fields/Input';
 import { required, validator } from '../../../../../components/forms/fields/validators';
+import FormikTextEditor from '../../../../../components/forms/FormikTextEditor/FormikTextEditor';
 import FormMessage from '../../../../../components/forms/FormMessage';
 import FormProgress from '../../../../../components/forms/FormProgress';
 import SubmitButton from '../../../../../components/forms/SubmitButton';
 import Text from '../../../../../components/Text';
+import { Transition } from '../types';
 import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState
+  transition?: Transition
   cancel: () => void
 }
 
@@ -23,6 +25,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   cancel,
   classes,
   asyncState,
+  transition,
 }) => {
   const { name } = store.getState().auth.user;
   const defaultValue = { label: name, value: name };
@@ -42,7 +45,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         isDisabled
         options={[defaultValue]}
       />
-      <InputField
+      { transition !== 'reject' && <InputField
         name="password"
         label="document.action.password"
         dataCy="transition.action.password"
@@ -50,14 +53,14 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         inputStyleProps={classes.inputFieldWrap}
         inputProps={{ type: 'password', placeholder: translate('common.enter.here'), className: classes.inputField }}
         validate={validator(required)}
-      />
-      <SMTextEditor
+      /> }
+      { transition === 'reject' && <FormikTextEditor
         name="comment"
         label="transition.action.rejection.comment"
         dataCy="transition.action.rejection.comment"
         placeholder={translate('transition.action.rejection.comment.placeholder')}
         disabled={false}
-      />
+      /> }
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         id="passwordConfirm"

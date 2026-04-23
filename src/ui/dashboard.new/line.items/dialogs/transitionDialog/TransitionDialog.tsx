@@ -47,6 +47,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     <PasswordFormApproval
       {...props}
       asyncState={asyncState}
+      transition={transition}
       cancel={transitionDialog.close}
     />
   );
@@ -96,7 +97,6 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
         disableBackdropClick={true}
         open={transitionDialog.isOpen}
         onSubmit={preventPropagation}
-        PaperProps={{ className: classes.dialogRoot }}
       >
         <Box component="div" className={classes.paper}>
           <Grid container justify="space-between">
@@ -140,7 +140,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 initialValues={
                   transition === TransitionTypes.TRANSITION_CLOSED
                     ? { effectiveDate: moment.utc().toISOString() }
-                    : { password: '' }
+                    : { password: '', comment: '' }
                 }
                 onSubmit={onSubmit}
               >
@@ -170,7 +170,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                     initialValues={
                       transition === TransitionTypes.TRANSITION_CLOSED
                         ? { effectiveDate: '' }
-                        : { password: '' }
+                        : { password: '', comment: '' }
                     }
                     onSubmit={onSubmit}
                   >

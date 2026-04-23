@@ -34,6 +34,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     <PasswordFormApproval
       {...props}
       asyncState={asyncState}
+      transition={transition}
       cancel={transitionDialog.close}
     />
   );
@@ -78,7 +79,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
           </Grid>
           <DialogContent className={classes.pendingBox}>
             <FormContext.Provider value={{ submitOnChange: false }}>
-              <Formik initialValues={{ password: '' }} onSubmit={onSubmit}>
+              <Formik initialValues={{ password: '', comment: '' }} onSubmit={onSubmit}>
                 {renderPasswordForm}
               </Formik>
             </FormContext.Provider>
