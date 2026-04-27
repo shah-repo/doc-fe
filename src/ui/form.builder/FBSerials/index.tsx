@@ -23,9 +23,11 @@ const FBSerials: React.FC = () => {
   const addDialog = useDialog();
   const importDialog = useDialog();
   const toolbarRef = useRef<HTMLDivElement>(null);
+  const lotId = useObserver(() => serialsState?.lotId);
 
-  useMqttSubscription('+/lot_serial_numbers/+/updated', (...args) => {
-    console.log(args);
+  useMqttSubscription(`+/lot_serial_numbers/${lotId}/updated`, (...args) => {
+    console.log('reload serials');
+    serialsState?.reload();
   });
 
   const lotPart = useFormValue(LOT_PART_SELECT_KEY);
