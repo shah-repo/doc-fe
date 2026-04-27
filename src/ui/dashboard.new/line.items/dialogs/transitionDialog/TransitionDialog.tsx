@@ -48,6 +48,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
       {...props}
       asyncState={asyncState}
       transition={transition}
+      showPassword={true}
       cancel={transitionDialog.close}
     />
   );
