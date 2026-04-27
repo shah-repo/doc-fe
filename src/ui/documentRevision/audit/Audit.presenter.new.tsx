@@ -158,6 +158,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
+    const lotSerials: Audit[] = [];
     const lotSerialsAdded: Audit[] = [];
     const lotSerialsDeleted: Audit[] = [];
     const singleFields: JSX.Element[] = [];
@@ -538,6 +539,20 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             updatedField: CUSTOM_BOOLEAN_FIELD,
           };
         }
+      }
+
+      if (!isFBField && change.field.startsWith('lotSerialNumbers')) {
+        try {
+          const nextValue = JSON.parse(change.nextValue as string);
+          change = {
+            ...change,
+            nextValue,
+          };
+          lotSerials.push(change);
+        } catch (e) {
+          lotSerials.push(change);
+        }
+        return;
       }
 
       if (!isFBField && change.field === 'lotSerialNumbers' && change.type === 'OBJECT_NEW') {
