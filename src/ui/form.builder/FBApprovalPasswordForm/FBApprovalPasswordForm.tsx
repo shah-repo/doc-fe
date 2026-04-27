@@ -1,6 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { FBForm, FBTextEditor, FBTextField } from '..';
+import { FBForm, FBInlineApprovalTransitionIdent, FBTextEditor, FBTextField } from '..';
 import { translate } from '../../../common/intl';
 import { store } from '../../../state/store';
 import { Autocomplete } from '../../components/forms/fields-next';
@@ -12,6 +12,7 @@ import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
   isApproverVisible = false,
+  isPasswordVisible = false,
   children,
   transition,
 }) => {
@@ -37,7 +38,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
             getOptionLabel={(option) => option.label}
           />
         </Box>}
-        {transition !== 'reject' && <FBTextField
+        {(transition !== 'reject' || isPasswordVisible) && <FBTextField
           rules="required"
           name="password"
           inputProps={{
@@ -45,7 +46,8 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
           }}
           label="form.builder.password"
         /> }
-        {transition === 'reject' && <FBTextEditor
+        {[FBInlineApprovalTransitionIdent.REJECT, FBInlineApprovalTransitionIdent.REJECT_WITH_PASSWORD].includes(transition as FBInlineApprovalTransitionIdent)
+        && <FBTextEditor
           name="comment"
           label="transition.action.rejection.comment"
           placeholder={translate('transition.action.rejection.comment.placeholder')}

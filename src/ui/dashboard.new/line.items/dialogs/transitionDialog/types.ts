@@ -6,6 +6,7 @@ export type Transition =
   | 'approve'
   | 'reject'
   | 'in_review'
+  | 'reject_with_password'
   | 'to_review'
   | 'submitted'
   | 'withdrawn'

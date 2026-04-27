@@ -1,5 +1,5 @@
 import React from 'react';
-import { FB, FBApprovalPasswordFormActions, FBFormState, FBInlineApprovalTransition } from '..';
+import { FB, FBApprovalPasswordFormActions, FBFormState, FBInlineApprovalTransition, FBInlineApprovalTransitionIdent } from '..';
 import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 
 export const withFBApprovalPasswordForm = (
@@ -26,15 +26,17 @@ export const withFBApprovalPasswordForm = (
     };
 
     const onDialogReject = () => {
+      const password = formState?.getFieldValue('password');
       const comment = formState?.getFieldValue('comment');
-      approvalTransition?.(transition, approvalId, null, comment, true);
+      approvalTransition?.(transition, approvalId, password, comment, true);
       onDialogClose();
     };
 
     const objectToPass: any = { onDialogClose };
     if (transition === 'approve') {
       objectToPass.onDialogApprove = onDialogApprove;
-    } else if (transition === 'reject') {
+    } else if ([FBInlineApprovalTransitionIdent.REJECT, FBInlineApprovalTransitionIdent.REJECT_WITH_PASSWORD]
+      .includes(transition as FBInlineApprovalTransitionIdent)) {
       objectToPass.onDialogReject = onDialogReject;
     }
 
