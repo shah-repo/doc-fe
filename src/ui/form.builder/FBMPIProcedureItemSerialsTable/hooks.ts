@@ -72,8 +72,8 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
       const rejectedQty = serialNumbers.filter((serial) => serial.status === SerialNumberStatus.REJECTED).length;
       formState?.setFieldValue(LHRS_ACCEPTED_QUANTITY, acceptedQty);
       formState?.setFieldValue(LHRS_REJECTED_QUANTITY, rejectedQty);
-      formState?.setFieldAutosave(LHRS_ACCEPTED_QUANTITY);
-      formState?.setFieldAutosave(LHRS_REJECTED_QUANTITY);
+      // formState?.setFieldAutosave(LHRS_ACCEPTED_QUANTITY);
+      // formState?.setFieldAutosave(LHRS_REJECTED_QUANTITY);
     },
     UPDATE_STEP_QTY_INTERVAL,
     { trailing: false },

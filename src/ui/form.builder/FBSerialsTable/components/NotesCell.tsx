@@ -18,7 +18,7 @@ const StatusCell: React.FC<Props> = ({ dataItem, onChange }) => {
 
   const saveValue = () => {
     if (value !== defaultNotes) {
-      onChange(dataItem.id, value);
+      onChange(dataItem.id, value ?? null);
     }
   };
 

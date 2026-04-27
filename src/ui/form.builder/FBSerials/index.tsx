@@ -1,5 +1,5 @@
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FB, FBSection } from '..';
 import { translate } from '../../../common/intl';
@@ -22,6 +22,11 @@ const FBSerials: React.FC = () => {
   const { serialsState } = FB.useStores();
   const addDialog = useDialog();
   const importDialog = useDialog();
+  const toolbarRef = useRef<HTMLDivElement>(null);
+
+  useMqttSubscription('+/lot_serial_numbers/+/updated', (...args) => {
+    console.log(args);
+  });
 
   const lotPart = useFormValue(LOT_PART_SELECT_KEY);
   const lotQuantity = useFormValue(LOT_QUANTITY_SELECT_KEY);
@@ -102,10 +107,13 @@ const FBSerials: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <FBSection label="form.builder.serials.title" />
+      <FBSection label="form.builder.serials.title">
+        <div ref={toolbarRef} className={classes.toolbar} />
+      </FBSection>
       <FBSerialsTable
         serialNumbers={serialNumbers}
         isLoading={isLoading}
+        toolbarRef={toolbarRef}
         {...actionProps}
       />
       {isPartSerializationManual && (
