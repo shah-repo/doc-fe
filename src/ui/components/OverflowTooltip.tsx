@@ -1,7 +1,8 @@
-import { Tooltip, TooltipProps, makeStyles } from '@material-ui/core';
+import { Tooltip, TooltipProps, makeStyles, withStyles } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import useOverflow from '../hooks/useOverflow';
+import { Colors } from '../layout/theme-next';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -18,6 +19,17 @@ const useStyles = makeStyles({
     '-webkit-box-orient': 'vertical',
   }),
 });
+
+const CustomTooltip = withStyles({
+  tooltip: {
+    backgroundColor: Colors.black,
+    color: Colors.white,
+    fontSize: 12,
+  },
+  arrow: {
+    color: Colors.black,
+  },
+})(Tooltip);
 
 interface Props extends Omit<TooltipProps, 'children'> {
   maxLines?: number
@@ -37,7 +49,7 @@ const OverflowTooltip: React.FC<Props> = ({
   const classes = useStyles({ maxLines });
 
   return (
-    <Tooltip
+    <CustomTooltip
       {...props}
       title={isOverflowing || forceTooltip ? title : ''}
     >
@@ -53,7 +65,7 @@ const OverflowTooltip: React.FC<Props> = ({
       >
         {children}
       </div>
-    </Tooltip>
+    </CustomTooltip>
   );
 };
 

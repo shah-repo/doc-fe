@@ -25,6 +25,7 @@ export default makeStyles((theme) => ({
     paddingRight: '0px !important',
   },
   adornmentStart: {
+    fontSize: 14,
     marginRight: '0px !important',
   },
 }));
