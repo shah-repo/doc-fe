@@ -18,6 +18,7 @@ import styles from './PasswordForm.styles';
 interface PasswordFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState
   transition?: Transition
+  showPassword?: boolean
   cancel: () => void
 }
 
@@ -26,6 +27,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   classes,
   asyncState,
   transition,
+  showPassword,
 }) => {
   const { name } = store.getState().auth.user;
   const defaultValue = { label: name, value: name };
@@ -45,7 +47,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         isDisabled
         options={[defaultValue]}
       />
-      { transition !== 'reject' && <InputField
+      { (transition !== 'reject' || showPassword) && <InputField
         name="password"
         label="document.action.password"
         dataCy="transition.action.password"
@@ -66,7 +68,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         id="passwordConfirm"
         dataCy="passwordConfirm"
         asyncState={asyncState}
-        label="transition.action.confirm"
+        label={transition !== 'reject' ? 'transition.action.confirm' : 'transition.action.reject'}
         className={classes.submitButton}
       />
       <Button
