@@ -113,7 +113,12 @@ export default class FBRequest<Data, Body> {
         break;
       case 'post':
         this.method = 'post';
-        promise = apiClient().post(this.url, this.body, { headers }).promise;
+        // eslint-disable-next-line no-case-declarations
+        let payload;
+        if (this.body) {
+          payload = 'password' in this.body ? (({ password, ...rest }) => rest)(this.body) : this.body;
+        }
+        promise = apiClient().post(this.url, payload, { headers }).promise;
         break;
       case 'patch':
         this.method = 'patch';

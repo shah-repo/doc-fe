@@ -6,6 +6,7 @@ import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
@@ -43,6 +44,7 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   buttonProps,
   label,
   transitionDialog,
+  type,
   onSuccess,
 }) => {
   const dispatch = useDispatch();
@@ -103,9 +105,14 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
 
   const onSubmit = (props: PasswordFormValues) => {
+    let transitionToUse = transition;
+    if (type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER && transitionToUse === 'reject') {
+      transitionToUse = 'reject_with_password';
+    }
     if (props.password) {
       setPassword(props.password);
-      async.start(applyTransition, approvalId, transition, async, null, props.password, TASK_APPROVAL_GET_ASYNC);
+      const bodyToPass = props.comment ? { comment: props.comment } : null;
+      async.start(applyTransition, approvalId, transitionToUse, async, bodyToPass, props.password, TASK_APPROVAL_GET_ASYNC);
     } else {
       async.start(applyTransition, approvalId, transition, async, { comment: props.comment }, null, TASK_APPROVAL_GET_ASYNC);
     }
@@ -125,6 +132,7 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
         buttonProps={buttonProps}
         transition={transition}
         label={label}
+        type={type}
         {...{
           transitionDialog,
         }}

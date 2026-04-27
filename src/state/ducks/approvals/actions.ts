@@ -1,11 +1,11 @@
 import { APPROVALS_ROOT_URL } from '.';
-import { FBApprovalsStatusEndpoint } from '../../../ui/form.builder';
+import { FBInlineApprovalTransition } from '../../../ui/form.builder';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 
 const applyTransition = (
   id: string,
-  transition: FBApprovalsStatusEndpoint,
+  transition: FBInlineApprovalTransition,
   handlers: Handlers<any>,
   body?: string,
   password?: string,
