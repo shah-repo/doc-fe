@@ -10,12 +10,14 @@ interface Props {
 const StatusCell: React.FC<Props> = ({ dataItem, onChange }) => {
   const [value, setValue] = React.useState(dataItem.notes ?? '');
 
+  const defaultNotes = dataItem.notes ?? '';
+
   React.useEffect(() => {
-    setValue(dataItem.notes ?? '');
-  }, [dataItem.notes]);
+    setValue(defaultNotes);
+  }, [defaultNotes]);
 
   const saveValue = () => {
-    if (value && value !== dataItem.notes) {
+    if (value !== defaultNotes) {
       onChange(dataItem.id, value);
     }
   };

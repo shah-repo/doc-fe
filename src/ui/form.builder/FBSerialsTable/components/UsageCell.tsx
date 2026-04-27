@@ -22,7 +22,8 @@ const StatusCell: React.FC<Props> = ({ dataItem, options, onChange }) => {
       blurOnSelect
       filterSelectedOptions
       getOptionLabel={(option: SerialsSelectOption<SerialNumberUsage>) => option.value ? option.text : ''}
-      value={ isDisabled ? null : activeOption}
+      renderOption={(option: SerialsSelectOption<SerialNumberUsage>) => option.text}
+      value={isDisabled ? null : activeOption}
       onChange={(e, value?: SerialsSelectOption<SerialNumberUsage>) => {
         if (!value) return;
         onChange(dataItem.id, value.value);
