@@ -6,7 +6,6 @@ import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps } from '..'
 import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
 import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
-import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
   Component: React.FC<T>,
@@ -20,7 +19,6 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     formAutocompleteDisabled,
     ...props
   }: T) => {
-    const getDocTypeGroups = useDocTypeGroups();
     // MARK: @config
     const { dialogState, supplierState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
@@ -38,7 +36,6 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     onDialogConfirm = () => {
       const supplierDocumentRevisionDto = {
         ...formState.getValues(),
-        securityGroups: getDocTypeGroups(supplierState?.documentTypeApi.data?.documentType),
       };
       supplierState?.addNewSupplier(toNewVersionRequestBody(supplierDocumentRevisionDto as DocumentRevisionFormValues));
       onDialogClose?.();
