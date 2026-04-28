@@ -114,3 +114,32 @@ export const useTextCellStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(0.5),
   },
 }));
+
+export const useStatusButtonStyles = makeStyles(theme => ({
+  root: {
+    borderRadius: theme.shape.borderRadius,
+    color: Colors.textBlack,
+    borderColor: Colors.stroke,
+    fontWeight: 400,
+    fontSize: 12,
+    padding: theme.spacing(0.5, 1, 0.5, 1.5),
+
+    '&:hover': {
+      borderColor: Colors.stroke,
+    },
+  },
+  selected: {
+    color: Colors.white,
+  },
+  rejected: {
+    backgroundColor: Colors.error,
+    borderColor: Colors.error,
+  },
+  accepted: {
+    backgroundColor: Colors.success,
+    borderColor: Colors.success,
+  },
+  icon: {
+    fontSize: '12px !important',
+  },
+}));
