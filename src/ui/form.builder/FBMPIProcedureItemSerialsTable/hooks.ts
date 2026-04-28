@@ -94,11 +94,13 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
       if (!shoupShow) {
         return acc;
       }
+      const existingSerial = affectedSerialNumbers[serial.id];
+
       return [...acc, {
         ...serial,
-        status: affectedSerialNumbers[serial.id]?.status ?? null,
-        usage: affectedSerialNumbers[serial.id]?.usage ?? null,
-        notes: affectedSerialNumbers[serial.id]?.notes ?? null,
+        status: existingSerial?.status ?? null,
+        usage: existingSerial?.usage ?? null,
+        notes: existingSerial?.notes ?? null,
         isDisabled: isRejected && isUpdatedInNextSteps,
       }];
     }, []);
