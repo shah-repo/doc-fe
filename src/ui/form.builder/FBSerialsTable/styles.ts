@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
-
-const ROW_HEIGHT = 36;
+import { ROW_HEIGHT } from './const';
 
 export default makeStyles(theme => ({
   checkbox: {
@@ -28,8 +27,7 @@ export default makeStyles(theme => ({
     borderRight: `1px solid ${Colors.stroke}`,
   },
   gridContainer: {
-    height: '50vh',
-    minHeight: 230,
+    maxHeight: '50vh',
     width: '100%',
     position: 'relative',
   },

@@ -8,7 +8,7 @@ import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { EditableSerialNumber, SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload } from '../FBSerials/types';
 import SerialsToolbar from './components/SerialsToolbar';
-import { DATA_ITEM_KEY, SELECTED_FIELD } from './const';
+import { DATA_ITEM_KEY, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD } from './const';
 import { useSchema } from './schema';
 import useStyles from './styles';
 
@@ -109,7 +109,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
         onDeleteSelected={deleteSelected}
       />
 
-      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })}>
+      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })} style={{ height: data.length * ROW_HEIGHT + PANELS_HEIGHT }}>
         <KendoDataGrid<EditableSerialNumber>
           data={data}
           schema={schema}
