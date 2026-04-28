@@ -2,7 +2,7 @@ import { getSelectedState, GridSelectionChangeEvent } from '@progress/kendo-reac
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -35,7 +35,42 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   onBulkDelete,
 }) => {
   const classes = useStyles();
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const scrollPositionRef = useRef({ top: 0, left: 0 });
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
+
+  useLayoutEffect(() => {
+    const scrollContainer = gridContainerRef.current?.querySelector<HTMLDivElement>('.k-grid-content');
+
+    if (!scrollContainer) {
+      return undefined;
+    }
+
+    const restoreScrollPosition = () => {
+      const maxScrollTop = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
+      const maxScrollLeft = Math.max(0, scrollContainer.scrollWidth - scrollContainer.clientWidth);
+
+      scrollContainer.scrollTop = Math.min(scrollPositionRef.current.top, maxScrollTop);
+      scrollContainer.scrollLeft = Math.min(scrollPositionRef.current.left, maxScrollLeft);
+    };
+
+    const preserveScrollPosition = () => {
+      scrollPositionRef.current = {
+        top: scrollContainer.scrollTop,
+        left: scrollContainer.scrollLeft,
+      };
+    };
+
+    restoreScrollPosition();
+    const restoreFrame = window.requestAnimationFrame(restoreScrollPosition);
+
+    scrollContainer.addEventListener('scroll', preserveScrollPosition, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(restoreFrame);
+      scrollContainer.removeEventListener('scroll', preserveScrollPosition);
+    };
+  });
 
   const selectedIds = useMemo(() => keys(selectedSerials).filter(sn => selectedSerials[sn]), [selectedSerials]);
   const hasSelection = selectedIds.length > 0;
@@ -132,6 +167,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
             cell: false,
             mode: 'multiple',
           }}
+          containerRef={gridContainerRef}
           onSelectionChange={toggleSelection}
         />
       </div>
