@@ -72,7 +72,7 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
 
   @computed
   public get serialNumbers (): SerialNumber[] {
-    return this.data.sort((a, b) => a.serialNumber.localeCompare(b.serialNumber));
+    return this.data;
   }
 
   public reload (): void {

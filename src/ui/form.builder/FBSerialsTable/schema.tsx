@@ -65,7 +65,7 @@ export const useSchema = ({
   return [
     {
       id: 'id',
-      field: 'selected',
+      field: 'isSelected',
       title: 'Select',
       width: 65,
       resizable: false,

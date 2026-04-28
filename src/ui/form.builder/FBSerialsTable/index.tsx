@@ -1,18 +1,14 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
 import { getSelectedState, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { translate } from '../../../common/intl';
-import { Button, IconButton } from '../../components/forms/fields-next';
+import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import useHover from '../../hooks/useHover';
 import { EditableSerialNumber, SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload } from '../FBSerials/types';
-import StatusButton, { StatusButtonType } from './components/StatusButton';
-import { DATA_ITEM_KEY, SELECTED_FIELD } from './const';
+import SerialsToolbar from './components/SerialsToolbar';
+import { DATA_ITEM_KEY, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD } from './const';
 import { useSchema } from './schema';
 import useStyles from './styles';
 
@@ -20,6 +16,7 @@ interface FBSerialsTableProps {
   serialNumbers: SerialNumber[]
   isPartSerializationManual?: boolean
   isLoading?: boolean
+  toolbarRef?: React.RefObject<HTMLDivElement>
   onAdd?: () => void
   onUpdate?: (id: string, data: SerialNumberUpdateData) => Promise<void>
   onDelete?: (id: string) => Promise<void>
@@ -30,6 +27,7 @@ interface FBSerialsTableProps {
 const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   serialNumbers,
   isLoading,
+  toolbarRef,
   onAdd,
   onUpdate,
   onDelete,
@@ -38,14 +36,14 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 }) => {
   const classes = useStyles();
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
-  const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
 
-  const selectedIds = useMemo(() => keys(selectedSerials), [selectedSerials]);
+  const selectedIds = useMemo(() => keys(selectedSerials).filter(sn => selectedSerials[sn]), [selectedSerials]);
   const hasSelection = selectedIds.length > 0;
   const isAllSelected = hasSelection && selectedIds.length === serialNumbers.length;
 
   const acceptSelected = async () => {
-    await onBulkUpdate?.(selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED })));
+    const payload = selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED }));
+    await onBulkUpdate?.(payload);
     setSelectedSerials({});
   };
 
@@ -67,12 +65,10 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
     }
   };
 
-  const clearSelection = () => {
-    setSelectedSerials({});
-  };
+  const clearSelection = () => setSelectedSerials({});
 
   const toggleSelection = (event: GridSelectionChangeEvent) => {
-    const { dataItem } = event;
+    const dataItem = event.dataItem as EditableSerialNumber | null;
     if (isNull(dataItem)) {
       return;
     }
@@ -99,54 +95,21 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
   const hasData = data.length > 0;
 
-  const shouldShowBulkActions = hasSelection && (onBulkUpdate ?? onBulkDelete);
+  const shouldShowBulkActions = hasSelection && Boolean(onBulkUpdate ?? onBulkDelete);
 
   return (
     <>
-      <div className={classes.toolbar}>
-        {shouldShowBulkActions && (
-          <>
-            <div className={classes.selectionContainer}>
-              <Tooltip title={translate('form.builder.serials.clear.selection')}>
-                <IconButton onClick={clearSelection} size="small" kind="action">
-                  <FontAwesomeIcon icon={solid('xmark')} />
-                </IconButton>
-              </Tooltip>
-              <span>
-                <span className={classes.selectedCount}>{selectedIds.length}</span>
-                    &nbsp;
-                {translate('form.builder.serials.items.selected')}
-              </span>
-            </div>
-            {onBulkUpdate && (
-              <>
-                <StatusButton
-                  type={StatusButtonType.ACCEPT}
-                  onClick={acceptSelected}
-                />
-                <StatusButton
-                  type={StatusButtonType.REJECT}
-                  onClick={rejectSelected}
-                />
-              </>
-            )}
-            {onBulkDelete && (
-              <Tooltip title={translate('form.builder.serials.delete.selected')}>
-                <IconButton
-                  kind="destructive"
-                  ref={deleteRef}
-                  onClick={deleteSelected}
-                  data-cy="action-delete"
-                >
-                  <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
-      </div>
+      <SerialsToolbar
+        toolbarRef={toolbarRef}
+        selectedCount={selectedIds.length}
+        shouldShowBulkActions={shouldShowBulkActions}
+        onClearSelection={clearSelection}
+        onAcceptSelected={acceptSelected}
+        onRejectSelected={rejectSelected}
+        onDeleteSelected={deleteSelected}
+      />
 
-      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })}>
+      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })} style={{ height: data.length * ROW_HEIGHT + PANELS_HEIGHT }}>
         <KendoDataGrid<EditableSerialNumber>
           data={data}
           schema={schema}
@@ -166,7 +129,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
           selectable={{
             enabled: true,
             drag: false,
-            cell: true,
+            cell: false,
             mode: 'multiple',
           }}
           onSelectionChange={toggleSelection}

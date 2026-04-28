@@ -1,11 +1,11 @@
 import cx from 'classnames';
 import React from 'react';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { SerialNumber, SerialNumberStatus, SerialsSelectOption } from '../../FBSerials/types';
+import { EditableSerialNumber, SerialNumberStatus, SerialsSelectOption } from '../../FBSerials/types';
 import useStyles from '../styles';
 
 interface Props {
-  dataItem: SerialNumber
+  dataItem: EditableSerialNumber
   options: Array<SerialsSelectOption<SerialNumberStatus>>
   onChange: (id: string, status: SerialNumberStatus | null) => void
 }
@@ -19,6 +19,7 @@ const StatusCell: React.FC<Props> = ({ dataItem, options, onChange }) => {
     <Autocomplete
       options={options}
       size="small"
+      disabled={dataItem.isDisabled}
       disableClearable
       blurOnSelect
       filterSelectedOptions

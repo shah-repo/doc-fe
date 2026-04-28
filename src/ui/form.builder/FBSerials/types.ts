@@ -10,6 +10,13 @@ export enum SerialNumberUsage {
   DO_NOT_USE = 'DO_NOT_USE',
 }
 
+interface SerialNumberMeta {
+  updatedIn?: {
+    step?: number
+    sequence?: number
+  } | null
+}
+
 export interface SerialNumber {
   id: string
   serialNumber: string
@@ -18,6 +25,7 @@ export interface SerialNumber {
   notes: string | null
   lotId: string
   partId: string
+  meta: SerialNumberMeta | null
   createdAt?: string
   updatedAt?: string
 }
@@ -28,7 +36,8 @@ export interface SerialsSelectOption<T> {
 }
 
 export interface EditableSerialNumber extends SerialNumber {
-  selected?: boolean | number[]
+  isSelected?: boolean | number[]
+  isDisabled?: boolean
 }
 
 interface SerialNumberAddBody {
@@ -39,6 +48,7 @@ export interface SerialNumberUpdateData {
   status?: SerialNumberStatus | null
   usage?: SerialNumberUsage | null
   notes?: string | null
+  meta?: SerialNumberMeta | null
 }
 
 export type SerialNumberUpdatePayload = { id: string } & SerialNumberUpdateData;

@@ -95,7 +95,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           </Box>
         )}
       </Box>}
-      {!isAttachmentType && (
+      {!FBProcedureItemOmitAction.includes(type) && (
         <Box className={classes.typeLabel}>
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
@@ -151,7 +151,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           {type === FBProcedureItemType.serials && (
             <FBMPIProcedureItemSerialsTable
               name={name}
-              stepIndex={stepIndex}
               isPreview={isPreview}
               disabled={disabled}
             />
