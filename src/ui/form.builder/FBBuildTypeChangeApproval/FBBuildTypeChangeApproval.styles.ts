@@ -3,6 +3,15 @@ import Colors from '../../layout/theme-next/colors';
 
 export default makeStyles((theme) =>
   createStyles({
+    label: {
+      float: 'left',
+      color: theme.palette.text.primary,
+      fontSize: 16,
+      lineHeight: 1.5,
+      fontWeight: 600,
+      marginBottom: 12,
+      display: 'block',
+    },
     approvalCard: {
       border: `1px solid ${Colors.stroke}`,
       borderRadius: '8px',
