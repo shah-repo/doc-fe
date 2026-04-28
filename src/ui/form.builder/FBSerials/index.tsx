@@ -140,6 +140,7 @@ const FBSerials: React.FC = () => {
       />
       {isPartSerializationManual && (
         <AddDialog
+          existingSerials={serialNumbers.map(sn => sn.serialNumber)}
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}
           onConfirm={addSerials}

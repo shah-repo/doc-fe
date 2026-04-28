@@ -1854,6 +1854,7 @@
   "form.builder.serials.delete.all": "Delete All",
   "form.builder.serials.accept.all": "Accept All",
   "form.builder.serials.reject.all": "Reject All",
+  "form.builder.serials.add.dialog.invalid.serials": "Some of the serial numbers already exist",
   "form.builder.serials.delete.selected": "Delete Selected",
   "form.builder.serials.accept.selected": "Accept Selected",
   "form.builder.serials.reject.selected": "Reject Selected",

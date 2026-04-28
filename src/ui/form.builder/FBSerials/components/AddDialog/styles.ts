@@ -23,4 +23,12 @@ export default makeStyles(theme => ({
     flexGrow: 0,
     paddingLeft: theme.spacing(1.25),
   },
+  invalidSerial: {
+    backgroundColor: Colors.errorHighlight,
+  },
+  invalidSerialsMessage: {
+    color: Colors.error,
+    fontSize: '0.75rem',
+    marginTop: theme.spacing(0.5),
+  },
 }));
