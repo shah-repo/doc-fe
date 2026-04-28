@@ -17,7 +17,6 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
     shouldShowSerials,
     stepSerialNumbers,
     isLoading,
-    lhrsInfo,
     updateSerialNumber,
     updateSerialNumbers,
   } = useLHRSSerialNumbers(name);
@@ -25,11 +24,6 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
   if (!shouldShowSerials) {
     return null;
   }
-
-  console.log({
-    lhrsInfo: JSON.parse(JSON.stringify(lhrsInfo)),
-    stepSerialNumbers: JSON.parse(JSON.stringify(stepSerialNumbers)),
-  });
 
   return (
     <>
