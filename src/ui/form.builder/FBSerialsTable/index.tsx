@@ -129,7 +129,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
           selectable={{
             enabled: true,
             drag: false,
-            cell: true,
+            cell: false,
             mode: 'multiple',
           }}
           onSelectionChange={toggleSelection}

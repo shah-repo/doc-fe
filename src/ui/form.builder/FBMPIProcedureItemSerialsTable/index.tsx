@@ -21,6 +21,7 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
     stepSerialNumbers,
     isLoading,
     updateSerialNumber,
+    updateSerialNumbers,
   } = useLHRSSerialNumbers(name, stepIndex);
 
   if (!shouldShowSerials) {
@@ -31,11 +32,13 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
     <>
       <Box className={classes.typeLabel}>
         <FBText loading={isLoading} locale={FBProcedureItemLocale.serials} />
+        Step: {stepIndex}
       </Box>
       <FBSerialsTable
         serialNumbers={stepSerialNumbers}
         isLoading={isLoading}
         onUpdate={updateSerialNumber}
+        onBulkUpdate={updateSerialNumbers}
       />
     </>
 

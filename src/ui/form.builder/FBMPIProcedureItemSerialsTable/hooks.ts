@@ -5,7 +5,7 @@ import { FB, FBLHRBuildOptions } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY } from '../FBLHRStep/utils';
-import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUsage } from '../FBSerials/types';
+import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
 import { LHRSSerialNumbers, LHRSStepSerialNumbersFormValue } from './types';
 
 const UPDATE_STEP_QTY_INTERVAL = 1000;
@@ -65,6 +65,10 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
     formState?.setFieldAutosave(name);
   };
 
+  const updateSerialNumbers = async (payload: SerialNumberUpdatePayload[]) => {
+    await serialsState?.updateSerialNumbers(payload);
+  };
+
   const updateStepQty = throttle(
     (serialNumbers?: SerialNumber[]) => {
       if (!serialNumbers || serialNumbers.length === 0) { return; }
@@ -91,5 +95,6 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
     stepSerialNumbers,
     allSerialNumbers,
     updateSerialNumber,
+    updateSerialNumbers,
   };
 };
