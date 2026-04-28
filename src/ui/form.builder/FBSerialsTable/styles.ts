@@ -113,6 +113,21 @@ export const useTextCellStyles = makeStyles(theme => ({
   },
 }));
 
+export const useNotesCellStyles = makeStyles(theme => ({
+  displayValue: {
+    width: '100%',
+    minHeight: theme.spacing(3),
+    cursor: 'text',
+  },
+  disabledDisplayValue: {
+    color: Colors.textDisabled,
+    cursor: 'default',
+  },
+  inputRoot: {
+    width: '100%',
+  },
+}));
+
 export const useStatusButtonStyles = makeStyles(theme => ({
   root: {
     borderRadius: theme.shape.borderRadius,
