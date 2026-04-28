@@ -11,28 +11,30 @@ import { FBMPIProcedureItemSerialsTableProps } from './types';
 
 const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTableProps> = ({
   name = '',
-  stepIndex = 1,
-  isPreview = false,
-  disabled = false,
 }) => {
   const classes = useStyles();
   const {
     shouldShowSerials,
     stepSerialNumbers,
     isLoading,
+    lhrsInfo,
     updateSerialNumber,
     updateSerialNumbers,
-  } = useLHRSSerialNumbers(name, stepIndex);
+  } = useLHRSSerialNumbers(name);
 
   if (!shouldShowSerials) {
     return null;
   }
 
+  console.log({
+    lhrsInfo: JSON.parse(JSON.stringify(lhrsInfo)),
+    stepSerialNumbers: JSON.parse(JSON.stringify(stepSerialNumbers)),
+  });
+
   return (
     <>
       <Box className={classes.typeLabel}>
         <FBText loading={isLoading} locale={FBProcedureItemLocale.serials} />
-        Step: {stepIndex}
       </Box>
       <FBSerialsTable
         serialNumbers={stepSerialNumbers}

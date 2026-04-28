@@ -1,35 +1,16 @@
-import { throttle } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useMemo } from 'react';
 import { FB, FBLHRBuildOptions } from '..';
-import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
-import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY } from '../FBLHRStep/utils';
-import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
+import { useFormValue } from '../../hooks/useFormValue';
+import { useLhrsTitle } from '../../hooks/useLhrsTitle';
+import { EditableSerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
 import { LHRSSerialNumbers, LHRSStepSerialNumbersFormValue } from './types';
 
-const UPDATE_STEP_QTY_INTERVAL = 1000;
+const useIsRnD = () => {
+  const { workspaceState } = FB.useStores();
 
-export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSerialNumbers => {
-  const { workspaceState, serialsState, formState } = FB.useStores();
-
-  const value = useObserver<LHRSStepSerialNumbersFormValue | undefined>(
-    () => (formState?.newValues.get(name) ?? formState?.getFieldValue(name)) as LHRSStepSerialNumbersFormValue | undefined,
-  );
-
-  const affectedSerialNumbers = useMemo(() => {
-    return value?.serialsNumbers ?? {};
-  }, [value]);
-
-  useEffect(() => {
-    serialsState?.load();
-  }, [serialsState]);
-
-  const allSerialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
-  const isLoading = useObserver(() => serialsState?.isLoading ?? false);
-  const shouldShowSerials = useObserver(() => serialsState?.shouldShowSerials ?? false);
-
-  const isRnD = useMemo(() => {
+  return useMemo(() => {
     const smartRef = workspaceState?.document?.smartReferencesTo?.find(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
     );
@@ -39,26 +20,77 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
     );
     return buildType?.internalType === FBLHRBuildOptions['R&D'];
   }, [workspaceState?.buildTypeOptions, workspaceState?.document?.smartReferencesTo]);
+};
+
+const useLhrsInfo = (name: string) => {
+  const { workspaceState } = FB.useStores();
+  const { stepIndex } = useLhrsTitle(workspaceState?.document?.name ?? '', workspaceState?.document?.document.documentType.id ?? '');
+  const sequence = workspaceState?.schema?.find((item) => item.name === name);
+  return {
+    step: stepIndex,
+    sequence: sequence?.stepIndex,
+  };
+};
+
+export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
+  const { serialsState, formState } = FB.useStores();
+
+  useEffect(() => {
+    serialsState?.load();
+  }, [serialsState]);
+
+  const isRnD = useIsRnD();
+  const value = useFormValue<LHRSStepSerialNumbersFormValue | undefined>(name);
+  const affectedSerialNumbers = useMemo(() => value?.serialsNumbers ?? {}, [value]);
+  const lhrsInfo = useLhrsInfo(name);
+
+  const [
+    allSerialNumbers,
+    shouldShowSerials,
+    isLoading,
+  ] = useObserver(() => [
+    serialsState?.serialNumbers ?? [],
+    serialsState?.shouldShowSerials ?? false,
+    serialsState?.isLoading ?? false,
+  ]);
 
   const stepSerialNumbers = useMemo(() => {
-    return allSerialNumbers.filter((serial) => {
+    return allSerialNumbers.reduce<EditableSerialNumber[]>((acc, serial) => {
       const isRejected = serial.status === SerialNumberStatus.REJECTED;
+      const isUpdatedInNextSteps = (serial.meta?.updatedIn?.step ?? 0) > (lhrsInfo?.step ?? 0) || (serial.meta?.updatedIn?.sequence ?? 0) > (lhrsInfo?.sequence ?? 0);
       const canUseForRnD = isRnD && serial.usage === SerialNumberUsage.RND;
-      return !isRejected || canUseForRnD || (serial.id in affectedSerialNumbers);
-    }).map((serial) => ({
-      ...serial,
-      ...(serial.id in affectedSerialNumbers ? affectedSerialNumbers[serial.id] : {}),
-    }));
-  }, [allSerialNumbers, affectedSerialNumbers, isRnD]);
+
+      const shoupShow = !isRejected || canUseForRnD || isUpdatedInNextSteps || (serial.id in affectedSerialNumbers);
+      if (!shoupShow) {
+        return acc;
+      }
+      return [...acc, {
+        ...serial,
+        status: affectedSerialNumbers[serial.id]?.status ?? null,
+        usage: affectedSerialNumbers[serial.id]?.usage ?? null,
+        notes: affectedSerialNumbers[serial.id]?.notes ?? null,
+        isDisabled: isRejected && isUpdatedInNextSteps,
+      }];
+    }, []);
+  }, [allSerialNumbers, affectedSerialNumbers, isRnD, lhrsInfo]);
 
   const updateSerialNumber = async (id: string, data: SerialNumberUpdateData) => {
-    await serialsState?.updateSerialNumber(id, data);
+    await serialsState?.updateSerialNumber(id, {
+      ...data,
+      meta: {
+        updatedIn: lhrsInfo,
+      },
+    });
 
     formState?.setFieldValue(name, {
       ...value,
       serialsNumbers: {
         ...affectedSerialNumbers,
-        [id]: data,
+        [id]: {
+          status: data.status,
+          usage: data.usage,
+          notes: data.notes,
+        },
       },
     });
 
@@ -66,27 +98,32 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
   };
 
   const updateSerialNumbers = async (payload: SerialNumberUpdatePayload[]) => {
-    await serialsState?.updateSerialNumbers(payload);
+    await serialsState?.updateSerialNumbers(payload.map((item) => ({
+      ...item,
+      meta: {
+        updatedIn: lhrsInfo,
+      },
+    })));
+
+    const updatedSerialNumbers = payload.reduce((acc, item) => {
+      acc[item.id] = {
+        status: item.status,
+        usage: item.usage,
+        notes: item.notes,
+      };
+      return acc;
+    }, {});
+
+    formState?.setFieldValue(name, {
+      ...value,
+      serialsNumbers: {
+        ...affectedSerialNumbers,
+        ...updatedSerialNumbers,
+      },
+    });
+
+    formState?.setFieldAutosave(name);
   };
-
-  const updateStepQty = throttle(
-    (serialNumbers?: SerialNumber[]) => {
-      if (!serialNumbers || serialNumbers.length === 0) { return; }
-      const acceptedQty = serialNumbers.filter((serial) => serial.status === SerialNumberStatus.ACCEPTED).length;
-      const rejectedQty = serialNumbers.filter((serial) => serial.status === SerialNumberStatus.REJECTED).length;
-      formState?.setFieldValue(LHRS_ACCEPTED_QUANTITY, acceptedQty);
-      formState?.setFieldValue(LHRS_REJECTED_QUANTITY, rejectedQty);
-      // formState?.setFieldAutosave(LHRS_ACCEPTED_QUANTITY);
-      // formState?.setFieldAutosave(LHRS_REJECTED_QUANTITY);
-    },
-    UPDATE_STEP_QTY_INTERVAL,
-    { trailing: false },
-  );
-
-  SM.reaction(
-    () => serialsState?.serialNumbers,
-    updateStepQty,
-  );
 
   return {
     isRnD,
@@ -94,6 +131,7 @@ export const useLHRSSerialNumbers = (name: string, stepIndex: number): LHRSSeria
     shouldShowSerials,
     stepSerialNumbers,
     allSerialNumbers,
+    lhrsInfo,
     updateSerialNumber,
     updateSerialNumbers,
   };

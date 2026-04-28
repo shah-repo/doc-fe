@@ -1,9 +1,9 @@
 import React from 'react';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { SerialNumber, SerialNumberStatus, SerialNumberUsage, SerialsSelectOption } from '../../FBSerials/types';
+import { EditableSerialNumber, SerialNumberStatus, SerialNumberUsage, SerialsSelectOption } from '../../FBSerials/types';
 
 interface Props {
-  dataItem: SerialNumber
+  dataItem: EditableSerialNumber
   options: Array<SerialsSelectOption<SerialNumberUsage>>
   onChange: (id: string, usage: SerialNumberUsage | null) => void
 }
@@ -11,7 +11,7 @@ interface Props {
 const StatusCell: React.FC<Props> = ({ dataItem, options, onChange }) => {
   const activeOption = options.find(option => option.value === dataItem.usage || (!option.value && !dataItem.usage));
 
-  const isDisabled = dataItem.status !== SerialNumberStatus.REJECTED;
+  const isDisabled = dataItem.status !== SerialNumberStatus.REJECTED || dataItem.isDisabled;
 
   return (
     <Autocomplete

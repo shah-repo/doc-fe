@@ -18,6 +18,12 @@ export interface SerialNumber {
   notes: string | null
   lotId: string
   partId: string
+  meta: {
+    updatedIn?: {
+      step?: number
+      sequence?: number
+    } | null
+  }
   createdAt?: string
   updatedAt?: string
 }
@@ -28,7 +34,8 @@ export interface SerialsSelectOption<T> {
 }
 
 export interface EditableSerialNumber extends SerialNumber {
-  selected?: boolean | number[]
+  isSelected?: boolean | number[]
+  isDisabled?: boolean
 }
 
 interface SerialNumberAddBody {
@@ -39,6 +46,12 @@ export interface SerialNumberUpdateData {
   status?: SerialNumberStatus | null
   usage?: SerialNumberUsage | null
   notes?: string | null
+  meta?: {
+    updatedIn?: {
+      step?: number
+      sequence?: number
+    } | null
+  } | null
 }
 
 export type SerialNumberUpdatePayload = { id: string } & SerialNumberUpdateData;

@@ -104,3 +104,13 @@ export default makeStyles(theme => ({
     backgroundColor: Colors.error,
   },
 }));
+
+export const useTextCellStyles = makeStyles(theme => ({
+  disabledValue: {
+    color: Colors.textDisabled,
+  },
+  disabledIcon: {
+    color: Colors.primaryLight,
+    marginLeft: theme.spacing(0.5),
+  },
+}));

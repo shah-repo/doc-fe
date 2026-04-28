@@ -5,10 +5,10 @@ import React from 'react';
 import { translate } from '../../../../common/intl';
 import { IconButton } from '../../../components/forms/fields-next';
 import useHover from '../../../hooks/useHover';
-import { SerialNumber } from '../../FBSerials/types';
+import { EditableSerialNumber } from '../../FBSerials/types';
 
 interface Props {
-  dataItem: SerialNumber
+  dataItem: EditableSerialNumber
   onDelete?: (id: string) => void
 }
 
@@ -26,6 +26,7 @@ const ActionsCell: React.FC<Props> = ({ dataItem, onDelete }) => {
         ref={deleteRef}
         onClick={() => onDelete(dataItem.id)}
         data-cy="action-delete"
+        disabled={dataItem.isDisabled}
       >
         <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
       </IconButton>

@@ -2,7 +2,6 @@ import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberU
 
 export interface FBMPIProcedureItemSerialsTableProps {
   name?: string
-  stepIndex?: number
   isPreview?: boolean
   disabled?: boolean
 }
@@ -13,6 +12,10 @@ export interface LHRSSerialNumbers {
   shouldShowSerials: boolean
   stepSerialNumbers: SerialNumber[]
   allSerialNumbers: SerialNumber[]
+  lhrsInfo: {
+    step?: number
+    sequence?: number
+  }
   updateSerialNumber: (id: string, data: SerialNumberUpdateData) => Promise<void>
   updateSerialNumbers: (payload: SerialNumberUpdatePayload[]) => Promise<void>
 }

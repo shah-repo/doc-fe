@@ -151,7 +151,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           {type === FBProcedureItemType.serials && (
             <FBMPIProcedureItemSerialsTable
               name={name}
-              stepIndex={stepIndex}
               isPreview={isPreview}
               disabled={disabled}
             />

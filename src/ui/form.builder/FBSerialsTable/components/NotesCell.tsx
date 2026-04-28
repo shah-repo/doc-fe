@@ -1,9 +1,9 @@
 import React from 'react';
 import { TextField } from '../../../components/forms/fields-next';
-import { SerialNumber } from '../../FBSerials/types';
+import { EditableSerialNumber } from '../../FBSerials/types';
 
 interface Props {
-  dataItem: SerialNumber
+  dataItem: EditableSerialNumber
   onChange: (id: string, notes: string | null) => void
 }
 
@@ -26,6 +26,7 @@ const StatusCell: React.FC<Props> = ({ dataItem, onChange }) => {
     <TextField
       size="small"
       value={value}
+      disabled={dataItem.isDisabled}
       onChange={(e) => setValue(e.currentTarget.value)}
       onBlur={saveValue}
       onKeyDown={(e) => {

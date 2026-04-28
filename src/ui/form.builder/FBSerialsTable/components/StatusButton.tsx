@@ -14,6 +14,7 @@ export enum StatusButtonType {
 
 interface StatusButtonProps {
   isSelected?: boolean
+  isDisabled?: boolean
   type: StatusButtonType
   onClick: () => void
 }
@@ -49,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 
 const StatusButton: React.FC<StatusButtonProps> = ({
   isSelected = false,
+  isDisabled = false,
   type,
   onClick,
 }) => {
@@ -64,6 +66,7 @@ const StatusButton: React.FC<StatusButtonProps> = ({
       kind="outlined"
       size="small"
       onClick={onClick}
+      disabled={isDisabled}
       startIcon={<FontAwesomeIcon icon={icon} className={classes.icon} />}
       className={cx(
         classes.root,
