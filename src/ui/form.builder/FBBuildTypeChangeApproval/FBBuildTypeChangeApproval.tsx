@@ -1,7 +1,7 @@
 import { Avatar, Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText, Owner } from '..';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBText, Owner } from '..';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
@@ -50,9 +50,11 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...props} {...{ name, autosave }} type="approvals">
-        <FBSection
-          name={`fb-approvals-section-${name}`}
-          {...{ label }}
+        <FBText
+          locale={label as string}
+          boxProps={{
+            className: classes.label,
+          }}
         />
         <FBAutocompleteAsync
           placeholder="form.builder.start.typing.list"
