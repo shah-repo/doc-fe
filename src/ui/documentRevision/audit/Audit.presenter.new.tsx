@@ -1,5 +1,6 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { FB, FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import { SamplingPlanType } from '../../form.builder/FBSamplingPlan/types';
@@ -33,6 +34,7 @@ import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
 import { CUSTOM_BOOLEAN_FIELD, getMaterialReplacementAuditLabel, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 import { buildLotSerialNumbersAuditRows, LOT_SERIAL_NUMBERS_FIELD, parseLotSerialNumbersValue, renderLotSerialNumbersAuditRow } from './helpers/lotSerialNumbers';
+import { buildMpiProcedureSerialNumbersAuditRows, isMpiProcedureSerialNumbersAuditField, renderMpiProcedureSerialNumbersAuditRow } from './helpers/mpiProcedureSerialNumbers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -65,6 +67,20 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
   const docTypeId = documentRevisions[0].document?.documentType?.id;
+  const { serialsState } = FB.useStores();
+  const mpiProcedureSerialNumberLabelsById = useObserver(() => (
+    (serialsState?.serialNumbers ?? []).reduce<Record<string, string>>((labelsById, serialNumber) => {
+      const displaySerialNumber = serialNumber.serialNumber?.trim();
+      if (serialNumber.id && displaySerialNumber) {
+        labelsById[serialNumber.id] = displaySerialNumber;
+      }
+      return labelsById;
+    }, {})
+  ));
+
+  useEffect(() => {
+    serialsState?.load();
+  }, [serialsState]);
 
   // fetch lifecycle phase options
   const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifeCyclePhaseOptions[]>([]);
@@ -160,6 +176,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
     const lotSerials: Audit[] = [];
+    const mpiProcedureSerials: Audit[] = [];
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
@@ -170,6 +187,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
     sortedAudit.forEach((change: Audit, index, array) => {
       change.groupKey = groupKey;
+
+      if (isMpiProcedureSerialNumbersAuditField(change.field)) {
+        mpiProcedureSerials.push(change);
+        return;
+      }
+
       const isFBField = has(change, 'fbSchemaItem');
       const isSmartRef = change.field.split('.').includes('smartRefs');
       const {
@@ -826,6 +849,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     buildLotSerialNumbersAuditRows(lotSerials).forEach((row) => {
       singleFields.push(renderLotSerialNumbersAuditRow(row, groupKey, key, classes));
+      key++;
+    });
+
+    buildMpiProcedureSerialNumbersAuditRows(mpiProcedureSerials, mpiProcedureSerialNumberLabelsById).forEach((row) => {
+      singleFields.push(renderMpiProcedureSerialNumbersAuditRow(row, groupKey, key, classes));
       key++;
     });
 
