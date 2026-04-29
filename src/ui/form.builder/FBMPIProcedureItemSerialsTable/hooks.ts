@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useMemo } from 'react';
 import { FB, FBLHRBuildOptions } from '..';
@@ -114,14 +115,16 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
       },
     });
 
+    const existingSerial = affectedSerialNumbers[id] ?? {};
+    const dataToUpdate = pick(data, ['status', 'usage', 'notes']);
+
     formState?.setFieldValue(name, {
       ...value,
       serialsNumbers: {
         ...affectedSerialNumbers,
         [id]: {
-          status: data.status,
-          usage: data.usage,
-          notes: data.notes,
+          ...existingSerial,
+          ...dataToUpdate,
         },
       },
     });
@@ -138,10 +141,11 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
     })));
 
     const updatedSerialNumbers = payload.reduce((acc, item) => {
+      const dataToUpdate = pick(item, ['status', 'usage', 'notes']);
+      const existingSerial = affectedSerialNumbers[item.id] ?? {};
       acc[item.id] = {
-        status: item.status,
-        usage: item.usage,
-        notes: item.notes,
+        ...existingSerial,
+        ...dataToUpdate,
       };
       return acc;
     }, {});
