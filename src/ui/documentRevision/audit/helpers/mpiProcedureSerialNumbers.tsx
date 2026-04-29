@@ -4,7 +4,7 @@ import { translate } from '../../../../common/intl';
 import { Audit } from '../../../../state/ducks/audit/types';
 import Text from '../../../components/Text';
 
-export const MPI_PROCEDURE_SERIAL_NUMBERS_FIELD = 'serialsNumbers';
+const MPI_PROCEDURE_SERIAL_NUMBERS_FIELD = 'serialsNumbers';
 
 const FORM_INPUT_FIELD = 'formInput';
 const MPI_PROCEDURE_SERIAL_NUMBERS_STATUS_FIELD = 'status';
