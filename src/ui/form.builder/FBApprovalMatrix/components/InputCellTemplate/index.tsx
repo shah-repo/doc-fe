@@ -47,20 +47,25 @@ const InputCellTemplate: CellTemplate = (props) => {
     setError(undefined);
   };
 
-  const handleClick = () => {
-    onClick?.({ dataItem });
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (!onClick) {
+      return;
+    }
+    event.stopPropagation();
+    onClick({ dataItem });
   };
 
   if (!canBeModified) {
     return (
-      <OverflowTooltip
-        arrow
-        placement="top"
-        title={value ?? ''}
-        onClick={handleClick}
-      >
-        {value || '-'}
-      </OverflowTooltip>);
+      <div onClick={handleClick}>
+        <OverflowTooltip
+          arrow
+          placement="top"
+          title={value ?? ''}
+        >
+          {value || '-'}
+        </OverflowTooltip>
+      </div>);
   }
 
   return (

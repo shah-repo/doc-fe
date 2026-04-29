@@ -12,7 +12,7 @@ interface StatusCellTemplateProps<T> extends CellTemplateProps<T> {
 }
 
 const StatusCellTemplate: React.FC<StatusCellTemplateProps<FBApprovalMatrixItem>> = (props) => {
-  const { dataItem, dataIndex, field, column, onChange, popupSettings } = props;
+  const { dataItem, dataIndex, field, column, onChange, onClick, popupSettings } = props;
   const { editable } = column;
 
   const mode = get(dataItem, MODE_FIELD);
@@ -42,13 +42,25 @@ const StatusCellTemplate: React.FC<StatusCellTemplateProps<FBApprovalMatrixItem>
     });
   };
 
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (!onClick) {
+      return;
+    }
+    event.stopPropagation();
+    onClick({ dataItem });
+  };
+
   // Empty for deprecated documents.
   if (value === undefined) {
-    return <>-</>;
+    return <div onClick={handleClick}>-</div>;
   }
 
   if (!canBeModified) {
-    return <Status value={value} />;
+    return (
+      <div onClick={handleClick}>
+        <Status value={value} />
+      </div>
+    );
   }
 
   return (
