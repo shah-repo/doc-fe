@@ -34,7 +34,6 @@ export default makeStyles(theme => ({
   },
   gridContainerEmpty: {
     height: 'auto',
-    minHeight: 0,
   },
   grid: {
     '& .k-column-title': {
