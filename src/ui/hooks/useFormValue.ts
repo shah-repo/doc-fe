@@ -7,10 +7,11 @@ export function useFormValue<T> (name: string, defaultValue: T): T;
 export function useFormValue<T> (name: string, defaultValue?: T): T | undefined {
   const { formState } = FB.useStores();
   return useObserver(
-    () =>
+    () => (
       FBDataStore.refreshData?.formInput?.[name]
       ?? formState?.newValues.get(name)
       ?? formState?.getFieldValue(name)
-      ?? defaultValue,
+      ?? defaultValue
+    ) as T | undefined,
   );
 }
