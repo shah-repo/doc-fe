@@ -56,6 +56,7 @@ interface Props {
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
+  type,
   arChangeRequestId,
   arId,
   docRevs,
@@ -475,12 +476,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogReject}
         label="transition.action.reject"
+        type={type}
       />
       <ApproveDialogueContainer
         transition="approve"
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogApprove}
         label="transition.action.approve"
+        type={type}
       />
     </>
   );
