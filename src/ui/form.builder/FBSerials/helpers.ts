@@ -1,21 +1,5 @@
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-
-const PART_SERIALIZATION_KEY = 'has-serialization';
-const PART_SERIALIZATION_TYPE_KEY = 'select-serialization';
-
-export const LOT_PART_SELECT_KEY = 'lot_part';
-export const LOT_QUANTITY_SELECT_KEY = 'lot_quantity';
-const LOT_SERIAL_NUMBERS_FIELD = 'lot-serial-numbers';
-
-export const LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS = [
-  LOT_PART_SELECT_KEY,
-  LOT_QUANTITY_SELECT_KEY,
-  LOT_SERIAL_NUMBERS_FIELD,
-];
-
-const HAS_SERIALIZATION_VALUES = ['Yes'];
-const SERIALIZATION_MANUAL_VALUES = ['manual', 'Select Provided Serialization'];
-const SERIALIZATION_SYSTEM_GENERATED_VALUES = ['system-generated', 'In-house Generated Serialization'];
+import { HAS_SERIALIZATION_VALUES, PART_SERIALIZATION_KEY, PART_SERIALIZATION_TYPE_KEY, SERIALIZATION_MANUAL_VALUES, SERIALIZATION_SYSTEM_GENERATED_VALUES } from './consts';
 
 const isSerializationManual = (serializationType: string): boolean => {
   return SERIALIZATION_MANUAL_VALUES.includes(serializationType);

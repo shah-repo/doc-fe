@@ -2,6 +2,7 @@ import { useObserver } from 'mobx-react';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBSection } from '..';
+import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../../state/reducers';
@@ -13,7 +14,7 @@ import { withThemeNext } from '../../layout/theme-next';
 import FBSerialsTable from '../FBSerialsTable';
 import FBStore from '../FBStore/FBStore';
 import AddDialog from './components/AddDialog';
-import { LOT_PART_SELECT_KEY, LOT_QUANTITY_SELECT_KEY, LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS } from './helpers';
+import { DEFAULT_LOT_ID, LOT_PART_SELECT_KEY, LOT_QUANTITY_SELECT_KEY, LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS } from './consts';
 import useStyles from './styles';
 import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
@@ -21,10 +22,11 @@ const FBSerials: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { serialsState, workspaceState, formState } = FB.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
   const addDialog = useDialog();
   const importDialog = useDialog();
   const toolbarRef = useRef<HTMLDivElement>(null);
-  const lotId = useObserver(() => workspaceState?.document?.id);
+  const lotId = useObserver(() => workspaceState?.document?.id ?? DEFAULT_LOT_ID);
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
@@ -36,10 +38,12 @@ const FBSerials: React.FC = () => {
   const lotQuantity = useFormValue<number>(LOT_QUANTITY_SELECT_KEY);
 
   useEffect(() => {
-    if (lotPart) {
+    if (documentRevision?.formInput?.[LOT_PART_SELECT_KEY] && !_documentRevisionFormState?.loading) {
       serialsState?.reload();
+    } else {
+      _documentRevisionFormState?.setLoading(false);
     }
-  }, [documentRevision, serialsState]);
+  }, [documentRevision, serialsState, _documentRevisionFormState]);
 
   useMqttSubscription(
     `+/lot_serial_numbers/${lotId}/updated`,
@@ -74,37 +78,41 @@ const FBSerials: React.FC = () => {
   const serialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading);
 
-  const reloadAudit = () => {
+  const updateWorkspace = () => {
     const lotId = serialsState?.lotId;
-    if (lotId && FBStore.isHistoryTabSelected) {
-      dispatch(documentRevisionsActions.loadAudit(lotId));
+    if (lotId) {
+      _documentRevisionFormState?.setLoading(true);
+      dispatch(documentRevisionsActions.reload(lotId));
+      if (FBStore.isHistoryTabSelected) {
+        dispatch(documentRevisionsActions.loadAudit(lotId));
+      }
     }
   };
 
   const updateSerialNumber = async (id: string, data: SerialNumberUpdateData) => {
     await serialsState?.updateSerialNumber(id, data);
-    reloadAudit();
+    updateWorkspace();
   };
 
   const deleteSerialNumber = async (id: string) => {
     await serialsState?.deleteSerialNumber(id);
-    reloadAudit();
+    updateWorkspace();
   };
 
   const bulkUpdateSerialNumbers = async (payload: SerialNumberUpdatePayload[]) => {
     await serialsState?.updateSerialNumbers(payload);
-    reloadAudit();
+    updateWorkspace();
   };
 
   const bulkDeleteSerialNumbers = async (ids: string[]) => {
     await serialsState?.deleteSerialNumbers(ids);
-    reloadAudit();
+    updateWorkspace();
   };
 
   const addSerials = async (serials: string[]) => {
     try {
       await serialsState?.createSerialNumbers(serials);
-      reloadAudit();
+      updateWorkspace();
     } catch (error) {
       toastError(translate('form.builder.serials.failed.to.add'));
     }
