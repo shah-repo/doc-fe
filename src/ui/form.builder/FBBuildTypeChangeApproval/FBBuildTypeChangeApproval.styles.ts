@@ -78,16 +78,67 @@ export default makeStyles((theme) =>
       fontSize: 14,
     },
   deleteChip: {
-      ...theme.typography.subtitle1,
+    ...theme.typography.subtitle1,
 
-      '& .chip-delete': {
-        left: 0,
-        padding: theme.spacing(0, 0.75, 0, 2),
-        background: Colors.errorHighlight,
-      },
-      '& .chip-delete-icon': {
-        transform: 'translate(0, 150%)',
-      },
+    '& .chip-delete': {
+      left: 0,
+      padding: theme.spacing(0, 0.75, 0, 2),
+      background: Colors.errorHighlight,
     },
+    '& .chip-delete-icon': {
+      transform: 'translate(0, 150%)',
+    },
+  },
+  sectionContainer: {
+    border: `1px solid ${Colors.stroke}`,
+    borderRadius: '8px',
+    backgroundColor: Colors.white,
+    overflow: 'hidden',
+  },
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1.5, 2),
+    cursor: 'pointer',
+    userSelect: 'none' as const,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    fontSize: 16,
+    color: theme.palette.primary.main,
+  },
+  sectionCount: {
+    fontSize: 14,
+    color: theme.palette.text.secondary,
+  },
+  sectionChevron: {
+    marginRight: theme.spacing(1),
+    color: theme.palette.primary.main,
+  },
+  approvalDivider: {
+    height: '1px',
+    backgroundColor: Colors.stroke,
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  },
+  approvedStatus: {
+    display: 'flex',
+    alignItems: 'center',
+    fontWeight: 700,
+    fontSize: 14,
+    gap: theme.spacing(0.5),
+    color: Colors.success,
+  },
+  approvedIcon: {
+    color: Colors.success,
+    fontSize: 18,
+  },
+  approvedDate: {
+    fontSize: 12,
+    color: theme.palette.text.secondary,
+    marginTop: theme.spacing(0.25),
+    textAlign: 'right' as const,
+  },
   }),
 );

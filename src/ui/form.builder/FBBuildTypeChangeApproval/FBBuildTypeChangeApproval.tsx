@@ -1,7 +1,9 @@
-import { Avatar, Box } from '@material-ui/core';
+import { Avatar, Box, Collapse } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBText, Owner } from '..';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBText, Owner } from '..';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
@@ -12,6 +14,7 @@ import ApprovalApprovedGroup from './ApprovalApprovedGroup';
 import useStyles from './FBBuildTypeChangeApproval.styles';
 import { FBBuildTypeChangeApprovalProps } from './FBBuildTypeChangeApproval.types';
 import { withFBBuildTypeChangeApproval } from './FBBuildTypeChangeApproval.wrap';
+import { APPROVAL_STATUS_LABEL } from './utils';
 
 const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprovalProps> = ({
   onApproveClick,
@@ -45,6 +48,95 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
 }) => {
   const classes = useStyles();
   const { getFormattedDateString } = useDate();
+  const [pendingOpen, setPendingOpen] = React.useState(true);
+  const [approvedOpen, setApprovedOpen] = React.useState(true);
+
+  const pendingApprovals = approvals.filter((a) => !isDocumentRevisionApproved(a.status) && a.status !== ApprovalStatus.Rejected);
+  const approvedApprovals = approvals.filter((a) => isDocumentRevisionApproved(a.status));
+
+  const renderApprovalRow = (approval: FBInlineApprovalBody, index: number) => {
+    const isApproved = isDocumentRevisionApproved(approval.status);
+    const approverName = isApproved ? approval.approverName : approval.approver?.user.name;
+    const approverEmail = isApproved ? approval.approverEmail : approval.approver?.user.email;
+    const statusLabel = APPROVAL_STATUS_LABEL[approval.status || ''] ?? approval.status ?? '';
+
+    return (
+      <React.Fragment key={`fb-ia-info-${approval.id}-${index}`}>
+        {index > 0 && <Box className={classes.approvalDivider} />}
+        <Box
+          data-cy={isApproved ? 'approved-' + approval.approverName : 'not-approved-' + approval.approver?.user.name}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          py={2}
+          px={2}
+        >
+          <Box className={classes.approvalInfoContainer}>
+            <Avatar
+              src={approval.approver?.user.avatar || undefined}
+              alt={approverName || ''}
+              className={classes.avatar}
+              style={{ '--avatar-bg-color': approval.approver?.user.initialColor } as React.CSSProperties}
+            >
+              {!approval.approver?.user.avatar && approverName && getInitalsFromName(approverName)}
+            </Avatar>
+            <Box>
+              <Box className={classes.approverName}>{approverName}</Box>
+              <Box className={classes.approverEmail}>{approverEmail}</Box>
+              {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
+                <FBButton
+                  className={classes.requestApprovalButton}
+                  label="form.builder.request.approval"
+                  variant="text"
+                  color="primary"
+                  onClick={() => requestApproval?.(approval.id)}
+                />
+              )}
+            </Box>
+          </Box>
+
+          <Box className={classes.actionsContainer}>
+            {documentStatus === DocumentStatus.InReview
+              && approval.status === ApprovalStatus.Pending
+              && currentUser === approval.approver?.user.id
+              ? (
+                <Box className={classes.buttonGroup}>
+                  <StyledCancelFBButton
+                    {...{ disabled }}
+                    label="common.reject"
+                    size="small"
+                    className={classes.actionButton}
+                    onClick={() => approvalTransition?.('reject', approval.id)}
+                  />
+                  <FBButton
+                    {...{ disabled }}
+                    label="form.builder.request.approve"
+                    size="small"
+                    className={classes.actionButton}
+                    onClick={() => onApproveClick?.(approval.id || '')}
+                  />
+                </Box>
+              ) : isApproved ? (
+                <Box>
+                  <Box className={classes.approvedStatus}>
+                    <CheckCircleIcon className={classes.approvedIcon} />
+                    <span>{statusLabel}</span>
+                  </Box>
+                  {approval.reviewedAt && (
+                    <Box className={classes.approvedDate}>
+                      {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
+                    </Box>
+                  )}
+                </Box>
+              ) : (
+                <Box className={classes.statusText}>{statusLabel}</Box>
+              )
+            }
+          </Box>
+        </Box>
+      </React.Fragment>
+    );
+  };
 
   return (
     <FBProvider {...{ dialogState }}>
@@ -81,103 +173,61 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
             </FBMapWrapper>
           )}
         </Box>
-        {showFieldOwnersWarning && owners && <Box className={classes.ownersWarningContainer}>
-          <FBMapWrapper<Owner[]> collection={owners}>
-            {(owner: Owner, id) => (
-              <Box className={classes.ownerItemContainer} key={`fb-approvals-${id}`}>
-                <CheckCircleIcon
-                  data-cy={
-                  `fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? 'marked' : 'disabled'}`
-                  }
-                  color={isContributorIncluded?.(owner.id) ? 'primary' : 'disabled'}
-                />
-                <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
-              </Box>
-            )}
-          </FBMapWrapper>
-        </Box>}
-        <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
-          {(approval: FBInlineApprovalBody, index) => {
-            const isApproved = isDocumentRevisionApproved(approval.status);
-            const approverName = isApproved ? approval.approverName : approval.approver?.user.name;
-            const approverEmail = isApproved ? approval.approverEmail : approval.approver?.user.email;
-
-            return (
-              <Box
-                key={`fb-ia-info-${approval.id}-${index}`}
-                data-cy={isApproved ? 'approved-' + approval.approverName : 'not-approved-' + approval.approver?.user.name}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                py={2}
-                px={2}
-                mb={2}
-                className={classes.approvalCard} /* inline flex layout kept as per MUI pattern */
-              >
-                <Box className={classes.approvalInfoContainer}>
-                  <Avatar
-                    src={approval.approver?.user.avatar || undefined}
-                    alt={approverName || ''}
-                    className={classes.avatar}
-                    style={{ '--avatar-bg-color': approval.approver?.user.initialColor } as React.CSSProperties}
-                  >
-                    {!approval.approver?.user.avatar && approverName && getInitalsFromName(approverName)}
-                  </Avatar>
-                  <Box>
-                    <Box className={classes.approverName}>
-                      {approverName}
-                    </Box>
-                    <Box className={classes.approverEmail}>
-                      {approverEmail}
-                    </Box>
-                    {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
-                      <FBButton
-                        className={classes.requestApprovalButton}
-                        label="form.builder.request.approval"
-                        variant="text"
-                        color="primary"
-                        onClick={() => requestApproval?.(approval.id)}
-                      />
-                    )}
-                  </Box>
+        {showFieldOwnersWarning && owners && (
+          <Box className={classes.ownersWarningContainer}>
+            <FBMapWrapper<Owner[]> collection={owners}>
+              {(owner: Owner, id) => (
+                <Box className={classes.ownerItemContainer} key={`fb-approvals-${id}`}>
+                  <CheckCircleIcon
+                    data-cy={`fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? 'marked' : 'disabled'}`}
+                    color={isContributorIncluded?.(owner.id) ? 'primary' : 'disabled'}
+                  />
+                  <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
                 </Box>
+              )}
+            </FBMapWrapper>
+          </Box>
+        )}
 
-                <Box className={classes.actionsContainer}>
-                  {documentStatus === DocumentStatus.InReview
-                    && approval.status === ApprovalStatus.Pending
-                    && currentUser === approval.approver?.user.id
-                    ? (
-                      <Box className={classes.buttonGroup}>
-                        <StyledCancelFBButton
-                          {...{ disabled }}
-                          label="common.reject"
-                          size="small"
-                          className={classes.actionButton}
-                          onClick={() => approvalTransition?.('reject', approval.id)}
-                        />
-                        <FBButton
-                          {...{ disabled }}
-                          label="form.builder.request.approve"
-                          size="small"
-                          className={classes.actionButton}
-                          onClick={() => onApproveClick?.(approval.id || '')}
-                        />
-                      </Box>
-                    ) : (
-                      <Box className={classes.statusText}>
-                        {approval.status && (
-                          isApproved
-                            ? `${FBInlineApprovalStatusIdent[approval.status]}${approval.reviewedAt ? ` | ${getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}` : ''}`
-                            : FBInlineApprovalStatusIdent[approval.status]
-                        )}
-                      </Box>
-                    )
-                  }
-                </Box>
+        {pendingApprovals.length > 0 && (
+          <Box className={classes.sectionContainer} mb={2}>
+            <Box className={classes.sectionHeader} onClick={() => setPendingOpen(!pendingOpen)}>
+              <Box display="flex" alignItems="center">
+                {pendingOpen
+                  ? <ExpandLessIcon className={classes.sectionChevron} />
+                  : <ExpandMoreIcon className={classes.sectionChevron} />
+                }
+                <Box className={classes.sectionTitle}>Pending</Box>
               </Box>
-            );
-          }}
-        </FBMapWrapper>
+              <Box className={classes.sectionCount}>
+                {pendingApprovals.length} {pendingApprovals.length === 1 ? 'item' : 'items'}
+              </Box>
+            </Box>
+            <Collapse in={pendingOpen}>
+              {pendingApprovals.map((approval, index) => renderApprovalRow(approval, index))}
+            </Collapse>
+          </Box>
+        )}
+
+        {approvedApprovals.length > 0 && (
+          <Box className={classes.sectionContainer} mb={2}>
+            <Box className={classes.sectionHeader} onClick={() => setApprovedOpen(!approvedOpen)}>
+              <Box display="flex" alignItems="center">
+                {approvedOpen
+                  ? <ExpandLessIcon className={classes.sectionChevron} />
+                  : <ExpandMoreIcon className={classes.sectionChevron} />
+                }
+                <Box className={classes.sectionTitle}>Approved</Box>
+              </Box>
+              <Box className={classes.sectionCount}>
+                {approvedApprovals.length} {approvedApprovals.length === 1 ? 'item' : 'items'}
+              </Box>
+            </Box>
+            <Collapse in={approvedOpen}>
+              {approvedApprovals.map((approval, index) => renderApprovalRow(approval, index))}
+            </Collapse>
+          </Box>
+        )}
       </FBInput>
     </FBProvider>
   );
