@@ -1,9 +1,8 @@
-import { Avatar, Box, Collapse } from '@material-ui/core';
+import { Avatar, Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBText, Owner } from '..';
+import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
@@ -11,6 +10,7 @@ import { getInitalsFromName } from '../../components/icons/avatar/helpers';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import ApprovalApprovedGroup from './ApprovalApprovedGroup';
+import CollapsibleSection from './Components/CollapsibleSection';
 import useStyles from './FBBuildTypeChangeApproval.styles';
 import { FBBuildTypeChangeApprovalProps } from './FBBuildTypeChangeApproval.types';
 import { withFBBuildTypeChangeApproval } from './FBBuildTypeChangeApproval.wrap';
@@ -58,7 +58,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
     const isApproved = isDocumentRevisionApproved(approval.status);
     const approverName = isApproved ? approval.approverName : approval.approver?.user.name;
     const approverEmail = isApproved ? approval.approverEmail : approval.approver?.user.email;
-    const statusLabel = APPROVAL_STATUS_LABEL[approval.status || ''] ?? approval.status ?? '';
+    const statusLabel = translate(APPROVAL_STATUS_LABEL[approval.status ?? ''] ?? approval.status ?? '');
 
     return (
       <React.Fragment key={`fb-ia-info-${approval.id}-${index}`}>
@@ -182,7 +182,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
                     data-cy={`fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? 'marked' : 'disabled'}`}
                     color={isContributorIncluded?.(owner.id) ? 'primary' : 'disabled'}
                   />
-                  <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
+                  <Box className={classes.ownerName}>{owner.name}</Box>
                 </Box>
               )}
             </FBMapWrapper>
@@ -190,43 +190,25 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
         )}
 
         {pendingApprovals.length > 0 && (
-          <Box className={classes.sectionContainer} mb={2}>
-            <Box className={classes.sectionHeader} onClick={() => setPendingOpen(!pendingOpen)}>
-              <Box display="flex" alignItems="center">
-                {pendingOpen
-                  ? <ExpandLessIcon className={classes.sectionChevron} />
-                  : <ExpandMoreIcon className={classes.sectionChevron} />
-                }
-                <Box className={classes.sectionTitle}>Pending</Box>
-              </Box>
-              <Box className={classes.sectionCount}>
-                {pendingApprovals.length} {pendingApprovals.length === 1 ? 'item' : 'items'}
-              </Box>
-            </Box>
-            <Collapse in={pendingOpen}>
-              {pendingApprovals.map((approval, index) => renderApprovalRow(approval, index))}
-            </Collapse>
-          </Box>
+          <CollapsibleSection
+            title="Pending"
+            count={pendingApprovals.length}
+            isOpen={pendingOpen}
+            onToggle={() => setPendingOpen(!pendingOpen)}
+          >
+            {pendingApprovals.map((approval, index) => renderApprovalRow(approval, index))}
+          </CollapsibleSection>
         )}
 
         {approvedApprovals.length > 0 && (
-          <Box className={classes.sectionContainer} mb={2}>
-            <Box className={classes.sectionHeader} onClick={() => setApprovedOpen(!approvedOpen)}>
-              <Box display="flex" alignItems="center">
-                {approvedOpen
-                  ? <ExpandLessIcon className={classes.sectionChevron} />
-                  : <ExpandMoreIcon className={classes.sectionChevron} />
-                }
-                <Box className={classes.sectionTitle}>Approved</Box>
-              </Box>
-              <Box className={classes.sectionCount}>
-                {approvedApprovals.length} {approvedApprovals.length === 1 ? 'item' : 'items'}
-              </Box>
-            </Box>
-            <Collapse in={approvedOpen}>
-              {approvedApprovals.map((approval, index) => renderApprovalRow(approval, index))}
-            </Collapse>
-          </Box>
+          <CollapsibleSection
+            title="Approved"
+            count={approvedApprovals.length}
+            isOpen={approvedOpen}
+            onToggle={() => setApprovedOpen(!approvedOpen)}
+          >
+            {approvedApprovals.map((approval, index) => renderApprovalRow(approval, index))}
+          </CollapsibleSection>
         )}
       </FBInput>
     </FBProvider>

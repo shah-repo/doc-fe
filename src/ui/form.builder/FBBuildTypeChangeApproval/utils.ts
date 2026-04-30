@@ -1,6 +1,6 @@
 export const APPROVAL_STATUS_LABEL: Record<string, string> = {
-  PENDING: 'Pending Approval',
-  DRAFT: 'Draft',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
+  PENDING: 'common.pending.approval',
+  DRAFT: 'DRAFT',
+  APPROVED: 'form.builder.approved',
+  REJECTED: 'common.rejected',
 };
