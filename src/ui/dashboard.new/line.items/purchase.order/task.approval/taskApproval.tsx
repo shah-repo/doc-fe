@@ -133,11 +133,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: (response?: ResponseProps) => {
-      const status = response?.status ?? '';
-      const isBuildTypeSwitch = type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER;
-      const statusKey = isBuildTypeSwitch
-        ? `approvalRequest.status.buildTypeSwitch.${status}` as Translation
-        : `approvalRequest.status.${status}` as Translation;
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -147,7 +142,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             <div style={{ color: Colors.black }}>
               <div>
                 <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={statusKey} />
+                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
                 </span>
               </div>
             </div>
@@ -430,7 +425,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         approvalId={approvalId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
-        type={type}
       />
     </>
   );
