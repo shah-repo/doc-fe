@@ -6,7 +6,6 @@ import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
-import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
@@ -53,14 +52,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const supplierStatusDialog = useDialog();
   const [errorResponse, setErrorResponse] = useState<ApprovalFailureResponse>();
   const [password, setPassword] = useState<string>();
-  const isBuildTypeSwitch = type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER;
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
-      const status = response?.status ?? '';
-      const statusKey = isBuildTypeSwitch
-        ? `approvalRequest.status.buildTypeSwitch.${status}` as Translation
-        : `approvalRequest.status.${status}` as Translation;
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -70,7 +64,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
             <div style={{ color: Colors.black }}>
               <div>
                 <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={statusKey} />
+                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
                 </span>
               </div>
             </div>
@@ -126,13 +120,13 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { type && !isBuildTypeSwitch && <AlertDialog
+      { type && <AlertDialog
         dialog={transitionDialog}
         message="dashboard.po.reject.alert"
         confirmAction={onReject}
         cancelAction={transitionDialog.close}
       /> }
-      { (!type || isBuildTypeSwitch) && <ApproveDialog
+      { !type && <ApproveDialog
         onSubmit={onSubmit}
         asyncState={asyncState}
         buttonProps={buttonProps}
