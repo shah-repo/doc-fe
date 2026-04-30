@@ -8,7 +8,6 @@ import {
   ChangeRequestTransitionResponse,
 } from '../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../state/ducks/dashboard.new/my.feeds';
-import { ActionTypes } from '../../../../state/ducks/dashboard.new/my.feeds/types';
 import { dashboardTodoActions } from '../../../../state/ducks/dashboard.new/todo';
 import {
   EffectiveDateFormValues,
@@ -32,7 +31,6 @@ interface Props {
   label: string
   transitionDialog: any
   onSuccess?: () => void
-  type?: string
 }
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
@@ -44,7 +42,6 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   label,
   transitionDialog,
   onSuccess,
-  type,
 }) => {
   const effectiveDateDialog = useDialog();
   const applyTransitionAction = useActionCreator(
@@ -57,16 +54,11 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       onSuccess && onSuccess();
       effectiveDateDialog.close();
       transitionDialog.close();
-      const isBuildTypeSwitch = type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER;
-      const state = response?.state ?? '';
-      const statusKey = isBuildTypeSwitch
-        ? `approvalRequest.status.buildTypeSwitch.${state}` as Translation
-        : `approvalRequest.status.${state}` as Translation;
       toastSuccess(<><div style={{ display: 'flex' }}>
         <div><SuccessIcon style={{ height: '30px' }} /></div>
         <div style={{ color: Colors.black }}>
           <div><span style={{ fontWeight: 'bold' }}>
-            <Text translation={statusKey} /></span></div>
+            <Text translation={`approvalRequest.status.${response?.state}` as Translation} /></span></div>
           {response?.state === 'IN_REVIEW'
             ? <div><Text translation={'approvalRequest.status.message.IN_REVIEW_PENDING' as Translation}
             /> </div>
