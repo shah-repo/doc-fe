@@ -55,6 +55,7 @@ interface Props {
 }
 interface ResponseProps {
   status: string
+  fieldId?: string
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -133,6 +134,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: (response?: ResponseProps) => {
+      const statusKey = response?.fieldId === 'buildTypeApprovals'
+        ? `approvalRequest.status.buildTypeSwitch.${response?.status}` as Translation
+        : `approvalRequest.status.${response?.status}` as Translation;
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -142,7 +146,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             <div style={{ color: Colors.black }}>
               <div>
                 <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
+                  <Text translation={statusKey} />
                 </span>
               </div>
             </div>
