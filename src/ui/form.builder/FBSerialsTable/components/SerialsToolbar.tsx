@@ -79,4 +79,4 @@ const SerialsToolbar: React.FC<SerialsToolbarProps> = ({
   return toolbarRef?.current ? ReactDOM.createPortal(toolbar, toolbarRef.current) : toolbar;
 };
 
-export default SerialsToolbar;
+export default React.memo(SerialsToolbar);

@@ -3,7 +3,7 @@ import { getSelectedState, GridDataStateChangeEvent, GridSelectionChangeEvent } 
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -26,76 +26,40 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   onBulkDelete,
 }) => {
   const classes = useStyles();
-  const gridContainerRef = useRef<HTMLDivElement>(null);
-  const scrollPositionRef = useRef({ top: 0, left: 0 });
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
   const [dataState, setDataState] = useState<State>(DEFAULT_DATA_STATE);
   const sharedSerialNumberPart = useMemo(() => getSharedSerialNumberPart(serialNumbers), [serialNumbers]);
-
-  useLayoutEffect(() => {
-    const scrollContainer = gridContainerRef.current?.querySelector<HTMLDivElement>('.k-grid-content');
-
-    if (!scrollContainer) {
-      return undefined;
-    }
-
-    const restoreScrollPosition = () => {
-      const maxScrollTop = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
-      const maxScrollLeft = Math.max(0, scrollContainer.scrollWidth - scrollContainer.clientWidth);
-
-      scrollContainer.scrollTop = Math.min(scrollPositionRef.current.top, maxScrollTop);
-      scrollContainer.scrollLeft = Math.min(scrollPositionRef.current.left, maxScrollLeft);
-    };
-
-    const preserveScrollPosition = () => {
-      scrollPositionRef.current = {
-        top: scrollContainer.scrollTop,
-        left: scrollContainer.scrollLeft,
-      };
-    };
-
-    restoreScrollPosition();
-    const restoreFrame = window.requestAnimationFrame(restoreScrollPosition);
-
-    scrollContainer.addEventListener('scroll', preserveScrollPosition, { passive: true });
-
-    return () => {
-      window.cancelAnimationFrame(restoreFrame);
-      scrollContainer.removeEventListener('scroll', preserveScrollPosition);
-    };
-  });
-
   const selectedIds = useMemo(() => keys(selectedSerials).filter(sn => selectedSerials[sn]), [selectedSerials]);
   const hasSelection = selectedIds.length > 0;
   const isAllSelected = hasSelection && selectedIds.length === serialNumbers.length;
 
-  const acceptSelected = async () => {
+  const acceptSelected = useCallback(async () => {
     const payload = selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED }));
     await onBulkUpdate?.(payload);
     setSelectedSerials({});
-  };
+  }, [onBulkUpdate, selectedIds]);
 
-  const rejectSelected = async () => {
+  const rejectSelected = useCallback(async () => {
     await onBulkUpdate?.(selectedIds.map(id => ({ id, status: SerialNumberStatus.REJECTED })));
     setSelectedSerials({});
-  };
+  }, [onBulkUpdate, selectedIds]);
 
-  const deleteSelected = onBulkDelete ? async () => {
-    await onBulkDelete(selectedIds);
+  const deleteSelected = useCallback(async () => {
+    await onBulkDelete?.(selectedIds);
     setSelectedSerials({});
-  } : undefined;
+  }, [onBulkDelete, selectedIds]);
 
-  const toggleAllSelection = (event: CheckboxChangeEvent) => {
+  const toggleAllSelection = useCallback((event: CheckboxChangeEvent) => {
     if (event.target.value) {
       setSelectedSerials(serialNumbers.reduce((acc, sn) => ({ ...acc, [sn.id]: true }), {}));
     } else {
       setSelectedSerials({});
     }
-  };
+  }, [serialNumbers]);
 
-  const clearSelection = () => setSelectedSerials({});
+  const clearSelection = useCallback(() => setSelectedSerials({}), []);
 
-  const toggleSelection = (event: GridSelectionChangeEvent) => {
+  const toggleSelection = useCallback((event: GridSelectionChangeEvent) => {
     const dataItem = event.dataItem as EditableSerialNumber | null;
     if (isNull(dataItem)) {
       return;
@@ -106,9 +70,9 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
       dataItemKey: DATA_ITEM_KEY,
     });
     setSelectedSerials(newSelectedState);
-  };
+  }, [selectedSerials]);
 
-  const updateDataState = (event: GridDataStateChangeEvent): State => {
+  const updateDataState = useCallback((event: GridDataStateChangeEvent): State => {
     const updatedState: State = {
       ...event.dataState,
       sort: event.dataState.sort?.map((sort): SerialNumberSortDescriptor => {
@@ -130,7 +94,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
     setDataState(updatedState);
     return updatedState;
-  };
+  }, [sharedSerialNumberPart, setDataState]);
 
   const schema = useSchema({
     canSelect: Boolean(onBulkUpdate ?? onBulkDelete),
@@ -202,7 +166,6 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
             cell: false,
             mode: 'multiple',
           }}
-          containerRef={gridContainerRef}
           onDataStateChange={updateDataState}
           onSelectionChange={toggleSelection}
         />

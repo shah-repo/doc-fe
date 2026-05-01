@@ -1,11 +1,11 @@
 import { pick } from 'lodash';
 import { useObserver } from 'mobx-react';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { FB, FBLHRBuildOptions } from '..';
 import { SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
-import { useFormValue } from '../../hooks/useFormValue';
 import { useLhrsTitle } from '../../hooks/useLhrsTitle';
 import { EditableSerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
+import FBDataStore from '../FBStore/FBDataStore';
 import { LHRSInfo, LHRSSequenceInfo, LHRSSerialNumbers, LHRSStepSerialNumbersFormValue } from './types';
 
 const useIsRnD = () => {
@@ -24,8 +24,10 @@ const useIsRnD = () => {
 };
 
 const useLhrsInfo = (): LHRSInfo => {
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const { stepIndex } = useLhrsTitle(workspaceState?.document?.name ?? '', workspaceState?.document?.document.documentType.id ?? '');
+
+  const formValues = useObserver(() => formState?.newValues ?? formState?.values ?? {});
 
   const sequences = useObserver(
     () => workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure').sort((a, b) => (a.stepIndex ?? 0) - (b.stepIndex ?? 0)),
@@ -36,28 +38,50 @@ const useLhrsInfo = (): LHRSInfo => {
       const defaultResult = { rejectedSerials: new Set<string>(), acceptedSerials: new Set<string>() };
       if (!sequences) { return defaultResult; }
       return sequences.reduce((acc, item) => {
+        if (!item.name) {
+          return acc;
+        }
+        const formValue = formValues[item.name] as LHRSStepSerialNumbersFormValue | undefined;
+        const serialsNumbers = formValue?.serialsNumbers;
+        if (!serialsNumbers) {
+          return acc;
+        }
+        Object.entries(serialsNumbers).forEach(([serialNumber, data]) => {
+          if (data.status === SerialNumberStatus.REJECTED) {
+            acc.rejectedSerials.add(serialNumber);
+            acc.acceptedSerials.delete(serialNumber);
+          } else {
+            acc.acceptedSerials.add(serialNumber);
+            acc.rejectedSerials.delete(serialNumber);
+          }
+        });
         return acc;
       }, defaultResult);
     },
-    [sequences],
+    [formValues, sequences],
   );
 
-  return {
+  const rejectedCount = rejectedSerials.size;
+  const acceptedCount = acceptedSerials.size;
+
+  return useMemo(() => ({
     stepIndex,
     isSynced: false,
-    rejectedCount: rejectedSerials.size,
-    acceptedCount: acceptedSerials.size,
-  };
+    rejectedCount,
+    acceptedCount,
+  }), [acceptedCount, rejectedCount, stepIndex]);
 };
 
 const useLhrsSequenceInfo = (name: string): LHRSSequenceInfo => {
   const { workspaceState } = FB.useStores();
   const { stepIndex } = useLhrsTitle(workspaceState?.document?.name ?? '', workspaceState?.document?.document.documentType.id ?? '');
   const sequence = workspaceState?.schema?.find((item) => item.name === name);
-  return {
+  const sequenceIndex = sequence?.stepIndex;
+
+  return useMemo(() => ({
     step: stepIndex,
-    sequence: sequence?.stepIndex,
-  };
+    sequence: sequenceIndex,
+  }), [sequenceIndex, stepIndex]);
 };
 
 export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
@@ -68,10 +92,21 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
   }, [serialsState]);
 
   const isRnD = useIsRnD();
-  const value = useFormValue<LHRSStepSerialNumbersFormValue | undefined>(name);
+  const getLHRSStepSerialNumbersValue = useCallback((): LHRSStepSerialNumbersFormValue | undefined => {
+    if (formState?.newValues.has(name)) {
+      return formState.newValues.get(name) as LHRSStepSerialNumbersFormValue | undefined;
+    }
+
+    return (
+      FBDataStore.refreshData?.formInput?.[name]
+      ?? formState?.getFieldValue(name)
+    ) as LHRSStepSerialNumbersFormValue | undefined;
+  }, [formState, name]);
+  const value = useObserver(getLHRSStepSerialNumbersValue);
   const affectedSerialNumbers = useMemo(() => value?.serialsNumbers ?? {}, [value]);
   const lhrsInfo = useLhrsInfo();
   const lhrsSequenceInfo = useLhrsSequenceInfo(name);
+  const { sequence, step } = lhrsSequenceInfo;
 
   const [
     allSerialNumbers,
@@ -87,8 +122,8 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
     return allSerialNumbers.reduce<EditableSerialNumber[]>((acc, serial) => {
       const isRejected = serial.status === SerialNumberStatus.REJECTED;
       const isUpdatedInNextSteps
-        = (serial.meta?.updatedIn?.step ?? 0) > (lhrsSequenceInfo?.step ?? 0)
-        || (serial.meta?.updatedIn?.sequence ?? 0) > (lhrsSequenceInfo?.sequence ?? 0);
+        = (serial.meta?.updatedIn?.step ?? 0) > (step ?? 0)
+        || (serial.meta?.updatedIn?.sequence ?? 0) > (sequence ?? 0);
       const canUseForRnD = isRnD && serial.usage === SerialNumberUsage.RND;
 
       const shoupShow = !isRejected || canUseForRnD || isUpdatedInNextSteps || (serial.id in affectedSerialNumbers);
@@ -105,63 +140,69 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
         isDisabled: isRejected && isUpdatedInNextSteps,
       }];
     }, []);
-  }, [allSerialNumbers, affectedSerialNumbers, isRnD, lhrsSequenceInfo]);
+  }, [allSerialNumbers, affectedSerialNumbers, isRnD, sequence, step]);
 
-  const updateSerialNumber = async (id: string, data: SerialNumberUpdateData) => {
-    await serialsState?.updateSerialNumber(id, {
-      ...data,
-      meta: {
-        updatedIn: lhrsSequenceInfo,
-      },
-    });
+  const setAffectedSerialNumbers = useCallback((payload: SerialNumberUpdatePayload[]) => {
+    const currentValue = getLHRSStepSerialNumbersValue();
+    const currentAffectedSerialNumbers = currentValue?.serialsNumbers ?? {};
 
-    const existingSerial = affectedSerialNumbers[id] ?? {};
-    const dataToUpdate = pick(data, ['status', 'usage', 'notes']);
-
-    formState?.setFieldValue(name, {
-      ...value,
-      serialsNumbers: {
-        ...affectedSerialNumbers,
-        [id]: {
-          ...existingSerial,
-          ...dataToUpdate,
-        },
-      },
-    });
-
-    formState?.setFieldAutosave(name);
-  };
-
-  const updateSerialNumbers = async (payload: SerialNumberUpdatePayload[]) => {
-    await serialsState?.updateSerialNumbers(payload.map((item) => ({
-      ...item,
-      meta: {
-        updatedIn: lhrsSequenceInfo,
-      },
-    })));
-
-    const updatedSerialNumbers = payload.reduce((acc, item) => {
+    const updatedSerialNumbers = payload.reduce<Record<string, Partial<SerialNumberUpdateData>>>((acc, item) => {
       const dataToUpdate = pick(item, ['status', 'usage', 'notes']);
-      const existingSerial = affectedSerialNumbers[item.id] ?? {};
+      const existingSerial = currentAffectedSerialNumbers[item.id] ?? {};
+
       acc[item.id] = {
         ...existingSerial,
         ...dataToUpdate,
       };
+
       return acc;
     }, {});
 
     formState?.setFieldValue(name, {
-      ...value,
+      ...currentValue,
       serialsNumbers: {
-        ...affectedSerialNumbers,
+        ...currentAffectedSerialNumbers,
         ...updatedSerialNumbers,
       },
     });
+  }, [formState, getLHRSStepSerialNumbersValue, name]);
 
-    formState?.setFieldAutosave(name);
-  };
+  const updateSerialNumbers = useCallback(async (payload: SerialNumberUpdatePayload[]) => {
+    const previousValue = getLHRSStepSerialNumbersValue();
 
-  return {
+    setAffectedSerialNumbers(payload);
+
+    try {
+      await serialsState?.updateSerialNumbers(payload.map((item) => ({
+        ...item,
+        meta: {
+          updatedIn: {
+            sequence,
+            step,
+          },
+        },
+      })));
+
+      formState?.setFieldAutosave(name);
+    } catch (error) {
+      formState?.setFieldValue(name, previousValue);
+      throw error;
+    }
+  }, [
+    formState,
+    getLHRSStepSerialNumbersValue,
+    name,
+    sequence,
+    serialsState,
+    setAffectedSerialNumbers,
+    step,
+  ]);
+
+  const updateSerialNumber = useCallback(async (id: string, data: SerialNumberUpdateData) => {
+    await updateSerialNumbers([{ id, ...data }]);
+  }, [updateSerialNumbers]);
+
+  return useMemo(() => ({
     isRnD,
     isLoading,
     shouldShowSerials,
@@ -171,5 +212,15 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
     lhrsSequenceInfo,
     updateSerialNumber,
     updateSerialNumbers,
-  };
+  }), [
+    allSerialNumbers,
+    isLoading,
+    isRnD,
+    lhrsInfo,
+    lhrsSequenceInfo,
+    shouldShowSerials,
+    stepSerialNumbers,
+    updateSerialNumber,
+    updateSerialNumbers,
+  ]);
 };
