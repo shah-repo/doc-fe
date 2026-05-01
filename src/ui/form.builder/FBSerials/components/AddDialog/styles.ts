@@ -24,11 +24,13 @@ export default makeStyles(theme => ({
     paddingLeft: theme.spacing(1.25),
   },
   invalidSerial: {
-    backgroundColor: Colors.errorHighlight,
+    backgroundColor: Colors.errorLight,
+    color: Colors.error,
   },
   invalidSerialsMessage: {
     color: Colors.error,
     fontSize: '0.75rem',
     marginTop: theme.spacing(0.5),
+    position: 'absolute',
   },
 }));

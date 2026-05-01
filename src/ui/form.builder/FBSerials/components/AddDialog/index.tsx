@@ -3,15 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chip } from '@material-ui/core';
 import { GetTagProps } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
-import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Dialog } from '../../../../components/dialogs';
 import { Autocomplete } from '../../../../components/forms/fields-next';
 import { AutocompleteControl } from '../../../../components/forms/fields-next/Autocomplete/Autocomplete';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { SERIAL_VALIDATION_DEBOUNCE_MS } from '../../consts';
 import { normalizeSerial, sanitizeSerials, splitSerials } from '../../helpers';
+import { useExistingSerialsCheck } from '../../hooks';
 import useStyles from './styles';
 
 interface AddDialogProps {
@@ -31,18 +30,6 @@ const getRepeatedSerialKeys = (serials: string[]): Set<string> => {
   return new Set(Object.keys(counts).filter(key => counts[key] > 1));
 };
 
-const getMatchingExistingSerials = (serials: string[], existingSerials: string[]): string[] => {
-  const submittedSerialKeys = new Set(serials.map(normalizeSerial));
-  const matchingSerials = existingSerials.filter(serial =>
-    submittedSerialKeys.has(normalizeSerial(serial)));
-  const uniqueMatchingSerials = new Map<string, string>();
-
-  matchingSerials.forEach(serial => uniqueMatchingSerials.set(normalizeSerial(serial), serial));
-  return Array.from(uniqueMatchingSerials.values());
-};
-
-const getSerialsValidationKey = (serials: string[]): string => serials.map(normalizeSerial).join('\n');
-
 export const AddDialog: React.FC<AddDialogProps> = ({
   isOpen,
   onCheckExistingSerialNumbers,
@@ -53,134 +40,48 @@ export const AddDialog: React.FC<AddDialogProps> = ({
   const [serials, setSerials] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCheckingExistingSerials, setIsCheckingExistingSerials] = useState(false);
-  const [existingCompanySerials, setExistingCompanySerials] = useState<string[]>([]);
-  const [validationErrorMessage, setValidationErrorMessage] = useState('');
-  const [validatedSerialsKey, setValidatedSerialsKey] = useState('');
-  const validationRequestId = useRef(0);
-
-  const clearValidationState = useCallback(() => {
-    validationRequestId.current += 1;
-    setIsCheckingExistingSerials(false);
-    setExistingCompanySerials([]);
-    setValidationErrorMessage('');
-    setValidatedSerialsKey('');
-  }, []);
-
-  const resetDialog = useCallback(() => {
-    setSerials([]);
-    setInputValue('');
-    clearValidationState();
-  }, [clearValidationState]);
-
-  const updateSerials = useCallback((nextSerials: string[]) => {
-    setSerials(nextSerials);
-    clearValidationState();
-  }, [clearValidationState]);
 
   const sanitizedSerials = useMemo(() => sanitizeSerials(serials), [serials]);
-  const sanitizedSerialsKey = useMemo(() => getSerialsValidationKey(sanitizedSerials), [sanitizedSerials]);
+  const repeatedKeys = useMemo(() => getRepeatedSerialKeys(sanitizedSerials), [sanitizedSerials]);
+  const hasRepeated = repeatedKeys.size > 0;
 
-  const repeatedSerialKeys = useMemo(
-    () => getRepeatedSerialKeys(sanitizedSerials),
-    [sanitizedSerials],
-  );
-  const hasRepeatedSerials = repeatedSerialKeys.size > 0;
-
-  const existingCompanySerialKeys = useMemo(() => {
-    return new Set(existingCompanySerials.map(normalizeSerial));
-  }, [existingCompanySerials]);
-  const hasExistingCompanySerials = existingCompanySerials.length > 0;
-  const hasValidationError = validationErrorMessage.length > 0;
-
-  const debouncedCheckExistingSerialNumbers = useMemo(() => debounce((
-    requestSerials: string[],
-    requestSerialsKey: string,
-    requestId: number,
-  ) => {
-    onCheckExistingSerialNumbers(requestSerials)
-      .then((existingCompanySerialNumbers) => {
-        if (requestId !== validationRequestId.current) {
-          return;
-        }
-
-        setExistingCompanySerials(getMatchingExistingSerials(
-          requestSerials,
-          existingCompanySerialNumbers,
-        ));
-        setValidatedSerialsKey(requestSerialsKey);
-        setIsCheckingExistingSerials(false);
-      })
-      .catch(() => {
-        if (requestId !== validationRequestId.current) {
-          return;
-        }
-
-        setValidationErrorMessage(translate('form.builder.serials.add.dialog.validation.failed'));
-        setIsCheckingExistingSerials(false);
-      });
-  }, SERIAL_VALIDATION_DEBOUNCE_MS), [onCheckExistingSerialNumbers]);
-
-  useEffect(() => {
-    validationRequestId.current += 1;
-    const requestId = validationRequestId.current;
-
-    setExistingCompanySerials([]);
-    setValidationErrorMessage('');
-    setValidatedSerialsKey('');
-
-    if (
-      !isOpen
-      || sanitizedSerials.length === 0
-      || hasRepeatedSerials
-    ) {
-      setIsCheckingExistingSerials(false);
-      return;
-    }
-
-    setIsCheckingExistingSerials(true);
-    debouncedCheckExistingSerialNumbers(
-      sanitizedSerials,
-      sanitizedSerialsKey,
-      requestId,
-    );
-
-    return () => {
-      validationRequestId.current += 1;
-      debouncedCheckExistingSerialNumbers.cancel();
-    };
-  }, [
-    debouncedCheckExistingSerialNumbers,
-    hasRepeatedSerials,
-    isOpen,
+  const { isChecking, hasExistingMatches, hasError, existingKeys } = useExistingSerialsCheck(
     sanitizedSerials,
-    sanitizedSerialsKey,
-  ]);
+    isOpen && !hasRepeated,
+    onCheckExistingSerialNumbers,
+  );
+
+  const errorMessage = hasRepeated
+    ? translate('form.builder.serials.add.dialog.duplicate.serials')
+    : hasExistingMatches
+      ? translate('form.builder.serials.add.dialog.invalid.serials')
+      : hasError
+        ? translate('form.builder.serials.add.dialog.validation.failed')
+        : '';
+
+  const isConfirmDisabled = isSubmitting
+    || sanitizedSerials.length === 0
+    || isChecking
+    || errorMessage !== '';
 
   const handleClose = () => {
-    resetDialog();
+    setSerials([]);
+    setInputValue('');
     onClose();
   };
 
   const handleConfirm = async () => {
-    const submittedSerials = sanitizeSerials(serials);
-    if (
-      submittedSerials.length === 0
-      || hasRepeatedSerials
-      || hasExistingCompanySerials
-      || hasValidationError
-      || isCheckingExistingSerials
-      || (shouldValidateExistingCompanySerials && !hasCompletedExistingCompanySerialsCheck)
-    ) {
+    if (isConfirmDisabled) {
       return;
     }
 
     setIsSubmitting(true);
-    setSerials(submittedSerials);
+    setSerials(sanitizedSerials);
 
     try {
-      await onConfirm(submittedSerials);
-      resetDialog();
+      await onConfirm(sanitizedSerials);
+      setSerials([]);
+      setInputValue('');
       onClose();
     } finally {
       setIsSubmitting(false);
@@ -193,7 +94,6 @@ export const AddDialog: React.FC<AddDialogProps> = ({
     if (parsed.length > 1) {
       event.preventDefault();
       setSerials(prev => [...prev, ...parsed]);
-      clearValidationState();
     }
   };
 
@@ -204,7 +104,6 @@ export const AddDialog: React.FC<AddDialogProps> = ({
       if (v) {
         setSerials(prev => [...prev, v]);
         setInputValue('');
-        clearValidationState();
       }
       return;
     }
@@ -229,7 +128,7 @@ export const AddDialog: React.FC<AddDialogProps> = ({
   const renderTags = useCallback((value: string[], getTagProps: GetTagProps) => {
     return value.map((option, index) => {
       const normalizedOption = normalizeSerial(option);
-      const isInvalid = repeatedSerialKeys.has(normalizedOption) || existingCompanySerialKeys.has(normalizedOption);
+      const isInvalid = repeatedKeys.has(normalizedOption) || existingKeys.has(normalizedOption);
       const tagProps = getTagProps({ index }) as { className?: string };
       return (
         <Chip
@@ -243,26 +142,9 @@ export const AddDialog: React.FC<AddDialogProps> = ({
     });
   }, [
     classes.invalidSerial,
-    existingCompanySerialKeys,
-    repeatedSerialKeys,
+    existingKeys,
+    repeatedKeys,
   ]);
-
-  const shouldValidateExistingCompanySerials = sanitizedSerials.length > 0;
-  const hasCompletedExistingCompanySerialsCheck = validatedSerialsKey === sanitizedSerialsKey;
-
-  const isConfirmDisabled = sanitizedSerials.length === 0
-    || isSubmitting
-    || hasRepeatedSerials
-    || hasExistingCompanySerials
-    || hasValidationError
-    || isCheckingExistingSerials
-    || (shouldValidateExistingCompanySerials && !hasCompletedExistingCompanySerialsCheck);
-
-  const errorMessage = hasRepeatedSerials
-    ? translate('form.builder.serials.add.dialog.duplicate.serials')
-    : hasExistingCompanySerials
-      ? translate('form.builder.serials.add.dialog.invalid.serials')
-      : validationErrorMessage;
 
   return (
     <Dialog
@@ -286,7 +168,7 @@ export const AddDialog: React.FC<AddDialogProps> = ({
           value={serials}
           shouldAlwaysShowPlaceholder
           onChange={(_, value: string[]) => {
-            updateSerials(value);
+            setSerials(value);
             setInputValue('');
           }}
           onInputChange={(_, value: string) => setInputValue(value)}

@@ -249,4 +249,49 @@ describe('AddDialog serial validation', () => {
     expect(getDialogText(wrapper)).not.toContain('Some of the serial numbers already exist');
     expect(getConfirmDisabled(wrapper)).toBe(false);
   });
+
+  it('keeps the existing-serial error visible while a new check is in flight', async () => {
+    const onCheckExistingSerialNumbers = jest
+      .fn<Promise<string[]>, [string[]]>()
+      .mockResolvedValueOnce(['SN-001'])
+      .mockResolvedValueOnce(['SN-001']);
+    const wrapper = mount(<AddDialog {...getProps({ onCheckExistingSerialNumbers })} />);
+
+    await setSerials(wrapper, ['SN-001']);
+    await runDebouncedValidation(wrapper);
+
+    expect(getDialogText(wrapper)).toContain('Some of the serial numbers already exist');
+
+    await setSerials(wrapper, ['SN-001', 'SN-002']);
+
+    expect(getDialogText(wrapper)).toContain('Some of the serial numbers already exist');
+    expect(getConfirmDisabled(wrapper)).toBe(true);
+
+    await runDebouncedValidation(wrapper);
+
+    expect(getDialogText(wrapper)).toContain('Some of the serial numbers already exist');
+    expect(getConfirmDisabled(wrapper)).toBe(true);
+  });
+
+  it('clears the existing-serial error immediately when the offending serial is removed', async () => {
+    const onCheckExistingSerialNumbers = jest
+      .fn<Promise<string[]>, [string[]]>()
+      .mockResolvedValueOnce(['SN-001'])
+      .mockResolvedValueOnce([]);
+    const wrapper = mount(<AddDialog {...getProps({ onCheckExistingSerialNumbers })} />);
+
+    await setSerials(wrapper, ['SN-001', 'SN-002']);
+    await runDebouncedValidation(wrapper);
+
+    expect(getDialogText(wrapper)).toContain('Some of the serial numbers already exist');
+
+    await setSerials(wrapper, ['SN-002']);
+
+    expect(getDialogText(wrapper)).not.toContain('Some of the serial numbers already exist');
+    expect(getConfirmDisabled(wrapper)).toBe(true);
+
+    await runDebouncedValidation(wrapper);
+
+    expect(getConfirmDisabled(wrapper)).toBe(false);
+  });
 });
