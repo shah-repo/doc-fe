@@ -31,7 +31,12 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   const hasAnyContent = !isPreview || hasItems || hasDescription;
 
   return (
-    <FBInput {...props } {...{ name }} type="mpiprocedure">
+    <FBInput
+      {...props}
+      {...{ name }}
+      type="mpiprocedure"
+      shouldWrapWithFormControl={false}
+    >
       <Box
         pb={3.8}
         mt={hasAnyContent ? 1.75 : 0}

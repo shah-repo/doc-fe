@@ -129,6 +129,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.restorePartInfo;
   }
 
+  @action public setLoading = (loading: boolean): void => {
+    set(this, 'loading', loading);
+  };
+
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
     set(this, 'revisionChangeType', revisionChangeType);
