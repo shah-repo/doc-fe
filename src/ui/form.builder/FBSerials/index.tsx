@@ -118,6 +118,14 @@ const FBSerials: React.FC = () => {
     }
   };
 
+  const checkExistingSerialNumbers = useCallback(async (serials: string[]) => {
+    if (!serialsState) {
+      return [];
+    }
+
+    return await serialsState.checkExistingLotSerialNumbers(serials);
+  }, [serialsState]);
+
   if (!shouldShowSerials) {
     return null;
   }
@@ -148,10 +156,10 @@ const FBSerials: React.FC = () => {
       />
       {isPartSerializationManual && (
         <AddDialog
-          existingSerials={serialNumbers.map(sn => sn.serialNumber)}
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}
           onConfirm={addSerials}
+          onCheckExistingSerialNumbers={checkExistingSerialNumbers}
         />
       )}
     </div>

@@ -44,6 +44,10 @@ interface SerialNumberAddBody {
   serialNumbers: string[]
 }
 
+export interface SerialNumberExistingCheckBody {
+  serialNumbers: string[]
+}
+
 export interface SerialNumberUpdateData {
   status?: SerialNumberStatus | null
   usage?: SerialNumberUsage | null

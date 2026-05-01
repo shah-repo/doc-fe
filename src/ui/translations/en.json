@@ -1866,6 +1866,8 @@
   "form.builder.serials.accept.all": "Accept All",
   "form.builder.serials.reject.all": "Reject All",
   "form.builder.serials.add.dialog.invalid.serials": "Some of the serial numbers already exist",
+  "form.builder.serials.add.dialog.duplicate.serials": "Duplicate serial numbers in this list",
+  "form.builder.serials.add.dialog.validation.failed": "Unable to validate serial numbers. Please try again.",
   "form.builder.serials.delete.selected": "Delete Selected",
   "form.builder.serials.accept.selected": "Accept Selected",
   "form.builder.serials.reject.selected": "Reject Selected",
