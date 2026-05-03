@@ -67,6 +67,13 @@ export default makeStyles(theme => ({
       borderBottomRightRadius: 0,
     },
   },
+  disabledRow: {
+    '& .k-checkbox': {
+      pointerEvents: 'none',
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+  },
   acceptIcon: {
     color: Colors.success,
   },
