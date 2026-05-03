@@ -17,6 +17,7 @@ import useStyles from './styles';
 
 interface SchemaOptions {
   isAllSelected: boolean
+  isTableDisabled?: boolean
   canSelect?: boolean
   onCheckAllToggle: (event: CheckboxChangeEvent) => void
   onUpdate?: (id: string, data: SerialNumberUpdateData) => void
@@ -25,13 +26,13 @@ interface SchemaOptions {
 
 export const useSchema = ({
   isAllSelected,
-  canSelect,
+  isTableDisabled = false,
+  canSelect = false,
   onCheckAllToggle,
   onUpdate,
   onDelete,
 }: SchemaOptions): Array<ColumnDefinition<SerialNumber>> => {
   const classes = useStyles();
-
   const statusOptions = React.useMemo(() => [
     createOption(null, translate('form.builder.serials.no.status')),
     createOption(SerialNumberStatus.ACCEPTED, translate('form.builder.serials.accepted')),
@@ -70,7 +71,7 @@ export const useSchema = ({
         title: 'Select',
         width: 65,
         resizable: false,
-        hidden: !canSelect,
+        hidden: isTableDisabled || !canSelect,
         filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
         className: classes.checkbox,
       },
@@ -91,7 +92,7 @@ export const useSchema = ({
         field: 'serialNumber',
         resizable: true,
         filterCell: InputFilter,
-        template: (props) => <TextCell {...props} />,
+        template: (props) => <TextCell {...props} isTableDisabled={isTableDisabled} />,
         title: 'form.builder.serials.serial.number',
       },
       {
@@ -102,7 +103,12 @@ export const useSchema = ({
         width: 160,
         filterCell: StatusFilter,
         template: (props) => (
-          <StatusCell {...props} options={statusOptions} onChange={(id, status) => onUpdate?.(id, { status })} />
+          <StatusCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            options={statusOptions}
+            onChange={(id, status) => onUpdate?.(id, { status })}
+          />
         ),
       },
       {
@@ -113,7 +119,12 @@ export const useSchema = ({
         resizable: false,
         filterCell: UsageFilter,
         template: (props) => (
-          <UsageCell {...props} options={usageOptions} onChange={(id, usage) => onUpdate?.(id, { usage })} />
+          <UsageCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            options={usageOptions}
+            onChange={(id, usage) => onUpdate?.(id, { usage })}
+          />
         ),
       },
       {
@@ -122,7 +133,11 @@ export const useSchema = ({
         title: 'form.builder.serials.notes',
         filterCell: InputFilter,
         template: (props) => (
-          <NotesCell {...props} onChange={(id, notes) => onUpdate?.(id, { notes })} />
+          <NotesCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            onChange={(id, notes) => onUpdate?.(id, { notes })}
+          />
         ),
       },
       {
@@ -133,7 +148,7 @@ export const useSchema = ({
         filterable: false,
         sortable: false,
         resizable: false,
-        hidden: !onDelete,
+        hidden: isTableDisabled || !onDelete,
         template: (props) => (
           <ActionsCell {...props} onDelete={onDelete} />
         ),
@@ -144,6 +159,7 @@ export const useSchema = ({
     canSelect,
     classes.checkbox,
     isAllSelected,
+    isTableDisabled,
     onCheckAllToggle,
     onDelete,
     onUpdate,

@@ -167,7 +167,6 @@ export const AddDialog: React.FC<AddDialogProps> = ({
           options={[]}
           value={serials}
           shouldAlwaysShowPlaceholder
-          getOptionSelected={() => false}
           onChange={(_, value: string[]) => {
             setSerials(value);
             setInputValue('');

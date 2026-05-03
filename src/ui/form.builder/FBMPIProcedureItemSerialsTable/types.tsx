@@ -2,8 +2,7 @@ import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberU
 
 export interface FBMPIProcedureItemSerialsTableProps {
   name?: string
-  isPreview?: boolean
-  disabled?: boolean
+  isDisabled?: boolean
 }
 
 export interface LHRSInfo {

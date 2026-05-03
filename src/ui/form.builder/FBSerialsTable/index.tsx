@@ -3,10 +3,11 @@ import { getSelectedState, GridDataStateChangeEvent, GridSelectionChangeEvent } 
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableSerialNumber, SerialNumberStatus } from '../FBSerials/types';
 import SerialsToolbar from './components/SerialsToolbar';
 import { DATA_ITEM_KEY, DEFAULT_DATA_STATE, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD, SERIAL_NUMBER_FIELD } from './const';
@@ -18,6 +19,7 @@ import { FBSerialsTableProps, SerialNumberSortDescriptor } from './types';
 const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   serialNumbers,
   isLoading,
+  isDisabled: isTableDisabled = false,
   toolbarRef,
   onAdd,
   onUpdate,
@@ -29,9 +31,23 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
   const [dataState, setDataState] = useState<State>(DEFAULT_DATA_STATE);
   const sharedSerialNumberPart = useMemo(() => getSharedSerialNumberPart(serialNumbers), [serialNumbers]);
+
+  const canInteract = !isTableDisabled;
+  const canSelect = canInteract && Boolean(onBulkUpdate ?? onBulkDelete);
+
+  const selectableSerialNumbers = useMemo(
+    () => serialNumbers.filter(sn => !sn.isDisabled),
+    [serialNumbers],
+  );
+
   const selectedIds = useMemo(() => keys(selectedSerials).filter(sn => selectedSerials[sn]), [selectedSerials]);
-  const hasSelection = selectedIds.length > 0;
-  const isAllSelected = hasSelection && selectedIds.length === serialNumbers.length;
+  const hasSelection = canSelect && selectedIds.length > 0;
+  const isAllSelected = hasSelection
+    && selectableSerialNumbers.length > 0
+    && selectedIds.length === selectableSerialNumbers.length;
+
+  const shouldShowAddButton = canInteract && Boolean(onAdd);
+  const shouldShowBulkActions = canSelect && hasSelection && Boolean(onBulkUpdate ?? onBulkDelete);
 
   const acceptSelected = useCallback(async () => {
     const payload = selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED }));
@@ -51,17 +67,23 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
   const toggleAllSelection = useCallback((event: CheckboxChangeEvent) => {
     if (event.target.value) {
-      setSelectedSerials(serialNumbers.reduce((acc, sn) => ({ ...acc, [sn.id]: true }), {}));
+      setSelectedSerials(selectableSerialNumbers.reduce((acc, sn) => ({ ...acc, [sn.id]: true }), {}));
     } else {
       setSelectedSerials({});
     }
-  }, [serialNumbers]);
+  }, [selectableSerialNumbers]);
 
   const clearSelection = useCallback(() => setSelectedSerials({}), []);
 
+  useEffect(() => {
+    if (isTableDisabled && selectedIds.length > 0) {
+      clearSelection();
+    }
+  }, [clearSelection, isTableDisabled, selectedIds.length]);
+
   const toggleSelection = useCallback((event: GridSelectionChangeEvent) => {
     const dataItem = event.dataItem as EditableSerialNumber | null;
-    if (isNull(dataItem)) {
+    if (isNull(dataItem) || dataItem.isDisabled) {
       return;
     }
     const newSelectedState = getSelectedState({
@@ -97,8 +119,9 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   }, [sharedSerialNumberPart, setDataState]);
 
   const schema = useSchema({
-    canSelect: Boolean(onBulkUpdate ?? onBulkDelete),
+    canSelect,
     isAllSelected,
+    isTableDisabled,
     onCheckAllToggle: toggleAllSelection,
     onUpdate,
     onDelete,
@@ -106,8 +129,8 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
   const data = useMemo<EditableSerialNumber[]>(() => serialNumbers.map(sn => ({
     ...sn,
-    [SELECTED_FIELD]: selectedSerials[sn.id],
-  })), [selectedSerials, serialNumbers]);
+    [SELECTED_FIELD]: canSelect && !sn.isDisabled ? selectedSerials[sn.id] : false,
+  })), [canSelect, selectedSerials, serialNumbers]);
 
   const processedData = useMemo(() => {
     const processed = process(data, getStateWithoutSerialNumberSort(dataState)).data as EditableSerialNumber[];
@@ -127,7 +150,16 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
 
   const hasData = processedData.length > 0;
 
-  const shouldShowBulkActions = hasSelection && Boolean(onBulkUpdate ?? onBulkDelete);
+  const rowRender: DataGridProps<EditableSerialNumber>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableSerialNumber;
+    if (!item.isDisabled) {
+      return row;
+    }
+
+    return React.cloneElement(row, {
+      className: cx(row.props.className, classes.disabledRow),
+    });
+  };
 
   return (
     <>
@@ -158,19 +190,20 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
           {...dataState}
           className={cx(
             classes.grid,
-            { [classes.gridWithButton]: onAdd },
+            { [classes.gridWithButton]: shouldShowAddButton },
           )}
           selectable={{
-            enabled: true,
+            enabled: canSelect,
             drag: false,
             cell: false,
             mode: 'multiple',
           }}
           onDataStateChange={updateDataState}
           onSelectionChange={toggleSelection}
+          rowRender={rowRender}
         />
       </div>
-      {onAdd && (
+      {shouldShowAddButton && (
         <Button
           attached
           fullWidth

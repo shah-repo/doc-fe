@@ -16,9 +16,12 @@ import FBStore from '../FBStore/FBStore';
 import AddDialog from './components/AddDialog';
 import { DEFAULT_LOT_ID, LOT_PART_SELECT_KEY, LOT_QUANTITY_SELECT_KEY, LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS } from './consts';
 import useStyles from './styles';
-import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
+import { FBSerialsProps, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
-const FBSerials: React.FC = () => {
+const FBSerials: React.FC<FBSerialsProps> = ({
+  disabled = false,
+  name = '',
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { serialsState, workspaceState, formState } = FB.useStores();
@@ -50,7 +53,7 @@ const FBSerials: React.FC = () => {
     () => {
       if (shouldReload.current) {
         shouldReload.current = false;
-        formState?.unlockFields(LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS);
+        formState?.unlockFields([...LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS, name]);
         serialsState?.reload();
       }
     },
@@ -58,8 +61,8 @@ const FBSerials: React.FC = () => {
 
   const lockFields = useCallback(() => {
     shouldReload.current = true;
-    formState?.lockFields(LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS);
-  }, [formState]);
+    formState?.lockFields([...LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS, name]);
+  }, [formState, name]);
 
   useEffect(() => {
     if (serialsState?.shouldShowSerials && shouldReload.current) {
@@ -156,12 +159,13 @@ const FBSerials: React.FC = () => {
         <div ref={toolbarRef} className={classes.toolbar} />
       </FBSection>
       <FBSerialsTable
+        isDisabled={disabled}
         serialNumbers={serialNumbers}
         isLoading={isLoading}
         toolbarRef={toolbarRef}
         {...actionProps}
       />
-      {isPartSerializationManual && (
+      {isPartSerializationManual && !disabled && (
         <AddDialog
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}

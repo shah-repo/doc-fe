@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box } from '@material-ui/core';
 import React from 'react';
 import { FBText } from '..';
@@ -11,6 +10,7 @@ import { FBMPIProcedureItemSerialsTableProps } from './types';
 
 const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTableProps> = ({
   name = '',
+  isDisabled = false,
 }) => {
   const classes = useStyles();
   const {
@@ -31,8 +31,9 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
         <FBText loading={isLoading} locale={FBProcedureItemLocale.serials} />
       </Box>
       <FBSerialsTable
-        serialNumbers={stepSerialNumbers}
         isLoading={isLoading}
+        isDisabled={isDisabled}
+        serialNumbers={stepSerialNumbers}
         onUpdate={updateSerialNumber}
         onBulkUpdate={updateSerialNumbers}
       />

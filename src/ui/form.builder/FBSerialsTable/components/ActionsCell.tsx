@@ -5,10 +5,9 @@ import React from 'react';
 import { translate } from '../../../../common/intl';
 import { IconButton } from '../../../components/forms/fields-next';
 import useHover from '../../../hooks/useHover';
-import { EditableSerialNumber } from '../../FBSerials/types';
+import { TableCellProps } from '../types';
 
-interface Props {
-  dataItem: EditableSerialNumber
+interface Props extends TableCellProps {
   onDelete?: (id: string) => void
 }
 

@@ -6,16 +6,18 @@ import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../common/intl';
 import OverflowTooltip from '../../../components/OverflowTooltip';
-import { EditableSerialNumber } from '../../FBSerials/types';
 import { useTextCellStyles } from '../styles';
+import { TableCellProps } from '../types';
 
-interface Props {
-  field: string
-  dataItem: EditableSerialNumber
-}
-const TextCell: React.FC<Props> = ({ dataItem, field }) => {
+const TextCell: React.FC<TableCellProps> = ({
+  isTableDisabled,
+  dataItem,
+  field,
+}) => {
   const defaultValue = get(dataItem, field, '') as string;
   const classes = useTextCellStyles();
+
+  const shouldDisableRow = dataItem.isDisabled && !isTableDisabled;
 
   return (
     <OverflowTooltip
@@ -23,8 +25,8 @@ const TextCell: React.FC<Props> = ({ dataItem, field }) => {
       placement="top"
       arrow
     >
-      <span className={cx({ [classes.disabledValue]: dataItem.isDisabled })}>{defaultValue}</span>
-      {dataItem.isDisabled && (
+      <span className={cx({ [classes.disabledValue]: shouldDisableRow })}>{defaultValue}</span>
+      {shouldDisableRow && (
         <Tooltip title={translate('form.builder.serials.disabled.in.next.steps')}>
           <FontAwesomeIcon className={classes.disabledIcon} icon={solid('circle-exclamation')} />
         </Tooltip>

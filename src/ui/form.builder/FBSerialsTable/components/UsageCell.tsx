@@ -1,15 +1,25 @@
 import React from 'react';
 import { Autocomplete } from '../../../components/forms/fields-next';
-import { EditableSerialNumber, SerialNumberStatus, SerialNumberUsage, SerialsSelectOption } from '../../FBSerials/types';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../components/KendoDataGrid/constants';
+import { SerialNumberStatus, SerialNumberUsage, SerialsSelectOption } from '../../FBSerials/types';
+import { TableCellProps } from '../types';
 
-interface Props {
-  dataItem: EditableSerialNumber
+interface Props extends TableCellProps {
   options: Array<SerialsSelectOption<SerialNumberUsage>>
   onChange: (id: string, usage: SerialNumberUsage | null) => void
 }
 
-const StatusCell: React.FC<Props> = ({ dataItem, options, onChange }) => {
+const StatusCell: React.FC<Props> = ({
+  isTableDisabled,
+  dataItem,
+  options,
+  onChange,
+}) => {
   const activeOption = options.find(option => option.value === dataItem.usage || (!option.value && !dataItem.usage));
+
+  if (isTableDisabled) {
+    return <>{activeOption?.value ? activeOption.text : EMPTY_VALUE_PLACEHOLDER}</>;
+  }
 
   const isDisabled = dataItem.status !== SerialNumberStatus.REJECTED || dataItem.isDisabled;
 
