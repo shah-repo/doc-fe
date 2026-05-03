@@ -11,5 +11,8 @@ export default makeStyles<NextTheme>(theme => ({
     padding: theme.spacing(1),
     margin: theme.spacing(0, 1.25, 1.25),
     borderRadius: theme.shape.borderRadius,
+    position: 'sticky',
+    top: 0,
+    zIndex: 5,
   },
 }));
