@@ -15,6 +15,8 @@ import useStyles from './styles';
 
 interface AddDialogProps {
   isOpen: boolean
+  shouldValidateRemotely?: boolean
+  existingSerials: string[]
   onCheckExistingSerialNumbers: (serials: string[]) => Promise<string[]>
   onConfirm: (serials: string[]) => Promise<void>
   onClose: () => void
@@ -32,7 +34,9 @@ const getRepeatedSerialKeys = (serials: string[]): Set<string> => {
 
 export const AddDialog: React.FC<AddDialogProps> = ({
   isOpen,
+  shouldValidateRemotely,
   onCheckExistingSerialNumbers,
+  existingSerials,
   onConfirm,
   onClose,
 }) => {
@@ -45,11 +49,32 @@ export const AddDialog: React.FC<AddDialogProps> = ({
   const repeatedKeys = useMemo(() => getRepeatedSerialKeys(sanitizedSerials), [sanitizedSerials]);
   const hasRepeated = repeatedKeys.size > 0;
 
-  const { isChecking, hasExistingMatches, hasError, existingKeys } = useExistingSerialsCheck(
-    sanitizedSerials,
+  const {
+    isChecking,
+    hasExistingMatches: hasExistingMatchesFromCheck,
+    hasError,
+    existingKeys: existingKeysFromCheck,
+  } = useExistingSerialsCheck(
+    shouldValidateRemotely ? sanitizedSerials : [],
     isOpen && !hasRepeated,
     onCheckExistingSerialNumbers,
   );
+
+  const existingKeys = useMemo(() => {
+    if (shouldValidateRemotely) {
+      return existingKeysFromCheck;
+    }
+
+    return new Set(sanitizedSerials.filter(serial => existingSerials.includes(serial)));
+  }, [shouldValidateRemotely, existingKeysFromCheck, existingSerials, sanitizedSerials]);
+
+  const hasExistingMatches = useMemo(() => {
+    if (shouldValidateRemotely) {
+      return hasExistingMatchesFromCheck;
+    }
+
+    return existingKeys.size > 0;
+  }, [shouldValidateRemotely, hasExistingMatchesFromCheck, existingKeys]);
 
   const errorMessage = hasRepeated
     ? translate('form.builder.serials.add.dialog.duplicate.serials')
@@ -175,6 +200,7 @@ export const AddDialog: React.FC<AddDialogProps> = ({
           classes={{
             inputRoot: classes.autocompleteField,
           }}
+          getOptionSelected={() => false}
           renderTags={renderTags}
           renderInput={(params) => (
             <AutocompleteControl

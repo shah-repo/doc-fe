@@ -80,6 +80,10 @@ const FBSerials: React.FC<FBSerialsProps> = ({
 
   const serialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading);
+  const existingSerials = useMemo(
+    () => serialNumbers.map(serialNumber => serialNumber.serialNumber),
+    [serialNumbers],
+  );
 
   const updateWorkspace = useCallback(() => {
     const lotId = serialsState?.lotId;
@@ -167,6 +171,7 @@ const FBSerials: React.FC<FBSerialsProps> = ({
       />
       {isPartSerializationManual && !disabled && (
         <AddDialog
+          existingSerials={existingSerials}
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}
           onConfirm={addSerials}

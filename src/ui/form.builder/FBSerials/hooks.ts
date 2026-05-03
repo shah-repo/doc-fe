@@ -76,15 +76,12 @@ export const useExistingSerialsCheck = (
       debouncedCheck.cancel();
       requestIdRef.current += 1;
     };
-    // `key` already encodes the meaningful content of `serials`; depending on the
-    // array reference would re-run the effect on no-op renders.
+    // `key` already encodes the meaningful content of `serials`, using it as a stable dependency
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, key, debouncedCheck]);
 
   const isChecking = enabled && serials.length > 0 && validatedKey !== key;
 
-  // Filter "existing" matches against the current input so that removing the
-  // offending serial clears the error immediately, before a new check runs.
   const existingKeys = useMemo(() => {
     if (result?.kind !== 'existing') {
       return new Set<string>();
