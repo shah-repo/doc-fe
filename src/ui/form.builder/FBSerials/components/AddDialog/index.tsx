@@ -9,7 +9,7 @@ import { Dialog } from '../../../../components/dialogs';
 import { Autocomplete } from '../../../../components/forms/fields-next';
 import { AutocompleteControl } from '../../../../components/forms/fields-next/Autocomplete/Autocomplete';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { normalizeSerial, sanitizeSerials, splitSerials } from '../../helpers';
+import { getRepeatedSerialKeys, normalizeSerial, sanitizeSerials, splitSerials } from '../../helpers';
 import { useExistingSerialsCheck } from '../../hooks';
 import useStyles from './styles';
 
@@ -21,16 +21,6 @@ interface AddDialogProps {
   onConfirm: (serials: string[]) => Promise<void>
   onClose: () => void
 }
-
-const getRepeatedSerialKeys = (serials: string[]): Set<string> => {
-  const counts = serials.reduce<Record<string, number>>((acc, serial) => {
-    const key = normalizeSerial(serial);
-    acc[key] = (acc[key] ?? 0) + 1;
-    return acc;
-  }, {});
-
-  return new Set(Object.keys(counts).filter(key => counts[key] > 1));
-};
 
 export const AddDialog: React.FC<AddDialogProps> = ({
   isOpen,
