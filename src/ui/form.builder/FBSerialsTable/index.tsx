@@ -177,7 +177,6 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
         onRejectSelected={rejectSelected}
         onDeleteSelected={onBulkDelete ? deleteSelected : undefined}
       />
-
       <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })} style={{ height: processedData.length * ROW_HEIGHT + PANELS_HEIGHT }}>
         <KendoDataGrid<EditableSerialNumber>
           data={processedData}

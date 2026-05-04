@@ -216,7 +216,7 @@ const AddDialog: React.FC<AddDialogProps> = ({
         />
         {errorMessage && (
           <div className={classes.invalidSerialsMessage}>
-            {errorMessage}
+            <span dangerouslySetInnerHTML={{ __html: errorMessage }} />
           </div>
         )}
       </div>
