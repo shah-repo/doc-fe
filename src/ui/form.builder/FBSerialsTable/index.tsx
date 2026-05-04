@@ -1,5 +1,5 @@
 import { process, State } from '@progress/kendo-data-query';
-import { getSelectedState, GridDataStateChangeEvent, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
+import { getSelectedState, GridDataStateChangeEvent, GridPageChangeEvent, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
@@ -28,6 +28,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   onBulkDelete,
 }) => {
   const classes = useStyles();
+  const [skippedItemsCount, setSkippedItemsCount] = React.useState<number>(0);
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
   const [dataState, setDataState] = useState<State>(DEFAULT_DATA_STATE);
   const sharedSerialNumberPart = useMemo(() => getSharedSerialNumberPart(serialNumbers), [serialNumbers]);
@@ -161,6 +162,10 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
     });
   };
 
+  const onPageChange = useCallback((event: GridPageChangeEvent) => {
+    setSkippedItemsCount(event.page.skip);
+  }, []);
+
   return (
     <>
       <SerialsToolbar
@@ -185,6 +190,9 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
           hasBoxScrollbars
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
+          skip={skippedItemsCount}
+          onPageChange={onPageChange}
+          rowHeight={ROW_HEIGHT}
           skipDataProcessing
           loading={isLoading}
           {...dataState}
