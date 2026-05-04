@@ -8,7 +8,7 @@ type ExistingSerialsResult =
   | { kind: 'existing', serials: string[] }
   | { kind: 'error' };
 
-export interface ExistingSerialsCheck {
+interface ExistingSerialsCheck {
   isChecking: boolean
   hasExistingMatches: boolean
   hasError: boolean

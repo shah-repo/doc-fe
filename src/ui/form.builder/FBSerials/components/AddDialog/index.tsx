@@ -22,7 +22,7 @@ interface AddDialogProps {
   onClose: () => void
 }
 
-export const AddDialog: React.FC<AddDialogProps> = ({
+const AddDialog: React.FC<AddDialogProps> = ({
   isOpen,
   shouldValidateRemotely,
   onCheckExistingSerialNumbers,
