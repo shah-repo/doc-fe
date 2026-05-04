@@ -1,7 +1,8 @@
 import { Avatar, Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import React from 'react';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBText, Owner } from '..';
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, Owner } from '..';
 import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
@@ -142,12 +143,18 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...props} {...{ name, autosave }} type="approvals">
-        <FBText
-          locale={label as string}
-          boxProps={{
-            className: classes.label,
-          }}
-        />
+        <Box className={classes.infoBanner}>
+          <InfoOutlinedIcon className={classes.infoBannerIcon} />
+          <Box component="span" className={classes.infoBannerText}>
+            {(() => {
+              const text = translate(label as string);
+              const lastSpace = text.lastIndexOf(' ');
+              return lastSpace === -1 ? text : (
+                <>{text.slice(0, lastSpace + 1)}<strong>{text.slice(lastSpace + 1)}</strong></>
+              );
+            })()}
+          </Box>
+        </Box>
         <FBAutocompleteAsync
           placeholder="form.builder.start.typing.list"
           label="form.builder.approvers"

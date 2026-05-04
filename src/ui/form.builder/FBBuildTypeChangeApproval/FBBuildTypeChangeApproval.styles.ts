@@ -3,14 +3,25 @@ import Colors from '../../layout/theme-next/colors';
 
 export default makeStyles((theme) =>
   createStyles({
-    label: {
-      float: 'left',
+    infoBanner: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: theme.spacing(1.5),
+      padding: theme.spacing(1.5, 2),
+      backgroundColor: Colors.primaryBg,
+      border: `1px solid ${theme.palette.primary.main}`,
+      borderRadius: '8px',
+      marginBottom: theme.spacing(1.5),
+    },
+    infoBannerIcon: {
+      color: theme.palette.primary.main,
+      flexShrink: 0,
+      fontSize: 22,
+    },
+    infoBannerText: {
+      fontSize: 14,
       color: theme.palette.text.primary,
-      fontSize: 16,
       lineHeight: 1.5,
-      fontWeight: 600,
-      marginBottom: 12,
-      display: 'block',
     },
     approvalCard: {
       border: `1px solid ${Colors.stroke}`,
