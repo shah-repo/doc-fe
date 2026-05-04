@@ -145,15 +145,7 @@ const FBBuildTypeChangeApproval: React.FunctionComponent<FBBuildTypeChangeApprov
       <FBInput {...props} {...{ name, autosave }} type="approvals">
         <Box className={classes.infoBanner}>
           <InfoOutlinedIcon className={classes.infoBannerIcon} />
-          <span className={classes.infoBannerText}>
-            {(() => {
-              const text = translate(label as string);
-              const lastSpace = text.lastIndexOf(' ');
-              return lastSpace === -1 ? text : (
-                <>{text.slice(0, lastSpace + 1)}<strong>{text.slice(lastSpace + 1)}</strong></>
-              );
-            })()}
-          </span>
+          <span className={classes.infoBannerText} dangerouslySetInnerHTML={{ __html: translate('form.builder.build.type.switch.approval.header.msg') }} />
         </Box>
         <FBAutocompleteAsync
           placeholder="form.builder.start.typing.list"
