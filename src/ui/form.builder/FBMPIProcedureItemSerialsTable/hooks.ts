@@ -137,7 +137,7 @@ export const useLHRSSerialNumbers = (name: string): LHRSSerialNumbers => {
         status: existingSerial?.status ?? null,
         usage: existingSerial?.usage ?? null,
         notes: existingSerial?.notes ?? null,
-        isDisabled: isRejected && isUpdatedInNextSteps,
+        isDisabled: isRejected && !canUseForRnD && isUpdatedInNextSteps,
       }];
     }, []);
   }, [allSerialNumbers, affectedSerialNumbers, isRnD, sequence, step]);
