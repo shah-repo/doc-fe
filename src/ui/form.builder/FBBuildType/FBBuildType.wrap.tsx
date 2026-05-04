@@ -125,12 +125,12 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
       const isValid = !isNull(event) && (isEmpty(inputValue) || selectedLhrBuild);
-      const currentBuildType = lhrBuildTypeSwitchConfigApproval?.filter(
+      const currentBuildType = lhrBuildTypeSwitchConfigApproval?.find(
         (config) => config.from === defaultValue?.id && config.to === selectedLhrBuild?.id,
       );
 
-      if (currentBuildType && currentBuildType.length > 0 && enableNewBuildTypeFlow) {
-        enableNewBuildTypeFlow = currentBuildType[0].approvalGroups.length > 0;
+      if (currentBuildType && enableNewBuildTypeFlow) {
+        enableNewBuildTypeFlow = currentBuildType.approvalGroups.length > 0;
       }
 
       if (!enableNewBuildTypeFlow) {

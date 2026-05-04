@@ -10,7 +10,7 @@ export default makeStyles((theme) =>
       padding: theme.spacing(1.5, 2),
       backgroundColor: Colors.primaryBg,
       border: `1px solid ${theme.palette.primary.main}`,
-      borderRadius: '8px',
+      borderRadius: theme.shape.borderRadius,
       marginBottom: theme.spacing(1.5),
     },
     infoBannerIcon: {
