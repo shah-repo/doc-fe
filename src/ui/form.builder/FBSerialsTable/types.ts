@@ -1,12 +1,18 @@
 import { SortDescriptor } from '@progress/kendo-data-query';
-import { EditableSerialNumber, SerialNumber, SerialNumberUpdateData, SerialNumberUpdatePayload } from '../FBSerials/types';
+import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { EditableSerialNumber, SerialNumberUpdateData, SerialNumberUpdatePayload } from '../FBSerials/types';
 
 export type SerialNumberSortDescriptor = SortDescriptor & {
   compare?: (first: EditableSerialNumber, second: EditableSerialNumber) => number
 };
 
+export interface TableCellProps extends Omit<CellTemplateProps<EditableSerialNumber>, 'onChange'> {
+  isTableDisabled?: boolean
+}
+
 export interface FBSerialsTableProps {
-  serialNumbers: SerialNumber[]
+  serialNumbers: EditableSerialNumber[]
+  isDisabled?: boolean
   isPartSerializationManual?: boolean
   isLoading?: boolean
   toolbarRef?: React.RefObject<HTMLDivElement>

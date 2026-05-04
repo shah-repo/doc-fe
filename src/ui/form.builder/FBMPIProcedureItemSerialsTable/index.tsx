@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box } from '@material-ui/core';
-import React from 'react';
+import cx from 'classnames';
+import React, { useRef } from 'react';
 import { FBText } from '..';
 import { withThemeNext } from '../../layout/theme-next';
 import useStyles from '../FBMPIProcedureItem/FBMPIProcedureItem.styles';
@@ -11,8 +10,10 @@ import { FBMPIProcedureItemSerialsTableProps } from './types';
 
 const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTableProps> = ({
   name = '',
+  isDisabled = false,
 }) => {
   const classes = useStyles();
+  const toolbarRef = useRef<HTMLDivElement>(null);
   const {
     shouldShowSerials,
     stepSerialNumbers,
@@ -26,18 +27,20 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
   }
 
   return (
-    <>
-      <Box className={classes.typeLabel}>
+    <div>
+      <div className={cx(classes.typeLabel, classes.typeLabelContainer)}>
         <FBText loading={isLoading} locale={FBProcedureItemLocale.serials} />
-      </Box>
+        <div ref={toolbarRef} />
+      </div>
       <FBSerialsTable
-        serialNumbers={stepSerialNumbers}
         isLoading={isLoading}
+        isDisabled={isDisabled}
+        serialNumbers={stepSerialNumbers}
         onUpdate={updateSerialNumber}
         onBulkUpdate={updateSerialNumbers}
+        toolbarRef={toolbarRef}
       />
-    </>
-
+    </div>
   );
 };
 

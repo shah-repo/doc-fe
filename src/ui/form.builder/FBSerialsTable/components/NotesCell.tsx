@@ -1,16 +1,19 @@
 import cx from 'classnames';
-import React from 'react';
-import OverflowTooltip from '../../../components/OverflowTooltip';
+import React, { useCallback } from 'react';
 import { TextField } from '../../../components/forms/fields-next';
-import { EditableSerialNumber } from '../../FBSerials/types';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { useNotesCellStyles } from '../styles';
+import { TableCellProps } from '../types';
 
-interface Props {
-  dataItem: EditableSerialNumber
+interface Props extends TableCellProps {
   onChange: (id: string, notes: string | null) => void
 }
 
-const NotesCell: React.FC<Props> = ({ dataItem, onChange }) => {
+const NotesCell: React.FC<Props> = ({
+  isTableDisabled,
+  dataItem,
+  onChange,
+}) => {
   const classes = useNotesCellStyles();
   const defaultNotes = dataItem.notes ?? '';
   const [value, setValue] = React.useState(defaultNotes);
@@ -21,14 +24,14 @@ const NotesCell: React.FC<Props> = ({ dataItem, onChange }) => {
     setValue(defaultNotes);
   }, [defaultNotes]);
 
-  const saveValue = (nextValue: string) => {
+  const saveValue = useCallback((nextValue: string) => {
     if (nextValue !== defaultNotes) {
       onChange(dataItem.id, nextValue);
     }
     setIsEditing(false);
-  };
+  }, [defaultNotes, onChange, dataItem.id]);
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (isCancellingRef.current) {
       isCancellingRef.current = false;
       setValue(defaultNotes);
@@ -37,15 +40,19 @@ const NotesCell: React.FC<Props> = ({ dataItem, onChange }) => {
     }
 
     saveValue(event.currentTarget.value);
-  };
+  }, [defaultNotes, saveValue]);
 
-  const handleDisplayClick = () => {
+  const handleDisplayClick = useCallback(() => {
     if (dataItem.isDisabled) {
       return;
     }
 
     setIsEditing(true);
-  };
+  }, [dataItem.isDisabled]);
+
+  if (isTableDisabled) {
+    return <>{defaultNotes}</>;
+  }
 
   if (isEditing) {
     return (

@@ -1,5 +1,5 @@
 import { useObserver } from 'mobx-react';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBSection } from '..';
 import { SM } from '../../../App';
@@ -16,9 +16,12 @@ import FBStore from '../FBStore/FBStore';
 import AddDialog from './components/AddDialog';
 import { DEFAULT_LOT_ID, LOT_PART_SELECT_KEY, LOT_QUANTITY_SELECT_KEY, LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS } from './consts';
 import useStyles from './styles';
-import { SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
+import { FBSerialsProps, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 
-const FBSerials: React.FC = () => {
+const FBSerials: React.FC<FBSerialsProps> = ({
+  disabled = false,
+  name = '',
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { serialsState, workspaceState, formState } = FB.useStores();
@@ -50,7 +53,7 @@ const FBSerials: React.FC = () => {
     () => {
       if (shouldReload.current) {
         shouldReload.current = false;
-        formState?.unlockFields(LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS);
+        formState?.unlockFields([...LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS, name]);
         serialsState?.reload();
       }
     },
@@ -58,8 +61,8 @@ const FBSerials: React.FC = () => {
 
   const lockFields = useCallback(() => {
     shouldReload.current = true;
-    formState?.lockFields(LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS);
-  }, [formState]);
+    formState?.lockFields([...LOT_SERIAL_NUMBERS_LOCKABLE_FIELDS, name]);
+  }, [formState, name]);
 
   useEffect(() => {
     if (serialsState?.shouldShowSerials && shouldReload.current) {
@@ -77,8 +80,12 @@ const FBSerials: React.FC = () => {
 
   const serialNumbers = useObserver(() => serialsState?.serialNumbers ?? []);
   const isLoading = useObserver(() => serialsState?.isLoading);
+  const existingSerials = useMemo(
+    () => serialNumbers.map(serialNumber => serialNumber.serialNumber),
+    [serialNumbers],
+  );
 
-  const updateWorkspace = () => {
+  const updateWorkspace = useCallback(() => {
     const lotId = serialsState?.lotId;
     if (lotId) {
       _documentRevisionFormState?.setLoading(true);
@@ -87,53 +94,68 @@ const FBSerials: React.FC = () => {
         dispatch(documentRevisionsActions.loadAudit(lotId));
       }
     }
-  };
+  }, [dispatch, _documentRevisionFormState, serialsState]);
 
-  const updateSerialNumber = async (id: string, data: SerialNumberUpdateData) => {
+  const updateSerialNumber = useCallback(async (id: string, data: SerialNumberUpdateData) => {
     await serialsState?.updateSerialNumber(id, data);
     updateWorkspace();
-  };
+  }, [updateWorkspace, serialsState]);
 
-  const deleteSerialNumber = async (id: string) => {
+  const deleteSerialNumber = useCallback(async (id: string) => {
     await serialsState?.deleteSerialNumber(id);
     updateWorkspace();
-  };
+  }, [updateWorkspace, serialsState]);
 
-  const bulkUpdateSerialNumbers = async (payload: SerialNumberUpdatePayload[]) => {
+  const bulkUpdateSerialNumbers = useCallback(async (payload: SerialNumberUpdatePayload[]) => {
     await serialsState?.updateSerialNumbers(payload);
     updateWorkspace();
-  };
+  }, [updateWorkspace, serialsState]);
 
-  const bulkDeleteSerialNumbers = async (ids: string[]) => {
+  const bulkDeleteSerialNumbers = useCallback(async (ids: string[]) => {
     await serialsState?.deleteSerialNumbers(ids);
     updateWorkspace();
-  };
+  }, [updateWorkspace, serialsState]);
 
-  const addSerials = async (serials: string[]) => {
+  const addSerials = useCallback(async (serials: string[]) => {
     try {
       await serialsState?.createSerialNumbers(serials);
       updateWorkspace();
     } catch (error) {
       toastError(translate('form.builder.serials.failed.to.add'));
     }
-  };
+  }, [updateWorkspace, serialsState]);
 
-  if (!shouldShowSerials) {
-    return null;
-  }
-
-  const defaultActionProps = {
+  const defaultActionProps = useMemo(() => ({
     onUpdate: updateSerialNumber,
     onBulkUpdate: bulkUpdateSerialNumbers,
-  };
+  }), [bulkUpdateSerialNumbers, updateSerialNumber]);
 
-  const actionProps = isPartSerializationManual ? {
+  const actionProps = useMemo(() => (isPartSerializationManual ? {
     ...defaultActionProps,
     onDelete: deleteSerialNumber,
     onBulkDelete: bulkDeleteSerialNumbers,
     onImport: importDialog.open,
     onAdd: addDialog.open,
-  } : defaultActionProps;
+  } : defaultActionProps), [
+    addDialog.open,
+    bulkDeleteSerialNumbers,
+    defaultActionProps,
+    deleteSerialNumber,
+    importDialog.open,
+    isPartSerializationManual,
+  ]);
+
+  const checkExistingSerialNumbers = useCallback(async (serials: string[]) => {
+    if (!serialsState) {
+      return [];
+    }
+
+    return await serialsState.checkExistingLotSerialNumbers(serials);
+  }, [serialsState]);
+
+  if (!shouldShowSerials) {
+    return null;
+  }
 
   return (
     <div className={classes.root}>
@@ -141,17 +163,19 @@ const FBSerials: React.FC = () => {
         <div ref={toolbarRef} className={classes.toolbar} />
       </FBSection>
       <FBSerialsTable
+        isDisabled={disabled}
         serialNumbers={serialNumbers}
         isLoading={isLoading}
         toolbarRef={toolbarRef}
         {...actionProps}
       />
-      {isPartSerializationManual && (
+      {isPartSerializationManual && !disabled && (
         <AddDialog
-          existingSerials={serialNumbers.map(sn => sn.serialNumber)}
+          existingSerials={existingSerials}
           isOpen={addDialog.isOpen}
           onClose={addDialog.close}
           onConfirm={addSerials}
+          onCheckExistingSerialNumbers={checkExistingSerialNumbers}
         />
       )}
     </div>

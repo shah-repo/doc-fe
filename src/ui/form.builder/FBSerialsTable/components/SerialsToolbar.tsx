@@ -31,47 +31,47 @@ const SerialsToolbar: React.FC<SerialsToolbarProps> = ({
   const classes = useStyles();
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
 
+  if (!shouldShowBulkActions) {
+    return null;
+  }
+
   const toolbar = (
     <div className={classes.toolbar}>
-      {shouldShowBulkActions && (
+      <div className={classes.selectionContainer}>
+        <Tooltip title={translate('form.builder.serials.clear.selection')}>
+          <IconButton onClick={onClearSelection} size="small" kind="action">
+            <FontAwesomeIcon icon={solid('xmark')} />
+          </IconButton>
+        </Tooltip>
+        <span>
+          <span className={classes.selectedCount}>{selectedCount}</span>
+          &nbsp;
+          {translate('form.builder.serials.items.selected')}
+        </span>
+      </div>
+      {onAcceptSelected && onRejectSelected && (
         <>
-          <div className={classes.selectionContainer}>
-            <Tooltip title={translate('form.builder.serials.clear.selection')}>
-              <IconButton onClick={onClearSelection} size="small" kind="action">
-                <FontAwesomeIcon icon={solid('xmark')} />
-              </IconButton>
-            </Tooltip>
-            <span>
-              <span className={classes.selectedCount}>{selectedCount}</span>
-              &nbsp;
-              {translate('form.builder.serials.items.selected')}
-            </span>
-          </div>
-          {onAcceptSelected && onRejectSelected && (
-            <>
-              <StatusButton
-                type={StatusButtonType.ACCEPT}
-                onClick={onAcceptSelected}
-              />
-              <StatusButton
-                type={StatusButtonType.REJECT}
-                onClick={onRejectSelected}
-              />
-            </>
-          )}
-          {onDeleteSelected && (
-            <Tooltip title={translate('form.builder.serials.delete.selected')}>
-              <IconButton
-                kind="destructive"
-                ref={deleteRef}
-                onClick={onDeleteSelected}
-                data-cy="action-delete"
-              >
-                <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
-              </IconButton>
-            </Tooltip>
-          )}
+          <StatusButton
+            type={StatusButtonType.ACCEPT}
+            onClick={onAcceptSelected}
+          />
+          <StatusButton
+            type={StatusButtonType.REJECT}
+            onClick={onRejectSelected}
+          />
         </>
+      )}
+      {onDeleteSelected && (
+        <Tooltip title={translate('form.builder.serials.delete.selected')}>
+          <IconButton
+            kind="destructive"
+            ref={deleteRef}
+            onClick={onDeleteSelected}
+            data-cy="action-delete"
+          >
+            <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
+          </IconButton>
+        </Tooltip>
       )}
     </div>
   );
@@ -79,4 +79,4 @@ const SerialsToolbar: React.FC<SerialsToolbarProps> = ({
   return toolbarRef?.current ? ReactDOM.createPortal(toolbar, toolbarRef.current) : toolbar;
 };
 
-export default SerialsToolbar;
+export default React.memo(SerialsToolbar);

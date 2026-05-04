@@ -1,4 +1,5 @@
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBInputProps } from '../FBInput/FBInput.types';
 
 export enum SerialNumberStatus {
   ACCEPTED = 'ACCEPTED',
@@ -44,6 +45,10 @@ interface SerialNumberAddBody {
   serialNumbers: string[]
 }
 
+export interface SerialNumberExistingCheckBody {
+  serialNumbers: string[]
+}
+
 export interface SerialNumberUpdateData {
   status?: SerialNumberStatus | null
   usage?: SerialNumberUsage | null
@@ -64,3 +69,7 @@ export interface LotAndPart {
 }
 
 export type FBSerialsStateBody = SerialNumberAddBody | SerialNumberUpdateBody | SerialNumberDeleteBody;
+
+export interface FBSerialsProps extends Pick<FBInputProps, 'disabled' | 'name'> {
+
+}

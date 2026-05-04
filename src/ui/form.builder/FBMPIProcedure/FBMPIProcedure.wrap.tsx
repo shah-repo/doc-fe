@@ -22,6 +22,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     index = 0,
     ...props
   }: T) => {
+    const isFieldDisabled = disabled;
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const schemaItem = workspaceState?.getSchemaItemAt(index);
@@ -132,6 +133,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       name,
       disabled,
       types,
+      isFieldDisabled,
     });
   };
 
