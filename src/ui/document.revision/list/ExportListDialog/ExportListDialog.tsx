@@ -32,6 +32,7 @@ interface Props {
   categoryName?: string
   isMultiplePagesDownloadAllowed?: boolean
   isTrainingRecord?: boolean
+  isARRecord?: boolean
 }
 
 const DEFAULT_RECORD_DOWNLOAD_LIMIT = 25;
@@ -45,6 +46,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   categoryName,
   isMultiplePagesDownloadAllowed = false,
   isTrainingRecord = false,
+  isARRecord = false,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
@@ -52,9 +54,15 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   const docTypeTableContext = useContext(DocTypeTableContext);
   const { tableSearchQueryPayload } = useContext(SearchContext);
 
-  const action = isTrainingRecord
-    ? documentRevisionsActions.downloadTrainingRecordCsvData
-    : documentRevisionsActions.downloadCsvData;
+  let action;
+  if (isTrainingRecord) {
+    action = documentRevisionsActions.downloadTrainingRecordCsvData;
+  } else if (isARRecord) {
+    action = documentRevisionsActions.downloadArCsvData;
+  } else {
+    action = documentRevisionsActions.downloadCsvData;
+  }
+
   const loadAction = useActionCreator(action);
 
   const options = {
