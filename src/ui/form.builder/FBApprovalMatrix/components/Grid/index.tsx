@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { cloneDeep, get, isEmpty, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { v4 as generateUuid } from 'uuid';
 import { DEFAULT_DATA_STATE, Mode, MODE_FIELD } from '.';
 import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
@@ -11,10 +12,14 @@ import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
 
-function normalizeData <T> (data: T[]): T[] {
+function normalizeData <T> (data: T[]): Array<GridItem<T>> {
   return cloneDeep(data).map(dataItem => {
-    dataItem[MODE_FIELD] = Mode.show;
-    return dataItem;
+    const gridItem = dataItem as GridItem<T>;
+    if (!gridItem.id) {
+      gridItem.id = generateUuid();
+    }
+    gridItem[MODE_FIELD] = Mode.show;
+    return gridItem;
   });
 }
 
@@ -30,12 +35,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     ...restProps
   } = props;
   const classes = useStyles();
-  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as Array<GridItem<T>>);
+  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
 
   useEffect(
     () => {
-      setData(normalizeData(originData) as Array<GridItem<T>>);
+      setData(normalizeData(originData));
     },
     [originData],
   );

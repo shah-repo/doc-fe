@@ -482,6 +482,28 @@ class FBFormState extends FBSchemaState {
     //   });
     // });
   };
+
+  public lockFields = (fields: string[]): void => {
+    if (!this.includeLocking) { return; }
+    if (!fields.length) { return; }
+    fields.forEach((field) => {
+      this.locked.set(field, {
+        ...this.locked.get(field),
+        locked: true,
+      });
+    });
+  };
+
+  public unlockFields = (fields: string[]): void => {
+    if (!this.includeLocking) { return; }
+    if (!fields.length) { return; }
+    fields.forEach((field) => {
+      this.locked.set(field, {
+        ...this.locked.get(field),
+        locked: false,
+      });
+    });
+  };
 }
 
 export default FBFormState;

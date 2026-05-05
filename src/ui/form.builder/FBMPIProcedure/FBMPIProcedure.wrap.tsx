@@ -1,5 +1,6 @@
 import { isEqual, keys, omit } from 'lodash';
 import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBMediaProps, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from '..';
@@ -21,20 +22,21 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     index = 0,
     ...props
   }: T) => {
+    const isFieldDisabled = disabled;
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const schemeItem = workspaceState?.getSchemaItemAt(index);
-    mpiProcedureState = FB.useRef(FBMPIProcedureState, schemeItem?.editorConfig);
+    const schemaItem = workspaceState?.getSchemaItemAt(index);
+    mpiProcedureState = FB.useRef(FBMPIProcedureState, schemaItem?.editorConfig);
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = (isOutput || workspaceState?.mode === 'preview' || workspaceState?.mode === 'formPreview')
     && !redlineActive;
-    types = keys(FBProcedureItemType).filter((type) => {
+    types = useObserver(() => keys(FBProcedureItemType).filter((type) => {
       const attachments = mpiProcedureState?.value?.attachments;
       switch (type) {
         case FBProcedureItemType.serials:
-          return !mpiProcedureState?.value?.shouldSkipSerialization;
+          return !schemaItem?.editorConfig?.shouldSkipSerialization;
         case FBProcedureItemType.attachments:
           return !isPreview || (attachments?.length ?? 0) > 0;
         default: {
@@ -42,7 +44,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           return !isPreview || itemValues.length > 0;
         }
       }
-    });
+    }));
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
     const descFormValue = formState?.getFieldValue(`${name}.description`);
@@ -131,6 +133,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       name,
       disabled,
       types,
+      isFieldDisabled,
     });
   };
 

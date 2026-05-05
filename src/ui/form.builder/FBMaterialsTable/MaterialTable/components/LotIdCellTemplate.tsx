@@ -164,6 +164,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
     [lots],
   );
 
+  const [open, setOpen] = React.useState<boolean>(false);
   const [items, setItems] = React.useState<OptionType[] | undefined>([]);
   const [inputValue, setInputValue] = React.useState<string>();
   const isUpdateAction = dataItem[MODE_FIELD];
@@ -252,11 +253,14 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         disabled={!!dataItem[field] && !isEBProcedure}
         options={items}
         blurOnSelect
-        freeSolo={isFreeSolo}
+        {...(!open && { freeSolo: isFreeSolo })}
         onInputChange={debounceFunction}
         disableOpenOnFocus
         placeholder={translate('common.select')}
         size="small"
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
         getOptionLabel={(opt) => opt.label}
         renderOption={(option: LotAutoCompleteOptions, props) => (
           <ListItem {...props} className="lot-list-item" disableGutters>

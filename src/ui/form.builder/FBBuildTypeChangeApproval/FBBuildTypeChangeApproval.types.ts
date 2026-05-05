@@ -16,7 +16,7 @@ export type FBBuildTypeChangeApprovalProps =
   requestApproval?: (id?: string) => any
   approvals?: FBInlineApprovalBody[]
   approvalsState?: FBBuildTypeChangeApprovalState
-  approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
+  approvalTransition?: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
   docId?: string
   documentStatus: DocumentStatus
   formState?: FBFormState
@@ -35,6 +35,7 @@ export type FBBuildTypeChangeApprovalProps =
   prevValue?: LHRBuild
   submitRef?: React.MutableRefObject<(() => void) | null>
   validateRef?: React.MutableRefObject<(() => ApprovalValidationError | null) | null>
+  skipExistingApprovals?: boolean
 };
 
 interface Owner {

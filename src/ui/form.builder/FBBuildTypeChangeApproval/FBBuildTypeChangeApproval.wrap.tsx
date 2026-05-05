@@ -51,6 +51,7 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     prevValue,
     submitRef,
     validateRef,
+    skipExistingApprovals,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -99,11 +100,12 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
     }
     const approvalsState = FB.useRef(
       FBBuildTypeChangeApprovalState,
-      { approvals: docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
+      { approvals: skipExistingApprovals ? [] : docApprovals, isOwner, fromBuildType: prevValue?.id || '', toBuildType: selectedValue?.id || '' },
     );
     dialogState = FB.useRef(FBDialogState);
 
     const stagedApproverIds = React.useRef<string[]>([]);
+    const stagedRemovedIds = React.useRef<string[]>([]);
 
     approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
@@ -201,16 +203,23 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
         const addedIds = difference(fieldValue, formValue);
         const removedIds = difference(formValue, fieldValue);
+        // Only add approvers that aren't already committed in approvals list
+        const newAddedIds = addedIds.filter(addedId =>
+          !approvalsState?.getApprovals.some(a => a.approver?.id === addedId),
+        );
         // Stage newly selected approvers; do not make API calls yet
         stagedApproverIds.current = [
           ...without(stagedApproverIds.current, ...removedIds),
-          ...addedIds,
+          ...newAddedIds,
         ];
-        // Only abandon approvers that were already committed via API
+        // Stage removals of committed approvals — don't call API until Update is clicked
         const committedRemovedIds = removedIds.filter(removedId =>
           approvalsState?.getApprovals.some(a => a.approver?.id === removedId),
         );
-        removeApprover(committedRemovedIds);
+        stagedRemovedIds.current = [
+          ...stagedRemovedIds.current.filter(id => !addedIds.includes(id)),
+          ...committedRemovedIds.filter(id => !stagedRemovedIds.current.includes(id)),
+        ];
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -220,7 +229,9 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       if (submitRef) {
         submitRef.current = () => {
           addApprover(stagedApproverIds.current);
+          removeApprover(stagedRemovedIds.current);
           stagedApproverIds.current = [];
+          stagedRemovedIds.current = [];
         };
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -359,29 +370,18 @@ export const withFBBuildTypeChangeApproval = <T extends FBBuildTypeChangeApprova
       if (validateRef) {
         validateRef.current = () => {
           const currentSelectedIds: string[] = formState?.newValues.get(`fb-approvals-${name}`) || [];
-          const hasApprovers = currentSelectedIds.length > 0 || stagedApproverIds.current.length > 0;
 
-          if (!hasApprovers) {
+          if (currentSelectedIds.length === 0) {
             return { type: 'no_approvers' };
           }
 
           const currentGroups = approvalsState?.groups;
           if (currentGroups && Object.keys(currentGroups).length > 0) {
-            const allGroups = Object.values(currentGroups);
-            const satisfiedGroups = allGroups.filter(group =>
-              (group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
+            const unsatisfiedGroups = Object.values(currentGroups).filter(group =>
+              !(group.joinedEmployees as string[]).some(employee => currentSelectedIds.includes(employee)),
             );
-
-            if (satisfiedGroups.length === 0) {
-              return { type: 'group_required', groupNames: allGroups.map(g => g.name) };
-            }
-
-            // If multiple groups needed but only one satisfied
-            if (allGroups.length > 1 && satisfiedGroups.length < allGroups.length) {
-              const unsatisfiedGroups = allGroups
-                .filter(group => !satisfiedGroups.includes(group))
-                .map(g => g.name);
-              return { type: 'group_required', groupNames: unsatisfiedGroups };
+            if (unsatisfiedGroups.length > 0) {
+              return { type: 'group_required', groupNames: unsatisfiedGroups.map(g => g.name) };
             }
           }
 

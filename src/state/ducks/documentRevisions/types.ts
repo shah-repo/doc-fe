@@ -413,7 +413,7 @@ export interface DocumentRevisionDocumentRequest {
   docId?: string
   id?: string
   documentType?: Partial<DocumentType>
-  securityList: SecurityListRequest
+  securityList: Partial<SecurityListRequest>
 }
 
 export interface ExportToEmailRequest {
@@ -421,13 +421,13 @@ export interface ExportToEmailRequest {
 }
 
 export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
-  name: string
+  name?: string
   docId?: string
-  description: string
+  description?: string
   lifecyclePhaseId?: string
-  attachments: Attachment[]
+  attachments?: Attachment[]
   type?: string
-  referenceTo: ReferenceToEditRequest[]
+  referenceTo?: ReferenceToEditRequest[]
   document?: Partial<DocumentRevisionDocumentRequest>
   revisionChangeType?: RevisionChangeType
   revisionStage?: number
@@ -438,6 +438,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   equipmentSection?: string
   redline?: boolean
   tabId?: string
+  schema?: FBSchemaProps[]
 }
 
 export interface DocumentRevisionSetAction {

@@ -22,7 +22,7 @@ import FBMPIProcedureItemSerialsTable from '../FBMPIProcedureItemSerialsTable';
 import useStyles from './FBMPIProcedureItem.styles';
 import { withFBMPIProcedureItem } from './FBMPIProcedureItem.wrap';
 
-const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
+const FBMPIProcedureItem: React.FC<FBMPIProcedureItemProps> = ({
   onClick,
   handleRemove,
   handleSelect,
@@ -45,6 +45,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   defaultValue,
   redlineActive,
   isReleased,
+  isFieldDisabled,
   isDesign,
   isDocumentMPI,
 }) => {
@@ -95,7 +96,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           </Box>
         )}
       </Box>}
-      {!isAttachmentType && (
+      {!FBProcedureItemOmitAction.includes(type) && (
         <Box className={classes.typeLabel}>
           <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
         </Box>
@@ -151,9 +152,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           {type === FBProcedureItemType.serials && (
             <FBMPIProcedureItemSerialsTable
               name={name}
-              stepIndex={stepIndex}
-              isPreview={isPreview}
-              disabled={disabled}
+              isDisabled={isFieldDisabled}
             />
           )}
         </>

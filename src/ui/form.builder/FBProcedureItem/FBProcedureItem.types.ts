@@ -19,6 +19,7 @@ export enum FBProcedureItemLocale {
 
 export const FBProcedureItemOmitAction: Partial<FBProcedureItemType[]> = [
   FBProcedureItemType.attachments,
+  FBProcedureItemType.serials,
 ];
 
 export type FBProcedureItemProps =
