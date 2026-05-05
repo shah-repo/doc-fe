@@ -10,7 +10,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableSerialNumber, SerialNumberStatus } from '../FBSerials/types';
 import SerialsToolbar from './components/SerialsToolbar';
-import { DATA_ITEM_KEY, DEFAULT_DATA_STATE, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD, SERIAL_NUMBER_FIELD } from './const';
+import { DATA_ITEM_KEY, DEFAULT_DATA_STATE, PAGE_SIZE, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD, SERIAL_NUMBER_FIELD } from './const';
 import { compareSerialNumbers, getSerialNumberSort, getSharedSerialNumberPart, getStateWithoutSerialNumberSort } from './helpers';
 import { useSchema } from './schema';
 import useStyles from './styles';
@@ -128,13 +128,12 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
     onDelete,
   });
 
-  const data = useMemo<EditableSerialNumber[]>(() => serialNumbers.map(sn => ({
-    ...sn,
-    [SELECTED_FIELD]: canSelect && !sn.isDisabled ? selectedSerials[sn.id] : false,
-  })), [canSelect, selectedSerials, serialNumbers]);
-
   const processedData = useMemo(() => {
-    const processed = process(data, getStateWithoutSerialNumberSort(dataState)).data as EditableSerialNumber[];
+    const serialNumbersWithSelected = serialNumbers.map(sn => ({
+      ...sn,
+      [SELECTED_FIELD]: canSelect && !sn.isDisabled ? selectedSerials[sn.id] : false,
+    }));
+    const processed = process(serialNumbersWithSelected, getStateWithoutSerialNumberSort(dataState)).data as EditableSerialNumber[];
     const serialNumberSort = getSerialNumberSort(dataState);
 
     if (!serialNumberSort?.dir) {
@@ -147,9 +146,13 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
       sharedSerialNumberPart,
       serialNumberSort.dir,
     ));
-  }, [data, dataState, sharedSerialNumberPart]);
+  }, [dataState, sharedSerialNumberPart, canSelect, selectedSerials, serialNumbers]);
 
-  const hasData = processedData.length > 0;
+  const height = useMemo(() => {
+    const minRows = Math.max(serialNumbers.length, 1);
+    const maxRows = Math.min(minRows, PAGE_SIZE);
+    return maxRows * ROW_HEIGHT + PANELS_HEIGHT;
+  }, [serialNumbers.length]);
 
   const rowRender: DataGridProps<EditableSerialNumber>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableSerialNumber;
@@ -177,11 +180,11 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
         onRejectSelected={rejectSelected}
         onDeleteSelected={onBulkDelete ? deleteSelected : undefined}
       />
-      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })} style={{ height: processedData.length * ROW_HEIGHT + PANELS_HEIGHT }}>
+      <div className={cx(classes.gridContainer)} style={{ height }}>
         <KendoDataGrid<EditableSerialNumber>
           data={processedData}
           schema={schema}
-          fullHeight={hasData}
+          fullHeight
           fullWidth
           filterable
           sortable
@@ -192,6 +195,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
           skip={skippedItemsCount}
           onPageChange={onPageChange}
           rowHeight={ROW_HEIGHT}
+          pageSize={PAGE_SIZE}
           skipDataProcessing
           loading={isLoading}
           {...dataState}
