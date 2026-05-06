@@ -1,5 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
-import useElementSize from './useElementSize';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 interface Overflow {
   x: boolean
@@ -9,39 +8,51 @@ interface Overflow {
 type UseOverflowType<T> = [RefObject<T>, boolean, Overflow];
 
 function useOverflow<T extends HTMLElement> (): UseOverflowType<T> {
-  const [ref, { width, height }] = useElementSize<T>();
+  const ref = useRef<T>(null);
   const [overflow, setOverflow] = useState<Overflow>({ x: false, y: false });
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    let retryTimeout: ReturnType<typeof setTimeout> | null = null;
+    let rafId: number | null = null;
 
     const check = () => {
-      const tolerance = 1;
+      // run in next frame to ensure layout is stable
+      rafId = requestAnimationFrame(() => {
+        const x = Math.ceil(el.scrollWidth) > Math.ceil(el.clientWidth);
+        const y = Math.ceil(el.scrollHeight) > Math.ceil(el.clientHeight);
 
-      const x = el.scrollWidth - el.clientWidth > tolerance;
-      const y = el.scrollHeight - el.clientHeight > tolerance;
-
-      setOverflow((prev) => {
-        if (prev.x === x && prev.y === y) return prev;
-        return { x, y };
+        setOverflow((prev) => {
+          if (prev.x === x && prev.y === y) return prev;
+          return { x, y };
+        });
       });
-
-      // 👇 Retry only if element not ready (Cypress case)
-      if (el.clientWidth === 0 || el.clientHeight === 0) {
-        retryTimeout = setTimeout(check, 100);
-      }
     };
 
-    const raf = requestAnimationFrame(check);
+    // Initial check
+    check();
+
+    // ResizeObserver handles size/layout changes
+    const resizeObserver = new ResizeObserver(check);
+    resizeObserver.observe(el);
+
+    // MutationObserver handles content changes (edit case fix)
+    const mutationObserver = new MutationObserver(check);
+    mutationObserver.observe(el, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
 
     return () => {
-      cancelAnimationFrame(raf);
-      if (retryTimeout) clearTimeout(retryTimeout);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
-  }, [width, height, ref]);
+  }, []);
 
   return [ref, overflow.x || overflow.y, overflow];
 }
