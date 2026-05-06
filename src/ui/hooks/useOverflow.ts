@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
+import useElementSize from './useElementSize';
 
 interface Overflow {
   x: boolean
@@ -8,37 +9,32 @@ interface Overflow {
 type UseOverflowType<T> = [RefObject<T>, boolean, Overflow];
 
 function useOverflow<T extends HTMLElement> (): UseOverflowType<T> {
-  const ref = useRef<T>(null);
+  const [ref, { width, height }] = useElementSize<T>();
   const [overflow, setOverflow] = useState<Overflow>({ x: false, y: false });
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    let rafId: number | null = null;
+    let rafId: number;
 
     const check = () => {
-      // run in next frame to ensure layout is stable
       rafId = requestAnimationFrame(() => {
         const x = Math.ceil(el.scrollWidth) > Math.ceil(el.clientWidth);
         const y = Math.ceil(el.scrollHeight) > Math.ceil(el.clientHeight);
 
-        setOverflow((prev) => {
-          if (prev.x === x && prev.y === y) return prev;
-          return { x, y };
-        });
+        setOverflow((prev) =>
+          prev.x === x && prev.y === y ? prev : { x, y },
+        );
       });
     };
 
-    // Initial check
+    // initial + size change trigger
     check();
 
-    // ResizeObserver handles size/layout changes
-    const resizeObserver = new ResizeObserver(check);
-    resizeObserver.observe(el);
-
-    // MutationObserver handles content changes (edit case fix)
+    // required for content updates
     const mutationObserver = new MutationObserver(check);
+
     mutationObserver.observe(el, {
       childList: true,
       subtree: true,
@@ -46,13 +42,10 @@ function useOverflow<T extends HTMLElement> (): UseOverflowType<T> {
     });
 
     return () => {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-      }
-      resizeObserver.disconnect();
+      cancelAnimationFrame(rafId);
       mutationObserver.disconnect();
     };
-  }, []);
+  }, [ref, width, height]);
 
   return [ref, overflow.x || overflow.y, overflow];
 }
