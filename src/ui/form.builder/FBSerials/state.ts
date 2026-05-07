@@ -5,7 +5,7 @@ import { toastError } from '../../components/notifications';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { isPartHasSerialization, isPartSerializationManual, isPartSerializationSystemGenerated, sanitizeSerials } from './helpers';
-import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberExistingCheckBody, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
+import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberExistingCheckBody, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
   public lotFindRequest = new FBRequest<LotAndPart, Record<string, never>>(
     FBEndpoint.LotForDocRev,
@@ -148,15 +148,29 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
     await this.updateSerialNumbers([{ id, ...data }]);
   }
 
+  private getShapedUpdatePayload <T extends SerialNumberUpdatePayload>(serialNumber: T): T {
+    switch (serialNumber.status) {
+      case SerialNumberStatus.ACCEPTED:
+      case SerialNumberStatus.REJECTED:
+        return {
+          ...serialNumber,
+          usage: null,
+        };
+      default:
+        return serialNumber;
+    }
+  }
+
   public async updateSerialNumbers (serialNumbers: SerialNumberUpdatePayload[]): Promise<void> {
     if (!this.lotId || !serialNumbers.length) {
       return;
     }
+    const updatePayload = serialNumbers.map((serialNumber) => this.getShapedUpdatePayload(serialNumber));
     await this.set({
       method: 'patch',
       url: this.url,
       urlValues: { lotId: this.lotId },
-      body: { serialNumbers },
+      body: { serialNumbers: updatePayload },
     });
   }
 

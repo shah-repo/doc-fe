@@ -16,12 +16,12 @@ const StatusCell: React.FC<Props> = ({
   onChange,
 }) => {
   const activeOption = options.find(option => option.value === dataItem.usage || (!option.value && !dataItem.usage));
+  const isRejected = dataItem.status === SerialNumberStatus.REJECTED;
+  const isDisabled = !isRejected || dataItem.isDisabled;
 
   if (isTableDisabled) {
-    return <>{activeOption?.value ? activeOption.text : EMPTY_VALUE_PLACEHOLDER}</>;
+    return <>{activeOption?.value && isRejected ? activeOption.text : EMPTY_VALUE_PLACEHOLDER}</>;
   }
-
-  const isDisabled = dataItem.status !== SerialNumberStatus.REJECTED || dataItem.isDisabled;
 
   return (
     <Autocomplete
@@ -33,7 +33,7 @@ const StatusCell: React.FC<Props> = ({
       filterSelectedOptions
       getOptionLabel={(option: SerialsSelectOption<SerialNumberUsage>) => option.value ? option.text : ''}
       renderOption={(option: SerialsSelectOption<SerialNumberUsage>) => option.text}
-      value={isDisabled ? null : activeOption}
+      value={!isRejected ? null : activeOption}
       onChange={(e, value?: SerialsSelectOption<SerialNumberUsage>) => {
         if (!value) return;
         onChange(dataItem.id, value.value);

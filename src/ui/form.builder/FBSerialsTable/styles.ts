@@ -106,13 +106,21 @@ export default makeStyles(theme => ({
   },
 }));
 
-export const useTextCellStyles = makeStyles(theme => ({
+export const useSerialNumberCellStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+  },
   disabledValue: {
     color: Colors.textDisabled,
   },
   disabledIcon: {
     color: Colors.primaryLight,
     marginLeft: theme.spacing(0.5),
+  },
+  tooltip: {
+    whiteSpace: 'pre-line',
   },
 }));
 

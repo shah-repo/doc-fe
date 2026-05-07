@@ -1879,6 +1879,8 @@
   "form.builder.serials.no.usage": "No usage",
   "form.builder.serials.notes": "Notes",
   "form.builder.serials.failed.to.add": "Failed to add serial numbers",
+  "form.builder.serials.disabled": "Serial number was already rejected",
+  "form.builder.serials.disabled.in": "Serial number was already rejected\n on Step #{step}, Sequence #{sequence}",
   "form.builder.serials.disabled.in.next.steps": "Serial number was already rejected on a subsequent step/sequence",
   "form.builder.skip.serialization": "Skip Serialization",
   "documentRevision.equipment.status.update.alert.title": "Status change",

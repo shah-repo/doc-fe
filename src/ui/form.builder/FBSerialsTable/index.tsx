@@ -18,6 +18,7 @@ import { FBSerialsTableProps, SerialNumberSortDescriptor } from './types';
 
 const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   serialNumbers,
+  shouldShowStepAndSequence = false,
   isLoading,
   isDisabled: isTableDisabled = false,
   toolbarRef,
@@ -123,6 +124,7 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
     canSelect,
     isAllSelected,
     isTableDisabled,
+    shouldShowStepAndSequence,
     onCheckAllToggle: toggleAllSelection,
     onUpdate,
     onDelete,

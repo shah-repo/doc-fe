@@ -12,6 +12,7 @@ export interface TableCellProps extends Omit<CellTemplateProps<EditableSerialNum
 
 export interface FBSerialsTableProps {
   serialNumbers: EditableSerialNumber[]
+  shouldShowStepAndSequence?: boolean
   isDisabled?: boolean
   isPartSerializationManual?: boolean
   isLoading?: boolean
