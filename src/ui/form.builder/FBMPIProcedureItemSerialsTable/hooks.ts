@@ -51,7 +51,7 @@ const useLhrsSequences = (workspaceState?: FBWorkspaceState) => {
 
 const useLhrsInfo = (): LHRSInfo => {
   const { workspaceState, formState } = FB.useStores();
-  const { stepIndex } = useLhrsTitle(workspaceState?.document?.name ?? '', workspaceState?.document?.document.documentType.id ?? '');
+  const { stepIndex } = useLhrsTitle(workspaceState?.document?.name, workspaceState?.document?.document.documentType.id);
   const sequences = useLhrsSequences(workspaceState);
   const formRejectedCount = useCurrentFormValue<number>(LHRS_REJECTED_QUANTITY);
   const formAcceptedCount = useCurrentFormValue<number>(LHRS_ACCEPTED_QUANTITY);
@@ -80,8 +80,6 @@ const useLhrsInfo = (): LHRSInfo => {
     return rejectedCount === rejectedQuantity && acceptedCount === acceptedQuantity;
   }, [formRejectedCount, formAcceptedCount, rejectedCount, acceptedCount]);
 
-  console.log(JSON.parse(JSON.stringify({ formRejectedCount, formAcceptedCount, rejectedCount, acceptedCount, isSynced })));
-
   return useMemo(() => ({
     stepIndex,
     isSynced,
@@ -92,7 +90,7 @@ const useLhrsInfo = (): LHRSInfo => {
 
 const useLhrsSequenceInfo = (name: string): LHRSSequenceInfo => {
   const { workspaceState } = FB.useStores();
-  const { stepIndex } = useLhrsTitle(workspaceState?.document?.name ?? '', workspaceState?.document?.document.documentType.id ?? '');
+  const { stepIndex } = useLhrsTitle(workspaceState?.document?.name, workspaceState?.document?.document.documentType.id);
   const sequence = workspaceState?.schema?.find((item) => item.name === name);
   const sequenceIndex = sequence?.stepIndex;
 
