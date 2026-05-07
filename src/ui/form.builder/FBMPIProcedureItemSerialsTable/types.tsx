@@ -32,3 +32,5 @@ export interface LHRSSerialNumbers {
 export interface LHRSStepSerialNumbersFormValue {
   serialsNumbers?: Record<string, { status: SerialNumberStatus, usage: SerialNumberUsage, notes: string }>
 }
+
+export type LHRSStepSerialNumbersFormValues = Record<string, LHRSStepSerialNumbersFormValue | unknown | undefined>;
