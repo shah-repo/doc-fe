@@ -1,4 +1,4 @@
-import { cloneDeep, debounce, isEmpty, isEqual, isNull, omitBy } from 'lodash';
+import { cloneDeep, debounce, isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -114,7 +114,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const frozenInitialValues = cloneDeep(initialValues);
 
   const onSubmit = (values: ChangeRequestFormValues) => {
-    const updatedValues = omitBy(formState.getValues(), isNull);
+    const updatedValues = formState.getValues();
 
     const dataToSubmit = compareValuesToSubmit(
       {
