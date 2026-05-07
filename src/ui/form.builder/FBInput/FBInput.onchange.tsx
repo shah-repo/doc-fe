@@ -73,7 +73,7 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     function setValue (formValue: any, state = false, shouldOmitSetValue = false) {
       if (!name) { return; }
-      if(name === 'lhr-build-type') {
+      if (name === 'lhr-build-type') {
         return;
       }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
@@ -89,16 +89,23 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
-      if (formState?.validationRelatedRules[name]) {
-        map(formState?.validationRelatedRules[name], (field) => {
-          const { name: fieldName, value: fieldValue } = field;
-          if (formValue !== fieldValue) {
-            formState.omitFieldValue((fieldName || ''));
-            formState.errors.set(fieldName, '');
-          }
-        });
-      }
+      getResetAllChildFields(name);
     }
+
+    const getResetAllChildFields = (name: string) => {
+      if (!name || !formState?.validationRelatedRules[name]) {
+        return;
+      }
+
+      map(formState?.validationRelatedRules[name], (field) => {
+        const { name: fieldName = '' } = field;
+        if (formState.getFieldValue(fieldName)) {
+          formState.setFieldValue(fieldName, null);
+          formState.errors.set(fieldName, '');
+          getResetAllChildFields(fieldName);
+        }
+      });
+    };
 
     function checkboxGroupValue (ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = at(ev.target, ['value', 'checked']);

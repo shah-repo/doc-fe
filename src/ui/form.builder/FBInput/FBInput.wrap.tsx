@@ -256,9 +256,6 @@ export const withFBInput = <T extends FBInputProps>(
       if (validationMode === 'visibility') {
         if (isFieldUnderValidation && !isUndefined(showValidationField)) {
           isUnderMode = !showValidationField;
-          if (isUnderMode) {
-            formState?.setFieldValue(name, null);
-          }
         }
         hidden = isUnderMode;
 
