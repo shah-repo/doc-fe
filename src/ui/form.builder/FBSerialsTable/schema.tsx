@@ -10,14 +10,15 @@ import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberU
 import ActionsCell from './components/ActionsCell';
 import NotesCell from './components/NotesCell';
 import SelectFilter from './components/SelectFilter';
+import SerialNumberCell from './components/SerialNumberCell';
 import StatusCell from './components/StatusCell';
-import TextCell from './components/TextCell';
 import UsageCell from './components/UsageCell';
 import useStyles from './styles';
 
 interface SchemaOptions {
   isAllSelected: boolean
   isTableDisabled?: boolean
+  shouldShowStepAndSequence?: boolean
   canSelect?: boolean
   onCheckAllToggle: (event: CheckboxChangeEvent) => void
   onUpdate?: (id: string, data: SerialNumberUpdateData) => void
@@ -27,6 +28,7 @@ interface SchemaOptions {
 export const useSchema = ({
   isAllSelected,
   isTableDisabled = false,
+  shouldShowStepAndSequence = false,
   canSelect = false,
   onCheckAllToggle,
   onUpdate,
@@ -81,7 +83,7 @@ export const useSchema = ({
         title: 'form.builder.serials.item',
         width: 55,
         resizable: false,
-        filterable: false,
+        filterCell: () => <span />,
         template: ({ dataItem, dataIndex }) => {
           const rowIndex = (dataItem as { index?: number }).index ?? (dataIndex ?? 0) + 1;
           return <div>{rowIndex}</div>;
@@ -92,7 +94,13 @@ export const useSchema = ({
         field: 'serialNumber',
         resizable: true,
         filterCell: InputFilter,
-        template: (props) => <TextCell {...props} isTableDisabled={isTableDisabled} />,
+        template: (props) => (
+          <SerialNumberCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            shouldShowStepAndSequence={shouldShowStepAndSequence}
+          />
+        ),
         title: 'form.builder.serials.serial.number',
       },
       {
