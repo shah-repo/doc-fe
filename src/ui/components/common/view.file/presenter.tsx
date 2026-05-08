@@ -27,6 +27,7 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
       classes={{ paper: classes.paper }}
       maxWidth={isImage ? 'xl' : 'lg'}
       fullWidth={isPDF || isImage}
+      disableBackdropClick={Boolean(!url)}
     >
       <ViewFileTitle
         attachment={attachment}
