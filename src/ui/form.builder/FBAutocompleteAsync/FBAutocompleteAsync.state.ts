@@ -3,6 +3,7 @@ import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } f
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
@@ -165,6 +166,28 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: releasedForm?.displayRevision || '',
           });
         });
+      case FBAutocompleteAsyncOption.mpiDocuments:
+        return map(
+          groupBy(union(data, this.additionalData), 'document.id'),
+          (documents: DocumentRevision[]) => {
+            if (!documents?.length) return [];
+
+            let draft: DocumentRevision | undefined;
+            let released: DocumentRevision | undefined;
+
+            for (const document of documents) {
+              if (!draft && isDocumentRevisionInDraft(document?.status)) {
+                draft = document;
+              } else if (!released && isDocumentRevisionReleased(document?.status)) {
+                released = document;
+              }
+
+              if (draft && released) break;
+            }
+
+            return draft ?? released ?? documents[0];
+          },
+        );
       case FBAutocompleteAsyncOption.parts:
         return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== 'OBSOLETE');
       default: return union(data, this.additionalData);

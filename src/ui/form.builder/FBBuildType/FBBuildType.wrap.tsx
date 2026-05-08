@@ -49,8 +49,10 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     });
     const generalSettings = useSelector(companySelectors.getGeneralSettings) as { lhrBuildTypeSwitchConfigApproval?: LHRBuildTypeSwitchConfigApproval[] } | null;
     lhrBuildTypeSwitchConfigApproval = generalSettings?.lhrBuildTypeSwitchConfigApproval || [];
-    const currentBuildType = lhrBuildTypeSwitchConfigApproval.filter((config) => { return config.from === defaultValue?.id; });
-    allowedBuildTypeChange = currentBuildType.map((config) => config.to).filter((value): value is string => value !== undefined) || [];
+    allowedBuildTypeChange = lhrBuildTypeSwitchConfigApproval
+      .filter((config) => config.from === defaultValue?.id)
+      .map((config) => config.to)
+      .filter((value): value is string => value !== undefined) || [];
 
     const {
       document,
@@ -114,21 +116,29 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
     }
 
     enableNewBuildTypeFlow = lhrBuildTypeSwitchConfigApproval && lhrBuildTypeSwitchConfigApproval.length > 0;
-    if (currentBuildType && currentBuildType.length > 0 && enableNewBuildTypeFlow) {
-      enableNewBuildTypeFlow = currentBuildType[0].approvalGroups.length > 0;
-    }
 
-    const onChange = (event: React.ChangeEvent<{}>, inputValue: string) => {
+    const onChange = (event: React.ChangeEvent<{}>, inputValue: string, reason: string) => {
+      if (reason !== 'input' && isEmpty(inputValue)) {
+        return;
+      }
+
       const lhrBuildType = options?.find(opt => opt.id === defaultValue?.id);
       const selectedLhrBuild = options?.find(value => value.displayLabel === inputValue);
+      const isValid = !isNull(event) && (isEmpty(inputValue) || selectedLhrBuild);
+      const currentBuildType = lhrBuildTypeSwitchConfigApproval?.find(
+        (config) => config.from === defaultValue?.id && config.to === selectedLhrBuild?.id,
+      );
+
+      if (currentBuildType && enableNewBuildTypeFlow) {
+        enableNewBuildTypeFlow = currentBuildType.approvalGroups.length > 0;
+      }
 
       if (!enableNewBuildTypeFlow) {
         if (!isEmpty(selectedLhrBuild) && selectedLhrBuild?.internalType !== FBLHRBuildOptions.Production && lhrBuildType?.internalType === FBLHRBuildOptions.Production && !isNull(event)) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
-        } else if (!isNull(event)) {
+        } else if (isValid) {
           formState?.setFieldValue(name, selectedLhrBuild?.id);
-          formState?.setFieldAutosave(name);
           formState?.getInputState(name ?? '')?.setRender();
           setDefaultValue(selectedLhrBuild);
           setPrevValue(selectedLhrBuild);
@@ -138,9 +148,8 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         if (!isEmpty(selectedLhrBuild) && !isNull(event) && defaultValue) {
           setSelectedValue(selectedLhrBuild);
           lhrBuildDialog.open();
-        } else if (!isNull(event)) {
+        } else if (isValid) {
           formState?.setFieldValue(name, selectedLhrBuild?.id);
-          formState?.setFieldAutosave(name);
           formState?.getInputState(name ?? '')?.setRender();
           setDefaultValue(selectedLhrBuild);
           setPrevValue(selectedLhrBuild);
@@ -190,17 +199,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
         submitApproversRef.current?.();
         formState?.setFieldValue(`new-${name}`, selectedValue?.id);
         formState?.setFieldAutosave(`new-${name}`);
-        setDefaultValue(selectedValue);
         workspaceState?.saveDocRev(formState?.getValues());
-        formState?.getInputState(name ?? '')?.setRender();
-        approvalDialog.close();
-      } else {
-        setDefaultValue(prevValue);
-        forceRerender();
-        formState?.getInputState(name ?? '')?.setRender();
-        setSelectedValue(undefined);
-        approvalDialog.close();
       }
+      setDefaultValue(prevValue);
+      forceRerender();
+      formState?.getInputState(name ?? '')?.setRender();
+      setSelectedValue(undefined);
+      approvalDialog.close();
     };
 
     const forceRerender = () => {

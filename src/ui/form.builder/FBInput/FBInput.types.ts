@@ -143,6 +143,7 @@ export type FBInputProps =
     inputState?: FBInputState
     editorProperties?: FBEditorPropertiesType[]
     includeContext?: boolean
+    shouldWrapWithFormControl?: boolean
     rules?: any
     validationMode?: FBEditorValidationMode
     includeSelectedSchema?: boolean

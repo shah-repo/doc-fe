@@ -3,6 +3,26 @@ import Colors from '../../layout/theme-next/colors';
 
 export default makeStyles((theme) =>
   createStyles({
+    infoBanner: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: theme.spacing(1.5),
+      padding: theme.spacing(1.5, 2),
+      backgroundColor: Colors.primaryBg,
+      border: `1px solid ${theme.palette.primary.main}`,
+      borderRadius: theme.shape.borderRadius,
+      marginBottom: theme.spacing(1.5),
+    },
+    infoBannerIcon: {
+      color: theme.palette.primary.main,
+      flexShrink: 0,
+      fontSize: 22,
+    },
+    infoBannerText: {
+      fontSize: 14,
+      color: theme.palette.text.primary,
+      lineHeight: 1.5,
+    },
     approvalCard: {
       border: `1px solid ${Colors.stroke}`,
       borderRadius: '8px',
@@ -50,6 +70,10 @@ export default makeStyles((theme) =>
       display: 'flex',
       marginRight: 2.5,
     },
+    ownerName: {
+      marginTop: theme.spacing(0.2),
+      paddingLeft: theme.spacing(0.5),
+    },
     approvalInfoContainer: {
       display: 'flex',
       alignItems: 'center',
@@ -68,7 +92,7 @@ export default makeStyles((theme) =>
       fontWeight: 500,
       fontSize: 14,
     },
-  deleteChip: {
+    deleteChip: {
       ...theme.typography.subtitle1,
 
       '& .chip-delete': {
@@ -79,6 +103,58 @@ export default makeStyles((theme) =>
       '& .chip-delete-icon': {
         transform: 'translate(0, 150%)',
       },
+    },
+    sectionContainer: {
+      border: `1px solid ${Colors.stroke}`,
+      borderRadius: '8px',
+      backgroundColor: Colors.white,
+      overflow: 'hidden',
+      marginBottom: theme.spacing(2),
+    },
+    sectionHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: theme.spacing(1.5, 2),
+      cursor: 'pointer',
+      userSelect: 'none',
+    },
+    sectionTitle: {
+      fontWeight: 700,
+      fontSize: 16,
+      color: theme.palette.primary.main,
+    },
+    sectionCount: {
+      fontSize: 14,
+      color: theme.palette.text.secondary,
+    },
+    sectionChevron: {
+      marginRight: theme.spacing(1),
+      color: theme.palette.primary.main,
+    },
+    approvalDivider: {
+      height: '1px',
+      backgroundColor: Colors.stroke,
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
+    },
+    approvedStatus: {
+      display: 'flex',
+      alignItems: 'center',
+      fontWeight: 700,
+      fontSize: 14,
+      gap: theme.spacing(0.5),
+      color: Colors.success,
+    },
+    approvedIcon: {
+      color: Colors.success,
+      fontSize: 18,
+    },
+    approvedDate: {
+      fontSize: 12,
+      color: theme.palette.text.secondary,
+      marginTop: theme.spacing(0.25),
+      textAlign: 'right',
     },
   }),
 );

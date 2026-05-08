@@ -142,7 +142,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     [_tabsState],
   );
 
-const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
+  const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
     ({ type, fieldId, status }) => type === 'SECTION' && fieldId === 'buildTypeApprovals' && status === 'PENDING');
 
   return (
@@ -175,7 +175,6 @@ const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
           }}
         >
           {documentRevision && <LHRBanner documentRevision={documentRevision} />}
-          {isBuildTypeChangeApprovalEnabled && <RedlineBuildTypeBanner documentRevision={documentRevision} />}
           <Observer>
             {() => (
               <SMTemplate
@@ -183,6 +182,7 @@ const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
                 contentBoxProps={{
                   overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
                 }}
+                banner={isBuildTypeChangeApprovalEnabled && <RedlineBuildTypeBanner documentRevision={documentRevision} />}
                 header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} isSliderView={isSliderView} inDialog={inDialog} />}
                 lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
               >

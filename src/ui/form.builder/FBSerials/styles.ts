@@ -9,4 +9,7 @@ export default makeStyles(theme => ({
   importButton: {
     float: 'right',
   },
+  toolbar: {
+    margin: theme.spacing(-1, 0),
+  },
 }));

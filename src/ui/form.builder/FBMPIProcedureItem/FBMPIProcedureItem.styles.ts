@@ -40,5 +40,11 @@ export default makeStyles((theme) =>
       fontWeight: 600,
       fontSize: 12,
     },
+    typeLabelContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      minHeight: 34,
+    },
   }),
 );
