@@ -6,9 +6,10 @@ import { autorun, reaction } from 'mobx';
 import { useLocalStore, useObserver } from 'mobx-react';
 import React, { cloneElement, useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteAsyncOption, FBAutosave, FBAutocompleteAsyncState, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
 import { WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { companySelectors } from '../../../state/ducks/company';
 import { useFormContext } from '../../components/forms/FormContext';
 import { CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME } from '../../document.revision/utils/helpers';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -17,6 +18,7 @@ import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 import { FBClasses } from '../defaults/layout';
 import { withFBOnChange } from './FBInput.onchange';
+import { useSelector } from 'react-redux';
 
 // Initial values only some of the fields have
 export const INDIVIDUAL_INITIAL_VALUES = {
@@ -95,13 +97,9 @@ export const withFBInput = <T extends FBInputProps>(
     if (name === WO_PART_UNIT_KEY_NAME) {
       showErrorMsg = false;
     }
-    let buildTypes = FBAutocompleteAsyncStore.data.get(
-      FBAutocompleteAsyncOption.buildType,
-    );
-    const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId: FBAutocompleteAsyncOption.buildType });
-    useEffect(() => {
-      autocompleteAsyncState.load();
-    }, []);
+    const settings = useSelector(companySelectors.getGeneralSettings);
+    const LHRBuild = settings.lhrBuildTypeConfig;
+
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
     }));
@@ -423,17 +421,17 @@ export const withFBInput = <T extends FBInputProps>(
     }, [bookmarked]);
 
     useEffect(() => {
-      buildTypes = buildTypes ? Array.from(buildTypes.values()) : [];
       const lhrRef = workspaceState?.document?.smartReferencesTo?.find(
         (ref) => ref.type === SmartReferenceType.HiddenPiInstance,
       );
       const selectedBuildType = lhrRef?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
 
-      const selectedBuildTypeObj = buildTypes.find((item) => item.id === selectedBuildType);
-      if ([FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical, FBLHRBuildOptions['Verification & Validation']].includes(selectedBuildTypeObj?.internalType)) {
+      const selectedBuildTypeObj = LHRBuild?.find((item) => item.id === selectedBuildType);
+
+      if (selectedBuildTypeObj && selectedBuildTypeObj?.internalType !== FBLHRBuildOptions['R&D']) {
         inputState?.setIncludeNotes(false);
       }
-    }, [buildTypes]);
+    }, [LHRBuild]);
 
     useEffect(() => {
       formState?.validate();
