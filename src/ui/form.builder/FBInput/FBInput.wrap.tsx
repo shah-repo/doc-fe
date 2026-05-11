@@ -97,8 +97,7 @@ export const withFBInput = <T extends FBInputProps>(
     if (name === WO_PART_UNIT_KEY_NAME) {
       showErrorMsg = false;
     }
-    const settings = useSelector(companySelectors.getGeneralSettings);
-    const LHRBuild = settings.lhrBuildTypeConfig;
+    const LHRBuild = useSelector(companySelectors.getLHRBuildTypeConfig);
 
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
