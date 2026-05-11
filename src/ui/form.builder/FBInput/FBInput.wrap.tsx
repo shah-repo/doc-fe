@@ -6,7 +6,7 @@ import { autorun, reaction } from 'mobx';
 import { useLocalStore, useObserver } from 'mobx-react';
 import React, { cloneElement, useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteAsyncOption, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
+import { FB, FBAutocompleteAsyncOption, FBAutosave, FBAutocompleteAsyncState, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
 import { WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { useFormContext } from '../../components/forms/FormContext';
@@ -98,7 +98,10 @@ export const withFBInput = <T extends FBInputProps>(
     let buildTypes = FBAutocompleteAsyncStore.data.get(
       FBAutocompleteAsyncOption.buildType,
     );
-
+    const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, { optionId: FBAutocompleteAsyncOption.buildType });
+    useEffect(() => {
+      autocompleteAsyncState.load();
+    }, []);
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,
     }));
@@ -427,7 +430,7 @@ export const withFBInput = <T extends FBInputProps>(
       const selectedBuildType = lhrRef?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
 
       const selectedBuildTypeObj = buildTypes.find((item) => item.id === selectedBuildType);
-      if (selectedBuildTypeObj?.internalType === FBLHRBuildOptions.Production) {
+      if ([FBLHRBuildOptions.Production, FBLHRBuildOptions.Clinical, FBLHRBuildOptions['Verification & Validation']].includes(selectedBuildTypeObj?.internalType)) {
         inputState?.setIncludeNotes(false);
       }
     }, [buildTypes]);
