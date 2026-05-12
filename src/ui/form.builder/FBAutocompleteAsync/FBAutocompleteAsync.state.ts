@@ -13,12 +13,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
   private readonly docTypeIds?: string[] = [];
+  private readonly documentStatuses?: DocumentRevisionStatus[] = [];
   private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, docTypeIds, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, docTypeIds, documentStatuses, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.docTypeIds = docTypeIds;
+    this.documentStatuses = documentStatuses;
     this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
   }
@@ -27,7 +29,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return undefined;
     }
-    return this.docTypeIds?.length ? `${this.optionId}-${this.docTypeIds.join(',')}` : this.optionId;
+    const keyParts = [this.optionId];
+    if (this.docTypeIds?.length) {
+      keyParts.push(this.docTypeIds.join(','));
+    }
+    if (this.optionId === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length) {
+      keyParts.push(this.documentStatuses.join(','));
+    }
+    return keyParts.join('-');
   }
 
   public setAdditionalData = (data?: any[]) => set(this, 'additionalData', data);
@@ -112,7 +121,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
-      case FBAutocompleteAsyncOption.allDocuments:
         return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions:
@@ -120,6 +128,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
               ? doc.documentRevisions : null,
           // the 0th entry is always the released / most recent released version
         })).filter((item) => item.documentRevisions);
+      case FBAutocompleteAsyncOption.allDocuments:
+
+        return map([data].flat(), (doc) => {
+          const documentRevisions = this.documentStatuses?.length
+            ? doc.documentRevisions?.filter((revision) => this.documentStatuses?.includes(revision.status))
+            : doc.documentRevisions;
+
+          return ({
+            ...doc,
+            documentRevisions,
+            // the 0th entry is always the released / most recent released version
+          });
+        }).filter((item) => Boolean(item.documentRevisions?.length));
       case FBAutocompleteAsyncOption.docRevByDoc:
         return data.documentRevisions.map((e) => ({
           ...e,
@@ -205,6 +226,12 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
     FBAutocompleteAsyncStore.loading.set(this.optionsKey, true);
     const { id, root = '', publicApi } = this.optionConfig;
+    const body = {
+      ...(this.docTypeIds?.length ? { docTypeIds: this.docTypeIds.join(',') } : {}),
+      ...(id === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length
+        ? { documentStatuses: this.documentStatuses.join(',') }
+        : {}),
+    };
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
@@ -220,7 +247,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.set({
       url: FBEndpoint.AutocompleteByOptionId,
       urlValues: { optionId: id },
-      body: this.docTypeIds?.length ? { docTypeIds: this.docTypeIds.join(',') } : undefined,
+      body: Object.keys(body).length ? body : undefined,
       method: 'get',
     });
   }

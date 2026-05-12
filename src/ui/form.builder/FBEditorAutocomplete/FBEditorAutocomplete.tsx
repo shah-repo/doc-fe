@@ -4,11 +4,17 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
 import useStyles from './FBEditorAutocomplete.styles';
+
+const documentRevisionStatusOptions = Object.values(DocumentRevisionStatus).map((status) => ({
+  id: status,
+  label: status,
+}));
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -52,19 +58,34 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         withState
       />
       {optionId === FBAutocompleteAsyncOption.allDocuments && (
-        <FBAutocomplete
-          label="common.document.types"
-          options={documentTypes}
-          optionLabelKey="documentTypeName"
-          optionValueKey="id"
-          name="docTypeIds"
-          autoCompleteClasses={{
-            root: 'custom-autocomplete-root',
-            input: 'custom-autocomplete-input',
-            endAdornment: customClasses.endAdornment,
-          }}
-          multiple
-        />
+        <>
+          <FBAutocomplete
+            label="common.document.types"
+            options={documentTypes}
+            optionLabelKey="documentTypeName"
+            optionValueKey="id"
+            name="docTypeIds"
+            autoCompleteClasses={{
+              root: 'custom-autocomplete-root',
+              input: 'custom-autocomplete-input',
+              endAdornment: customClasses.endAdornment,
+            }}
+            multiple
+          />
+          <FBAutocomplete
+            label="common.status"
+            options={documentRevisionStatusOptions}
+            optionLabelKey="label"
+            optionValueKey="id"
+            name="documentStatuses"
+            autoCompleteClasses={{
+              root: 'custom-autocomplete-root',
+              input: 'custom-autocomplete-input',
+              endAdornment: customClasses.endAdornment,
+            }}
+            multiple
+          />
+        </>
       )}
       {children}
     </FBEditor>

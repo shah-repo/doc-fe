@@ -13,6 +13,7 @@ export type FBAutocompleteAsyncProps =
   additionalData?: any[] // TODO: make autocomplete async generic type by data
   forceNewRender?: boolean
   docTypeIds?: string[]
+  documentStatuses?: DocumentRevisionStatus[]
   /**
    * @cfg {Record} Additional url params.
    */
@@ -89,6 +90,7 @@ export interface FBAutocompleteAsyncConstructor {
   optionId?: string
   urlValues?: Record<string, any>
   docTypeIds?: string[]
+  documentStatuses?: DocumentRevisionStatus[]
   documentStatus?: string
   includePrevReleaseDoc?: boolean
 }
@@ -106,13 +108,14 @@ export interface OptionDocumentRevision {
 }
 export interface BuildAutocompleteConfigProps {
   optionId?: string
-  getOptionLabel: (value: OptionDocument | OptionDocumentRevision) => string
+  getOptionLabel: (value: OptionDocument | OptionDocumentRevision, documentStatuses?: DocumentRevisionStatus[]) => string
+  documentStatuses?: DocumentRevisionStatus[]
 }
 
 export type AutocompleteValue = OptionDocument | OptionDocumentRevision | OptionDocument[] | OptionDocumentRevision[];
 
-type GetTagLabel = (value: OptionDocument | OptionDocumentRevision) => React.ReactNode;
-type RenderAdornment = (value: AutocompleteValue) => React.ReactNode;
+type GetTagLabel = (value: OptionDocument | OptionDocumentRevision, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
+type RenderAdornment = (value: AutocompleteValue, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
 export interface AutocompleteConfig {
   getTagLabel?: GetTagLabel
   renderEndAdornment?: RenderAdornment

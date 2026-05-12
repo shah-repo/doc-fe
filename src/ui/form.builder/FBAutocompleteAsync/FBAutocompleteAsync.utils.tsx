@@ -18,11 +18,14 @@ const VIABLE_STATUSES = new Set<DocumentRevisionStatus>([
   DocumentRevisionStatus.Released,
 ]);
 
-const findLatestViableRevision = (revisions: OptionDocumentRevision[] = []) =>
-  revisions.reduce<OptionDocumentRevision | undefined>((best, r) => {
-    if (!VIABLE_STATUSES.has(r.status)) return best;
+const findLatestViableRevision = (revisions: OptionDocumentRevision[] = [], documentStatuses?: DocumentRevisionStatus[]) => {
+  const viableStatuses = documentStatuses?.length ? new Set(documentStatuses) : VIABLE_STATUSES;
+  console.log(JSON.parse(JSON.stringify({ revisions, documentStatuses, viableStatuses: Array.from(viableStatuses) })));
+  return revisions.reduce<OptionDocumentRevision | undefined>((best, r) => {
+    if (!viableStatuses.has(r.status)) return best;
     return !best || r.version > best.version ? r : best;
   }, undefined);
+};
 
 const isDocument = (
   value: OptionDocument | OptionDocumentRevision,
@@ -30,11 +33,12 @@ const isDocument = (
 
 type LinkResolver = (
   value: OptionDocument | OptionDocumentRevision,
+  documentStatuses?: DocumentRevisionStatus[],
 ) => string | null;
 
-const getLinkFromDocument: LinkResolver = (value) => {
+const getLinkFromDocument: LinkResolver = (value, documentStatuses) => {
   if (!isDocument(value) || !value.id) return null;
-  const revision = findLatestViableRevision(value.documentRevisions);
+  const revision = findLatestViableRevision(value.documentRevisions, documentStatuses);
   return revision?.id ? documentVersionPath(revision.id, value.id) : null;
 };
 
@@ -108,18 +112,19 @@ const LINKABLE_OPTIONS = new Map<string, LinkResolver>([
 export const buildAutocompleteConfig: BuildAutocompleteConfig = ({
   optionId,
   getOptionLabel,
+  documentStatuses,
 }: BuildAutocompleteConfigProps) => {
   const resolveLink = optionId ? LINKABLE_OPTIONS.get(optionId) : undefined;
   if (!resolveLink) return {};
   return {
     getTagLabel: (value) => {
-      const text = getOptionLabel(value);
-      const to = resolveLink(value);
+      const text = getOptionLabel(value, documentStatuses);
+      const to = resolveLink(value, documentStatuses);
       return to ? <LinkTag to={to}>{text}</LinkTag> : text;
     },
     renderStartAdornment: (value) => {
       if (Array.isArray(value)) return undefined;
-      const to = resolveLink(value);
+      const to = resolveLink(value, documentStatuses);
       return to ? <AdornmentTag to={to} /> : undefined;
     },
   };
