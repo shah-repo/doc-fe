@@ -4,8 +4,10 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { companySelectors } from '../../../state/ducks/company';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Button, FormControlLabel, Switch } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
@@ -85,10 +87,12 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   const [isMappingRulesPanelVisible, setIsMappingRulesPanelVisible] = useState<boolean>(false);
   const [isOptionMapperVisible, setIsOptionMapperVisible] = useState<boolean>(false);
   const { _formState } = SM.useStores();
+  const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
   const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: [],
     mode: _formState?.mode,
-    autosave: _formState?.autosave || false,
+    autosave: _formState?.autosave,
+    lhrBuildTypeConfig,
   });
 
   useEffect(() => {

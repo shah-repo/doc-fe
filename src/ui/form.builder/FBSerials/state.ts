@@ -4,10 +4,17 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
-import { isPartHasSerialization, isPartSerializationManual, isPartSerializationSystemGenerated } from './helpers';
-import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
+import { isPartHasSerialization, isPartSerializationManual, isPartSerializationSystemGenerated, sanitizeSerials } from './helpers';
+import { FBSerialsStateBody, LotAndPart, SerialNumber, SerialNumberExistingCheckBody, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload } from './types';
 class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
-  public lotFindRequest = new FBRequest<LotAndPart, Record<string, never>>(FBEndpoint.LotForDocRev);
+  public lotFindRequest = new FBRequest<LotAndPart, Record<string, never>>(
+    FBEndpoint.LotForDocRev,
+  );
+
+  public existingSerialNumbersRequest = new FBRequest<string[], SerialNumberExistingCheckBody>(
+    FBEndpoint.CheckExistingLotSerialNumbers,
+  );
+
   public documentRevision?: DocumentRevision;
 
   @observable
@@ -72,7 +79,7 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
 
   @computed
   public get serialNumbers (): SerialNumber[] {
-    return this.data.sort((a, b) => a.serialNumber.localeCompare(b.serialNumber));
+    return this.data;
   }
 
   public reload (): void {
@@ -101,6 +108,27 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
     return await this.createSerialNumbers([serialNumber]);
   }
 
+  public async checkExistingLotSerialNumbers (serialNumbers: string[]): Promise<string[]> {
+    const sanitizedSerialNumbers = sanitizeSerials(serialNumbers);
+    if (sanitizedSerialNumbers.length === 0) {
+      return [];
+    }
+
+    const existingSerialNumbersResponse: unknown = await this.existingSerialNumbersRequest.set({
+      method: 'post',
+      url: FBEndpoint.CheckExistingLotSerialNumbers,
+      body: { serialNumbers: sanitizedSerialNumbers },
+    });
+
+    if (!Array.isArray(existingSerialNumbersResponse)) {
+      return [];
+    }
+
+    return existingSerialNumbersResponse.filter(
+      (serialNumber): serialNumber is string => typeof serialNumber === 'string',
+    );
+  }
+
   public async createSerialNumbers (serialNumbers: string[]): Promise<void> {
     if (!this.lotId || !Array.isArray(serialNumbers) || serialNumbers.length === 0) {
       return;
@@ -120,15 +148,29 @@ class FBSerialsState extends FBRequest<SerialNumber[], FBSerialsStateBody> {
     await this.updateSerialNumbers([{ id, ...data }]);
   }
 
+  private getShapedUpdatePayload <T extends SerialNumberUpdatePayload>(serialNumber: T): T {
+    switch (serialNumber.status) {
+      case SerialNumberStatus.ACCEPTED:
+      case SerialNumberStatus.REJECTED:
+        return {
+          ...serialNumber,
+          usage: null,
+        };
+      default:
+        return serialNumber;
+    }
+  }
+
   public async updateSerialNumbers (serialNumbers: SerialNumberUpdatePayload[]): Promise<void> {
     if (!this.lotId || !serialNumbers.length) {
       return;
     }
+    const updatePayload = serialNumbers.map((serialNumber) => this.getShapedUpdatePayload(serialNumber));
     await this.set({
       method: 'patch',
       url: this.url,
       urlValues: { lotId: this.lotId },
-      body: { serialNumbers },
+      body: { serialNumbers: updatePayload },
     });
   }
 

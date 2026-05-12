@@ -19,4 +19,9 @@ export const styles = makeStyles((theme) => ({
       transform: 'rotate(180deg)',
     },
   },
+  wrapText: {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+    display: 'inline-block',
+  },
 }));

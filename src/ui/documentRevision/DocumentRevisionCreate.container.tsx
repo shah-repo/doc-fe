@@ -170,7 +170,10 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
 
   const saveAsIs = () => {
     if (groupsAlertConfig.current?.values) {
-      saveDocumentRevision(groupsAlertConfig.current?.values);
+      saveDocumentRevision({
+        ...groupsAlertConfig.current?.values,
+        securityGroups: groupsAlertConfig.current?.values.securityGroups ?? [],
+      });
     }
   };
 

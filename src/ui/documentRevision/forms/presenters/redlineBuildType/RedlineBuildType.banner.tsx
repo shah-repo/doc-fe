@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import { store } from '../../../../../state/store';
 import { LHRBuild } from '../../../../administration/general.settings/panels/LHRBuild/types';
 import Text from '../../../../components/Text';
 import { FB, FBAutocompleteAsyncOption } from '../../../../form.builder';
@@ -22,11 +21,9 @@ const RedlineBuildTypeBanner: React.FunctionComponent<Props> = ({
   const { formState, workspaceState } = FB.useStores();
   const buildTypes = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.buildType);
   const options = buildTypes ? Array.from(buildTypes?.values() as LHRBuild[]) : workspaceState?.buildTypeOptions;
-  const loggedInUser = store.getState().auth.user;
-  const isUserHaveAccess = documentRevision?.approvals?.some(({ approver }) => approver.user.id === loggedInUser.id);
 
-  const buildTypeSource = documentRevision && isUserHaveAccess ? documentRevision.formInput
-   : { 'lhr-build-type': formState?.getFieldValue('lhr-build-type'), 'new-lhr-build-type': formState?.getFieldValue('new-lhr-build-type') };
+  const buildTypeSource = documentRevision ? documentRevision.formInput
+    : { 'lhr-build-type': formState?.getFieldValue('lhr-build-type'), 'new-lhr-build-type': formState?.getFieldValue('new-lhr-build-type') };
 
   const oldBuildType = options?.find(({ id }) => id === buildTypeSource?.['lhr-build-type']);
   const newBuildType = options?.find(({ id }) => id === buildTypeSource?.['new-lhr-build-type']);
@@ -36,7 +33,7 @@ const RedlineBuildTypeBanner: React.FunctionComponent<Props> = ({
     newBuildType: newBuildType?.displayLabel || 'N/A',
   });
 
-  if(oldBuildType) {
+  if (oldBuildType) {
     return (
       <Box className={classes.root}>
         <Text message={message} />

@@ -1,6 +1,6 @@
 import { cloneDeep, has, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBAutocompleteAsyncOption, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
@@ -39,7 +39,6 @@ class FBWorkspaceState extends FBSchemaState {
   @observable.shallow
   public lhrBuildTypeConfig: LHRBuild[] = [];
 
-  public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
 
@@ -53,11 +52,12 @@ class FBWorkspaceState extends FBSchemaState {
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
-  public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor ({ schema = [], mode = 'none', autosave = false, lhrBuildTypeConfig = [] }: FBWorkspaceConstructor) {
     super(schema);
-    this.schema = schema || [];
-    this.mode = mode || 'none';
+    this.schema = schema;
+    this.mode = mode;
     this.autosave = autosave;
+    this.lhrBuildTypeConfig = lhrBuildTypeConfig;
   }
 
   public get buildTypeOptionId (): string {
@@ -114,6 +114,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   public get isOutput (): boolean {
     return !isEmpty(this.document?.formDocumentId);
+  }
+
+  public get isLHRRnDBuild (): boolean {
+    return this.lhrBuildTypeConfigForSelectedBuildType?.internalType === FBLHRBuildOptions['R&D'];
   }
 
   public get isLHRProductionBuild (): boolean {
