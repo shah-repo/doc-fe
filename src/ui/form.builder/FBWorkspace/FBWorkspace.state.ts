@@ -127,8 +127,8 @@ class FBWorkspaceState extends FBSchemaState {
       FBLHRBuildOptions['Verification & Validation'],
     ];
 
-    const activeBuildTypeIds = this.buildTypeOptions
-      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
+    const activeBuildTypeIds = this.lhrBuildTypeConfig
+      ?.filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
       .map((buildType) => buildType.id);
 
     const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
@@ -150,11 +150,11 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRRelevantBuilds (): boolean {
-    if (this.buildTypeOptions.length === 0) {
+    const buildTypes = this.lhrBuildTypeConfig;
+    if (!buildTypes?.length) {
       return false;
     }
 
-    const buildTypes = this.buildTypeOptions;
     const selectedBuildTypeId
     = this.document?.smartReferencesTo
       ?.find(ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)
