@@ -294,6 +294,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'approvals':
         returnValue = (audit.nextValue as Approval).approver.user.name;
         break;
+      case 'approvals.buildTypeApprovals.approver':
       case 'approvals.approver':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name} - {(audit.nextValue as Employee).user?.email}</div>);
         break;
@@ -334,6 +335,16 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'documentType':
         returnValue = (audit.nextValue as DocumentType).documentTypeName;
+        break;
+      case 'approvals.buildTypeApprovals.status':
+        returnValue = (
+          <div data-cy={dataCy}>
+            <Text
+              translation="documentRevision.audit.approvals.buildTypeApprovals.status.accepted.by"
+              values={{ name: audit.ownerName }}
+            />
+          </div>
+        );
         break;
       case 'approvals.status':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
@@ -843,6 +854,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           </div>
         );
         break;
+      case 'formInput.lhr-build-type':
+        return <AuditLhrBuildTypeSection {...{ audit, dataCy, auditValue }} />;
       case 'formInput.lineItems':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
