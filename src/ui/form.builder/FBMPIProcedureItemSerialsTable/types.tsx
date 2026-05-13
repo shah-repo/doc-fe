@@ -17,6 +17,12 @@ export interface LHRSSequenceInfo {
   sequence?: number
 }
 
+export interface LHRSSerialNumbersParams {
+  name: string
+  shouldDisableInSubsequentSteps?: boolean
+  shouldShowOnlyAffectedSerialNumbers?: boolean
+}
+
 export interface LHRSSerialNumbers {
   isRnD: boolean
   isLoading: boolean

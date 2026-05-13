@@ -7,7 +7,7 @@ import { useLhrsTitle } from '../../hooks/useLhrsTitle';
 import { LHRS_ACCEPTED_QUANTITY, LHRS_REJECTED_QUANTITY } from '../FBLHRStep/utils';
 import { EditableSerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
 import FBDataStore from '../FBStore/FBDataStore';
-import { LHRSInfo, LHRSSequenceInfo, LHRSSerialNumbers, LHRSStepSerialNumbersFormValue, LHRSStepSerialNumbersFormValues } from './types';
+import { LHRSInfo, LHRSSequenceInfo, LHRSSerialNumbers, LHRSSerialNumbersParams, LHRSStepSerialNumbersFormValue, LHRSStepSerialNumbersFormValues } from './types';
 
 const isLHRSStepSerialNumbersFormValue = (value: unknown): value is LHRSStepSerialNumbersFormValue => {
   return typeof value === 'object' && value !== null && 'serialsNumbers' in value;
@@ -23,12 +23,18 @@ const calculateLhrsQuantities = (formValues: LHRSStepSerialNumbersFormValues, se
     }
     const serialsNumbers = formValue.serialsNumbers;
     Object.entries(serialsNumbers).forEach(([serialNumber, data]) => {
-      if (data.status === SerialNumberStatus.REJECTED) {
-        acc.rejected.add(serialNumber);
-        acc.accepted.delete(serialNumber);
-      } else {
-        acc.accepted.add(serialNumber);
-        acc.rejected.delete(serialNumber);
+      switch (data.status) {
+        case SerialNumberStatus.REJECTED:
+          acc.rejected.add(serialNumber);
+          acc.accepted.delete(serialNumber);
+          break;
+        case SerialNumberStatus.ACCEPTED:
+          if (!acc.rejected.has(serialNumber)) {
+            acc.accepted.add(serialNumber);
+          }
+          break;
+        default:
+          break;
       }
     });
     return acc;
@@ -100,10 +106,11 @@ const useLhrsSequenceInfo = (name: string): LHRSSequenceInfo => {
   }), [sequenceIndex, stepIndex]);
 };
 
-export const useLHRSSerialNumbers = (
-  name: string,
-  shouldDisableInSubsequentSteps = false,
-): LHRSSerialNumbers => {
+export const useLHRSSerialNumbers = ({
+  name,
+  shouldDisableInSubsequentSteps,
+  shouldShowOnlyAffectedSerialNumbers,
+}: LHRSSerialNumbersParams): LHRSSerialNumbers => {
   const { serialsState, formState, workspaceState } = FB.useStores();
   const isRnD = useObserver(() => workspaceState?.isLHRRnDBuild ?? false);
   const formValues = useObserver(() => formState?.values ?? {});
@@ -145,7 +152,10 @@ export const useLHRSSerialNumbers = (
         ? isRejected && !canUseForRnD && !isUpdatedInCurrent
         : isRejected && !canUseForRnD && isUpdatedInSubsequent;
 
-      const shoupShow = !isRejected || canUseForRnD || isUpdatedInSubsequent || existingSerial;
+      const shoupShow = shouldShowOnlyAffectedSerialNumbers
+        ? existingSerial
+        : !isRejected || canUseForRnD || isUpdatedInSubsequent || existingSerial;
+
       if (!shoupShow) {
         return acc;
       }
@@ -158,7 +168,15 @@ export const useLHRSSerialNumbers = (
         isDisabled,
       }];
     }, []);
-  }, [allSerialNumbers, affectedSerialNumbers, isRnD, sequence, step, shouldDisableInSubsequentSteps]);
+  }, [
+    allSerialNumbers,
+    affectedSerialNumbers,
+    isRnD,
+    sequence,
+    step,
+    shouldDisableInSubsequentSteps,
+    shouldShowOnlyAffectedSerialNumbers,
+  ]);
 
   const buildLhrsStepFormValue = useCallback((payload: SerialNumberUpdatePayload[]) => {
     const currentValue = value;
