@@ -1,7 +1,9 @@
 import { cloneDeep, get } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
+import { companySelectors } from '../../../../state/ducks/company';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
@@ -31,11 +33,13 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
     const { approvalMatrixFieldState } = FB.useStores();
+    const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
     isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
       mode: _formState?.mode,
-      autosave: _formState?.autosave || false,
+      autosave: _formState?.autosave,
+      lhrBuildTypeConfig,
     });
 
     const schema = _documentRevisionFormState?.schema || documentRevision?.schema;

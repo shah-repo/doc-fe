@@ -11,6 +11,7 @@ import { withSMForm } from '../../../../../../../App/Shifamed/Components/SMForm/
 import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
+import { companySelectors } from '../../../../../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabIds, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
@@ -54,10 +55,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
+  const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
   const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
     autosave: false,
+    lhrBuildTypeConfig,
   });
 
   const documentTypesById = useSelector(documentTypeSelectors.byId);
@@ -375,11 +378,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
   const { workspaceState } = FB.useStores();
-
+  const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
   const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: workspaceState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
     autosave: false,
+    lhrBuildTypeConfig,
   });
 
   previewWorkspaceState.document = cloneDeep(workspaceState?.document);
