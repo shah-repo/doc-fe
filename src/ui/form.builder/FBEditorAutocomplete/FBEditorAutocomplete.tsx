@@ -4,7 +4,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { checkIfDocumentHasOptions } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
@@ -26,6 +28,15 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   const classes = styles();
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const customClasses = useStyles();
+
+  const documentTypeOptions = documentTypes.filter((documentType) => {
+    return documentType.active && !checkIfDocumentHasOptions(
+      [
+        DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST,
+      ],
+      documentType.groupOptions,
+    );
+  });
 
   const optionId = useObserver(
     () => (formState?.newValues.get('optionId') ?? formState?.getFieldValue('optionId')) as string | undefined,
@@ -61,7 +72,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         <>
           <FBAutocomplete
             label="common.document.types"
-            options={documentTypes}
+            options={documentTypeOptions}
             optionLabelKey="documentTypeName"
             optionValueKey="id"
             name="docTypeIds"
