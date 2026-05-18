@@ -74,12 +74,10 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const isNewVersion: boolean = location.pathname.includes('new-version');
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
-
+  const { restrictions, isRestrictionsLoading } = useDamNumberingStyleRestrictions();
   const isLoading = useObserver(
-    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
+    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading || isRestrictionsLoading,
   );
-
-  const { restrictions } = useDamNumberingStyleRestrictions();
 
   const schema = useMemo(
     () =>

@@ -31,7 +31,6 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
       value: event.value,
     });
   };
-  console.log('canBeModified', canBeModified);
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     if (!onClick || canBeModified) {
