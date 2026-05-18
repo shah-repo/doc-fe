@@ -69,7 +69,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       withoutStatus = status === DocumentRevisionStatus.Deprecated
         || approvalMatrix.some(item => isUndefined(get(item, 'docType.active', undefined)));
 
-      const matrix = approvalMatrix.map(item => ({
+      const matrix = (approvalMatrix ?? []).map(item => ({
         ...item,
         docType: {
           ...item.docType,
