@@ -2,7 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
@@ -81,16 +81,20 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
 
   const { restrictions } = useDamNumberingStyleRestrictions();
 
-  const schema = createSchema({
-    data,
-    withoutStatus,
-    clearRightBorderClassName: classes.clearRightBorder,
-    cellARClassName: classes.cellAR,
-    cellARHeaderClassName: classes.cellARHeader,
-    popupContainer: popupContainerRef,
-  });
+  const schema = useMemo(
+    () =>
+      createSchema({
+        data,
+        withoutStatus,
+        clearRightBorderClassName: classes.clearRightBorder,
+        cellARClassName: classes.cellAR,
+        cellARHeaderClassName: classes.cellARHeader,
+        popupContainer: popupContainerRef,
+      }),
+    [approvalMatrix, approvalRoles, withoutStatus, classes.clearRightBorder, classes.cellAR, classes.cellARHeader],
+  );
 
-  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
+  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = useCallback(() => ({
     id: generateUuid(),
     docType: {
       name: '',
@@ -108,7 +112,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-  });
+  }), [approvalRoles.length]);
 
   return (
     <Box
