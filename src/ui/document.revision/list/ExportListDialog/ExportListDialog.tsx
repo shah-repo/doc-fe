@@ -1,7 +1,8 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, LinearProgress, TextField, Typography } from '@material-ui/core';
+import { Box, Grid, LinearProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { ExportToCsv } from 'export-to-csv';
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { FormikProvider, useFormik } from 'formik';
+import React, { useContext, useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
 import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
@@ -12,9 +13,11 @@ import {
   POStatusLabelMapping,
   POStatusType,
 } from '../../../../state/ducks/documentRevisions/types';
+import { Dialog } from '../../../components/dialogs';
+import { FormikField, TextField } from '../../../components/forms/fields-next';
+import { requiredNumber, validator, validNumber } from '../../../components/forms/fields/validators';
 import { SearchContext } from '../../../components/KeywordSearch/types';
 import { toastError } from '../../../components/notifications';
-import Text from '../../../components/Text';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
 import { FB } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -36,6 +39,16 @@ interface Props {
 
 const DEFAULT_RECORD_DOWNLOAD_LIMIT = 25;
 
+interface ExportList {
+  fileName: string
+  limit?: number
+}
+
+const INITIAL_VALUES = {
+  fileName: '',
+  limit: DEFAULT_RECORD_DOWNLOAD_LIMIT,
+};
+
 const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
   headers,
@@ -48,7 +61,6 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
-  const [limit, saveLimit] = useState(DEFAULT_RECORD_DOWNLOAD_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
   const { tableSearchQueryPayload } = useContext(SearchContext);
 
@@ -73,14 +85,6 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
       saveFileName('');
     }
   }, [dialog.isOpen]);
-
-  const handleFileName = (ev: React.ChangeEvent<any>) => {
-    saveFileName(ev.target.value);
-  };
-
-  const handleLimit = (ev: ChangeEvent<HTMLInputElement>) => {
-    saveLimit(ev.target.value as unknown as number);
-  };
 
   if (categoryName === DocumentCategory.PurchaseOrder) {
     data = data.map((item) => ({
@@ -112,6 +116,17 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     });
   }
 
+  const formik = useFormik<ExportList>({
+    initialValues: INITIAL_VALUES,
+    onSubmit: (values) => {
+      const { fileName = '', limit = 0 } = values;
+      saveFileName(fileName);
+      downloadCSVFile(limit);
+    },
+  });
+
+  const { getFieldProps, submitForm } = formik;
+
   const downloadCsvFromString = (csvString?: string) => {
     try {
       const blob = new Blob([csvString ?? ''], { type: 'text/csv;charset=utf-8;' });
@@ -136,7 +151,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     onError: toastError,
   });
 
-  const downloadCSVFile = () => {
+  const downloadCSVFile = (limit: number) => {
     if (isMultiplePagesDownloadAllowed) {
       async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit), offset: 0 } }, async);
     } else {
@@ -148,71 +163,59 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   return (
     <>
       {dialog.isOpen && (
-        <Dialog open={dialog.isOpen} onClose={dialog.close} maxWidth="sm" PaperProps={{ id: 'exportListDialog' }}>
-          <DialogContent>
-            <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
-              <Box textAlign="center">
+        <FormikProvider value={formik}>
+          <Dialog
+            title="document.revision.export.list"
+            confirmProps={{
+              id: 'ExportListDialog-downloadButton',
+              'data-cy': 'ExportListDialog-downloadButton',
+            }}
+            cancelProps={{
+              id: 'ExportListDialog-cancelButton',
+              'data-cy': 'ExportListDialog-cancelButton',
+            }}
+            confirmLabel="common.download"
+            cancelLabel="common.cancel"
+            open={dialog.isOpen}
+            onClose={dialog.close}
+            onCancel={dialog.close}
+            onConfirm={submitForm}
+            maxWidth="sm" PaperProps={{ id: 'exportListDialog' }}>
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={2}
+            >
+              <Box width="100%" display="flex" flex={1} justifyContent="center" marginBottom={1.5}>
                 <span className={classes.iconContainer}>
                   <ExportIcon style={{ marginLeft: 6, marginTop: 7 }} />
                 </span>
-                <Typography variant="h6" className={classes.title}>
-                  <Text translation="document.revision.export.list" />
-                </Typography>
               </Box>
-              <DialogContentText>
-                <Box className={classes.dialogContent}>
-                  <Typography variant="subtitle1" className={classes.subtitle}>
-                    <Text translation="document.revision.enter.file.name" />
-                  </Typography>
-                  <TextField
-                    error={fileName === ''}
-                    variant="outlined"
-                    id="ExportListDialog-fileName"
-                    className={classes.field}
-                    onChange={handleFileName}
-                  />
-                </Box>
-                {isMultiplePagesDownloadAllowed && (
-                  <Box className={classes.dialogContent}>
-                    <Typography variant="subtitle1" className={classes.subtitle}>
-                      <Text translation="document.revision.enter.file.limit" />
-                    </Typography>
-                    <TextField
-                      variant="outlined"
-                      type="number"
-                      inputProps={{ min: DEFAULT_RECORD_DOWNLOAD_LIMIT }}
-                      value={limit}
-                      data-cy="export-list-dialog-limit"
-                      className={classes.field}
-                      onChange={handleLimit}
-                    />
-                  </Box>
-                )}
-              </DialogContentText>
-            </Box>
-          </DialogContent>
-          <Box className={classes.dialogAction}>
-            <Button
-              variant="contained"
-              className={classes.cancelButton}
-              onClick={dialog.close}
-              id="ExportListDialog-cancelButton"
-            >
-              <Text translation="common.cancel" />
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              className={classes.submitButton}
-              id="ExportListDialog-downloadButton"
-              data-cy="ExportListDialog-downloadButton"
-              onClick={downloadCSVFile}
-            >
-              <Text translation="common.download" />
-            </Button>
-          </Box>
-          {async.isLoading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
-        </Dialog>
+              <Grid item xs={12}>
+                <FormikField
+                  required
+                  name="fileName"
+                  label="document.revision.enter.file.name"
+                >
+                  <TextField {...getFieldProps('fileName')} id="ExportListDialog-fileName" />
+                </FormikField>
+              </Grid>
+              {isMultiplePagesDownloadAllowed && (
+                <Grid item xs={12}>
+                  <FormikField
+                    required
+                    validate={validator(requiredNumber, validNumber)}
+                    name="limit"
+                    label="document.revision.enter.file.limit"
+                  >
+                    <TextField type="number" {...getFieldProps('limit')} data-cy="export-list-dialog-limit" />
+                  </FormikField>
+                </Grid>
+              )}
+            </Grid>
+            {async.isLoading && <LinearProgress className={cx(classes.loading, classes.loadingAtTop)} />}
+          </Dialog>
+        </FormikProvider>
       )}
     </>
   );
