@@ -45,6 +45,12 @@ export const positiveNumber: Validator = (value) => {
   }
 };
 
+export const validNumber: Validator = (value) => {
+  if (isNaN(parseFloat(value)) || parseFloat(value) < 1) {
+    return 'validators.valid.number';
+  }
+};
+
 export const confirmResetPasswordSchema = Yup.string()
   .oneOf([Yup.ref('newPassword'), null], 'validator.match.passwords')
   .required('validator.confirm');
