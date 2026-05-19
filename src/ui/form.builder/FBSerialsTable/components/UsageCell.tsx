@@ -9,7 +9,7 @@ interface Props extends TableCellProps {
   onChange: (id: string, usage: SerialNumberUsage | null) => void
 }
 
-const StatusCell: React.FC<Props> = ({
+const UsageCell: React.FC<Props> = ({
   isTableDisabled,
   dataItem,
   options,
@@ -42,4 +42,4 @@ const StatusCell: React.FC<Props> = ({
   );
 };
 
-export default StatusCell;
+export default UsageCell;

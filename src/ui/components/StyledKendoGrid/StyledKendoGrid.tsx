@@ -68,7 +68,6 @@ const StyledKendoGrid: React.FC<PropsWithChildren<StyledKendoGridProps>> = ({
 
   return (
     <LocalizationProvider language={intl.locale}>
-      {/* TODO Switch to Box after upgrading MUI as for now it doesn't support refs */}
       <div
         ref={gridContainerRef}
         style={props.style}
