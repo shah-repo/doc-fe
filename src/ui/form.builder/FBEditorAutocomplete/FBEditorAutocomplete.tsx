@@ -3,6 +3,7 @@ import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
+import { translate } from '../../../common/intl';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -13,10 +14,44 @@ import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
 import useStyles from './FBEditorAutocomplete.styles';
 
-const documentRevisionStatusOptions = Object.values(DocumentRevisionStatus).map((status) => ({
-  id: status,
-  label: status,
-}));
+const EXCLUDED_DOCUMENT_OPTIONS = [
+  DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST,
+];
+
+const EXCLUDED_DOCUMENT_REVISION_STATUS = [
+  DocumentRevisionStatus.Canceled,
+  DocumentRevisionStatus.Deprecated,
+  DocumentRevisionStatus.Obsolete,
+  DocumentRevisionStatus.Voided,
+];
+
+const DOCUMENT_REVISION_STATUS_LABELS: Partial<Record<DocumentRevisionStatus, string[]>> = {
+  [DocumentRevisionStatus.Draft]: [
+    translate('DRAFT'),
+    translate('common.wip'),
+  ],
+  [DocumentRevisionStatus.InReview]: [
+    translate('IN_REVIEW'),
+  ],
+  [DocumentRevisionStatus.PendingChange]: [
+    translate('PENDING_CHANGE'),
+  ],
+  [DocumentRevisionStatus.Approved]: [
+    translate('APPROVED'),
+  ],
+  [DocumentRevisionStatus.Released]: [
+    translate('RELEASED'),
+    translate('common.completed'),
+    translate('common.last.signed'),
+  ],
+};
+
+const documentRevisionStatusOptions = Object.values(DocumentRevisionStatus)
+  .filter((status) => !EXCLUDED_DOCUMENT_REVISION_STATUS.includes(status) && DOCUMENT_REVISION_STATUS_LABELS[status])
+  .map((status) => ({
+    id: status,
+    label: DOCUMENT_REVISION_STATUS_LABELS[status]?.join('/'),
+  }));
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -32,7 +67,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   const documentTypeOptions = documentTypes.filter((documentType) => {
     return documentType.active && !checkIfDocumentHasOptions(
       [
-        DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST,
+        ...EXCLUDED_DOCUMENT_OPTIONS,
       ],
       documentType.groupOptions,
     );
