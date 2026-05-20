@@ -1,7 +1,9 @@
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { pageDetailsActions } from '../../../state/ducks/pageDetails';
+import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -27,9 +29,11 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
   };
 
   const addPageDetailsAction = useActionCreator(pageDetailsActions.addPageDetails);
+  const dispatch = useDispatch();
 
   const async = useAsync({
     onSuccess: () => {
+      dispatch(tableSearchActions.clearAllTables());
       dialog.close();
     },
     onError: (error) => {

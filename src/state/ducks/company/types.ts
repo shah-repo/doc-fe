@@ -1,5 +1,6 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { LHRBuild } from '../../../ui/administration/general.settings/panels/LHRBuild/types';
+import { LHRBuildTypeSwitchConfigApproval } from '../../../ui/administration/general.settings/panels/LHRBuildTypeSwitchConfig/types';
 import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { SupplierLabel } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/SupplierLabelGrid/types';
 import { SupplierConfig } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
@@ -296,6 +297,8 @@ export interface GeneralSettings {
   supplierTypes: SupplierLabel[]
   supplierCapabilities: SupplierLabel[]
   supplierServices: SupplierLabel[]
+  lhrBuildTypeSwitchConfigApproval?: LHRBuildTypeSwitchConfigApproval[]
+  defaultTaxRate?: number
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

@@ -14,6 +14,7 @@ import { ReactComponent as SuccessIcon } from '../../../../../assets/images/succ
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { toastSuccess } from '../../../../components/notifications';
@@ -54,10 +55,12 @@ interface Props {
 }
 interface ResponseProps {
   status: string
+  fieldId?: string
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
+  type,
   docId,
   approvalId,
   docRevId,
@@ -131,6 +134,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: (response?: ResponseProps) => {
+      const statusKey = response?.fieldId === 'buildTypeApprovals'
+        ? `approvalRequest.status.buildTypeSwitch.${response?.status}` as Translation
+        : `approvalRequest.status.${response?.status}` as Translation;
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -140,7 +146,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             <div style={{ color: Colors.black }}>
               <div>
                 <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
+                  <Text translation={statusKey} />
                 </span>
               </div>
             </div>
@@ -245,6 +251,17 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />
+                  {type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="require.approval.build.type.switch" />
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
               <Grid

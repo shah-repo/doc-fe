@@ -16,6 +16,7 @@ export type FBAutocompleteProps =
  | 'disableClearable'
  > & {
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any
+   onOpen?: () => any
    refresh?: () => any
    autoCompleteClasses?: AutocompleteProps['classes']
    disabledOptions?: string[]

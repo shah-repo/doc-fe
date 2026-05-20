@@ -1,6 +1,4 @@
-import { Box, List, ListItem, TextField, Typography } from '@material-ui/core';
-import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import cx from 'classnames';
+import { List, ListItem } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,7 +6,7 @@ import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { ExpiredLotTypes, GeneralSettings, NotifyPartLCP } from '../../../../../state/ducks/company/types';
-import { FormControlLabel } from '../../../../components/forms/fields-next';
+import { Autocomplete, FormControlLabel } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import SettingsPanel from '../../components/SettingsPanel';
 import SwitchControl from '../../components/SwitchControl';
@@ -66,34 +64,13 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
                 value={value}
                 options={OPTIONS}
                 getOptionLabel={(option: OptionType) => option.label}
-                renderInput={(params: RenderInputParams) => (
-                  <Box display="flex">
-                    <Box width="100%" data-cy="bom-part-lcp">
-                      <TextField
-                        {...params}
-                        fullWidth
-                        variant="outlined"
-                        placeholder={translate('common.select.or.enter.placeholder')}
-                        InputProps={{
-                          ...params.InputProps,
-                          className: cx(params.InputProps.className, classes.bomLCPDropdownTextField),
-                          style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                          startAdornment: <div>{params.InputProps.startAdornment}</div>,
-                          endAdornment: (
-                            <>
-                              { NotifyPartLCP.DO_NOTHING === value.value && <span className={classes.defaultOption}>{DEFAULT_OPTION_MARKUP}</span>}
-                              {params.InputProps.endAdornment}
-                            </>
-                          ),
-                        }}
-                        inputProps={{
-                          ...params.inputProps,
-                          style: { padding: '4.5px 0' },
-                        }}
-                      />
-                    </Box>
-                  </Box>
-                )}
+                shouldShowDefaultAdornment
+                inputProps={{
+                  endAdornment:
+                    NotifyPartLCP.DO_NOTHING === value.value
+                      ? <span className={classes.defaultOption}>{DEFAULT_OPTION_MARKUP}</span>
+                      : undefined,
+                }}
                 renderOption={(option: OptionType) => {
                   if (option.value === NotifyPartLCP.DO_NOTHING) {
                     return (<>
@@ -107,11 +84,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
               />
             }
             labelPlacement="start"
-            label={
-              <Typography>
-                {translate('administration.general.settings.expired.lots.dropdown.label')}
-              </Typography>
-            }
+            label={translate('administration.general.settings.expired.lots.dropdown.label')}
           />
         </ListItem>
       </List>

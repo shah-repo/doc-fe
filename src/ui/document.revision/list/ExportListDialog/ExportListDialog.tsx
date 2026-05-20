@@ -31,6 +31,7 @@ interface Props {
   customFileName: string
   categoryName?: string
   isMultiplePagesDownloadAllowed?: boolean
+  isTrainingRecord?: boolean
 }
 
 const DEFAULT_RECORD_DOWNLOAD_LIMIT = 25;
@@ -43,13 +44,18 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   customFileName,
   categoryName,
   isMultiplePagesDownloadAllowed = false,
+  isTrainingRecord = false,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
   const [limit, saveLimit] = useState(DEFAULT_RECORD_DOWNLOAD_LIMIT);
   const docTypeTableContext = useContext(DocTypeTableContext);
   const { tableSearchQueryPayload } = useContext(SearchContext);
-  const loadAction = useActionCreator(documentRevisionsActions.downloadCsvData);
+
+  const action = isTrainingRecord
+    ? documentRevisionsActions.downloadTrainingRecordCsvData
+    : documentRevisionsActions.downloadCsvData;
+  const loadAction = useActionCreator(action);
 
   const options = {
     showLabels: true,
@@ -132,7 +138,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   const downloadCSVFile = () => {
     if (isMultiplePagesDownloadAllowed) {
-      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit) } }, async);
+      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit), offset: 0 } }, async);
     } else {
       csvExporter.generateCsv(data);
       dialog.close();

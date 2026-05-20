@@ -27,6 +27,7 @@ import { isOperator } from '../../../../ui/documentRevision/DocumentRevisionDisp
 import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
+import RedlineBuildTypeBanner from '../../../../ui/documentRevision/forms/presenters/redlineBuildType/RedlineBuildType.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
 import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
@@ -78,6 +79,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   isSliderView,
   dirty = false,
   inDialog,
+  isBuildTypeChangeApprovalEnabled,
 }) => {
   const outputDocumentType = documentRevision?.formTemplate?.outputDocumentTypes[0];
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
@@ -286,6 +288,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       }}
                     />
                     {documentRevision && <LHRBanner documentRevision={documentRevision} />}
+                    {isBuildTypeChangeApprovalEnabled && <RedlineBuildTypeBanner />}
                   </>
                 }
                 header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader

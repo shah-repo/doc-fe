@@ -86,7 +86,7 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
       unit: '',
       quantity: undefined,
       isLotAddition: false,
-      ...(isMPIProcedure && { LHRTparameter: true }),
+      ...(isMPIProcedure && { LHRTparameter: false }),
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };
@@ -221,10 +221,14 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
 
       state.data[index][SUB_ITEMS_FIELD]?.unshift(lotItem);
 
+      const partId = state.data[index].id;
+
       updateState({
         ...state,
         data: [...state.data],
-        expanded: [state.data[index].id],
+        expanded: state.expanded?.includes(partId)
+          ? state.expanded
+          : [...(state.expanded ?? []), partId],
         inEdit: [lotItem],
       });
       formik.setValues(lotItem);

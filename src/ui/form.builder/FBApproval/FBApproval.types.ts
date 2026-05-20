@@ -72,5 +72,11 @@ export interface FBInlineApprovalRole {
   joinedEmployees?: Employee[]
 }
 
-export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
+interface FBBuildTypeChangeApprovalRole {
+  id: string
+  name: string
+  joinedEmployees?: Employee[]
+}
+
+export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole | FBBuildTypeChangeApprovalRole;
 export type FBApprovalSocketProps = Pick<FBApprovalProps, 'name'>;

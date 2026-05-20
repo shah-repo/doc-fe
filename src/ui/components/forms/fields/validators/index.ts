@@ -4,7 +4,7 @@ import { Translation } from '../../../../translations/types';
 
 const reactQuillEmptyString = '<p><br></p>';
 
-export type Validator = (value: any) => Translation | undefined;
+export type Validator = (value: any, documentTypeAcronym?: string) => Translation | undefined;
 
 export const required: Validator = (value) => {
   if (value === reactQuillEmptyString || isEmpty(value)) {
@@ -18,6 +18,19 @@ export const email: Validator = (value: string) => {
   if (!/^[a-z0-9!'#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return 'validators.email';
   }
+};
+
+export const docId: Validator = (value: string, documentTypeAcronym?: string) => {
+  if (!value) return required(value);
+
+  let docIdValue = value;
+
+  // Remove prefix only if it actually exists
+  if (documentTypeAcronym && value.startsWith(documentTypeAcronym)) {
+    docIdValue = value.slice(documentTypeAcronym.length);
+  }
+
+  return required(docIdValue.trim());
 };
 
 export const requiredNumber: Validator = (value) => {

@@ -87,6 +87,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   useEffect(() => {
     if (selectedDocumentType) {
+      setDocId('');
       const isDocIdVisibleFalse = selectedDocumentType.fieldsConfig?.F?.visible === false;
       setHelpText(
         isDocIdVisibleFalse ? translate('document.revision.user.numbering.help.doc.id.visible.false')

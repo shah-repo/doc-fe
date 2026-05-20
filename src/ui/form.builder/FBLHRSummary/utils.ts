@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import { LotStatus } from '../../../state/ducks/documentRevisions/types';
@@ -5,7 +6,7 @@ import { getLotStatusLabel } from '../../components/common/header/HeaderLotStatu
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
-import { EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
+import { DATE_TYPE, EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
 import { DetailsObj, EditableLHRSummaryItem, NullableString } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSummaryItem>>): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
@@ -28,7 +29,6 @@ export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSumma
 export const getExcelData = (
   LHRSummaryItemList: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
-  dateFormatter: (date: string, format: string) => string,
 ): Array<ColumnDefinition<EditableLHRSummaryItem>> =>
   LHRSummaryItemList.map(item => {
     const lotStatus = item.lotStatus ? getLotStatusLabel(item.lotStatus as LotStatus) : EMPTY_PLACEHOLDER;
@@ -40,10 +40,6 @@ export const getExcelData = (
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customExpiryDate: item.customExpiryDate && dateFormatter(item?.customExpiryDate, MomentFormats.MonthDateYearTwoDigit),
-      customCalDueDate: item?.customCalDueDate && dateFormatter(item?.customCalDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customPmDueDate: item?.customPmDueDate && dateFormatter(item?.customPmDueDate, MomentFormats.MonthDateYearTwoDigit),
-      customRecordCreationDate: item?.customRecordCreationDate && dateFormatter(item?.customRecordCreationDate, MomentFormats.MonthDateYearTwoDigit),
       lotStatus,
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
@@ -80,6 +76,7 @@ export const processData = (
   data: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
   formatDate: (date: string, format: string) => string,
+  convertDateTimeToUserTz: (date: string, format: string) => string,
 ): EditableLHRSummaryItem[] => {
   return data?.map(item => {
     const modifiedItem = {
@@ -89,10 +86,10 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.DateTimeComplete),
-      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.DateTimeComplete),
-      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.DateTimeComplete),
-      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.DateTimeComplete),
+      customCalDueDate: item?.calDueDate && formatDate(convertDateTimeToUserTz(item?.calDueDate ?? '', MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
+      customPmDueDate: item?.pmDueDate && formatDate(convertDateTimeToUserTz(item?.pmDueDate ?? '', MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
+      customExpiryDate: item?.expiryDate && formatDate(convertDateTimeToUserTz(item?.expiryDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
+      customRecordCreationDate: item?.recordCreationDate && formatDate(convertDateTimeToUserTz(item?.recordCreationDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter), MomentFormats.MonthDateYearTwoDigit),
       customEnteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
@@ -109,4 +106,23 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
 const getDisplayStepAndMpiValue = (step?: string, stepOrMpiDetails?: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
   return !step ? `/${customMpiIdValue}` : (customMpiIdValue === step) ? `${step}/` : `${step}/${customMpiIdValue}`;
+};
+
+export const normalizeDate = (date: string, field: string): string | null => {
+  if (!date) {
+    if ([DATE_TYPE.customCalDueDate, DATE_TYPE.customPmDueDate, DATE_TYPE.customExpiryDate].includes(DATE_TYPE[field])) {
+      return null;
+    }
+    return date;
+  }
+
+  if (moment(date, MomentFormats.YearMonthDateDash, true).isValid()) {
+    return date;
+  }
+
+  if (moment(date, MomentFormats.MonthDateYearTwoDigit, true).isValid()) {
+    return moment(date, MomentFormats.MonthDateYearTwoDigit).format(MomentFormats.YearMonthDateDash);
+  }
+
+  return date;
 };

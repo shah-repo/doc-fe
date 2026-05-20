@@ -8,6 +8,7 @@ import { SM } from '../../../App';
 import { MomentFormats, convertDateTimeToPST, useDate } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { getHighestRevision, getLatesReferenceVersion } from '../../documentRevision/forms/transform';
+import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { LHRS_END_DATE, LHRS_START_DATE } from './utils';
@@ -30,6 +31,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     isDocumentLHRT,
     stepIndex,
     label,
+    isBuildTypeChangeApprovalEnabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -55,26 +57,42 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
     const isPendingChange = isDocumentRevisionPendingChange(workspaceState?.document?.status);
 
-    // TO DO: Find another way with BE to chechk if doc is LHRT
-    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === 'LHRT-';
+    isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
 
-    const startDateFieldName = LHRS_START_DATE;
-    const endDateFieldName = LHRS_END_DATE;
+    // TO DO: Find another way with BE to chechk if doc is LHRT
+    isDocumentLHRT = checkIsDocumentLHRT(workspaceState?.document?.document.documentType.groupOptions);
+
+    // Use step-specific field names so each LHR step's dates are isolated in formState.
+    // All steps previously shared the same key ('lhrs-start-date'), causing one step's
+    // date change to overwrite every other step's date via the shared formState.
+    const startDateFieldName = stepLHRs?.id ? `${LHRS_START_DATE}-${stepLHRs.id}` : LHRS_START_DATE;
+    const endDateFieldName = stepLHRs?.id ? `${LHRS_END_DATE}-${stepLHRs.id}` : LHRS_END_DATE;
 
     if (!(isOutput && stepLHRs)) {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
     } else if (stepLHRs) {
-      const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[startDateFieldName] || stepLHRs?.createdAt;
-      const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[endDateFieldName] || stepLHRs?.releasedAt;
+      const startDate = formState?.getFieldValue(startDateFieldName) || stepLHRs?.formInput?.[LHRS_START_DATE] || stepLHRs?.createdAt;
+      const endDate = formState?.getFieldValue(endDateFieldName) || stepLHRs?.formInput?.[LHRS_END_DATE] || stepLHRs?.releasedAt;
 
-      if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
-        // Format the date to MM/DD/YYYY format expected by FBDatePicker
-        const formattedStartDate = getFormattedDateString(startDate, MomentFormats.MonthDateYearTwoDigit);
+      if (stepLHRs?.formInput?.[LHRS_START_DATE] === null) {
+        // Only null out if user hasn't already set a value (prevents overwriting user input on re-renders)
+        if (!formState?.getFieldValue(startDateFieldName)) {
+          formState?.setFieldValue(startDateFieldName, null);
+        }
+      } else if (startDate && startDate !== formState?.getFieldValue(startDateFieldName)) {
+        // Store as YYYY-MM-DD (consistent with what FBDatePicker saves via convertDateTimeToUserTz)
+        const formattedStartDate = getFormattedDateString(startDate, MomentFormats.YearMonthDateDash);
         formState?.setFieldValue(startDateFieldName, formattedStartDate);
       }
-      if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
-        // Format the date to MM/DD/YYYY format expected by FBDatePicker
-        const formattedEndDate = getFormattedDateString(endDate, MomentFormats.MonthDateYearTwoDigit);
+
+      if (stepLHRs?.formInput?.[LHRS_END_DATE] === null) {
+        // Only null out if user hasn't already set a value (prevents overwriting user input on re-renders)
+        if (!formState?.getFieldValue(endDateFieldName)) {
+          formState?.setFieldValue(endDateFieldName, null);
+        }
+      } else if (endDate && endDate !== formState?.getFieldValue(endDateFieldName)) {
+        // Store as YYYY-MM-DD (consistent with what FBDatePicker saves via convertDateTimeToUserTz)
+        const formattedEndDate = getFormattedDateString(endDate, MomentFormats.YearMonthDateDash);
         formState?.setFieldValue(endDateFieldName, formattedEndDate);
       }
     }
@@ -187,8 +205,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
       const disposer = reaction(
         () => [
-          formState?.inputState.get(startDateFieldName)?.value,
-          formState?.inputState.get(endDateFieldName)?.value,
+          formState?.newValues.get(startDateFieldName),
+          formState?.newValues.get(endDateFieldName),
         ],
         ([startDate, endDate]) => {
           if (!stepLHRs || !lhrStepState) { return; }
@@ -203,16 +221,25 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
             // Re-check stepLHRs since it might have changed during the timeout
             if (!stepLHRs || !lhrStepState) { return; }
 
+            // Skip if both dates are null — this is the initialization state, not a user change
+            if (startDate === null && endDate === null) { return; }
+
             // Check if there are actual changes before updating
             const currentStartDate = stepLHRs.formInput?.[LHRS_START_DATE] as string | undefined;
             const currentEndDate = stepLHRs.formInput?.[LHRS_END_DATE] as string | undefined;
 
-            // Convert form dates to ISO format for comparison
-            const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
-            const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.AsyncTasksDefaultDateTimeFormatter) : undefined;
+            // Convert form dates (YYYY-MM-DD, stored by FBDatePicker via convertDateTimeToUserTz) to ISO
+            const isoStartDate = startDate ? convertDateTimeToPST(startDate, MomentFormats.YearMonthDateDash) : undefined;
+            const isoEndDate = endDate ? convertDateTimeToPST(endDate, MomentFormats.YearMonthDateDash) : undefined;
+
+            // Normalize null/undefined to null for comparison (treat both as "no date")
+            const effectiveStart = isoStartDate ?? null;
+            const effectiveEnd = isoEndDate ?? null;
+            const effectiveCurrentStart = currentStartDate ?? null;
+            const effectiveCurrentEnd = currentEndDate ?? null;
 
             // Only update if there are actual changes
-            if (isoStartDate !== currentStartDate || isoEndDate !== currentEndDate) {
+            if (effectiveStart !== effectiveCurrentStart || effectiveEnd !== effectiveCurrentEnd) {
               lhrStepState.updateLHRStepDates(isoStartDate, isoEndDate);
             }
           }, 500); // 500ms debounce to allow both dates to be set
@@ -315,6 +342,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrBuildTypeExist,
       startDateFieldName,
       endDateFieldName,
+      isBuildTypeChangeApprovalEnabled,
     });
   };
 

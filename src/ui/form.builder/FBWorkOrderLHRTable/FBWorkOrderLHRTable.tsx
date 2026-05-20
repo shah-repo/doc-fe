@@ -15,6 +15,7 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
 import ColumnShowHideTreeMenu from '../../components/common/treelist/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps } from '../../components/common/treelist/types';
@@ -106,8 +107,13 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
 
     if (!disabled || isEditable) {
       _formState?.setLoading(true);
+      const formInput = { ...formState?.getValues(), [name]: dataToPersist };
+      if (formInput[WO_LOT_ID_KEY_NAME] === null) {
+        formInput[WO_LOT_ID_KEY_NAME] = '';
+      }
+
       Promise.resolve(
-        workspaceState?.updateDocRevById({ formInput: { ...formState?.getValues(), [name]: dataToPersist } }, workspaceState?.id),
+        workspaceState?.updateDocRevById({ formInput: formInput }, workspaceState?.id),
       ).then(() => {
         workspaceState?.setFormInputSync(name, dataToPersist);
         if (workspaceState?.id && FBStore?.isHistoryTabSelected) {
