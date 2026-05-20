@@ -31,6 +31,8 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
 }) => {
   const { name } = store.getState().auth.user;
   const defaultValue = { label: name, value: name };
+  const isRejectTransition = transition === 'reject';
+
   return (
     <Form className={classes.container}>
       <FormMessage asyncState={asyncState} />
@@ -47,7 +49,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         isDisabled
         options={[defaultValue]}
       />
-      { (transition !== 'reject' || showPassword) && <InputField
+      { (!isRejectTransition || showPassword) && <InputField
         name="password"
         label="document.action.password"
         dataCy="transition.action.password"
@@ -56,7 +58,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         inputProps={{ type: 'password', placeholder: translate('common.enter.here'), className: classes.inputField }}
         validate={validator(required)}
       /> }
-      { transition === 'reject' && <FormikTextEditor
+      { isRejectTransition && <FormikTextEditor
         name="comment"
         label="transition.action.rejection.comment"
         dataCy="transition.action.rejection.comment"
@@ -68,7 +70,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
         id="passwordConfirm"
         dataCy="passwordConfirm"
         asyncState={asyncState}
-        label={transition !== 'reject' ? 'transition.action.confirm' : 'transition.action.reject'}
+        label={!isRejectTransition ? 'transition.action.confirm' : 'transition.action.reject'}
         className={classes.submitButton}
       />
       <Button

@@ -39,13 +39,13 @@ export const toUniqGroupOptions = (approvers) => {
 export const templateOptionToChangeRequestCreateBody = (option: TemplateOption): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     formDocument: {
-      id: option.value,
+      id: option?.value,
     },
     title: '',
     description: '',
-    formInput: option.formInput ?? {},
+    formInput: option?.formInput ?? {},
     documentType: {
-      id: option.docTypeId,
+      id: option?.docTypeId,
     },
   };
 

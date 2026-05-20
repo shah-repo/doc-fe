@@ -23,6 +23,7 @@ interface PasswordFormProps extends WithStyles<typeof styles> {
 
 const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, cancel, classes, asyncState }) => {
   const { name } = store.getState().auth.user;
+  const isRejectTransition = transition === 'reject';
 
   return (
     <Form className={classes.form}>
@@ -46,7 +47,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, 
         inputProps={{ type: 'password', className: classes.inputField }}
         validate={validator(required)}
       />
-      {transition === 'reject' && <FormikTextEditor
+      {isRejectTransition && <FormikTextEditor
         name="comment"
         label="transition.action.rejection.comment"
         dataCy="transition.action.rejection.comment"
@@ -58,7 +59,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, 
         id="passwordConfirm"
         dataCy="passwordConfirm"
         asyncState={asyncState}
-        label="transition.action.confirm"
+        label={isRejectTransition ? 'transition.action.reject' : 'transition.action.confirm'}
         fullWidth={false}
         className={classes.submitButton}
       />
