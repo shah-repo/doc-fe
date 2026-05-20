@@ -22,6 +22,7 @@ import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from '../../..
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
 import useGetHasTag from '../../../hooks/useGetHasTag';
+import { useLhrsTitle } from '../../../hooks/useLhrsTitle';
 import OverflowTooltip from '../../OverflowTooltip';
 import Text from '../../Text';
 import { useFormContext } from '../../forms/FormContext';
@@ -119,11 +120,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   }
   const classes = styles({ iconLink });
 
+  const { title: mpiOutputTitle } = useLhrsTitle(name, documentTypeId);
+
   const titleRenderer = (className: string) => {
-    const stepRegex = /Step #[0-9]+/;
-    // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-    const mpiOutputTitle = name.match(stepRegex);
-    const docId = isTypeMpiOutput && mpiOutputTitle ? mpiOutputTitle[0] : id;
+    const docId = mpiOutputTitle ?? id;
 
     return (
       <OverflowTooltip

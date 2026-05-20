@@ -17,6 +17,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   isOutput = true,
   stepIndex,
   disabled,
+  isFieldDisabled,
   types = [],
   name,
   redlineActive,
@@ -31,7 +32,12 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   const hasAnyContent = !isPreview || hasItems || hasDescription;
 
   return (
-    <FBInput {...props } {...{ name }} type="mpiprocedure">
+    <FBInput
+      {...props}
+      {...{ name }}
+      type="mpiprocedure"
+      shouldWrapWithFormControl={false}
+    >
       <Box
         pb={3.8}
         mt={hasAnyContent ? 1.75 : 0}
@@ -156,11 +162,13 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 borderRight={0}
               />
             )}
-            <Box flexGrow={1}>
-              <FBMPIProcedureItem
-                type={types.pop() as FBProcedureItemType}
-                {...{ name, disabled, isPreview, isOutput, redlineActive }} />
-            </Box>
+            {types.length > 0 && (
+              <Box flexGrow={1}>
+                <FBMPIProcedureItem
+                  type={types.pop() as FBProcedureItemType}
+                  {...{ name, disabled, isPreview, isOutput, redlineActive, isFieldDisabled }} />
+              </Box>
+            )}
           </Box>
         </FBProvider>
       </Box>

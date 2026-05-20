@@ -161,7 +161,7 @@ const FBBuildType: React.FunctionComponent<FBBuildTypeProps> = ({
         </Box>
         <FBBuildTypeChangeApproval
           name="buildTypeApprovals"
-          label="form.builder.approvers"
+          label="form.builder.build.type.switch.approval.header.msg"
           documentStatus={documentStatus}
           approvalTransition={approvalTransition}
           selectedValue={selectedValue}

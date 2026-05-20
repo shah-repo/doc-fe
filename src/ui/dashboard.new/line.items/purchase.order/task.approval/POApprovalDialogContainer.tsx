@@ -36,6 +36,7 @@ interface Props {
 
 interface ResponseProps {
   status: string
+  fieldId?: string
 }
 
 const ApproveDialogContainer: React.FunctionComponent<Props> = ({
@@ -54,6 +55,10 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
+      const status = response?.status ?? '';
+      const statusKey = response?.fieldId === 'buildTypeApprovals'
+        ? `approvalRequest.status.buildTypeSwitch.${status}` as Translation
+        : `approvalRequest.status.${status}` as Translation;
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -63,7 +68,7 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
             <div style={{ color: Colors.black }}>
               <div>
                 <span style={{ fontWeight: 'bold' }}>
-                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
+                  <Text translation={statusKey} />
                 </span>
               </div>
             </div>

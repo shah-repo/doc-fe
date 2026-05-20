@@ -95,6 +95,8 @@ const getCompanyTimezone = (state: ApplicationState) => state.company.generalSet
 
 const getCompanyDefaultTaxRate = (state: ApplicationState): number => state.company.generalSettings.defaultTaxRate ?? DEFAULT_TAX_RATE;
 
+const getLHRBuildTypeConfig = (state: ApplicationState) => state.company.generalSettings.lhrBuildTypeConfig;
+
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
@@ -149,6 +151,7 @@ export default {
   getPremiumFeatureSubscriptionsUpdatedAt,
   getCompanyTimezone,
   getCompanyDefaultTaxRate,
+  getLHRBuildTypeConfig,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
   getPremiumFeatureSubscriptions,

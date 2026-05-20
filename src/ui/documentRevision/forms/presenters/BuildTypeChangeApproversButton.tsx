@@ -104,7 +104,7 @@ const BuildTypeChangeApproversButton: React.FunctionComponent<Props> = ({ render
         </Box>
         <FBBuildTypeChangeApproval
           name="buildTypeApprovals"
-          label="form.builder.approvers"
+          label="form.builder.build.type.switch.approval.header.msg"
           documentStatus={DocumentStatus.Draft}
           prevValue={prevValueProp}
           selectedValue={selectedValueProp}
