@@ -12,6 +12,7 @@ import FormMessage from '../../../../../components/forms/FormMessage';
 import FormProgress from '../../../../../components/forms/FormProgress';
 import SubmitButton from '../../../../../components/forms/SubmitButton';
 import Text from '../../../../../components/Text';
+import { TransitionIdent } from '../../../../../components/transitionDialog/types';
 import { Transition } from '../types';
 import styles from './PasswordForm.styles';
 
@@ -31,7 +32,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
 }) => {
   const { name } = store.getState().auth.user;
   const defaultValue = { label: name, value: name };
-  const isRejectTransition = transition === 'reject';
+  const isRejectTransition = transition === TransitionIdent.REJECT;
 
   return (
     <Form className={classes.container}>

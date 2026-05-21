@@ -13,6 +13,7 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import Text from '../../../../components/Text';
+import { TransitionIdent } from '../../../../components/transitionDialog/types';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../../constants/urls';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useDialog from '../../../../hooks/useDialog';
@@ -376,7 +377,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         </Grid>
       </Collapse>
       <ApproveDialogContainer
-        transition={approved ? 'approve' : 'reject'}
+        transition={approved ? TransitionIdent.APPROVE : TransitionIdent.REJECT}
         type={type}
         approvalId={approvalId}
         transitionDialog={transitionDialog}

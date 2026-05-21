@@ -12,7 +12,7 @@ import FormMessage from '../../forms/FormMessage';
 import FormProgress from '../../forms/FormProgress';
 import SubmitButton from '../../forms/SubmitButton';
 import Text from '../../Text';
-import { Transition } from '../../transitionDialog/types';
+import { Transition, TransitionIdent } from '../../transitionDialog/types';
 import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
@@ -23,7 +23,7 @@ interface PasswordFormProps extends WithStyles<typeof styles> {
 
 const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, cancel, classes, asyncState }) => {
   const { name } = store.getState().auth.user;
-  const isRejectTransition = transition === 'reject';
+  const isRejectTransition = transition === TransitionIdent.REJECT;
 
   return (
     <Form className={classes.form}>

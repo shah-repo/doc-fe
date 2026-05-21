@@ -1,10 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { FBForm, FBInlineApprovalTransitionIdent, FBTextEditor, FBTextField } from '..';
+import { FBForm, FBTextEditor, FBTextField } from '..';
 import { translate } from '../../../common/intl';
 import { store } from '../../../state/store';
 import { Autocomplete } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
+import { TransitionIdent } from '../../components/transitionDialog/types';
 import { useStyle } from './FBApprovalPasswordForm.styles';
 import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
@@ -38,7 +39,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
             getOptionLabel={(option) => option.label}
           />
         </Box>}
-        {(transition !== 'reject' || isPasswordVisible) && <FBTextField
+        {(transition !== TransitionIdent.REJECT || isPasswordVisible) && <FBTextField
           rules="required"
           name="password"
           inputProps={{
@@ -46,7 +47,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
           }}
           label="form.builder.password"
         /> }
-        {[FBInlineApprovalTransitionIdent.REJECT, FBInlineApprovalTransitionIdent.REJECT_WITH_PASSWORD].includes(transition as FBInlineApprovalTransitionIdent)
+        {[TransitionIdent.REJECT, TransitionIdent.REJECT_WITH_PASSWORD].includes(transition as TransitionIdent)
         && <FBTextEditor
           name="comment"
           label="transition.action.rejection.comment"

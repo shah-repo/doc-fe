@@ -1,5 +1,6 @@
 import React from 'react';
-import { FB, FBApprovalPasswordFormActions, FBFormState, FBInlineApprovalTransition, FBInlineApprovalTransitionIdent } from '..';
+import { FB, FBApprovalPasswordFormActions, FBFormState, FBInlineApprovalTransition } from '..';
+import { TransitionIdent } from '../../components/transitionDialog/types';
 import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 
 export const withFBApprovalPasswordForm = (
@@ -33,10 +34,10 @@ export const withFBApprovalPasswordForm = (
     };
 
     const objectToPass: any = { onDialogClose };
-    if (transition === 'approve') {
+    if (transition === TransitionIdent.APPROVE) {
       objectToPass.onDialogApprove = onDialogApprove;
-    } else if ([FBInlineApprovalTransitionIdent.REJECT, FBInlineApprovalTransitionIdent.REJECT_WITH_PASSWORD]
-      .includes(transition as FBInlineApprovalTransitionIdent)) {
+    } else if ([TransitionIdent.REJECT, TransitionIdent.REJECT_WITH_PASSWORD]
+      .includes(transition as TransitionIdent)) {
       objectToPass.onDialogReject = onDialogReject;
     }
 

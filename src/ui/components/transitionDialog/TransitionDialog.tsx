@@ -14,7 +14,7 @@ import EffectiveDateForm from '../effectiveDate/form/EffectiveDateForm';
 import { FormContext } from '../forms/FormContext';
 import PasswordForm from '../password/form/PasswordForm';
 import styles from './TransitionDialog.styles';
-import { PasswordFormValues, Transition } from './types';
+import { PasswordFormValues, Transition, TransitionIdent } from './types';
 
 interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
@@ -51,9 +51,9 @@ const TransitionDialog: React.FunctionComponent<Props>
     );
 
     const getDialogTitle = () => {
-      if (transition === 'closed') {
+      if (transition === TransitionIdent.CLOSED) {
         return 'transition.action.close.date';
-      } else if (transition === 'reject') {
+      } else if (transition === TransitionIdent.REJECT) {
         return 'form.builder.rejection.prompt';
       } else {
         return 'transition.action.title';
@@ -61,6 +61,8 @@ const TransitionDialog: React.FunctionComponent<Props>
     };
 
     const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
+    const isEffectiveDateTransition = transition === TransitionIdent.CLOSED;
+
     return (
       <div className={classes.container}>
         {isNewLayout ? (
@@ -110,10 +112,10 @@ const TransitionDialog: React.FunctionComponent<Props>
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={transition === 'closed' ? { effectiveDate: '' } : { password: '', comment: '' }}
+                initialValues={isEffectiveDateTransition ? { effectiveDate: '' } : { password: '', comment: '' }}
                 onSubmit={onSubmit}
               >
-                {transition === 'closed' ? renderCloseForm : renderPasswordForm}
+                {isEffectiveDateTransition ? renderCloseForm : renderPasswordForm}
               </Formik>
             </FormContext.Provider>
           </DialogContent>

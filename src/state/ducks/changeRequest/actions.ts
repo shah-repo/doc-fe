@@ -1,3 +1,4 @@
+import { TransitionIdent } from '../../../ui/components/transitionDialog/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
@@ -111,7 +112,8 @@ const applyTransition = (
         return;
       }
       dispatch(load(id));
-      if (transition === 'reject' || transition === 'approve') {
+
+      if ([TransitionIdent.REJECT, TransitionIdent.APPROVE].includes(transition as TransitionIdent)) {
         dispatch(dashboardActions.loadPendingActionsList());
       }
     },

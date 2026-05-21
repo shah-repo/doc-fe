@@ -14,6 +14,7 @@ import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { TransitionIdent } from '../../../../components/transitionDialog/types';
 import { ApprovalFailureResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -111,8 +112,8 @@ const ApproveDialogContainer: React.FunctionComponent<Props> = ({
 
   const onSubmit = (props: PasswordFormValues) => {
     let transitionToUse = transition;
-    if (type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER && transitionToUse === 'reject') {
-      transitionToUse = 'reject_with_password';
+    if (type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER && transitionToUse === TransitionIdent.REJECT) {
+      transitionToUse = TransitionIdent.REJECT_WITH_PASSWORD;
     }
     if (props.password) {
       setPassword(props.password);

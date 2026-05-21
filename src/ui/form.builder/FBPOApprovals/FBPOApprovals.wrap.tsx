@@ -7,6 +7,7 @@ import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDi
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
+import { TransitionIdent } from '../../components/transitionDialog/types';
 import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
@@ -116,7 +117,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState?.config({
         title: 'form.builder.rejection.prompt',
         open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: 'reject' }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: TransitionIdent.REJECT }} />,
       });
     };
 
