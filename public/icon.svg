@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="76" height="76"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="76" height="76"><svg width="76" height="76" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .fragment-1,
+    .fragment-2,
+    .fragment-3,
+    .fragment-4,
+    .fragment-5,
+    .fragment-6 {
+      fill: #00249C;
+    }
+    @media (prefers-color-scheme: dark) {
+      .fragment-1 {
+        fill: #AD96DC;
+      }
+      .fragment-2 {
+        fill: white;
+      }
+      .fragment-3 {
+        fill: #C6D843;
+      }
+      .fragment-4 {
+        fill: white;
+      }
+      .fragment-5 {
+        fill: #AD96DC;
+      }
+      .fragment-6 {
+        fill: white;
+      }
+    }
+  </style>
+
+  <path class="fragment-1" d="M74.1451 2.00618L53.1478 2.03082C50.3457 2.03082 47.6671 3.14562 45.6858 5.12269L38.0757 12.7169H63.4366L71.2813 4.88865L74.1513 2.00618H74.1451Z"></path>
+  <path class="fragment-2" d="M74.1452 2.00616L74.1205 22.9594C74.1205 25.7557 73.0034 28.4287 71.0222 30.4058L63.412 38V12.6922L71.2567 4.86399L74.1452 2V2.00616Z"></path>
+  <path class="fragment-3" d="M63.4117 38.0061L42.4144 38.0308C39.6123 38.0308 36.9336 39.1456 34.9524 41.1226L27.3422 48.7168H52.7032L60.5479 40.8886L63.4179 38.0061H63.4117Z"></path>
+  <path class="fragment-4" d="M63.4123 38.0062L63.3876 58.9595C63.3876 61.7557 62.2704 64.4288 60.2892 66.4058L52.6791 74V48.6922L60.5237 40.864L63.4123 38V38.0062Z"></path>
+  <path class="fragment-5" d="M38.0695 12.7169L17.0721 12.7415C14.27 12.7415 11.5914 13.8563 9.61014 15.8334L2 23.4275H27.361L35.2056 15.5993L38.0756 12.7169H38.0695Z"></path>
+  <path class="fragment-6" d="M38.0696 12.7169L38.0449 33.6701C38.0449 36.4664 36.9277 39.1394 34.9465 41.1165L27.3364 48.7107V23.4029L35.181 15.5747L38.0696 12.7107V12.7169Z"></path>
+</svg></svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
+@media (prefers-color-scheme: dark) { :root { filter: none; } }
+</style></svg>
