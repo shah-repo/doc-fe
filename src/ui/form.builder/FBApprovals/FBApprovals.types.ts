@@ -13,6 +13,7 @@ export type FBApprovalsProps =
 & FBAutocompleteAsyncProps
 & {
   onApproveClick?: (approvalId: string) => void
+  onRejectClick?: (approvalId: string) => void
   requestApproval?: (id?: string) => any
   approvals?: FBInlineApprovalBody[]
   approvalsState?: FBApprovalsState

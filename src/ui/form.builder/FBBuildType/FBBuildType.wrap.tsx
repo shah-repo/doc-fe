@@ -212,9 +212,13 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       setRefresh((x) => !x);
     };
 
-    const approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
+    const approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string, comment?: string) => {
       if (!approvalId) { return; }
-      buildTypeState.applyTransition(transition, approvalId, { password });
+      const bodyToPass = { password };
+      if (comment) {
+        Object.assign(bodyToPass, { comment });
+      }
+      buildTypeState.applyTransition(transition, approvalId, bodyToPass);
     };
 
     let showApprovalButtons = false;
@@ -231,7 +235,7 @@ export const withFBBuildType = <T extends FBBuildTypeProps>(
       dialogState?.config({
         title: 'form.builder.password.prompt',
         open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true, transition }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, isApproverVisible: true, isPasswordVisible: true, transition }} />,
       });
     };
 
