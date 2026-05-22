@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputAdornment } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, BuildAutocompleteConfig, BuildAutocompleteConfigProps, OptionDocument, OptionDocumentRevision } from '..';
+import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, AutocompleteOption, BuildAutocompleteConfig, BuildAutocompleteConfigProps, OptionDocument, OptionDocumentRevision } from '..';
 import { translate } from '../../../common/intl';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
@@ -28,11 +28,11 @@ const findLatestViableRevision = (revisions: OptionDocumentRevision[] = [], docu
 };
 
 const isDocument = (
-  value: OptionDocument | OptionDocumentRevision,
+  value: AutocompleteOption,
 ): value is OptionDocument => Object.prototype.hasOwnProperty.call(value, 'docId');
 
 type LinkResolver = (
-  value: OptionDocument | OptionDocumentRevision,
+  value: AutocompleteOption,
   documentStatuses?: DocumentRevisionStatus[],
 ) => string | null;
 
