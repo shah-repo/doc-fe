@@ -18,9 +18,8 @@ const VIABLE_STATUSES = new Set<DocumentRevisionStatus>([
   DocumentRevisionStatus.Released,
 ]);
 
-const findLatestViableRevision = (revisions: OptionDocumentRevision[] = [], documentStatuses?: DocumentRevisionStatus[]) => {
+const findLatestViableRevision = (revisions: OptionDocumentRevision[] = [], documentStatuses?: DocumentRevisionStatus[]): OptionDocumentRevision | undefined => {
   const viableStatuses = documentStatuses?.length ? new Set(documentStatuses) : VIABLE_STATUSES;
-  console.log(JSON.parse(JSON.stringify({ revisions, documentStatuses, viableStatuses: Array.from(viableStatuses) })));
   return revisions.reduce<OptionDocumentRevision | undefined>((best, r) => {
     if (!viableStatuses.has(r.status)) return best;
     return !best || r.version > best.version ? r : best;
@@ -61,7 +60,7 @@ const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
   to,
 }) => {
   return (
-    <InputAdornment position={position}>
+    <InputAdornment position={position} onClick={(e) => e.stopPropagation()}>
       <FBTooltip title={translate('common.open.in.new.tab')}>
         <LinkTag to={to}>
           <FontAwesomeIcon icon={solid('external-link')} size="sm" />
