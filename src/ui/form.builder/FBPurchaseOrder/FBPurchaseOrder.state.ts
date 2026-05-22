@@ -87,7 +87,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     if (!initialValues || isEmpty(initialValues)) {
       return;
     }
-    const items = (initialValues?.items || []).map((item, index) => ({ ...item, index }));
+    const items = (initialValues?.items || []).map((item, index) => ({ ...item, tax: item.tax ?? false, index }));
     this.setValue({ ...initialValues, items });
   }
 
@@ -283,6 +283,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       ...item,
       id: FB.uniqid,
       received: 0,
+      tax: false,
       totalAmount: this.itemTotalAmount.toFixed(2),
       formattedDate: this.formatDate(item.date),
       index: size(this.value.items),
