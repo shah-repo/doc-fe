@@ -154,7 +154,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         <StyledChip
           {...getTagProps({ index })}
           key={`fb-autocomplete-${key}-${index}`}
-          label={getTagLabel ? getTagLabel(option) : getOptionLabel?.(option)}
+          label={getTagLabel?.(option) ?? getOptionLabel?.(option)}
           disabled={isDisabled}
         />
       );
