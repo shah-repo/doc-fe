@@ -108,7 +108,7 @@ export interface OptionDocumentRevision {
 }
 
 export type AutocompleteOption = OptionDocument | OptionDocumentRevision;
-export type AutocompleteValue = AutocompleteOption | AutocompleteOption[];
+type AutocompleteValue = AutocompleteOption | AutocompleteOption[];
 export interface BuildAutocompleteConfigProps {
   optionId?: string
   getOptionLabel: (value: AutocompleteOption, documentStatuses?: DocumentRevisionStatus[]) => string
