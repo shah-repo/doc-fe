@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputAdornment } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, BuildAutocompleteConfig, BuildAutocompleteConfigProps, FBAutocompleteAsyncOption, OptionDocument, OptionDocumentRevision } from '..';
+import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, BuildAutocompleteConfig, BuildAutocompleteConfigProps, OptionDocument, OptionDocumentRevision } from '..';
 import { translate } from '../../../common/intl';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import FBTooltip from '../FBTooltip/FBTooltip';
 import useStyles from './FBAutocompleteAsync.styles';
+import { FBAutocompleteAsyncOption } from './FBAutocompleteAsync.types';
 
 const VIABLE_STATUSES = new Set<DocumentRevisionStatus>([
   DocumentRevisionStatus.Draft,
