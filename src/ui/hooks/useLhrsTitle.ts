@@ -15,10 +15,14 @@ const DEFAULT_RETURN: UseLhrsTitleReturn = {
   title: undefined,
 };
 
-export const useLhrsTitle = (name: string, documentTypeId = ''): UseLhrsTitleReturn => {
+export const useLhrsTitle = (name?: string, documentTypeId = ''): UseLhrsTitleReturn => {
   const documentType = useSelector(
     (state: ApplicationState) => documentTypeSelectors.getDocumentTypeById(state, documentTypeId),
   );
+
+  if (!name) {
+    return DEFAULT_RETURN;
+  }
 
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
 
