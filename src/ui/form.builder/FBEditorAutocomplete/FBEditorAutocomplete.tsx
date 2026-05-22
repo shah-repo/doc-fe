@@ -3,55 +3,15 @@ import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
-import { translate } from '../../../common/intl';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import OverflowTooltip from '../../components/OverflowTooltip';
 import { checkIfDocumentHasOptions } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
+import { documentRevisionStatusOptions, EXCLUDED_DOCUMENT_OPTIONS } from './FBEditorAutocomplete.consts';
 import useStyles from './FBEditorAutocomplete.styles';
-
-const EXCLUDED_DOCUMENT_OPTIONS = [
-  DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST,
-];
-
-const EXCLUDED_DOCUMENT_REVISION_STATUS = [
-  DocumentRevisionStatus.Canceled,
-  DocumentRevisionStatus.Deprecated,
-  DocumentRevisionStatus.Obsolete,
-  DocumentRevisionStatus.Voided,
-];
-
-const DOCUMENT_REVISION_STATUS_LABELS: Partial<Record<DocumentRevisionStatus, string[]>> = {
-  [DocumentRevisionStatus.Draft]: [
-    translate('DRAFT'),
-    translate('common.wip'),
-  ],
-  [DocumentRevisionStatus.InReview]: [
-    translate('IN_REVIEW'),
-  ],
-  [DocumentRevisionStatus.PendingChange]: [
-    translate('PENDING_CHANGE'),
-  ],
-  [DocumentRevisionStatus.Approved]: [
-    translate('APPROVED'),
-  ],
-  [DocumentRevisionStatus.Released]: [
-    translate('RELEASED'),
-    translate('common.completed'),
-    translate('common.last.signed'),
-  ],
-};
-
-const documentRevisionStatusOptions = Object.values(DocumentRevisionStatus)
-  .filter((status) => !EXCLUDED_DOCUMENT_REVISION_STATUS.includes(status) && DOCUMENT_REVISION_STATUS_LABELS[status])
-  .map((status) => ({
-    id: status,
-    label: DOCUMENT_REVISION_STATUS_LABELS[status]?.join('/'),
-  }));
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -59,8 +19,8 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   inputProps,
   ...props
 }) => {
-  const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
   const classes = styles();
+  const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const customClasses = useStyles();
 
@@ -98,8 +58,13 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         name="optionId"
         key={`fb-editor-${type}-${index}`}
         rules="required"
-        inputPropStyle={AutoCompleteStyles.inputPropStyle}
         labelProps={AutoCompleteStyles.labelProps}
+        inputPropStyle={{}}
+        autoCompleteClasses={{
+          endAdornment: customClasses.endAdornment,
+          inputRoot: customClasses.inputRoot,
+          input: customClasses.input,
+        }}
         inputPropStyleSize="small"
         withState
       />
@@ -111,11 +76,13 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             optionLabelKey="documentTypeName"
             optionValueKey="id"
             name="docTypeIds"
+            inputPropStyle={{}}
             autoCompleteClasses={{
-              root: 'custom-autocomplete-root',
-              input: 'custom-autocomplete-input',
               endAdornment: customClasses.endAdornment,
+              inputRoot: customClasses.inputRoot,
+              input: customClasses.input,
             }}
+            getTagLabel={(option) => <OverflowTooltip title={option.documentTypeName} arrow>{option.documentTypeName}</OverflowTooltip>}
             multiple
           />
           <FBAutocomplete
@@ -125,10 +92,11 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             optionValueKey="id"
             name="documentStatuses"
             autoCompleteClasses={{
-              root: 'custom-autocomplete-root',
-              input: 'custom-autocomplete-input',
               endAdornment: customClasses.endAdornment,
+              inputRoot: customClasses.inputRoot,
+              input: customClasses.input,
             }}
+            getTagLabel={(option) => <OverflowTooltip title={option.label} arrow>{option.label}</OverflowTooltip>}
             multiple
           />
         </>
