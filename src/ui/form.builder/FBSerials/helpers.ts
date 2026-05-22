@@ -1,13 +1,21 @@
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { HAS_SERIALIZATION_VALUES, PART_SERIALIZATION_KEY, PART_SERIALIZATION_TYPE_KEY, SERIALIZATION_MANUAL_VALUES, SERIALIZATION_SYSTEM_GENERATED_VALUES } from './consts';
 
-const PART_SERIALIZATION_KEY = 'has-serialization';
-const PART_SERIALIZATION_TYPE_KEY = 'select-serialization';
+export const normalizeSerial = (serial: string): string => serial.trim().toLowerCase();
 
-export const LOT_PART_SELECT_KEY = 'lot_part';
+export const sanitizeSerials = (serials: string[]): string[] => serials.map(serial => serial.trim()).filter(Boolean);
 
-const HAS_SERIALIZATION_VALUES = ['Yes'];
-const SERIALIZATION_MANUAL_VALUES = ['manual', 'Select Provided Serialization'];
-const SERIALIZATION_SYSTEM_GENERATED_VALUES = ['system-generated', 'In-house Generated Serialization'];
+export const splitSerials = (text: string): string[] => sanitizeSerials(text.split(/[,;\n]/));
+
+export const getRepeatedSerialKeys = (serials: string[]): Set<string> => {
+  const counts = serials.reduce<Record<string, number>>((acc, serial) => {
+    const key = normalizeSerial(serial);
+    acc[key] = (acc[key] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return new Set(Object.keys(counts).filter(key => counts[key] > 1));
+};
 
 const isSerializationManual = (serializationType: string): boolean => {
   return SERIALIZATION_MANUAL_VALUES.includes(serializationType);

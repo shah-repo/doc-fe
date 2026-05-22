@@ -20,4 +20,5 @@ export type FBMPIProcedureItemProps =
   fieldType?: FBInputType
   isReleased?: boolean
   isDesign?: boolean
+  isFieldDisabled?: boolean
 };

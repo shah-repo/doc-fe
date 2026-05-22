@@ -290,7 +290,7 @@ function KendoDataGrid<T> ({
             onDataStateChange={updateDataState}
             onColumnReorder={reorderColumns}
             ref={gridRef}
-            containerRef={containerRef}
+            containerRef={gridContainerRef}
             onRowClick={onRowClick}
             {...dataState}
           >
