@@ -260,6 +260,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
         size="small"
         open={open}
         onOpen={() => setOpen(true)}
+        onFocus={() => setOpen(true)}
         onClose={() => setOpen(false)}
         getOptionLabel={(opt) => opt.label}
         renderOption={(option: LotAutoCompleteOptions, props) => (

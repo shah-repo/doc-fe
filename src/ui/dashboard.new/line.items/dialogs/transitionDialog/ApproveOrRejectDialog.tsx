@@ -3,6 +3,7 @@ import { Styles } from '@material-ui/core/styles/withStyles';
 import { Formik, FormikProps } from 'formik';
 import React from 'react';
 import { ReactComponent as ModelCloseIcon } from '../../../../../../src/assets/images/modelClose.svg';
+import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { TransitionTypes } from '../../../../../state/ducks/dashboard/types';
 import { AsyncState } from '../../../../../state/types';
 import { FormContext } from '../../../../components/forms/FormContext';
@@ -19,6 +20,7 @@ interface TransitionDialogProps {
   transition: Transition
   label: string
   transitionDialog: DialogHandler
+  type?: string
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
@@ -29,12 +31,15 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   asyncState,
   transition,
   transitionDialog,
+  type,
 }) => {
   const renderPasswordForm = (props: FormikProps<any>) => (
     <PasswordFormApproval
       {...props}
       asyncState={asyncState}
+      transition={transition}
       cancel={transitionDialog.close}
+      showPassword={type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER}
     />
   );
 
@@ -78,7 +83,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
           </Grid>
           <DialogContent className={classes.pendingBox}>
             <FormContext.Provider value={{ submitOnChange: false }}>
-              <Formik initialValues={{ password: '' }} onSubmit={onSubmit}>
+              <Formik initialValues={{ password: '', comment: '' }} onSubmit={onSubmit}>
                 {renderPasswordForm}
               </Formik>
             </FormContext.Provider>

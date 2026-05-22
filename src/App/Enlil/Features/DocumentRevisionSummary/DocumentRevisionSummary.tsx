@@ -200,7 +200,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           schemaItem.tabId === tabId && !schemaItem.deleted);
 
                         return (
-                          <AutoSizer onResize={handleResize}>
+                          <AutoSizer disableHeight={_documentRevisionFormState?.expanded} onResize={handleResize}>
                             {({ width }) => (
                               <SMBox style={{ width }} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                                 {tabType === TabTypeOptions.MIXED && <>

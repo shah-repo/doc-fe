@@ -1,9 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { FBForm, FBTextField } from '..';
+import { FBForm, FBTextEditor, FBTextField } from '..';
+import { translate } from '../../../common/intl';
 import { store } from '../../../state/store';
 import { Autocomplete } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
+import { TransitionIdent } from '../../components/transitionDialog/types';
 import { useStyle } from './FBApprovalPasswordForm.styles';
 import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
@@ -11,7 +13,9 @@ import { withFBApprovalPasswordForm } from './FBApprovalPasswordForm.wrap';
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
   isApproverVisible = false,
+  isPasswordVisible = false,
   children,
+  transition,
 }) => {
   // Prevent form submitting.
   const submitHandler: React.FormEventHandler = React.useCallback(
@@ -35,14 +39,21 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
             getOptionLabel={(option) => option.label}
           />
         </Box>}
-        <FBTextField
+        {(transition !== TransitionIdent.REJECT || isPasswordVisible) && <FBTextField
           rules="required"
           name="password"
           inputProps={{
             type: 'password',
           }}
           label="form.builder.password"
-        />
+        /> }
+        {[TransitionIdent.REJECT, TransitionIdent.REJECT_WITH_PASSWORD].includes(transition as TransitionIdent)
+        && <FBTextEditor
+          name="comment"
+          label="transition.action.rejection.comment"
+          placeholder={translate('transition.action.rejection.comment.placeholder')}
+          disabled={false}
+        /> }
         <Box display="flex" justifyContent="center" mx={0}>
           {children}
         </Box>

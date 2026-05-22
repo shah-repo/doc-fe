@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
 import { MomentFormats, useDate } from '../../common/utils/date';
-import { convertHtmlEntities } from '../../common/utils/helpers';
+import { convertHtmlEntities, sanitizeHtml } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
@@ -1035,6 +1035,14 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'supplierStatusId':
         returnValue = (<div data-cy={dataCy}>{getASLStatusAuditDefaultValue(audit, aslStatusOptions)}</div>);
         break;
+      case 'approvals.comment':
+        return (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(audit.nextValue as string),
+            }}
+          />
+        );
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
     }

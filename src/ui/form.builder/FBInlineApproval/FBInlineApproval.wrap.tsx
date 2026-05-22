@@ -29,6 +29,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     name = '',
     loading,
     onApproveClick,
+    onRejectClick,
     ...props
   }: T) => {
     // MARK: @config
@@ -65,18 +66,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals);
     dialogState = FB.useRef(FBDialogState);
     const shouldShowApprovals = document?.status === 'DRAFT' || document?.status === 'IN_REVIEW';
-
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: 'form.builder.password.prompt',
-        open: true,
-        content: (
-          <FBApprovalPasswordForm
-            {...{ approvalTransition, approvalId }}
-          />
-        ),
-      });
-    };
 
     // MARK: @reaction
     // Approvals sync
@@ -236,9 +225,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     }
 
     // MARK: @methods
-    approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
+    approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string, comment?: string) => {
       if (!id) { return; }
-      inlineApprovalState?.approvalTransition(transition, id, { password }, () => {
+      const body = password ? { password } : comment ? { comment } : {};
+      inlineApprovalState?.approvalTransition(transition, id, body, () => {
         const { documentId } = workspaceState || {};
         documentId && inlineApprovalState?.getDocument(documentId);
       });
@@ -249,6 +239,14 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    onRejectClick = (approvalId: string) => {
+      dialogState?.config({
+        title: 'form.builder.rejection.prompt',
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: 'reject' }} />,
       });
     };
 
@@ -293,6 +291,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       options,
       name,
       onApproveClick,
+      onRejectClick,
       shouldShowApprovals,
       shouldShowRequestAllApprovals,
     });
