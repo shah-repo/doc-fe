@@ -6,14 +6,14 @@ export const EXCLUDED_DOCUMENT_OPTIONS = [
   DOC_TYPE_GROUP_OPTION.CHANGE_REQUEST,
 ];
 
-export const EXCLUDED_DOCUMENT_REVISION_STATUS = [
+const EXCLUDED_DOCUMENT_REVISION_STATUS = [
   DocumentRevisionStatus.Canceled,
   DocumentRevisionStatus.Deprecated,
   DocumentRevisionStatus.Obsolete,
   DocumentRevisionStatus.Voided,
 ];
 
-export const DOCUMENT_REVISION_STATUS_LABELS: Partial<Record<DocumentRevisionStatus, string[]>> = {
+const DOCUMENT_REVISION_STATUS_LABELS: Partial<Record<DocumentRevisionStatus, string[]>> = {
   [DocumentRevisionStatus.Draft]: [
     translate('DRAFT'),
     translate('DRAFT.LOT'),

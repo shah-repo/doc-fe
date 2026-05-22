@@ -112,11 +112,11 @@ export interface BuildAutocompleteConfigProps {
   documentStatuses?: DocumentRevisionStatus[]
 }
 
-export type AutocompleteValue = OptionDocument | OptionDocumentRevision | OptionDocument[] | OptionDocumentRevision[];
+type AutocompleteValue = OptionDocument | OptionDocumentRevision | OptionDocument[] | OptionDocumentRevision[];
 
 type GetTagLabel = (value: OptionDocument | OptionDocumentRevision, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
 type RenderAdornment = (value: AutocompleteValue, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
-export interface AutocompleteConfig {
+interface AutocompleteConfig {
   getTagLabel?: GetTagLabel
   renderEndAdornment?: RenderAdornment
   renderStartAdornment?: RenderAdornment
