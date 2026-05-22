@@ -1,6 +1,7 @@
 import { Tooltip, TooltipProps, makeStyles } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { withThemeNext } from '../layout/theme-next';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -22,6 +23,7 @@ interface Props extends Omit<TooltipProps, 'children'> {
   maxLines?: number
   wrapperClassName?: string
   forceTooltip?: boolean
+  children?: React.ReactNode
 }
 
 const OverflowTooltip: React.FC<Props> = ({
@@ -97,4 +99,4 @@ const OverflowTooltip: React.FC<Props> = ({
   );
 };
 
-export default OverflowTooltip;
+export default withThemeNext(OverflowTooltip);

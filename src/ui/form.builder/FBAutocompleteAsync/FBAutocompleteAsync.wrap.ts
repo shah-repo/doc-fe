@@ -6,12 +6,14 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
+import { buildAutocompleteConfig } from './FBAutocompleteAsync.utils';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     getOptionLabel,
     refresh,
@@ -30,6 +32,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     optionId,
     options,
     loading,
+    docTypeIds,
+    documentStatuses,
     multiple,
     name,
     withoutPrefixRoot,
@@ -42,19 +46,28 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       freeSolo = true;
     }
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
+
+    documentStatuses = useObserver(() => {
+      const schemaItem = workspaceState?.getSchemaItem(name) as { documentStatuses?: DocumentRevisionStatus[] } | undefined;
+      return schemaItem?.documentStatuses;
+    });
+
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
+      docTypeIds,
+      documentStatuses,
       includePrevReleaseDoc: isWO && isWOPart,
     });
+
     const {
       valueKey: optionValueKey = 'value',
       labelKey: optionLabelKey = 'text',
-    } = autocompleteAsyncState?.optionConfig || {
+    } = autocompleteAsyncState?.optionConfig ?? {
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
     };
@@ -89,6 +102,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       loading = Boolean(
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
+        || FBAutocompleteAsyncStore.loading.get(autocompleteAsyncState?.optionsKey || optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
         || autocompleteAsyncState?.loading,
       );
@@ -197,6 +211,16 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       return contentState.getPlainText();
     }
 
+    const {
+      getTagLabel,
+      renderEndAdornment,
+      renderStartAdornment,
+    } = buildAutocompleteConfig({
+      optionId,
+      getOptionLabel,
+      documentStatuses,
+    });
+
     // Filter selected options used to hide the selected options in the dropdown list.
     const shouldFilterSelectedOptions = Boolean(
       props.filterSelectedOptions || [FBFieldName.TrainingDocumentsToBeTrainedOnList].includes(name as FBFieldName),
@@ -215,11 +239,17 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueType,
       selectedOptions,
       defaultValue,
+      getTagLabel,
+      renderEndAdornment,
+      renderStartAdornment,
       omitFormValue,
       forceNewRender,
       freeSolo,
       multiple,
       urlValues,
+      docTypeIds,
+      documentStatuses,
+      autocompleteAsyncState,
       filterSelectedOptions: shouldFilterSelectedOptions,
       name,
       value,
