@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { useObserver } from 'mobx-react-lite';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
@@ -33,6 +33,12 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
     );
   });
 
+  const autocompleteClasses = useMemo(() => ({
+    endAdornment: customClasses.endAdornment,
+    inputRoot: customClasses.inputRoot,
+    input: customClasses.input,
+  }), [customClasses]);
+
   const optionId = useObserver(
     () => (formState?.newValues.get('optionId') ?? formState?.getFieldValue('optionId')) as string | undefined,
   );
@@ -60,11 +66,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
         rules="required"
         labelProps={AutoCompleteStyles.labelProps}
         inputPropStyle={{}}
-        autoCompleteClasses={{
-          endAdornment: customClasses.endAdornment,
-          inputRoot: customClasses.inputRoot,
-          input: customClasses.input,
-        }}
+        autoCompleteClasses={autocompleteClasses}
         inputPropStyleSize="small"
         withState
       />
@@ -77,11 +79,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             optionValueKey="id"
             name="docTypeIds"
             inputPropStyle={{}}
-            autoCompleteClasses={{
-              endAdornment: customClasses.endAdornment,
-              inputRoot: customClasses.inputRoot,
-              input: customClasses.input,
-            }}
+            autoCompleteClasses={autocompleteClasses}
             getTagLabel={(option) => <OverflowTooltip title={option.documentTypeName} arrow>{option.documentTypeName}</OverflowTooltip>}
             multiple
           />
@@ -91,11 +89,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             optionLabelKey="label"
             optionValueKey="id"
             name="documentStatuses"
-            autoCompleteClasses={{
-              endAdornment: customClasses.endAdornment,
-              inputRoot: customClasses.inputRoot,
-              input: customClasses.input,
-            }}
+            autoCompleteClasses={autocompleteClasses}
             getTagLabel={(option) => <OverflowTooltip title={option.label} arrow>{option.label}</OverflowTooltip>}
             multiple
           />
