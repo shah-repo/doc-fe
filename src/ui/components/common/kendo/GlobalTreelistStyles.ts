@@ -155,10 +155,16 @@ export const globalTreeListStyles = (theme: Theme) => ({
       },
     },
     '& .k-filter-row': {
+      overflow: 'visible',
+
+      '& .k-filtercell': {
+        overflow: 'visible',
+      },
       '& th:not([aria-label])': {
         borderRight: 'none',
       },
       '& th': {
+        overflow: 'visible',
         '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
           boxShadow: '-5px 0 10px 2px rgba(0, 0, 0, .1)',
         },
@@ -242,6 +248,21 @@ export const globalTreeListStyles = (theme: Theme) => ({
       ...baseInputStyles(theme),
       justifyContent: 'space-between',
     },
+  },
+  'k-multiselect': {
+    '& .k-dropdown-wrap': {
+      ...baseInputStyles(theme),
+      justifyContent: 'space-between',
+    },
+  },
+  '.k-multiselect': {
+    '& .k-icon': {
+      color: Colors.textGray,
+    },
+    '& .k-i-arrow-s': {
+      fontSize: 12,
+    },
+
   },
   '.k-select': {
     '& .k-icon': {

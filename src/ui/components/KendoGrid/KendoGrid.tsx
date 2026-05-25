@@ -32,6 +32,7 @@ import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter
 import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
+import { StatusMultiFilterTemplate } from '../../document.revision/grid/filter.template/StatusMultiFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -123,6 +124,29 @@ export function KendoGrid<T extends any> ({
 
   const processWithGroups = (data, dataState: State) => {
     const dataStateOne = cloneDeep(dataState);
+
+    if (dataStateOne?.filter?.filters) {
+      dataStateOne.filter.filters = dataStateOne.filter.filters.flatMap(
+        (filter: any) => {
+          if (
+            filter.operator === 'eq'
+          && Array.isArray(filter.value)
+          ) {
+            return {
+              logic: 'or',
+              filters: filter.value.map((value: string) => ({
+                field: filter.field,
+                operator: 'eq',
+                value,
+              })),
+            };
+          }
+
+          return filter;
+        },
+      );
+    }
+
     if (dataStateOne) {
       dataStateOne.skip = 0;
       const processedData = process(data.data, dataStateOne);
@@ -203,7 +227,7 @@ export function KendoGrid<T extends any> ({
   );
 
   const StatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiFilterTemplate
       {...props}
       documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
