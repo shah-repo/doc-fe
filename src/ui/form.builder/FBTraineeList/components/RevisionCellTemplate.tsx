@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { clone, get, isEmpty } from 'lodash';
 import React from 'react';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
@@ -60,16 +60,23 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
     onClick?.({ dataItem });
   };
 
+  const val = options?.find(item => item.documentId === value?.documentId);
+  const displayText = clone(value);
+  if(displayText) {
+    displayText.name = val?.name || '';
+  }
+  const displayVal = displayText ? getOptionLabel(displayText) : EMPTY_VALUE_PLACEHOLDER;
+
   return (
     <Box onClick={handleClick}>
       <OverflowTooltip
-        title={displayValue}
+        title={displayVal}
         placement="top"
         interactive
         arrow
         onClick={handleClick}
       >
-        {displayValue}
+        {displayVal}
       </OverflowTooltip>
     </Box>
   );

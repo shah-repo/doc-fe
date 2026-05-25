@@ -10,6 +10,7 @@ interface OptionItem {
   id: string
   active?: boolean
   documentId?: string
+  displayRevision?: string
 }
 
 interface Props<T extends OptionItem> extends CustomTemplateProps {
@@ -32,7 +33,8 @@ const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
     setFieldValue(field, getValue(value));
   };
 
-  const value = field === 'trainingDocument' ? options.find(item => item.documentId === values?.trainingDocument?.documentId) : options?.find(item => item.id === getKey(values[field]));
+  const value = field === 'trainingDocument' ? options.find(item => item.documentId === values?.trainingDocument?.documentId && item.displayRevision === values.trainingDocument.displayRevision)
+   : options?.find(item => item.id === getKey(values[field]));
 
   return (
     <FormikField name={field} error={get(errors, field)}>
