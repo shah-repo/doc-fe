@@ -6,14 +6,15 @@ import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
+import { ActionTypes } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
 import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
-import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { TransitionIdent } from '../../../../components/transitionDialog/types';
 import { ApprovalFailureResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -39,14 +40,13 @@ interface ResponseProps {
   fieldId?: string
 }
 
-const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
+const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   approvalId,
   transition,
   buttonProps,
   label,
-  type,
   transitionDialog,
-  translationRejectMsg = 'dashboard.po.reject.alert',
+  type,
   onSuccess,
 }) => {
   const dispatch = useDispatch();
@@ -109,12 +109,19 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   });
   const asyncState = useSelector(documentRevisionsSelectors.getLoadAsyncTaskApprovalState);
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
+
   const onSubmit = (props: PasswordFormValues) => {
-    setPassword(props.password);
-    async.start(applyTransition, approvalId, transition, async, props.password, TASK_APPROVAL_GET_ASYNC);
-  };
-  const onReject = () => {
-    async.start(applyTransition, approvalId, transition, async, null);
+    let transitionToUse = transition;
+    if (type === ActionTypes.APPROVAL_REQ_BUILD_TYPE_INLINE_APPROVER && transitionToUse === TransitionIdent.REJECT) {
+      transitionToUse = TransitionIdent.REJECT_WITH_PASSWORD;
+    }
+    if (props.password) {
+      setPassword(props.password);
+      const bodyToPass = props.comment ? { comment: props.comment } : null;
+      async.start(applyTransition, approvalId, transitionToUse, async, bodyToPass, props.password, TASK_APPROVAL_GET_ASYNC);
+    } else {
+      async.start(applyTransition, approvalId, transition, async, { comment: props.comment }, null, TASK_APPROVAL_GET_ASYNC);
+    }
   };
 
   const onConfirmClick = () => {
@@ -125,22 +132,17 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { type && <AlertDialog
-        dialog={transitionDialog}
-        message="dashboard.po.reject.alert"
-        confirmAction={onReject}
-        cancelAction={transitionDialog.close}
-      /> }
-      { !type && <ApproveDialog
+      <ApproveDialog
         onSubmit={onSubmit}
         asyncState={asyncState}
         buttonProps={buttonProps}
         transition={transition}
         label={label}
+        type={type}
         {...{
           transitionDialog,
         }}
-      />}
+      />
       {errorResponse && (
         <SupplierStatusDialog
           dialog={supplierStatusDialog}
@@ -151,4 +153,4 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ApproveDialogueContainer;
+export default ApproveDialogContainer;

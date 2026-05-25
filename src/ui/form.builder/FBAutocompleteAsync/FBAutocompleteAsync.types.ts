@@ -1,5 +1,7 @@
+import { InputAdornmentProps } from '@material-ui/core';
 import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import { FBAutocompleteAsyncState, FBAutocompleteProps } from '..';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export type FBAutocompleteAsyncProps =
 & FBAutocompleteProps
@@ -10,6 +12,8 @@ export type FBAutocompleteAsyncProps =
   shouldReloadOnInit?: boolean
   additionalData?: any[] // TODO: make autocomplete async generic type by data
   forceNewRender?: boolean
+  docTypeIds?: string[]
+  documentStatuses?: DocumentRevisionStatus[]
   /**
    * @cfg {Record} Additional url params.
    */
@@ -79,11 +83,50 @@ export enum FBAutocompleteAsyncOption {
   buildType = '48',
   equipmentSpecifications = '49',
   documentsEligibleForGroupTrainee = '51',
+  allDocuments = '52',
 }
 
 export interface FBAutocompleteAsyncConstructor {
   optionId?: string
   urlValues?: Record<string, any>
+  docTypeIds?: string[]
+  documentStatuses?: DocumentRevisionStatus[]
   documentStatus?: string
   includePrevReleaseDoc?: boolean
+}
+
+export interface OptionDocument {
+  id: string
+  docId: string
+  documentRevisions?: OptionDocumentRevision[]
+}
+export interface OptionDocumentRevision {
+  id: string
+  version: number
+  status: DocumentRevisionStatus
+  document?: OptionDocument
+}
+
+export type AutocompleteOption = OptionDocument | OptionDocumentRevision;
+type AutocompleteValue = AutocompleteOption | AutocompleteOption[];
+export interface BuildAutocompleteConfigProps {
+  optionId?: string
+  getOptionLabel: (value: AutocompleteOption, documentStatuses?: DocumentRevisionStatus[]) => string
+  documentStatuses?: DocumentRevisionStatus[]
+}
+
+type GetTagLabel = (value: AutocompleteOption, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
+type RenderAdornment = (value: AutocompleteValue, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
+interface AutocompleteConfig {
+  getTagLabel?: GetTagLabel
+  renderEndAdornment?: RenderAdornment
+  renderStartAdornment?: RenderAdornment
+}
+
+export type BuildAutocompleteConfig = (props: BuildAutocompleteConfigProps) => AutocompleteConfig;
+
+export interface AutocompleteLinkTagProps { to: string }
+
+export interface AutocompleteAdornmentTagProps extends AutocompleteLinkTagProps {
+  position?: InputAdornmentProps['position']
 }
