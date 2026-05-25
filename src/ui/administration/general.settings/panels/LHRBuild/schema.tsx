@@ -58,19 +58,6 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'enforceEquipmentRequired',
-      field: 'enforceEquipmentRequired',
-      headerCell: (props) => (
-        <HeaderCell
-          {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired.tooltip"
-        />
-      ),
-      template: AutocompleteCellTemplate,
-      width: 200,
-    },
-    {
       id: 'enforceLotQtyRange',
       field: 'enforceLotQtyRange',
       headerCell: (props) => (
@@ -117,6 +104,19 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
           {...props}
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceNonExpiredLots"
           tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceNonExpiredLots.tooltip"
+        />
+      ),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
+      id: 'enforceEquipmentRequired',
+      field: 'enforceEquipmentRequired',
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired.tooltip"
         />
       ),
       template: AutocompleteCellTemplate,
