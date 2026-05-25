@@ -283,7 +283,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       ...item,
       id: FB.uniqid,
       received: 0,
-      tax: false,
+      tax: item.tax ?? false,
       totalAmount: this.itemTotalAmount.toFixed(2),
       formattedDate: this.formatDate(item.date),
       index: size(this.value.items),
