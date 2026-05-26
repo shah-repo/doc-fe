@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { clone, get, isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React from 'react';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
@@ -38,8 +38,9 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
   const targetField = fieldToEdit ?? field;
 
   const source = isEditMode ? values : dataItem;
-  const value = get(source, targetField) as DocumentOption;
-  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
+  const value = get(source, targetField) as DocumentOption & { docRevId: string };
+  const activeOption = options?.find(option => option.id === value?.docRevId);
+  const displayValue = activeOption ? getOptionLabel(activeOption) : EMPTY_VALUE_PLACEHOLDER;
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -60,23 +61,16 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
     onClick?.({ dataItem });
   };
 
-  const val = options?.find(item => item.documentId === value?.documentId);
-  const displayText = clone(value);
-  if(displayText) {
-    displayText.name = val?.name ?? '';
-  }
-  const displayVal = displayText ? getOptionLabel(displayText) : EMPTY_VALUE_PLACEHOLDER;
-
   return (
     <Box onClick={handleClick}>
       <OverflowTooltip
-        title={displayVal}
+        title={displayValue}
         placement="top"
         interactive
         arrow
         onClick={handleClick}
       >
-        {displayVal}
+        {displayValue}
       </OverflowTooltip>
     </Box>
   );
