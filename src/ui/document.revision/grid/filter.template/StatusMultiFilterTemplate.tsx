@@ -43,8 +43,6 @@ export const StatusMultiFilterTemplate = ({ data, onChange, value, field, docume
     });
   };
 
-  console.log('StatusMultiFilterTemplate rendered with value: ', value);
-
   const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
@@ -55,45 +53,53 @@ export const StatusMultiFilterTemplate = ({ data, onChange, value, field, docume
     });
   };
 
-  const [opened, setOpened] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpened(true);
-  };
-
-  const handleClose = () => {
-    setOpened(false);
-  };
-
   const [selectedValues, setSelectedValues] = React.useState<string[]>(Array.isArray(value) ? value : []);
 
   React.useEffect(() => {
-    setSelectedValues(Array.isArray(value) ? value : []);
+    setSelectedValues(Array.isArray(value) ? value : value ? [value] : []);
   }, [value]);
   console.log('StatusMultiFilterTemplate rendered with value: ', value, ' and selectedValues: ', selectedValues);
 
   return (
-    <div className="k-filtercell">
-      <MultiSelect
-        data={data}
-        value={selectedValues}
-        onChange={onMultiSelectChange}
-        placeholder="Select status"
-        autoClose={false}
-        opened={opened}
-        onOpen={handleOpen}
-        onClose={handleClose}
-        itemRender={(li, itemProps) => {
-          const itemChildren = <span>{getDisplayValue(itemProps?.dataItem as string)}</span>;
+    <div
+      className="status-multi-filter k-filtercell"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        overflow: 'visible',
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
+        <MultiSelect
+          data={data}
+          onChange={onMultiSelectChange}
+          value={selectedValues}
+          placeholder="Select status"
+          autoClose={false}
+          itemRender={(li, itemProps) =>
+            React.cloneElement(li, li.props, <span>{getDisplayValue(itemProps?.dataItem as string)}</span>)
+          }
+          tagRender={(tagData, li) => {
+            const children = React.Children.toArray(li.props.children);
 
-          return React.cloneElement(li, li.props, itemChildren);
-        }}
-        tagRender={(tagData, li) => {
-          const itemChildren = <span>{getDisplayValue(tagData.text)}</span>;
-          console.log('Rendering tag for value: ', tagData.text);
-          return React.cloneElement(li, li.props, itemChildren);
-        }}
-      />
+            return React.cloneElement(
+              li,
+              li.props,
+              <>
+                <span className="multi-select-status">{getDisplayValue(tagData.text)}</span>
+                {children[1]}
+              </>,
+            );
+          }}
+        />
+
+      </div>
 
       <button
         className="k-button k-button-icon k-clear-button-visible"
