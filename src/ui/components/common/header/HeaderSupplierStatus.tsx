@@ -29,6 +29,7 @@ interface HeaderSupplierStatusProps {
 const disabledStatuses = [
   DocumentRevisionStatus.Obsolete,
   DocumentRevisionStatus.Voided,
+  DocumentRevisionStatus.Deprecated,
 ];
 
 const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
