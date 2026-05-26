@@ -63,7 +63,7 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
   const val = options?.find(item => item.documentId === value?.documentId);
   const displayText = clone(value);
   if(displayText) {
-    displayText.name = val?.name || '';
+    displayText.name = val?.name ?? '';
   }
   const displayVal = displayText ? getOptionLabel(displayText) : EMPTY_VALUE_PLACEHOLDER;
 
