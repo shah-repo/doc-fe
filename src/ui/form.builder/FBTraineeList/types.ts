@@ -41,6 +41,7 @@ export interface Trainee {
     docId: string
     documentId: string
     docRevId: string
+    displayRevision?: string
   }
   trainingCompletionDate: string
   attachments: TraineeAttachment[]
