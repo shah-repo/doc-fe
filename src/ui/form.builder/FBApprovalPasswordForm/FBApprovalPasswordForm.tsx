@@ -31,7 +31,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
       <form autoComplete="off" onSubmit={submitHandler}>
         {!isApproverVisible && <Box className={classes.labelContainer}>
           <Typography className={classes.label}>
-            <Text translation="common.approvers" />
+            <Text translation="document.action.approvers" />
           </Typography>
           <Autocomplete
             disabled
@@ -44,6 +44,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
           name="password"
           inputProps={{
             type: 'password',
+            placeholder: translate('document.action.password.placeholder'),
           }}
           label="form.builder.password"
         /> }
