@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
-export default makeStyles(() =>
+export default makeStyles((theme) =>
   createStyles({
     marginBStyle: {
       '& p':
@@ -13,7 +13,7 @@ export default makeStyles(() =>
     },
     previewPlaceholder: {
       color: Colors.lightGray3,
-      padding: '4px 0',
+      padding: theme.spacing(0.5, 0),
     },
   }),
 );
