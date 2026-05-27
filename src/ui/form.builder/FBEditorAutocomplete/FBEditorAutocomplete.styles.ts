@@ -7,7 +7,7 @@ export default makeStyles((theme) =>
       minHeight: 0,
     },
     input: {
-      padding: `${theme.spacing(1)} !important`,
+      padding: `${theme.spacing(1, 1, 1, 1)} !important`,
     },
     endAdornment: {
       paddingRight: 0,
