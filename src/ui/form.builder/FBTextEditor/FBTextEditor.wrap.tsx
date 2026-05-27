@@ -155,15 +155,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       !masked && !textEditorState?.preserveFocus && textEditorState.editorReference.focus();
       textEditorState?.setMasked(masked);
       masked ? handleLockBlur() : handleLockFocus();
-
-      // if (!masked) {
-      //   timeout = setInterval(() => {
-      //     workspaceState?.saveDocRev(formState?.getValues());
-      //   }, 30000);
-      //   setTimeoutID(timeout);
-      // } else {
-      //   clearInterval(timeoutID);
-      // }
     };
 
     onOptionsChange = (value: string) => {

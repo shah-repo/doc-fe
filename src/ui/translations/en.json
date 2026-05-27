@@ -863,6 +863,8 @@
   "document.action.cancel": "Cancel",
   "document.action.title": "Enter password to proceed",
   "document.action.password": "Password",
+  "document.action.password.placeholder": "Enter password",
+  "document.action.approvers": "Approver(s)",
   "document.action.approve": "Approve",
   "document.action.reject": "Reject",
   "document.action.to_review": "Send to review",

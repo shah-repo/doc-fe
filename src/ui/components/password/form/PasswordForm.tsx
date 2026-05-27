@@ -30,7 +30,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, 
       <FormMessage asyncState={asyncState} />
       <Box className={classes.labelContainer}>
         <Typography className={classes.label}>
-          <Text translation="common.approvers" />
+          <Text translation="document.action.approvers" />
         </Typography>
         <Autocomplete
           disabled
@@ -44,7 +44,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, 
         dataCy="transition.action.password"
         labelProps={{ className: classes.label }}
         inputStyleProps={classes.inputFieldWrap}
-        inputProps={{ type: 'password', className: classes.inputField }}
+        inputProps={{ type: 'password', placeholder: translate('document.action.password.placeholder'), className: classes.inputField }}
         validate={validator(required)}
       />
       {isRejectTransition && <FormikTextEditor
@@ -69,6 +69,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, 
         data-cy="reject.request"
         className={classes.cancelButton}
         disabled={asyncState.status === AsyncStatus.Active}
+        disableRipple
         onClick={cancel}
       >
         <Text translation="transition.action.cancel" />
