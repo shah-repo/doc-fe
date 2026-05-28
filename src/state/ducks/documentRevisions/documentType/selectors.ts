@@ -4,15 +4,21 @@ import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/util
 import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
+import authSelectors from '../../auth/selectors';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
-import { DOC_TYPE_GROUP_OPTION, DocumentGroupType, DocumentType, DocumentTypeByIdState, TabInfo } from './types';
+import { CreateAccessByCategoryState, DOC_TYPE_GROUP_OPTION, DocumentGroupType, DocumentType, DocumentTypeByIdState, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
+
+const createAccessByCategory = (state: ApplicationState): CreateAccessByCategoryState => state.documentType.createAccessByCategory;
 const byId = (state: ApplicationState) => state.documentType.byId;
 
 const getDocumentTypeById = (state: ApplicationState, id: string) =>
   state.documentType.byId[id];
+
+const { currentEmployeeId, currentUserGroups } = authSelectors;
+const currentUserGroupIds = createSelector([currentUserGroups], (groups) => groups.map((group) => group.id));
 
 const getDocumentTypeList = createSelector(
   allIds, byId,
@@ -144,6 +150,44 @@ const makeGetDocTypeByAcronym = () => createSelector(
   (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
 );
 
+export const canCreateCategory = createSelector(
+  createAccessByCategory, currentEmployeeId, currentUserGroupIds,
+  (state: ApplicationState, category: string) => category,
+  (accessByCategory, employeeId, groupIds, category) => {
+    const access = accessByCategory[category];
+    if (!access) {
+      return true;
+    }
+
+    if (access.isAllowed || (!access.allowedCreateUserIds?.length && !access.allowedCreateRoleIds?.length)) {
+      return true;
+    }
+
+    const hasUserAccess = access.allowedCreateUserIds?.includes(employeeId);
+    const hasGroupAccess = groupIds.some((groupId) => access.allowedCreateRoleIds?.includes(groupId));
+    return hasUserAccess || hasGroupAccess;
+  },
+);
+
+const canCreateDocumentType = createSelector(
+  byId, currentEmployeeId, currentUserGroupIds,
+  (state: ApplicationState, documentTypeId: string) => documentTypeId,
+  (docTypesById, employeeId, currentUserGroupIds, documentTypeId) => {
+    const documentType = docTypesById[documentTypeId];
+    if (!documentType) {
+      return true;
+    }
+
+    if (!documentType.allowedCreateUserIds?.length && !documentType.allowedCreateRoleIds?.length) {
+      return true;
+    }
+
+    const hasUserAccess = documentType.allowedCreateUserIds?.includes(employeeId);
+    const hasGroupAccess = currentUserGroupIds.some((groupId) => documentType.allowedCreateRoleIds?.includes(groupId));
+    return hasUserAccess || hasGroupAccess;
+  },
+);
+
 export default {
   byId,
   getDocumentTypeList,
@@ -164,4 +208,6 @@ export default {
   getDocumentTypesByCategory,
   getDocumentTypeNumberingStye,
   getTabConfiguration,
+  canCreateCategory,
+  canCreateDocumentType,
 };

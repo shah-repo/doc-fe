@@ -525,6 +525,8 @@ export interface DocumentType {
   equipmentEnforceProd?: boolean
   numberingStyle: DOCUMENT_NUMBERING_STYLE
   initialNumberingStyle?: DOCUMENT_NUMBERING_STYLE
+  allowedCreateUserIds?: string[]
+  allowedCreateRoleIds?: string[]
 }
 
 interface DocumentForms {
@@ -677,3 +679,11 @@ export enum tabIdByInternalType {
   CUSTOMERS = 'details',
   SHIPPING = 'details',
 }
+
+export interface CreateAccess {
+  isAllowed: boolean
+  allowedCreateUserIds: string[]
+  allowedCreateRoleIds: string[]
+}
+
+export type CreateAccessByCategoryState = Partial<Record<string, CreateAccess>>;

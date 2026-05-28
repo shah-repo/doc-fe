@@ -2,10 +2,15 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { translate } from '../../../common/intl';
+import { Group } from '../../../state/ducks/auth/types';
+import { Employee } from '../../../state/ducks/company/types';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { ApplicationState } from '../../../state/reducers';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import AllowedCreateDropdownCellTemplate from './components/AllowedCreateDropdownCellTemplate';
 import BooleanFilter from './components/BooleanFilter';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
 import DropdownCellTemplate from './components/DropdownCellTemplate';
@@ -36,6 +41,12 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
 
   const internalTypeOptions = Object.keys(GroupWithGroupOptions).map(v => createOption(v));
+
+  const allCompanyGroups: Group[] = useSelector((state: ApplicationState) => state.auth.user.groups) as Group[];
+  const groupOptions = allCompanyGroups.map(companyGroup => (createOption(companyGroup.id, companyGroup.name)));
+
+  const allCompanyEmployees: Employee[] = useSelector((state: ApplicationState) => state.company.companyMine.employees) as Employee[];
+  const employeeOptions = allCompanyEmployees.map(companyEmployee => (createOption(companyEmployee.id, companyEmployee.user?.name ?? '')));
 
   // Add unknown Categories to Filter from data.
   const categoryFilterOptions = [...CATEGORY_OPTIONS];
@@ -73,6 +84,26 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
     <NamingStyleDropdownCellTemplate
       {...props}
       data={NUMBERING_STYLE_OPTIONS}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
+    />
+  );
+
+  const AllowedCreateUsersTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <AllowedCreateDropdownCellTemplate
+      {...props}
+      data={employeeOptions}
+      popupSettings={{
+        appendTo: popupContainer?.current!,
+      }}
+    />
+  );
+
+  const AllowedCreateRolesTemplate: CellTemplate<FBApprovalMatrixItem> = (props) => (
+    <AllowedCreateDropdownCellTemplate
+      {...props}
+      data={groupOptions}
       popupSettings={{
         appendTo: popupContainer?.current!,
       }}
@@ -211,6 +242,24 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterCell: CategoryFilter,
       template: CategoryCellTemplate,
       width: 140,
+    },
+    {
+      id: 'allowedCreateUsers',
+      title: 'form.builder.am.allowedCreateUsers',
+      field: 'docType.allowedCreateUserIds',
+      filterable: false,
+      editable: true,
+      template: AllowedCreateUsersTemplate,
+      width: 180,
+    },
+    {
+      id: 'allowedCreateRoles',
+      title: 'form.builder.am.allowedCreateRoles',
+      field: 'docType.allowedCreateRoleIds',
+      filterable: false,
+      editable: true,
+      template: AllowedCreateRolesTemplate,
+      width: 180,
     },
   ];
 
