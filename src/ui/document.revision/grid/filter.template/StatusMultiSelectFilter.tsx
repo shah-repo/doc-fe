@@ -15,13 +15,13 @@ import FilterWrapper from '../../../components/common/kendo/FilterWrapper';
 import CommonMultiSelect from '../../../components/common/kendo/MultiSelectFilter';
 
 interface Props extends GridFilterCellProps {
-  defaultItem: string
   data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[] | string[]
   documentTypeCategory?: string
 }
 
-export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
+export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory, ...props }: Props) => {
   const hasValue = (values: string[]) => values.length > 0;
+  console.log('props', props);
 
   const getDisplayValue = (item: string) =>
     documentTypeCategory === DocumentCategory.PurchaseOrder && item === DocumentRevisionStatusDisplay.Released
@@ -73,7 +73,7 @@ export const StatusMultiSelectFilter = ({ data, onChange, value, field, document
             li,
             li.props,
             <>
-              <span className="multi-select-status">{getDisplayValue(tagData.text)}</span>
+              <span>{getDisplayValue(tagData.text)}</span>
               {children[1]}
             </>,
           );

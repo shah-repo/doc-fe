@@ -188,14 +188,13 @@ export default makeStyles((theme) => ({
         '& .k-multiselect .k-button': {
           display: 'inline-flex',
         },
-
         '& .status-multi-filter': {
           display: 'flex',
           alignItems: 'center',
           width: '100%',
-          overflow: 'visible',
           flex: 1,
           minWidth: 0,
+          overflow: 'visible',
 
           '& .k-multiselect': {
             width: '100%',
@@ -205,12 +204,17 @@ export default makeStyles((theme) => ({
             overflow: 'visible',
           },
 
-          '& .multi-select-status': {
-            color: `${Colors.textBlack} !important`,
+          '& .k-multiselect-wrap .k-button': {
             fontSize: 12,
+            color: Colors.textBlack,
           },
-          '& > .k-i-close': {
-            color: `${Colors.textBlack} !important`,
+
+          '& .k-icon.k-i-close': {
+            color: Colors.textBlack,
+          },
+
+          '& .k-clear-value': {
+            display: 'none',
           },
         },
       },

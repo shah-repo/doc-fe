@@ -24,7 +24,7 @@ import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateF
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
 import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
-import { ASLStatusFilterTemplate } from '../../document.revision/grid/filter.template/ASLStatusFilterTemplate';
+import { ASLStatusMultiSelectFilter } from '../../document.revision/grid/filter.template/ASLStatusMultiSelectFilter';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
@@ -230,18 +230,12 @@ export function KendoGrid<T extends any> ({
       {...props}
       documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
   const ASLSupplierStatusFilter = (props: GridFilterCellProps) => (
-    <ASLStatusFilterTemplate
+    <ASLStatusMultiSelectFilter
       {...props}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
@@ -255,9 +249,6 @@ export function KendoGrid<T extends any> ({
     <StatusMultiSelectFilter
       {...props}
       data={poStatusOptions}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
@@ -267,9 +258,6 @@ export function KendoGrid<T extends any> ({
     <StatusMultiSelectFilter
       {...props}
       data={eqStatuses}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
@@ -316,9 +304,6 @@ export function KendoGrid<T extends any> ({
     <StatusMultiSelectFilter
       {...props}
       data={map(changeRequestStatusOption(), 'value') as ChangeRequestStatus[]}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
   const TaskTypeFilter = (props: GridFilterCellProps) => (
