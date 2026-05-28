@@ -11,6 +11,11 @@ import { REF_ID_FIELD, REF_ID_FILTER_FIELD } from '../../training/grid/column.de
 import { DateFields } from '../../training/kendo/types';
 import { KendoGridFilterCell } from './interfaces';
 
+const normalizePOStatus = (value: POStatusLabelMapping): string =>
+  [POStatusLabelMapping.CLOSED, POStatusLabelMapping.VOIDED].includes(value)
+    ? value.toUpperCase()
+    : POStatusType.OPENED;
+
 export const getDynamicPayloadItems = (queryUrl, payload) => {
   const { timezone } = useDate();
 
@@ -21,18 +26,14 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
   switch (queryUrl) {
     case DOCUMENT_REVISION_SEARCH_ROOT_URL: {
       // handling payload for po Status cases
-      const poStatusField = find(payload.filters, { field: KendoGridFilterCell.PO_STATUS });
-      if (poStatusField && payload?.filters && poStatusField.field === KendoGridFilterCell.PO_STATUS) {
-        payload?.filters?.forEach((filter) => {
-          if (filter.field === KendoGridFilterCell.PO_STATUS) {
-            if ([POStatusLabelMapping.CLOSED, POStatusLabelMapping.VOIDED].includes(filter.value)) {
-              filter.value = filter.value.toUpperCase();
-            } else {
-              filter.value = POStatusType.OPENED;
-            }
-          }
-        });
+      const poStatusFilter = payload?.filters?.find((filter) => filter.field === KendoGridFilterCell.PO_STATUS);
+
+      if (poStatusFilter) {
+        poStatusFilter.value = Array.isArray(poStatusFilter.value)
+          ? poStatusFilter.value.map(normalizePOStatus)
+          : normalizePOStatus(poStatusFilter.value);
       }
+
       // Special handling in payload for effectiveDate
       const effectiveDateFiel = find(payload.filters, { field: 'effectiveDate' });
       if (effectiveDateFiel && effectiveDateFiel.field === 'effectiveDate') {

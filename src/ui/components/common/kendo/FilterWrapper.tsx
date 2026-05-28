@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { translate } from '../../../../common/intl';
-import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import { DisplayText, TranslatedText } from './helpers';
 
 interface FilterWrapperProps {
   hasValue: string | boolean

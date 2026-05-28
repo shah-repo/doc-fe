@@ -31,7 +31,6 @@ import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
-import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import { StatusMultiFilterTemplate } from '../../document.revision/grid/filter.template/StatusMultiFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -253,7 +252,7 @@ export function KendoGrid<T extends any> ({
   ];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiFilterTemplate
       {...props}
       data={poStatusOptions}
       defaultItem={intl.formatMessage({
@@ -265,7 +264,7 @@ export function KendoGrid<T extends any> ({
   const eqStatuses = Object.values(EquipmentStatus);
 
   const EQStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiFilterTemplate
       {...props}
       data={eqStatuses}
       defaultItem={intl.formatMessage({
@@ -314,7 +313,7 @@ export function KendoGrid<T extends any> ({
     />
   );
   const StateFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiFilterTemplate
       {...props}
       data={map(changeRequestStatusOption(), 'value') as ChangeRequestStatus[]}
       defaultItem={intl.formatMessage({

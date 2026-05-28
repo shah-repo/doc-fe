@@ -672,6 +672,7 @@
   "common.void": "Void",
   "common.voided": "Voided",
   "common.alert": "Alert",
+  "common.select.value": "Select Value",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
   "common.disable": "Disable",

@@ -3,11 +3,11 @@ import { isEmpty } from 'lodash';
 import React, { MouseEvent, useContext, useMemo } from 'react';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import FilterWrapper from '../../../components/common/kendo/FilterWrapper';
 import { Autocomplete } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
-import FilterWrapper from './FilterWraper';
 import useStyles from './styles';
 
 interface Props extends GridFilterCellProps {
