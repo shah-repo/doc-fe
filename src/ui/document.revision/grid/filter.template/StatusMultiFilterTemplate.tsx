@@ -1,7 +1,6 @@
 import { MultiSelect, MultiSelectChangeEvent } from '@progress/kendo-react-dropdowns';
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
-import { useIntl } from 'react-intl';
 
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 
@@ -13,7 +12,7 @@ import {
   POStatusLabelMapping,
 } from '../../../../state/ducks/documentRevisions/types';
 
-import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
+import FilterWrapper from './FilterWraper';
 
 interface Props extends GridFilterCellProps {
   defaultItem: string
@@ -22,7 +21,6 @@ interface Props extends GridFilterCellProps {
 }
 
 export const StatusMultiFilterTemplate = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
-  const intl = useIntl();
   const selectedValue = Array.isArray(value) ? value : [];
   const hasValue = (values: string[]) => values.length > 0;
 
@@ -61,21 +59,8 @@ export const StatusMultiFilterTemplate = ({ data, onChange, value, field, docume
   console.log('StatusMultiFilterTemplate rendered with value: ', value, ' and selectedValues: ', selectedValues);
 
   return (
-    <div
-      className="status-multi-filter k-filtercell"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        overflow: 'visible',
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          minWidth: 0,
-        }}
-      >
+    <FilterWrapper hasValue={hasValue(selectedValue)} onClear={onClearButtonClick}>
+      <div className="status-multi-filter" >
         <MultiSelect
           data={data}
           onChange={onMultiSelectChange}
@@ -98,19 +83,7 @@ export const StatusMultiFilterTemplate = ({ data, onChange, value, field, docume
             );
           }}
         />
-
       </div>
-
-      <button
-        className="k-button k-button-icon k-clear-button-visible"
-        title={intl.formatMessage({
-          id: TranslatedText[DisplayText.CLEAR],
-        })}
-        disabled={!hasValue(selectedValue)}
-        onClick={onClearButtonClick}
-      >
-        <span className="k-icon k-i-filter-clear" />
-      </button>
-    </div>
+    </FilterWrapper>
   );
 };

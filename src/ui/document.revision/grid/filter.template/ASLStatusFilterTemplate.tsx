@@ -3,11 +3,11 @@ import { isEmpty } from 'lodash';
 import React, { MouseEvent, useContext, useMemo } from 'react';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
-import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 import { Autocomplete } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
+import FilterWrapper from './FilterWraper';
 import useStyles from './styles';
 
 interface Props extends GridFilterCellProps {
@@ -56,7 +56,7 @@ export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props)
   const updatedValue = aslOptions?.find((option) => option.aslStatusId === value) ?? defaultValue;
 
   return (
-    <div className="k-filtercell">
+    <FilterWrapper hasValue={hasValue(value)} onClear={onClearButtonClick}>
       <Autocomplete
         key={isEmpty(filteredAslOptions) ? 'disabled' : 'enabled'}
         blurOnSelect
@@ -74,14 +74,6 @@ export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props)
         )}
         size="small"
       />
-      <button
-        className="k-button k-button-icon k-clear-button-visible"
-        title={translate(TranslatedText[DisplayText.CLEAR])}
-        disabled={!hasValue(value)}
-        onClick={onClearButtonClick}
-      >
-        <span className="k-icon k-i-filter-clear" />
-      </button>
-    </div>
+    </FilterWrapper>
   );
 };

@@ -194,6 +194,8 @@ export default makeStyles((theme) => ({
           alignItems: 'center',
           width: '100%',
           overflow: 'visible',
+          flex: 1,
+          minWidth: 0,
 
           '& .k-multiselect': {
             width: '100%',
