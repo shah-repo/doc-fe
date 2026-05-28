@@ -31,7 +31,7 @@ import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
-import { StatusMultiSelectFilter } from '../../document.revision/grid/filter.template/StatusMultiFilterTemplate';
+import { StatusMultiSelectFilter } from '../../document.revision/grid/filter.template/StatusMultiSelectFilter';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -226,7 +226,7 @@ export function KendoGrid<T extends any> ({
   );
 
   const StatusFilter = (props: GridFilterCellProps) => (
-    <StatusMultiFilterTemplate
+    <StatusMultiSelectFilter
       {...props}
       documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
