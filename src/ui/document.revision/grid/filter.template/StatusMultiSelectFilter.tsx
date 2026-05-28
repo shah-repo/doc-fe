@@ -20,7 +20,7 @@ interface Props extends GridFilterCellProps {
   documentTypeCategory?: string
 }
 
-export const StatusMultiFilterTemplate = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
+export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
   const hasValue = (values: string[]) => values.length > 0;
 
   const getDisplayValue = (item: string) =>
