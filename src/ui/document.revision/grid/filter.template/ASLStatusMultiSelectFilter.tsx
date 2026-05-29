@@ -46,7 +46,7 @@ export const ASLStatusMultiSelectFilter = ({ onChange, value }: GridFilterCellPr
 
     onChange({
       value: selectedIds,
-      operator: selectedIds.length ? 'eq' : '',
+      operator: 'eq',
       syntheticEvent,
     });
   };

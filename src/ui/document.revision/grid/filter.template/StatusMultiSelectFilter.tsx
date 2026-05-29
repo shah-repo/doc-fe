@@ -1,9 +1,7 @@
 import { MultiSelectChangeEvent } from '@progress/kendo-react-dropdowns';
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
-
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
-
 import {
   DocumentCategory,
   DocumentRevisionStatus,
@@ -19,8 +17,9 @@ interface Props extends GridFilterCellProps {
   documentTypeCategory?: string
 }
 
-export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory, ...props }: Props) => {
+export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
   const hasValue = (values: string[]) => values.length > 0;
+  const [selectedValues, setSelectedValues] = React.useState<string[]>(Array.isArray(value) ? value : []);
 
   const getDisplayValue = (item: string) =>
     documentTypeCategory === DocumentCategory.PurchaseOrder && item === DocumentRevisionStatusDisplay.Released
@@ -29,7 +28,6 @@ export const StatusMultiSelectFilter = ({ data, onChange, value, field, document
 
   const onMultiSelectChange = ({ target, syntheticEvent }: MultiSelectChangeEvent) => {
     const updatedValues = target.value || [];
-
     setSelectedValues(updatedValues);
 
     onChange({
@@ -48,8 +46,6 @@ export const StatusMultiSelectFilter = ({ data, onChange, value, field, document
       syntheticEvent: event,
     });
   };
-
-  const [selectedValues, setSelectedValues] = React.useState<string[]>(Array.isArray(value) ? value : []);
 
   React.useEffect(() => {
     setSelectedValues(Array.isArray(value) ? value : value ? [value] : []);
