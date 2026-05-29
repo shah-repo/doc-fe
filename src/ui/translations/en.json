@@ -1256,8 +1256,6 @@
   "form.builder.am.category": "Category",
   "form.builder.am.prefix": "Prefix",
   "form.builder.am.numberingStyle": "Numbering Style",
-  "form.builder.am.allowedCreateUsers": "Allowed Users",
-  "form.builder.am.allowedCreateRoles": "Allowed Roles",
   "form.builder.exit.edit.mode": "Exit edit mode",
   "form.builder.approvalRoles": "Approval Roles",
   "form.builder.approvalRoles.error.empty": "Approval Role name is required",

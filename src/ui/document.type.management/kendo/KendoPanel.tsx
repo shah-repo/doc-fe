@@ -160,8 +160,6 @@ export function KendoPanel ({
         'group',
         'active',
         'numberingStyle',
-        'allowedCreateUserIds',
-        'allowedCreateRoleIds',
       ].includes(field as string)) {
         setDropDownState((prevState) => {
           const object = { ...prevState };
@@ -358,8 +356,6 @@ export function KendoPanel ({
       active: dataItem.active,
       equipmentEnforceProd: dataItem.equipmentEnforceProd,
       numberingStyle: dataItem.numberingStyle,
-      allowedCreateUserIds: dataItem.allowedCreateUserIds,
-      allowedCreateRoleIds: dataItem.allowedCreateRoleIds,
     };
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {

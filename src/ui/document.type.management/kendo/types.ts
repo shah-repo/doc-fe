@@ -50,8 +50,6 @@ export interface DTMRowItem {
   updatedAt: string
   inEdit?: boolean
   numberingStyle: DOCUMENT_NUMBERING_STYLE
-  allowedCreateUserIds: string[]
-  allowedCreateRoleIds: string[]
 }
 
 export interface DTMAddRow {
