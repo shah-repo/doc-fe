@@ -21,7 +21,6 @@ interface Props extends GridFilterCellProps {
 
 export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory, ...props }: Props) => {
   const hasValue = (values: string[]) => values.length > 0;
-  console.log('props', props);
 
   const getDisplayValue = (item: string) =>
     documentTypeCategory === DocumentCategory.PurchaseOrder && item === DocumentRevisionStatusDisplay.Released
@@ -55,7 +54,6 @@ export const StatusMultiSelectFilter = ({ data, onChange, value, field, document
   React.useEffect(() => {
     setSelectedValues(Array.isArray(value) ? value : value ? [value] : []);
   }, [value]);
-  console.log('StatusMultiFilterTemplate rendered with value: ', value, ' and selectedValues: ', selectedValues);
 
   return (
     <FilterWrapper hasValue={hasValue(selectedValues)} onClear={onClearButtonClick}>

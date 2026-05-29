@@ -31,6 +31,7 @@ import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
+import { MultiLotSelectFilter } from '../../document.revision/grid/filter.template/LotMultiSelectFilter';
 import { StatusMultiSelectFilter } from '../../document.revision/grid/filter.template/StatusMultiSelectFilter';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -262,10 +263,9 @@ export function KendoGrid<T extends any> ({
   );
 
   const LotStatusFilter = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+    <MultiLotSelectFilter
       {...props}
       data={lotStatusOptions}
-      defaultItem={createOption('', translate('common.all'))}
     />
   );
   const TypeFilter = (props: GridFilterCellProps) => (

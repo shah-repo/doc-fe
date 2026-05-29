@@ -5,7 +5,9 @@ import React, { MouseEvent, useContext, useMemo } from 'react';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import FilterWrapper from '../../../components/common/kendo/FilterWrapper';
 import CommonMultiSelect from '../../../components/common/kendo/MultiSelectFilter';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { DocTypeTableContext } from '../../../documentType/grid/interfaces';
+import useStyles from './styles';
 
 interface CustomOptionType {
   label: string
@@ -15,6 +17,7 @@ interface CustomOptionType {
 }
 
 export const ASLStatusMultiSelectFilter = ({ onChange, value }: GridFilterCellProps) => {
+  const classes = useStyles();
   const docTypeTableContext = useContext(DocTypeTableContext);
 
   const aslOptions = useMemo(
@@ -70,6 +73,34 @@ export const ASLStatusMultiSelectFilter = ({ onChange, value }: GridFilterCellPr
         onChange={onMultiSelectChange}
         dataItemKey="aslStatusId"
         textField="label"
+        itemRender={(li, itemProps) =>
+          React.cloneElement(
+            li,
+            li.props,
+            <OverflowTooltip
+              arrow
+              placement="top"
+              title={itemProps.dataItem.label}
+              wrapperClassName={classes.dropdownOption}
+            >
+              {itemProps.dataItem.label}
+            </OverflowTooltip>,
+          )
+        }
+        tagRender={(tagData, li) => {
+          const children = React.Children.toArray(li.props.children);
+
+          return React.cloneElement(
+            li,
+            li.props,
+            <>
+              <OverflowTooltip arrow placement="top" title={tagData.text} wrapperClassName={classes.multiSelectStatus}>
+                {tagData.text}
+              </OverflowTooltip>
+              {children[1]}
+            </>,
+          );
+        }}
       />
     </FilterWrapper>
   );
