@@ -159,8 +159,7 @@ export function KendoPanel ({
         'hiddenForCreationForUsersWithoutTagsFormatted',
         'group',
         'active',
-        'numberingStyle',
-      ].includes(field as string)) {
+        'numberingStyle'].includes(field as string)) {
         setDropDownState((prevState) => {
           const object = { ...prevState };
           let newValue: string;
