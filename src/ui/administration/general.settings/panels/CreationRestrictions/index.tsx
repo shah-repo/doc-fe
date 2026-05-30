@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { groupBy, has, isArray, isEmpty, kebabCase, omit } from 'lodash';
+import { groupBy, has, isArray, isEmpty, kebabCase, keyBy, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,9 +34,11 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
 
   const allGroups: Group[] = useSelector(authSelectors.currentUserGroups);
   const groupOptions = toSortedOptions(allGroups, (group) => group.id, (group) => group.name);
+  const groupOptionsMap = { ...(keyBy(groupOptions, (group) => group.id)) };
 
   const allEmployees: Employee[] = useSelector(companySelectors.getActiveEmployees) as Employee[];
   const employeeOptions = toSortedOptions(allEmployees, (employee) => employee.id, (employee) => employee.user?.name ?? '');
+  const employeeOptionsMap = { ...(keyBy(employeeOptions, (employee) => employee.id)) };
 
   const documentTypesAll: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypeList);
   const documentTypeOptions = toSortedOptions(documentTypesAll,
@@ -91,18 +93,21 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = {
         ...omit(values, [MODE_FIELD, ...EDIT_FIELDS]),
-        restrictedToUsers: values.restrictedToUsers_edit,
-        restrictedToRoles: values.restrictedToRoles_edit,
+        restrictedToUsers: (values.restrictedToUsers_edit ?? []).map(userOption => userOption.id),
+        restrictedToRoles: (values.restrictedToRoles_edit ?? []).map(roleOption => roleOption.id),
       };
+      const existingRestrictions = restrictions?.filter(restriction => restriction.documentTypeId === values.documentTypeId);
+      if (isAddition && existingRestrictions?.length) {
+        toastError(translate('administration.general.settings.creation.restrictions.duplicate.error.msg', { documentTypeName: values.documentTypeName }));
+        return;
+      }
       const updatedRestrictions = isAddition
         ? [...(restrictions ?? []), updatedValues]
         : restrictions?.map((restriction) => restriction.id === values.id ? updatedValues : restriction,
         );
 
       discardRestrictions();
-      updateRestrictions(
-        (updatedRestrictions ?? []) as DocumentTypeRestriction[],
-      );
+      updateRestrictions((updatedRestrictions ?? []) as DocumentTypeRestriction[]);
     },
   });
   const { setValues, submitForm } = formik;
@@ -138,13 +143,16 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
     editedRestrictions?.[MODE_FIELD] === Mode.add ? [...mappedRestrictions, editedRestrictions] : mappedRestrictions).map((restriction) => {
     const { restrictedToRoles, restrictedToUsers } = restriction;
 
+    const restrictedToRolesWithText = restrictedToRoles?.map((roleId: string) => (groupOptionsMap[roleId]));
+    const restrictedToUsersWithText = restrictedToUsers?.map((userId: string) => (employeeOptionsMap[userId]));
+
     return {
       ...restriction,
       ...(isArray(restrictedToRoles) && {
-        restrictedToRoles: restrictedToRoles?.map((item) => item.text).join(', '),
+        restrictedToRoles: restrictedToRolesWithText?.map((item) => item.text).join(', '),
       }),
       ...(isArray(restrictedToUsers) && {
-        restrictedToUsers: restrictedToUsers?.map((item) => item.text).join(', '),
+        restrictedToUsers: restrictedToUsersWithText?.map((item) => item.text).join(', '),
       }),
       restrictedToRoles_edit: restrictedToRoles,
       restrictedToUsers_edit: restrictedToUsers,
