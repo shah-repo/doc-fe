@@ -154,8 +154,8 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
       ...(isArray(restrictedToUsers) && {
         restrictedToUsers: restrictedToUsersWithText?.map((item) => item.text).join(', '),
       }),
-      restrictedToRoles_edit: restrictedToRoles,
-      restrictedToUsers_edit: restrictedToUsers,
+      restrictedToRoles_edit: restrictedToRolesWithText,
+      restrictedToUsers_edit: restrictedToUsersWithText,
     };
   });
 

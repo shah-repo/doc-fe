@@ -54,6 +54,7 @@ export const buildSchema: SchemaBuilder<EditableDocumentTypeRestriction> = ({
       template: (props) => (
         <ActionsCellTemplate
           {...props}
+          isActive={true}
           onEdit={onEdit}
           onDelete={onDelete}
           onDiscard={onDiscard}
