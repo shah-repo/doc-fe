@@ -24,38 +24,6 @@ const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentTypeActions
   }
 };
 
-const createAccessByCategory = (state: DocumentTypeByIdState = {}, action: DocumentTypeActions) => {
-  switch (action.type) {
-    case DOCUMENT_TYPE_LIST: {
-      const result: {[category: string]: {isAllowed: boolean, allowedCreateUserIds: string[], allowedCreateRoleIds: string[]}} = {};
-
-      action.payload.forEach((documentType) => {
-        const category = documentType.category as string;
-
-        if (!result[category]) {
-          result[category] = {
-            isAllowed: false,
-            allowedCreateUserIds: [],
-            allowedCreateRoleIds: [],
-          };
-        }
-
-        if (!documentType.allowedCreateUserIds?.length && !documentType.allowedCreateRoleIds?.length) {
-          result[category].isAllowed = true;
-        }
-        result[category].allowedCreateUserIds.push(...(documentType.allowedCreateUserIds ?? []));
-        result[category].allowedCreateRoleIds.push(...(documentType.allowedCreateRoleIds ?? []));
-      });
-
-      console.log(result);
-      return result;
-    }
-
-    default:
-      return state;
-  }
-};
-
 const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   documentType: {
     id: '',
@@ -117,7 +85,6 @@ export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_TYPE_LIST_ASYNC),
   byId,
   allIds,
-  createAccessByCategory,
   docRevTypeId,
   docTypesByCategory,
   tabsConfiguration,

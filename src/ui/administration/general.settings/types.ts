@@ -24,6 +24,7 @@ export enum GeneralSettingsTabs {
   LHRBuild = 'LHR Build',
   LHRBuildSwitch = 'LHR Build Switch',
   TaxRate = 'Tax Rate',
+  CreationPermissions = 'CREATION PERMISSIONS',
 }
 
 export interface GeneralSettingsProps {
