@@ -101,6 +101,10 @@ export const expirationDateOption = () => [
     text: ExpiryDateOptions.THREE_MONTHS,
     value: '90',
   },
+  {
+    text: ExpiryDateOptions.EXPIRED,
+    value: '-1',
+  },
 ];
 
 export const getVersionNumber = (documentRevisionId) => {

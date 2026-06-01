@@ -25,6 +25,7 @@ export enum ExpiryDateOptions {
   ONE_MONTH = 'Expiring in 30 days',
   TWO_MONTHS = 'Expiring in 60 days',
   THREE_MONTHS = 'Expiring in 90 days',
+  EXPIRED = 'Expired',
 }
 
 export enum CompletedOnDateOptions {
