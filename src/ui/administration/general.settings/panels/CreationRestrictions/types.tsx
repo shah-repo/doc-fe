@@ -10,8 +10,8 @@ export interface DocumentTypeRestriction {
   documentTypeId: string
   documentTypeName: string
   category: string
-  restrictedToUsers: []
-  restrictedToRoles: []
+  restrictedToUsers: string[]
+  restrictedToRoles: string[]
 }
 
 export interface EditableDocumentTypeRestriction extends DocumentTypeRestriction, EditableItem {

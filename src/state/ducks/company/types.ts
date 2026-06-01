@@ -347,3 +347,11 @@ export interface UpdatePremiumFeatureSubscriptionAction {
   type: typeof UPDATE_PREMIUM_FEATURE_SUBSCRIPTION
   payload: PremiumFeatureSubscription
 }
+
+export interface DocumentCreationRestrictions {
+  isAllowed: boolean
+  restrictedToUserIds: string[]
+  restrictedToRoleIds: string[]
+}
+
+export type DocumentCreationRestrictionsByCategoryState = Partial<Record<string, DocumentCreationRestrictions>>;

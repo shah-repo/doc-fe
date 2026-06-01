@@ -169,7 +169,16 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
-  const canCreateRevision = true;
+  let canCreateRevision = true;
+  if (isByCategory && categoryName) {
+    canCreateRevision = useSelector(
+      (state: ApplicationState) => documentTypeSelectors.canCreateCategory(state, categoryName),
+    );
+  } else if (documentTypeId) {
+    canCreateRevision = useSelector(
+      (state: ApplicationState) => documentTypeSelectors.canCreateDocumentType(state, documentTypeId),
+    );
+  }
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
