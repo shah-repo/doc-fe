@@ -172,7 +172,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   let canCreateRevision = true;
   if (hasOutput) {
     canCreateRevision = useSelector(
-      (state: ApplicationState) => documentTypeSelectors.canCreateDocumentType(state, outputDocumentType.id),
+      (state: ApplicationState) => documentTypeSelectors?.canCreateDocumentType(state, outputDocumentType.id),
     );
   }
 

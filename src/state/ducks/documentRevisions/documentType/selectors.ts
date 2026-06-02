@@ -187,7 +187,7 @@ const canCreateDocumentType = createSelector(
   (state: ApplicationState, documentTypeId: string) => documentTypeId,
   (creationRestrictions, employeeId, currentUserGroupIds, documentTypeId) => {
     const docTypeCreationRestrictions
-        = creationRestrictions.find((restriction) => restriction.documentTypeId === documentTypeId);
+        = creationRestrictions?.find((restriction) => restriction.documentTypeId === documentTypeId);
     if (!docTypeCreationRestrictions) {
       return true;
     }
