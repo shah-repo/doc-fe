@@ -80,7 +80,16 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             name="docTypeIds"
             inputPropStyle={{}}
             autoCompleteClasses={autocompleteClasses}
-            getTagLabel={(option) => <OverflowTooltip title={option.documentTypeName} arrow>{option.documentTypeName}</OverflowTooltip>}
+            renderOption={(option) => (
+              <OverflowTooltip title={option.documentTypeName} placement="right" arrow>
+                {option.documentTypeName}
+              </OverflowTooltip>
+            )}
+            getTagLabel={(option) => (
+              <OverflowTooltip title={option.documentTypeName} arrow>
+                {option.documentTypeName}
+              </OverflowTooltip>
+            )}
             multiple
           />
           <FBAutocomplete
@@ -90,7 +99,16 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             optionValueKey="id"
             name="documentStatuses"
             autoCompleteClasses={autocompleteClasses}
-            getTagLabel={(option) => <OverflowTooltip title={option.label} arrow>{option.label}</OverflowTooltip>}
+            renderOption={(option) => (
+              <OverflowTooltip title={option.label} placement="right" arrow>
+                {option.label}
+              </OverflowTooltip>
+            )}
+            getTagLabel={(option) => (
+              <OverflowTooltip title={option.label} arrow>
+                {option.label}
+              </OverflowTooltip>
+            )}
             multiple
           />
         </>
