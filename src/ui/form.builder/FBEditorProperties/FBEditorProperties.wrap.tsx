@@ -5,6 +5,7 @@ import { DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions
 import { checkDocumentGroupOptions, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBInputType } from '../FBInput/FBInput.types';
 import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
+import { FBEditorPropertiesFormOutputOptions } from './FBEditorProperties.types';
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -14,17 +15,24 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     options,
     type,
     inputProps,
+    isFormOutput,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     type && (options = FBData.editorPropertiesByType(type));
 
+    if (isFormOutput) {
+      options = filter(
+        options,
+        (option) => FBEditorPropertiesFormOutputOptions.includes(get(option, 'value')),
+      ) as FBOption[];
+    }
+
     const { document: docRev, externalState } = workspaceState || {};
     const docTypeId = docRev?.document.documentType.id || '';
     const documentTypesById = externalState?.documentType?.byId;
     const docGroupOptions = documentTypesById?.[docTypeId]?.groupOptions;
-    const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
-      documentTypesById[type.value]);
+    const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) => documentTypesById[type.value]);
     const isDocumentForm = checkIsDocumentForm(docGroupOptions);
 
     map(FBEditorPropertiesOmitByGroup, (v: string[], k: DocumentGroupOptionsType) => {
