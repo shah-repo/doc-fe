@@ -9,14 +9,14 @@ export function useCurrentFormValue<T> (name: string, defaultValue?: T): T | und
   const { formState } = FB.useStores();
   const getLHRSStepSerialNumbersValue = useCallback((): T | undefined => {
     if (formState?.newValues.has(name)) {
-      return formState.newValues.get(name) as T | undefined;
+      return (formState.newValues.get(name) as T | undefined) ?? defaultValue;
     }
 
-    return (
+    return ((
       FBDataStore.refreshData?.formInput?.[name]
       ?? formState?.getFieldValue(name)
-    ) as T | undefined;
-  }, [formState, name]);
+    ) as T | undefined) ?? defaultValue;
+  }, [formState, name, defaultValue]);
 
   return useObserver(getLHRSStepSerialNumbersValue);
 }
