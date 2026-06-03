@@ -5,12 +5,11 @@ import { useSelector } from 'react-redux';
 import { FB, FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from '..';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import OverflowTooltip from '../../components/OverflowTooltip';
-import { checkIfDocumentHasOptions } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
-import { documentRevisionStatusOptions, EXCLUDED_DOCUMENT_OPTIONS } from './FBEditorAutocomplete.consts';
+import { getDocumentStatusOptions, getDocumentTypeOptions } from './FBEditorAutocomplete.helpers';
 import useStyles from './FBEditorAutocomplete.styles';
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
@@ -23,15 +22,12 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const customClasses = useStyles();
+  const selectedDocumentTypes = (
+    formState?.newValues.get('docTypeIds') ?? formState?.getFieldValue('docTypeIds') ?? []
+  ) as string[];
 
-  const documentTypeOptions = documentTypes.filter((documentType) => {
-    return documentType.active && !checkIfDocumentHasOptions(
-      [
-        ...EXCLUDED_DOCUMENT_OPTIONS,
-      ],
-      documentType.groupOptions,
-    );
-  });
+  const documentTypeOptions = getDocumentTypeOptions(documentTypes);
+  const documentStatusOptions = getDocumentStatusOptions(documentTypes, selectedDocumentTypes);
 
   const autocompleteClasses = useMemo(() => ({
     endAdornment: customClasses.endAdornment,
@@ -80,12 +76,12 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             name="docTypeIds"
             inputPropStyle={{}}
             autoCompleteClasses={autocompleteClasses}
-            renderOption={(option) => (
+            renderOption={(option: typeof documentTypeOptions[number]) => (
               <OverflowTooltip title={option.documentTypeName} placement="right" arrow>
                 {option.documentTypeName}
               </OverflowTooltip>
             )}
-            getTagLabel={(option) => (
+            getTagLabel={(option: typeof documentTypeOptions[number]) => (
               <OverflowTooltip title={option.documentTypeName} arrow>
                 {option.documentTypeName}
               </OverflowTooltip>
@@ -94,17 +90,17 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
           />
           <FBAutocomplete
             label="common.status"
-            options={documentRevisionStatusOptions}
+            options={documentStatusOptions}
             optionLabelKey="label"
             optionValueKey="id"
             name="documentStatuses"
             autoCompleteClasses={autocompleteClasses}
-            renderOption={(option) => (
+            renderOption={(option: typeof documentStatusOptions[number]) => (
               <OverflowTooltip title={option.label} placement="right" arrow>
                 {option.label}
               </OverflowTooltip>
             )}
-            getTagLabel={(option) => (
+            getTagLabel={(option: typeof documentStatusOptions[number]) => (
               <OverflowTooltip title={option.label} arrow>
                 {option.label}
               </OverflowTooltip>
