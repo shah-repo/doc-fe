@@ -1,15 +1,14 @@
 import { at, filter, get, map, some } from 'lodash';
 import { useEffect } from 'react';
-import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
+import { FB, FBData, FBEditorPropertiesFormOutputOptions, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
 import { DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkDocumentGroupOptions, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBInputType } from '../FBInput/FBInput.types';
 import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
-import { FBEditorPropertiesFormOutputOptions } from './FBEditorProperties.types';
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     onChange,
     options,
