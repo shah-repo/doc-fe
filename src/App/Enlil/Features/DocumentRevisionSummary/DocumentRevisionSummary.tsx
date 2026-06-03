@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { Formik } from 'formik';
 import { debounce, filter, get, includes, isEmpty, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -19,7 +20,7 @@ import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBuildTypeBanner from '../../../../ui/documentRevision/forms/presenters/redlineBuildType/RedlineBuildType.banner';
-import { checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -49,6 +50,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const outputTypeGroupOptions = get(outputDocumentType, 'groupOptions');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isRecord = checkIsDocumentRecord(groupOptions);
   const isDAM = checkIsDocumentDAM(groupOptions);
   const hasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
@@ -160,7 +162,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         }
       >
         <SMTemplate
-          boxProps={{ className: 'hide-scroll' }}
+          boxProps={{ className: cx({ 'hide-scroll': !isRecord }) }}
           templateBoxProps={{ stretchY: '100%' }}
           contentBoxProps={{ stretchY: '100%' }}
           rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}

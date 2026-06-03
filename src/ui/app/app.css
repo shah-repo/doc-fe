@@ -75,10 +75,12 @@
 .Toastify__close-button {
   font-family: "Sora";
 }
+
 .containing-box-scrollbar {
   -ms-overflow-style: scrollbar !important;
   scrollbar-width: auto !important;
 }
+
 .containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;
   width: 9px !important;
@@ -87,6 +89,12 @@
 
 .containing-box-scrollbar::-webkit-scrollbar-thumb {
   background-color: transparent;
+}
+
+[data-cy="material-disposition-table"] .containing-box-scrollbar::-webkit-scrollbar-thumb,
+[data-cy="tasks-list-table"] .containing-box-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--light-gray) !important;
+  border-radius: 1ex;
 }
 
 .containing-box-scrollbar:hover::-webkit-scrollbar-thumb {

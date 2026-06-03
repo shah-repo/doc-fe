@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core';
+import cx from 'classnames';
 import { debounce, filter, get, includes, isEmpty, map, size } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
 import React, { useCallback } from 'react';
@@ -29,7 +30,7 @@ import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import RedlineBuildTypeBanner from '../../../../ui/documentRevision/forms/presenters/redlineBuildType/RedlineBuildType.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FB, FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -87,6 +88,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroupOptions = get(outputDocumentType, 'groupOptions');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isRecord = checkIsDocumentRecord(groupOptions);
   const isPaperLHR = checkIsDocumentPaperLHR(groupOptions);
   const isDAM = checkIsDocumentDAM(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
@@ -248,7 +250,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           message={isPOEditState ? 'common.navigate.away.po.prompt' : undefined}
         />
         <SMTemplate
-          boxProps={{ className: 'hide-scroll' }}
+          boxProps={{ className: cx({ 'hide-scroll': !isRecord }) }}
           templateBoxProps={{ stretchY: '100%' }}
           contentBoxProps={{ stretchY: '100%' }}
           rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
