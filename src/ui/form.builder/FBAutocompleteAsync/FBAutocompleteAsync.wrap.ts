@@ -223,7 +223,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     // Filter selected options used to hide the selected options in the dropdown list.
     const shouldFilterSelectedOptions = Boolean(
-      props.filterSelectedOptions || [FBFieldName.TrainingDocumentsToBeTrainedOnList].includes(name as FBFieldName),
+      props.filterSelectedOptions || [FBFieldName.TrainingDocumentsToBeTrainedOnList, FBFieldName.Approvals].includes(name as FBFieldName),
     );
 
     return Component({
