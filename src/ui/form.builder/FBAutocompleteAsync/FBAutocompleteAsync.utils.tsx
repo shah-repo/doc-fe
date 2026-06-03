@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { AutocompleteAdornmentTagProps, AutocompleteLinkTagProps, AutocompleteOption, BuildAutocompleteConfig, BuildAutocompleteConfigProps, OptionDocument, OptionDocumentRevision } from '..';
 import { translate } from '../../../common/intl';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { changeRequestPreviewPath } from '../../change.request/utils/paths';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import FBTooltip from '../FBTooltip/FBTooltip';
 import useStyles from './FBAutocompleteAsync.styles';
@@ -47,10 +48,15 @@ const getLinkFromDocumentRevision: LinkResolver = (value) => {
   return documentVersionPath(value.id, value.document.id);
 };
 
+const getLinkFromApprovalRequest: LinkResolver = (value) => {
+  if (!value?.id) return null;
+  return changeRequestPreviewPath(value.id);
+};
+
 const LinkTag: React.FC<AutocompleteLinkTagProps> = ({ to, children }) => {
   const classes = useStyles();
   return (
-    <Link className={classes.link} to={to} target="_blank">
+    <Link className={classes.link} to={to} target="_blank" onClick={(e) => e.stopPropagation()}>
       {children}
     </Link>
   );
@@ -70,6 +76,10 @@ const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
     </InputAdornment>
   );
 };
+
+const APPROVAL_REQUEST_OPTIONS: FBAutocompleteAsyncOption[] = [
+  FBAutocompleteAsyncOption.changeRequests,
+];
 
 const DOCUMENT_OPTIONS: FBAutocompleteAsyncOption[] = [
   FBAutocompleteAsyncOption.allDocuments,
@@ -107,6 +117,7 @@ const DOCUMENT_REVISION_OPTIONS: FBAutocompleteAsyncOption[] = [
 const LINKABLE_OPTIONS = new Map<string, LinkResolver>([
   ...DOCUMENT_OPTIONS.map((id): [string, LinkResolver] => [id, getLinkFromDocument]),
   ...DOCUMENT_REVISION_OPTIONS.map((id): [string, LinkResolver] => [id, getLinkFromDocumentRevision]),
+  ...APPROVAL_REQUEST_OPTIONS.map((id): [string, LinkResolver] => [id, getLinkFromApprovalRequest]),
 ]);
 
 export const buildAutocompleteConfig: BuildAutocompleteConfig = ({
