@@ -12,4 +12,5 @@ export enum FBFieldName {
   GRPTTrainer = 'fb-grpt-trainer',
   GRPTTraineeList = 'fb-grpt-trainee-list',
   TrainingDocumentsToBeTrainedOnList = 'training-document-to-be-trained-on',
+  Approvals = 'fb-approvers-approvers',
 }
