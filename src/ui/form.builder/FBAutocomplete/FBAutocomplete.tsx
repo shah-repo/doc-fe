@@ -34,6 +34,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   defaultValue,
   includeQRScan,
   optionLabelKey = '',
+  getOptionSelected,
   placeholder,
   disabled = false,
   loading,
@@ -210,7 +211,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               getOptionDisabled,
               getOptionLabel,
               renderOption,
-              filterSelectedOptions,
               groupBy,
               multiple,
               defaultValue,
@@ -218,6 +218,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            filterSelectedOptions
+            getOptionSelected={getOptionSelected}
             classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
@@ -232,7 +234,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               getOptionDisabled,
               getOptionLabel,
               renderOption,
-              filterSelectedOptions,
               groupBy,
               multiple,
               defaultValue,
@@ -240,6 +241,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            filterSelectedOptions
+            getOptionSelected={getOptionSelected}
             classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}

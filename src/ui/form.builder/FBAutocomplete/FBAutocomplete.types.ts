@@ -34,6 +34,7 @@ export type FBAutocompleteProps =
    inputPropStyle?: React.CSSProperties
    inputPropStyleSize?: FormControlProps['size']
    isDocumentLHRT?: boolean
+   getOptionSelected?: (option: any, value: any) => boolean
    /**
     * @cfg {Boolean} Option to disable deletion of rendered chips using Backspace key.
     */

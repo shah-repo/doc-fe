@@ -205,6 +205,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     if (isUndefined(defaultValue)) {
       defaultValue = '';
     }
+
+    const getOptionSelected = (option, value) => {
+      const optionKey = get(option, optionValueKey) || option;
+      const valueKey = get(value, optionValueKey) || value;
+
+      return optionKey === valueKey;
+    };
+
     return Component({
       ...(props as T),
       onInputChange,
@@ -221,6 +229,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
+      getOptionSelected,
       placeholder,
       multiple,
       optionId,
