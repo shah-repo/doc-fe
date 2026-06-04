@@ -47,6 +47,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     omitFormValue,
     disabled,
     isDocumentLHRT,
+    filterSelectedOptions,
     editorProperties,
     onBlur,
     ...props
@@ -205,6 +206,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     if (isUndefined(defaultValue)) {
       defaultValue = '';
     }
+
+    const getOptionSelected = filterSelectedOptions
+      ? (option, value) => {
+        const optionKey = get(option, optionValueKey) || option;
+        const valueKey = get(value, optionValueKey) || value;
+
+        return optionKey === valueKey;
+      } : undefined;
+
     return Component({
       ...(props as T),
       onInputChange,
@@ -221,6 +231,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
+      getOptionSelected,
       placeholder,
       multiple,
       optionId,
