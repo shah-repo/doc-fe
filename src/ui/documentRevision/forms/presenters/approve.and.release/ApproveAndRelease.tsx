@@ -188,7 +188,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const asyncGetDocTypeByGroup = useAsync({
     onSuccess: (data: DocumentTypeById[] = []) => {
       const options = flatten(
-        data.map((template) =>
+        data.filter((template) => template.documentType.active).map((template) =>
           template.forms.map((form) => ({
             label: form.name,
             value: form.id,
