@@ -11,6 +11,7 @@ import { ReactComponent as DatePickerIcon } from '../../../assets/images/formBui
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBTextFieldStyles } from '../styles/FBTextField.styles';
+import { useStyles } from './FBDatePicker.styles';
 import { FBDatePickerProps } from './FBDatePicker.types';
 import { withDatePicker } from './FBDatePicker.wrap';
 
@@ -23,6 +24,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   disablePastDates,
   ...props
 }) => {
+  useStyles();
   const classes = FBTextFieldStyles();
   const { getCurrentDate, timezone } = useDate();
   const currentDate = getCurrentDate(MomentFormats.YearMonthDateDash);
