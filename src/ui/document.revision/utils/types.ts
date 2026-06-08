@@ -21,6 +21,7 @@ export enum ReleasedDateOptions {
 }
 
 export enum ExpiryDateOptions {
+  ONE_WEEK = 'Expiring in 7 days',
   TWO_WEEKS = 'Expiring in 14 days',
   ONE_MONTH = 'Expiring in 30 days',
   TWO_MONTHS = 'Expiring in 60 days',

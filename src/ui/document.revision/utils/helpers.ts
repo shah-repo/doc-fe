@@ -86,6 +86,10 @@ export const trainingCompletedOnDateOption = () => [
 
 export const expirationDateOption = () => [
   {
+    text: ExpiryDateOptions.ONE_WEEK,
+    value: '7',
+  },
+  {
     text: ExpiryDateOptions.TWO_WEEKS,
     value: '14',
   },
