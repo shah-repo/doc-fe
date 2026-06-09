@@ -147,7 +147,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         (e) => (e.approver.id === get(option, 'id')) && e.status === ApprovalStatus.Approved,
       );
       const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
-      const isDisabled = disabled || name === 'approvers' ? isAlreadyApproved : isOptionDisabled;
+      const isDisabled = disabled || (name === 'approvers' ? isAlreadyApproved : isOptionDisabled);
       const key = get(option, optionLabelKey) as string;
 
       return (
