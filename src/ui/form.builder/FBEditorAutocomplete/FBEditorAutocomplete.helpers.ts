@@ -63,3 +63,8 @@ export const getDocumentTypeOptions = <T extends DocumentType>(documentTypes: T[
       documentType.groupOptions,
     );
   });
+
+export const getDocumentStatusOptionLabel = (
+  option: ReturnType<typeof getDocumentStatusOptions>[number],
+  documentStatuses: ReturnType<typeof getDocumentStatusOptions>,
+): string => documentStatuses.find((o) => o.id === option.id)?.label ?? '';

@@ -9,7 +9,7 @@ import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocomplete
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
-import { getDocumentStatusOptions, getDocumentTypeOptions } from './FBEditorAutocomplete.helpers';
+import { getDocumentStatusOptionLabel, getDocumentStatusOptions, getDocumentTypeOptions } from './FBEditorAutocomplete.helpers';
 import useStyles from './FBEditorAutocomplete.styles';
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
@@ -90,18 +90,19 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
           />
           <FBAutocomplete
             label="common.status"
-            options={documentStatusOptions.map((option) => option.id)}
+            options={documentStatusOptions.map((option) => ({ id: option.id, label: option.id }))}
             name="documentStatuses"
             optionLabelKey="label"
+            optionValueKey="id"
             autoCompleteClasses={autocompleteClasses}
-            renderOption={(option: string) => (
-              <OverflowTooltip title={documentStatusOptions.find((o) => o.id === option)?.label} placement="right" arrow>
-                {documentStatusOptions.find((o) => o.id === option)?.label}
+            renderOption={(option: typeof documentStatusOptions[number]) => (
+              <OverflowTooltip title={getDocumentStatusOptionLabel(option, documentStatusOptions)} placement="right" arrow>
+                {getDocumentStatusOptionLabel(option, documentStatusOptions)}
               </OverflowTooltip>
             )}
-            getTagLabel={(option: string) => (
-              <OverflowTooltip title={documentStatusOptions.find((o) => o.id === option)?.label} arrow>
-                {documentStatusOptions.find((o) => o.id === option)?.label}
+            getTagLabel={(option: typeof documentStatusOptions[number]) => (
+              <OverflowTooltip title={getDocumentStatusOptionLabel(option, documentStatusOptions)} arrow>
+                {getDocumentStatusOptionLabel(option, documentStatusOptions)}
               </OverflowTooltip>
             )}
             multiple
