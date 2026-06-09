@@ -2,7 +2,7 @@ import { translate } from '../../../common/intl';
 import { DisplayFieldType, DOC_TYPE_GROUP_OPTION, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIfDocumentHasOptions } from '../../documentRevision/helpers/checkDocumentGroup';
-import { DIRECT_APPROVAL_DOCUMENT_REVISION_EXCLUDED_STATUSES, EXCLUDED_DOCUMENT_OPTIONS, EXCLUDED_DOCUMENT_REVISION_STATUS } from './FBEditorAutocomplete.consts';
+import { EXCLUDED_DOCUMENT_OPTIONS, EXCLUDED_DOCUMENT_REVISION_STATUS, SPECIAL_DOCUMENT_STATUS_CASES } from './FBEditorAutocomplete.consts';
 
 export const getDocumentStatusOptions = (
   documentTypes: DocumentType[],
@@ -16,32 +16,27 @@ export const getDocumentStatusOptions = (
   const shouldAddPoReleased = isEmptyDocumentTypes || documentTypesToConsider.some((documentType) => documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.PO));
   const hasMultipleDocumentTypes = documentTypesToConsider.length > 1;
 
-  const isOnlyDirectApprovalTypes = documentTypesToConsider.every((documentType) => documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL));
-
   const viableStatuses = Object.values(DocumentRevisionStatus)
-    .filter((status) => {
-      const isStatusExcluded = EXCLUDED_DOCUMENT_REVISION_STATUS.includes(status);
-      const isStatusAllowed = isOnlyDirectApprovalTypes ? !DIRECT_APPROVAL_DOCUMENT_REVISION_EXCLUDED_STATUSES.includes(status) : true;
-      return !isStatusExcluded && isStatusAllowed;
-    });
+    .filter((status) => !EXCLUDED_DOCUMENT_REVISION_STATUS.includes(status));
 
   const statusDisplayOptions = viableStatuses.reduce<Map<DocumentRevisionStatus, string[]>>((acc, status) => {
-    const existingStatusOptions = acc.get(status) ?? [];
-    documentTypesToConsider.forEach((documentType) => {
-      const isDirectApprovalType = documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL);
-      if (isDirectApprovalType && DIRECT_APPROVAL_DOCUMENT_REVISION_EXCLUDED_STATUSES.includes(status)) {
-        return;
-      }
+    const statusLabels = documentTypesToConsider.reduce((labels, documentType) => {
+      const isStatusExcluded = SPECIAL_DOCUMENT_STATUS_CASES
+        .some((specialCase) => specialCase.condition(documentType) && specialCase.excludedStatuses.includes(status));
+      if (isStatusExcluded) return labels;
 
-      const statusConfigKey = DisplayFieldType[`STATUS_${status}`];
-      if (!statusConfigKey) return;
+      const statusOverride = documentType.fieldsConfig?.[DisplayFieldType[`STATUS_${status}`]];
+      const statusLabel = statusOverride?.visible && statusOverride.label ? statusOverride.label : translate(status);
 
-      const statusOverride = documentType.fieldsConfig?.[statusConfigKey];
-      if (statusOverride?.visible && statusOverride.label && !existingStatusOptions.some((option) => option === statusOverride.label)) {
-        existingStatusOptions.push(statusOverride.label);
+      if (!labels.has(statusLabel)) {
+        labels.add(statusLabel);
       }
-    });
-    acc.set(status, existingStatusOptions);
+      return labels;
+    }, new Set<string>());
+
+    if (statusLabels.size > 0) {
+      acc.set(status, Array.from(statusLabels));
+    }
     return acc;
   }, new Map<DocumentRevisionStatus, string[]>());
 
@@ -53,13 +48,10 @@ export const getDocumentStatusOptions = (
       : statusDisplayOptions.set(DocumentRevisionStatus.Released, [translate('APPROVED')]);
   }
 
-  return viableStatuses.map((status) => {
-    const overrides = statusDisplayOptions.get(status);
-    return {
-      id: status,
-      label: overrides?.length ? overrides.join('/') : translate(status),
-    };
-  });
+  return Array.from(statusDisplayOptions.entries()).map(([status, overrides]) => ({
+    id: status,
+    label: overrides.join('/'),
+  }));
 };
 
 export const getDocumentTypeOptions = <T extends DocumentType>(documentTypes: T[]): T[] =>
