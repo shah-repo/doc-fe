@@ -1,4 +1,4 @@
-import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export const EXCLUDED_DOCUMENT_OPTIONS = [
@@ -12,7 +12,20 @@ export const EXCLUDED_DOCUMENT_REVISION_STATUS = [
   DocumentRevisionStatus.Voided,
 ];
 
-export const DIRECT_APPROVAL_DOCUMENT_REVISION_EXCLUDED_STATUSES = [
-  DocumentRevisionStatus.Approved,
-  DocumentRevisionStatus.PendingChange,
+export const SPECIAL_DOCUMENT_STATUS_CASES = [
+  {
+    condition: (documentType: DocumentType): boolean => documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL) ?? false,
+    excludedStatuses: [
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.PendingChange,
+    ],
+  },
+  {
+    condition: (documentType: DocumentType): boolean => documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.GROUP_TRAINING) ?? false,
+    excludedStatuses: [
+      DocumentRevisionStatus.InReview,
+      DocumentRevisionStatus.PendingChange,
+      DocumentRevisionStatus.Approved,
+    ],
+  },
 ];
