@@ -74,6 +74,7 @@ export const convertHtmlEntities = (input: string | string[]): string => {
 
 export const theme = Config.Theme;
 export const logo = '/logo_enlil_dark.svg';
+export const logoThumb = '/Enlil_logo_thumb.png';
 
 export function deleteCookie (name) {
   document.cookie = name + '='
@@ -158,7 +159,7 @@ const getPayloadBasedOnWoTypeMakeKit = (payload: Record<string, unknown>): Recor
     typeof woPart === 'object'
     && woPart !== null
     && 'id' in woPart
-    && woPart['id'] === ''
+    && woPart.id === ''
   ) {
     payload[WO_PART_UNIT_KEY_NAME] = '';
     payload[WO_PART_QTY_KEY_NAME] = null;
