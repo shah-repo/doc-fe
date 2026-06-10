@@ -34,6 +34,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     DOC_TYPE_GROUP_OPTION.PO,
     DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
     DOC_TYPE_GROUP_OPTION.WORK_ORDER,
+    DOC_TYPE_GROUP_OPTION.SHIPPING,
   ];
   const notInCategory = CATEGORY.WORKORDER_CATEGORY;
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
