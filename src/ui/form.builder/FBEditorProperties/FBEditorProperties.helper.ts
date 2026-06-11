@@ -1,5 +1,5 @@
 import { FBInputType, OmitIncludeNotes } from '..';
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export const FBEditorPropertiesDefaultValue = (type: FBInputType, docGroupOptions?: DocumentGroupOptionsType[]) => {
   if (docGroupOptions?.includes(DOC_TYPE_GROUP_OPTION.FB_DEFAULT_NOTES)) {
@@ -13,6 +13,5 @@ export const FBEditorPropertiesDefaultValue = (type: FBInputType, docGroupOption
   }
   return {
     procedure: ['copyableValue'],
-    eqmaintenance: ['deleteDisabled'],
   };
 };
