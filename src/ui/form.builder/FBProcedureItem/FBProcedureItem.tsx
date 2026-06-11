@@ -70,7 +70,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             </Box>
           )}
         </Box>}
-        {!isAttachmentType && (
+        {!FBProcedureItemOmitAction.includes(type) && (
           <Box color={Colors.almost_black} fontWeight={600} fontSize="12px">
             <FBText {...{ loading }} locale={FBProcedureItemLocale[type]} />
           </Box>
