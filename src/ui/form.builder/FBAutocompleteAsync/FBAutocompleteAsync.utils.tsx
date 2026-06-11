@@ -28,9 +28,8 @@ const findLatestViableRevision = (revisions: OptionDocumentRevision[] = [], docu
   }, undefined);
 };
 
-const isDocument = (
-  value: AutocompleteOption,
-): value is OptionDocument => Object.prototype.hasOwnProperty.call(value, 'docId');
+const isDocument = (value: AutocompleteOption): value is OptionDocument =>
+  value != null && typeof value === 'object' && 'docId' in value;
 
 type LinkResolver = (
   value: AutocompleteOption,
