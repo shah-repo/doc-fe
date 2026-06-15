@@ -60,7 +60,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           workspaceState.schema![index] = {
             ...schemeItem,
-            editorConfig: data,
+            editorConfig: { ...schemeItem?.editorConfig, ...data },
           };
           workspaceState.saveDocRev(formState?.getValues());
         }
