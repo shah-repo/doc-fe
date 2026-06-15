@@ -56,7 +56,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     });
 
     useEffect(() => {
-      documentOptionsAsync.load();
+      documentOptionsAsync.load(true);
     }, [documentOptionsAsync]);
 
     const documentOptions = useObserver(
