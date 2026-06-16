@@ -6,5 +6,10 @@ export default makeStyles({
     textDecoration: 'none',
     color: Colors.primary,
     position: 'relative',
+    pointerEvents: 'auto',
+    cursor: 'pointer',
+  },
+  clickableAdornment: {
+    pointerEvents: 'auto',
   },
 });
