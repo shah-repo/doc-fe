@@ -65,8 +65,9 @@ const AdornmentTag: React.FC<AutocompleteAdornmentTagProps> = ({
   position = 'start',
   to,
 }) => {
+  const classes = useStyles();
   return (
-    <InputAdornment position={position} onClick={(e) => e.stopPropagation()}>
+    <InputAdornment className={classes.clickableAdornment} position={position} onClick={(e) => e.stopPropagation()}>
       <FBTooltip title={translate('common.open.in.new.tab')}>
         <LinkTag to={to}>
           <FontAwesomeIcon icon={solid('external-link')} size="sm" />
