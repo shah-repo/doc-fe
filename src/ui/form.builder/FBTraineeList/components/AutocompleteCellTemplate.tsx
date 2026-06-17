@@ -3,6 +3,7 @@ import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import ListBoxComponent from '../../../components/common/autocomplete/ListBoxComponent';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { CustomTemplateProps, EditableTrainee } from '../types';
 
@@ -47,6 +48,7 @@ const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
         getOptionLabel={getOptionLabel}
         getOptionDisabled={props.getOptionDisabled ?? getOptionDisabled}
         onChange={handleChange}
+        ListboxComponent={ListBoxComponent}
         size="small"
       />
     </FormikField>
