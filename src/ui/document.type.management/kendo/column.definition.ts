@@ -165,7 +165,7 @@ const columns: KendoColumn[] = [{
   title: 'common.equipmentEnforce',
   cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: 'boolean',
-  show: true,
+  show: false,
   width: '125px',
   groupable: true,
   showColumnMenu: true,
