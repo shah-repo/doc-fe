@@ -6,7 +6,7 @@ export default makeStyles((theme) =>
     infoBanner: {
       display: 'flex',
       alignItems: 'center',
-      gap: theme.spacing(1.5),
+      gap: `${theme.spacing(1.5)}px`,
       padding: theme.spacing(1.5, 2),
       backgroundColor: Colors.primaryBg,
       border: `1px solid ${theme.palette.primary.main}`,
