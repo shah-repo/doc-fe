@@ -313,7 +313,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
   const isValidLOT = (lot) => {
     let isAcceptedStatus = false;
     if (isEBProcedure) {
-      isAcceptedStatus = true; // No constraints on Lot Status
+      isAcceptedStatus = isDocumentRevisionReleased(lot.status) && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     } else {
       const isValidStatus = [
         DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
