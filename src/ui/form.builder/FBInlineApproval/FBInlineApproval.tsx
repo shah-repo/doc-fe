@@ -6,6 +6,7 @@ import { FB, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBo
 import Loader from '../../components/common/kendo/Loader';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
 import Colors from '../../layout/theme/utils/colors';
+import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { withFBInlineApproval } from './FBInlineApproval.wrap';
 
@@ -13,6 +14,7 @@ const LazyFBApprovalAudit = lazy(async () => await import('..').then(module => (
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
+  onRejectClick,
   requestAllApprovals,
   label = 'form.builder.approvers',
   approvals = [],
@@ -111,6 +113,14 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   {currentUser === approval.approver?.user.id
                     && (
                       <Box flexGrow={1} textAlign="right">
+                        <StyledCancelFBButton
+                          color="secondary"
+                          disabled={disabled || approval.status === 'APPROVED'}
+                          label="common.reject"
+                          size="small"
+                          style={{ fontSize: '11px' }}
+                          onClick={() => onRejectClick?.(approval.id || '')}
+                        />
                         <FBButton
                           disabled={disabled || approval.status === 'APPROVED'}
                           label="form.builder.request.approve"

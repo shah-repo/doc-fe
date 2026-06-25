@@ -17,6 +17,7 @@ export type FBInlineApprovalProps =
   // approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
   requestAllApprovals?: (id?: string) => any
   onApproveClick?: (approvalId: string) => void
+  onRejectClick?: (approvalId: string) => void
   editorConfig?: FBInlineApprovalValue
   approvals?: FBInlineApprovalBody[]
   currentUser?: string
@@ -76,6 +77,7 @@ export type FBInlineApprovalBody =
 
 export interface FBInlineApprovalTransitionBody {
   password?: string
+  comment?: string
 }
 
 export interface FBRequestApprovalTransitionBody {

@@ -21,7 +21,7 @@ interface Props {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
   onSuccess?: () => void
 }
-const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
+const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   arId,
   title,
   transition,
@@ -47,4 +47,4 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   />
 );
 
-export default ApproveDialogueContainer;
+export default ApproveDialogContainer;

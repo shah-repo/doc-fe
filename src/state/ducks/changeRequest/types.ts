@@ -2,7 +2,7 @@ import { FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Approval, Id, Owner, User } from '../common/types';
-import { DocumentType, DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType } from '../documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, FBDocumentRevisionProps } from '../documentRevisions/types';
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 
@@ -102,7 +102,7 @@ export interface ChangeRequestsByIdState {
 export type ChangeRequestsAllIdsState = string[];
 
 export type ChangeRequestTransition =
-  'approve' | 'reject' | 'to_review' | 'withdrawn' | 'submitted' | 'in_review' | 'closed';
+  'approve' | 'reject' | 'reject_with_password' | 'to_review' | 'withdrawn' | 'submitted' | 'in_review' | 'closed';
 
 export interface ChangeRequestTransitionRequestBody {
   password?: string

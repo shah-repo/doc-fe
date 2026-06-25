@@ -40,7 +40,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
   const asyncGetDocTypeByGroup = useAsync({
     onSuccess: (data: DocumentTypeById[] = []) => {
       const options = flatten(
-        data.map((template) =>
+        data.filter((template) => template.documentType.active).map((template) =>
           template.forms.map((form) => (
             {
               label: form.name,

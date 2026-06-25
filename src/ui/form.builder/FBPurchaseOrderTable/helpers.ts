@@ -21,4 +21,4 @@ export const getPOLineItemsTotalAndForTaxAmount = (poLineItems: FBPurchaseOrderI
   }, { subTotal: 0, forTax: 0 },
 );
 
-export const getDecimalLength = (value: number|string): number => value.toString().split('.')[1]?.length ?? 2;
+export const getDecimalLength = (value: number|string): number => Math.max(value.toString().split('.')[1]?.length ?? 0, 2);
