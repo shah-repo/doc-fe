@@ -42,7 +42,7 @@ const SerialNumberCell: React.FC<Props> = ({
         <span className={cx({ [classes.disabledValue]: shouldDisableRow })}>{defaultValue}</span>
       </OverflowTooltip>
       {shouldDisableRow && (
-        <Tooltip title={tooltipText} classes={{ tooltip: classes.tooltip }}>
+        <Tooltip title={tooltipText} classes={{ tooltip: classes.tooltip }} arrow>
           <FontAwesomeIcon className={classes.disabledIcon} icon={solid('circle-exclamation')} />
         </Tooltip>
       )}

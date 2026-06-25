@@ -764,6 +764,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
 
+        if (change.field.includes('approvals.comment') && change.type !== 'STRING_EDITED') {
+          return;
+        }
+
         // for site contact info delete chage FbLable
         if (change.field.includes('siteContact') && change.type === 'ARRAY_DELETED') {
           fbLabel = `${fbLabel} Contact`;

@@ -48,6 +48,10 @@ export default (theme: Theme) =>
       order: 0,
       flexGrow: 0,
       margin: '0px 20px',
+      '& span': {
+        color: Colors.navy,
+        fontWeight: 600,
+      },
     },
     label: {
       fontSize: 12,
