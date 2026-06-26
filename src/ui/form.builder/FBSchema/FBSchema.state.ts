@@ -274,7 +274,9 @@ class FBSchemaState {
   };
 
   @action public updateSchemaItem = (schemaItem: FBSchemaProps, at: number) => {
-    const newSchema = [...this.getSchema()];
+    const schema = this.getSchema();
+    schemaItem.editorConfig = { ...schema[at].editorConfig, ...schemaItem.editorConfig };
+    const newSchema = [...schema];
     newSchema[at] = schemaItem;
     this.setSchema(newSchema);
     this.setValidationSchemaItem(schemaItem);
