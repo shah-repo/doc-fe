@@ -1,6 +1,7 @@
 import { InputAdornmentProps } from '@material-ui/core';
 import { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import { FBAutocompleteAsyncState, FBAutocompleteProps } from '..';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export type FBAutocompleteAsyncProps =
@@ -14,6 +15,7 @@ export type FBAutocompleteAsyncProps =
   forceNewRender?: boolean
   docTypeIds?: string[]
   documentStatuses?: DocumentRevisionStatus[]
+  changeRequestStatuses?: ChangeRequestStatus[]
   /**
    * @cfg {Record} Additional url params.
    */
@@ -91,6 +93,7 @@ export interface FBAutocompleteAsyncConstructor {
   urlValues?: Record<string, any>
   docTypeIds?: string[]
   documentStatuses?: DocumentRevisionStatus[]
+  changeRequestStatuses?: ChangeRequestStatus[]
   documentStatus?: string
   includePrevReleaseDoc?: boolean
 }
@@ -113,6 +116,7 @@ export interface BuildAutocompleteConfigProps {
   optionId?: string
   getOptionLabel: (value: AutocompleteOption, documentStatuses?: DocumentRevisionStatus[]) => string
   documentStatuses?: DocumentRevisionStatus[]
+  changeRequestStatuses?: ChangeRequestStatus[]
 }
 
 type GetTagLabel = (value: AutocompleteOption, documentStatuses?: DocumentRevisionStatus[]) => React.ReactNode;
@@ -129,4 +133,9 @@ export interface AutocompleteLinkTagProps { to: string }
 
 export interface AutocompleteAdornmentTagProps extends AutocompleteLinkTagProps {
   position?: InputAdornmentProps['position']
+}
+
+export interface FBAutocompleteAsyncSchemaItem {
+  documentStatuses?: DocumentRevisionStatus[]
+  changeRequestStatuses?: ChangeRequestStatus[]
 }

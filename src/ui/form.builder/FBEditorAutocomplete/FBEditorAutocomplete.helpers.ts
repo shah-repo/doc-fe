@@ -1,4 +1,5 @@
 import { translate } from '../../../common/intl';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DisplayFieldType, DOC_TYPE_GROUP_OPTION, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIfDocumentHasOptions } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -53,6 +54,12 @@ export const getDocumentStatusOptions = (
     label: overrides.join('/'),
   }));
 };
+
+export const getChangeRequestStatusOptions = (): Array<{ id: ChangeRequestStatus, label: string }> =>
+  Object.values(ChangeRequestStatus).map((status) => ({
+    id: status,
+    label: translate(status),
+  }));
 
 export const getDocumentTypeOptions = <T extends DocumentType>(documentTypes: T[]): T[] =>
   documentTypes.filter((documentType) => {
