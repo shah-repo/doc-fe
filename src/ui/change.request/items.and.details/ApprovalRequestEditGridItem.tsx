@@ -44,7 +44,7 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const classes = useStyles();
   const location = useLocation();
   const showDeleteButton = Boolean(entry?.docRevId) && !location.pathname.includes(entry?.docRevId);
-  const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
+  const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate ?? (isAddingNewItem && isLineItemPartCanBeSubstituted));
   const popperAnchorRef = useRef<HTMLDivElement>(null);
 
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
