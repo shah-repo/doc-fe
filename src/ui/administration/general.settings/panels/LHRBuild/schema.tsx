@@ -58,6 +58,19 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
+      id: 'enforceEquipmentRequired',
+      field: 'enforceEquipmentRequired',
+      headerCell: (props) => (
+        <HeaderCell
+          {...props}
+          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired"
+          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired.tooltip"
+        />
+      ),
+      template: AutocompleteCellTemplate,
+      width: 200,
+    },
+    {
       id: 'enforceLotQtyRange',
       field: 'enforceLotQtyRange',
       headerCell: (props) => (
@@ -110,19 +123,6 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       width: 200,
     },
     {
-      id: 'enforceEquipmentRequired',
-      field: 'enforceEquipmentRequired',
-      headerCell: (props) => (
-        <HeaderCell
-          {...props}
-          content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired"
-          tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceEquipmentRequired.tooltip"
-        />
-      ),
-      template: AutocompleteCellTemplate,
-      width: 200,
-    },
-    {
       id: 'enforceProdLotsOnly',
       field: 'enforceProdLotsOnly',
       headerCell: (props) => (
@@ -141,6 +141,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       headerCell: (props) => (
         <HeaderCell
           {...props}
+          shouldShowNotImplementedIcon
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval"
           tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval.tooltip"
         />
@@ -154,6 +155,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       headerCell: (props) => (
         <HeaderCell
           {...props}
+          shouldShowNotImplementedIcon
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval"
           tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval.tooltip"
         />

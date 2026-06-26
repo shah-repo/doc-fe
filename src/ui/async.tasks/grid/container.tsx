@@ -172,6 +172,9 @@ RouteComponentProps
   };
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     const updatedPayload = JSON.parse(payload);
+    if ('comment' in values) {
+      delete values.comment;
+    }
     if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
       async.start(
         executeSessionTimeTravelAsyncTask,

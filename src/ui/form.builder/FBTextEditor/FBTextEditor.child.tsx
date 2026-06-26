@@ -1,4 +1,5 @@
 import { Box, Fade } from '@material-ui/core';
+import cx from 'classnames';
 import { isEmpty, isUndefined } from 'lodash';
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
@@ -14,6 +15,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   editorRef,
   onBlur,
   onKeyDown,
+  placeholder,
   editorState,
   isPreview,
   formValue = '',
@@ -57,6 +59,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
             ],
           }}
           toolbarHidden={isPreview}
+          placeholder={placeholder}
           toolbarStyle={{
             border: 'none',
             borderBottom: `1px solid ${Colors.hint_gray}`,
@@ -94,15 +97,17 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           p={isPreview ? 0 : 1.5}
         >
-          <div className={classes.marginBStyle}
-            style={{ width: '100%', height: '100%' }}
-            dangerouslySetInnerHTML={{ __html: formattedFormValue }}
-          />
+          {formattedFormValue ? (
+            <div
+              className={cx(classes.marginBStyle, classes.previewContent)}
+              dangerouslySetInnerHTML={{ __html: formattedFormValue }}
+            />
+          ) : (
+            <div className={cx(classes.previewContent, classes.previewPlaceholder)}>{placeholder}</div>
+          )}
         </Box>
-
       </FBConditionalWrapper>
     </Box>
-
   );
 };
 

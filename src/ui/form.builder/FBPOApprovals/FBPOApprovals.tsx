@@ -27,6 +27,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   isIncluded,
   approvalTransition,
   onApproveClick,
+  onRejectClick,
   onConfirmClick,
   name,
   disabled,
@@ -68,11 +69,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
     = isDocumentRevisionReleased(documentStatus) && isUserAdminEnforce
       ? isUserAdminEnforce
       : disabled;
-
-  const handleRejectPO = (id: string) => {
-    setSelectedApprovalId(id);
-    alertDialog.open();
-  };
 
   const handleConfirmReject = () => {
     selectedApprovalId
@@ -203,7 +199,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                           label="common.reject"
                                           size="small"
                                           className={cx(classes.poButton, classes.poRejectButton)}
-                                          onClick={() => handleRejectPO(approval.id)}
+                                          onClick={() => onRejectClick?.(approval.id || '')}
                                         />
                                         <FBButton
                                           label="form.builder.request.approve"

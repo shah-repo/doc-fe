@@ -26,12 +26,8 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(1),
     borderRight: `1px solid ${Colors.stroke}`,
   },
-  gridContainer: {
-    maxHeight: '50vh',
-    width: '100%',
-    position: 'relative',
-  },
   grid: {
+    maxHeight: '50vh',
     '& .k-column-title': {
       fontSize: 12,
       whiteSpace: 'normal',

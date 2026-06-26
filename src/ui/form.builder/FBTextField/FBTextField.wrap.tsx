@@ -74,7 +74,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       const min = isEmpty(rawMin) ? Number.MIN_VALUE : toNumber(rawMin);
       const max = isEmpty(rawMax) ? Number.MAX_VALUE : toNumber(rawMax);
       const step = isEmpty(rawStep) ? false : toNumber(rawStep);
-      const roundedNumber = step ? Math.round((number - min) / step) * step + min : number;
+      const roundedNumber = (step && name !== 'editorConfig.taxRate') ? Math.round((number - min) / step) * step + min : number;
 
       return Math.min(
         max,

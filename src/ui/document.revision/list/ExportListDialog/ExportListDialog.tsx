@@ -71,6 +71,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (dialog.isOpen) {
       saveFileName('');
+      saveLimit(DEFAULT_RECORD_DOWNLOAD_LIMIT);
     }
   }, [dialog.isOpen]);
 

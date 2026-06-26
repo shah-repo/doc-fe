@@ -24,7 +24,7 @@ import DocId from '../../common/DocId/presenter';
 import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
-import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
+import ApproveDialogContainer from '../../dialogs/approveDialogContainer';
 import useStyles from './taskApproval.styles';
 
 interface Props {
@@ -470,13 +470,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </Grid>
         </List>
       </Collapse>
-      <ApproveDialogueContainer
+      <ApproveDialogContainer
         transition="reject"
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogReject}
         label="transition.action.reject"
       />
-      <ApproveDialogueContainer
+      <ApproveDialogContainer
         transition="approve"
         changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialogApprove}
