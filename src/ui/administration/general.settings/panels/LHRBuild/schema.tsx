@@ -141,6 +141,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       headerCell: (props) => (
         <HeaderCell
           {...props}
+          shouldShowNotImplementedIcon
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval"
           tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceDeviationApproval.tooltip"
         />
@@ -154,6 +155,7 @@ export const buildSchema: SchemaBuilder<EditableLHRBuild> = ({
       headerCell: (props) => (
         <HeaderCell
           {...props}
+          shouldShowNotImplementedIcon
           content="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval"
           tooltipTitle="administration.general.settings.lhrBuildTypeConfig.lhrBuild.enforceReworkApproval.tooltip"
         />
