@@ -1,7 +1,8 @@
 import { get } from 'lodash';
 import React, { lazy, Suspense } from 'react';
 import { translate } from '../../../../common/intl';
-import { convertHtmlEntities } from '../../../../common/utils/helpers';
+import { convertHtmlEntities, stripTags } from '../../../../common/utils/helpers';
+import { HTML_CONTENT_FIELDS } from '../../../documentType/grid/constants';
 import useHoverOnce from '../../../hooks/useHoverOnce';
 import { CustomGridCellProps } from '../kendo/types';
 
@@ -19,7 +20,9 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
 }) => {
   const fieldValue = get(dataItem, field ?? '', '') ?? '';
   const dataString = Array.isArray(fieldValue) ? fieldValue.join(', ') : fieldValue;
-  const dataItemValue = convertHtmlEntities(dataString) ?? '';
+  const shouldStripHtml = HTML_CONTENT_FIELDS.includes(field ?? '');
+  const convertedValue = convertHtmlEntities(dataString) ?? '';
+  const dataItemValue = shouldStripHtml ? stripTags(convertedValue) : convertedValue;
   const [elementRef, isHovered] = useHoverOnce<HTMLSpanElement>();
 
   const cellClickEvent = () => {
