@@ -153,7 +153,7 @@ const makeGetDocTypeByAcronym = () => createSelector(
   (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
 );
 
-export const canCreateCategory = createSelector(
+const canCreateCategory = createSelector(
   allDocTypeIdsByCategory, getCreationRestrictionsMap, currentEmployeeId, currentUserGroupIds,
   (state: ApplicationState, category: string) => category,
   (allDocTypeIdsByCategory, getCreationRestrictionsMap, employeeId, groupIds, category) => {
