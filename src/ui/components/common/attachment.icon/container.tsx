@@ -297,6 +297,18 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     }
   };
 
+  const handleDownloadAttachment = (attachment: Attachment) => {
+    if (redLineRequiresPassword(attachment) || cleanCopyRequiresPassword(attachment)) {
+      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+      setSelectedAttachment(attachment);
+      openWarningDialog();
+      closeContextMenu();
+    } else {
+      handleDownload(attachment);
+      closeContextMenu();
+    }
+  };
+
   const handleClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     if (redLineRequiresPassword(attachment)) {
@@ -373,7 +385,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       </div>
       <AttachmentTable
         {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderCheck, isHeaderChecked, attachments }}
-        onDownloadAttachment={handleDownload}
+        onDownloadAttachment={handleDownloadAttachment}
         onDownloadAsPDF={handleWatermarkRequest}
         onDelete={handleRemove}
         onView={handleClick}
