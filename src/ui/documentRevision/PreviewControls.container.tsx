@@ -34,7 +34,7 @@ import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
-import HeaderSupplierStatus, { shouldShowHeaderStatus } from '../components/common/header/HeaderSupplierStatus';
+import HeaderSupplierStatus from '../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../components/common/header/Menu';
 import OwnerChangerContainer from '../components/common/owner.changer/container';
 import { RequestType } from '../components/common/owner.changer/helpers/types';
@@ -670,7 +670,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
-  const showSupplierHeaderStatus = shouldShowHeaderStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isCloseDisabled = ((isWORecord || isShippingRecord) && hasPendingApprovals)
     || !isDocOwner;
@@ -687,7 +686,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isSupplier && showSupplierHeaderStatus && <HeaderSupplierStatus documentRevision={documentRevision} />}
+      {isSupplier && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {(isWORecord || isShippingRecord) && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isCloseDisabled} />}
       <>
