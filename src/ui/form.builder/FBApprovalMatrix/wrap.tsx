@@ -1,6 +1,6 @@
-import { get, isEmpty, isUndefined, omit, set } from 'lodash';
+import { get, isEmpty, isUndefined, omit } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixItem } from '..';
 import { SM } from '../../../App';
@@ -30,26 +30,28 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     disabled = !isInputOwner || disabled
       || (workspaceState && !['design', 'form'].includes(workspaceState.mode));
 
-    handleSave = (data: FBApprovalMatrixItem[]) => {
+    handleSave = useCallback((data: FBApprovalMatrixItem[]) => {
       const approvalMatrix = data.map(({ id, docType, ...restItem }) => {
-        if (docType.updatedCategory !== DEFAULT_CATEGORY_LABEL) {
-          set(docType, 'category', docType.updatedCategory);
-        }
+        const category = docType.updatedCategory !== DEFAULT_CATEGORY_LABEL
+          ? docType.updatedCategory
+          : docType.category;
+
         return ({
           id: id ?? generateUuid(),
           docType: {
             ...omit(docType, 'updatedCategory'),
+            category,
             acronym: docType.acronym.toUpperCase(),
           },
           ...omit(restItem, MODE_FIELD, 'errors'),
         });
-      });
+      }) as FBApprovalMatrixItem[];
 
       if (isEmpty(approvalMatrix)) { return; }
 
       approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
       approvalMatrixFieldState?.setApprovalMatrix(approvalMatrix);
-    };
+    }, [approvalMatrixFieldState]);
 
     const { document, formInput } = workspaceState ?? {};
     const { status } = document ?? {};
@@ -67,22 +69,25 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       withoutStatus = status === DocumentRevisionStatus.Deprecated
         || approvalMatrix.some(item => isUndefined(get(item, 'docType.active', undefined)));
 
-      const matrix = (approvalMatrix ?? []).map(item => {
-        if (withoutStatus) {
-          set(item, 'docType.active', undefined);
-        }
-        item.docType.updatedCategory = isEmpty(item.docType.category) ? DEFAULT_CATEGORY_LABEL : item.docType.category;
-        return item;
-      });
+      const matrix = (approvalMatrix ?? []).map(item => ({
+        ...item,
+        docType: {
+          ...item.docType,
+          active: withoutStatus ? undefined : item.docType.active,
+          updatedCategory: isEmpty(item.docType.category)
+            ? DEFAULT_CATEGORY_LABEL
+            : item.docType.category,
+        },
+      }));
 
       data = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
         approvalMatrix: matrix,
-        approvalRoles: approvalRoles.sort((a, b) => a.index - b.index),
+        approvalRoles: [...approvalRoles].sort((a, b) => a.index - b.index),
       };
-    });
 
-    size = useObserver(() => _tabsState?.contentSize);
+      size = _tabsState?.contentSize;
+    });
 
     return Component({
       ...(props as T),
