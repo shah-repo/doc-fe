@@ -2,6 +2,7 @@
 import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import { FBEndpoint } from '../defaults/FBEndpoint';
@@ -15,13 +16,15 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private readonly urlValues?: Record<string, any> = {};
   private readonly docTypeIds?: string[] = [];
   private readonly documentStatuses?: DocumentRevisionStatus[] = [];
+  private readonly changeRequestStatuses?: ChangeRequestStatus[] = [];
   private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, docTypeIds, documentStatuses, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, docTypeIds, documentStatuses, changeRequestStatuses, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.docTypeIds = docTypeIds;
     this.documentStatuses = documentStatuses;
+    this.changeRequestStatuses = changeRequestStatuses;
     this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
   }
@@ -36,6 +39,9 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     if (this.optionId === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length) {
       keyParts.push(this.documentStatuses.join(','));
+    }
+    if (this.optionId === FBAutocompleteAsyncOption.changeRequests && this.changeRequestStatuses?.length) {
+      keyParts.push(this.changeRequestStatuses.join(','));
     }
     return keyParts.join('-');
   }
@@ -253,6 +259,9 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       ...(this.docTypeIds?.length ? { docTypeIds: this.docTypeIds.join(',') } : {}),
       ...(id === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length
         ? { documentStatuses: this.documentStatuses.join(',') }
+        : {}),
+      ...(id === FBAutocompleteAsyncOption.changeRequests && this.changeRequestStatuses?.length
+        ? { changeRequestStatuses: this.changeRequestStatuses.join(',') }
         : {}),
     };
 
