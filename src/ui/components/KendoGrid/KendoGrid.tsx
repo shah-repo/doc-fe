@@ -24,14 +24,15 @@ import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateF
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
 import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
-import { ASLStatusFilterTemplate } from '../../document.revision/grid/filter.template/ASLStatusFilterTemplate';
+import { ASLStatusMultiSelectFilter } from '../../document.revision/grid/filter.template/ASLStatusMultiSelectFilter';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
 import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
-import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
+import { MultiLotSelectFilter } from '../../document.revision/grid/filter.template/LotMultiSelectFilter';
+import { StatusMultiSelectFilter } from '../../document.revision/grid/filter.template/StatusMultiSelectFilter';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -123,6 +124,29 @@ export function KendoGrid<T extends any> ({
 
   const processWithGroups = (data, dataState: State) => {
     const dataStateOne = cloneDeep(dataState);
+
+    if (dataStateOne?.filter?.filters) {
+      dataStateOne.filter.filters = dataStateOne.filter.filters.flatMap(
+        (filter: any) => {
+          if (
+            filter.operator === 'eq'
+          && Array.isArray(filter.value)
+          ) {
+            return {
+              logic: 'or',
+              filters: filter.value.map((value: string) => ({
+                field: filter.field,
+                operator: 'eq',
+                value,
+              })),
+            };
+          }
+
+          return filter;
+        },
+      );
+    }
+
     if (dataStateOne) {
       dataStateOne.skip = 0;
       const processedData = process(data.data, dataStateOne);
@@ -203,22 +227,16 @@ export function KendoGrid<T extends any> ({
   );
 
   const StatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiSelectFilter
       {...props}
       documentTypeCategory={documentTypeCategory}
       data={statuses as DocumentRevisionStatus[]}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
   const ASLSupplierStatusFilter = (props: GridFilterCellProps) => (
-    <ASLStatusFilterTemplate
+    <ASLStatusMultiSelectFilter
       {...props}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
@@ -229,32 +247,25 @@ export function KendoGrid<T extends any> ({
   ];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiSelectFilter
       {...props}
       data={poStatusOptions}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
   const eqStatuses = Object.values(EquipmentStatus);
 
   const EQStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiSelectFilter
       {...props}
       data={eqStatuses}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
 
   const LotStatusFilter = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+    <MultiLotSelectFilter
       {...props}
       data={lotStatusOptions}
-      defaultItem={createOption('', translate('common.all'))}
     />
   );
   const TypeFilter = (props: GridFilterCellProps) => (
@@ -290,12 +301,9 @@ export function KendoGrid<T extends any> ({
     />
   );
   const StateFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+    <StatusMultiSelectFilter
       {...props}
       data={map(changeRequestStatusOption(), 'value') as ChangeRequestStatus[]}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
     />
   );
   const TaskTypeFilter = (props: GridFilterCellProps) => (

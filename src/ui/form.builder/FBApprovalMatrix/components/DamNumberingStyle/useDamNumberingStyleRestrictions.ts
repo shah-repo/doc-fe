@@ -30,5 +30,6 @@ export const useDamNumberingStyleRestrictions = () => {
 
   return {
     restrictions,
+    isRestrictionsLoading: async.isLoading,
   };
 };

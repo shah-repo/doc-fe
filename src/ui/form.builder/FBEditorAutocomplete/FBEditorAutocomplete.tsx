@@ -9,7 +9,7 @@ import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocomplete
 import FBFormState from '../FBForm/FBForm.state';
 import { styles as AutoCompleteStyles } from '../styles/FBAutocomplete.styles';
 import { styles } from '../styles/FBEditorTextField.styles';
-import { getDocumentStatusOptionLabel, getDocumentStatusOptions, getDocumentTypeOptions } from './FBEditorAutocomplete.helpers';
+import { getChangeRequestStatusOptions, getDocumentStatusOptionLabel, getDocumentStatusOptions, getDocumentTypeOptions } from './FBEditorAutocomplete.helpers';
 import useStyles from './FBEditorAutocomplete.styles';
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
@@ -28,6 +28,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
 
   const documentTypeOptions = useMemo(() => getDocumentTypeOptions(documentTypes), [documentTypes]);
   const documentStatusOptions = useMemo(() => getDocumentStatusOptions(documentTypes, selectedDocumentTypes), [documentTypes, selectedDocumentTypes]);
+  const changeRequestStatusOptions = useMemo(() => getChangeRequestStatusOptions(), []);
 
   const autocompleteClasses = useMemo(() => ({
     endAdornment: customClasses.endAdornment,
@@ -108,6 +109,27 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
             multiple
           />
         </>
+      )}
+      {optionId === FBAutocompleteAsyncOption.changeRequests && (
+        <FBAutocomplete
+          label="common.status"
+          options={changeRequestStatusOptions}
+          name="changeRequestStatuses"
+          optionLabelKey="label"
+          optionValueKey="id"
+          autoCompleteClasses={autocompleteClasses}
+          renderOption={(option: typeof changeRequestStatusOptions[number]) => (
+            <OverflowTooltip title={option.label} placement="right" arrow>
+              {option.label}
+            </OverflowTooltip>
+          )}
+          getTagLabel={(option: typeof changeRequestStatusOptions[number]) => (
+            <OverflowTooltip title={option.label} arrow>
+              {option.label}
+            </OverflowTooltip>
+          )}
+          multiple
+        />
       )}
       {children}
     </FBEditor>

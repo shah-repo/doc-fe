@@ -184,6 +184,39 @@ export default makeStyles((theme) => ({
         '& .k-button:not(.k-clear-button-visible)': {
           display: 'none',
         },
+
+        '& .k-multiselect .k-button': {
+          display: 'inline-flex',
+        },
+        '& .status-multi-filter': {
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          flex: 1,
+          minWidth: 0,
+          overflow: 'visible',
+
+          '& .k-multiselect': {
+            width: '100%',
+          },
+
+          '& .k-multiselect-wrap': {
+            overflow: 'visible',
+          },
+
+          '& .k-multiselect-wrap .k-button': {
+            fontSize: 12,
+            color: Colors.textBlack,
+          },
+
+          '& .k-icon.k-i-close': {
+            color: Colors.textBlack,
+          },
+
+          '& .k-clear-value': {
+            display: 'none',
+          },
+        },
       },
       '& .k-link .k-icon': {
         color: Colors.textGray,

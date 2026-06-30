@@ -26,11 +26,24 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
 
   const blockEditing: MouseEventHandler = (e) => e.stopPropagation();
 
-  const sortedAttachments = attachments.sort((a, b) => {
-    if (a.lineType === LINE_TYPES.RED_LINE && b.lineType !== LINE_TYPES.RED_LINE) return -1;
-    if (a.lineType !== LINE_TYPES.RED_LINE && b.lineType === LINE_TYPES.RED_LINE) return 1;
-    return 0;
-  });
+  const [sortedAttachments, setAttachmentsData] = React.useState<Attachment[]>([]);
+
+  const sortAttachments = (attachments: Attachment[]) => {
+    return [...attachments].sort((a, b) => {
+      const isARedLine = a.lineType === LINE_TYPES.RED_LINE;
+      const isBRedLine = b.lineType === LINE_TYPES.RED_LINE;
+
+      if (isARedLine !== isBRedLine) {
+        return isARedLine ? -1 : 1;
+      }
+
+      return Number(a.index) - Number(b.index);
+    });
+  };
+
+  React.useEffect(() => {
+    setAttachmentsData(sortAttachments(attachments));
+  }, [attachments]);
 
   const visibleAttachments = sortedAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
   const remainingAttachmentCount = sortedAttachments.length - visibleAttachments.length;

@@ -4,9 +4,8 @@ import { get, isArray, isEmpty, isObject, isString, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncSchemaItem, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
 import { buildAutocompleteConfig } from './FBAutocompleteAsync.utils';
@@ -34,6 +33,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     loading,
     docTypeIds,
     documentStatuses,
+    changeRequestStatuses,
     multiple,
     name,
     withoutPrefixRoot,
@@ -52,8 +52,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     const isWOPart = name === WO_PART_KEY_NAME;
 
     documentStatuses = useObserver(() => {
-      const schemaItem = workspaceState?.getSchemaItem(name) as { documentStatuses?: DocumentRevisionStatus[] } | undefined;
-      return schemaItem?.documentStatuses;
+      const schemaItem = workspaceState?.getSchemaItem(name) as FBAutocompleteAsyncSchemaItem | undefined;
+      return schemaItem?.documentStatuses ?? documentStatuses;
+    });
+
+    changeRequestStatuses = useObserver(() => {
+      const schemaItem = workspaceState?.getSchemaItem(name) as FBAutocompleteAsyncSchemaItem | undefined;
+      return schemaItem?.changeRequestStatuses ?? changeRequestStatuses;
     });
 
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
@@ -61,6 +66,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       urlValues,
       docTypeIds,
       documentStatuses,
+      changeRequestStatuses,
       includePrevReleaseDoc: isWO && isWOPart,
     });
 
@@ -132,18 +138,19 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     }, [shouldReloadOnInit, optionId, fetchOptions]);
 
     useEffect(() => {
+      const optionsKey = autocompleteAsyncState?.optionsKey || optionId;
       const values = isArray(defaultValue) ? defaultValue : [defaultValue];
       values.forEach((optionValue) => {
-        const existingOption = loadedOptions.getValue(optionId, optionValue);
+        const existingOption = loadedOptions.getValue(optionsKey, optionValue);
         if (existingOption) {
-          FBAutocompleteAsyncStore.add(String(optionId), optionValue, existingOption);
+          FBAutocompleteAsyncStore.add(String(optionsKey), optionValue, existingOption);
           return;
         }
         if (FB.isUUID(optionValue) && !loading) {
           fetchSingleOption(optionValue, optionId);
         }
       });
-    }, [optionId, defaultValue, loading, fetchSingleOption, loadedOptions]);
+    }, [optionId, defaultValue, loading, fetchSingleOption, loadedOptions, autocompleteAsyncState]);
 
     // Fetch missing selected autocomplete value
     React.useEffect(() => reaction(
@@ -151,8 +158,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       (data) => {
         const { id } = data || {};
         const preparedData = autocompleteAsyncState?.prepareData([data])?.at(0) ?? data;
-        FBAutocompleteAsyncStore.add(optionId as string, id, preparedData);
-        loadedOptions.add(optionId as string, id, preparedData);
+        const optionsKey = autocompleteAsyncState?.optionsKey || optionId;
+        FBAutocompleteAsyncStore.add(optionsKey as string, id, preparedData);
+        loadedOptions.add(optionsKey as string, id, preparedData);
         formState?.getInputState(name || '')?.setRender();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -249,6 +257,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       urlValues,
       docTypeIds,
       documentStatuses,
+      changeRequestStatuses,
       autocompleteAsyncState,
       filterSelectedOptions: shouldFilterSelectedOptions,
       name,

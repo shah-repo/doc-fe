@@ -24,6 +24,25 @@ const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentTypeActions
   }
 };
 
+const allDocTypeIdsByCategory = (state: DocumentTypeByIdState = {}, action: DocumentTypeActions) => {
+  switch (action.type) {
+    case DOCUMENT_TYPE_LIST: {
+      const result: Record<string, string[] | undefined> = {};
+      action.payload.forEach((documentType) => {
+        const category = documentType.category as string;
+        if (!result[category]) {
+          result[category] = [];
+        }
+        result[category]?.push(documentType.id);
+      });
+      return result;
+    }
+
+    default:
+      return state;
+  }
+};
+
 const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   documentType: {
     id: '',
@@ -85,6 +104,7 @@ export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_TYPE_LIST_ASYNC),
   byId,
   allIds,
+  allDocTypeIdsByCategory,
   docRevTypeId,
   docTypesByCategory,
   tabsConfiguration,

@@ -1,15 +1,24 @@
 import { get, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
+import { DocumentTypeRestriction } from '../../../../ui/administration/general.settings/panels/CreationRestrictions/types';
 import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/utils/helpers';
 import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
+import { authSelectors } from '../../auth';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
 import { DOC_TYPE_GROUP_OPTION, DocumentGroupType, DocumentType, DocumentTypeByIdState, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
+const allDocTypeIdsByCategory = (state: ApplicationState) => state.documentType.allDocTypeIdsByCategory;
+const creationRestrictions = (state: ApplicationState): DocumentTypeRestriction[] => state.company.generalSettings.creationRestrictions;
+
 const byId = (state: ApplicationState) => state.documentType.byId;
+
+const { currentEmployeeId, currentUserGroups } = authSelectors;
+const { getCreationRestrictionsMap } = companySelectors;
+const currentUserGroupIds = createSelector([currentUserGroups], (groups) => groups.map((group) => group.id));
 
 const getDocumentTypeById = (state: ApplicationState, id: string) =>
   state.documentType.byId[id];
@@ -144,6 +153,56 @@ const makeGetDocTypeByAcronym = () => createSelector(
   (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
 );
 
+const canCreateCategory = createSelector(
+  allDocTypeIdsByCategory, getCreationRestrictionsMap, currentEmployeeId, currentUserGroupIds,
+  (state: ApplicationState, category: string) => category,
+  (allDocTypeIdsByCategory, getCreationRestrictionsMap, employeeId, groupIds, category) => {
+    const categoryDocumentTypeIds: string[] = allDocTypeIdsByCategory[category] ?? [];
+
+    // If not all of them have entry in the creationRestrictions
+    const eachDocTypeHasRestrictions = categoryDocumentTypeIds.every(docTypeId => {
+      const creationRestrictions = getCreationRestrictionsMap[docTypeId];
+      return creationRestrictions?.restrictedToRoles?.length || creationRestrictions?.restrictedToUsers?.length;
+    });
+    if (!eachDocTypeHasRestrictions) {
+      return true;
+    }
+
+    // When all documentTypes under a category have been marked for restriction, need to generate a combined list.
+    const combinedRestrictedToUsers: string[] = [];
+    const combinedRestrictedToRoles: string[] = [];
+    categoryDocumentTypeIds.forEach(docTypeId => {
+      combinedRestrictedToUsers.push(...(getCreationRestrictionsMap[docTypeId].restrictedToUsers ?? []));
+      combinedRestrictedToRoles.push(...(getCreationRestrictionsMap[docTypeId].restrictedToRoles ?? []));
+    });
+
+    const hasUserAccess = combinedRestrictedToUsers.includes(employeeId);
+    const hasGroupAccess = groupIds.some((groupId) => combinedRestrictedToRoles.includes(groupId));
+    return hasUserAccess || hasGroupAccess;
+  },
+);
+
+const canCreateDocumentType = createSelector(
+  creationRestrictions, currentEmployeeId, currentUserGroupIds,
+  (state: ApplicationState, documentTypeId: string) => documentTypeId,
+  (creationRestrictions, employeeId, currentUserGroupIds, documentTypeId) => {
+    const docTypeCreationRestrictions
+        = creationRestrictions?.find((restriction) => restriction.documentTypeId === documentTypeId);
+    if (!docTypeCreationRestrictions) {
+      return true;
+    }
+
+    if (!docTypeCreationRestrictions.restrictedToUsers?.length
+      && !docTypeCreationRestrictions.restrictedToRoles?.length) {
+      return true;
+    }
+
+    const hasUserAccess = docTypeCreationRestrictions.restrictedToUsers?.includes(employeeId);
+    const hasGroupAccess = currentUserGroupIds.some((groupId) => docTypeCreationRestrictions.restrictedToRoles?.includes(groupId));
+    return hasUserAccess || hasGroupAccess;
+  },
+);
+
 export default {
   byId,
   getDocumentTypeList,
@@ -164,4 +223,6 @@ export default {
   getDocumentTypesByCategory,
   getDocumentTypeNumberingStye,
   getTabConfiguration,
+  canCreateCategory,
+  canCreateDocumentType,
 };

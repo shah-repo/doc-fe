@@ -1,8 +1,9 @@
-import { chain, filter, find, omit, pick } from 'lodash';
+import { chain, filter, find, keyBy, omit, pick } from 'lodash';
 import moment from 'moment';
 import { createSelector } from 'reselect';
 import { sortStringsByKey } from '../../../common/utils/helpers';
 import Config from '../../../config';
+import { DocumentTypeRestriction } from '../../../ui/administration/general.settings/panels/CreationRestrictions/types';
 import { DEFAULT_TAX_RATE } from '../../../ui/form.builder/helpers/constants';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { ApplicationState } from '../../reducers';
@@ -122,6 +123,12 @@ const hasActivePremiumFeatureSubscription = createSelector(
   ),
 );
 
+const getCreationRestrictions = (state: ApplicationState) => state.company.generalSettings.creationRestrictions;
+const getCreationRestrictionsMap = createSelector(
+  getCreationRestrictions,
+  (creationRestrictions) => ({ ...(keyBy<DocumentTypeRestriction>(creationRestrictions, (creationRestriction) => creationRestriction.documentTypeId)) }),
+);
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -158,4 +165,5 @@ export default {
   getSubscriptionsAsyncState,
   hasActivePremiumFeatureSubscription,
   isTrainingForApprovedRevisionsEnabled,
+  getCreationRestrictionsMap,
 };
