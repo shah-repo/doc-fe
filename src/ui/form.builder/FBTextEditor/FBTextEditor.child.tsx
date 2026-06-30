@@ -84,6 +84,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
+          data-cy={`${name}-mask`}
           bgcolor={
             removeBorder ? Colors.alabaster : isPreview ? 'transparent' : disabled ? Colors.whitest_grey : Colors.white
           }
