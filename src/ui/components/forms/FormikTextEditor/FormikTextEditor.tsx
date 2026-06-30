@@ -32,6 +32,7 @@ const FormikTextEditorField: React.FunctionComponent<Omit<FBTextEditorProps, 'te
   const [masked, setMasked] = useState(true);
   const editorRefState = useRef<HTMLInputElement>();
   const preserveFocusRef = useRef(false);
+  const focusTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const emptyHtmlContent = '<p></p>';
   const formValue = (formik?.values?.[name] as string) || '';
@@ -87,6 +88,25 @@ const FormikTextEditorField: React.FunctionComponent<Omit<FBTextEditorProps, 'te
     }
     setMasked(maskState);
   };
+
+  useEffect(() => {
+    if (masked || preserveFocusRef.current) {
+      return;
+    }
+
+    // Focus only after unmasking; focusing while masked can be swallowed by overlay.
+    focusTimeoutRef.current = setTimeout(() => {
+      editorRefState.current?.focus();
+      setEditorState((prevEditorState) => EditorState.moveFocusToEnd(prevEditorState));
+    }, 0);
+
+    return () => {
+      if (focusTimeoutRef.current) {
+        clearTimeout(focusTimeoutRef.current);
+        focusTimeoutRef.current = undefined;
+      }
+    };
+  }, [masked]);
 
   const handleEditorRef = (ref: HTMLInputElement) => {
     editorRefState.current = ref;

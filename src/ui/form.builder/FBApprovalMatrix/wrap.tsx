@@ -10,8 +10,8 @@ import { DEFAULT_CATEGORY_LABEL } from './constants';
 import { FBApprovalMatrixProps } from './types';
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     handleSave,
     disabled,

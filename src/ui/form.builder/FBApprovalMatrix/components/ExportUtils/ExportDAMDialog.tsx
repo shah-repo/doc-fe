@@ -1,3 +1,4 @@
+import { State } from '@progress/kendo-data-query';
 import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react-lite';
 import React, { useState } from 'react';
@@ -6,12 +7,11 @@ import { exportDAM } from '.';
 import { FB } from '../../..';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { userManagementSelectors } from '../../../../../state/ducks/userManagement';
+import Dialog from '../../../../components/dialogs';
+import { FormField, TextField } from '../../../../components/forms/fields-next';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import useTableCriteria from '../../../FBApprovalMatrixRoles/utils';
 import { APPROVAL_MATRIX_TABLE_NAME } from '../../constants';
-import { State } from '@progress/kendo-data-query';
-import Dialog from '../../../../components/dialogs';
-import { FormField, TextField } from '../../../../components/forms/fields-next';
 
 interface Props {
   dialog: DialogHandler

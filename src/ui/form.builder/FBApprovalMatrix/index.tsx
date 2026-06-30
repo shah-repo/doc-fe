@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
 import React, { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
+import { companySelectors } from '../../../state/ducks/company';
 import { AsyncStatus } from '../../../state/types';
 import Loader from '../../components/common/kendo/Loader';
 import { Dialog } from '../../components/dialogs';
@@ -67,6 +69,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const popupContainerRef = React.useRef<HTMLDivElement>(null);
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+  const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
   const classes = useStyles();
   const dialog = useDialog();
 
@@ -83,6 +86,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     () =>
       createSchema({
         data,
+        numOfRevStages,
         withoutStatus,
         clearRightBorderClassName: classes.clearRightBorder,
         cellARClassName: classes.cellAR,
