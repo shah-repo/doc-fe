@@ -64,7 +64,7 @@ import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { useIsLatestRevision } from './helpers/useIsLatestRevision';
 
 interface OwnProps {
@@ -701,6 +701,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const hideSupplierStatusValue = isDocumentRevisionInStatus([DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete], documentRevision.status);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isCloseDisabled = ((isWORecord || isShippingRecord) && hasPendingApprovals)
     || !isDocOwner;
@@ -717,7 +718,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isSupplier && <HeaderSupplierStatus documentRevision={documentRevision} />}
+      {isSupplier && !hideSupplierStatusValue && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {(isWORecord || isShippingRecord) && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isCloseDisabled} />}
       <>
