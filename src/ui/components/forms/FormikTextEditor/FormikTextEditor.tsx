@@ -86,6 +86,7 @@ const FormikTextEditorField: React.FunctionComponent<Omit<FBTextEditorProps, 'te
     }
     if (!maskState && !preserveFocusRef.current) {
       editorRefState.current.focus();
+      setEditorState((prevEditorState) => EditorState.moveFocusToEnd(prevEditorState));
     }
     setMasked(maskState);
   };
