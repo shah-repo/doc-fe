@@ -153,7 +153,7 @@ const FBTextFieldWithRange: React.FC<FBTextFieldWithRangeProps> = ({
                   max: range?.to,
                   step: tolerance,
                 } : {}}
-                onBlur={e => onUpdate?.({ value: isNumericInput ? parseFloat(e.target.value) : e.target.value })}
+                onBlur={e => onUpdate?.({ value: isNumericInput ? (!isNaN(parseFloat(e.target.value)) ? parseFloat(e.target.value) : undefined) : e.target.value })}
               />
             </FormField>
           </Grid>
