@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentTypeByIdState } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -40,7 +41,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   }, [loadProposedDocIdState]);
   const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    let value = event.target.value;
     const { documentType } = document;
 
     if (!documentType || !documentType.id) {
@@ -52,6 +53,11 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     if (!document && !type) {
       return;
     }
+
+    if (isEmpty(value) && !isEmpty(type)) {
+      value = type;
+    }
+
     const pattern = new RegExp('^' + type + '\\d{0,' + type.length + '}', 'g');
 
     if (!pattern.test(value) || !setDocId) {
