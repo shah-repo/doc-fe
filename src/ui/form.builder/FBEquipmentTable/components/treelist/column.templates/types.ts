@@ -1,5 +1,6 @@
 import { TreeListCellProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { LHRBuild } from '../../../../../administration/general.settings/panels/LHRBuild/types';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { EditableEquipmentItem } from '../../../types';
 
@@ -28,6 +29,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   allowedEditEqOptions?: customEQOptionType[]
   isMPIForm?: boolean
   isEBProcedure?: boolean
+  lhrBuildTypeConfigForSelectedBuildType?: LHRBuild | undefined
 }
 
 export interface EquipmentItemActionsProps<T> {

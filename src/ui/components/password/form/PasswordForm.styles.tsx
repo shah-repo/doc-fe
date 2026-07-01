@@ -13,6 +13,10 @@ export default (theme: Theme) =>
     cancelButton: {
       float: 'right',
       marginRight: theme.spacing(1),
+      '& span': {
+        color: Colors.primary,
+        fontWeight: 600,
+      },
     },
     labelContainer: {
       display: 'flex',

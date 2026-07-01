@@ -1,5 +1,5 @@
 import isMobile from 'is-mobile';
-import { chain, kebabCase, set } from 'lodash';
+import { chain, isEmpty, kebabCase, set } from 'lodash';
 import { KendoColumn } from '../../components/common/kendo/types';
 
 export interface ColumnInfo {
@@ -12,6 +12,16 @@ export interface ColumnInfo {
   filterCell?: string
   locked: boolean
 }
+
+export const isEmptyValue = (value: unknown): boolean => {
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (typeof value === 'number') {
+    return isNaN(value);
+  }
+  return isEmpty(value);
+};
 
 export const removeLastCharacterIfNotAlphaNumeric = (text = ''): string => {
   if (!text) {

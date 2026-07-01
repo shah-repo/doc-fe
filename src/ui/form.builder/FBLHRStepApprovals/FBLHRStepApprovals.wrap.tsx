@@ -50,9 +50,9 @@ import {
   FBLHRStepApprovalsStatusEndpoint,
 } from './FBLHRStepApprovals.types';
 
-export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
+export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
   Component: React.FunctionComponent<T>,
-) => {
+) {
   const Comp = ({
     onApproveClick,
     approvals,
@@ -72,7 +72,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     owners,
     ...props
   }: T) => {
-    const { workspaceState, formState } = FB.useStores();
+    const { workspaceState, formState, mpiProcedureState } = FB.useStores();
     const {
       document,
       id,
@@ -115,6 +115,13 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
     let docApprovals = document?.approvals;
     if (!docApprovals?.length && FBStore.selectedApprover.length) {
       docApprovals = FBStore.selectedApprover;
+    }
+    function addCurrentUserToApprovers () {
+      const existingFormIds = (formState?.getFieldValue(name) as string[]) ?? [];
+      const existingApprovalIds = lhrApprovalsState?.getApprovals
+        ?.map(a => a.approver?.id)
+        .filter(Boolean) ?? [];
+      formState?.setFieldValue(name, uniq([...existingFormIds, ...existingApprovalIds, authUser.employeeId]), false);
     }
     const lhrApprovalsState = FB.useRef(FBLHRStepApprovalsState, {
       id: outputId,
@@ -160,7 +167,8 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           );
           lhrApprovalsState?.setApprovals(activeApprovals);
           formState?.inputState.get(name)?.setRender();
-          formState?.setFieldValue(name, activeApprovals.map(a => a.approver.id), false);
+          const fieldApprovals = activeApprovals.filter(a => a.fieldId === name);
+          formState?.setFieldValue(name, fieldApprovals.map(a => a.approver.id), false);
         },
       );
       return () => dispose();
@@ -266,6 +274,18 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const procedureFields = useObserver<string[]>(() => {
+      if (!isOutput || !workspaceState?.schema) {
+        return [];
+      }
+      return workspaceState?.schema.reduce<string[]>((acc, item) => {
+        if (item.type === 'mpiprocedure' && item.name && !item.deleted) {
+          acc.push(item.name);
+        }
+        return acc;
+      }, []);
+    });
+
     React.useEffect(() => {
       const dispose = reaction(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -274,6 +294,8 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
           formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
           formState?.getInputState(LHRS_START_QUANTITY)?.value,
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
+          mpiProcedureState?.partsSelected?.map(part => ({ ...part })),
+          procedureFields.map(field => formState?.newValues.get(field)?.serialNumbers),
         ],
         () => {
           if (!isOperator && !isOwner) {
@@ -284,7 +306,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+            addCurrentUserToApprovers();
           }
 
           const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
@@ -315,7 +337,7 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
               (a) => a.approver?.id === authUser.employeeId,
             )
           ) {
-            formState?.setFieldValue(name, [...formState.getFieldValue(name), authUser.employeeId], false);
+            addCurrentUserToApprovers();
           }
 
           const currentUserApproval = lhrApprovalsState?.getApprovals?.find(
@@ -457,4 +479,4 @@ export const withFBLHRStepApprovals = <T extends FBLHRStepApprovalsProps>(
 
   Comp.displayName = 'withFBLHRStepApprovals';
   return Comp;
-};
+}

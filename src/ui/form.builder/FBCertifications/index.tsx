@@ -161,43 +161,45 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     <Box className={classes.root} data-cy="certifications">
       <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="certifications" name={name}>
-        <FBSection label={label}>
+        <>
+          <FBSection label={label}>
+            {isActive && (
+              <Button
+                kind="ghost"
+                size="small"
+                disabled={isInEditMode}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={createDraftCertification}
+                data-cy="add-link"
+              >
+                {translate('form.builder.add.item')}
+              </Button>
+            )}
+          </FBSection>
+          <KendoDataGrid<EditableCertification>
+            className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+            fullWidth
+            hasBoxScrollbars
+            schema={schema}
+            data={certificationsList as EditableCertification[]}
+            onRowClick={handleRowClick}
+            rowRender={rowRender}
+          />
           {isActive && (
             <Button
-              kind="ghost"
-              size="small"
+              kind="add"
+              fullWidth
+              attached
               disabled={isInEditMode}
-              className={classes.addButton}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={createDraftCertification}
-              data-cy="add-link"
+              data-cy="add-button"
             >
               {translate('form.builder.add.item')}
             </Button>
           )}
-        </FBSection>
+        </>
       </FBInput>
-      <KendoDataGrid<EditableCertification>
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        fullWidth
-        hasBoxScrollbars
-        schema={schema}
-        data={certificationsList as EditableCertification[]}
-        onRowClick={handleRowClick}
-        rowRender={rowRender}
-      />
-      {isActive && (
-        <Button
-          kind="add"
-          fullWidth
-          attached
-          disabled={isInEditMode}
-          onClick={createDraftCertification}
-          data-cy="add-button"
-        >
-          {translate('form.builder.add.item')}
-        </Button>
-      )}
     </Box>
   );
 };

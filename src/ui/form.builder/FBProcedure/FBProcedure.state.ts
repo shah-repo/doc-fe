@@ -61,6 +61,10 @@ class FBProcedureState {
 
     const isItemExists = existingItems.some(i => i.id === item.id);
 
+    if (!item.LHRTparameter && isItemExists && item.type) {
+      delete item.type;
+    }
+
     const value = {
       ...this.value,
       [type]: isItemExists ? items : [...items, item],

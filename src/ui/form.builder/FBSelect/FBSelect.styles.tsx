@@ -3,8 +3,12 @@ import { Colors } from '../../layout/theme-next';
 
 export default makeStyles((theme) => createStyles({
   select: {
-    '& .MuiSelect-root': {
+    '& .MuiSelect-select': {
       padding: theme.spacing(1.5),
+      display: 'flex',
+      alignItems: 'center',
+      minHeight: 40,
+      boxSizing: 'border-box',
     },
   },
   menu: {

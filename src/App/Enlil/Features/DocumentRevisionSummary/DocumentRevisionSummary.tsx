@@ -18,6 +18,7 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
+import RedlineBuildTypeBanner from '../../../../ui/documentRevision/forms/presenters/redlineBuildType/RedlineBuildType.banner';
 import { checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
@@ -141,6 +142,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     [_tabsState],
   );
 
+  const isBuildTypeChangeApprovalEnabled = documentRevision.approvals?.some(
+    ({ type, fieldId, status }) => type === 'SECTION' && fieldId === 'buildTypeApprovals' && status === 'PENDING');
+
   return (
     <>
       <SMForm
@@ -178,6 +182,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                 contentBoxProps={{
                   overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
                 }}
+                banner={isBuildTypeChangeApprovalEnabled && <RedlineBuildTypeBanner documentRevision={documentRevision} />}
                 header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} isSliderView={isSliderView} inDialog={inDialog} />}
                 lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
               >
@@ -195,7 +200,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           schemaItem.tabId === tabId && !schemaItem.deleted);
 
                         return (
-                          <AutoSizer onResize={handleResize}>
+                          <AutoSizer disableHeight={_documentRevisionFormState?.expanded} onResize={handleResize}>
                             {({ width }) => (
                               <SMBox style={{ width }} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                                 {tabType === TabTypeOptions.MIXED && <>

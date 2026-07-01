@@ -195,6 +195,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           type="number"
           defaultValue={quantityDefaultValue ?? QUANTITY_DEFAULT_VALUE}
           inputProps={{ min: '1' }}
+          previewClassName={classes.preview}
           gutter={false}
           showErrorMsg={false}
           placeholder="1"
@@ -208,6 +209,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
             dataCy={`${cyName}-unit`}
             label="form.builder.field.units"
             name={`${name}_unit`}
+            previewClassName={classes.preview}
             gutter={false}
             placeholder="0"
           />

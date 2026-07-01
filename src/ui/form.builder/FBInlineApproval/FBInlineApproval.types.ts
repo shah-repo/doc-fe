@@ -17,6 +17,7 @@ export type FBInlineApprovalProps =
   // approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
   requestAllApprovals?: (id?: string) => any
   onApproveClick?: (approvalId: string) => void
+  onRejectClick?: (approvalId: string) => void
   editorConfig?: FBInlineApprovalValue
   approvals?: FBInlineApprovalBody[]
   currentUser?: string
@@ -33,7 +34,16 @@ export type FBInlineApprovalOptions = FBEmployee & {
 
 type FBInlineApprovalType = 'MASTER' | 'SECTION';
 type FBInlineApprovalStatus = 'DRAFT' | 'PENDING' | 'ABANDONED' | 'APPROVED' | 'REJECTED';
-export type FBInlineApprovalTransition = 'abandon' | 'pending' | 'approve' | 'reject' | 'pending_by_field';
+export type FBInlineApprovalTransition = 'abandon' | 'pending' | 'approve' | 'reject' | 'pending_by_field' | 'reject_with_password';
+
+export enum FBInlineApprovalTransitionIdent {
+  ABANDON = 'abandon',
+  PENDING = 'pending',
+  APPROVE = 'approve',
+  REJECT = 'reject',
+  PENDING_BY_FIELD = 'pending_by_field',
+  REJECT_WITH_PASSWORD = 'reject_with_password',
+}
 
 export enum FBInlineApprovalStatusIdent {
   DRAFT = 'DRAFT',
@@ -67,6 +77,7 @@ export type FBInlineApprovalBody =
 
 export interface FBInlineApprovalTransitionBody {
   password?: string
+  comment?: string
 }
 
 export interface FBRequestApprovalTransitionBody {

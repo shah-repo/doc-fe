@@ -1,6 +1,6 @@
 import { cloneDeep, has, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBAutocompleteAsyncOption, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
@@ -12,7 +12,7 @@ import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
-import { LHRS_END_DATE, LHRS_START_DATE } from '../FBLHRStep/utils';
+import { cleanupLHRDateFields } from '../FBLHRStep/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { CheckBoxOptionType } from '../FBSupplierCheckboxGroupAsync/types';
@@ -36,7 +36,9 @@ class FBWorkspaceState extends FBSchemaState {
   @observable.shallow
   public buildTypeOptions: LHRBuild[] = [];
 
-  public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
+  @observable.shallow
+  public lhrBuildTypeConfig: LHRBuild[] = [];
+
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
 
@@ -50,11 +52,12 @@ class FBWorkspaceState extends FBSchemaState {
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
-  public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor ({ schema = [], mode = 'none', autosave = false, lhrBuildTypeConfig = [] }: FBWorkspaceConstructor) {
     super(schema);
-    this.schema = schema || [];
-    this.mode = mode || 'none';
+    this.schema = schema;
+    this.mode = mode;
     this.autosave = autosave;
+    this.lhrBuildTypeConfig = lhrBuildTypeConfig;
   }
 
   public get buildTypeOptionId (): string {
@@ -113,6 +116,10 @@ class FBWorkspaceState extends FBSchemaState {
     return !isEmpty(this.document?.formDocumentId);
   }
 
+  public get isLHRRnDBuild (): boolean {
+    return this.lhrBuildTypeConfigForSelectedBuildType?.internalType === FBLHRBuildOptions['R&D'];
+  }
+
   public get isLHRProductionBuild (): boolean {
     const allowedInternalTypes = [
       FBLHRBuildOptions.Production,
@@ -120,8 +127,8 @@ class FBWorkspaceState extends FBSchemaState {
       FBLHRBuildOptions['Verification & Validation'],
     ];
 
-    const activeBuildTypeIds = this.buildTypeOptions
-      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
+    const activeBuildTypeIds = this.lhrBuildTypeConfig
+      ?.filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
       .map((buildType) => buildType.id);
 
     const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
@@ -135,12 +142,19 @@ class FBWorkspaceState extends FBSchemaState {
     return !!lhrBuildType && effectiveBuildTypeIds.includes(lhrBuildType);
   }
 
+  public get lhrBuildTypeConfigForSelectedBuildType (): LHRBuild | undefined {
+    const buildType = this.document?.smartReferencesTo?.find(
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+    )?.toDocRev?.formInput?.['lhr-build-type'] as string | undefined;
+    return this.lhrBuildTypeConfig?.find((config) => config.id === buildType);
+  }
+
   public get isLHRRelevantBuilds (): boolean {
-    if (this.buildTypeOptions.length === 0) {
+    const buildTypes = this.lhrBuildTypeConfig;
+    if (!buildTypes?.length) {
       return false;
     }
 
-    const buildTypes = this.buildTypeOptions;
     const selectedBuildTypeId
     = this.document?.smartReferencesTo
       ?.find(ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)
@@ -199,6 +213,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setBuildTypeOptions = (data) => {
     set(this, 'buildTypeOptions', data);
+  };
+
+  @action public setLhrBuildTypeConfig = (data: LHRBuild[]) => {
+    set(this, 'lhrBuildTypeConfig', data);
   };
 
   @action public setIsPreview = (isPreview: boolean) => {
@@ -261,12 +279,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.loading = true;
 
     if (values && has(values, 'lhrstep-built-in')) {
-      if (has(values, LHRS_START_DATE)) {
-        delete values[LHRS_START_DATE];
-      }
-      if (has(values, LHRS_END_DATE)) {
-        delete values[LHRS_END_DATE];
-      }
+      cleanupLHRDateFields(values);
     }
 
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ['autoFocus', 'autoScrollTo']));
@@ -417,6 +430,11 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public deleteHiddenFieldByRules = (name: string): void => {
     this.hiddenFieldsByRules.delete(name);
+  };
+
+  public buildTypeChangeStatus = () => {
+    const isBuildTypeChangeApprovalPending = this?.approvals?.filter(approval => approval?.type === 'SECTION' && approval?.fieldId === 'buildTypeApprovals' && approval?.status === 'PENDING');
+    return isBuildTypeChangeApprovalPending && isBuildTypeChangeApprovalPending.length > 0;
   };
 }
 

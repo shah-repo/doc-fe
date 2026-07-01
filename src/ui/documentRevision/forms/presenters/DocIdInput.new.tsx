@@ -14,6 +14,7 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useDocId } from '../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import { stripAllWhitespace } from '../transform';
 import useStyles from './styles/DocIdInput.styles';
 
 interface Props {
@@ -78,7 +79,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   });
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value?.trim();
+    const value = stripAllWhitespace(event.target.value);
     setDocIdEntered(value);
 
     if (handleDocIdUpdated) {
@@ -87,7 +88,7 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   };
 
   const handleDocIdBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = event.target.value.trim();
+    const value = stripAllWhitespace(event.target.value);
     if (value === docId) {
       return;
     }

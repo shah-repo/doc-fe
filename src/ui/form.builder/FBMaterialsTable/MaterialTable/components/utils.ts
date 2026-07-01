@@ -1,4 +1,6 @@
 import { round } from 'lodash';
+import moment from 'moment-timezone';
+import { MomentFormats, TIME_ZONE } from '../../../../../common/utils/date';
 import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import { FBProcedureItemConfig } from '../../../FBProcedureItem/FBProcedureItem.types';
 import { ADD_FIELD, MAX_DECIMALS, MODE_FIELD, SUB_ITEMS_FIELD } from '../constants';
@@ -181,3 +183,19 @@ export function areRequiredEquipmentsSelected (
     unselectedEquipment,
   };
 }
+
+export const isDateExpired = (
+  expiryDateStr?: string,
+  timeZone = TIME_ZONE,
+): boolean => {
+  if (!expiryDateStr) return false;
+
+  const expiryDate = moment
+    .tz(expiryDateStr, MomentFormats.YearMonthDateDash, true, timeZone)
+    .add(1, 'day')
+    .startOf('day');
+
+  if (!expiryDate.isValid()) return false;
+
+  return moment.tz(timeZone).isSameOrAfter(expiryDate);
+};

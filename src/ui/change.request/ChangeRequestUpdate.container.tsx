@@ -1,4 +1,4 @@
-import { cloneDeep, debounce, isEmpty, isEqual } from 'lodash';
+import { cloneDeep, debounce, isEmpty, isEqual, isNull, omitBy } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { saveApprovalRequest } from '../../App/Shifamed/Utils/API';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions, changeRequestsSelectors } from '../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
-import { companyActions } from '../../state/ducks/company';
+import { companyActions, companySelectors } from '../../state/ducks/company';
 import { ApplicationState } from '../../state/reducers';
 import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
@@ -62,7 +62,8 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const [isMDTab, setMDTab] = React.useState(false);
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
-  const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
+  const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
+  const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { lhrBuildTypeConfig });
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
   const updatingAsyncState = useSelector(changeRequestsSelectors.getUpdateAsyncState);
   const { triggerRestrictEditUpdates, isLoading } = useRestrictedEditUpdates(changeRequest?.id);
@@ -114,7 +115,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const frozenInitialValues = cloneDeep(initialValues);
 
   const onSubmit = (values: ChangeRequestFormValues) => {
-    const updatedValues = formState.getValues();
+    const updatedValues = omitBy(formState.getValues(), isNull);
 
     const dataToSubmit = compareValuesToSubmit(
       {

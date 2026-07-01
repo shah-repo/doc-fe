@@ -1,14 +1,14 @@
-import * as XLSX from '@progress/kendo-ooxml';
 import { saveAs } from '@progress/kendo-file-saver';
+import * as XLSX from '@progress/kendo-ooxml';
 import { TreeListColumnProps } from '@progress/kendo-react-treelist';
-import { getExcelColumns } from '../Grid';
-import createSchema from '../../schema';
-import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ApprovalRole } from '../../../FBApprovalMatrixRoles/types';
-import { SEARCHABLE_GROUPS_FIELD } from '../../../FBApprovalMatrixRoles/constants';
 import { isEmpty, isUndefined } from 'lodash';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { SEARCHABLE_GROUPS_FIELD } from '../../../FBApprovalMatrixRoles/constants';
+import { ApprovalRole } from '../../../FBApprovalMatrixRoles/types';
+import createSchema from '../../schema';
+import { getExcelColumns } from '../Grid';
 
 const matrixTab = translate('tabId.matrixdetails');
 const approvalTab = translate('tabId.approvalroles');
@@ -99,7 +99,7 @@ const exportSheets = async (sheetData, fileName, damName, status) => {
       cells: flatColumns.map((col, colIndex) => {
         let value = getNestedValue(row, col.field);
         if (colIndex === 0) {
-          if(status === DocumentRevisionStatus.Deprecated && name === matrixTab && isUndefined(value)) {
+          if (status === DocumentRevisionStatus.Deprecated && name === matrixTab && isUndefined(value)) {
             value = '-';
           } else {
             value = value === true ? translate('common.active') : value === false ? translate('common.inactive') : value;
@@ -139,7 +139,16 @@ const exportSheets = async (sheetData, fileName, damName, status) => {
 const getNestedValue = (obj, path) =>
   path?.split('.').reduce((acc, part) => acc?.[part], obj);
 
-export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOfRevStages, fileName, damName, datafilter, status) => {
+export const exportDAM = (
+  approvalMatrixFieldState,
+  groups,
+  existingRoles,
+  numOfRevStages,
+  fileName,
+  damName,
+  datafilter,
+  status,
+) => {
   let matrixDetailsData = approvalMatrixFieldState?.getCurrentData('matrix') ?? [];
   const approvalRoles = existingRoles.map((role) => {
     const foundGroups = role.groups.map(({ id }) => {
@@ -156,7 +165,7 @@ export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOf
       ...role, [SEARCHABLE_GROUPS_FIELD]: role.groups.map(({ name }) => name).join(' '),
     };
   });
-  let schemaMatrix = createSchema({ data: { approvalMatrix: matrixDetailsData, approvalRoles: approvalRolesData } });
+  let schemaMatrix = createSchema({ data: { approvalMatrix: matrixDetailsData, approvalRoles: approvalRolesData }, numOfRevStages });
 
   if (numOfRevStages === 2) {
     schemaMatrix = schemaMatrix.filter(item => item.id !== 'form-builder-approvals-numeric-alpha');
@@ -168,8 +177,7 @@ export const exportDAM = (approvalMatrixFieldState, groups, existingRoles, numOf
   if (!isEmpty(datafilter)) {
     const filterItem = datafilter?.find(item => item.field === 'docType.active');
     matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active === filterItem?.value);
-  }
-  else if (isUndefined(datafilter) && status !== DocumentRevisionStatus.Deprecated) {
+  } else if (isUndefined(datafilter) && status !== DocumentRevisionStatus.Deprecated) {
     matrixDetailsData = matrixDetailsData.filter(item => item?.docType?.active);
   }
 

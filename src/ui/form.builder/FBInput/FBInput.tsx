@@ -25,6 +25,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   helperText = '',
   disabled,
   includeContext,
+  shouldWrapWithFormControl = true,
   boxProps,
   loading,
   type,
@@ -58,6 +59,32 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
     );
   };
 
+  const inputContent = (
+    <>
+      <Box display="flex" flexDirection="row">
+        <Observer>
+          {() => (
+            <>
+              {formState?.locked.get(name || '')?.locked && (
+                <FBTooltip title={lockOwnerName}>
+                  <Box mt={-0.5} pr={0.5}>
+                    <LockIcon fontSize="small" color="error" style={{ float: 'right' }} />
+                  </Box>
+                </FBTooltip>
+              )}
+            </>
+          )}
+        </Observer>
+        {!includes(FBInputState.omitLabel, type) && label && (
+          <FBLabel {...{ error, label, loading, labelProps }} />
+        )}
+        {isChangeControlConfigTooltipsEnabled && getChangeContolConfigTooltip()}
+      </Box>
+
+      {children}
+    </>
+  );
+
   return (
     <>
       {!hidden && (
@@ -68,29 +95,11 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             )}
           </Observer>
 
-          <FormControl fullWidth {...{ error }} >
-            <Box display="flex" flexDirection="row">
-              <Observer>
-                {() => (
-                  <>
-                    {formState?.locked.get(name || '')?.locked && (
-                      <FBTooltip title={lockOwnerName}>
-                        <Box mt={-0.5} pr={0.5}>
-                          <LockIcon fontSize="small" color="error" style={{ float: 'right' }} />
-                        </Box>
-                      </FBTooltip>
-                    )}
-                  </>
-                )}
-              </Observer>
-              {!includes(FBInputState.omitLabel, type) && label && (
-                <FBLabel {...{ error, label, loading, labelProps }} />
-              )}
-              {isChangeControlConfigTooltipsEnabled && getChangeContolConfigTooltip()}
-            </Box>
-
-            {children}
-          </FormControl>
+          {shouldWrapWithFormControl ? (
+            <FormControl fullWidth {...{ error }}>
+              {inputContent}
+            </FormControl>
+          ) : inputContent}
 
           {!isEmpty(helperText) && showErrorMsg && !disabled && (
             <FormHelperText {...{ error }} className={cx({ [classes.formHelperTextError]: error })} >

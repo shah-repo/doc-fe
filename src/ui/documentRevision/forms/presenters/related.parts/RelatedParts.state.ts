@@ -57,19 +57,17 @@ class RelatedPartsState {
     this.relatedPartsList.push(createdRelatedPart);
   }
 
-  @action validateDocId (parentPartDocId, userEnteredDocIdPortion, skipId = '') {
+  @action validateDocId (userEnteredDocIdPortion: string, skipId = ''): boolean {
     this.docIdErrorMsg = '';
 
     if (!userEnteredDocIdPortion) {
       this.docIdErrorMsg = 'relatedParts.docId.required.msg';
     } else if (userEnteredDocIdPortion.length === 1) {
       this.docIdErrorMsg = 'relatedParts.docId.length.msg';
-    } else if (/\D/.test(userEnteredDocIdPortion)) {
-      this.docIdErrorMsg = 'relatedParts.docId.onlyNumbers.msg';
     } else {
       const filteredList = this.relatedPartsList.filter(
         (listItem: RelatedPartsListItem) =>
-          listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}` && userEnteredDocIdPortion !== skipId);
+          listItem.suffixNumber?.toLocaleLowerCase() === userEnteredDocIdPortion.toLocaleLowerCase() && userEnteredDocIdPortion !== skipId);
 
       if (filteredList.length > 0) {
         this.docIdErrorMsg = 'relatedParts.docId.exists.msg';

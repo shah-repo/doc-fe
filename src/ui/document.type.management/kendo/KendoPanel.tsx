@@ -79,7 +79,7 @@ export function KendoPanel ({
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const classes = styles();
   const gridClasses = KendoGridStyles();
-  const actualData: DocumentType[] = cloneDeep(gridData);
+  const [workingData, setWorkingData] = useState<DocumentType[]>(cloneDeep(gridData));
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -97,6 +97,39 @@ export function KendoPanel ({
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
+  };
+
+  const processWithGroupsAndVisibleEditRows = (data: DocumentType[], state: State) => {
+    const processedState = processWithGroups(data, state);
+    if ((state.group ?? []).length > 0) {
+      return processedState;
+    }
+
+    const processedRows = processedState.data as DocumentTypeCustom[];
+    const editRows = (data as DocumentTypeCustom[]).filter(
+      (item) => Boolean(item.inEdit ?? item.isNewRecord),
+    );
+
+    if (!editRows.length) {
+      return processedState;
+    }
+
+    const missingEditRows = editRows.filter((editRow) => !processedRows.some((row) => {
+      if (editRow.id) {
+        return row.id === editRow.id;
+      }
+      return row === editRow;
+    }));
+
+    if (!missingEditRows.length) {
+      return processedState;
+    }
+
+    return {
+      ...processedState,
+      data: [...missingEditRows, ...processedRows],
+      total: processedState.total + missingEditRows.length,
+    };
   };
   const defaultItem = {
     text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
@@ -145,7 +178,18 @@ export function KendoPanel ({
   );
   useEffect(() => {
     setIsLoading(true);
-    const newDataState = processWithGroups(actualData, dataState);
+    const clonedGridData = cloneDeep(gridData);
+    const hasPendingEdits = (workingData as DocumentTypeCustom[])
+      .some((item) => Boolean(item.inEdit ?? item.isNewRecord));
+
+    const sourceData = hasPendingEdits ? workingData : clonedGridData;
+    if (!hasPendingEdits) {
+      setWorkingData(clonedGridData);
+    }
+
+    const newDataState = hasPendingEdits
+      ? processWithGroupsAndVisibleEditRows(sourceData, dataState)
+      : processWithGroups(sourceData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
 
@@ -207,7 +251,7 @@ export function KendoPanel ({
   };
 
   const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
-    const newDataState = processWithGroups(actualData, dataState);
+    const newDataState = processWithGroupsAndVisibleEditRows(workingData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
     setKendoFilterStatus(JSON.stringify(dataState));
@@ -311,20 +355,26 @@ export function KendoPanel ({
 
   // On edit click- all cells in edit mode
   const enterEdit = ({ id }: DTMRowItem) => {
-    each(actualData, (item: DocumentTypeCustom) => {
+    const editData = (workingData as DocumentTypeCustom[]).map((item) => {
       if (item.id === id) {
-        item.inEdit = true;
-        item.isNewRecord = false;
+        return {
+          ...item,
+          inEdit: true,
+          isNewRecord: false,
+        };
       }
-    });
+      return item;
+    }) as DocumentType[];
+    setWorkingData(editData);
     setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
-    const newDataState = processWithGroups(actualData, dataState);
-    setDataState(dataState);
+    // Keep current filter state and force edited row visibility.
+    const newDataState = processWithGroupsAndVisibleEditRows(editData, dataState);
     setResultState(newDataState);
   };
 
   // On cancel- come out of edit mode
   const cancel = () => {
+    setWorkingData(cloneDeep(gridData));
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -375,14 +425,22 @@ export function KendoPanel ({
   };
 
   // Add New row object
-  const addNewRowObject = async () => {
-    await clearFilter(true);
+  const addNewRowObject = () => {
+    const hasDraftRow = (workingData as DocumentTypeCustom[])
+      .some((item) => !item.id && Boolean(item.isNewRecord));
+    if (hasDraftRow) {
+      const newDataState = processWithGroupsAndVisibleEditRows(workingData, dataState);
+      setResultState(newDataState);
+      return;
+    }
+
     const newDataItem = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     newDataItem.isNewRecord = true;
-    const newDataArr = [newDataItem, ...actualData];
+    const newDataArr = [newDataItem, ...workingData];
+    setWorkingData(newDataArr as DocumentType[]);
     setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
-    const newDataState = processWithGroups(newDataArr as DocumentType[], dataState);
+    const newDataState = processWithGroupsAndVisibleEditRows(newDataArr as DocumentType[], dataState);
     setDataState(dataState);
     setResultState(newDataState);
   };
@@ -450,7 +508,7 @@ export function KendoPanel ({
     const isLHR = GroupWithGroupOptions[grp]?.includes(DOC_TYPE_GROUP_OPTION.BASE_LHR);
     let newData: DocumentType[] = [];
     if (dataItem.id) {
-      newData = map(actualData, (item) => {
+      newData = map(workingData, (item) => {
         if (item.id === dataItem.id) {
           item = set(dataItem, field || '', value);
           if (!isLHR) {
@@ -461,14 +519,24 @@ export function KendoPanel ({
       });
     } else {
       // For New Record
-      const updatedDataItem = set(dataItem, field || '', value);
+      const updatedDataItem = set(dataItem, field || '', value) as DocumentType;
       if (!isLHR) {
         updatedDataItem.equipmentEnforceProd = false;
       }
-      newData = [updatedDataItem, ...actualData];
+      const draftIndex = (workingData as DocumentTypeCustom[])
+        .findIndex((item) => !item.id && Boolean(item.isNewRecord));
+
+      if (draftIndex >= 0) {
+        newData = workingData.map((item, index) => (
+          index === draftIndex ? updatedDataItem : item
+        ));
+      } else {
+        newData = [updatedDataItem, ...workingData];
+      }
     }
-    const newDataState = processWithGroups(newData, dataState);
-    setDataState(dataState);
+    setWorkingData(newData);
+    // Keep current filter state and force edited/new row visibility.
+    const newDataState = processWithGroupsAndVisibleEditRows(newData, dataState);
     setResultState(newDataState);
   };
 
@@ -485,6 +553,7 @@ export function KendoPanel ({
       dataState.skip = 0;
     }
     setDropDownState({});
+    setWorkingData(cloneDeep(gridData));
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);

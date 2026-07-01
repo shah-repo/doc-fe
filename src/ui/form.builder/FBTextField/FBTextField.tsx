@@ -21,6 +21,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   dataCy,
   mode,
   className,
+  previewClassName,
   value,
   customHeight,
   helperText,
@@ -33,7 +34,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
     <FBInput {...props} {...{ error, defaultValue, isFbEditorField }}
       type={inputType} labelProps={FBFontStyle.labelProps}>
       {mode === 'preview' && (
-        <Box className={classes.preview}>{defaultValue}</Box>
+        <Box className={previewClassName}>{defaultValue}</Box>
       )}
       {mode !== 'preview' && (
         <TextField

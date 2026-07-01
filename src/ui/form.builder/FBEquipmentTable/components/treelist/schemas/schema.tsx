@@ -23,6 +23,7 @@ export const TreeListSchema = ({
   releasedEquipmentOptions,
   filterEquipmentOptions,
   onRowClick,
+  lhrBuildTypeConfigForSelectedBuildType,
 }) => [
   {
     field: 'plannedId',
@@ -40,7 +41,7 @@ export const TreeListSchema = ({
     title: translate('lhr.equipment.grid.heading.actual.id'),
     width: 150,
     mainOrderIndex: 2,
-    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} releasedEquipmentOptions={releasedEquipmentOptions} filterEquipmentOptions={filterEquipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} />,
+    cell: (props) => <ActualIdCell {...props} addActualId={addActualId} isEBProcedure={isEBProcedure} isEnableActualIdAddition={isEnableActualIdAddition} equipmentOptions={equipmentOptions} releasedEquipmentOptions={releasedEquipmentOptions} filterEquipmentOptions={filterEquipmentOptions} allowedEditEqOptions={allowedEditEqOptions} parentRevId={parentRevId} deleteLot={null} onScanClick={onScanClick} lhrBuildTypeConfigForSelectedBuildType={lhrBuildTypeConfigForSelectedBuildType} />,
   },
   {
     field: 'eqStatus',

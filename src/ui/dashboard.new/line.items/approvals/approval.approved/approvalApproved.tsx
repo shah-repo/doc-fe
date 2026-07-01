@@ -37,7 +37,7 @@ import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
 import { DocTypeGroups } from '../../common/types';
-import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
+import ApproveDialogContainer from '../../dialogs/approveDialogContainer';
 import useStyles from './approvalApproved.styles';
 
 interface Props {
@@ -478,7 +478,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </Button></Grid>
         </List>
       </Collapse>
-      <ApproveDialogueContainer
+      <ApproveDialogContainer
         transition="closed"
         changeRequestId={arChangeRequestId}
         arId={arId}
