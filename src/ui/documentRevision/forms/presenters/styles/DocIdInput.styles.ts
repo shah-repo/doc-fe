@@ -26,6 +26,9 @@ export default makeStyles((theme) => ({
     fontWeight: 400,
     color: Colors.black,
     paddingRight: '0px !important',
+    overflow: 'hidden !important',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
   },
   adornmentStart: {
     fontSize: 14,
