@@ -1,6 +1,5 @@
 import React from 'react';
-import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
-import { theme } from '../../../common/utils/helpers';
+import { logoThumb, theme } from '../../../common/utils/helpers';
 import Config from '../../../config';
 import { WhiteLabelingEnv } from '../../../state/ducks/company/types';
 import { store } from '../../../state/store';
@@ -39,16 +38,12 @@ const Logo: React.FunctionComponent<Props> = ({
       )}
       {!isOpen && (
         <div className={classes.smallLogoContainer} data-cy={companyName}>
-          {whiteLabeling.avatar ? (
-            <img
-              id="logo"
-              className={classes.avatar}
-              src={whiteLabeling.avatar}
-              alt={companyName}
-            />
-          ) : (
-            <CompanyAvatar />
-          )}
+          <img
+            id="logo"
+            className={classes.avatar}
+            src={whiteLabeling.avatar || logoThumb}
+            alt={companyName}
+          />
         </div>
       )}
       {isOpen && (

@@ -3,16 +3,16 @@ import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { ReactComponent as CompanyAvatar } from '../../../assets/images/company_avatar.svg';
+import { logoThumb } from '../../../common/utils/helpers';
 import Config from '../../../config';
 import { authActions, authSelectors } from '../../../state/ducks/auth';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { Employee, WhiteLabelingEnv } from '../../../state/ducks/company/types';
+import { setCompanyCookie } from '../../../utils/companyCookie';
+import { tryRedirectToReturnUrl } from '../../../utils/returnUrl';
 import { toastSuccess } from '../../components/notifications';
 import { COMPANY_EMAIL, HOME_URL } from '../../constants/urls';
 import { ThemeEnv } from '../../layout/theme/utils/types';
-import { setCompanyCookie } from '../../../utils/companyCookie';
-import { tryRedirectToReturnUrl } from '../../../utils/returnUrl';
 import { LoginContainerProps } from '../Login.container';
 import { showPasswordExpiryToast } from '../PasswordExpiryToast';
 import SwitchCompanyPresenter from './SwitchCompany.presenter';
@@ -81,14 +81,11 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
             id="SwitchCompanyContainer-companies"
           >
             <div className={classes.company}>
-              {whiteLabeling.avatar && (
-                <img
-                  src={whiteLabeling.avatar}
-                  alt="Avatar"
-                  className={classes.avatar}
-                />
-              )}
-              {!whiteLabeling.avatar && <CompanyAvatar />}
+              <img
+                src={whiteLabeling.avatar || logoThumb}
+                alt="Avatar"
+                className={classes.avatar}
+              />
               <div className={classes.companyName}>{company.name}</div>
               {employee.company.id === selectedCompanyMobile.id
               && (
