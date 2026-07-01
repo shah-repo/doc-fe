@@ -1,3 +1,6 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Tooltip } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Formik, FormikProps } from 'formik';
@@ -7,6 +10,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
+import { translate } from '../../../common/intl';
 import { MomentFormats, useDate } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -164,6 +168,17 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
 
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
+
+  let canCreateRevision = true;
+  if (isByCategory && categoryName) {
+    canCreateRevision = useSelector(
+      (state: ApplicationState) => documentTypeSelectors.canCreateCategory(state, categoryName),
+    );
+  } else if (documentTypeId) {
+    canCreateRevision = useSelector(
+      (state: ApplicationState) => documentTypeSelectors.canCreateDocumentType(state, documentTypeId),
+    );
+  }
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
@@ -418,16 +433,24 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             customFileName="DocumentList"
             isMultiplePagesDownloadAllowed
           />
-          <CustomLabelTooltip {...{ tooltipConfig }}>
-            <Button
-              className={classes.createButton}
-              onClick={handleAddButtonClick}
-              id="DocumentByTypeListPresenter-openDocRev"
-              data-cy="document-by-type-list-presenter-open-doc-rev"
-            >
-              <Text message={buttonLabel} values={{ name: labelName }} />
-            </Button>
-          </CustomLabelTooltip>
+          <Box display="inline-flex" alignItems="center">
+            <CustomLabelTooltip {...{ tooltipConfig }}>
+              <Button
+                className={classes.createButton}
+                onClick={handleAddButtonClick}
+                id="DocumentByTypeListPresenter-openDocRev"
+                data-cy="document-by-type-list-presenter-open-doc-rev"
+                disabled={!canCreateRevision}
+              >
+                <Text message={buttonLabel} values={{ name: labelName }} />
+              </Button>
+            </CustomLabelTooltip>
+            {!canCreateRevision && (
+              <Tooltip title={translate('documentRevision.create.not.allowed.msg')}>
+                <FontAwesomeIcon icon={solid('lock')} />
+              </Tooltip>
+            )}
+          </Box>
         </Grid>
       </Grid>
       {errorMessage && (

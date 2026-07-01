@@ -1,4 +1,4 @@
-import { email, positiveNumber, required, validator } from '.';
+import { docId, email, positiveNumber, required, validator } from '.';
 
 describe('validators tests', () => {
   describe('required validator tests', () => {
@@ -16,6 +16,38 @@ describe('validators tests', () => {
 
     it('returns error when value is empty string', () => {
       expect(required('')).toEqual('validators.required');
+    });
+  });
+
+  describe('docId validator tests', () => {
+    const acronym = 'LHRS-';
+
+    it('returns undefined when valid docId is provided', () => {
+      expect(docId('LHRS-123', acronym)).toBeUndefined();
+    });
+
+    it('returns error when suffix is empty', () => {
+      expect(docId('LHRS-', acronym)).toEqual('validators.required');
+    });
+
+    it('returns error when value is empty string', () => {
+      expect(docId('', acronym)).toEqual('validators.required');
+    });
+
+    it('returns error when value is null', () => {
+      expect(docId(null, acronym)).toEqual('validators.required');
+    });
+
+    it('returns error when value is undefined', () => {
+      expect(docId(undefined, acronym)).toEqual('validators.required');
+    });
+
+    it('returns error when extracted value is empty with missing acronym', () => {
+      expect(docId('')).toEqual('validators.required');
+    });
+
+    it('handles value with multiple occurrences of acronym', () => {
+      expect(docId('LHRS-LHRS-123', acronym)).toBeUndefined();
     });
   });
 

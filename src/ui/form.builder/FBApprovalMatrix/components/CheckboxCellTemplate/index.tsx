@@ -8,7 +8,7 @@ import { FBApprovalRole } from '../../../FBApprovalMatrixField/FBApprovalMatrixF
 import { MODE_FIELD, Mode } from '../Grid';
 
 const CheckboxCellTemplate: CellTemplate = (props) => {
-  const { dataItem, field, dataIndex, column, onChange } = props;
+  const { dataItem, field, dataIndex, column, onChange, onClick } = props;
   const { editable } = column;
 
   const isRoleCheckbox = Boolean(get(column, 'isRoleCheckbox', false));
@@ -32,6 +32,14 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
     });
   };
 
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (!onClick || canBeModified) {
+      return;
+    }
+    event.stopPropagation();
+    onClick({ dataItem });
+  };
+
   return (
     <Tooltip
       title={
@@ -42,12 +50,14 @@ const CheckboxCellTemplate: CellTemplate = (props) => {
       placement="top"
       arrow
     >
-      <div>
-        <Checkbox
-          defaultValue={value}
-          disabled={!canBeModified || isRoleCheckboxDisabled}
-          onChange={handleChange}
-        />
+      <div onClick={handleClick}>
+        <div style={!canBeModified ? { pointerEvents: 'none' } : undefined}>
+          <Checkbox
+            defaultValue={value}
+            disabled={!canBeModified || isRoleCheckboxDisabled}
+            onChange={handleChange}
+          />
+        </div>
       </div>
     </Tooltip>
   );

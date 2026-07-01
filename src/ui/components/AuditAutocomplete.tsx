@@ -1,9 +1,10 @@
 import { CircularProgress } from '@material-ui/core';
 import { get } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Audit } from '../../state/ducks/audit/types';
-import { FB, FBAutocompleteAsyncState } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../form.builder';
 import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
 interface OwnProps {
@@ -13,6 +14,47 @@ interface OwnProps {
 }
 
 type Props = OwnProps;
+
+interface OptionProps {
+  label: string
+  optionId: string
+}
+
+const RenderOption: React.FC<OptionProps> = ({ label, optionId }) => {
+  const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
+  const [option, setOption] = useState(label);
+
+  useEffect(() => {
+    if (FB.isUUID(label)) {
+      autocompleteState?.setOptionId(optionId);
+      if (optionId === FBAutocompleteAsyncOption.trainingDocuments) {
+        autocompleteState.fetchDepricatedAutocompleteOption(label);
+        return;
+      }
+
+      autocompleteState.fetchAutocompleteOption(label, optionId);
+    }
+  }, []);
+
+  useEffect(
+    () =>
+      reaction(
+        () => autocompleteState?.autocompleteValueApi?.data,
+        (data) => {
+          if (!data) return;
+          const { id } = data || {};
+          const preparedData = autocompleteState?.prepareData([data])?.at(0) ?? data;
+          FBAutocompleteAsyncStore.add(optionId, id, preparedData);
+          const { labelKey = 'text', labelPrefixRoot = '' } = autocompleteState?.optionConfig || {};
+          const optionLabel = `${get(preparedData, labelPrefixRoot, '')} ${FB.stripTags(get(preparedData, labelKey, ''))}`;
+          setOption(optionLabel);
+        },
+      ),
+    [],
+  );
+
+  return (<div>{option}</div>);
+};
 
 const AuditAutocomplete: React.FunctionComponent<Props> = ({
   audit, loading,
@@ -57,7 +99,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
       } catch {
         arrayValue.push(auditValue);
       }
-      label = arrayValue.reduce((label, value) => {
+      label = arrayValue?.reduce((label, value) => {
         label += getRecordLabel(value);
         return label;
       }, '');
@@ -67,7 +109,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading && <div>{label}</div>}
+      {!loading && <RenderOption {...{ label, optionId }} />}
     </Fragment>
   );
 };

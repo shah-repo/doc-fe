@@ -1,8 +1,10 @@
-import { chain, filter, find, omit, pick } from 'lodash';
+import { chain, filter, find, keyBy, omit, pick } from 'lodash';
 import moment from 'moment';
 import { createSelector } from 'reselect';
 import { sortStringsByKey } from '../../../common/utils/helpers';
 import Config from '../../../config';
+import { DocumentTypeRestriction } from '../../../ui/administration/general.settings/panels/CreationRestrictions/types';
+import { DEFAULT_TAX_RATE } from '../../../ui/form.builder/helpers/constants';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
@@ -92,6 +94,10 @@ const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.g
 
 const getCompanyTimezone = (state: ApplicationState) => state.company.generalSettings.timezone;
 
+const getCompanyDefaultTaxRate = (state: ApplicationState): number => state.company.generalSettings.defaultTaxRate ?? DEFAULT_TAX_RATE;
+
+const getLHRBuildTypeConfig = (state: ApplicationState) => state.company.generalSettings.lhrBuildTypeConfig;
+
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
@@ -115,6 +121,12 @@ const hasActivePremiumFeatureSubscription = createSelector(
   (subscriptions, subscriptionType) => subscriptions.some(
     subscription => subscription.premiumFeature === subscriptionType && subscription.isEnabled,
   ),
+);
+
+const getCreationRestrictions = (state: ApplicationState) => state.company.generalSettings.creationRestrictions;
+const getCreationRestrictionsMap = createSelector(
+  getCreationRestrictions,
+  (creationRestrictions) => ({ ...(keyBy<DocumentTypeRestriction>(creationRestrictions, (creationRestriction) => creationRestriction.documentTypeId)) }),
 );
 
 export default {
@@ -145,10 +157,13 @@ export default {
   getGeneralSettingsUpdatedAt,
   getPremiumFeatureSubscriptionsUpdatedAt,
   getCompanyTimezone,
+  getCompanyDefaultTaxRate,
+  getLHRBuildTypeConfig,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
   getPremiumFeatureSubscriptions,
   getSubscriptionsAsyncState,
   hasActivePremiumFeatureSubscription,
   isTrainingForApprovedRevisionsEnabled,
+  getCreationRestrictionsMap,
 };

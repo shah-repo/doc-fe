@@ -1,5 +1,5 @@
 import { FBInputProps, FBOption } from '..';
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 
 export type FBEditorPropertiesType =
 | 'multiple'
@@ -34,9 +34,14 @@ export const editorPropertiesFlags: FBEditorPropertiesType[] = [
   'disablePastDates',
 ];
 
+export const FBEditorPropertiesFormOutputOptions: FBEditorPropertiesType[] = [
+  'multiple',
+];
+
 export type FBEditorPropertiesProps = Pick<FBInputProps, 'type' | 'options' | 'onChange'> & {
   inputProps?: Partial<FBInputProps>
   docGroupOptions?: DocumentGroupOptionsType[]
+  isFormOutput?: boolean
 };
 
 export const FBEditorPropertiesOmitByGroup = {

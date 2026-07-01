@@ -21,7 +21,7 @@ import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_EDIT_BASE_URL } from '../../../constants/urls';
 import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
-import ApproveDialogueContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
+import ApproveDialogContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -248,7 +248,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       {idx !== bulkImportsGroupByProcess[valKey].length - 1 && <Divider className={classes.divider} />}
       {showApproverButtons
         && <>
-          <ApproveDialogueContainer
+          <ApproveDialogContainer
             transition="reject"
             type="reject"
             approvalId={currentApproval?.id}
@@ -257,7 +257,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             translationRejectMsg="bulkImport.reject.alert"
             onSuccess={handleRejectedBulkImport}
           />
-          <ApproveDialogueContainer
+          <ApproveDialogContainer
             transition="approve"
             approvalId={currentApproval?.id}
             transitionDialog={transitionDialog}

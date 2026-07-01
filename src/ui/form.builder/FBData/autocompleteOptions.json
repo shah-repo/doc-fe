@@ -10,6 +10,15 @@
     "hidden": false
   },
   {
+    "id": "52",
+    "label": "Documents",
+    "valueKey": "id",
+    "labelKey": "documentRevisions[0].name",
+    "labelPrefixRoot": "docId",
+    "root": "",
+    "hidden": false
+  },
+  {
     "id": "2",
     "label": "Approval Requests",
     "valueKey": "id",
@@ -391,6 +400,16 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision",
+    "hidden": false
+    },
+  {
+    "id": "51",
+    "label": "Documents eligible for training",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "docId",
     "root": "",
     "includeRevision": "displayRevision",
     "hidden": false

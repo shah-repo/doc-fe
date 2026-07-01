@@ -26,6 +26,7 @@ export type FBLHRStepProps =
   lhrBuildTypeExist: string
   startDateFieldName?: string
   endDateFieldName?: string
+  isBuildTypeChangeApprovalEnabled?: boolean
 };
 
 export interface StartMpiBody {

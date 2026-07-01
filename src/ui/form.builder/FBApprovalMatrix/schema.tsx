@@ -20,6 +20,7 @@ import { FBApprovalMatrixRoleTitles } from './types';
 
 interface Options {
   data?: FBApprovalMatrixFieldData
+  numOfRevStages: number
   withoutStatus?: boolean
   cellARHeaderClassName?: string
   cellARClassName?: string
@@ -29,8 +30,12 @@ interface Options {
 
 export default function createSchema (options: Options): Array<ColumnDefinition<FBApprovalMatrixItem>> {
   const {
-    data, withoutStatus,
-    cellARHeaderClassName, cellARClassName, clearRightBorderClassName,
+    data,
+    withoutStatus,
+    numOfRevStages,
+    cellARHeaderClassName,
+    cellARClassName,
+    clearRightBorderClassName,
     popupContainer,
   } = options;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
@@ -216,10 +221,13 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
 
   if (approvalRoles) {
     for (const [headKey, headTitle] of Object.entries(FBApprovalMatrixRoleTitles)) {
+      const isStage2 = headKey === 'stage2';
+
       schema.push({
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
+        hidden: !headKey && isStage2 && numOfRevStages === 2,
         children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,

@@ -17,7 +17,6 @@ const styles = makeStyles((theme: Theme) =>
       background: '0% 0% no-repeat padding-box',
       backgroundColor: theme.palette.secondary.contrastText,
       width: '100%',
-      marginBottom: 10,
       display: 'flex',
       justifyContent: 'center',
       height: 25,
@@ -40,7 +39,7 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: '100%',
-      padding: theme.spacing(0, 3),
+      padding: theme.spacing(2, 4.5),
     },
     smallLogo: {
       width: 50,

@@ -4,6 +4,7 @@ import { UserGroupsState, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { Company } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { LHRBuild } from '../../administration/general.settings/panels/LHRBuild/types';
 
 export type FBWorkspaceMode =
 | 'none'
@@ -67,4 +68,6 @@ export interface FBWorkspaceExternalState {
   }
 }
 
-export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, 'schema' | 'mode' | 'autosave'>;
+export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, 'schema' | 'mode' | 'autosave'> & {
+  lhrBuildTypeConfig?: LHRBuild[]
+};

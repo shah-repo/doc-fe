@@ -1,13 +1,14 @@
 import { cloneDeep, get } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from '../../..';
-import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { companySelectors } from '../../../../state/ducks/company';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../ui/constants/urls';
 import { checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from '../../../../ui/form.builder';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldState, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBSerialsState, FBWorkspaceState } from '../../../../ui/form.builder';
 import FBLeftPanelState from '../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state';
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
@@ -23,6 +24,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     doNotPrompt,
     setDoNotPrompt,
     formInput,
+    isBuildTypeChangeApprovalEnabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -31,15 +33,14 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
     const { approvalMatrixFieldState } = FB.useStores();
+    const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig);
     isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
       mode: _formState?.mode,
-      autosave: _formState?.autosave || false,
+      autosave: _formState?.autosave,
+      lhrBuildTypeConfig,
     });
-
-    _documentRevisionFormState.setNumberingStyle(
-      props.isInternalTypeNumbering ? DOCUMENT_NUMBERING_STYLE.INTERNAL : DOCUMENT_NUMBERING_STYLE.CUSTOMER);
 
     const schema = _documentRevisionFormState?.schema || documentRevision?.schema;
     const formState = FB.useRef<FBFormState>(FBFormState, {
@@ -49,7 +50,10 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       workspaceState,
     });
 
+    const serialsState = FB.useRef<FBSerialsState>(FBSerialsState, documentRevision);
+
     const { document: { outputRevision = false } = {} } = workspaceState || {};
+    isBuildTypeChangeApprovalEnabled = useObserver(() => workspaceState.buildTypeChangeStatus());
 
     const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
     const poApprovalsState = isPO ? FB.useRef(
@@ -146,6 +150,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
           formState,
           workspaceState,
           poApprovalsState,
+          serialsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
@@ -163,6 +168,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               isCreateUrl,
               doNotPrompt,
               setDoNotPrompt,
+              isBuildTypeChangeApprovalEnabled,
             }}
           />
         </FBProvider>

@@ -56,6 +56,7 @@ import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
 import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
+import BuildTypeChangeApproversButton from './BuildTypeChangeApproversButton';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
@@ -152,6 +153,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formState, formState, schema, _formState?.Validator, _formState?.getValues()]);
 
+  const isBuildTypeChangeApprovalEnabled = workspaceState?.buildTypeChangeStatus();
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isEquipment = checkIsDocumentEquipment(values.document?.documentType?.groupOptions);
@@ -284,8 +286,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: (data?: DocumentTypeById) => {
       const { forms } = data ?? {};
-      if(!isEmpty(forms)) {
-        if(forms?.length === 1) {
+      if (!isEmpty(forms)) {
+        if (forms?.length === 1) {
           createDocument(forms[0]);
         } else {
           setForms(forms ?? [] as DocumentTypeByIdForm[]);
@@ -304,7 +306,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   };
 
   const onFormClick = () => {
-    if(isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
+    if (isDisabled && (!isStatusReleased || (isStatusReleased && documentRevision.formDocument !== null))) {
       createDocument();
     } else {
       const values = get(formik, 'values') as DocumentRevision;
@@ -327,7 +329,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       }
     }
 
-    if(formDocument?.id) {
+    if (formDocument?.id) {
       formik.setFieldValue('formDocument', { id: formDocument?.id });
     }
 
@@ -388,7 +390,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if (
     isDirectlyApproved
     && (!isInlineApproval || revisionStage !== 1 || isMPIOutput)
-    && showToOwnerOrOperator
+    && showToOwnerOrOperator && !isBuildTypeChangeApprovalEnabled
   ) {
     accessableButtons.push(PreviewControlButtons.SubmitApprovalButton);
   }
@@ -422,6 +424,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision?.status);
   if (isDocumentDraft || canCreateInspection) {
     accessableButtons.push(PreviewControlButtons.InspectionControl);
+  }
+  if (isBuildTypeChangeApprovalEnabled) {
+    accessableButtons.push(PreviewControlButtons.BuildTypeChangeApproversButton);
   }
   if (canChangeOwnerShip && values.id) {
     accessableButtons.push(PreviewControlButtons.ChangeOwner);
@@ -544,6 +549,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes(PreviewControlButtons.ExportCsvButton) && (
         <ExportToCSVButton {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes(PreviewControlButtons.BuildTypeChangeApproversButton) && (
+        <BuildTypeChangeApproversButton renderAsButton={renderAsButton} />
       )}
       {buttons.includes(PreviewControlButtons.ChangeOwner) && values.id && (
         <OwnerChangerContainer

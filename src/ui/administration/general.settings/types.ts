@@ -22,6 +22,9 @@ export enum GeneralSettingsTabs {
   Training = 'Training',
   Timezone = 'Timezone',
   LHRBuild = 'LHR Build',
+  LHRBuildSwitch = 'LHR Build Switch',
+  TaxRate = 'Tax Rate',
+  CreationPermissions = 'CREATION PERMISSIONS',
 }
 
 export interface GeneralSettingsProps {
@@ -35,6 +38,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   info?: string
   containerRef?: RefObject<HTMLElement>
   isOutOfSync?: boolean
+  addButtonLabel?: string
   onToggle: () => void
   onAddNew?: () => void
   onManageItems?: () => void

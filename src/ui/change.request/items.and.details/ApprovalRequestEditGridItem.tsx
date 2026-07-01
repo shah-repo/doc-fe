@@ -2,7 +2,8 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popper } from '@material-ui/core';
 import cx from 'classnames';
-import React, { useRef, useState } from 'react';
+import { useFormikContext } from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -43,10 +44,16 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const classes = useStyles();
   const location = useLocation();
   const showDeleteButton = Boolean(entry?.docRevId) && !location.pathname.includes(entry?.docRevId);
-  const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
+  const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate ?? (isAddingNewItem && isLineItemPartCanBeSubstituted));
   const popperAnchorRef = useRef<HTMLDivElement>(null);
 
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
+  const { setFieldValue } = useFormikContext();
+
+  useEffect(() => {
+    setFieldValue('documentRev', true);
+    return () => setFieldValue('documentRev', undefined);
+  }, []);
 
   return (
     <FBForm {...{ formState }} >
