@@ -22,6 +22,7 @@ import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
+import { CHANGE_REQUEST_ROOT_URL_SEARCH } from '../changeRequest/constants';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
 import { TRAINING_RECORDS_SEARCH_URL } from '../training/constants';
@@ -900,6 +901,17 @@ const downloadTrainingRecordCsvData = (
     handlers,
   });
 
+const downloadArCsvData = (
+  data: TableSearchQueryPayloadType,
+  handlers: Handlers<string>,
+): ApiAction<string> =>
+  apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL_SEARCH}?download=true`,
+    method: 'post',
+    data,
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -975,4 +987,5 @@ export default {
   restrictedEdit,
   downloadCsvData,
   downloadTrainingRecordCsvData,
+  downloadArCsvData,
 };

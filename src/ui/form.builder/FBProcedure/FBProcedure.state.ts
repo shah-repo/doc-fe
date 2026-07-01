@@ -53,13 +53,13 @@ class FBProcedureState {
     const existingItems = get(this, `value.${type}`, []);
 
     const items = existingItems.reduce((acc, curr) => {
-      if (curr.id === item.id) {
+      if (curr.id === item.id || curr.id === addedItem.id) {
         return [...acc, item];
       }
       return [...acc, curr];
     }, []);
 
-    const isItemExists = existingItems.some(i => i.id === item.id);
+    const isItemExists = existingItems.some(i => (i.id === item.id || i.id === addedItem.id));
 
     if (!item.LHRTparameter && isItemExists && item.type) {
       delete item.type;

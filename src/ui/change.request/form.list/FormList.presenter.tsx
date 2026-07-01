@@ -57,6 +57,8 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
             {...{ headers, data }}
             dialog={exportDialog}
             customFileName="DocumentList"
+            isMultiplePagesDownloadAllowed
+            isARRecord
           />
           <Button
             id="ChangeRequest-create"

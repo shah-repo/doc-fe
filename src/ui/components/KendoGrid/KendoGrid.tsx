@@ -383,7 +383,7 @@ export function KendoGrid<T extends any> ({
             {...column}
             title={getTranslatedText(column.title)}
             width={setColumnWidth(column.width as number, gridWidth)}
-            minResizableWidth={200}
+            minResizableWidth={100}
             headerCell={
               headerCellMapping[column.headerCell as string]
                 ? headerCellMapping[column.headerCell as string]
@@ -546,11 +546,19 @@ export function KendoGrid<T extends any> ({
     [collapsedState],
   );
 
+  const [resizeInProgress, setResizeInProgress] = useState<boolean>(false);
+
   const onColumnResize = ({ end, columns: cols }: GridColumnResizeEvent) => {
     hideColumnTitleOnResize();
     if (!end) {
+      !resizeInProgress && setResizeInProgress(true);
       return false;
     }
+
+    setTimeout(() => {
+      setResizeInProgress(false);
+    }, 300);
+
     let dataColumns = columns;
     dataColumns = map(dataColumns, (column) => {
       const columnObject = find(cols, { field: column.field });
@@ -618,7 +626,7 @@ export function KendoGrid<T extends any> ({
         sortable={true}
         pageable={pagerSettings}
         groupable={true}
-        reorderable={true}
+        reorderable={!resizeInProgress}
         resizable={true}
         {...dataState}
         data={result}

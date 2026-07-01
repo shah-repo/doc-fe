@@ -312,7 +312,7 @@ const MaterialsTable: React.FC<MaterialTableProps> = ({
 
       const parentItem = state.data[parentIndex];
 
-      const updatedSubItems = [...newSubItems, ...(parentItem[SUB_ITEMS_FIELD] ?? [])].map((item) =>
+      const updatedSubItems = [...(parentItem[SUB_ITEMS_FIELD] ?? []), ...newSubItems].map((item) =>
         omit(item, [...EB_FIELDS_TO_OMIT, 'title']),
       );
 

@@ -120,6 +120,7 @@ const FBMPIProcedureItem: React.FC<FBMPIProcedureItemProps> = ({
         <>
           {type === FBProcedureItemType.materials && hasItems && (
             <MaterialsTable
+              key={(isSelectVisible && !redlineActive) ? 'enabled' : 'disabled'}
               name={name}
               isEnableOnlyLotAddition={isSelectVisible && !redlineActive}
               isActive={!isPreview}
@@ -136,6 +137,7 @@ const FBMPIProcedureItem: React.FC<FBMPIProcedureItemProps> = ({
           )}
           {type === FBProcedureItemType.equipment && hasItems && (
             <FBEquipmentTable
+              key={(isSelectVisible && !redlineActive) ? 'enabled' : 'disabled'}
               name={name}
               isDisabled={Boolean(disabled)}
               type={type}
