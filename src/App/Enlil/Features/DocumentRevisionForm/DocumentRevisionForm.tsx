@@ -312,7 +312,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                         const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                         return (
-                          <AutoSizer onResize={handleResize}>
+                          <AutoSizer disableHeight={_documentRevisionFormState?.expanded} onResize={handleResize}>
                             {({ width }) => (
                               <SMBox key={index} style={{ width }} pb={2}>
                                 {tabType === 'MIXED' && (

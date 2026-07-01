@@ -23,6 +23,7 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import { useLhrsTitle } from '../../../hooks/useLhrsTitle';
+import { withThemeNext } from '../../../layout/theme-next';
 import OverflowTooltip from '../../OverflowTooltip';
 import Text from '../../Text';
 import { useFormContext } from '../../forms/FormContext';
@@ -334,4 +335,4 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   );
 };
 
-export default HeaderInfo;
+export default withThemeNext(HeaderInfo);

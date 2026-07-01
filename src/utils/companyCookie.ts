@@ -1,7 +1,30 @@
 import Config from '../config';
+import {
+  buildCookieName,
+  expireCookie,
+  getCookieSecurePart,
+  getCookieSharedDomain,
+  normalizeCookieHostname,
+} from './cookie';
 
-const COOKIE_NAME = Config.CompanyCookieName;
 const MAX_AGE_SECONDS = Config.CompanyCookieMaxAgeDays * 24 * 60 * 60;
+
+function buildCompanyCookieName (hostname: string): string {
+  return buildCookieName(hostname, 'company_id');
+}
+
+function clearCompanyCookieVariants (): void {
+  const host = normalizeCookieHostname(window.location.hostname);
+  const cookieName = buildCompanyCookieName(host);
+
+  expireCookie(cookieName);
+  expireCookie(cookieName, host);
+
+  const sharedDomain = getCookieSharedDomain(host);
+  if (sharedDomain) {
+    expireCookie(cookieName, sharedDomain);
+  }
+}
 
 /**
  * Persist the selected company ID as a browser cookie so that other
@@ -10,9 +33,9 @@ const MAX_AGE_SECONDS = Config.CompanyCookieMaxAgeDays * 24 * 60 * 60;
  * The cookie is NOT httpOnly — company_id is not a secret (it is visible
  * in API URL paths) and must be readable by client-side JavaScript.
  */
-export function setCompanyCookie(companyId: string): void {
-  const secure = window.location.protocol === 'https:' ? '; secure' : '';
-  const host = window.location.hostname;
-  const domainPart = host === 'localhost' || host === '127.0.0.1' ? '' : `; domain=${host}`;
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(companyId)}; path=/; max-age=${MAX_AGE_SECONDS}; samesite=lax${secure}${domainPart}`;
+export function setCompanyCookie (companyId: string): void {
+  const cookieName = buildCompanyCookieName(window.location.hostname);
+
+  clearCompanyCookieVariants();
+  document.cookie = `${cookieName}=${encodeURIComponent(companyId)}; path=/; max-age=${MAX_AGE_SECONDS}; samesite=lax${getCookieSecurePart()}`;
 }

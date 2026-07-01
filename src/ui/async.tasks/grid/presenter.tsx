@@ -5,7 +5,7 @@ import { GetAsyncTaskResponse } from '../../../state/ducks/async.tasks/types';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import Text from '../../components/Text';
-import PasswordDialogueContainer from '../dialogs/PasswordDialogue';
+import PasswordDialogContainer from '../dialogs/PasswordDialog';
 import DateForm from '../forms/date.form/date.form';
 import EmailForm from '../forms/email.form/email.form';
 import EmptyForm from '../forms/empty.form/empty.form';
@@ -115,7 +115,7 @@ export function AsyncTasksPresenter ({
         ].includes(SQS_TYPES[type]) && (
             <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type} />
           )}
-          <PasswordDialogueContainer
+          <PasswordDialogContainer
             transition="approve"
             asyncState={async.asyncState}
             onSubmit={onSubmit}

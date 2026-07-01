@@ -20,7 +20,10 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
     isLoading,
     updateSerialNumber,
     updateSerialNumbers,
-  } = useLHRSSerialNumbers(name);
+  } = useLHRSSerialNumbers({
+    name,
+    shouldDisableInSubsequentSteps: true,
+  });
 
   if (!shouldShowSerials) {
     return null;
@@ -39,6 +42,7 @@ const FBMPIProcedureItemSerialsTable: React.FC<FBMPIProcedureItemSerialsTablePro
         onUpdate={updateSerialNumber}
         onBulkUpdate={updateSerialNumbers}
         toolbarRef={toolbarRef}
+        shouldShowStepAndSequence
       />
     </div>
   );

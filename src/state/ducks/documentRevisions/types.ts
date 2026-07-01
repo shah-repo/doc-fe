@@ -15,10 +15,10 @@ import { DOCUMENT_NUMBERING_STYLE, DocumentGroupOptionsType, DocumentGroupType, 
 
 export enum DocumentRevisionStatus {
   Draft = 'DRAFT',
-  PendingChange = 'PENDING_CHANGE',
   InReview = 'IN_REVIEW',
-  Released = 'RELEASED',
+  PendingChange = 'PENDING_CHANGE',
   Approved = 'APPROVED',
+  Released = 'RELEASED',
   Deprecated = 'DEPRECATED',
   Obsolete = 'OBSOLETE',
   Canceled = 'CANCELED',
@@ -34,10 +34,10 @@ export enum ErrorCodes {
 
 export enum DocumentRevisionStatusDisplay {
   Draft = 'Draft',
-  PendingChange = 'PendingChange',
   InReview = 'InReview',
-  Released = 'Released',
+  PendingChange = 'PendingChange',
   Approved = 'Approved',
+  Released = 'Released',
   Deprecated = 'Deprecated',
   Obsolete = 'Obsolete',
   Canceled = 'Canceled',

@@ -150,6 +150,17 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
     ));
   }, [dataState, sharedSerialNumberPart, canSelect, selectedSerials, serialNumbers]);
 
+  const visibleData = useMemo(
+    () => processedData.slice(skippedItemsCount, skippedItemsCount + PAGE_SIZE),
+    [processedData, skippedItemsCount],
+  );
+
+  useEffect(() => {
+    if (skippedItemsCount >= processedData.length && skippedItemsCount > 0) {
+      setSkippedItemsCount(Math.max(processedData.length - PAGE_SIZE, 0));
+    }
+  }, [processedData.length, skippedItemsCount]);
+
   const height = useMemo(() => {
     const minRows = Math.max(serialNumbers.length, 1);
     const maxRows = Math.min(minRows, PAGE_SIZE);
@@ -182,40 +193,39 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
         onRejectSelected={rejectSelected}
         onDeleteSelected={onBulkDelete ? deleteSelected : undefined}
       />
-      <div className={cx(classes.gridContainer)} style={{ height }}>
-        <KendoDataGrid<EditableSerialNumber>
-          data={processedData}
-          schema={schema}
-          fullHeight
-          fullWidth
-          filterable
-          sortable
-          resizable
-          hasBoxScrollbars
-          selectedField={SELECTED_FIELD}
-          dataItemKey={DATA_ITEM_KEY}
-          skip={skippedItemsCount}
-          onPageChange={onPageChange}
-          rowHeight={ROW_HEIGHT}
-          pageSize={PAGE_SIZE}
-          skipDataProcessing
-          loading={isLoading}
-          {...dataState}
-          className={cx(
-            classes.grid,
-            { [classes.gridWithButton]: shouldShowAddButton },
-          )}
-          selectable={{
-            enabled: canSelect,
-            drag: false,
-            cell: false,
-            mode: 'multiple',
-          }}
-          onDataStateChange={updateDataState}
-          onSelectionChange={toggleSelection}
-          rowRender={rowRender}
-        />
-      </div>
+      <KendoDataGrid<EditableSerialNumber>
+        {...dataState}
+        data={visibleData}
+        schema={schema}
+        filterable
+        sortable
+        resizable
+        hasBoxScrollbars
+        scrollable="virtual"
+        selectedField={SELECTED_FIELD}
+        dataItemKey={DATA_ITEM_KEY}
+        skip={skippedItemsCount}
+        total={processedData.length}
+        onPageChange={onPageChange}
+        rowHeight={ROW_HEIGHT}
+        pageSize={PAGE_SIZE}
+        skipDataProcessing
+        loading={isLoading}
+        className={cx(
+          classes.grid,
+          { [classes.gridWithButton]: shouldShowAddButton },
+        )}
+        style={{ height, maxHeight: '50vh' }}
+        selectable={{
+          enabled: canSelect,
+          drag: false,
+          cell: false,
+          mode: 'multiple',
+        }}
+        onDataStateChange={updateDataState}
+        onSelectionChange={toggleSelection}
+        rowRender={rowRender}
+      />
       {shouldShowAddButton && (
         <Button
           attached

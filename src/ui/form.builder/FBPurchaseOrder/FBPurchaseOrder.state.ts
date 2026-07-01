@@ -87,7 +87,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     if (!initialValues || isEmpty(initialValues)) {
       return;
     }
-    const items = (initialValues?.items || []).map((item, index) => ({ ...item, index }));
+    const items = (initialValues?.items || []).map((item, index) => ({ ...item, tax: item.tax ?? false, index }));
     this.setValue({ ...initialValues, items });
   }
 
@@ -210,17 +210,18 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
     if (!this.isManualTax && lineItemsLength && !isNil(this.value.taxRate)) {
       tax = sum.forTax * this.value.taxRate / 100;
     }
+    const decimalLength = getDecimalLength(taxRate);
+    const roundedTax = Math.round((tax + Number.EPSILON) * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength);
 
-    const roundedTax = Math.round(tax * 100) / 100;
     const shippingCost = lineItemsLength ? this.value.shippingCost || 0 : 0;
-    const totalAmount = roundedTax + sum.subTotal + Number(shippingCost);
+    const totalAmount = Number(roundedTax) + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.value.exchangeRate;
 
     const value = {
       ...this.value,
       taxRate,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(roundedTax),
+      tax: this.formatCost(roundedTax, decimalLength),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
@@ -283,6 +284,7 @@ class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<n
       ...item,
       id: FB.uniqid,
       received: 0,
+      tax: item.tax ?? false,
       totalAmount: this.itemTotalAmount.toFixed(2),
       formattedDate: this.formatDate(item.date),
       index: size(this.value.items),

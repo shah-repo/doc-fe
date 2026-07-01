@@ -23,6 +23,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     editorConfig = {},
     name = '',
     label = '',
+    rules,
     ...props
   }: T) => {
     const {
@@ -56,7 +57,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       () => [formState?.getFieldError(`${name}.value`), formState?.errors.has(`${name}.value`)],
     );
 
-    formState?.setFieldRules(`${name}.value`, getRules(range?.from, range?.to));
+    formState?.setFieldRules(`${name}.value`, `${getRules(range?.from, range?.to)}|${rules}`);
     formState?.setValidationAttributeName(`${name}.value`, String(label));
 
     const updateValue = (newValue: Partial<FBTextFieldWithRangeValue>) => {
@@ -77,6 +78,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
 
     return Component({
       ...(props as T),
+      rules,
       name,
       label,
       value,
