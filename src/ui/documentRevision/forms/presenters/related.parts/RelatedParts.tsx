@@ -19,6 +19,7 @@ import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, Relate
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBButton, FBTooltip } from '../../../../form.builder';
@@ -515,8 +516,10 @@ const RelatedPartViewRow: React.FunctionComponent<{
   };
 
   const docIdTitle = () =>
-    <span>{listItem.rootDocId.slice(0, lastIndexOfDash)} -
-      <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b></span>;
+    <span>
+      {listItem.rootDocId.slice(0, lastIndexOfDash)} -
+      <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
+    </span>;
 
   return (
     <>
@@ -536,7 +539,14 @@ const RelatedPartViewRow: React.FunctionComponent<{
             className={classes.link}
             onClick={linkHandler}
           >
-            {docIdTitle()}
+            <OverflowTooltip
+              title={docIdTitle()}
+              placement="top"
+              arrow
+              classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+            >
+              {docIdTitle()}
+            </OverflowTooltip>
           </Link>
         </div>
         <div className={cx(classes.tableCellTwo, classes.relatedPartViewRowCell)}>
