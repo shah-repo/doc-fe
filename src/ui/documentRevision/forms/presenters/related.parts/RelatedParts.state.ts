@@ -59,11 +59,14 @@ class RelatedPartsState {
 
   @action validateDocId (userEnteredDocIdPortion: string, skipId = ''): boolean {
     this.docIdErrorMsg = '';
+    const hasOnlyAlphaNumeric = /^[A-Za-z0-9]+$/.test(userEnteredDocIdPortion);
 
     if (!userEnteredDocIdPortion) {
       this.docIdErrorMsg = 'relatedParts.docId.required.msg';
     } else if (userEnteredDocIdPortion.length === 1) {
       this.docIdErrorMsg = 'relatedParts.docId.length.msg';
+    } else if (!hasOnlyAlphaNumeric) {
+      this.docIdErrorMsg = 'relatedParts.docId.specialChar.msg';
     } else {
       const filteredList = this.relatedPartsList.filter(
         (listItem: RelatedPartsListItem) =>
