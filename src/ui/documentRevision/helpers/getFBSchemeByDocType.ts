@@ -1,6 +1,6 @@
 import { find, get, map, maxBy, some, union, unionBy } from 'lodash';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType, DocumentTypeByIdState, TabInfo, tabIdByInternalType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
 import { store as appStore } from '../../../state/store';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -71,6 +71,7 @@ export const getFBSchemeByDocType = (
         label: 'form.builder.approvals',
         type: 'poapprovals',
         deleteDisabled: false,
+        deleteInFormDisabled: true,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
         tabId,
@@ -82,6 +83,7 @@ export const getFBSchemeByDocType = (
           label: 'form.builder.approvals',
           type: 'approvals',
           deleteDisabled: true,
+          deleteInFormDisabled: true,
           name: `fb-approvals-${FB.uniqid}`,
           uniqueSchemaItem: true,
           tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
