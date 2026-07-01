@@ -1,6 +1,5 @@
 import React, { MouseEventHandler } from 'react';
 import { translate } from '../../../common/intl';
-import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
 import { Attachment } from '../../../state/ducks/attachments/types';
 import AttachmentField from '../../../ui/components/common/attachment.icon/container';
 import Dialog from '../../components/dialogs';
@@ -26,28 +25,9 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
 
   const blockEditing: MouseEventHandler = (e) => e.stopPropagation();
 
-  const [sortedAttachments, setAttachmentsData] = React.useState<Attachment[]>([]);
-
-  const sortAttachments = (attachments: Attachment[]) => {
-    return [...attachments].sort((a, b) => {
-      const isARedLine = a.lineType === LINE_TYPES.RED_LINE;
-      const isBRedLine = b.lineType === LINE_TYPES.RED_LINE;
-
-      if (isARedLine !== isBRedLine) {
-        return isARedLine ? -1 : 1;
-      }
-
-      return Number(a.index) - Number(b.index);
-    });
-  };
-
-  React.useEffect(() => {
-    setAttachmentsData(sortAttachments(attachments));
-  }, [attachments]);
-
-  const visibleAttachments = sortedAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
-  const remainingAttachmentCount = sortedAttachments.length - visibleAttachments.length;
-  const isExceedsMaxAttachments = sortedAttachments.length > MAX_VISIBLE_ATTACHMENTS;
+  const visibleAttachments = attachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
+  const remainingAttachmentCount = attachments.length - visibleAttachments.length;
+  const isExceedsMaxAttachments = attachments.length > MAX_VISIBLE_ATTACHMENTS;
 
   if (!visibleAttachments.length) {
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
@@ -80,7 +60,7 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
             <AttachmentField
               value={attachments}
               name="arAttachments"
-              isRedlineFirst
+              preserveOrder
             />
           </LegacyThemeWrapper>
         </div>

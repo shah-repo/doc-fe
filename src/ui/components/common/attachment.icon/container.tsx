@@ -41,6 +41,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   documentRevision,
   docRevId,
   isRedlineFirst,
+  preserveOrder,
   selectedAttachments,
   onSelectedAttachmentsChange,
   onHeaderCheck,
@@ -318,10 +319,16 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const openFileView = () => dialogHandler.open();
 
   const sortedAttachments = useMemo(() => {
-    return attachments
+    const attachmentsToDisplay = [...attachments];
+
+    if (preserveOrder) {
+      return attachmentsToDisplay;
+    }
+
+    return attachmentsToDisplay
       .sort((a) => (a.lineType === (isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY) ? -1 : 0))
       .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
-  }, [attachments, documentRevision, isRedlineFirst]);
+  }, [attachments, documentRevision, isRedlineFirst, preserveOrder]);
 
   return (
     <>

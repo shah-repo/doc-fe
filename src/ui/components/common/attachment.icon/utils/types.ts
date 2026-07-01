@@ -39,6 +39,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isPrimary?: boolean
   isTransferred?: boolean
   isRedlineFirst?: boolean
+  preserveOrder?: boolean
   docRevId?: string
   selectedAttachments?: {[id: string]: boolean | number[]}
   onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
