@@ -11,4 +11,5 @@ export enum FBFieldName {
   MPIProcedureId = 'fb-mpiprocedure-ref',
   GRPTTrainer = 'fb-grpt-trainer',
   GRPTTraineeList = 'fb-grpt-trainee-list',
+  TrainingDocumentsToBeTrainedOnList = 'training-document-to-be-trained-on',
 }

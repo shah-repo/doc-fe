@@ -2,7 +2,9 @@
 import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
@@ -12,13 +14,36 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
+  private readonly docTypeIds?: string[] = [];
+  private readonly documentStatuses?: DocumentRevisionStatus[] = [];
+  private readonly changeRequestStatuses?: ChangeRequestStatus[] = [];
   private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, docTypeIds, documentStatuses, changeRequestStatuses, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
+    this.docTypeIds = docTypeIds;
+    this.documentStatuses = documentStatuses;
+    this.changeRequestStatuses = changeRequestStatuses;
     this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
+  }
+
+  @computed public get optionsKey (): string | undefined {
+    if (!this.optionId) {
+      return undefined;
+    }
+    const keyParts = [this.optionId];
+    if (this.docTypeIds?.length) {
+      keyParts.push(this.docTypeIds.join(','));
+    }
+    if (this.optionId === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length) {
+      keyParts.push(this.documentStatuses.join(','));
+    }
+    if (this.optionId === FBAutocompleteAsyncOption.changeRequests && this.changeRequestStatuses?.length) {
+      keyParts.push(this.changeRequestStatuses.join(','));
+    }
+    return keyParts.join('-');
   }
 
   public setAdditionalData = (data?: any[]) => set(this, 'additionalData', data);
@@ -47,19 +72,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   @computed public get sliceData (): any {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    if (FBAutocompleteAsyncStore.data.get(this.optionId)) {
-      return Array.from(FBAutocompleteAsyncStore.data.get(this.optionId).values());
+    if (FBAutocompleteAsyncStore.data.get(this.optionsKey)) {
+      return Array.from(FBAutocompleteAsyncStore.data.get(this.optionsKey).values());
     }
   }
 
   @action public sliceValue = (id: string | string[]): any => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    const options = FBAutocompleteAsyncStore.data.get(this.optionId);
+    const options = FBAutocompleteAsyncStore.data.get(this.optionsKey);
     if (!options) {
       return;
     }
@@ -75,19 +100,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   };
 
   @action public load = (force = false) => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
+    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionsKey);
     if (isLoading) { return; }
-    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
+    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionsKey));
     if (force || !hasData) {
       this.loadInternal();
     }
   };
 
   @action public prepareData = (data: any): any[] | undefined => {
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
     // TODO: refactore autocomplete list to reuse doc rev list (check with mobile)
@@ -110,6 +135,19 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
               ? doc.documentRevisions : null,
           // the 0th entry is always the released / most recent released version
         })).filter((item) => item.documentRevisions);
+      case FBAutocompleteAsyncOption.allDocuments:
+
+        return map([data].flat(), (doc) => {
+          const documentRevisions = this.documentStatuses?.length
+            ? doc.documentRevisions?.filter((revision) => this.documentStatuses?.includes(revision.status))
+            : doc.documentRevisions;
+
+          return ({
+            ...doc,
+            documentRevisions,
+            // the 0th entry is always the released / most recent released version
+          });
+        }).filter((item) => Boolean(item.documentRevisions?.length));
       case FBAutocompleteAsyncOption.docRevByDoc:
         return data.documentRevisions.map((e) => ({
           ...e,
@@ -165,6 +203,28 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: releasedForm?.displayRevision || '',
           });
         });
+      case FBAutocompleteAsyncOption.mpiDocuments:
+        return map(
+          groupBy(union(data, this.additionalData), 'document.id'),
+          (documents: DocumentRevision[]) => {
+            if (!documents?.length) return [];
+
+            let draft: DocumentRevision | undefined;
+            let released: DocumentRevision | undefined;
+
+            for (const document of documents) {
+              if (!draft && isDocumentRevisionInDraft(document?.status)) {
+                draft = document;
+              } else if (!released && isDocumentRevisionReleased(document?.status)) {
+                released = document;
+              }
+
+              if (draft && released) break;
+            }
+
+            return draft ?? released ?? documents[0];
+          },
+        );
       case FBAutocompleteAsyncOption.parts:
         return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== 'OBSOLETE');
       default: return union(data, this.additionalData);
@@ -173,28 +233,37 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
   public onSuccess () {
     super.onSuccess();
-    if (!this.optionId) {
+    if (!this.optionsKey) {
       return;
     }
-    FBAutocompleteAsyncStore.loading.set(this.optionId, false);
+    FBAutocompleteAsyncStore.loading.set(this.optionsKey, false);
     let data = this.data;
     if (!data) {
       return;
     }
     if (data.some && !data.some((value) => typeof value === 'object')) {
       data = map(this.data, (d) => ({ id: d, name: d }));
-      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
+      return FBAutocompleteAsyncStore.setOptionData(this.optionsKey, data);
     }
-    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
+    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionsKey, data.slice());
   }
 
   protected loadInternal () {
-    if (!this.optionConfig || !this.optionId) {
+    if (!this.optionConfig || !this.optionsKey) {
       return;
     }
 
-    FBAutocompleteAsyncStore.loading.set(this.optionId, true);
+    FBAutocompleteAsyncStore.loading.set(this.optionsKey, true);
     const { id, root = '', publicApi } = this.optionConfig;
+    const body = {
+      ...(this.docTypeIds?.length ? { docTypeIds: this.docTypeIds.join(',') } : {}),
+      ...(id === FBAutocompleteAsyncOption.allDocuments && this.documentStatuses?.length
+        ? { documentStatuses: this.documentStatuses.join(',') }
+        : {}),
+      ...(id === FBAutocompleteAsyncOption.changeRequests && this.changeRequestStatuses?.length
+        ? { changeRequestStatuses: this.changeRequestStatuses.join(',') }
+        : {}),
+    };
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
@@ -210,6 +279,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.set({
       url: FBEndpoint.AutocompleteByOptionId,
       urlValues: { optionId: id },
+      body: Object.keys(body).length ? body : undefined,
       method: 'get',
     });
   }

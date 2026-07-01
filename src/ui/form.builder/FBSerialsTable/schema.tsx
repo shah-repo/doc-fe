@@ -10,13 +10,15 @@ import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberU
 import ActionsCell from './components/ActionsCell';
 import NotesCell from './components/NotesCell';
 import SelectFilter from './components/SelectFilter';
+import SerialNumberCell from './components/SerialNumberCell';
 import StatusCell from './components/StatusCell';
-import TextCell from './components/TextCell';
 import UsageCell from './components/UsageCell';
 import useStyles from './styles';
 
 interface SchemaOptions {
   isAllSelected: boolean
+  isTableDisabled?: boolean
+  shouldShowStepAndSequence?: boolean
   canSelect?: boolean
   onCheckAllToggle: (event: CheckboxChangeEvent) => void
   onUpdate?: (id: string, data: SerialNumberUpdateData) => void
@@ -25,114 +27,151 @@ interface SchemaOptions {
 
 export const useSchema = ({
   isAllSelected,
-  canSelect,
+  isTableDisabled = false,
+  shouldShowStepAndSequence = false,
+  canSelect = false,
   onCheckAllToggle,
   onUpdate,
   onDelete,
 }: SchemaOptions): Array<ColumnDefinition<SerialNumber>> => {
   const classes = useStyles();
+  const statusOptions = React.useMemo(() => [
+    createOption(null, translate('form.builder.serials.no.status')),
+    createOption(SerialNumberStatus.ACCEPTED, translate('form.builder.serials.accepted')),
+    createOption(SerialNumberStatus.REJECTED, translate('form.builder.serials.rejected')),
+  ], []);
 
-  const statusOptions
-    = [
-      createOption(null, translate('form.builder.serials.no.status')),
-      createOption(SerialNumberStatus.ACCEPTED, translate('form.builder.serials.accepted')),
-      createOption(SerialNumberStatus.REJECTED, translate('form.builder.serials.rejected')),
+  const usageOptions = React.useMemo(() => [
+    createOption(null, translate('form.builder.serials.no.usage')),
+    createOption(SerialNumberUsage.RND, translate('form.builder.serials.usage.rnd')),
+    createOption(SerialNumberUsage.DO_NOT_USE, translate('form.builder.serials.usage.do.not.use')),
+  ], []);
+
+  const allOption = React.useMemo(() => createOption(undefined, translate('common.all')), []);
+
+  return React.useMemo(() => {
+    const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
+      <DropdownFilter
+        {...props}
+        data={statusOptions}
+        defaultItem={allOption}
+      />
+    );
+
+    const UsageFilter: React.FC<GridFilterCellProps> = (props) => (
+      <DropdownFilter
+        {...props}
+        data={usageOptions}
+        defaultItem={allOption}
+      />
+    );
+
+    return [
+      {
+        id: 'id',
+        field: 'isSelected',
+        title: 'Select',
+        width: 65,
+        resizable: false,
+        hidden: isTableDisabled || !canSelect,
+        filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
+        className: classes.checkbox,
+      },
+      {
+        id: 'index',
+        field: 'index',
+        title: 'form.builder.serials.item',
+        width: 55,
+        resizable: false,
+        filterCell: () => <span />,
+        template: ({ dataItem, dataIndex }) => {
+          const rowIndex = (dataItem as { index?: number }).index ?? (dataIndex ?? 0) + 1;
+          return <div>{rowIndex}</div>;
+        },
+      },
+      {
+        id: 'serialNumber',
+        field: 'serialNumber',
+        resizable: true,
+        filterCell: InputFilter,
+        template: (props) => (
+          <SerialNumberCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            shouldShowStepAndSequence={shouldShowStepAndSequence}
+          />
+        ),
+        title: 'form.builder.serials.serial.number',
+      },
+      {
+        id: 'status',
+        field: 'status',
+        title: 'form.builder.serials.status',
+        resizable: false,
+        width: 160,
+        filterCell: StatusFilter,
+        template: (props) => (
+          <StatusCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            options={statusOptions}
+            onChange={(id, status) => onUpdate?.(id, { status })}
+          />
+        ),
+      },
+      {
+        id: 'usage',
+        field: 'usage',
+        title: 'form.builder.serials.usage',
+        width: 150,
+        resizable: false,
+        filterCell: UsageFilter,
+        template: (props) => (
+          <UsageCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            options={usageOptions}
+            onChange={(id, usage) => onUpdate?.(id, { usage })}
+          />
+        ),
+      },
+      {
+        id: 'notes',
+        field: 'notes',
+        title: 'form.builder.serials.notes',
+        filterCell: InputFilter,
+        template: (props) => (
+          <NotesCell
+            {...props}
+            isTableDisabled={isTableDisabled}
+            onChange={(id, notes) => onUpdate?.(id, { notes })}
+          />
+        ),
+      },
+      {
+        id: 'actions',
+        field: 'actions',
+        title: 'common.actions',
+        width: 80,
+        filterable: false,
+        sortable: false,
+        resizable: false,
+        hidden: isTableDisabled || !onDelete,
+        template: (props) => (
+          <ActionsCell {...props} onDelete={onDelete} />
+        ),
+      },
     ];
-
-  const usageOptions
-    = [
-      createOption(null, translate('form.builder.serials.no.usage')),
-      createOption(SerialNumberUsage.RND, translate('form.builder.serials.usage.rnd')),
-      createOption(SerialNumberUsage.DO_NOT_USE, translate('form.builder.serials.usage.do.not.use')),
-    ];
-
-  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
-      {...props}
-      data={statusOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
-
-  const UsageFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
-      {...props}
-      data={usageOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
-
-  return [
-    {
-      id: 'id',
-      field: 'selected',
-      title: 'Select',
-      width: 65,
-      resizable: false,
-      hidden: !canSelect,
-      filterCell: (props) => <SelectFilter {...props} isChecked={isAllSelected} onCheck={onCheckAllToggle} />,
-      className: classes.checkbox,
-    },
-    {
-      id: 'index',
-      field: 'index',
-      title: 'form.builder.serials.item',
-      width: 55,
-      resizable: false,
-      filterable: false,
-      template: ({ dataIndex }) => <div>{(dataIndex ?? 0) + 1}</div>,
-    },
-    {
-      id: 'serialNumber',
-      field: 'serialNumber',
-      resizable: true,
-      filterCell: InputFilter,
-      template: (props) => <TextCell {...props} />,
-      title: 'form.builder.serials.serial.number',
-    },
-    {
-      id: 'status',
-      field: 'status',
-      title: 'form.builder.serials.status',
-      resizable: false,
-      width: 160,
-      filterCell: StatusFilter,
-      template: (props) => (
-        <StatusCell {...props} options={statusOptions} onChange={(id, status) => onUpdate?.(id, { status })} />
-      ),
-    },
-    {
-      id: 'usage',
-      field: 'usage',
-      title: 'form.builder.serials.usage',
-      width: 150,
-      resizable: false,
-      filterCell: UsageFilter,
-      template: (props) => (
-        <UsageCell {...props} options={usageOptions} onChange={(id, usage) => onUpdate?.(id, { usage })} />
-      ),
-    },
-    {
-      id: 'notes',
-      field: 'notes',
-      title: 'form.builder.serials.notes',
-      filterCell: InputFilter,
-      template: (props) => (
-        <NotesCell {...props} onChange={(id, notes) => onUpdate?.(id, { notes })} />
-      ),
-    },
-    {
-      id: 'actions',
-      field: 'actions',
-      title: 'common.actions',
-      width: 80,
-      filterable: false,
-      sortable: false,
-      resizable: false,
-      hidden: !onDelete,
-      template: (props) => (
-        <ActionsCell {...props} onDelete={onDelete} />
-      ),
-    },
-  ];
+  }, [
+    allOption,
+    canSelect,
+    classes.checkbox,
+    isAllSelected,
+    isTableDisabled,
+    onCheckAllToggle,
+    onDelete,
+    onUpdate,
+    statusOptions,
+    usageOptions,
+  ]);
 };

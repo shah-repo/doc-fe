@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
-
-const ROW_HEIGHT = 36;
+import { ROW_HEIGHT } from './const';
 
 export default makeStyles(theme => ({
   checkbox: {
@@ -27,17 +26,8 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(1),
     borderRight: `1px solid ${Colors.stroke}`,
   },
-  gridContainer: {
-    height: '50vh',
-    minHeight: 230,
-    width: '100%',
-    position: 'relative',
-  },
-  gridContainerEmpty: {
-    height: 'auto',
-    minHeight: 0,
-  },
   grid: {
+    maxHeight: '50vh',
     '& .k-column-title': {
       fontSize: 12,
       whiteSpace: 'normal',
@@ -67,6 +57,13 @@ export default makeStyles(theme => ({
     '& .k-grid-container': {
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
+    },
+  },
+  disabledRow: {
+    '& .k-checkbox': {
+      pointerEvents: 'none',
+      opacity: 0.5,
+      cursor: 'not-allowed',
     },
   },
   acceptIcon: {
@@ -102,5 +99,67 @@ export default makeStyles(theme => ({
   },
   rejected: {
     backgroundColor: Colors.error,
+  },
+}));
+
+export const useSerialNumberCellStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+  },
+  disabledValue: {
+    color: Colors.textDisabled,
+  },
+  disabledIcon: {
+    color: Colors.primaryLight,
+    marginLeft: theme.spacing(0.5),
+  },
+  tooltip: {
+    whiteSpace: 'pre-line',
+  },
+}));
+
+export const useNotesCellStyles = makeStyles(theme => ({
+  displayValue: {
+    width: '100%',
+    minHeight: theme.spacing(3),
+    cursor: 'text',
+  },
+  disabledDisplayValue: {
+    color: Colors.textDisabled,
+    cursor: 'default',
+  },
+  inputRoot: {
+    width: '100%',
+  },
+}));
+
+export const useStatusButtonStyles = makeStyles(theme => ({
+  root: {
+    borderRadius: theme.shape.borderRadius,
+    color: Colors.textBlack,
+    borderColor: Colors.stroke,
+    fontWeight: 400,
+    fontSize: 12,
+    padding: theme.spacing(0.5, 1, 0.5, 1.5),
+
+    '&:hover': {
+      borderColor: Colors.stroke,
+    },
+  },
+  selected: {
+    color: Colors.white,
+  },
+  rejected: {
+    backgroundColor: Colors.error,
+    borderColor: Colors.error,
+  },
+  accepted: {
+    backgroundColor: Colors.success,
+    borderColor: Colors.success,
+  },
+  icon: {
+    fontSize: '12px !important',
   },
 }));

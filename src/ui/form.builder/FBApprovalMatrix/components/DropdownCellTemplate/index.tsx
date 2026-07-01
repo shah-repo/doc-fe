@@ -20,7 +20,7 @@ const Styles = makeStyles(() => ({
 }));
 
 const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
-  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange, popupSettings } = props;
+  const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange, onClick, popupSettings } = props;
   const { editable } = column;
   const classes = Styles();
   const mode = dataItem[MODE_FIELD];
@@ -41,17 +41,27 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
     });
   };
 
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (!onClick) {
+      return;
+    }
+    event.stopPropagation();
+    onClick({ dataItem });
+  };
+
   if (!canBeModified) {
     const label = valueItem?.[TEXT_FIELD] ?? emptyLabel;
 
     return (
-      <OverflowTooltip
-        arrow
-        placement="top"
-        title={label}
-      >
-        {label}
-      </OverflowTooltip>);
+      <div onClick={handleClick}>
+        <OverflowTooltip
+          arrow
+          placement="top"
+          title={label}
+        >
+          {label}
+        </OverflowTooltip>
+      </div>);
   }
 
   return (

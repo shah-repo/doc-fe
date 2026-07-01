@@ -68,7 +68,7 @@ class FBPOReceiveFormState {
       renderHTML: undefined,
     } as unknown as DocumentRevisionFormValues);
 
-    poDocumentId && reqBody.referenceTo.push({ id: poDocumentId });
+    poDocumentId && reqBody.referenceTo?.push({ id: poDocumentId });
     reqBody.formDocument = {
       id: this.releasedLfpoAPI.data[0].id,
     };

@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, omit, unionBy } from 'lodash';
 import React, { useEffect, useRef } from 'react';
@@ -9,20 +10,19 @@ import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { userManagementSelectors } from '../../../../../state/ducks/userManagement';
+import { AlertDialog } from '../../../../components/dialogs';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
-import { EditableLHRBuildSwitch, LHRBuildTypeSwitchConfigApproval } from './types';
 import { useStyles } from './styles';
-import { Box } from '@material-ui/core';
-import { AlertDialog } from '../../../../components/dialogs';
-import useDialog from '../../../../hooks/useDialog';
+import { EditableLHRBuildSwitch, LHRBuildTypeSwitchConfigApproval } from './types';
 
 const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { values } = useFormikContext<GeneralSettings>();
@@ -66,9 +66,6 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       }
       if (isEmpty(values.to)) {
         error.to = 'validators.required';
-      }
-      if (isEmpty(values.approvalGroups)) {
-        error.approvalGroups = 'validators.required';
       }
       if (values.from && values.to && isDuplicate) {
         error.from = 'validator.lhr.build.same.rule.exist';
@@ -170,19 +167,19 @@ const LHRBuildSwitchSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       addButtonLabel={translate('common.add.rule')}
     >
       <Box className={classes.subTitle}>
-        <Text message={'administration.general.settings.lhrBuildType.sub.title'} />
+        <Text message="administration.general.settings.lhrBuildType.sub.title" />
       </Box>
       <FormikProvider value={formik}>
-          <SettingsTable
-            isActive={true}
-            data={LHRBuildSwitchList}
-            isEditing={editedLHRBuildSwitch !== undefined}
-            schema={schema}
-            addButtonLabel={translate('common.add.rule')}
-            onAdd={addLHRBuildSwitch}
-            getRowProperties={getRowAttributes}
-            scrollable="scrollable"
-          />
+        <SettingsTable
+          isActive={true}
+          data={LHRBuildSwitchList}
+          isEditing={editedLHRBuildSwitch !== undefined}
+          schema={schema}
+          addButtonLabel={translate('common.add.rule')}
+          onAdd={addLHRBuildSwitch}
+          getRowProperties={getRowAttributes}
+          scrollable="scrollable"
+        />
       </FormikProvider>
       <AlertDialog
         handler={deleteConfirmationDialog}

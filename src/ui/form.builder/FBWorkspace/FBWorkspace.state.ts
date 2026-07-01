@@ -1,6 +1,6 @@
 import { cloneDeep, has, includes, isArray, isEmpty, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBAutocompleteAsyncOption, FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { saveApprovalRequest, saveDocumentRevision } from '../../../App/Shifamed/Utils/API';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
@@ -39,7 +39,6 @@ class FBWorkspaceState extends FBSchemaState {
   @observable.shallow
   public lhrBuildTypeConfig: LHRBuild[] = [];
 
-  public loadBuildTypeOptionsApi = new FBAutocompleteAsyncState({ optionId: this.buildTypeOptionId });
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
 
@@ -53,11 +52,12 @@ class FBWorkspaceState extends FBSchemaState {
 
   @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
-  public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
+  public constructor ({ schema = [], mode = 'none', autosave = false, lhrBuildTypeConfig = [] }: FBWorkspaceConstructor) {
     super(schema);
-    this.schema = schema || [];
-    this.mode = mode || 'none';
+    this.schema = schema;
+    this.mode = mode;
     this.autosave = autosave;
+    this.lhrBuildTypeConfig = lhrBuildTypeConfig;
   }
 
   public get buildTypeOptionId (): string {
@@ -116,6 +116,10 @@ class FBWorkspaceState extends FBSchemaState {
     return !isEmpty(this.document?.formDocumentId);
   }
 
+  public get isLHRRnDBuild (): boolean {
+    return this.lhrBuildTypeConfigForSelectedBuildType?.internalType === FBLHRBuildOptions['R&D'];
+  }
+
   public get isLHRProductionBuild (): boolean {
     const allowedInternalTypes = [
       FBLHRBuildOptions.Production,
@@ -123,8 +127,8 @@ class FBWorkspaceState extends FBSchemaState {
       FBLHRBuildOptions['Verification & Validation'],
     ];
 
-    const activeBuildTypeIds = this.buildTypeOptions
-      .filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
+    const activeBuildTypeIds = this.lhrBuildTypeConfig
+      ?.filter((buildType) => allowedInternalTypes.includes(buildType.internalType as FBLHRBuildOptions))
       .map((buildType) => buildType.id);
 
     const effectiveBuildTypeIds = activeBuildTypeIds.length > 0 ? activeBuildTypeIds : allowedInternalTypes;
@@ -146,11 +150,11 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isLHRRelevantBuilds (): boolean {
-    if (this.buildTypeOptions.length === 0) {
+    const buildTypes = this.lhrBuildTypeConfig;
+    if (!buildTypes?.length) {
       return false;
     }
 
-    const buildTypes = this.buildTypeOptions;
     const selectedBuildTypeId
     = this.document?.smartReferencesTo
       ?.find(ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)

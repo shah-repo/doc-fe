@@ -1,10 +1,26 @@
-import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUsage } from '../FBSerials/types';
+import { SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload, SerialNumberUsage } from '../FBSerials/types';
 
 export interface FBMPIProcedureItemSerialsTableProps {
   name?: string
+  isDisabled?: boolean
+}
+
+export interface LHRSInfo {
   stepIndex?: number
-  isPreview?: boolean
-  disabled?: boolean
+  isSynced: boolean
+  rejectedCount: number
+  acceptedCount: number
+}
+
+export interface LHRSSequenceInfo {
+  step?: number
+  sequence?: number
+}
+
+export interface LHRSSerialNumbersParams {
+  name: string
+  shouldDisableInSubsequentSteps?: boolean
+  shouldShowOnlyAffectedSerialNumbers?: boolean
 }
 
 export interface LHRSSerialNumbers {
@@ -13,9 +29,14 @@ export interface LHRSSerialNumbers {
   shouldShowSerials: boolean
   stepSerialNumbers: SerialNumber[]
   allSerialNumbers: SerialNumber[]
+  lhrsInfo: LHRSInfo
+  lhrsSequenceInfo: LHRSSequenceInfo
   updateSerialNumber: (id: string, data: SerialNumberUpdateData) => Promise<void>
+  updateSerialNumbers: (payload: SerialNumberUpdatePayload[]) => Promise<void>
 }
 
 export interface LHRSStepSerialNumbersFormValue {
   serialsNumbers?: Record<string, { status: SerialNumberStatus, usage: SerialNumberUsage, notes: string }>
 }
+
+export type LHRSStepSerialNumbersFormValues = Record<string, LHRSStepSerialNumbersFormValue | unknown | undefined>;

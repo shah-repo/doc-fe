@@ -1,32 +1,51 @@
 import { RefObject, useEffect, useState } from 'react';
 import useElementSize from './useElementSize';
 
-type UseOverflowType<T> = [RefObject<T>, boolean, { x: boolean, y: boolean }];
+interface Overflow {
+  x: boolean
+  y: boolean
+}
+
+type UseOverflowType<T> = [RefObject<T>, boolean, Overflow];
 
 function useOverflow<T extends HTMLElement> (): UseOverflowType<T> {
   const [ref, { width, height }] = useElementSize<T>();
-  const [overflow, setOverflow] = useState({ x: false, y: false });
+  const [overflow, setOverflow] = useState<Overflow>({ x: false, y: false });
 
   useEffect(() => {
     const el = ref.current;
+    if (!el) return;
 
-    // Guard: element not ready or not measured yet
-    if (!el || width === 0 || height === 0) {
-      setOverflow({ x: false, y: false });
-      return;
-    }
+    let rafId: number;
 
-    // Add tolerance to avoid float precision issues
-    const tolerance = 1;
+    const check = () => {
+      rafId = requestAnimationFrame(() => {
+        const x = Math.ceil(el.scrollWidth) > Math.ceil(el.clientWidth);
+        const y = Math.ceil(el.scrollHeight) > Math.ceil(el.clientHeight);
 
-    const isOverflowingX = el.scrollWidth - width > tolerance;
-    const isOverflowingY = el.scrollHeight - height > tolerance;
+        setOverflow((prev) =>
+          prev.x === x && prev.y === y ? prev : { x, y },
+        );
+      });
+    };
 
-    setOverflow({
-      x: isOverflowingX,
-      y: isOverflowingY,
+    // initial + size change trigger
+    check();
+
+    // required for content updates
+    const mutationObserver = new MutationObserver(check);
+
+    mutationObserver.observe(el, {
+      childList: true,
+      subtree: true,
+      characterData: true,
     });
-  }, [width, height, ref]);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      mutationObserver.disconnect();
+    };
+  }, [ref, width, height]);
 
   return [ref, overflow.x || overflow.y, overflow];
 }

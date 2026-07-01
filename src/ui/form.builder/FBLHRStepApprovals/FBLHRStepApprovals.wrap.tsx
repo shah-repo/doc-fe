@@ -72,7 +72,7 @@ export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
     owners,
     ...props
   }: T) => {
-    const { workspaceState, formState } = FB.useStores();
+    const { workspaceState, formState, mpiProcedureState } = FB.useStores();
     const {
       document,
       id,
@@ -274,6 +274,18 @@ export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const procedureFields = useObserver<string[]>(() => {
+      if (!isOutput || !workspaceState?.schema) {
+        return [];
+      }
+      return workspaceState?.schema.reduce<string[]>((acc, item) => {
+        if (item.type === 'mpiprocedure' && item.name && !item.deleted) {
+          acc.push(item.name);
+        }
+        return acc;
+      }, []);
+    });
+
     React.useEffect(() => {
       const dispose = reaction(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -282,6 +294,8 @@ export function withFBLHRStepApprovals <T extends FBLHRStepApprovalsProps> (
           formState?.getInputState(LHRS_REJECTED_QUANTITY)?.value,
           formState?.getInputState(LHRS_START_QUANTITY)?.value,
           formState?.getInputState(MPI_PROCEDURE_BUILT_IN_ATTACHMENTS)?.value,
+          mpiProcedureState?.partsSelected?.map(part => ({ ...part })),
+          procedureFields.map(field => formState?.newValues.get(field)?.serialNumbers),
         ],
         () => {
           if (!isOperator && !isOwner) {

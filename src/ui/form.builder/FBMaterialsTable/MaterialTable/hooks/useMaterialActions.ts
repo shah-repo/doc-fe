@@ -86,7 +86,7 @@ export function useMaterialActions (state, setState, formik, flags, externalHand
       unit: '',
       quantity: undefined,
       isLotAddition: false,
-      ...(isMPIProcedure && { LHRTparameter: true }),
+      ...(isMPIProcedure && { LHRTparameter: false }),
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };

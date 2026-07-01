@@ -71,6 +71,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (dialog.isOpen) {
       saveFileName('');
+      saveLimit(DEFAULT_RECORD_DOWNLOAD_LIMIT);
     }
   }, [dialog.isOpen]);
 
@@ -138,7 +139,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   const downloadCSVFile = () => {
     if (isMultiplePagesDownloadAllowed) {
-      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit) } }, async);
+      async.start(loadAction, { ...(tableSearchQueryPayload ?? {}), ...{ limit: Number(limit), offset: 0 } }, async);
     } else {
       csvExporter.generateCsv(data);
       dialog.close();

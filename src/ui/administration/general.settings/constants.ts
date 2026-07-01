@@ -1,6 +1,7 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
 import ApprovalRolesSettingsPanel from './panels/ApprovalRoles';
 import CompanyLocationSettingsPanel from './panels/CompanyLocations';
+import CreationRestrictions from './panels/CreationRestrictions';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
@@ -101,6 +102,11 @@ export const panels = [
     key: GeneralSettingsTabs.EF,
     title: 'administration.general.settings.equipmentFamily.tab',
     component: EquipmentFamilySettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.CreationPermissions,
+    title: 'administration.general.settings.creation.permissions',
+    component: CreationRestrictions,
   },
   {
     key: GeneralSettingsTabs.ApprovalRoles,

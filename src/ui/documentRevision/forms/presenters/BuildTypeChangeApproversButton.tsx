@@ -52,12 +52,8 @@ const BuildTypeChangeApproversButton: React.FunctionComponent<Props> = ({ render
 
   const handleConfirm = () => {
     const validationError = validateRef.current?.();
-    if (validationError) {
-      if (validationError.type === 'no_approvers') {
-        toastError(translate('form.builder.approvals.not.present'));
-      } else {
-        toastError(translate('form.builder.approvals.group.required', { groupNames: validationError.groupNames.join(', ') }));
-      }
+    if (validationError?.type === 'group_required') {
+      toastError(translate('form.builder.approvals.group.required', { groupNames: validationError.groupNames.join(', ') }));
       return;
     }
     submitRef.current?.();
@@ -108,7 +104,7 @@ const BuildTypeChangeApproversButton: React.FunctionComponent<Props> = ({ render
         </Box>
         <FBBuildTypeChangeApproval
           name="buildTypeApprovals"
-          label="form.builder.approvers"
+          label="form.builder.build.type.switch.approval.header.msg"
           documentStatus={DocumentStatus.Draft}
           prevValue={prevValueProp}
           selectedValue={selectedValueProp}

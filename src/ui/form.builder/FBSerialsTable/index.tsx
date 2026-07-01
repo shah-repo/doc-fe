@@ -1,35 +1,27 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
-import { getSelectedState, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
+import { process, State } from '@progress/kendo-data-query';
+import { getSelectedState, GridDataStateChangeEvent, GridPageChangeEvent, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { isNull, keys } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { translate } from '../../../common/intl';
-import { Button, IconButton } from '../../components/forms/fields-next';
+import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import useHover from '../../hooks/useHover';
-import { EditableSerialNumber, SerialNumber, SerialNumberStatus, SerialNumberUpdateData, SerialNumberUpdatePayload } from '../FBSerials/types';
-import StatusButton, { StatusButtonType } from './components/StatusButton';
-import { DATA_ITEM_KEY, SELECTED_FIELD } from './const';
+import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { EditableSerialNumber, SerialNumberStatus } from '../FBSerials/types';
+import SerialsToolbar from './components/SerialsToolbar';
+import { DATA_ITEM_KEY, DEFAULT_DATA_STATE, PAGE_SIZE, PANELS_HEIGHT, ROW_HEIGHT, SELECTED_FIELD, SERIAL_NUMBER_FIELD } from './const';
+import { compareSerialNumbers, getSerialNumberSort, getSharedSerialNumberPart, getStateWithoutSerialNumberSort } from './helpers';
 import { useSchema } from './schema';
 import useStyles from './styles';
-
-interface FBSerialsTableProps {
-  serialNumbers: SerialNumber[]
-  isPartSerializationManual?: boolean
-  isLoading?: boolean
-  onAdd?: () => void
-  onUpdate?: (id: string, data: SerialNumberUpdateData) => Promise<void>
-  onDelete?: (id: string) => Promise<void>
-  onBulkUpdate?: (payload: SerialNumberUpdatePayload[]) => Promise<void>
-  onBulkDelete?: (ids: string[]) => Promise<void>
-}
+import { FBSerialsTableProps, SerialNumberSortDescriptor } from './types';
 
 const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   serialNumbers,
+  shouldShowStepAndSequence = false,
   isLoading,
+  isDisabled: isTableDisabled = false,
+  toolbarRef,
   onAdd,
   onUpdate,
   onDelete,
@@ -37,43 +29,63 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
   onBulkDelete,
 }) => {
   const classes = useStyles();
+  const [skippedItemsCount, setSkippedItemsCount] = React.useState<number>(0);
   const [selectedSerials, setSelectedSerials] = useState<{ [id: string]: boolean | number[] }>({});
-  const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
+  const [dataState, setDataState] = useState<State>(DEFAULT_DATA_STATE);
+  const sharedSerialNumberPart = useMemo(() => getSharedSerialNumberPart(serialNumbers), [serialNumbers]);
 
-  const selectedIds = useMemo(() => keys(selectedSerials), [selectedSerials]);
-  const hasSelection = selectedIds.length > 0;
-  const isAllSelected = hasSelection && selectedIds.length === serialNumbers.length;
+  const canInteract = !isTableDisabled;
+  const canSelect = canInteract && Boolean(onBulkUpdate ?? onBulkDelete);
 
-  const acceptSelected = async () => {
-    await onBulkUpdate?.(selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED })));
+  const selectableSerialNumbers = useMemo(
+    () => serialNumbers.filter(sn => !sn.isDisabled),
+    [serialNumbers],
+  );
+
+  const selectedIds = useMemo(() => keys(selectedSerials).filter(sn => selectedSerials[sn]), [selectedSerials]);
+  const hasSelection = canSelect && selectedIds.length > 0;
+  const isAllSelected = hasSelection
+    && selectableSerialNumbers.length > 0
+    && selectedIds.length === selectableSerialNumbers.length;
+
+  const shouldShowAddButton = canInteract && Boolean(onAdd);
+  const shouldShowBulkActions = canSelect && hasSelection && Boolean(onBulkUpdate ?? onBulkDelete);
+
+  const acceptSelected = useCallback(async () => {
+    const payload = selectedIds.map(id => ({ id, status: SerialNumberStatus.ACCEPTED }));
+    await onBulkUpdate?.(payload);
     setSelectedSerials({});
-  };
+  }, [onBulkUpdate, selectedIds]);
 
-  const rejectSelected = async () => {
+  const rejectSelected = useCallback(async () => {
     await onBulkUpdate?.(selectedIds.map(id => ({ id, status: SerialNumberStatus.REJECTED })));
     setSelectedSerials({});
-  };
+  }, [onBulkUpdate, selectedIds]);
 
-  const deleteSelected = async () => {
+  const deleteSelected = useCallback(async () => {
     await onBulkDelete?.(selectedIds);
     setSelectedSerials({});
-  };
+  }, [onBulkDelete, selectedIds]);
 
-  const toggleAllSelection = (event: CheckboxChangeEvent) => {
+  const toggleAllSelection = useCallback((event: CheckboxChangeEvent) => {
     if (event.target.value) {
-      setSelectedSerials(serialNumbers.reduce((acc, sn) => ({ ...acc, [sn.id]: true }), {}));
+      setSelectedSerials(selectableSerialNumbers.reduce((acc, sn) => ({ ...acc, [sn.id]: true }), {}));
     } else {
       setSelectedSerials({});
     }
-  };
+  }, [selectableSerialNumbers]);
 
-  const clearSelection = () => {
-    setSelectedSerials({});
-  };
+  const clearSelection = useCallback(() => setSelectedSerials({}), []);
 
-  const toggleSelection = (event: GridSelectionChangeEvent) => {
-    const { dataItem } = event;
-    if (isNull(dataItem)) {
+  useEffect(() => {
+    if (isTableDisabled && selectedIds.length > 0) {
+      clearSelection();
+    }
+  }, [clearSelection, isTableDisabled, selectedIds.length]);
+
+  const toggleSelection = useCallback((event: GridSelectionChangeEvent) => {
+    const dataItem = event.dataItem as EditableSerialNumber | null;
+    if (isNull(dataItem) || dataItem.isDisabled) {
       return;
     }
     const newSelectedState = getSelectedState({
@@ -82,97 +94,139 @@ const FBSerialsTable: React.FC<FBSerialsTableProps> = ({
       dataItemKey: DATA_ITEM_KEY,
     });
     setSelectedSerials(newSelectedState);
-  };
+  }, [selectedSerials]);
+
+  const updateDataState = useCallback((event: GridDataStateChangeEvent): State => {
+    const updatedState: State = {
+      ...event.dataState,
+      sort: event.dataState.sort?.map((sort): SerialNumberSortDescriptor => {
+        if (sort.field === SERIAL_NUMBER_FIELD) {
+          return {
+            ...sort,
+            compare: (first, second) => compareSerialNumbers(
+              first.serialNumber,
+              second.serialNumber,
+              sharedSerialNumberPart,
+              sort.dir,
+            ),
+          };
+        }
+
+        return sort;
+      }),
+    };
+
+    setDataState(updatedState);
+    return updatedState;
+  }, [sharedSerialNumberPart, setDataState]);
 
   const schema = useSchema({
-    canSelect: Boolean(onBulkUpdate ?? onBulkDelete),
+    canSelect,
     isAllSelected,
+    isTableDisabled,
+    shouldShowStepAndSequence,
     onCheckAllToggle: toggleAllSelection,
     onUpdate,
     onDelete,
   });
 
-  const data: EditableSerialNumber[] = serialNumbers.map(sn => ({
-    ...sn,
-    [SELECTED_FIELD]: selectedSerials[sn.id],
-  }));
+  const processedData = useMemo(() => {
+    const serialNumbersWithSelected = serialNumbers.map(sn => ({
+      ...sn,
+      [SELECTED_FIELD]: canSelect && !sn.isDisabled ? selectedSerials[sn.id] : false,
+    }));
+    const processed = process(serialNumbersWithSelected, getStateWithoutSerialNumberSort(dataState)).data as EditableSerialNumber[];
+    const serialNumberSort = getSerialNumberSort(dataState);
 
-  const hasData = data.length > 0;
+    if (!serialNumberSort?.dir) {
+      return processed;
+    }
 
-  const shouldShowBulkActions = hasSelection && (onBulkUpdate ?? onBulkDelete);
+    return [...processed].sort((first, second) => compareSerialNumbers(
+      first.serialNumber,
+      second.serialNumber,
+      sharedSerialNumberPart,
+      serialNumberSort.dir,
+    ));
+  }, [dataState, sharedSerialNumberPart, canSelect, selectedSerials, serialNumbers]);
+
+  const visibleData = useMemo(
+    () => processedData.slice(skippedItemsCount, skippedItemsCount + PAGE_SIZE),
+    [processedData, skippedItemsCount],
+  );
+
+  useEffect(() => {
+    if (skippedItemsCount >= processedData.length && skippedItemsCount > 0) {
+      setSkippedItemsCount(Math.max(processedData.length - PAGE_SIZE, 0));
+    }
+  }, [processedData.length, skippedItemsCount]);
+
+  const height = useMemo(() => {
+    const minRows = Math.max(serialNumbers.length, 1);
+    const maxRows = Math.min(minRows, PAGE_SIZE);
+    return maxRows * ROW_HEIGHT + PANELS_HEIGHT;
+  }, [serialNumbers.length]);
+
+  const rowRender: DataGridProps<EditableSerialNumber>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableSerialNumber;
+    if (!item.isDisabled) {
+      return row;
+    }
+
+    return React.cloneElement(row, {
+      className: cx(row.props.className, classes.disabledRow),
+    });
+  };
+
+  const onPageChange = useCallback((event: GridPageChangeEvent) => {
+    setSkippedItemsCount(event.page.skip);
+  }, []);
 
   return (
     <>
-      <div className={classes.toolbar}>
-        {shouldShowBulkActions && (
-          <>
-            <div className={classes.selectionContainer}>
-              <Tooltip title={translate('form.builder.serials.clear.selection')}>
-                <IconButton onClick={clearSelection} size="small" kind="action">
-                  <FontAwesomeIcon icon={solid('xmark')} />
-                </IconButton>
-              </Tooltip>
-              <span>
-                <span className={classes.selectedCount}>{selectedIds.length}</span>
-                    &nbsp;
-                {translate('form.builder.serials.items.selected')}
-              </span>
-            </div>
-            {onBulkUpdate && (
-              <>
-                <StatusButton
-                  type={StatusButtonType.ACCEPT}
-                  onClick={acceptSelected}
-                />
-                <StatusButton
-                  type={StatusButtonType.REJECT}
-                  onClick={rejectSelected}
-                />
-              </>
-            )}
-            {onBulkDelete && (
-              <Tooltip title={translate('form.builder.serials.delete.selected')}>
-                <IconButton
-                  kind="destructive"
-                  ref={deleteRef}
-                  onClick={deleteSelected}
-                  data-cy="action-delete"
-                >
-                  <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} size="lg" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
+      <SerialsToolbar
+        toolbarRef={toolbarRef}
+        selectedCount={selectedIds.length}
+        shouldShowBulkActions={shouldShowBulkActions}
+        onClearSelection={clearSelection}
+        onAcceptSelected={acceptSelected}
+        onRejectSelected={rejectSelected}
+        onDeleteSelected={onBulkDelete ? deleteSelected : undefined}
+      />
+      <KendoDataGrid<EditableSerialNumber>
+        {...dataState}
+        data={visibleData}
+        schema={schema}
+        filterable
+        sortable
+        resizable
+        hasBoxScrollbars
+        scrollable="virtual"
+        selectedField={SELECTED_FIELD}
+        dataItemKey={DATA_ITEM_KEY}
+        skip={skippedItemsCount}
+        total={processedData.length}
+        onPageChange={onPageChange}
+        rowHeight={ROW_HEIGHT}
+        pageSize={PAGE_SIZE}
+        skipDataProcessing
+        loading={isLoading}
+        className={cx(
+          classes.grid,
+          { [classes.gridWithButton]: shouldShowAddButton },
         )}
-      </div>
-
-      <div className={cx(classes.gridContainer, { [classes.gridContainerEmpty]: !hasData })}>
-        <KendoDataGrid<EditableSerialNumber>
-          data={data}
-          schema={schema}
-          fullHeight={hasData}
-          fullWidth
-          filterable
-          sortable
-          resizable
-          hasBoxScrollbars
-          selectedField={SELECTED_FIELD}
-          dataItemKey={DATA_ITEM_KEY}
-          loading={isLoading}
-          className={cx(
-            classes.grid,
-            { [classes.gridWithButton]: onAdd },
-          )}
-          selectable={{
-            enabled: true,
-            drag: false,
-            cell: true,
-            mode: 'multiple',
-          }}
-          onSelectionChange={toggleSelection}
-        />
-      </div>
-      {onAdd && (
+        style={{ height, maxHeight: '50vh' }}
+        selectable={{
+          enabled: canSelect,
+          drag: false,
+          cell: false,
+          mode: 'multiple',
+        }}
+        onDataStateChange={updateDataState}
+        onSelectionChange={toggleSelection}
+        rowRender={rowRender}
+      />
+      {shouldShowAddButton && (
         <Button
           attached
           fullWidth

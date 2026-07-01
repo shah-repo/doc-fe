@@ -1,6 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme) =>
   createStyles({
     supplierGrid: {
       '& .k-grid-header': {
@@ -38,6 +39,10 @@ export const useStyles = makeStyles(() =>
     },
     tooltipContent: {
       whiteSpace: 'pre-line',
+    },
+    headerButton: {
+      marginRight: theme.spacing(0.675),
+      color: Colors.primary,
     },
   }),
 );
