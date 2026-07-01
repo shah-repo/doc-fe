@@ -93,7 +93,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
         cellARHeaderClassName: classes.cellARHeader,
         popupContainer: popupContainerRef,
       }),
-    [approvalMatrix, approvalRoles, withoutStatus, classes.clearRightBorder, classes.cellAR, classes.cellARHeader],
+    [approvalMatrix, approvalRoles, numOfRevStages, withoutStatus, classes.clearRightBorder, classes.cellAR, classes.cellARHeader],
   );
 
   const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = useCallback(() => ({
