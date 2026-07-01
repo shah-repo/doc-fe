@@ -4,6 +4,8 @@ import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevis
 import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import { Translation } from '../../../../translations/types';
 
+const RELATED_PARTS_REGEX = /^[a-z0-9]+$/i;
+
 class RelatedPartsState {
   constructor () {
     this.setViewOnlyMode(true);
@@ -64,6 +66,8 @@ class RelatedPartsState {
       this.docIdErrorMsg = 'relatedParts.docId.required.msg';
     } else if (userEnteredDocIdPortion.length === 1) {
       this.docIdErrorMsg = 'relatedParts.docId.length.msg';
+    } else if (!RELATED_PARTS_REGEX.test(userEnteredDocIdPortion)) {
+      this.docIdErrorMsg = 'relatedParts.docId.incorrect.format.msg';
     } else {
       const filteredList = this.relatedPartsList.filter(
         (listItem: RelatedPartsListItem) =>

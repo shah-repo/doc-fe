@@ -2307,6 +2307,7 @@
   "relatedParts.docId.length.msg": "DocId must contain at least 2 characters",
   "relatedParts.docId.onlyNumbers.msg": "DocId must be a number",
   "relatedParts.docId.exists.msg": "Duplicate Entry",
+  "relatedParts.docId.incorrect.format.msg": "Only letters and numbers are allowed.",
   "relatedParts.created.modal.success.msg": "Related {relatedType} created successfully",
   "relatedParts.created.modal.view": "View",
   "relatedParts.created.modal.quick.view": "Quick View",
