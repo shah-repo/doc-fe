@@ -1,6 +1,6 @@
-import { get, isEmpty, maxBy, pick } from 'lodash';
+import { get, isArray, isEmpty, maxBy, pick } from 'lodash';
 import { DOC_TYPE_GROUP, DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SecurityListRequest, SmartReference } from '../../../state/ducks/documentRevisions/types';
 import FBDRStore from '../../form.builder/stores/ui/FBDRStore';
 import { DEFAULT_INITIAL_VALUES } from '../DocumentRevisionCreate.container';
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from '../helpers/checkDocumentGroup';
@@ -149,6 +149,23 @@ export const toDocumentRevisionEditRequestBody = (
   return data;
 };
 
+export const stripAllWhitespace = (value?: string): string =>
+  value?.replace(/\s+/g, '') ?? '';
+
+const buildSecurityList = (values: DocumentRevisionFormValues) => {
+  const securityList: Partial<SecurityListRequest> = {};
+  if (isArray(values.securityGroups)) {
+    securityList.securityGroups = values.securityGroups.map((group) => ({ id: group.value }));
+  }
+  if (isArray(values.securityEmployees)) {
+    securityList.securityEmployees = values.securityEmployees.map((employee) => ({ id: employee.value }));
+  }
+  if (isArray(values.operators)) {
+    securityList.operators = values.operators.map((operator) => ({ id: operator.value }));
+  }
+  return securityList;
+};
+
 export const toNewVersionRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
@@ -167,12 +184,8 @@ export const toNewVersionRequestBody = (
       newValues.document = {
         ...newValues.document,
         id: get(values, 'document.id'),
-        docId: get(values, 'document.docId')?.trim(),
-        securityList: {
-          securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
-          securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
-          operators: (values.operators || []).map((operator) => ({ id: operator.value })),
-        },
+        docId: stripAllWhitespace(get(values, 'document.docId')),
+        securityList: buildSecurityList(values),
       };
       newValues.document.documentType = { id: get(values, 'document.documentType.id') };
       const equipmentId = get(values, 'parentEquipment.id');

@@ -64,7 +64,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     if (change.fbSchemaItem?.name === 'documentRevisions') {
       let fieldName = change.field.replace(/\[(.+?)\]/g, '');
-      if(change.type === 'ARRAY_DELETED') {
+      if (change.type === 'ARRAY_DELETED') {
         fieldName = fieldName.replace(/\.\d+\./, '.');
       }
       return `changeRequest.audit.${fieldName}.${change.type}`;
@@ -139,6 +139,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return null;
         }
 
+        if (change.field.includes('approvals.comment') && change.type !== 'STRING_EDITED') {
+          return;
+        }
+
         singleFields.push(
           <Box
             mb={1}
@@ -176,7 +180,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   };
 
   const getAttachmentMessage = (change: Audit) => {
-    if(change.field.startsWith('formInput.attachments') && change.fbSchemaItem?.type === 'fileupload') {
+    if (change.field.startsWith('formInput.attachments') && change.fbSchemaItem?.type === 'fileupload') {
       return `changeRequest.audit.formInput.attachments.${change.type}`;
     }
     return `changeRequest.audit.${change.field}.${change.type}`;

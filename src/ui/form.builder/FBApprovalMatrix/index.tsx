@@ -2,11 +2,13 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
+import { companySelectors } from '../../../state/ducks/company';
 import { AsyncStatus } from '../../../state/types';
 import Loader from '../../components/common/kendo/Loader';
 import { Dialog } from '../../components/dialogs';
@@ -67,6 +69,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const popupContainerRef = React.useRef<HTMLDivElement>(null);
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
+  const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
   const classes = useStyles();
   const dialog = useDialog();
 
@@ -74,23 +77,26 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const isNewVersion: boolean = location.pathname.includes('new-version');
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
-
+  const { restrictions, isRestrictionsLoading } = useDamNumberingStyleRestrictions();
   const isLoading = useObserver(
-    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
+    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading || isRestrictionsLoading,
   );
 
-  const { restrictions } = useDamNumberingStyleRestrictions();
+  const schema = useMemo(
+    () =>
+      createSchema({
+        data,
+        numOfRevStages,
+        withoutStatus,
+        clearRightBorderClassName: classes.clearRightBorder,
+        cellARClassName: classes.cellAR,
+        cellARHeaderClassName: classes.cellARHeader,
+        popupContainer: popupContainerRef,
+      }),
+    [approvalMatrix, approvalRoles, withoutStatus, classes.clearRightBorder, classes.cellAR, classes.cellARHeader],
+  );
 
-  const schema = createSchema({
-    data,
-    withoutStatus,
-    clearRightBorderClassName: classes.clearRightBorder,
-    cellARClassName: classes.cellAR,
-    cellARHeaderClassName: classes.cellARHeader,
-    popupContainer: popupContainerRef,
-  });
-
-  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = () => ({
+  const generateNewItem: GridProps<FBApprovalMatrixItem>['generateNewItem'] = useCallback(() => ({
     id: generateUuid(),
     docType: {
       name: '',
@@ -108,7 +114,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-  });
+  }), [approvalRoles.length]);
 
   return (
     <Box

@@ -1,12 +1,10 @@
-import { assign, first, keys, map, reduce, get } from 'lodash';
+import { assign, first, get, keys, map, reduce } from 'lodash';
 import React, { useEffect } from 'react';
 import { FB } from '..';
 import { SM, SMStore, SMUrl } from '../../../App';
 import { FBLockBody, FBLockProps } from './FBLock.types';
 
-export const withFBLock = <T extends FBLockProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+export const withFBLock = <T extends FBLockProps>(Component: React.FC<T>): React.FC<T> => {
   const Comp = ({
     ...props
   }: T) => {
@@ -14,11 +12,15 @@ export const withFBLock = <T extends FBLockProps>(
     const { workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
     const lockedFieldsUrl: string = SMStore.templateUrl(SMUrl.lockedFields, { id });
+    const processingLocksUrl: string = SMStore.templateUrl(SMUrl.processingLocks, { id });
 
     useEffect(() => {
       if (!id) { return; }
       SMStore.get<FBLockBody, null>({
         url: lockedFieldsUrl,
+      });
+      SMStore.get<string[], null>({
+        url: processingLocksUrl,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -28,6 +30,15 @@ export const withFBLock = <T extends FBLockProps>(
       () => SMStore.data.get(lockedFieldsUrl),
       (data: FBLockBody[]) => setLockedData(data),
     );
+
+    SM.reaction(
+      () => SMStore.data.get(processingLocksUrl),
+      (data: string[]) => setProcessingLocks(data),
+    );
+
+    function setProcessingLocks (fields: string[]) {
+      formState?.lockFields(fields);
+    }
 
     // MARK: @helpers
     function setLockedData (data: FBLockBody[]) {

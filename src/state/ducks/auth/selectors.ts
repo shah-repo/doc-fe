@@ -22,6 +22,9 @@ const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 const getExpirationOfCredentials = (state: ApplicationState): string =>
   state.auth.user.iotCredentials.credentials.Expiration;
 
+const getAccessToken = (state: ApplicationState): string =>
+  state.auth.user.accessToken;
+
 const getCredentials = (state: ApplicationState): IotCredentials =>
   state.auth.user.iotCredentials;
 
@@ -144,4 +147,5 @@ export default {
   getIsScheduledForDeletion,
   getAvatarInitialColor,
   getUserCompanyTimezone,
+  getAccessToken,
 };

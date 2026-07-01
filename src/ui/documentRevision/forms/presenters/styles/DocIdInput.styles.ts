@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   input: {
@@ -21,13 +22,16 @@ export default makeStyles((theme) => ({
   outlinedInput: {
     padding: '10px !important',
     paddingLeft: '0px !important',
-    fontSize: 14,
+    fontSize: '1rem !important',
+    fontWeight: 400,
+    color: Colors.black,
     paddingRight: '0px !important',
     overflow: 'hidden !important',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
   },
   adornmentStart: {
+    fontSize: 14,
     marginRight: '0px !important',
   },
 }));

@@ -1,3 +1,4 @@
+import { TransitionIdent } from '../../../ui/components/transitionDialog/types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
@@ -98,23 +99,27 @@ const applyTransition = (
   body: ChangeRequestTransitionRequestBody,
   transition: ChangeRequestTransition,
   handlers: Handlers<ChangeRequestTransitionResponse>,
-): ApiAction<ChangeRequestTransitionResponse, ChangeRequestTransitionRequestBody> => apiActionWithCallbacks({
-  url: `${CHANGE_REQUEST_ROOT_URL}/${id}/${transition}`,
-  method: 'post',
-  data: body,
-  password: body.password,
-  onSuccess: (d, dispatch) => {
-    if ('canBeReleased' in d) {
-      dispatch(setDependentOnDocRevs(d));
-      return;
-    }
-    dispatch(load(id));
-    if (transition === 'reject' || transition === 'approve') {
-      dispatch(dashboardActions.loadPendingActionsList());
-    }
-  },
-  handlers,
-});
+): ApiAction<ChangeRequestTransitionResponse, ChangeRequestTransitionRequestBody> => {
+  const payload = 'password' in body ? (({ password, ...rest }) => rest)(body) : body;
+  return apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL}/${id}/${transition}`,
+    method: 'post',
+    data: payload,
+    password: body.password,
+    onSuccess: (d, dispatch) => {
+      if ('canBeReleased' in d) {
+        dispatch(setDependentOnDocRevs(d));
+        return;
+      }
+      dispatch(load(id));
+
+      if ([TransitionIdent.REJECT, TransitionIdent.APPROVE].includes(transition as TransitionIdent)) {
+        dispatch(dashboardActions.loadPendingActionsList());
+      }
+    },
+    handlers,
+  });
+};
 
 const applyTransitionWithIgnoreWarning = (
   id: string,

@@ -49,6 +49,7 @@ export type FBInputType =
   | 'checkpoint'
   | 'approval'
   | 'inlineapproval'
+  | 'buildTypeChangeApproval'
   | 'createlabel'
   | 'quantity'
   | 'timer'
@@ -109,6 +110,7 @@ export type FBInputType =
   | 'shippingAddress'
   | 'salesOrderNumber'
   | 'lhrBuildTypeSelection'
+  | 'lotSerialNumbers'
   ;
 
 export type FBInputProps =
@@ -141,6 +143,7 @@ export type FBInputProps =
     inputState?: FBInputState
     editorProperties?: FBEditorPropertiesType[]
     includeContext?: boolean
+    shouldWrapWithFormControl?: boolean
     rules?: any
     validationMode?: FBEditorValidationMode
     includeSelectedSchema?: boolean

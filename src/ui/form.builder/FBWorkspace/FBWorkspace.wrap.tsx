@@ -2,9 +2,10 @@ import { differenceBy, filter, isEmpty, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceState } from '..';
 import { SM } from '../../../App';
+import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { store } from '../../../state/store';
 import { checkIsDocumentEquipment, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -22,8 +23,8 @@ console.error = (message, ...args) => {
 };
 
 export const withFBWorkspace = <T extends FBWorkspaceProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     workspaceState,
     dialogState,
@@ -40,6 +41,15 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
+    const lhrBuildTypeConfig = useSelector(companySelectors.getLHRBuildTypeConfig) ?? [];
+
+    workspaceState = workspaceState ?? FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+      schema,
+      mode,
+      autosave,
+      lhrBuildTypeConfig,
+    });
+
     const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
     const isStarterRequired = () => {
       const isEquipmentDoc = checkIsDocumentEquipment(groupOptions);
@@ -48,20 +58,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         && !(isEquipmentDoc && _tabsState?.isTabActive('overview'));
     };
     autosave = _formState?.autosave ?? false;
-
-    if (isEmpty(workspaceState)) {
-      workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
-        schema,
-        mode,
-        autosave,
-      });
-    }
-
-    useEffect(
-      () => reaction(
-        () => workspaceState?.loadBuildTypeOptionsApi.data,
-        (buildTypeOptions) => workspaceState?.setBuildTypeOptions(buildTypeOptions),
-      ), []);
 
     useObserver(() => {
       if (!isEmpty(workspaceState?.schema) && isEmpty(workspaceState?.document?.schema)) {
@@ -115,6 +111,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
     workspaceState && (workspaceState.formInput = formInput);

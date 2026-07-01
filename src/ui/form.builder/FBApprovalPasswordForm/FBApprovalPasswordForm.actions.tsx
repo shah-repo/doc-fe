@@ -6,6 +6,7 @@ import { FBApprovalPasswordFormProps } from './FBApprovalPasswordForm.types';
 
 const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   onDialogApprove,
+  onDialogReject,
   onDialogClose,
 }) => (
   <Box display="flex" justifyContent="center">
@@ -14,11 +15,16 @@ const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordF
       onClick={onDialogClose}
       label="common.cancel"
     />
-    <FBSubmitButton
+    {onDialogApprove && <FBSubmitButton
       variant="contained"
       label="common.confirm"
       onClick={onDialogApprove}
-    />
+    />}
+    {onDialogReject && <FBSubmitButton
+      variant="contained"
+      label="common.reject"
+      onClick={onDialogReject}
+    />}
   </Box>
 );
 

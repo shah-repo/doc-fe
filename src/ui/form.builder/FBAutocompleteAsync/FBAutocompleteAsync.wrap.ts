@@ -4,14 +4,15 @@ import { get, isArray, isEmpty, isObject, isString, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncSchemaItem, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
+import { buildAutocompleteConfig } from './FBAutocompleteAsync.utils';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     getOptionLabel,
     refresh,
@@ -30,6 +31,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     optionId,
     options,
     loading,
+    docTypeIds,
+    documentStatuses,
+    changeRequestStatuses,
     multiple,
     name,
     withoutPrefixRoot,
@@ -42,19 +46,34 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       freeSolo = true;
     }
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
+
+    documentStatuses = useObserver(() => {
+      const schemaItem = workspaceState?.getSchemaItem(name) as FBAutocompleteAsyncSchemaItem | undefined;
+      return schemaItem?.documentStatuses ?? documentStatuses;
+    });
+
+    changeRequestStatuses = useObserver(() => {
+      const schemaItem = workspaceState?.getSchemaItem(name) as FBAutocompleteAsyncSchemaItem | undefined;
+      return schemaItem?.changeRequestStatuses ?? changeRequestStatuses;
+    });
+
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
+      docTypeIds,
+      documentStatuses,
+      changeRequestStatuses,
       includePrevReleaseDoc: isWO && isWOPart,
     });
+
     const {
       valueKey: optionValueKey = 'value',
       labelKey: optionLabelKey = 'text',
-    } = autocompleteAsyncState?.optionConfig || {
+    } = autocompleteAsyncState?.optionConfig ?? {
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
     };
@@ -89,6 +108,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       loading = Boolean(
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
+        || FBAutocompleteAsyncStore.loading.get(autocompleteAsyncState?.optionsKey || optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
         || autocompleteAsyncState?.loading,
       );
@@ -118,18 +138,19 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     }, [shouldReloadOnInit, optionId, fetchOptions]);
 
     useEffect(() => {
+      const optionsKey = autocompleteAsyncState?.optionsKey || optionId;
       const values = isArray(defaultValue) ? defaultValue : [defaultValue];
       values.forEach((optionValue) => {
-        const existingOption = loadedOptions.getValue(optionId, optionValue);
+        const existingOption = loadedOptions.getValue(optionsKey, optionValue);
         if (existingOption) {
-          FBAutocompleteAsyncStore.add(String(optionId), optionValue, existingOption);
+          FBAutocompleteAsyncStore.add(String(optionsKey), optionValue, existingOption);
           return;
         }
         if (FB.isUUID(optionValue) && !loading) {
           fetchSingleOption(optionValue, optionId);
         }
       });
-    }, [optionId, defaultValue, loading, fetchSingleOption, loadedOptions]);
+    }, [optionId, defaultValue, loading, fetchSingleOption, loadedOptions, autocompleteAsyncState]);
 
     // Fetch missing selected autocomplete value
     React.useEffect(() => reaction(
@@ -137,8 +158,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       (data) => {
         const { id } = data || {};
         const preparedData = autocompleteAsyncState?.prepareData([data])?.at(0) ?? data;
-        FBAutocompleteAsyncStore.add(optionId as string, id, preparedData);
-        loadedOptions.add(optionId as string, id, preparedData);
+        const optionsKey = autocompleteAsyncState?.optionsKey || optionId;
+        FBAutocompleteAsyncStore.add(optionsKey as string, id, preparedData);
+        loadedOptions.add(optionsKey as string, id, preparedData);
         formState?.getInputState(name || '')?.setRender();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,6 +219,21 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       return contentState.getPlainText();
     }
 
+    const {
+      getTagLabel,
+      renderEndAdornment,
+      renderStartAdornment,
+    } = buildAutocompleteConfig({
+      optionId,
+      getOptionLabel,
+      documentStatuses,
+    });
+
+    // Filter selected options used to hide the selected options in the dropdown list.
+    const shouldFilterSelectedOptions = Boolean(
+      props.filterSelectedOptions || [FBFieldName.TrainingDocumentsToBeTrainedOnList].includes(name as FBFieldName),
+    );
+
     return Component({
       ...(props as T),
       getOptionLabel,
@@ -210,11 +247,19 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueType,
       selectedOptions,
       defaultValue,
+      getTagLabel,
+      renderEndAdornment,
+      renderStartAdornment,
       omitFormValue,
       forceNewRender,
       freeSolo,
       multiple,
       urlValues,
+      docTypeIds,
+      documentStatuses,
+      changeRequestStatuses,
+      autocompleteAsyncState,
+      filterSelectedOptions: shouldFilterSelectedOptions,
       name,
       value,
     });

@@ -5,7 +5,7 @@ import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/consta
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
 import { translate } from '../../../../../../common/intl';
-import { EditableLHRBuild, FBLHRBuildOptions } from '../../../panels/LHRBuild/types';
+import { EditableLHRBuild, FBLHRBuildOptions, FBLHRBuildOtherOptions } from '../../../panels/LHRBuild/types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { createStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core';
@@ -18,38 +18,55 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+const isValueBoolean = (value: unknown): boolean => typeof value === 'boolean';
+
 function Editor<T>(props: CustomTemplateProps): JSX.Element {
   const { dataItem, field } = props;
   const mode = get(dataItem, MODE_FIELD);
   const { values, setFieldValue, getFieldProps, errors } = useFormikContext<EditableLHRBuild>();
   const lhrBuilds = Object.keys(FBLHRBuildOptions).map((key) => key);
-
+  const otherOptions = Object.keys(FBLHRBuildOtherOptions).map((key) => key);
   const handleChange = (event: ChangeEvent<unknown>, value: T) => {
+    if([FBLHRBuildOtherOptions.Yes, FBLHRBuildOtherOptions.No].includes(value as unknown as FBLHRBuildOtherOptions)) {
+      return setFieldValue(field, String(value) === FBLHRBuildOtherOptions.Yes);
+    }
     setFieldValue(field, value);
   };
+  let value = dataItem[field];
 
+  if(isValueBoolean(value)) {
+    value = value ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+  }
+
+  const isFieldInternalType = field === 'internalType';
   return (
     <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
         {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}
-        placeholder={translate('validator.lhr.select.internal.type')}
+        placeholder={isFieldInternalType ? translate('validator.lhr.select.internal.type') : translate('common.select')}
         blurOnSelect
         disableClearable
-        options={lhrBuilds}
+        options={isFieldInternalType ? lhrBuilds : otherOptions}
         onChange={handleChange}
         size="small"
-        disabled={mode === Mode.edit}
+        disabled={isFieldInternalType && mode === Mode.edit}
+        value={value}
       />
     </FormikField>
   );
 }
 
 export const AutocompleteCellTemplate = (props: CustomTemplateProps): JSX.Element => {
-  const { dataItem } = props;
+  const { dataItem, field } = props;
   const mode = get(dataItem, MODE_FIELD);
   const canBeModified = [Mode.edit, Mode.add].includes(mode);
-  const defaultValue = dataItem.internalType;
+  let defaultValue = dataItem[field];
+
+  if(isValueBoolean(defaultValue)) {
+    defaultValue = defaultValue ? FBLHRBuildOtherOptions.Yes : FBLHRBuildOtherOptions.No;
+  }
+
   const classes = useStyles();
   if (canBeModified) {
     return <Editor {...props} />;

@@ -5,10 +5,10 @@ import { DOC_TYPE_GROUP_OPTION, DOCUMENT_NUMBERING_STYLE, DocumentType } from '.
 import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
+import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 import { AllocationState } from '../../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
-import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -128,6 +128,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @computed public get getRestorePartInfo () {
     return this.restorePartInfo;
   }
+
+  @action public setLoading = (loading: boolean): void => {
+    set(this, 'loading', loading);
+  };
 
   // MARK: @actions
   @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {

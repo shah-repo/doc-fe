@@ -1,30 +1,37 @@
 import { at, filter, get, map, some } from 'lodash';
 import { useEffect } from 'react';
-import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
+import { FB, FBData, FBEditorPropertiesFormOutputOptions, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
 import { DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkDocumentGroupOptions, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FBInputType } from '../FBInput/FBInput.types';
 import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     onChange,
     options,
     type,
     inputProps,
+    isFormOutput,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     type && (options = FBData.editorPropertiesByType(type));
 
+    if (isFormOutput) {
+      options = filter(
+        options,
+        (option) => FBEditorPropertiesFormOutputOptions.includes(get(option, 'value')),
+      ) as FBOption[];
+    }
+
     const { document: docRev, externalState } = workspaceState || {};
     const docTypeId = docRev?.document.documentType.id || '';
     const documentTypesById = externalState?.documentType?.byId;
     const docGroupOptions = documentTypesById?.[docTypeId]?.groupOptions;
-    const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
-      documentTypesById[type.value]);
+    const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) => documentTypesById[type.value]);
     const isDocumentForm = checkIsDocumentForm(docGroupOptions);
 
     map(FBEditorPropertiesOmitByGroup, (v: string[], k: DocumentGroupOptionsType) => {

@@ -33,6 +33,7 @@ import FBEditorAction from '../FBEditorAction/FBEditorAction';
 import FBEditorApprovalField from '../FBEditorApprovalField/FBEditorApprovalField';
 import FBEditorApprovals from '../FBEditorApprovals/FBEditorApprovals';
 import FBEditorAutocomplete from '../FBEditorAutocomplete/FBEditorAutocomplete';
+import FBEditorBuildTypeChangeApproval from '../FBEditorBuildTypeChangeApproval/FBEditorBuildTypeChangeApproval';
 import FBEditorCheckControl from '../FBEditorCheckControl/FBEditorCheckControl';
 import FBEditorEmpty from '../FBEditorEmpty/FBEditorEmpty';
 import FBEditorEQMaintenance from '../FBEditorEQMaintenance/FBEditorEQMaintenance';
@@ -41,8 +42,10 @@ import FBEditorInlineApproval from '../FBEditorInlineApproval/FBEditorInlineAppr
 import FBEditorInstructionsDocument from '../FBEditorInstructionsDocument/FBEditorInstructionsDocument';
 import FBEditorLabel from '../FBEditorLabel/FBEditorLabel';
 import FBEditorMediaAlbum from '../FBEditorMediaAlbum/FBEditorMediaAlbum';
+import FBEditorMpiProcedure from '../FBEditorMpiProcedure/FBEditorMpiProcedure';
 import FBEditorOptionGroup from '../FBEditorOptionGroup/FBEditorOptionGroup';
 import FBEditorParagraph from '../FBEditorParagraph/FBEditorParagraph';
+import FBEditorPurchaseOrder from '../FBEditorPurchaseOrder/FBEditorPurchaseOrder';
 import FBEditorRequestApproval from '../FBEditorRequestApproval/FBEditorRequestApproval';
 import FBEditorSelectDocument from '../FBEditorSelectDocument/FBEditorSelectDocument';
 import FBEditorTextEditor from '../FBEditorTextEditor/FBEditorTextEditor';
@@ -144,7 +147,7 @@ class FBEditorState {
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
-    purchaseorder: FBEditorLabel,
+    purchaseorder: FBEditorPurchaseOrder,
     poreceive: FBEditorLabel,
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
@@ -154,6 +157,7 @@ class FBEditorState {
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
     inlineapproval: FBEditorInlineApproval,
+    buildTypeChangeApproval: FBEditorBuildTypeChangeApproval,
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
@@ -166,7 +170,7 @@ class FBEditorState {
     woApprovals: FBEditorApprovals,
     lhrStepApprovals: FBEditorApprovals,
     procedure: FBEditorEmpty,
-    mpiprocedure: FBEditorEmpty,
+    mpiprocedure: FBEditorMpiProcedure,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,

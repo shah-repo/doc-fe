@@ -17,6 +17,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   isOutput = true,
   stepIndex,
   disabled,
+  isFieldDisabled,
   types = [],
   name,
   redlineActive,
@@ -26,12 +27,20 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isAddIconHover, setIsHoverAddIcon] = useState(false);
+  const hasItems = types.length > 0;
+  const hasDescription = Boolean(mpiProcedureState?.value?.description);
+  const hasAnyContent = !isPreview || hasItems || hasDescription;
 
   return (
-    <FBInput {...props } {...{ name }} type="mpiprocedure">
+    <FBInput
+      {...props}
+      {...{ name }}
+      type="mpiprocedure"
+      shouldWrapWithFormControl={false}
+    >
       <Box
         pb={3.8}
-        mt={1.75}
+        mt={hasAnyContent ? 1.75 : 0}
         color={Colors.hint_gray}
         borderBottom={1}
       >
@@ -88,6 +97,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             }}
             boxProps={{ style: { color: Colors.black, fontSize: 14 } }}
             withState
+            isPreview={isPreview}
             removeBorder={isPreview}
           />
           <Box
@@ -128,6 +138,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       {...{
                         type,
                         name,
+                        stepIndex,
                         disabled,
                         isPreview,
                         isOutput,
@@ -151,11 +162,13 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                 borderRight={0}
               />
             )}
-            <Box flexGrow={1}>
-              <FBMPIProcedureItem
-                type={types.pop() as FBProcedureItemType}
-                {...{ name, disabled, isPreview, isOutput, redlineActive }} />
-            </Box>
+            {types.length > 0 && (
+              <Box flexGrow={1}>
+                <FBMPIProcedureItem
+                  type={types.pop() as FBProcedureItemType}
+                  {...{ name, disabled, isPreview, isOutput, redlineActive, isFieldDisabled }} />
+              </Box>
+            )}
           </Box>
         </FBProvider>
       </Box>

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
 import { MomentFormats, useDate } from '../../common/utils/date';
-import { convertHtmlEntities } from '../../common/utils/helpers';
+import { convertHtmlEntities, sanitizeHtml } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifeCyclePhaseOptions, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
@@ -25,7 +25,8 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FB, FBPurchaseOrderItemType } from '../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
+import FBAutocompleteAsyncStore from '../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -90,14 +91,38 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   }
 
   const poDefinePartNumberText = (data: POLineItem) => {
-    const { type, partNumberDocId, supplierPartNumber, serviceId, description } = data;
+    const {
+      type,
+      partNumber,
+      partNumberDocId,
+      supplierPartNumber,
+      serviceId,
+      description,
+    } = data;
+
     let partNumberText = '';
+
     if (type === FBPurchaseOrderItemType.PRODUCT) {
-      partNumberText = partNumberDocId ?? supplierPartNumber;
+      const storedPart = partNumber
+        ? FBAutocompleteAsyncStore.getValue<DocumentRevision>(
+          FBAutocompleteAsyncOption.parts,
+          partNumber,
+        )
+        : null;
+
+      const latestDocId = storedPart?.document?.docId
+        ? `${storedPart.document.docId}${storedPart.displayRevision ? ` - ${storedPart.displayRevision}` : ''}`
+        : partNumberDocId ?? supplierPartNumber ?? '';
+
+      partNumberText = latestDocId;
     } else if (type === FBPurchaseOrderItemType.SERVICE) {
-      partNumberText = serviceId !== ''
-        ? serviceId
-        : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' }, { description });
+      partNumberText
+      = serviceId !== ''
+          ? serviceId
+          : intl.formatMessage(
+            { id: 'documentRevision.audit.formInput.lineItems.message.description.smallText' },
+            { description },
+          );
     }
 
     return partNumberText;
@@ -838,12 +863,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             tax: `${Boolean(tax)}`,
             formattedDate: formattedDate ?? '',
           };
-          const text
-            = !serviceId
-              ? intl.formatMessage(
-                { id: partNumber ? 'documentRevision.audit.formInput.lineItems.MESSAGE' : 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE' },
-                { ...values })
-              : intl.formatMessage({ id: 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil' }, { ...values });
+
+          let messageId = 'documentRevision.audit.formInput.lineItems.SUPPLIER_PART.MESSAGE';
+          if (serviceId) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE.NonEnlil';
+          } else if (partNumber) {
+            messageId = 'documentRevision.audit.formInput.lineItems.MESSAGE';
+          }
+
+          const text = intl.formatMessage({ id: messageId }, values);
 
           returnValue = (
             <div data-cy={dataCy} dangerouslySetInnerHTML={{ __html: text }} />
@@ -1007,6 +1035,14 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'supplierStatusId':
         returnValue = (<div data-cy={dataCy}>{getASLStatusAuditDefaultValue(audit, aslStatusOptions)}</div>);
         break;
+      case 'approvals.comment':
+        return (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(audit.nextValue as string),
+            }}
+          />
+        );
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
     }

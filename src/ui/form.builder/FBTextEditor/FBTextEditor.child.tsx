@@ -1,4 +1,5 @@
 import { Box, Fade } from '@material-ui/core';
+import cx from 'classnames';
 import { isEmpty, isUndefined } from 'lodash';
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
@@ -14,6 +15,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   editorRef,
   onBlur,
   onKeyDown,
+  placeholder,
   editorState,
   isPreview,
   formValue = '',
@@ -36,7 +38,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: 'grid', borderRadius: 3, borderColor: Colors.gray_goose }}
-      minHeight={removeBorder ? 'none' : isPreview ? 'auto' : 160}
+      minHeight={removeBorder ? 'auto' : isPreview ? 'auto' : 160}
       onKeyDown={(e) => onKeyDown?.(e as unknown as KeyboardEvent)}
     >
       <Box
@@ -57,6 +59,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
             ],
           }}
           toolbarHidden={isPreview}
+          placeholder={placeholder}
           toolbarStyle={{
             border: 'none',
             borderBottom: `1px solid ${Colors.hint_gray}`,
@@ -81,6 +84,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
+          data-cy={`${name}-mask`}
           bgcolor={
             removeBorder ? Colors.alabaster : isPreview ? 'transparent' : disabled ? Colors.whitest_grey : Colors.white
           }
@@ -94,15 +98,17 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           p={isPreview ? 0 : 1.5}
         >
-          <div className={classes.marginBStyle}
-            style={{ width: '100%', height: '100%' }}
-            dangerouslySetInnerHTML={{ __html: formattedFormValue }}
-          />
+          {formattedFormValue ? (
+            <div
+              className={cx(classes.marginBStyle, classes.previewContent)}
+              dangerouslySetInnerHTML={{ __html: formattedFormValue }}
+            />
+          ) : (
+            <div className={cx(classes.previewContent, classes.previewPlaceholder)}>{placeholder}</div>
+          )}
         </Box>
-
       </FBConditionalWrapper>
     </Box>
-
   );
 };
 

@@ -126,6 +126,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   supplierServices: [],
   status: AsyncStatus.Idle,
   message: '',
+  creationRestrictions: [],
 };
 
 const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {

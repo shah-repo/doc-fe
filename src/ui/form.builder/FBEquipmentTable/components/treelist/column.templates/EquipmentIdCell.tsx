@@ -66,7 +66,7 @@ const LotAutocomplete: React.FC<LotAutocompleteProps> = ({
   const handleChange = (_, option?: OptionType) => {
     setValue(option ?? { label: '', value: '' });
     setInputValue(undefined);
-    field && setFieldValue(field, option?.value);
+    field && setFieldValue(field, option?.value ?? '');
     setFieldValue(IS_ACTUAL_ID_ADDITION, true);
     setFieldValue('parentEquipPlannedId', dataItem?.parentEquipPlannedId);
     setFieldValue('parentId', dataItem?.parentId);

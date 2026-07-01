@@ -1,5 +1,5 @@
 import { useObserver } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -19,6 +19,10 @@ export const withFBReferences = <T extends FBReferenceProps>(
     );
 
     const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
+
+    const stableReferenceIds = useMemo(() => {
+      return (referenceFormInput ?? []).map((data) => data.referenceRevId);
+    }, [referenceFormInput]);
 
     const mergeArrays = (
       references: Reference[],
@@ -60,19 +64,28 @@ export const withFBReferences = <T extends FBReferenceProps>(
       },
     });
 
+    const prevIdsRef = useRef<string[]>([]);
+
     useEffect(() => {
-      if (!workspaceState?.formInputSync.get(name)) {
+      if (!stableReferenceIds) {
         return;
       }
+
+      const isSame
+        = prevIdsRef.current.length === stableReferenceIds.length
+        && prevIdsRef.current.every((id, index) => id === stableReferenceIds[index]);
+
+      if (isSame) return;
+
+      prevIdsRef.current = stableReferenceIds;
+
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        (workspaceState?.formInputSync.get(name) ?? []).map(
-          (data) => data.referenceRevId,
-        ),
+        stableReferenceIds ?? [],
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    }, [workspaceState?.documentId, stableReferenceIds]);
 
     return Component({
       ...(props as T),

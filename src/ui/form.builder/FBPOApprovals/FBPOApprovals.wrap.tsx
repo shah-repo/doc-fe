@@ -7,6 +7,7 @@ import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDi
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
+import { TransitionIdent } from '../../components/transitionDialog/types';
 import { ApprovalFailureResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
@@ -21,6 +22,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded,
     approvalTransition,
     onApproveClick,
+    onRejectClick,
     onConfirmClick,
     name = '',
     loading,
@@ -88,14 +90,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       supplierStatusDialog.open();
     };
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning = false) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, comment?: string, ignoreWarning = false) => {
       if (!approvalId) { return; }
-      setPassword(password);
-      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, ignoreWarning);
+      const body = password ? { password } : comment ? { comment } : {};
+      if (password) {
+        setPassword(password);
+      }
+      poApprovalsState?.applyTransition(transition, approvalId, body, handleError, ignoreWarning);
     };
 
     onConfirmClick = (approvalId: string) => {
-      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, true);
+      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, undefined, true);
       setPassword('');
       supplierStatusDialog.close();
     };
@@ -105,6 +110,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         title: 'form.builder.password.prompt',
         open: true,
         content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    onRejectClick = (approvalId: string) => {
+      dialogState?.config({
+        title: 'form.builder.rejection.prompt',
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition, transition: TransitionIdent.REJECT }} />,
       });
     };
 
@@ -208,6 +221,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       isIncluded,
       approvalTransition,
       onApproveClick,
+      onRejectClick,
       onConfirmClick,
       loading,
       name,

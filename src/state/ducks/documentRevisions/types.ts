@@ -15,10 +15,10 @@ import { DOCUMENT_NUMBERING_STYLE, DocumentGroupOptionsType, DocumentGroupType, 
 
 export enum DocumentRevisionStatus {
   Draft = 'DRAFT',
-  PendingChange = 'PENDING_CHANGE',
   InReview = 'IN_REVIEW',
-  Released = 'RELEASED',
+  PendingChange = 'PENDING_CHANGE',
   Approved = 'APPROVED',
+  Released = 'RELEASED',
   Deprecated = 'DEPRECATED',
   Obsolete = 'OBSOLETE',
   Canceled = 'CANCELED',
@@ -34,10 +34,10 @@ export enum ErrorCodes {
 
 export enum DocumentRevisionStatusDisplay {
   Draft = 'Draft',
-  PendingChange = 'PendingChange',
   InReview = 'InReview',
-  Released = 'Released',
+  PendingChange = 'PendingChange',
   Approved = 'Approved',
+  Released = 'Released',
   Deprecated = 'Deprecated',
   Obsolete = 'Obsolete',
   Canceled = 'Canceled',
@@ -218,6 +218,7 @@ export interface Precalc {
   lot_part?: string
   lot_part_revision?: string
   related_equipment?: string[]
+  lot_expiry_date?: string
 }
 
 interface DocumentsInLHRS {
@@ -370,6 +371,7 @@ export interface SmartReference {
     unit?: string
     lotPart?: string
     lhr?: LSHS
+    eqStatus?: string
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>
@@ -411,7 +413,7 @@ export interface DocumentRevisionDocumentRequest {
   docId?: string
   id?: string
   documentType?: Partial<DocumentType>
-  securityList: SecurityListRequest
+  securityList: Partial<SecurityListRequest>
 }
 
 export interface ExportToEmailRequest {
@@ -419,13 +421,13 @@ export interface ExportToEmailRequest {
 }
 
 export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
-  name: string
+  name?: string
   docId?: string
-  description: string
+  description?: string
   lifecyclePhaseId?: string
-  attachments: Attachment[]
+  attachments?: Attachment[]
   type?: string
-  referenceTo: ReferenceToEditRequest[]
+  referenceTo?: ReferenceToEditRequest[]
   document?: Partial<DocumentRevisionDocumentRequest>
   revisionChangeType?: RevisionChangeType
   revisionStage?: number
@@ -436,6 +438,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   equipmentSection?: string
   redline?: boolean
   tabId?: string
+  schema?: FBSchemaProps[]
 }
 
 export interface DocumentRevisionSetAction {

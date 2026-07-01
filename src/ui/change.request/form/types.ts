@@ -26,6 +26,7 @@ export interface ChangeRequestFormValues {
 
 export interface PasswordFormValues {
   password: string
+  comment?: string
 }
 
 export interface EffectiveDateFormValues {

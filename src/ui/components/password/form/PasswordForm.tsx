@@ -1,31 +1,36 @@
 import { Box, Button, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
+import { translate } from '../../../../common/intl';
 import { store } from '../../../../state/store';
 import { AsyncState, AsyncStatus } from '../../../../state/types';
 import { Autocomplete } from '../../forms/fields-next';
 import InputField from '../../forms/fields/Input';
 import { required, validator } from '../../forms/fields/validators';
+import FormikTextEditor from '../../forms/FormikTextEditor/FormikTextEditor';
 import FormMessage from '../../forms/FormMessage';
 import FormProgress from '../../forms/FormProgress';
 import SubmitButton from '../../forms/SubmitButton';
 import Text from '../../Text';
+import { Transition, TransitionIdent } from '../../transitionDialog/types';
 import styles from './PasswordForm.styles';
 
 interface PasswordFormProps extends WithStyles<typeof styles> {
+  transition?: Transition
   asyncState: AsyncState
   cancel: () => void
 }
 
-const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, classes, asyncState }) => {
+const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ transition, cancel, classes, asyncState }) => {
   const { name } = store.getState().auth.user;
+  const isRejectTransition = transition === TransitionIdent.REJECT;
 
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       <Box className={classes.labelContainer}>
         <Typography className={classes.label}>
-          <Text translation="common.approvers" />
+          <Text translation="document.action.approvers" />
         </Typography>
         <Autocomplete
           disabled
@@ -39,15 +44,22 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
         dataCy="transition.action.password"
         labelProps={{ className: classes.label }}
         inputStyleProps={classes.inputFieldWrap}
-        inputProps={{ type: 'password', className: classes.inputField }}
+        inputProps={{ type: 'password', placeholder: translate('document.action.password.placeholder'), className: classes.inputField }}
         validate={validator(required)}
       />
+      {isRejectTransition && <FormikTextEditor
+        name="comment"
+        label="transition.action.rejection.comment"
+        dataCy="transition.action.rejection.comment"
+        placeholder={translate('transition.action.rejection.comment.placeholder')}
+        disabled={false}
+      />}
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         id="passwordConfirm"
         dataCy="passwordConfirm"
         asyncState={asyncState}
-        label="transition.action.confirm"
+        label={isRejectTransition ? 'transition.action.reject' : 'transition.action.confirm'}
         fullWidth={false}
         className={classes.submitButton}
       />
@@ -57,6 +69,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
         data-cy="reject.request"
         className={classes.cancelButton}
         disabled={asyncState.status === AsyncStatus.Active}
+        disableRipple
         onClick={cancel}
       >
         <Text translation="transition.action.cancel" />

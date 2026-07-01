@@ -3,7 +3,7 @@ import { Grid, GridCell, GridCellProps, GridColumn, GridDataStateChangeEvent, Gr
 import invariant from 'invariant';
 import { flatMapDeep, kebabCase } from 'lodash';
 import React, { PropsWithChildren, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { AutoSizer } from 'react-virtualized';
+import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import Loader from '../common/kendo/Loader';
@@ -266,45 +266,53 @@ function KendoDataGrid<T> ({
     }));
   };
 
+  const renderGrid = ({ width, height }: Partial<Size> = {}) => {
+    return (
+      <GridContext.Provider
+        value={{
+          columns: columnsSchema as GenericColumnDefinition[],
+          onRowClick,
+        }}
+      >
+        <StyledKendoGrid
+          {...props}
+          style={{
+            ...style,
+            ...(fullWidth && width !== undefined ? { width: width } : {}),
+            ...(fullHeight && height !== undefined ? { height: height } : {}),
+          }}
+          data={resultData}
+          onDataStateChange={updateDataState}
+          onColumnReorder={reorderColumns}
+          ref={gridRef}
+          containerRef={gridContainerRef}
+          onRowClick={onRowClick}
+          {...dataState}
+        >
+          {renderColumns(columnsSchema as GenericColumnDefinition[], width ?? 0, calculateColumWidth)}
+          {fallback && (
+            <GridNoRecords>{fallback}</GridNoRecords>
+          )}
+          {children}
+        </StyledKendoGrid>
+        {loading && (
+          <Loader gridRef={gridContainerRef} />
+        )}
+      </GridContext.Provider>
+    );
+  };
+
+  if (!fullWidth && !fullHeight) {
+    return renderGrid();
+  }
+
   return (
     <AutoSizer
       disableWidth={!fullWidth}
       disableHeight={!fullHeight}
       onResize={onResize}
     >
-      {({ width, height }) => (
-        <GridContext.Provider
-          value={{
-            columns: columnsSchema as GenericColumnDefinition[],
-            onRowClick,
-          }}
-        >
-          <StyledKendoGrid
-            {...props}
-            style={{
-              width: fullWidth ? `${width}px` : undefined,
-              height: fullHeight ? `${height}px` : undefined,
-              ...style,
-            }}
-            data={resultData}
-            onDataStateChange={updateDataState}
-            onColumnReorder={reorderColumns}
-            ref={gridRef}
-            containerRef={containerRef}
-            onRowClick={onRowClick}
-            {...dataState}
-          >
-            {renderColumns(columnsSchema as GenericColumnDefinition[], width, calculateColumWidth)}
-            {fallback && (
-              <GridNoRecords>{fallback}</GridNoRecords>
-            )}
-            {children}
-          </StyledKendoGrid>
-          {loading && (
-            <Loader gridRef={gridContainerRef} />
-          )}
-        </GridContext.Provider>
-      )}
+      {(size) => renderGrid(size)}
     </AutoSizer>
   );
 }

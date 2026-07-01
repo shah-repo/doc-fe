@@ -1,6 +1,6 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, Grid, IconButton, makeStyles } from '@material-ui/core';
+import { Box, Button, Grid, IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -21,6 +21,7 @@ import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
 import { Approval } from '../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DOCUMENT_NUMBERING_STYLE, DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
@@ -34,7 +35,7 @@ import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
-import HeaderSupplierStatus, { shouldShowHeaderStatus } from '../components/common/header/HeaderSupplierStatus';
+import HeaderSupplierStatus from '../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../components/common/header/Menu';
 import OwnerChangerContainer from '../components/common/owner.changer/container';
 import { RequestType } from '../components/common/owner.changer/helpers/types';
@@ -63,7 +64,7 @@ import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { useIsLatestRevision } from './helpers/useIsLatestRevision';
 
 interface OwnProps {
@@ -167,6 +168,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const outputDocumentType = outputDocumentTypes[0] as DocumentType;
 
   const isInternalTypeNumbering = outputDocumentType?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
+
+  let canCreateRevision = true;
+  if (hasOutput) {
+    canCreateRevision = useSelector(
+      (state: ApplicationState) => documentTypeSelectors?.canCreateDocumentType(state, outputDocumentType.id),
+    );
+  }
 
   useEffect(() => {
     if (formDocumentId) {
@@ -346,22 +354,26 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.group === DocTypeGroups.CHANGE_REQUEST);
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput && !isDocumentCR) {
-      return isNewLayout ? (
-        renderAsButton ? <StyledButton
-          color="primary"
-          onClick={cloneOutputDocument}
-          id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
-        >
-          <Text translation="common.create.new" />
-        </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
-          <StyledMenuListItemText
+      const createNewControl = isNewLayout ? (
+        renderAsButton ? (
+          <StyledButton
+            color="primary"
+            onClick={cloneOutputDocument}
             id="PreviewControlsContainer-createNew"
             data-cy="PreviewControlsContainer-createNew"
-            primary={<Text translation="common.create.new" />}
-
-          />
-        </StyledMenuListItem>
+            disabled={!canCreateRevision}
+          >
+            <Text translation="common.create.new" />
+          </StyledButton>
+        ) : (
+          <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
+            <StyledMenuListItemText
+              id="PreviewControlsContainer-createNew"
+              data-cy="PreviewControlsContainer-createNew"
+              primary={<Text translation="common.create.new" />}
+            />
+          </StyledMenuListItem>
+        )
       ) : (
         <Button
           color="secondary"
@@ -369,9 +381,28 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
+          disabled={!canCreateRevision}
         >
           <Text translation="common.create.new" />
         </Button>
+      );
+
+      if (!renderAsButton && isNewLayout) {
+        return createNewControl;
+      }
+
+      return (
+        <Box display="inline-flex" alignItems="center">
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            {createNewControl}
+          </CustomLabelTooltip>
+
+          {!canCreateRevision && (
+            <Tooltip title={translate('documentRevision.create.not.allowed.msg')}>
+              <FontAwesomeIcon icon={solid('lock')} />
+            </Tooltip>
+          )}
+        </Box>
       );
     }
   };
@@ -670,7 +701,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
-  const showSupplierHeaderStatus = shouldShowHeaderStatus(documentRevision);
+  const hideSupplierStatusValue = isDocumentRevisionInStatus([DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete], documentRevision.status);
   const isLatestRevision = useIsLatestRevision(documentRevision);
   const isCloseDisabled = ((isWORecord || isShippingRecord) && hasPendingApprovals)
     || !isDocOwner;
@@ -687,7 +718,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isSupplier && showSupplierHeaderStatus && <HeaderSupplierStatus documentRevision={documentRevision} />}
+      {isSupplier && !hideSupplierStatusValue && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {(isWORecord || isShippingRecord) && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isCloseDisabled} />}
       <>
@@ -705,13 +736,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
       )}
-      <CustomIdDialog
+      {customIdDialog.isOpen && <CustomIdDialog
         isOpen = {customIdDialog.isOpen}
         closeDialog = {customIdDialog.close}
         outputDocumentType = {outputDocumentType}
         isInternalTypeNumbering = {isInternalTypeNumbering}
         handleSubmit = {(docId: string) => handleCreateDocument(documentRevision, docId)}
-      />
+      />}
     </>
   );
 };

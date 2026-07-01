@@ -7,16 +7,19 @@ export enum FBProcedureItemType {
   attachments = 'attachments',
   materials = 'materials',
   equipment = 'equipment',
+  serials = 'serials',
 }
 
 export enum FBProcedureItemLocale {
   materials = 'form.builder.materials',
   equipment = 'form.builder.equipment',
   attachments = 'form.builder.attachments',
+  serials = 'form.builder.serials.items.built',
 }
 
 export const FBProcedureItemOmitAction: Partial<FBProcedureItemType[]> = [
   FBProcedureItemType.attachments,
+  FBProcedureItemType.serials,
 ];
 
 export type FBProcedureItemProps =
@@ -28,6 +31,7 @@ export type FBProcedureItemProps =
   getItem?: (id: string) => string
   getLot?: (id?: string) => string
   type: FBProcedureItemType
+  stepIndex?: number
   value?: FBProcedureItemConfig[]
   locked?: boolean
   item?: FBProcedureItemConfig

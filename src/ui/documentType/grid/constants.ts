@@ -3,6 +3,8 @@ export const ownerFieldsMapping = {
   'document.docId': ['id', 'document.id'],
 };
 
+export const HTML_CONTENT_FIELDS = ['description'];
+
 export const cellOverflowFields = [
   'precalc.partNumberTitle',
   'precalc.partNumberDescription',
@@ -16,5 +18,8 @@ export const cellOverflowFields = [
   'precalc.supplierType',
   'precalc.primaryContactName',
   'name',
+  'description',
   'document.docId',
+  'precalc.formDocId',
+  'precalc.lshs_subtitle.part.label',
 ];

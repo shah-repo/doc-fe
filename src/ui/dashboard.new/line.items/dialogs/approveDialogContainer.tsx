@@ -33,7 +33,7 @@ interface Props {
   onSuccess?: () => void
 }
 
-const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
+const ApproveDialogContainer: React.FunctionComponent<Props> = ({
   changeRequestId,
   arId,
   title,
@@ -104,4 +104,4 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ApproveDialogueContainer;
+export default ApproveDialogContainer;
