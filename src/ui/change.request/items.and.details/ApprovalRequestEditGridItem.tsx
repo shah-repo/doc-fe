@@ -55,6 +55,14 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
     return () => setFieldValue('documentRev', undefined);
   }, []);
 
+  useEffect(() => {
+    if (!isLineItemPartCanBeSubstituted) { return; }
+    const initialAutoUpdate = Boolean(autoUpdateChecked);
+    setFieldValue('autoUpdate', initialAutoUpdate);
+    formState.setFieldValue('autoUpdate', initialAutoUpdate);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <FBForm {...{ formState }} >
       <div
@@ -70,8 +78,10 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               <Checkbox
                 checked={autoUpdateChecked}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setAutoUpdateChecked(event.target.checked);
-                  formState.setFieldValue('autoUpdate', event.target.checked);
+                  const checked = event.target.checked;
+                  setAutoUpdateChecked(checked);
+                  setFieldValue('autoUpdate', checked);
+                  formState.setFieldValue('autoUpdate', checked);
                 }}
                 name="autoUpdate"
               />
