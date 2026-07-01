@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { authSelectors } from '../../../../../state/ducks/auth';
-import { Group } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { Employee, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
 import { DocumentType } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { userManagementSelectors } from '../../../../../state/ducks/userManagement';
+import { LoadCompanyGroup } from '../../../../../state/ducks/userManagement/types';
 import {
   Mode,
   MODE_FIELD,
@@ -32,7 +32,7 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
   const [restrictions, setRestrictions] = React.useState<DocumentTypeRestriction[]>();
   const [editedRestrictions, setEditedRestrictions] = React.useState<EditableDocumentTypeRestriction>();
 
-  const allGroups: Group[] = useSelector(authSelectors.currentUserGroups);
+  const allGroups: LoadCompanyGroup[] = Object.values(useSelector(userManagementSelectors.groupsById));
   const groupOptions = toSortedOptions(allGroups, (group) => group.id, (group) => group.name);
   const groupOptionsMap = { ...(keyBy(groupOptions, (group) => group.id)) };
 
