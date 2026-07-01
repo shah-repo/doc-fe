@@ -40,7 +40,8 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
   const employeeOptions = toSortedOptions(allEmployees, (employee) => employee.id, (employee) => employee.user?.name ?? '');
   const employeeOptionsMap = { ...(keyBy(employeeOptions, (employee) => employee.id)) };
 
-  const documentTypesAll: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypeList);
+  let documentTypesAll: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypeList);
+  documentTypesAll = documentTypesAll.filter(documentType => documentType.active);
   const documentTypeOptions = toSortedOptions(documentTypesAll,
     (documentType) => documentType.id,
     (documentType) => documentType.documentTypeName,
