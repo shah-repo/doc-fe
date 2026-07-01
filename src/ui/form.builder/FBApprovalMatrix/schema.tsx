@@ -227,7 +227,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
-        hidden: !headKey && isStage2 && numOfRevStages === 2,
+        hidden: isStage2 && numOfRevStages === 2,
         children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,
