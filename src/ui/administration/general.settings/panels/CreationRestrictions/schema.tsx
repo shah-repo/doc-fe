@@ -37,7 +37,7 @@ export const buildSchema: SchemaBuilder<EditableDocumentTypeRestriction> = ({
     {
       id: 'restrictedToRoles',
       field: 'restrictedToRoles',
-      title: 'administration.general.settings.creation.restrictions.restricted.to.roles',
+      title: 'administration.general.settings.creation.restrictions.restricted.to.groups',
       template: (props) => (
         <RestrictionSelectionCell
           {...props}

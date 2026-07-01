@@ -2738,7 +2738,7 @@
   "administration.general.settings.creation.permissions": "Creation Permissions",
   "administration.general.settings.creation.restrictions.document.type": "Document Type",
   "administration.general.settings.creation.restrictions.restricted.to.users": "Restricted To Users",
-  "administration.general.settings.creation.restrictions.restricted.to.roles": "Restricted To Roles",
+  "administration.general.settings.creation.restrictions.restricted.to.groups": "Restricted To Groups",
   "administration.general.settings.creation.restrictions.duplicate.error.msg": "Restrictions rules for {documentTypeName} are already in place.",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
   "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
