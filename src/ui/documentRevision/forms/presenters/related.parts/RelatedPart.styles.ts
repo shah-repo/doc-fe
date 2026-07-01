@@ -257,6 +257,8 @@ export default makeStyles((theme) =>
       backgroundColor: Colors.light_red,
     },
     link: {
+      display: 'block',
+      maxWidth: '100%',
       textDecoration: 'none',
       color: 'inherit',
       '&:hover': {
