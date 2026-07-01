@@ -116,12 +116,13 @@ const updateDocumentType = (
   handlers,
 });
 
-const deleteDocumentType = (id: string): ApiAction<DocumentType[]> => apiAction({
+const deleteDocumentType = (id: string, handlers: Handlers): ApiAction<DocumentType[]> => apiActionWithCallbacks({
   url: `${DOCUMENT_TYPE_ROOT_URL}/remove/${id}`,
   method: 'delete',
   onSuccess: (m, dispatch) => {
     dispatch(loadList());
   },
+  handlers,
 });
 
 const addDocumentType = (

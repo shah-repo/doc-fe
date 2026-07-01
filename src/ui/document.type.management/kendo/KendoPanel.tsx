@@ -144,6 +144,11 @@ export function KendoPanel ({
   const addDocumentTypeAction = useActionCreator(
     documentTypeActions.addDocumentType,
   );
+
+  const deleteDocumentTypeAction = useActionCreator(
+    documentTypeActions.deleteDocumentType,
+  );
+
   const disabled = Config.docTypeManagementEditDisabled;
   const dispatch = useDispatch();
   const async = useAsync({
@@ -151,6 +156,10 @@ export function KendoPanel ({
       cancel();
       toastError(error as string);
     },
+  });
+
+  const asyncDeleteDocType = useAsync({
+    onError: toastError,
   });
 
   const [dropDownState, setDropDownState] = React.useState({});
@@ -484,7 +493,11 @@ export function KendoPanel ({
   const documentId = useRef<string>('');
 
   const confirmDeleteDocumnet = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(documentTypeActions.deleteDocumentType(documentId.current));
+    asyncDeleteDocType.start(
+      deleteDocumentTypeAction,
+      documentId.current,
+      asyncDeleteDocType,
+    );
     documentId.current = '';
     confirmationDialog.close();
   };
