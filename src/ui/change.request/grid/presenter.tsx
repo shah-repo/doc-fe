@@ -8,6 +8,7 @@ import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import FormListContainer from '../form.list/FormList.container';
 import { KendoPresenterProps } from './interfaces';
+import { SearchProvider } from '../../components/KeywordSearch/SearchProvider';
 
 export function DocumentListPresenter ({
   statuses,
@@ -29,20 +30,22 @@ export function DocumentListPresenter ({
 
   return (
     <Grid container>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <FormListContainer {...{ headers, tableData: dataToBeExported, isGrouped }} />
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        <KendoGrid
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-          schema={schema}
-          exportDataChanges={setDataToBeExported}
-          onRowClick={onRowClick}
-          queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
-          defaultPayloadData={{}}
-        />
-      </Grid>
+       <SearchProvider>
+        <Grid item xs={12} className={classes.headerGridItem}>
+          <FormListContainer {...{ headers, tableData: dataToBeExported, isGrouped }} />
+        </Grid>
+        <Grid item xs={12} className={classes.kendoGridItem}>
+          <KendoGrid
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            exportDataChanges={setDataToBeExported}
+            onRowClick={onRowClick}
+            queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
+            defaultPayloadData={{}}
+          />
+        </Grid>
+      </SearchProvider>
     </Grid>
   );
 }
