@@ -194,14 +194,44 @@ export default makeStyles((theme) => ({
           width: '100%',
           flex: 1,
           minWidth: 0,
-          overflow: 'visible',
+          overflow: 'hidden',
 
           '& .k-multiselect': {
             width: '100%',
+            minWidth: 0,
           },
 
           '& .k-multiselect-wrap': {
-            overflow: 'visible',
+            overflow: 'hidden',
+          },
+
+          '& .k-input-values': {
+            minWidth: 0,
+            maxWidth: '100%',
+            overflow: 'hidden',
+            flexWrap: 'nowrap',
+          },
+
+          '& .k-chip': {
+            minWidth: 0,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          },
+
+          '& .k-chip > :first-child': {
+            minWidth: 0,
+            maxWidth: '100%',
+            flex: 1,
+            overflow: 'hidden',
+          },
+
+          '& .k-chip-content, & .k-chip-label': {
+            display: 'block',
+            minWidth: 0,
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           },
 
           '& .k-multiselect-wrap .k-button': {

@@ -20,4 +20,12 @@ export default makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     verticalAlign: 'middle',
   },
+  singleLineTruncate: {
+    display: 'block',
+    minWidth: 0,
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
 }));
