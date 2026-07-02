@@ -76,6 +76,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
           handleRemove={handleRemove}
           viewItemActionsVisible={viewItemActionsVisible}
           isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
+          itemsAndDetailsState={itemsAndDetailsState}
         />
       )}
     </>

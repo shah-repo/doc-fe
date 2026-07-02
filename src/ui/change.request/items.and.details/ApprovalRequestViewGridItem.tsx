@@ -2,6 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { max } from 'lodash';
 import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
@@ -22,6 +23,7 @@ import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './ApprovalRequestGrid.styles';
 import ARAttachmentsList from './ARAttachmentsList';
 import { generateDocTitleText } from './helpers';
+import ItemsAndDetailsState from './ItemsAndDetails.state';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
 
 interface IDocRelatedPart {
@@ -38,11 +40,13 @@ interface Props {
   handleRemove: (docRevId: string) => void
   viewItemActionsVisible: boolean
   isLineItemPartCanBeSubstituted?: boolean
+  itemsAndDetailsState?: ItemsAndDetailsState
 }
 
 const ApprovalRequestViewGridItem: React.FC<Props> = ({
   entry,
   editItem,
+  itemsAndDetailsState,
   viewItemActionsVisible,
   isLineItemPartCanBeSubstituted,
 }) => {
@@ -126,9 +130,10 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
   const blockEditing = (e: MouseEvent) => e.stopPropagation();
 
   const expandableContentClass = cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent);
-  const expandablCellRef = useRef<HTMLDivElement>(null);
+  const descriptionExpandablCellRef = useRef<HTMLDivElement>(null);
+  const justificationExpandablCellRef = useRef<HTMLDivElement>(null);
   const [textLineCount, setTextLineCount] = useState(0);
-  const [ref, { width }] = useResizeObserver<HTMLDivElement>();
+  const [descriptionOfChangeRef, { width }] = useResizeObserver<HTMLDivElement>();
   const isShowMoreVisible = textLineCount > 3;
 
   function getLineCount (element) {
@@ -140,12 +145,18 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
   }
 
   useEffect(() => {
-    if (!expandablCellRef.current) {
+    if (!descriptionExpandablCellRef.current || !justificationExpandablCellRef.current) {
       return;
     }
 
-    setTextLineCount(getLineCount(expandablCellRef.current));
-  }, [width]);
+    const descriptionLineCount = getLineCount(descriptionExpandablCellRef.current);
+    const justificationLineCount = getLineCount(justificationExpandablCellRef.current);
+    const updatedLineCount = max([descriptionLineCount, justificationLineCount]) ?? 0;
+
+    if (updatedLineCount !== textLineCount) {
+      setTextLineCount(updatedLineCount);
+    }
+  }, [width, itemsAndDetailsState?.loadingState]);
 
   return (
     <>
@@ -203,8 +214,8 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             />
           </div>
 
-          <div ref={ref} className={cx(classes.contentCell, classes.textCell)}>
-            <div ref={expandablCellRef} className={expandableContentClass} data-cy="view-description-of-change">
+          <div ref={descriptionOfChangeRef} className={cx(classes.contentCell, classes.textCell)}>
+            <div ref={descriptionExpandablCellRef} className={expandableContentClass} data-cy="view-description-of-change">
               {descriptionOfChange}
             </div>
             <div className={cx(classes.showMoreContainer)}>
@@ -217,7 +228,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <div className={expandableContentClass} data-cy="view-justification-of-change">
+            <div ref={justificationExpandablCellRef} className={expandableContentClass} data-cy="view-justification-of-change">
               {justificationOfChange}
             </div>
           </div>

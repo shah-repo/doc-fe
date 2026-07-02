@@ -184,7 +184,7 @@ export default makeStyles((theme) =>
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.25, 1.75),
       },
@@ -193,7 +193,7 @@ export default makeStyles((theme) =>
       padding: theme.spacing(0.625, 0.25),
     },
     textCellAdding: {
-      padding: theme.spacing(2, 0.25, 0.5),
+      padding: theme.spacing(1.5, 0.25, 0.5),
     },
     whereUsedCell: {
       textAlign: 'center',
