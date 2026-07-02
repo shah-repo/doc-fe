@@ -11,13 +11,15 @@ import {
 } from '../../../../state/ducks/documentRevisions/types';
 import FilterWrapper from '../../../components/common/kendo/FilterWrapper';
 import CommonMultiSelect from '../../../components/common/kendo/MultiSelectFilter';
+import useStyles from './styles';
 
 interface Props extends GridFilterCellProps {
   data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[] | string[]
   documentTypeCategory?: string
 }
 
-export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory }: Props) => {
+export const StatusMultiSelectFilter = ({ data, onChange, value, field, documentTypeCategory }: Props): JSX.Element => {
+  const classes = useStyles();
   const hasValue = (values: string[]) => values.length > 0;
   const [selectedValues, setSelectedValues] = React.useState<string[]>(Array.isArray(value) ? value : []);
 
@@ -57,17 +59,24 @@ export const StatusMultiSelectFilter = ({ data, onChange, value, field, document
         data={data}
         onChange={onMultiSelectChange}
         value={selectedValues}
-        itemRender={(li, itemProps) =>
-          React.cloneElement(li, li.props, <span>{getDisplayValue(itemProps?.dataItem as string)}</span>)
-        }
+        itemRender={(li, itemProps) => {
+          const displayValue = getDisplayValue(itemProps?.dataItem as string);
+
+          return React.cloneElement(
+            li,
+            li.props,
+            <div className={classes.singleLineTruncate}>{displayValue}</div>,
+          );
+        }}
         tagRender={(tagData, li) => {
           const children = React.Children.toArray(li.props.children);
+          const displayValue = getDisplayValue(tagData.text);
 
           return React.cloneElement(
             li,
             li.props,
             <>
-              <span>{getDisplayValue(tagData.text)}</span>
+              <div className={classes.singleLineTruncate}>{displayValue}</div>
               {children[1]}
             </>,
           );

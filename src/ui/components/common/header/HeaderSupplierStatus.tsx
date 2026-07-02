@@ -53,28 +53,33 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
   const updateSupplierStatusAction = useActionCreator(
     documentRevisionsActions.updateSupplierStatus,
   );
-  const [options, setOptions] = useState<OptionType[]>([]);
+  const [supplierStatusOptions, setSupplierStatusOptions] = useState<OptionType[]>([]);
+  const [activeSupplierStatusOptions, setActiveSupplierStatusOptions] = useState<OptionType[]>([]);
   const fetchASLTypes = useActionCreator(
     documentRevisionsActions.fetchASLSuppliersListData,
   );
   const supplierTypesAsync = useAsync<ASLStatus[]>({
     onSuccess: (aslStatusList) => {
-      setOptions(
-        aslStatusList?.map((data: ASLStatus) => {
-          return { label: data.displayLabel, value: data.id };
-        }) ?? [],
+      const mappedOptions = aslStatusList?.map((data: ASLStatus) => ({
+        label: data.displayLabel,
+        value: data.id,
+      })) ?? [];
+
+      setSupplierStatusOptions(mappedOptions);
+      setActiveSupplierStatusOptions(
+        mappedOptions.filter((option, index) => aslStatusList?.[index]?.isActive),
       );
     },
     onError: toastError,
   });
 
   useEffect(() => {
-    supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
+    supplierTypesAsync.start(fetchASLTypes, false, supplierTypesAsync);
   }, []);
 
   const getSupplierStatusByValue = (supplierStatus?: string): string => {
     return (
-      options?.find((data: OptionType) => data.value === supplierStatus)
+      supplierStatusOptions?.find((data: OptionType) => data.value === supplierStatus)
         ?.label ?? ''
     );
   };
@@ -83,7 +88,7 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
   );
 
   const confirmUpdate = (supplierStatus: string) => {
-    nextStatus.current = options?.find(
+    nextStatus.current = activeSupplierStatusOptions?.find(
       (data: OptionType) => data.value === supplierStatus,
     )?.label;
     updateLotStatus.current = () => {
@@ -112,8 +117,8 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
       {(statusLabel || isSupplierStatusEditable) && <HeaderStatusButton
         onItemSelect={confirmUpdate}
         label={getStatusLabel()}
-        options={options}
-        disabled = {!isSupplierStatusEditable}
+        options={activeSupplierStatusOptions}
+        disabled={!isSupplierStatusEditable}
         data-cy="supplier-status"
       /> }
       <AlertDialog
