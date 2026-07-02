@@ -181,10 +181,6 @@ export default makeStyles((theme) =>
       transform: 'rotate(90deg)',
     },
     textCell: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      justifyContent: 'space-between',
       '& .MuiOutlinedInput-multiline': {
         padding: theme.spacing(1.25, 1.75),
       },
@@ -336,7 +332,7 @@ export default makeStyles((theme) =>
     },
     expandableContent: {
       overflow: 'hidden',
-      height: '100%',
+      maxHeight: '4.29em',
       transition: 'max-height 0.3s ease-in-out',
       display: '-webkit-box',
       '-webkit-line-clamp': '3',

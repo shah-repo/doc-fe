@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -17,7 +17,6 @@ import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
 import useDialog from '../../hooks/useDialog';
-import useResizeObserver from '../../hooks/useResizeObserver';
 import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './ApprovalRequestGrid.styles';
 import ARAttachmentsList from './ARAttachmentsList';
@@ -126,27 +125,6 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
   const blockEditing = (e: MouseEvent) => e.stopPropagation();
 
   const expandableContentClass = cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent);
-  const expandablCellRef = useRef<HTMLDivElement>(null);
-  const [textLineCount, setTextLineCount] = useState(0);
-  const [ref, { width }] = useResizeObserver<HTMLDivElement>();
-  const isShowMoreVisible = textLineCount > 3;
-
-  function getLineCount (element) {
-    const style = window.getComputedStyle(element);
-    const lineHeight = parseFloat(style.lineHeight);
-    const height = element.scrollHeight;
-
-    return Math.round(height / lineHeight);
-  }
-
-  useEffect(() => {
-    if (!expandablCellRef.current) {
-      return;
-    }
-
-    setTextLineCount(getLineCount(expandablCellRef.current));
-  }, [width]);
-
   return (
     <>
       <div
@@ -203,17 +181,17 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             />
           </div>
 
-          <div ref={ref} className={cx(classes.contentCell, classes.textCell)}>
-            <div ref={expandablCellRef} className={expandableContentClass} data-cy="view-description-of-change">
+          <div className={cx(classes.contentCell, classes.textCell)}>
+            <div className={expandableContentClass} data-cy="view-description-of-change">
               {descriptionOfChange}
             </div>
             <div className={cx(classes.showMoreContainer)}>
-              {isShowMoreVisible && <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
+              <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
                 {translate(isExpanded ? 'common.show.less' : 'common.show.more')}
                 <span className={classes.iconSpacing}>
                   <FontAwesomeIcon icon={isExpanded ? solid('chevron-up') : solid('chevron-down')} />
                 </span>
-              </Button>}
+              </Button>
             </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
