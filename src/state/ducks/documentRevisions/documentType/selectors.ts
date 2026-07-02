@@ -162,7 +162,7 @@ const canCreateCategory = createSelector(
     // If not all of them have entry in the creationRestrictions
     const eachDocTypeHasRestrictions = categoryDocumentTypeIds.every(docTypeId => {
       const creationRestrictions = getCreationRestrictionsMap[docTypeId];
-      return creationRestrictions?.restrictedToRoles?.length || creationRestrictions?.restrictedToUsers?.length;
+      return creationRestrictions?.restrictedToGroups?.length || creationRestrictions?.restrictedToUsers?.length;
     });
     if (!eachDocTypeHasRestrictions) {
       return true;
@@ -170,14 +170,14 @@ const canCreateCategory = createSelector(
 
     // When all documentTypes under a category have been marked for restriction, need to generate a combined list.
     const combinedRestrictedToUsers: string[] = [];
-    const combinedRestrictedToRoles: string[] = [];
+    const combinedRestrictedToGroups: string[] = [];
     categoryDocumentTypeIds.forEach(docTypeId => {
       combinedRestrictedToUsers.push(...(getCreationRestrictionsMap[docTypeId].restrictedToUsers ?? []));
-      combinedRestrictedToRoles.push(...(getCreationRestrictionsMap[docTypeId].restrictedToRoles ?? []));
+      combinedRestrictedToGroups.push(...(getCreationRestrictionsMap[docTypeId].restrictedToGroups ?? []));
     });
 
     const hasUserAccess = combinedRestrictedToUsers.includes(employeeId);
-    const hasGroupAccess = groupIds.some((groupId) => combinedRestrictedToRoles.includes(groupId));
+    const hasGroupAccess = groupIds.some((groupId) => combinedRestrictedToGroups.includes(groupId));
     return hasUserAccess || hasGroupAccess;
   },
 );
@@ -193,12 +193,12 @@ const canCreateDocumentType = createSelector(
     }
 
     if (!docTypeCreationRestrictions.restrictedToUsers?.length
-      && !docTypeCreationRestrictions.restrictedToRoles?.length) {
+      && !docTypeCreationRestrictions.restrictedToGroups?.length) {
       return true;
     }
 
     const hasUserAccess = docTypeCreationRestrictions.restrictedToUsers?.includes(employeeId);
-    const hasGroupAccess = currentUserGroupIds.some((groupId) => docTypeCreationRestrictions.restrictedToRoles?.includes(groupId));
+    const hasGroupAccess = currentUserGroupIds.some((groupId) => docTypeCreationRestrictions.restrictedToGroups?.includes(groupId));
     return hasUserAccess || hasGroupAccess;
   },
 );

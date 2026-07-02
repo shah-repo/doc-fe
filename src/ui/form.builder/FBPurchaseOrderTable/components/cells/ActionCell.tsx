@@ -2,6 +2,10 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import React, { MouseEventHandler } from 'react';
+import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP, DocumentType } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { ApplicationState } from '../../../../../state/reducers';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import KendoDataGridCell from '../../../../components/KendoDataGrid/KendoDataGridCell';
@@ -27,7 +31,12 @@ const ActionCell: CellComponent<FBPurchaseOrderItem, Props> = ({
 }) => {
   const [ref, isHovered] = useHover<HTMLButtonElement>();
   const isDeleteAllowed = !isReceivable && !disabled;
-  const isCreateLOTAllowed = isReceivable && dataItem.type === FBPurchaseOrderItemType.PRODUCT;
+
+  const documentTypesAll: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypeList);
+  const lotDocTypeId = documentTypesAll.find(docType => docType.group === DOC_TYPE_GROUP.LOT)?.id;
+  const canCreateLot = lotDocTypeId ? useSelector(
+    (state: ApplicationState) => documentTypeSelectors.canCreateDocumentType(state, lotDocTypeId)) : true;
+  const isCreateLOTAllowed = isReceivable && dataItem.type === FBPurchaseOrderItemType.PRODUCT && canCreateLot;
 
   return (
     <KendoDataGridCell
