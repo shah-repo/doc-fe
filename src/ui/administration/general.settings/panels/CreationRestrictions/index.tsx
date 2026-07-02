@@ -25,6 +25,7 @@ import { buildSchema } from './schema';
 import {
   DocumentTypeRestriction,
   EditableDocumentTypeRestriction,
+  OptionType,
 } from './types';
 
 const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
@@ -144,8 +145,10 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
     editedRestrictions?.[MODE_FIELD] === Mode.add ? [...mappedRestrictions, editedRestrictions] : mappedRestrictions).map((restriction) => {
     const { restrictedToRoles, restrictedToUsers } = restriction;
 
-    const restrictedToRolesWithText = restrictedToRoles?.map((roleId: string) => (groupOptionsMap[roleId]));
-    const restrictedToUsersWithText = restrictedToUsers?.map((userId: string) => (employeeOptionsMap[userId]));
+    const restrictedToRolesWithText = restrictedToRoles?.map((roleId: string) => (groupOptionsMap[roleId]))
+      .filter((role): role is OptionType => role !== undefined);
+    const restrictedToUsersWithText = restrictedToUsers?.map((userId: string) => (employeeOptionsMap[userId]))
+      .filter((role): role is OptionType => role !== undefined);
 
     return {
       ...restriction,
