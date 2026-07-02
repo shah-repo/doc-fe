@@ -96,7 +96,7 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
       const updatedValues = {
         ...omit(values, [MODE_FIELD, ...EDIT_FIELDS]),
         restrictedToUsers: (values.restrictedToUsers_edit ?? []).map(userOption => userOption.id),
-        restrictedToRoles: (values.restrictedToRoles_edit ?? []).map(roleOption => roleOption.id),
+        restrictedToGroups: (values.restrictedToGroups_edit ?? []).map(roleOption => roleOption.id),
       };
       const existingRestrictions = restrictions?.filter(restriction => restriction.documentTypeId === values.documentTypeId);
       if (isAddition && existingRestrictions?.length) {
@@ -124,10 +124,10 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
       documentTypeId: '',
       documentTypeName: '',
       category: '',
-      restrictedToRoles: [],
+      restrictedToGroups: [],
       restrictedToUsers: [],
       [MODE_FIELD]: Mode.add,
-      restrictedToRoles_edit: [],
+      restrictedToGroups_edit: [],
       restrictedToUsers_edit: [],
     });
   };
@@ -143,22 +143,22 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
 
   const restrictionsList = (
     editedRestrictions?.[MODE_FIELD] === Mode.add ? [...mappedRestrictions, editedRestrictions] : mappedRestrictions).map((restriction) => {
-    const { restrictedToRoles, restrictedToUsers } = restriction;
+    const { restrictedToGroups, restrictedToUsers } = restriction;
 
-    const restrictedToRolesWithText = restrictedToRoles?.map((roleId: string) => (groupOptionsMap[roleId]))
+    const restrictedToGroupsWithText = restrictedToGroups?.map((roleId: string) => (groupOptionsMap[roleId]))
       .filter((role): role is OptionType => role !== undefined);
     const restrictedToUsersWithText = restrictedToUsers?.map((userId: string) => (employeeOptionsMap[userId]))
       .filter((role): role is OptionType => role !== undefined);
 
     return {
       ...restriction,
-      ...(isArray(restrictedToRoles) && {
-        restrictedToRoles: restrictedToRolesWithText?.map((item) => item.text).join(', '),
+      ...(isArray(restrictedToGroups) && {
+        restrictedToGroups: restrictedToGroupsWithText?.map((item) => item.text).join(', '),
       }),
       ...(isArray(restrictedToUsers) && {
         restrictedToUsers: restrictedToUsersWithText?.map((item) => item.text).join(', '),
       }),
-      restrictedToRoles_edit: restrictedToRolesWithText,
+      restrictedToGroups_edit: restrictedToGroupsWithText,
       restrictedToUsers_edit: restrictedToUsersWithText,
     };
   });

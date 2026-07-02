@@ -11,12 +11,12 @@ export interface DocumentTypeRestriction {
   documentTypeName: string
   category: string
   restrictedToUsers: string[]
-  restrictedToRoles: string[]
+  restrictedToGroups: string[]
 }
 
 export interface EditableDocumentTypeRestriction extends DocumentTypeRestriction, EditableItem {
   restrictedToUsers_edit?: OptionType[]
-  restrictedToRoles_edit?: OptionType[]
+  restrictedToGroups_edit?: OptionType[]
 }
 
 export interface CustomCellProps

@@ -1,4 +1,4 @@
-export const EDIT_FIELDS = ['restrictedToUsers_edit', 'restrictedToRoles_edit'];
+export const EDIT_FIELDS = ['restrictedToUsers_edit', 'restrictedToGroups_edit'];
 
 export const toSortedOptions = <T>(
   items: T[],
