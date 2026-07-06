@@ -75,7 +75,7 @@ const FBAttachmentNamePresenter: React.FC<Props> = ({
         const isRedline = lineType === LINE_TYPES.RED_LINE;
 
         return (
-          <div className={classes.attachmentName}>
+          <div key={id} className={classes.attachmentName}>
             <div className={cx({ [classes.redLine]: isRedline })}>
               <FontAwesomeIcon
                 icon={regular('paperclip')}
