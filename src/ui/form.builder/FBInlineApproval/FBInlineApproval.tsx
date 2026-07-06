@@ -110,7 +110,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   {approval.status && (
                     <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
                   )}
-                  {currentUser === approval.approver?.user.id
+                  {currentUser === approval.approver?.user.id && ['PENDING', 'APPROVED'].includes(approval.status!)
                     && (
                       <Box flexGrow={1} textAlign="right">
                         <StyledCancelFBButton
@@ -134,7 +134,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                 <Box mt={1}>
                   {isApproved ? approval.approverEmail : approval.approver?.user.email}
                 </Box>
-                {shouldShowRequestAllApprovals
+                {shouldShowRequestAllApprovals && !['PENDING', 'APPROVED'].includes(approval.status!)
                   && <Box flexGrow={1} textAlign="right">
                     <FBButton
                       style={{ margin: 0 }}
