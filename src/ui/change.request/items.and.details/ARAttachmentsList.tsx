@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useMemo } from 'react';
 import { translate } from '../../../common/intl';
 import { Attachment } from '../../../state/ducks/attachments/types';
 import AttachmentField from '../../../ui/components/common/attachment.icon/container';
@@ -25,9 +25,14 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
 
   const blockEditing: MouseEventHandler = (e) => e.stopPropagation();
 
-  const visibleAttachments = attachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
-  const remainingAttachmentCount = attachments.length - visibleAttachments.length;
-  const isExceedsMaxAttachments = attachments.length > MAX_VISIBLE_ATTACHMENTS;
+  const orderedAttachments = useMemo(
+    () => [...attachments].sort((a, b) => Number(a?.index) - Number(b?.index)),
+    [attachments],
+  );
+
+  const visibleAttachments = orderedAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
+  const remainingAttachmentCount = orderedAttachments.length - visibleAttachments.length;
+  const isExceedsMaxAttachments = orderedAttachments.length > MAX_VISIBLE_ATTACHMENTS;
 
   if (!visibleAttachments.length) {
     return <>{EMPTY_VALUE_PLACEHOLDER}</>;
@@ -58,7 +63,7 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
         <div className={classes.attachmentsDialogContainer}>
           <LegacyThemeWrapper>
             <AttachmentField
-              value={attachments}
+              value={orderedAttachments}
               name="arAttachments"
               preserveOrder
             />
