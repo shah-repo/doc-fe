@@ -66,6 +66,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         subtitle={generateSubtitle(documentRevision)}
         displayRevision={getVersionNumber(documentRevision?.id)}
         relatedParentPartDetails={documentRevision?.relatedParentPartDetails}
+        isSliderView={isSliderView}
       />
       }
       <Grid item={true} xs={type !== 'newOutput' && isDisabled ? 6 : 12} alignContent="center" container>

@@ -28,6 +28,14 @@ export default makeStyles((theme: Theme) =>
       fontSize: 17,
       color: Colors.textBlack,
     },
+    docIdTruncate: {
+      maxWidth: 300,
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
     divider: {
       margin: theme.spacing(2, 0),
     },

@@ -62,6 +62,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         subtitle={generateSubtitle(documentRevision)}
         displayRevision={getVersionNumber(documentRevision.id)}
         relatedParentPartDetails={documentRevision.relatedParentPartDetails}
+        isSliderView={isSliderView}
       />
       <Grid item={true} xs={6}>
         <Grid container={true} alignItems="center" justify="flex-end">

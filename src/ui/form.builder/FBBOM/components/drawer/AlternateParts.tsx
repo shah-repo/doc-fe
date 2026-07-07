@@ -12,6 +12,7 @@ import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { AlternatePartsHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import Text from '../../../../components/Text';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
@@ -82,13 +83,16 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             className={classes.partInfo}
           >
             <Grid item>
-              <Typography
-                className={classes.docId}
-                data-cy="header-info-docId"
-                component="span"
+              <OverflowTooltip
+                title={docId}
+                arrow
+                placement="top"
+                wrapperClassName={classes.docIdTruncate}
               >
-                {docId}
-              </Typography>
+                <span className={classes.docId} data-cy="header-info-docId">
+                  {docId}
+                </span>
+              </OverflowTooltip>
             </Grid>
             <Grid item className={classes.whiteDot} />
             <Grid item className={classes.docId}>

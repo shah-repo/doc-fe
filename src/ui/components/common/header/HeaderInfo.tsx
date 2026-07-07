@@ -46,6 +46,7 @@ interface Props {
   displayRevision?: string
   relatedParentPartDetails?: RelatedParentPartDetails
   documentTypeAcronym?: string
+  isSliderView?: boolean
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -58,6 +59,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayRevision,
   relatedParentPartDetails,
   documentTypeAcronym,
+  isSliderView,
 }) => {
   const formContext = useFormContext();
   const intl = useIntl();
@@ -131,7 +133,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
         arrow
         placement="top"
         title={docId}
-        wrapperClassName={classes.truncateText}
+        wrapperClassName={classNames(classes.truncateText, {
+          [classes.truncateTextSlider]: isSliderView,
+        })}
       >
         <Typography
           variant="h6"
