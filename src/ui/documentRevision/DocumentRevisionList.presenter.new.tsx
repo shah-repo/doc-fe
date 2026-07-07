@@ -177,6 +177,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           dataCy="common.docId"
           label={docIdLabel}
           value={docId}
+          isSliderView={isSliderView}
         />
         {!isRecordOrPO && !isTitleHidden && (
           <SummaryInfo label="common.title" value={documentRevision.name} />
