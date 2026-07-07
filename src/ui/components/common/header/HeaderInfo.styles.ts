@@ -146,5 +146,8 @@ export const styles = makeStyles((theme: Theme) =>
       display: 'inline-block',
       verticalAlign: 'middle',
     },
+    truncateTextSlider: {
+      maxWidth: 170,
+    },
   },
   ));
