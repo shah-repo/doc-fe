@@ -89,13 +89,9 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
                 placement="top"
                 wrapperClassName={classes.docIdTruncate}
               >
-                <Typography
-                  className={classes.docId}
-                  data-cy="header-info-docId"
-                  component="span"
-                >
+                <span className={classes.docId} data-cy="header-info-docId">
                   {docId}
-                </Typography>
+                </span>
               </OverflowTooltip>
             </Grid>
             <Grid item className={classes.whiteDot} />
