@@ -54,7 +54,10 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const dialogHandler = useDialog();
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
-  const attachments = (value ?? field?.value ?? []) as Attachment[];
+  const attachments = useMemo(
+    () => (value ?? field?.value ?? []) as Attachment[],
+    [value, field?.value],
+  );
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>('');
   const [selectedAttachment, setSelectedAttachment] = useState<undefined | Attachment>(undefined);
@@ -319,16 +322,29 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const openFileView = () => dialogHandler.open();
 
   const sortedAttachments = useMemo(() => {
-    const attachmentsToDisplay = [...attachments];
-
     if (preserveOrder) {
-      return attachmentsToDisplay;
+      return [...attachments];
     }
 
-    return attachmentsToDisplay
-      .sort((a) => (a.lineType === (isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY) ? -1 : 0))
-      .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
-  }, [attachments, documentRevision, isRedlineFirst, preserveOrder]);
+    const preferredLineType = isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY;
+    const primaryAttachmentId = documentRevision?.primaryAttachment?.id;
+
+    return attachments.sort((a, b) => {
+      const aIsPrimary = a.id === primaryAttachmentId;
+      const bIsPrimary = b.id === primaryAttachmentId;
+      if (aIsPrimary !== bIsPrimary) {
+        return aIsPrimary ? -1 : 1;
+      }
+
+      const aIsPreferredLineType = a.lineType === preferredLineType;
+      const bIsPreferredLineType = b.lineType === preferredLineType;
+      if (aIsPreferredLineType !== bIsPreferredLineType) {
+        return aIsPreferredLineType ? -1 : 1;
+      }
+
+      return Number(a.index ?? 0) - Number(b.index ?? 0);
+    });
+  }, [attachments, documentRevision?.primaryAttachment?.id, isRedlineFirst, preserveOrder]);
 
   return (
     <>
@@ -379,7 +395,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
         />
       </div>
       <AttachmentTable
-        {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderCheck, isHeaderChecked, attachments }}
+        {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderCheck, isHeaderChecked }}
+        attachments={sortedAttachments}
         onDownloadAttachment={handleDownload}
         onDownloadAsPDF={handleWatermarkRequest}
         onDelete={handleRemove}
