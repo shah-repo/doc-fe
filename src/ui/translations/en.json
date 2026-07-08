@@ -2735,11 +2735,12 @@
   "administration.bulk.migration.context.error": "useMigrationContext must be used within a MigrationProvider",
   "administration.general.settings.revision.stages.number": "Number of revision stages",
   "administration.general.settings.revision.start.number": "Numeric revision start number",
-  "administration.general.settings.creation.permissions": "Creation Permissions",
-  "administration.general.settings.creation.restrictions.document.type": "Document Type",
-  "administration.general.settings.creation.restrictions.restricted.to.users": "Restricted To Users",
-  "administration.general.settings.creation.restrictions.restricted.to.groups": "Restricted To Groups",
-  "administration.general.settings.creation.restrictions.duplicate.error.msg": "Restrictions rules for {documentTypeName} are already in place.",
+  "administration.general.settings.document.creation.access.title": "Document Creation Access",
+  "administration.general.settings.document.creation.access.info": "If left blank, all users and groups can create all document types.",
+  "administration.general.settings.document.creation.access.document.type": "Document Type",
+  "administration.general.settings.document.creation.access.user.column": "Authorized Users",
+  "administration.general.settings.document.creation.access.group.column": "Authorized Groups",
+  "administration.general.settings.document.creation.access.duplicate.error.msg": "Access rules for {documentTypeName} are already in place.",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
   "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
   "ccc.bom.selected.fields.changes.tooltip": "The selected fields can be edited in the BOM line item without a new revision of the part.",
@@ -2935,5 +2936,5 @@
   "documentRevision.create.missing.security.groups.message": "{documentType} is configured to allow access for:\n{groups}\n\nDo you want to add it to the document?",
   "documentRevision.create.missing.security.groups.confirm": "Add and Save",
   "documentRevision.create.missing.security.groups.cancel": "Save as is",
-  "documentRevision.create.not.allowed.msg": "You do not have permission to create this resource"
+  "documentRevision.create.not.allowed.msg": "You do not have permission to create this document type"
 }

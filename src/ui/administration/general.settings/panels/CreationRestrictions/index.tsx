@@ -100,7 +100,7 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
       };
       const existingRestrictions = restrictions?.filter(restriction => restriction.documentTypeId === values.documentTypeId);
       if (isAddition && existingRestrictions?.length) {
-        toastError(translate('administration.general.settings.creation.restrictions.duplicate.error.msg', { documentTypeName: values.documentTypeName }));
+        toastError(translate('administration.general.settings.document.creation.access.duplicate.error.msg', { documentTypeName: values.documentTypeName }));
         return;
       }
       const updatedRestrictions = isAddition
@@ -198,6 +198,7 @@ const CreationRestrictions: React.FC<SettingsPanelProps> = (props) => {
     <SettingsPanel
       {...props}
       title={translate(props.title)}
+      info={translate('administration.general.settings.document.creation.access.info')}
       onAddNew={addRestriction}
     >
       <FormikProvider value={formik}>

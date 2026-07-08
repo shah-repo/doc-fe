@@ -18,7 +18,7 @@ export const buildSchema: SchemaBuilder<EditableDocumentTypeRestriction> = ({
     {
       id: 'documentTypeName',
       field: 'documentTypeName',
-      title: 'administration.general.settings.creation.restrictions.document.type',
+      title: 'administration.general.settings.document.creation.access.document.type',
       template: (props) => (
         <DocumentTypeCell {...props} dataOptions={documentTypeList as OptionType[]} />
       ),
@@ -26,7 +26,7 @@ export const buildSchema: SchemaBuilder<EditableDocumentTypeRestriction> = ({
     {
       id: 'restrictedToUsers',
       field: 'restrictedToUsers',
-      title: 'administration.general.settings.creation.restrictions.restricted.to.users',
+      title: 'administration.general.settings.document.creation.access.user.column',
       template: (props) => (
         <RestrictionSelectionCell
           {...props}
@@ -37,7 +37,7 @@ export const buildSchema: SchemaBuilder<EditableDocumentTypeRestriction> = ({
     {
       id: 'restrictedToGroups',
       field: 'restrictedToGroups',
-      title: 'administration.general.settings.creation.restrictions.restricted.to.groups',
+      title: 'administration.general.settings.document.creation.access.group.column',
       template: (props) => (
         <RestrictionSelectionCell
           {...props}
