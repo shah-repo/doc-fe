@@ -105,7 +105,7 @@ export const panels = [
   },
   {
     key: GeneralSettingsTabs.CreationPermissions,
-    title: 'administration.general.settings.creation.permissions',
+    title: 'administration.general.settings.document.creation.access.title',
     component: CreationRestrictions,
   },
   {
