@@ -1,4 +1,5 @@
 import { Box, Grid, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { DataProps } from '../../../state/ducks/common/types';
@@ -38,7 +39,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               color="textPrimary"
             >
               <Link
-                className={classes.link}
+                className={cx(classes.link, classes.overflowWrapLink)}
                 to={reference.url}
                 target="_blank"
                 id="ReferencePresenter-link"
