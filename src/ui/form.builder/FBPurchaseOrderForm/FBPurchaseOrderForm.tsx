@@ -34,7 +34,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       {formState?.newValues.get('type') === 'product' && (
         <>
           <FBAutocompleteAsync
-            label="form.builder.field.part.number"
+            label="form.builder.field.item.id"
             name="partNumber"
             optionId="11"
             onChange={handlePartTitle}
