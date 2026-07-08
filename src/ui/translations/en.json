@@ -2306,7 +2306,7 @@
   "relatedParts.grid.heading.obsolete": "OBSOLETE",
   "relatedParts.docId.required.msg": "DocId is required",
   "relatedParts.docId.length.msg": "DocId must contain at least 2 characters",
-  "relatedParts.docId.specialChar.msg": "DocId can contain only letters and numbers",
+  "relatedParts.docId.specialChar.msg": "Use only letters and numbers.",
   "relatedParts.docId.onlyNumbers.msg": "DocId must be a number",
   "relatedParts.docId.exists.msg": "Duplicate Entry",
   "relatedParts.created.modal.success.msg": "Related {relatedType} created successfully",
