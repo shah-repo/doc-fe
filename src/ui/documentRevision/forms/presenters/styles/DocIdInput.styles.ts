@@ -34,4 +34,15 @@ export default makeStyles((theme) => ({
     fontSize: 14,
     marginRight: '0px !important',
   },
+  customTooltip: {
+    maxWidth: 400,
+    backgroundColor: Colors.black,
+    whiteSpace: 'pre-wrap',
+  },
+  customArrow: {
+    color: Colors.black,
+  },
+  inputWrapper: {
+    width: '100%',
+  },
 }));

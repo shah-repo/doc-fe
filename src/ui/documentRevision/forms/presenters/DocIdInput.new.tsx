@@ -1,6 +1,6 @@
-import { InputAdornment } from '@material-ui/core';
+import { InputAdornment, Tooltip, TooltipProps } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -30,7 +30,7 @@ interface Props {
   docRevId?: string
 }
 
-const DocIdInputNew: React.FunctionComponent<Props> = ({
+const DocIdInputNew: React.FC<Props> = ({
   documentTypeId = '',
   isDisabled,
   docId = '',
@@ -45,24 +45,22 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
   const formik = useFormikContext();
-
-  const [docIdEntered, setDocIdEntered] = useState<string>(docId);
-  const savedDocIdRef = useRef(docId);
-
-  useEffect(() => {
-    savedDocIdRef.current = docId;
-    setDocIdEntered(docId);
-  }, [docId]);
-
-  const [isRequestInProgress, setIsRequestInProgress] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const [docIdEntered, setDocIdEntered] = useState<string>(docId);
+  const [isEditingDocId, setIsEditingDocId] = useState(false);
+  const [isDocIdTruncated, setIsDocIdTruncated] = useState(false);
+  const [isDocIdTooltipOpen, setIsDocIdTooltipOpen] = useState(false);
+  const [isRequestInProgress, setIsRequestInProgress] = useState(false);
 
-  useEffect(() => {
-    if (loadProposedDocIdState.status === AsyncStatus.Error) {
-      toastError(loadProposedDocIdState.message);
-    }
-  }, [loadProposedDocIdState]);
-  const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
+  const tooltipClassOverrides: NonNullable<TooltipProps['classes']> = {
+    tooltip: classes.customTooltip,
+    arrow: classes.customArrow,
+  };
+  const savedDocIdRef = useRef(docId);
+  const inputElementRef = useRef<HTMLInputElement | null>(null);
+
+  const { isVisible, label, tooltipConfig, validation: validators }
+    = useDocId(documentTypeId);
 
   const sendDocIdUpdateRequestAction = useActionCreator(documentsActions.sendDocIdUpdateRequest);
   const sendDocIdUpdateRequestAsync = useAsync({
@@ -78,18 +76,65 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     },
   });
 
+  useEffect(() => {
+    if (loadProposedDocIdState.status === AsyncStatus.Error) {
+      toastError(loadProposedDocIdState.message);
+    }
+  }, [loadProposedDocIdState]);
+
+  useEffect(() => {
+    savedDocIdRef.current = docId;
+    setDocIdEntered(docId);
+  }, [docId]);
+
+  const updateDocIdTruncation = useCallback(() => {
+    const input = inputElementRef.current;
+
+    if (!input) {
+      setIsDocIdTruncated(false);
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      setIsDocIdTruncated(input.scrollWidth > input.clientWidth + 1);
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isEditingDocId) {
+      updateDocIdTruncation();
+    }
+  }, [
+    docIdEntered,
+    documentAcronym,
+    isEditingDocId,
+    updateDocIdTruncation,
+  ]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateDocIdTruncation);
+
+    return () => {
+      window.removeEventListener('resize', updateDocIdTruncation);
+    };
+  }, [updateDocIdTruncation]);
+
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = stripAllWhitespace(event.target.value);
     setDocIdEntered(value);
 
-    if (handleDocIdUpdated) {
-      handleDocIdUpdated(value);
-    }
+    handleDocIdUpdated?.(value);
+  };
+  const handleDocIdFocus = () => {
+    setIsDocIdTooltipOpen(false);
+    setIsEditingDocId(true);
   };
 
   const handleDocIdBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setIsEditingDocId(false);
     const value = stripAllWhitespace(event.target.value);
     if (value === docId) {
+      requestAnimationFrame(updateDocIdTruncation);
       return;
     }
 
@@ -111,7 +156,40 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
         formik.setFieldValue('document.docId', updatedDocId);
       }
     }
+
+    requestAnimationFrame(updateDocIdTruncation);
   };
+
+  const fullDocId = `${documentAcronym}${docIdEntered}`;
+  const canEvaluateTooltip = Boolean(fullDocId) && !isEditingDocId;
+  const isTooltipEligible = canEvaluateTooltip && isDocIdTruncated;
+
+  const closeDocIdTooltip = () => {
+    setIsDocIdTooltipOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    const input = inputElementRef.current;
+
+    if (!canEvaluateTooltip || !input) {
+      setIsDocIdTooltipOpen(false);
+      return;
+    }
+
+    const isTruncatedNow = input.scrollWidth > input.clientWidth + 1;
+    setIsDocIdTruncated(isTruncatedNow);
+    setIsDocIdTooltipOpen(isTruncatedNow);
+  };
+
+  const handleTooltipClose = () => {
+    closeDocIdTooltip();
+  };
+
+  useEffect(() => {
+    if (!isTooltipEligible && isDocIdTooltipOpen) {
+      closeDocIdTooltip();
+    }
+  }, [isTooltipEligible, isDocIdTooltipOpen]);
 
   if (!isVisible && !isShownOnDialog) {
     return null;
@@ -122,9 +200,11 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     disabled: isDisabled,
     startAdornment: <InputAdornment position="start" classes={{ positionStart: classes.adornmentStart }}>{documentAcronym}</InputAdornment>,
     value: docIdEntered,
-    title: docIdEntered,
     onChange: handleDocIdChange,
+    onFocus: handleDocIdFocus,
+    onClick: closeDocIdTooltip,
     onBlur: handleDocIdBlur,
+    inputRef: inputElementRef,
     classes: {
       input: classes.outlinedInput,
     },
@@ -134,15 +214,30 @@ const DocIdInputNew: React.FunctionComponent<Props> = ({
     <>
       {isRequestInProgress && <span>Updating DocId</span>}
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        <InputField
-          name="document.docId"
-          label={label}
-          inputProps={inputProps}
-          validate={validators}
-          inputStyleProps={classes.input}
-          labelProps={AutoCompleteStyles.labelStyle}
-          helpText={inputProps.disabled ? '' : helpText}
-        />
+        <Tooltip
+          title={fullDocId}
+          arrow
+          placement="top"
+          classes={tooltipClassOverrides}
+          open={isTooltipEligible && isDocIdTooltipOpen}
+          onOpen={handleTooltipOpen}
+          onClose={handleTooltipClose}
+          disableHoverListener={!canEvaluateTooltip}
+          disableFocusListener
+          disableTouchListener
+        >
+          <div className={classes.inputWrapper}>
+            <InputField
+              name="document.docId"
+              label={label}
+              inputProps={inputProps}
+              validate={validators}
+              inputStyleProps={classes.input}
+              labelProps={AutoCompleteStyles.labelStyle}
+              helpText={isDisabled ? '' : helpText}
+            />
+          </div>
+        </Tooltip>
       </CustomLabelTooltip>
     </>
   );

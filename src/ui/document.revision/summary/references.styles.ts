@@ -33,6 +33,10 @@ export default makeStyles(theme =>
       fontSize: '14px',
       lineHeight: '17.64px',
     },
+    overflowWrapLink: {
+      overflowWrap: 'anywhere',
+      wordBreak: 'break-word',
+    },
     header: {
       fontSize: '12px',
       color: Colors.almost_black,
