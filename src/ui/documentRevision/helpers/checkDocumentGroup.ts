@@ -1,6 +1,6 @@
 import { some } from 'lodash';
 import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType, DocumentGroupType } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 
 /** Checks if document has a specific group option.
@@ -88,15 +88,7 @@ export const revIdRelatedTypeMapper = (documentRevisions: DocumentRevision[]): {
 export const getRelatedType = (documentRevision: DocumentRevision, hasOutput = false): RELATED_TYPE => {
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isPart = checkIsDocumentPart(groupOptions);
-
-  const isOther = checkIsDocumentOTHER(groupOptions);
-  const isOtherForm = hasOutput
-    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
-    : false;
-
-  const relatedType = isPart ? RELATED_TYPE.PART_RELATED
-    : ((isOther || isOtherForm) ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
-  return relatedType;
+  return isPart ? RELATED_TYPE.PART_RELATED : RELATED_TYPE.OTHER_RELATED;
 };
 
 export const checkIsDocumentWOByGroupOrOptions = (
