@@ -2936,5 +2936,5 @@
   "documentRevision.create.missing.security.groups.message": "{documentType} is configured to allow access for:\n{groups}\n\nDo you want to add it to the document?",
   "documentRevision.create.missing.security.groups.confirm": "Add and Save",
   "documentRevision.create.missing.security.groups.cancel": "Save as is",
-  "documentRevision.create.not.allowed.msg": "You do not have permission to create this resource"
+  "documentRevision.create.not.allowed.msg": "You do not have permission to create this document type"
 }
