@@ -51,7 +51,6 @@ const criteria = (
         ...state,
         [action.tableName]: action.payload,
       };
-    case LOGOUT_USER:
     case TABLE_CLEAR_ALL:
       return {};
     default:
