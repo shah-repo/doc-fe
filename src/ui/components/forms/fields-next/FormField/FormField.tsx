@@ -16,12 +16,14 @@ const FormField: React.FC<FormFieldProps> = ({
   helperTextProps,
   label,
   labelProps,
+  error,
   ...props
 }, ref) => {
   const classes = useStyles();
+  const { disabled } = props;
 
   return (
-    <FormControl {...props} ref={ref} fullWidth={fullWidth}>
+    <FormControl {...props} {...(!disabled && { error })} ref={ref} fullWidth={fullWidth}>
       {prefix}
       {label && (
         <InputLabel
@@ -34,7 +36,7 @@ const FormField: React.FC<FormFieldProps> = ({
         </InputLabel>
       )}
       {children}
-      {helperText && (
+      {helperText && !disabled && (
         <FormHelperText {...helperTextProps}>
           {renderNode(helperText)}
         </FormHelperText>
