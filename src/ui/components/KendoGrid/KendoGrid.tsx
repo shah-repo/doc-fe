@@ -59,6 +59,7 @@ import KendoGridStyles from './KendoGrid.styles';
 
 const lotStatusOptions = Object.values(LotStatus).map(value => createOption(value, getLotStatusLabel(value)));
 const SELECTED_FIELD = 'print';
+const REV_FIELD = 'precalc.revision';
 
 export function KendoGrid<T extends any> ({
   tableName,
@@ -383,7 +384,7 @@ export function KendoGrid<T extends any> ({
             {...column}
             title={getTranslatedText(column.title)}
             width={setColumnWidth(column.width as number, gridWidth)}
-            minResizableWidth={100}
+            minResizableWidth={column.field === REV_FIELD ? 100 : 200}
             headerCell={
               headerCellMapping[column.headerCell as string]
                 ? headerCellMapping[column.headerCell as string]
