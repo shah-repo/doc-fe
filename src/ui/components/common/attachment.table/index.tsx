@@ -151,8 +151,7 @@ const AttachmentTable: React.FC<Props> = ({
   }, [selectedAttachments]);
 
   React.useEffect(() => {
-    const sortedAttachments = [...attachments].sort((a, b) => Number(a?.index) - Number(b?.index));
-    setAttachmentsData(sortedAttachments);
+    setAttachmentsData(attachments);
   }, [attachments]);
 
   return (
