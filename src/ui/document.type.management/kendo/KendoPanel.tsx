@@ -392,7 +392,7 @@ export function KendoPanel ({
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
     // need to convert
-    dataItem.active = dataItem.active || dataItem.active.toString()
+    const activeValue = dataItem.active || dataItem.active.toString()
     === getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
     const newData = {
       documentTypeName: dataItem.documentTypeName,
@@ -411,7 +411,7 @@ export function KendoPanel ({
       schema: dataItem.schema,
       fieldsConfig: dataItem.fieldsConfig,
       defaultRevStage: dataItem.defaultRevStage,
-      active: dataItem.active,
+      active: activeValue,
       equipmentEnforceProd: dataItem.equipmentEnforceProd,
       numberingStyle: dataItem.numberingStyle,
     };
@@ -419,7 +419,22 @@ export function KendoPanel ({
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(',')} is missing.`);
     } else {
-      dataItem.inEdit = false;
+      const updatedData = (workingData as DocumentTypeCustom[]).map((item) => {
+        if (item.id === dataItem.id) {
+          return {
+            ...item,
+            ...dataItem,
+            active: activeValue,
+            inEdit: false,
+            isNewRecord: false,
+          };
+        }
+        return item;
+      }) as DocumentType[];
+
+      setWorkingData(updatedData);
+      const newDataState = processWithGroupsAndVisibleEditRows(updatedData, dataState);
+      setResultState(newDataState);
       onFieldConfig(newData, dataItem.id);
     }
   };
@@ -475,6 +490,11 @@ export function KendoPanel ({
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(',')} is missing.`);
     } else {
+      const dataWithoutDraft = (workingData as DocumentTypeCustom[])
+        .filter((item) => !(Boolean(item.isNewRecord) && !item.id)) as DocumentType[];
+      setWorkingData(dataWithoutDraft);
+      setResultState(processWithGroupsAndVisibleEditRows(dataWithoutDraft, dataState));
+
       const startingNumber = values?.startingNumber;
       values.startingNumber = startingNumber
         ? +startingNumber
