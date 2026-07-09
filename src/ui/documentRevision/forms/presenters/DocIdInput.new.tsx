@@ -2,6 +2,7 @@ import { InputAdornment, Tooltip, TooltipProps } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_NUMBERING_STYLE } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { documentsActions, documentsSelectors } from '../../../../state/ducks/documents';
@@ -212,12 +213,15 @@ const DocIdInputNew: React.FC<Props> = ({
 
   return (
     <>
-      {isRequestInProgress && <span>Updating DocId</span>}
+      {isRequestInProgress && (
+        <span>{translate('common.updating.doc.id')}</span>
+      )}
       <CustomLabelTooltip {...{ tooltipConfig }}>
         <Tooltip
           title={fullDocId}
           arrow
-          placement="top"
+          placement="top-start"
+          PopperProps={inputElementRef.current ? { anchorEl: inputElementRef.current } : undefined}
           classes={tooltipClassOverrides}
           open={isTooltipEligible && isDocIdTooltipOpen}
           onOpen={handleTooltipOpen}
