@@ -83,7 +83,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </IconButton>
         )}
       >
-        <Typography variant="h2" className={classes.title}>{title}</Typography>
+        <div className={classes.textSection}>
+          <Typography variant="h2" className={classes.title}>{title}</Typography>
+          {info && <Typography className={classes.info} data-cy="ganesh-info">{info}</Typography>}
+        </div>
         {isOutOfSync && (
           <Tooltip title={translate('administration.general.settings.approvalRoles.sync.message.dialog.out.of.sync.with.dam')}>
             <div className={classes.outOfSyncBox}>
@@ -91,7 +94,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </div>
           </Tooltip>
         )}
-        {info && <Typography className={classes.info}>{info}</Typography>}
         <Box>
           {onManageItems && (
             <Button
