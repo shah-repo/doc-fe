@@ -88,7 +88,15 @@ export const revIdRelatedTypeMapper = (documentRevisions: DocumentRevision[]): {
 export const getRelatedType = (documentRevision: DocumentRevision, hasOutput = false): RELATED_TYPE => {
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isPart = checkIsDocumentPart(groupOptions);
-  return isPart ? RELATED_TYPE.PART_RELATED : RELATED_TYPE.OTHER_RELATED;
+  const outputDocumentType = documentRevision?.formTemplate?.outputDocumentTypes?.[0];
+  const outputTypeGroup = outputDocumentType && 'group' in outputDocumentType
+    ? outputDocumentType.group
+    : undefined;
+  const isPartFromOutputGroup = outputTypeGroup === DOC_TYPE_GROUP.PART;
+
+  return isPart || isPartFromOutputGroup
+    ? RELATED_TYPE.PART_RELATED
+    : RELATED_TYPE.OTHER_RELATED;
 };
 
 export const checkIsDocumentWOByGroupOrOptions = (

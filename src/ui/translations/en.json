@@ -621,6 +621,7 @@
   "common.changes": "Changes",
   "common.create": "Create",
   "common.uploading": "Uploading...",
+  "common.updating.doc.id": "Updating DocId",
   "common.loading": "Loading…",
   "common.view.file": "View File",
   "common.file.not.loaded": "File not loaded",
