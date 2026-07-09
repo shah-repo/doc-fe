@@ -2,6 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Tooltip, Typography } from '@material-ui/core';
 import cx from 'classnames';
+import { kebabCase } from 'lodash';
 import React, { MouseEventHandler, RefObject, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
@@ -83,7 +84,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </IconButton>
         )}
       >
-        <Typography variant="h2" className={classes.title}>{title}</Typography>
+        <div className={classes.textSection}>
+          <Typography variant="h2" className={classes.title}>{title}</Typography>
+          {info && <Typography className={classes.info} data-cy={`info-${kebabCase(title)}`}>{info}</Typography>}
+        </div>
         {isOutOfSync && (
           <Tooltip title={translate('administration.general.settings.approvalRoles.sync.message.dialog.out.of.sync.with.dam')}>
             <div className={classes.outOfSyncBox}>
@@ -91,7 +95,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </div>
           </Tooltip>
         )}
-        {info && <Typography className={classes.info}>{info}</Typography>}
         <Box>
           {onManageItems && (
             <Button

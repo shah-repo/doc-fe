@@ -61,6 +61,16 @@ export default makeStyles(theme => ({
       margin: 0,
     },
   },
+  textSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    minWidth: 0,
+  },
+  titleRow: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   title: {
     fontWeight: 600,
     fontSize: 16,
@@ -69,6 +79,7 @@ export default makeStyles(theme => ({
     fontWeight: 400,
     fontSize: 12,
     color: Colors.textGray,
+    marginTop: theme.spacing(0.25),
   },
   details: {
     display: 'block',
