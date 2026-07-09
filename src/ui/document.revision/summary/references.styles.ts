@@ -53,7 +53,9 @@ export default makeStyles(theme =>
     avatarSection: {
       display: 'flex',
       alignItems: 'center',
-      marginRight: '10px',
+      marginRight: 0,
+      width: '100%',
+      minWidth: 0,
     },
     selectedUsersGrid: {
       borderRadius: '4px',
@@ -62,7 +64,9 @@ export default makeStyles(theme =>
       marginBottom: '10px',
       padding: '5px 5px 5px 10px',
       flexWrap: 'nowrap',
-      width: '203px',
+      width: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box',
       '&:hover': {
         background: Colors.bright_gray,
         borderRadius: '4px',
