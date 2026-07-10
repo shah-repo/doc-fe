@@ -169,12 +169,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const isInternalTypeNumbering = outputDocumentType?.numberingStyle === DOCUMENT_NUMBERING_STYLE.INTERNAL;
 
-  let canCreateRevision = true;
-  if (hasOutput && outputDocumentType) {
-    canCreateRevision = useSelector(
-      (state: ApplicationState) => documentTypeSelectors?.canCreateDocumentType(state, outputDocumentType.id),
-    );
-  }
+  const canCreateRevision = useSelector((state: ApplicationState) => {
+    if (!hasOutput || !outputDocumentType?.id) {
+      return true;
+    }
+
+    return documentTypeSelectors.canCreateDocumentType(state, outputDocumentType.id);
+  });
 
   useEffect(() => {
     if (formDocumentId) {
