@@ -313,8 +313,9 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
 
   const isValidLOT = (lot) => {
     let isAcceptedStatus = false;
+    const lotOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity);
     if (isEBProcedure) {
-      isAcceptedStatus = lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
+      isAcceptedStatus = (lotOnHandQuantity > 0 || lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP);
     } else {
       const isValidStatus = [
         DOCUMENT_REVISION_LOT_STATUS.ACCEPTED,
@@ -325,7 +326,7 @@ const LotIdCellTemplate: React.FC<CustomTreeListCellProps> = (props) => {
         : lot?.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.REJECTED && lot.lotStatus !== DOCUMENT_REVISION_LOT_STATUS.SCRAP;
     }
 
-    const isZeroOnHandQuantity = parseFloat(lot?.precalc?.lot_on_hand_quantity) === 0;
+    const isZeroOnHandQuantity = lotOnHandQuantity === 0;
 
     const isExpiryValid = !allowExpiredLots || !isDateExpired(lot?.formInput?.lot_expiry_date, timezone);
     const isRDDocument = endsWith(toUpper(lot?.document?.docId || ''), 'RD');
