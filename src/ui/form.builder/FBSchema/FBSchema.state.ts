@@ -3,6 +3,7 @@ import { action, get, observable, set } from 'mobx';
 import React from 'react';
 import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBSchemaProps } from '..';
 import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
+import FBAffectedSerialNumberTable from '../FBAffectedSerialNumbers';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';
@@ -122,6 +123,7 @@ class FBSchemaState {
     timer: FBTimerField,
     traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
+    affectedSerialNumbers: FBAffectedSerialNumberTable,
     purchaseordersummary: FBPurchaseOrderSummary,
     headquarterAddress: FBCustomerHeaderQuaterAddress,
     siteInformation: FBSiteInformation,

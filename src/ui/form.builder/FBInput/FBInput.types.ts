@@ -94,6 +94,7 @@ export type FBInputType =
   | 'cycleCount'
   | 'workOrderPartDetails'
   | 'tasksListTable'
+  | 'affectedSerialNumbers'
   | 'workOrderLhrTable'
   | 'woApprovals'
   | 'lhrStepApprovals'
